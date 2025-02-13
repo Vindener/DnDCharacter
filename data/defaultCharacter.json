@@ -1,0 +1,40 @@
+{
+  "name": "Арагорн",
+  "class": "Боєць",
+  "race": "Людина",
+  "level": 5,
+  "stats": {
+    "strength": 16,
+    "dexterity": 14,
+    "constitution": 15,
+    "intelligence": 10,
+    "wisdom": 12,
+    "charisma": 14
+  },
+  "skills": {
+    "acrobatics": 2,
+    "arcana": 1,
+    "athletics": 5,
+    "stealth": 3
+  },
+  "hp": {
+    "max": 40,
+    "current": 35,
+    "temp": 0
+  },
+  "death_saves": {
+    "successes": 1,
+    "failures": 0
+  },
+  "inventory": [
+    "Меч",
+    "Лук",
+    "Зілля лікування"
+  ],
+  "traits": {
+    "personality": "Серйозний, але доброзичливий",
+    "ideals": "Захищати слабких",
+    "bonds": "Королівство Гондор",
+    "flaws": "Не довіряє магії"
+  }
+}
