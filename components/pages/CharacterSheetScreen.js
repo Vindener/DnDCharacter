@@ -20,46 +20,46 @@ import * as DocumentPicker from 'expo-document-picker';
 
 const DICE_TYPES = [20, 12, 10, 100, 8, 6, 4, 2];
 
-const CharacterSheetScreen = () => {
-  // const { character } = route.params; 
-  // const [currentCharacter, setCurrentCharacter] = useState(character);
+const CharacterSheetScreen = ({route }) => {
+  const { character } = route.params; 
+  const [currentCharacter, setCurrentCharacter] = useState(character);
 
-  // useEffect(() => {
-  //   if (!character) {
-  //     setCurrentCharacter({
-  //       id: `${Date.now()}`,
-  //       name: "Новий персонаж",
-  //       level: 1,
-  //       experience: "0/300",
-  //       hp: 10,
-  //       ac: 10,
-  //       speed: 30,
-  //       initiative: "+0",
-  //       strength: 10,
-  //       dexterity: 10,
-  //       constitution: 10,
-  //       intelligence: 10,
-  //       wisdom: 10,
-  //       charisma: 10,
-  //     });
-  //   }
-  // }, [character]);
+  useEffect(() => {
+    if (!character) {
+      setCurrentCharacter({
+        id: `${Date.now()}`,
+        name: "Новий персонаж",
+        level: 1,
+        experience: "0/300",
+        hp: 10,
+        ac: 10,
+        speed: 30,
+        initiative: "+0",
+        strength: 10,
+        dexterity: 10,
+        constitution: 10,
+        intelligence: 10,
+        wisdom: 10,
+        charisma: 10,
+      });
+    }
+  }, [character]);
 
-  const [character, setCharacter] = useState({
-    name: "Безіменний персонаж",
-    level: 1,
-    experience: "100/300",
-    hp: 10,
-    ac: 10,
-    speed: 30,
-    initiative: "+0",
-    strength: 11,
-    dexterity: 22,
-    constitution: 3,
-    intelligence: 4,
-    wisdom: 5,
-    charisma: 10,
-  });
+  // const [character, setCharacter] = useState({
+  //   name: "Безіменний персонаж",
+  //   level: 1,
+  //   experience: "100/300",
+  //   hp: 10,
+  //   ac: 10,
+  //   speed: 30,
+  //   initiative: "+0",
+  //   strength: 11,
+  //   dexterity: 22,
+  //   constitution: 3,
+  //   intelligence: 4,
+  //   wisdom: 5,
+  //   charisma: 10,
+  // });
 
   const [isDiceMenuVisible, setDiceMenuVisible] = useState(false);
   const [isRollModalVisible, setRollModalVisible] = useState(false);
