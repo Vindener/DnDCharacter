@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,25 +7,71 @@ import {
   Button,
   StyleSheet,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons"; // Пакет іконок для хрестика
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 
+const STORAGE_KEY = "DnD_Characters";
+
 const HomeScreen = ({ navigation }) => {
   const [characters, setCharacters] = useState([]);
+
+  
+
+  useEffect(() => {
+    const loadCharacters = async () => {
+      try {
+        const storedCharacters = await AsyncStorage.getItem(STORAGE_KEY);
+        if (storedCharacters) {
+          setCharacters(JSON.parse(storedCharacters));
+        }
+      } catch (e) {
+        console.error("Помилка завантаження персонажів:", e);
+      }
+    };
+
+    loadCharacters();
+  }, []);
+
+  useEffect(() => {
+    const saveCharacters = async () => {
+      try {
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+      } catch (e) {
+        console.error("Помилка збереження персонажів:", e);
+      }
+    };
+
+    if (characters.length > 0) {
+      saveCharacters();
+    }
+  }, [characters]);
 
   const addNewCharacter = (newCharacter) => {
     setCharacters((prevCharacters) => [...prevCharacters, newCharacter]);
   };
 
+  const removeCharacter = (characterId) => {
+    setCharacters((prevCharacters) =>
+      prevCharacters.filter((character) => character.id !== characterId)
+    );
+  };
+
   const renderCharacterItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.characterItem}
-      onPress={() =>
-        navigation.navigate("CharacterSheet", { character: item })
-      }
-    >
-      <Text style={styles.characterText}>{item.name}</Text>
-    </TouchableOpacity>
+    <View style={styles.characterItem}>
+      <TouchableOpacity
+        style={styles.characterInfo}
+        onPress={() =>
+          navigation.navigate("CharacterSheet", { character: item })
+        }
+      >
+        <Text style={styles.characterText}>{item.name}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => removeCharacter(item.id)}>
+        <Ionicons name="close-circle" size={24} color="red" />
+      </TouchableOpacity>
+    </View>
   );
 
   const importFromFile = async () => {
@@ -80,10 +126,16 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   characterItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 16,
     marginBottom: 8,
     backgroundColor: "#f0f0f0",
     borderRadius: 8,
+  },
+  characterInfo: {
+    flex: 1,
   },
   characterText: {
     fontSize: 18,
