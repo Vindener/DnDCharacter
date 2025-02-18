@@ -18,6 +18,14 @@ const HomeScreen = ({ navigation }) => {
   const [characters, setCharacters] = useState([]);
 
   
+const updateCharacter = (updatedCharacter) => {
+  setCharacters((prevCharacters) =>
+    prevCharacters.map((char) =>
+      char.id === updatedCharacter.id ? updatedCharacter : char
+    )
+  );
+};
+
 
   useEffect(() => {
     const loadCharacters = async () => {
@@ -63,7 +71,10 @@ const HomeScreen = ({ navigation }) => {
       <TouchableOpacity
         style={styles.characterInfo}
         onPress={() =>
-          navigation.navigate("CharacterSheet", { character: item })
+          navigation.navigate("CharacterSheet", {
+            character: item,
+            onUpdateCharacter: updateCharacter,
+          })
         }
       >
         <Text style={styles.characterText}>{item.name}</Text>
