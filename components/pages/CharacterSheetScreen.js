@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect  } from "react";
 import {
   View,
   Text,
@@ -17,8 +17,10 @@ import { shareAsync } from "expo-sharing";
 
 import * as DocumentPicker from 'expo-document-picker';
 
-import Dice from "../Dice";
+import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
+import CharacterTabs from "./CharacterTabs";
 
+import Dice from "../Dice";
 
 
 const CharacterSheetScreen = ({route, navigation  }) => {
@@ -44,6 +46,7 @@ useEffect(() => {
   }
 }, [route.params]);
 
+
   // Завантаження даних з локального сховища
   useEffect(() => {
   const loadCharacterData = async () => {
@@ -60,23 +63,6 @@ useEffect(() => {
   };
   loadCharacterData();
 }, [characterData.id]);
-
-
-  // Зміна даних персонажа
-  const handleInputChange = (field, value) => {
-    const numericFields = [
-      "strength",
-      "dexterity",
-      "constitution",
-      "intelligence",
-      "wisdom",
-      "charisma",
-    ];
-    setCharacterData((prevData) => ({
-      ...prevData,
-      [field]: numericFields.includes(field) ? parseInt(value) || 0 : value,
-    }));
-  };
 
   // Збереження персонажа в локальне сховище
 const saveCharacter = async () => {
@@ -117,49 +103,6 @@ const saveCharacter = async () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     };
   }, [characterData]);
-
-
-
-  // useEffect(() => {
-  //   if (!character) {
-  //     setCurrentCharacter({
-  //       id: `${Date.now()}`,
-  //       name: "Новий персонаж",
-  //       level: 1,
-  //       experience: "0/300",
-  //       hp: 10,
-  //       ac: 10,
-  //       speed: 30,
-  //       initiative: "+0",
-  //       strength: 10,
-  //       dexterity: 10,
-  //       constitution: 10,
-  //       intelligence: 10,
-  //       wisdom: 10,
-  //       charisma: 10,
-  //     });
-  //   }
-  // }, [character]);
-
-
-
-
-
-  // const [character, setCharacter] = useState({
-  //   name: "Безіменний персонаж",
-  //   level: 1,
-  //   experience: "100/300",
-  //   hp: 10,
-  //   ac: 10,
-  //   speed: 30,
-  //   initiative: "+0",
-  //   strength: 11,
-  //   dexterity: 22,
-  //   constitution: 3,
-  //   intelligence: 4,
-  //   wisdom: 5,
-  //   charisma: 10,
-  // });
 
 // Функція для завантаження з AsyncStorage
   const loadCharacter = async () => {
@@ -214,100 +157,80 @@ const importFromFile = async () => {
   }
 };
 
-const rollD20WithModifier = (mod) => {
-  const rollResult = Math.floor(Math.random() * 20) + 1 + mod;
-   Alert.alert('Результат кидка',`Випав результат: ${rollResult- mod} + ${mod}(мод.) = ${rollResult}`);
-};
-
-
 console.log("characterData:", characterData);
+
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
 
 
   return (
     <View style={styles.container}>
       {/* Закріплений верхній блок */}
       <View style={styles.header}>
-        <Text style={styles.characterName}>{characterData.name}</Text>
+        <Text style={styles.characterName}>{characterData.name}
+          <Menu
+          visible={menuVisible}
+          anchor={
+            <TouchableOpacity onPress={openMenu}>
+              <Text style={styles.menuButton}>⋮</Text>
+            </TouchableOpacity>
+          }
+          onRequestClose={closeMenu}
+        >
+          <MenuItem onPress={() => saveCharacter()}>Зберегти дані</MenuItem>
+          <MenuItem onPress={() => loadCharacter()}>
+            Завантажити дані
+          </MenuItem>
+          <MenuItem onPress={() => importFromFile()}>
+            Імпорт JSON
+          </MenuItem>
+          <MenuItem onPress={() => exportToFile()}>
+            Експорт JSON
+          </MenuItem>
+        </Menu>
+
+        </Text>
         <Text style={styles.level}>Рівень {characterData.level}</Text>
         <Text style={styles.exp}>{characterData.experience}</Text>
-        
-        <TouchableOpacity style={styles.button} onPress={saveCharacter}>
-    <Text style={styles.buttonText}>Зберегти</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.button} onPress={loadCharacter}>
-    <Text style={styles.buttonText}>Завантажити</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.button} onPress={importFromFile}>
-    <Text style={styles.buttonText}>Імпорт JSON</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.button} onPress={exportToFile}>
-    <Text style={styles.buttonText}>експор JSON</Text>
-  </TouchableOpacity>
+
       </View>
 
       {/* Основний контент зі скролом */}
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.statsRow}>
          {[
-  { key: "speed", label: "🏃 Швидкість" },
-  { key: "ac", label: "🛡 Захист" },
-  { key: "hp", label: "❤️ HP" },
-  { key: "initiative", label: "⚡ Ініціатива" },
-].map((stat) => (
-  <View key={stat.key} style={styles.statBox}>
-    <Text style={styles.statLabel}>{stat.label}</Text>
-    <TextInput
-      style={styles.statInput}
-      keyboardType="numeric"
-      value={characterData[stat.key]?.toString() ?? ""} // Оновлюємо основні статистики, а не вкладені
-      onChangeText={(text) =>
-        setCharacterData((prevData) => ({
-          ...prevData,
-          [stat.key]: parseInt(text) || 0, // Оновлюємо конкретне поле
-        }))
-      }
-    />
-  </View>
-))}
+            { key: "speed", label: "🏃 Швидкість" },
+            { key: "ac", label: "🛡 Захист" },
+            { key: "hp", label: "❤️ HP" },
+            { key: "initiative", label: "⚡ Ініціатива" },
+          ].map((stat) => (
+            <View key={stat.key} style={styles.statBox}>
+              <Text style={styles.statLabel}>{stat.label}</Text>
+              <TextInput
+                style={styles.statInput}
+                keyboardType="numeric"
+                value={characterData[stat.key]?.toString() ?? ""} // Оновлюємо основні статистики, а не вкладені
+                onChangeText={(text) =>
+                  setCharacterData((prevData) => ({
+                    ...prevData,
+                    [stat.key]: parseInt(text) || 0, // Оновлюємо конкретне поле
+                  }))
+                }
+              />
+            </View>
+          ))}
 
 
         </View> 
-
-        {/* Характеристики */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Характеристики та навички</Text>
-        {[
-  { key: "strength", label: "Сила" },
-  { key: "dexterity", label: "Ловкість" },
-  { key: "constitution", label: "Тілобудова" },
-  { key: "intelligence", label: "Інтелект" },
-  { key: "wisdom", label: "Мудрість" },
-  { key: "charisma", label: "Харизма" },
-].map((attr) => (
-  <View key={attr.key} style={styles.statRow}>
-    <Text style={styles.statName}>{attr.label}</Text>
-    <TextInput
-      style={styles.statInput}
-      keyboardType="numeric"
-      value={characterData[attr.key]?.toString() ?? ""}
-       onChangeText={(text) => {
-          let numericValue = parseInt(text) || 0; // Перетворення тексту на число
-          numericValue = Math.max(1, Math.min(numericValue, 30)); // Обмеження в межах 1-30
-          handleInputChange(attr.key, numericValue.toString());
-        }}
-    />
-    <TouchableOpacity
-      style={styles.rollButton}
-      onPress={() => rollD20WithModifier(Number(characterData[attr.key] || 0))}
-    >
-      <Text style={styles.rollButtonText}>🎲</Text>
-    </TouchableOpacity>
-  </View>
-))}
-
-
-        </View>
       </ScrollView>
+
+        {/* Вкладки для навігації */}
+        <CharacterTabs
+          characterData={characterData}
+          setCharacterData={setCharacterData}
+        />
 
       <Dice />
     </View>
@@ -330,7 +253,8 @@ const styles = StyleSheet.create({
   section: { marginTop: 20 },
   sectionTitle: { color: "#B39DDB", fontSize: 18, marginBottom: 10 },
   statRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
-  statName: { color: "white", fontSize: 16, flex: 1 }
+  statName: { color: "white", fontSize: 16, flex: 1 },
+  menuButton: {    fontSize: 24,    color: "#fff", paddingLeft: 20  },
 });
 
 export default CharacterSheetScreen;
