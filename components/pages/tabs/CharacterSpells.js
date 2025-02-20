@@ -1,36 +1,23 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
 const CharacterSpells = ({ characterData, setCharacterData }) => {
-  const [newSpell, setNewSpell] = useState("");
-
-  const addSpell = () => {
-    if (newSpell.trim() !== "") {
-      const updatedSpells = characterData.spells || [];
-      updatedSpells.push(newSpell);
-      setCharacterData({ ...characterData, spells: updatedSpells });
-      setNewSpell("");
-    }
+  const handleSpellChange = (text) => {
+    setCharacterData({ ...characterData, spells: text });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Додати закляття:</Text>
+      <Text style={styles.label}>Закляття персонажа:</Text>
       <TextInput
-        style={styles.input}
-        value={newSpell}
-        onChangeText={setNewSpell}
-        placeholder="Введіть закляття"
+        style={styles.memoInput}
+        multiline={true}
+        numberOfLines={6}
+        value={characterData.spells || ""}
+        onChangeText={handleSpellChange}
+        placeholder="Введіть список заклять"
         placeholderTextColor="#888"
       />
-      <Button title="Додати" onPress={addSpell} />
-
-      <Text style={styles.label}>Список заклять:</Text>
-      {characterData.spells?.map((spell, index) => (
-        <Text key={index} style={styles.spell}>
-          {spell}
-        </Text>
-      ))}
     </View>
   );
 };
@@ -38,14 +25,14 @@ const CharacterSpells = ({ characterData, setCharacterData }) => {
 const styles = StyleSheet.create({
   container: { padding: 20, backgroundColor: "#222" },
   label: { color: "white", fontSize: 16, marginBottom: 5 },
-  input: {
+  memoInput: {
     backgroundColor: "#555",
     color: "white",
-    padding: 8,
+    padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
+    height: 150,
+    textAlignVertical: "top", // Для вирівнювання тексту по верхньому краю
   },
-  spell: { color: "white", fontSize: 16, marginTop: 5 },
 });
 
 export default CharacterSpells;

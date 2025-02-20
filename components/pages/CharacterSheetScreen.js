@@ -7,6 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Image,
+  Button,
+  Modal,
   BackHandler
 } from "react-native";
 
@@ -22,8 +25,24 @@ import CharacterTabs from "./CharacterTabs";
 
 import Dice from "../Dice";
 
+import * as ImagePicker from "expo-image-picker"; 
+
 
 const CharacterSheetScreen = ({route, navigation  }) => {
+
+  const { character, onUpdateCharacter } = route.params; // Отримуємо функцію оновлення
+
+  const changeCharacterName = (newName) => {
+  setCharacterData((prevData) => {
+    const updatedCharacter = { ...prevData, name: newName };
+    if (onUpdateCharacter) {
+      onUpdateCharacter(updatedCharacter); // Оновлюємо дані в HomeScreen
+    }
+    return updatedCharacter;
+  });
+};
+
+
  const [characterData, setCharacterData] = useState({
     name: "",
     level: "",
@@ -164,11 +183,62 @@ console.log("characterData:", characterData);
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
+  // Функція для вибору фото
+  const pickPhoto = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        const photoUri = result.assets[0].uri;
+        setCharacterData((prevData) => ({ ...prevData, photoUri }));
+        Alert.alert("Успіх", "Фото завантажено!");
+      }
+    } catch (error) {
+      Alert.alert("Помилка", "Не вдалося вибрати фото.");
+    }
+  };
+
+  // Видалення фото
+  const removePhoto = () => {
+    setCharacterData((prevData) => ({ ...prevData, photoUri: "" }));
+    Alert.alert("Успіх", "Фото видалено!");
+  };
+
+
+  const [isNameModalVisible, setIsNameModalVisible] = useState(false);
+  const [newName, setNewName] = useState("");
+
+
+    const handleNameChange = () => {
+    if (!newName.trim()) {
+        Alert.alert("Помилка", "Ім'я не може бути порожнім!");
+        return;
+      }
+    setCharacterData((prevData) => ({ ...prevData, name: newName }));
+    setIsNameModalVisible(false);
+    onUpdateCharacter({ ...characterData, name: newName });
+  };
 
   return (
     <View style={styles.container}>
       {/* Закріплений верхній блок */}
       <View style={styles.header}>
+      {/* Відображення фото */}
+        {characterData.photoUri ? (
+          <Image
+            source={{ uri: characterData.photoUri }}
+            style={styles.characterPhoto}
+          />
+        ) : (
+          <View style={styles.placeholderPhoto}>
+            <Text style={styles.placeholderText}>Фото героя</Text>
+          </View>
+        )}
+
         <Text style={styles.characterName}>{characterData.name}
           <Menu
           visible={menuVisible}
@@ -189,6 +259,12 @@ console.log("characterData:", characterData);
           <MenuItem onPress={() => exportToFile()}>
             Експорт JSON
           </MenuItem>
+          <MenuDivider/>
+          <MenuItem onPress={pickPhoto}>Завантажити фото</MenuItem>
+          <MenuItem onPress={removePhoto}>Видалити фото</MenuItem>
+          <MenuItem onPress={() => setIsNameModalVisible(true)}>
+              Змінити ім'я
+            </MenuItem>
         </Menu>
 
         </Text>
@@ -198,7 +274,7 @@ console.log("characterData:", characterData);
       </View>
 
       {/* Основний контент зі скролом */}
-      <ScrollView contentContainerStyle={styles.content}>
+      <View contentContainerStyle={styles.content}>
         <View style={styles.statsRow}>
          {[
             { key: "speed", label: "🏃 Швидкість" },
@@ -224,15 +300,41 @@ console.log("characterData:", characterData);
 
 
         </View> 
-      </ScrollView>
-
+      </View>
+          
+          <ScrollView>
         {/* Вкладки для навігації */}
         <CharacterTabs
           characterData={characterData}
           setCharacterData={setCharacterData}
         />
+        </ScrollView>
 
       <Dice />
+
+      {/* Модальне вікно для зміни імені */}
+      <Modal visible={isNameModalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Змінити ім'я персонажа</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={newName}
+              onChangeText={setNewName}
+              placeholder="Введіть нове ім'я"
+              placeholderTextColor="#888"
+            />
+            <View style={styles.modalButtons}>
+              <Button title="Зберегти" onPress={handleNameChange} />
+              <Button
+                title="Скасувати"
+                onPress={() => setIsNameModalVisible(false)}
+                color="#FF3B30"
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -255,6 +357,13 @@ const styles = StyleSheet.create({
   statRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
   statName: { color: "white", fontSize: 16, flex: 1 },
   menuButton: {    fontSize: 24,    color: "#fff", paddingLeft: 20  },
+  characterPhoto: {   width: 100,   height: 100,    borderRadius: 50,    marginBottom: 10,  },
+  placeholderPhoto: {    width: 100,    height: 100,    borderRadius: 50,    backgroundColor: "#555",    justifyContent: "center",    alignItems: "center", marginBottom: 10,},
+  modalContainer: {    flex: 1,    justifyContent: "center",    alignItems: "center",    backgroundColor: "rgba(0, 0, 0, 0.5)",  },
+  modalContent: {    width: "80%",    backgroundColor: "#333",    padding: 20,    borderRadius: 10,  },
+  modalTitle: {    color: "white",    fontSize: 18,    marginBottom: 10,    textAlign: "center",  },
+  modalInput: {    backgroundColor: "#555",    color: "white",    padding: 10,    borderRadius: 5,    marginBottom: 20,    textAlign: "center",},
+  modalButtons: {    flexDirection: "row",    justifyContent: "space-between",  },
 });
 
 export default CharacterSheetScreen;
