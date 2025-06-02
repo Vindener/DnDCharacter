@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Button,
   StyleSheet,
+  SafeAreaView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // Пакет іконок для хрестика
@@ -17,15 +18,13 @@ const STORAGE_KEY = "DnD_Characters";
 const HomeScreen = ({ navigation }) => {
   const [characters, setCharacters] = useState([]);
 
-  
-const updateCharacter = (updatedCharacter) => {
-  setCharacters((prevCharacters) =>
-    prevCharacters.map((char) =>
-      char.id === updatedCharacter.id ? updatedCharacter : char
-    )
-  );
-};
-
+  const updateCharacter = (updatedCharacter) => {
+    setCharacters((prevCharacters) =>
+      prevCharacters.map((char) =>
+        char.id === updatedCharacter.id ? updatedCharacter : char
+      )
+    );
+  };
 
   useEffect(() => {
     const loadCharacters = async () => {
@@ -112,29 +111,34 @@ const updateCharacter = (updatedCharacter) => {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={characters}
-        renderItem={renderCharacterItem}
-        keyExtractor={(item) => item.id}
-      />
-      <Button title="Імпортувати героя" onPress={importFromFile} />
-      <Button
-        title="Створити нового героя"
-        onPress={() =>
-          navigation.navigate("CreateCharacter", {
-            onCreateCharacter: addNewCharacter,
-          })
-        }
-      />
-    </View>
-  );
+    <SafeAreaView style={styles.container}>
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={characters}
+          renderItem={renderCharacterItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 120 }} // Додано відступ знизу
+        />
+        <View style={styles.buttonContainer}>
+          <Button title="Імпортувати героя" onPress={importFromFile} />
+          <Button
+            title="Створити нового героя"
+            onPress={() =>
+              navigation.navigate("CreateCharacter", {
+                onCreateCharacter: addNewCharacter,
+              })
+            }
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );  
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingBottom: 20,
   },
   characterItem: {
     flexDirection: "row",
@@ -150,6 +154,15 @@ const styles = StyleSheet.create({
   },
   characterText: {
     fontSize: 18,
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 25,
+    borderTopWidth: 1,
+    borderColor: "#333",
   },
 });
 

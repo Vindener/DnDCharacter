@@ -5,8 +5,8 @@ import { Picker } from "@react-native-picker/picker";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 const Tab = createMaterialTopTabNavigator();
 
-import CharacterAttributes from "./tabs/CharacterAttributes";
-import CharacterSpells from "./tabs/CharacterSpells";
+import CharacterAttributes from "../../components/pages/tabs/CharacterAttributes";
+import CharacterSpells from "../../components/pages/tabs/CharacterSpells";
 
 const CharacterTabs = ({ characterData, setCharacterData }) => {
   const [selectedTab, setSelectedTab] = useState("Attributes");

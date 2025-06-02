@@ -1,4 +1,4 @@
-import React, { useState,useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   Image,
   Button,
   Modal,
-  BackHandler
+  BackHandler,
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,32 +18,30 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FileSystem from "expo-file-system";
 import { shareAsync } from "expo-sharing";
 
-import * as DocumentPicker from 'expo-document-picker';
+import * as DocumentPicker from "expo-document-picker";
 
 import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 import CharacterTabs from "./CharacterTabs";
 
-import Dice from "../Dice";
+import Dice from "../../components/Dice";
 
-import * as ImagePicker from "expo-image-picker"; 
+import * as ImagePicker from "expo-image-picker";
 
-
-const CharacterSheetScreen = ({route, navigation  }) => {
+const CharacterSheetScreen = ({ route, navigation }) => {
   const { character, onUpdateCharacter } = route.params; // Отримуємо функцію оновлення
 
   const [restModalVisible, setRestModalVisible] = useState(false);
   const [tempHitDice, setTempHitDice] = useState(2 || 6);
-  
-  const changeCharacterName = (newName) => {
-  setCharacterData((prevData) => {
-    const updatedCharacter = { ...prevData, name: newName };
-    if (onUpdateCharacter) {
-      onUpdateCharacter(updatedCharacter); // Оновлюємо дані в HomeScreen
-    }
-    return updatedCharacter;
-  });
-};
 
+  const changeCharacterName = (newName) => {
+    setCharacterData((prevData) => {
+      const updatedCharacter = { ...prevData, name: newName };
+      if (onUpdateCharacter) {
+        onUpdateCharacter(updatedCharacter); // Оновлюємо дані в HomeScreen
+      }
+      return updatedCharacter;
+    });
+  };
 
   const handleShortRest = () => {
     const heal = Math.floor(Math.random() * tempHitDice) + 1;
@@ -53,12 +51,11 @@ const CharacterSheetScreen = ({route, navigation  }) => {
   };
 
   const handleLongRest = () => {
-    handleHPChange(tempHp+1)
+    handleHPChange(tempHp + 1);
     setRestModalVisible(false);
   };
 
-
- const [characterData, setCharacterData] = useState({
+  const [characterData, setCharacterData] = useState({
     name: "",
     level: "",
     class: "",
@@ -73,47 +70,52 @@ const CharacterSheetScreen = ({route, navigation  }) => {
     charisma: "",
   });
 
-    // Ініціалізація даних, якщо вони прийшли з `route.params`
-useEffect(() => {
-  if (route.params?.character) {
-    setCharacterData(route.params.character);
-  }
-}, [route.params]);
-
+  // Ініціалізація даних, якщо вони прийшли з `route.params`
+  useEffect(() => {
+    if (route.params?.character) {
+      setCharacterData(route.params.character);
+    }
+  }, [route.params]);
 
   // Завантаження даних з локального сховища
   useEffect(() => {
-  const loadCharacterData = async () => {
-    if (characterData.id) { // Перевірка наявності id
-      try {
-        const storedData = await AsyncStorage.getItem(`characterData_${characterData.id}`);
-        if (storedData) {
-          setCharacterData(JSON.parse(storedData));
+    const loadCharacterData = async () => {
+      if (characterData.id) {
+        // Перевірка наявності id
+        try {
+          const storedData = await AsyncStorage.getItem(
+            `characterData_${characterData.id}`
+          );
+          if (storedData) {
+            setCharacterData(JSON.parse(storedData));
+          }
+        } catch (error) {
+          console.error("Помилка завантаження даних:", error);
         }
-      } catch (error) {
-        console.error("Помилка завантаження даних:", error);
       }
-    }
-  };
-  loadCharacterData();
-}, [characterData.id]);
+    };
+    loadCharacterData();
+  }, [characterData.id]);
 
   // Збереження персонажа в локальне сховище
-const saveCharacter = async () => {
-  if (characterData.id) {
-    try {
-      await AsyncStorage.setItem(`characterData_${characterData.id}`, JSON.stringify(characterData));
-      console.log('Персонаж збережений');
-    } catch (error) {
-      Alert.alert("Помилка", error.message);
-      console.error("Помилка збереження даних:", error);
+  const saveCharacter = async () => {
+    if (characterData.id) {
+      try {
+        await AsyncStorage.setItem(
+          `characterData_${characterData.id}`,
+          JSON.stringify(characterData)
+        );
+        console.log("Персонаж збережений");
+      } catch (error) {
+        Alert.alert("Помилка", error.message);
+        console.error("Помилка збереження даних:", error);
+      }
+    } else {
+      Alert.alert("Помилка", "Ідентифікатор персонажа не знайдено.");
     }
-  } else {
-    Alert.alert("Помилка", "Ідентифікатор персонажа не знайдено.");
-  }
-};
+  };
 
-    // Автоматичне збереження кожні 30 секунд
+  // Автоматичне збереження кожні 30 секунд
   useEffect(() => {
     const intervalId = setInterval(() => {
       saveCharacter();
@@ -129,7 +131,7 @@ const saveCharacter = async () => {
       return false; // Дозволяє стандартний вихід
     };
 
-    const unsubscribe = navigation.addListener('beforeRemove', saveCharacter);
+    const unsubscribe = navigation.addListener("beforeRemove", saveCharacter);
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
 
     return () => {
@@ -138,7 +140,7 @@ const saveCharacter = async () => {
     };
   }, [characterData]);
 
-// Функція для завантаження з AsyncStorage
+  // Функція для завантаження з AsyncStorage
   const loadCharacter = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("characterData");
@@ -153,15 +155,17 @@ const saveCharacter = async () => {
     }
   };
 
-//  імпорт та експорт JSON із файлу
-const exportToFile = async () => {
+  //  імпорт та експорт JSON із файлу
+  const exportToFile = async () => {
     try {
       // Створення JSON-даних
       const jsonData = JSON.stringify(characterData, null, 2);
 
       // Локальне збереження файлу
       const fileUri = FileSystem.documentDirectory + "character.json";
-      await FileSystem.writeAsStringAsync(fileUri, jsonData, { encoding: FileSystem.EncodingType.UTF8 });
+      await FileSystem.writeAsStringAsync(fileUri, jsonData, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
 
       // Поширення файлу
       await shareAsync(fileUri);
@@ -170,28 +174,29 @@ const exportToFile = async () => {
     }
   };
 
+  const importFromFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "application/json",
+      });
 
-const importFromFile = async () => {
-  try {
-    const result = await DocumentPicker.getDocumentAsync({ type: 'application/json' });
+      if (result.canceled || !result.assets || !result.assets.length) {
+        Alert.alert("Помилка", "Файл не вибрано!");
+        return;
+      }
 
-    if (result.canceled || !result.assets || !result.assets.length) {
-      Alert.alert("Помилка", "Файл не вибрано!");
-      return;
+      const fileUri = result.assets[0].uri;
+      const jsonString = await FileSystem.readAsStringAsync(fileUri);
+      const jsonData = JSON.parse(jsonString);
+
+      setCharacterData(jsonData);
+      Alert.alert("Успіх", "Дані імпортовано!");
+    } catch (e) {
+      Alert.alert("Помилка", `Не вдалося імпортувати файл: ${e.message}`);
     }
+  };
 
-    const fileUri = result.assets[0].uri;
-    const jsonString = await FileSystem.readAsStringAsync(fileUri);
-    const jsonData = JSON.parse(jsonString);
-    
-    setCharacterData(jsonData);
-    Alert.alert("Успіх", "Дані імпортовано!");
-  } catch (e) {
-    Alert.alert("Помилка", `Не вдалося імпортувати файл: ${e.message}`);
-  }
-};
-
-console.log("characterData:", characterData);
+  console.log("characterData:", characterData);
 
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -223,16 +228,14 @@ console.log("characterData:", characterData);
     Alert.alert("Успіх", "Фото видалено!");
   };
 
-
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
   const [newName, setNewName] = useState("");
 
-
-    const handleNameChange = () => {
+  const handleNameChange = () => {
     if (!newName.trim()) {
-        Alert.alert("Помилка", "Ім'я не може бути порожнім!");
-        return;
-      }
+      Alert.alert("Помилка", "Ім'я не може бути порожнім!");
+      return;
+    }
     setCharacterData((prevData) => ({ ...prevData, name: newName }));
     setIsNameModalVisible(false);
     onUpdateCharacter({ ...characterData, name: newName });
@@ -254,7 +257,11 @@ console.log("characterData:", characterData);
   };
 
   const handleSaveHp = () => {
-    setCharacterData((prevData) => ({ ...prevData, hp: tempHp, maxHp: tempMaxHp }));
+    setCharacterData((prevData) => ({
+      ...prevData,
+      hp: tempHp,
+      maxHp: tempMaxHp,
+    }));
     setIsHpModalVisible(false);
   };
 
@@ -262,7 +269,7 @@ console.log("characterData:", characterData);
     <View style={styles.container}>
       {/* Закріплений верхній блок */}
       <View style={styles.header}>
-      {/* Відображення фото */}
+        {/* Відображення фото */}
         {characterData.photoUri ? (
           <Image
             source={{ uri: characterData.photoUri }}
@@ -274,48 +281,43 @@ console.log("characterData:", characterData);
           </View>
         )}
 
-        <Text style={styles.characterName}>{characterData.name}
+        <Text style={styles.characterName}>
+          {characterData.name}
           <Menu
-          visible={menuVisible}
-          anchor={
-            <TouchableOpacity onPress={openMenu}>
-              <Text style={styles.menuButton}>⋮</Text>
-            </TouchableOpacity>
-          }
-          onRequestClose={closeMenu}
-        >
-          <MenuItem onPress={() => saveCharacter()}>Зберегти дані</MenuItem>
-          <MenuItem onPress={() => loadCharacter()}>
-            Завантажити дані
-          </MenuItem>
-          <MenuItem onPress={() => importFromFile()}>
-            Імпорт JSON
-          </MenuItem>
-          <MenuItem onPress={() => exportToFile()}>
-            Експорт JSON
-          </MenuItem>
-          <MenuDivider/>
-          <MenuItem onPress={pickPhoto}>Завантажити фото</MenuItem>
-          <MenuItem onPress={removePhoto}>Видалити фото</MenuItem>
-          <MenuItem onPress={() => setIsNameModalVisible(true)}>
+            visible={menuVisible}
+            anchor={
+              <TouchableOpacity onPress={openMenu}>
+                <Text style={styles.menuButton}>⋮</Text>
+              </TouchableOpacity>
+            }
+            onRequestClose={closeMenu}
+          >
+            <MenuItem onPress={() => saveCharacter()}>Зберегти дані</MenuItem>
+            <MenuItem onPress={() => loadCharacter()}>
+              Завантажити дані
+            </MenuItem>
+            <MenuItem onPress={() => importFromFile()}>Імпорт JSON</MenuItem>
+            <MenuItem onPress={() => exportToFile()}>Експорт JSON</MenuItem>
+            <MenuDivider />
+            <MenuItem onPress={pickPhoto}>Завантажити фото</MenuItem>
+            <MenuItem onPress={removePhoto}>Видалити фото</MenuItem>
+            <MenuItem onPress={() => setIsNameModalVisible(true)}>
               Змінити ім'я
             </MenuItem>
-        </Menu>
-
+          </Menu>
         </Text>
         <Text style={styles.level}>Рівень {characterData.level}</Text>
         <Text style={styles.exp}>{characterData.experience}</Text>
-        
-        <TouchableOpacity onPress={() => setRestModalVisible(true)}>
-            <Text>Відпочинок</Text>
-        </TouchableOpacity>
 
+        <TouchableOpacity onPress={() => setRestModalVisible(true)}>
+          <Text>Відпочинок</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Основний контент зі скролом */}
       <View contentContainerStyle={styles.content}>
         <View style={styles.statsRow}>
-         {[
+          {[
             { key: "speed", label: "🏃 Швидкість" },
             { key: "ac", label: "🛡 Захист" },
             { key: "hp", label: "❤️ HP" },
@@ -336,26 +338,34 @@ console.log("characterData:", characterData);
               />
             </View>
           ))}
-            <View  style={styles.statBox}>
-        <Text>Здоров'я: {characterData.hp}/{characterData.maxHp}</Text>
-        <Button title="Редагувати HP" onPress={() => setIsHpModalVisible(true)} />
-            </View>
-
-        </View> 
+          <View style={styles.statBox}>
+            <Text>
+              Здоров'я: {characterData.hp}/{characterData.maxHp}
+            </Text>
+            <Button
+              title="Редагувати HP"
+              onPress={() => setIsHpModalVisible(true)}
+            />
+          </View>
+        </View>
       </View>
-          
-          <ScrollView>
+
+      <ScrollView>
         {/* Вкладки для навігації */}
         <CharacterTabs
           characterData={characterData}
           setCharacterData={setCharacterData}
         />
-        </ScrollView>
+      </ScrollView>
 
       <Dice />
 
       {/* Модальне вікно для зміни імені */}
-      <Modal visible={isNameModalVisible} animationType="slide" transparent={true}>
+      <Modal
+        visible={isNameModalVisible}
+        animationType="slide"
+        transparent={true}
+      >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Змінити ім'я персонажа</Text>
@@ -378,7 +388,6 @@ console.log("characterData:", characterData);
         </View>
       </Modal>
 
-
       {/* Модальне вікно дял НР */}
       <Modal visible={isHpModalVisible} animationType="slide">
         <View style={{ padding: 20 }}>
@@ -388,28 +397,40 @@ console.log("characterData:", characterData);
             value={String(tempHp || "")}
             onChangeText={handleHPChange}
           />
-          <TouchableOpacity onPress={() => handleHPChange(tempHp+1)}><Text>+1 HP</Text></TouchableOpacity>
-          <TouchableOpacity onPress={() => handleHPChange(tempHp-1)}><Text>-1 HP</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => handleHPChange(tempHp + 1)}>
+            <Text>+1 HP</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleHPChange(tempHp - 1)}>
+            <Text>-1 HP</Text>
+          </TouchableOpacity>
 
           <Text>Максимальне HP:</Text>
           <TextInput
             keyboardType="numeric"
-            value={String(tempMaxHp  || "")}
+            value={String(tempMaxHp || "")}
             onChangeText={handleMaxHPChange}
             style={{ borderWidth: 1, marginVertical: 10 }}
           />
-          
+
           <Button title="Зберегти" onPress={handleSaveHp} />
-          <Button title="Скасувати" onPress={() => setIsHpModalVisible(false)} />
+          <Button
+            title="Скасувати"
+            onPress={() => setIsHpModalVisible(false)}
+          />
         </View>
       </Modal>
-
 
       <Modal visible={restModalVisible} animationType="slide">
         <View>
           <Text>Відпочинок</Text>
-          <Button title="Короткий відпочинок (кидання кості хито)" onPress={handleShortRest} />
-          <Button title="Тривалий відпочинок (повне відновлення)" onPress={handleLongRest} />
+          <Button
+            title="Короткий відпочинок (кидання кості хито)"
+            onPress={handleShortRest}
+          />
+          <Button
+            title="Тривалий відпочинок (повне відновлення)"
+            onPress={handleLongRest}
+          />
           <Button title="Закрити" onPress={() => setRestModalVisible(false)} />
         </View>
       </Modal>
@@ -423,25 +444,77 @@ const styles = StyleSheet.create({
   characterName: { color: "white", fontSize: 20, fontWeight: "bold" },
   level: { color: "#B39DDB", fontSize: 16 },
   exp: { color: "#B0BEC5", fontSize: 14 },
-  button: { backgroundColor: "#6200EE", padding: 10, borderRadius: 5, marginVertical: 5 },
+  button: {
+    backgroundColor: "#6200EE",
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+  },
   buttonText: { color: "white", fontWeight: "bold" },
   content: { padding: 20 },
-  statsRow: { flexDirection: "row", justifyContent: "space-between", flexWrap: "wrap", marginBottom: 10 },
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    marginBottom: 10,
+  },
   statBox: { backgroundColor: "#444", padding: 10, borderRadius: 5, margin: 5 },
   statLabel: { color: "white", fontSize: 16 },
-  statInput: { backgroundColor: "#555", color: "white", padding: 8, borderRadius: 5, width: 60, textAlign: "center" },
+  statInput: {
+    backgroundColor: "#555",
+    color: "white",
+    padding: 8,
+    borderRadius: 5,
+    width: 60,
+    textAlign: "center",
+  },
   section: { marginTop: 20 },
   sectionTitle: { color: "#B39DDB", fontSize: 18, marginBottom: 10 },
   statRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
   statName: { color: "white", fontSize: 16, flex: 1 },
-  menuButton: {    fontSize: 24,    color: "#fff", paddingLeft: 20  },
-  characterPhoto: {   width: 100,   height: 100,    borderRadius: 50,    marginBottom: 10,  },
-  placeholderPhoto: {    width: 100,    height: 100,    borderRadius: 50,    backgroundColor: "#555",    justifyContent: "center",    alignItems: "center", marginBottom: 10,},
-  modalContainer: {    flex: 1,    justifyContent: "center",    alignItems: "center",    backgroundColor: "rgba(0, 0, 0, 0.5)",  },
-  modalContent: {    width: "80%",    backgroundColor: "#333",    padding: 20,    borderRadius: 10,  },
-  modalTitle: {    color: "white",    fontSize: 18,    marginBottom: 10,    textAlign: "center",  },
-  modalInput: {    backgroundColor: "#555",    color: "white",    padding: 10,    borderRadius: 5,    marginBottom: 20,    textAlign: "center",},
-  modalButtons: {    flexDirection: "row",    justifyContent: "space-between",  },
+  menuButton: { fontSize: 24, color: "#fff", paddingLeft: 20 },
+  characterPhoto: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
+  },
+  placeholderPhoto: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#555",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "#333",
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalTitle: {
+    color: "white",
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  modalInput: {
+    backgroundColor: "#555",
+    color: "white",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalButtons: { flexDirection: "row", justifyContent: "space-between" },
 });
 
 export default CharacterSheetScreen;
