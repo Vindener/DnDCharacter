@@ -5,6 +5,7 @@ import HomeScreen from "./components/pages/HomeScreen";
 import DiceRollerScreen from "./components/pages/DiceRollerScreen";
 import CharacterSheetScreen from "./components/pages/CharacterSheetScreen";
 import Test from "./components/pages/Test";
+import CreateCharacterScreen from "./components/pages/CreateCharacterScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default function App() {
         <Stack.Screen name="DiceRoller" component={DiceRollerScreen} options={{ title: "Кидок кубика" }} />
         <Stack.Screen name="CharacterSheet" component={CharacterSheetScreen} options={{ title: "Лист персонажа" }} />
         <Stack.Screen name="Test" component={Test} options={{ title: "Test" }} />
+        <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
