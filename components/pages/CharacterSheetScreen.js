@@ -29,9 +29,11 @@ import * as ImagePicker from "expo-image-picker";
 
 
 const CharacterSheetScreen = ({route, navigation  }) => {
-
   const { character, onUpdateCharacter } = route.params; // Отримуємо функцію оновлення
 
+  const [restModalVisible, setRestModalVisible] = useState(false);
+  const [tempHitDice, setTempHitDice] = useState(2 || 6);
+  
   const changeCharacterName = (newName) => {
   setCharacterData((prevData) => {
     const updatedCharacter = { ...prevData, name: newName };
@@ -41,6 +43,19 @@ const CharacterSheetScreen = ({route, navigation  }) => {
     return updatedCharacter;
   });
 };
+
+
+  const handleShortRest = () => {
+    const heal = Math.floor(Math.random() * tempHitDice) + 1;
+    setTempHP(Math.min(tempHp + heal, tempMaxHp));
+    handleHPChange(tempHp);
+    setRestModalVisible(false);
+  };
+
+  const handleLongRest = () => {
+    handleHPChange(tempHp+1)
+    setRestModalVisible(false);
+  };
 
 
  const [characterData, setCharacterData] = useState({
@@ -223,6 +238,26 @@ console.log("characterData:", characterData);
     onUpdateCharacter({ ...characterData, name: newName });
   };
 
+  //НР
+  const [isHpModalVisible, setIsHpModalVisible] = useState(false);
+  const [tempHp, setTempHP] = useState(characterData.hp);
+  const [tempMaxHp, setTempMaxHP] = useState(characterData.maxHp);
+
+  const handleHPChange = (text) => {
+    const value = text === "" ? 0 : Number(text);
+    setTempHP(isNaN(value) ? 0 : Math.min(value, tempMaxHp));
+  };
+
+  const handleMaxHPChange = (text) => {
+    const value = text === "" ? 0 : Number(text);
+    setTempMaxHP(isNaN(value) ? 0 : value);
+  };
+
+  const handleSaveHp = () => {
+    setCharacterData((prevData) => ({ ...prevData, hp: tempHp, maxHp: tempMaxHp }));
+    setIsHpModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       {/* Закріплений верхній блок */}
@@ -270,6 +305,10 @@ console.log("characterData:", characterData);
         </Text>
         <Text style={styles.level}>Рівень {characterData.level}</Text>
         <Text style={styles.exp}>{characterData.experience}</Text>
+        
+        <TouchableOpacity onPress={() => setRestModalVisible(true)}>
+            <Text>Відпочинок</Text>
+        </TouchableOpacity>
 
       </View>
 
@@ -297,7 +336,10 @@ console.log("characterData:", characterData);
               />
             </View>
           ))}
-
+            <View  style={styles.statBox}>
+        <Text>Здоров'я: {characterData.hp}/{characterData.maxHp}</Text>
+        <Button title="Редагувати HP" onPress={() => setIsHpModalVisible(true)} />
+            </View>
 
         </View> 
       </View>
@@ -333,6 +375,42 @@ console.log("characterData:", characterData);
               />
             </View>
           </View>
+        </View>
+      </Modal>
+
+
+      {/* Модальне вікно дял НР */}
+      <Modal visible={isHpModalVisible} animationType="slide">
+        <View style={{ padding: 20 }}>
+          <Text>Поточне HP: {tempHp}</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(tempHp || "")}
+            onChangeText={handleHPChange}
+          />
+          <TouchableOpacity onPress={() => handleHPChange(tempHp+1)}><Text>+1 HP</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => handleHPChange(tempHp-1)}><Text>-1 HP</Text></TouchableOpacity>
+
+          <Text>Максимальне HP:</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(tempMaxHp  || "")}
+            onChangeText={handleMaxHPChange}
+            style={{ borderWidth: 1, marginVertical: 10 }}
+          />
+          
+          <Button title="Зберегти" onPress={handleSaveHp} />
+          <Button title="Скасувати" onPress={() => setIsHpModalVisible(false)} />
+        </View>
+      </Modal>
+
+
+      <Modal visible={restModalVisible} animationType="slide">
+        <View>
+          <Text>Відпочинок</Text>
+          <Button title="Короткий відпочинок (кидання кості хито)" onPress={handleShortRest} />
+          <Button title="Тривалий відпочинок (повне відновлення)" onPress={handleLongRest} />
+          <Button title="Закрити" onPress={() => setRestModalVisible(false)} />
         </View>
       </Modal>
     </View>
