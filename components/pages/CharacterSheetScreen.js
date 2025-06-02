@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect  } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Image,
+  Button,
+  Modal,
   BackHandler
 } from "react-native";
 
@@ -17,11 +20,44 @@ import { shareAsync } from "expo-sharing";
 
 import * as DocumentPicker from 'expo-document-picker';
 
+import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
+import CharacterTabs from "./CharacterTabs";
+
 import Dice from "../Dice";
 
+import * as ImagePicker from "expo-image-picker"; 
 
 
 const CharacterSheetScreen = ({route, navigation  }) => {
+  const { character, onUpdateCharacter } = route.params; // Отримуємо функцію оновлення
+
+  const [restModalVisible, setRestModalVisible] = useState(false);
+  const [tempHitDice, setTempHitDice] = useState(2 || 6);
+  
+  const changeCharacterName = (newName) => {
+  setCharacterData((prevData) => {
+    const updatedCharacter = { ...prevData, name: newName };
+    if (onUpdateCharacter) {
+      onUpdateCharacter(updatedCharacter); // Оновлюємо дані в HomeScreen
+    }
+    return updatedCharacter;
+  });
+};
+
+
+  const handleShortRest = () => {
+    const heal = Math.floor(Math.random() * tempHitDice) + 1;
+    setTempHP(Math.min(tempHp + heal, tempMaxHp));
+    handleHPChange(tempHp);
+    setRestModalVisible(false);
+  };
+
+  const handleLongRest = () => {
+    handleHPChange(tempHp+1)
+    setRestModalVisible(false);
+  };
+
+
  const [characterData, setCharacterData] = useState({
     name: "",
     level: "",
@@ -44,6 +80,7 @@ useEffect(() => {
   }
 }, [route.params]);
 
+
   // Завантаження даних з локального сховища
   useEffect(() => {
   const loadCharacterData = async () => {
@@ -60,23 +97,6 @@ useEffect(() => {
   };
   loadCharacterData();
 }, [characterData.id]);
-
-
-  // Зміна даних персонажа
-  const handleInputChange = (field, value) => {
-    const numericFields = [
-      "strength",
-      "dexterity",
-      "constitution",
-      "intelligence",
-      "wisdom",
-      "charisma",
-    ];
-    setCharacterData((prevData) => ({
-      ...prevData,
-      [field]: numericFields.includes(field) ? parseInt(value) || 0 : value,
-    }));
-  };
 
   // Збереження персонажа в локальне сховище
 const saveCharacter = async () => {
@@ -117,49 +137,6 @@ const saveCharacter = async () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     };
   }, [characterData]);
-
-
-
-  // useEffect(() => {
-  //   if (!character) {
-  //     setCurrentCharacter({
-  //       id: `${Date.now()}`,
-  //       name: "Новий персонаж",
-  //       level: 1,
-  //       experience: "0/300",
-  //       hp: 10,
-  //       ac: 10,
-  //       speed: 30,
-  //       initiative: "+0",
-  //       strength: 10,
-  //       dexterity: 10,
-  //       constitution: 10,
-  //       intelligence: 10,
-  //       wisdom: 10,
-  //       charisma: 10,
-  //     });
-  //   }
-  // }, [character]);
-
-
-
-
-
-  // const [character, setCharacter] = useState({
-  //   name: "Безіменний персонаж",
-  //   level: 1,
-  //   experience: "100/300",
-  //   hp: 10,
-  //   ac: 10,
-  //   speed: 30,
-  //   initiative: "+0",
-  //   strength: 11,
-  //   dexterity: 22,
-  //   constitution: 3,
-  //   intelligence: 4,
-  //   wisdom: 5,
-  //   charisma: 10,
-  // });
 
 // Функція для завантаження з AsyncStorage
   const loadCharacter = async () => {
@@ -214,102 +191,228 @@ const importFromFile = async () => {
   }
 };
 
-const rollD20WithModifier = (mod) => {
-  const rollResult = Math.floor(Math.random() * 20) + 1 + mod;
-   Alert.alert('Результат кидка',`Випав результат: ${rollResult- mod} + ${mod}(мод.) = ${rollResult}`);
-};
-
-
 console.log("characterData:", characterData);
 
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
+
+  // Функція для вибору фото
+  const pickPhoto = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        const photoUri = result.assets[0].uri;
+        setCharacterData((prevData) => ({ ...prevData, photoUri }));
+        Alert.alert("Успіх", "Фото завантажено!");
+      }
+    } catch (error) {
+      Alert.alert("Помилка", "Не вдалося вибрати фото.");
+    }
+  };
+
+  // Видалення фото
+  const removePhoto = () => {
+    setCharacterData((prevData) => ({ ...prevData, photoUri: "" }));
+    Alert.alert("Успіх", "Фото видалено!");
+  };
+
+
+  const [isNameModalVisible, setIsNameModalVisible] = useState(false);
+  const [newName, setNewName] = useState("");
+
+
+    const handleNameChange = () => {
+    if (!newName.trim()) {
+        Alert.alert("Помилка", "Ім'я не може бути порожнім!");
+        return;
+      }
+    setCharacterData((prevData) => ({ ...prevData, name: newName }));
+    setIsNameModalVisible(false);
+    onUpdateCharacter({ ...characterData, name: newName });
+  };
+
+  //НР
+  const [isHpModalVisible, setIsHpModalVisible] = useState(false);
+  const [tempHp, setTempHP] = useState(characterData.hp);
+  const [tempMaxHp, setTempMaxHP] = useState(characterData.maxHp);
+
+  const handleHPChange = (text) => {
+    const value = text === "" ? 0 : Number(text);
+    setTempHP(isNaN(value) ? 0 : Math.min(value, tempMaxHp));
+  };
+
+  const handleMaxHPChange = (text) => {
+    const value = text === "" ? 0 : Number(text);
+    setTempMaxHP(isNaN(value) ? 0 : value);
+  };
+
+  const handleSaveHp = () => {
+    setCharacterData((prevData) => ({ ...prevData, hp: tempHp, maxHp: tempMaxHp }));
+    setIsHpModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
       {/* Закріплений верхній блок */}
       <View style={styles.header}>
-        <Text style={styles.characterName}>{characterData.name}</Text>
+      {/* Відображення фото */}
+        {characterData.photoUri ? (
+          <Image
+            source={{ uri: characterData.photoUri }}
+            style={styles.characterPhoto}
+          />
+        ) : (
+          <View style={styles.placeholderPhoto}>
+            <Text style={styles.placeholderText}>Фото героя</Text>
+          </View>
+        )}
+
+        <Text style={styles.characterName}>{characterData.name}
+          <Menu
+          visible={menuVisible}
+          anchor={
+            <TouchableOpacity onPress={openMenu}>
+              <Text style={styles.menuButton}>⋮</Text>
+            </TouchableOpacity>
+          }
+          onRequestClose={closeMenu}
+        >
+          <MenuItem onPress={() => saveCharacter()}>Зберегти дані</MenuItem>
+          <MenuItem onPress={() => loadCharacter()}>
+            Завантажити дані
+          </MenuItem>
+          <MenuItem onPress={() => importFromFile()}>
+            Імпорт JSON
+          </MenuItem>
+          <MenuItem onPress={() => exportToFile()}>
+            Експорт JSON
+          </MenuItem>
+          <MenuDivider/>
+          <MenuItem onPress={pickPhoto}>Завантажити фото</MenuItem>
+          <MenuItem onPress={removePhoto}>Видалити фото</MenuItem>
+          <MenuItem onPress={() => setIsNameModalVisible(true)}>
+              Змінити ім'я
+            </MenuItem>
+        </Menu>
+
+        </Text>
         <Text style={styles.level}>Рівень {characterData.level}</Text>
         <Text style={styles.exp}>{characterData.experience}</Text>
         
-        <TouchableOpacity style={styles.button} onPress={saveCharacter}>
-    <Text style={styles.buttonText}>Зберегти</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.button} onPress={loadCharacter}>
-    <Text style={styles.buttonText}>Завантажити</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.button} onPress={importFromFile}>
-    <Text style={styles.buttonText}>Імпорт JSON</Text>
-  </TouchableOpacity>
-  <TouchableOpacity style={styles.button} onPress={exportToFile}>
-    <Text style={styles.buttonText}>експор JSON</Text>
-  </TouchableOpacity>
+        <TouchableOpacity onPress={() => setRestModalVisible(true)}>
+            <Text>Відпочинок</Text>
+        </TouchableOpacity>
+
       </View>
 
       {/* Основний контент зі скролом */}
-      <ScrollView contentContainerStyle={styles.content}>
+      <View contentContainerStyle={styles.content}>
         <View style={styles.statsRow}>
          {[
-  { key: "speed", label: "🏃 Швидкість" },
-  { key: "ac", label: "🛡 Захист" },
-  { key: "hp", label: "❤️ HP" },
-  { key: "initiative", label: "⚡ Ініціатива" },
-].map((stat) => (
-  <View key={stat.key} style={styles.statBox}>
-    <Text style={styles.statLabel}>{stat.label}</Text>
-    <TextInput
-      style={styles.statInput}
-      keyboardType="numeric"
-      value={characterData[stat.key]?.toString() ?? ""} // Оновлюємо основні статистики, а не вкладені
-      onChangeText={(text) =>
-        setCharacterData((prevData) => ({
-          ...prevData,
-          [stat.key]: parseInt(text) || 0, // Оновлюємо конкретне поле
-        }))
-      }
-    />
-  </View>
-))}
-
+            { key: "speed", label: "🏃 Швидкість" },
+            { key: "ac", label: "🛡 Захист" },
+            { key: "hp", label: "❤️ HP" },
+            { key: "initiative", label: "⚡ Ініціатива" },
+          ].map((stat) => (
+            <View key={stat.key} style={styles.statBox}>
+              <Text style={styles.statLabel}>{stat.label}</Text>
+              <TextInput
+                style={styles.statInput}
+                keyboardType="numeric"
+                value={characterData[stat.key]?.toString() ?? ""} // Оновлюємо основні статистики, а не вкладені
+                onChangeText={(text) =>
+                  setCharacterData((prevData) => ({
+                    ...prevData,
+                    [stat.key]: parseInt(text) || 0, // Оновлюємо конкретне поле
+                  }))
+                }
+              />
+            </View>
+          ))}
+            <View  style={styles.statBox}>
+        <Text>Здоров'я: {characterData.hp}/{characterData.maxHp}</Text>
+        <Button title="Редагувати HP" onPress={() => setIsHpModalVisible(true)} />
+            </View>
 
         </View> 
-
-        {/* Характеристики */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Характеристики та навички</Text>
-        {[
-  { key: "strength", label: "Сила" },
-  { key: "dexterity", label: "Ловкість" },
-  { key: "constitution", label: "Тілобудова" },
-  { key: "intelligence", label: "Інтелект" },
-  { key: "wisdom", label: "Мудрість" },
-  { key: "charisma", label: "Харизма" },
-].map((attr) => (
-  <View key={attr.key} style={styles.statRow}>
-    <Text style={styles.statName}>{attr.label}</Text>
-    <TextInput
-      style={styles.statInput}
-      keyboardType="numeric"
-      value={characterData[attr.key]?.toString() ?? ""}
-       onChangeText={(text) => {
-          let numericValue = parseInt(text) || 0; // Перетворення тексту на число
-          numericValue = Math.max(1, Math.min(numericValue, 30)); // Обмеження в межах 1-30
-          handleInputChange(attr.key, numericValue.toString());
-        }}
-    />
-    <TouchableOpacity
-      style={styles.rollButton}
-      onPress={() => rollD20WithModifier(Number(characterData[attr.key] || 0))}
-    >
-      <Text style={styles.rollButtonText}>🎲</Text>
-    </TouchableOpacity>
-  </View>
-))}
-
-
-        </View>
-      </ScrollView>
+      </View>
+          
+          <ScrollView>
+        {/* Вкладки для навігації */}
+        <CharacterTabs
+          characterData={characterData}
+          setCharacterData={setCharacterData}
+        />
+        </ScrollView>
 
       <Dice />
+
+      {/* Модальне вікно для зміни імені */}
+      <Modal visible={isNameModalVisible} animationType="slide" transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Змінити ім'я персонажа</Text>
+            <TextInput
+              style={styles.modalInput}
+              value={newName}
+              onChangeText={setNewName}
+              placeholder="Введіть нове ім'я"
+              placeholderTextColor="#888"
+            />
+            <View style={styles.modalButtons}>
+              <Button title="Зберегти" onPress={handleNameChange} />
+              <Button
+                title="Скасувати"
+                onPress={() => setIsNameModalVisible(false)}
+                color="#FF3B30"
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+
+      {/* Модальне вікно дял НР */}
+      <Modal visible={isHpModalVisible} animationType="slide">
+        <View style={{ padding: 20 }}>
+          <Text>Поточне HP: {tempHp}</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(tempHp || "")}
+            onChangeText={handleHPChange}
+          />
+          <TouchableOpacity onPress={() => handleHPChange(tempHp+1)}><Text>+1 HP</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => handleHPChange(tempHp-1)}><Text>-1 HP</Text></TouchableOpacity>
+
+          <Text>Максимальне HP:</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={String(tempMaxHp  || "")}
+            onChangeText={handleMaxHPChange}
+            style={{ borderWidth: 1, marginVertical: 10 }}
+          />
+          
+          <Button title="Зберегти" onPress={handleSaveHp} />
+          <Button title="Скасувати" onPress={() => setIsHpModalVisible(false)} />
+        </View>
+      </Modal>
+
+
+      <Modal visible={restModalVisible} animationType="slide">
+        <View>
+          <Text>Відпочинок</Text>
+          <Button title="Короткий відпочинок (кидання кості хито)" onPress={handleShortRest} />
+          <Button title="Тривалий відпочинок (повне відновлення)" onPress={handleLongRest} />
+          <Button title="Закрити" onPress={() => setRestModalVisible(false)} />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -330,7 +433,15 @@ const styles = StyleSheet.create({
   section: { marginTop: 20 },
   sectionTitle: { color: "#B39DDB", fontSize: 18, marginBottom: 10 },
   statRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
-  statName: { color: "white", fontSize: 16, flex: 1 }
+  statName: { color: "white", fontSize: 16, flex: 1 },
+  menuButton: {    fontSize: 24,    color: "#fff", paddingLeft: 20  },
+  characterPhoto: {   width: 100,   height: 100,    borderRadius: 50,    marginBottom: 10,  },
+  placeholderPhoto: {    width: 100,    height: 100,    borderRadius: 50,    backgroundColor: "#555",    justifyContent: "center",    alignItems: "center", marginBottom: 10,},
+  modalContainer: {    flex: 1,    justifyContent: "center",    alignItems: "center",    backgroundColor: "rgba(0, 0, 0, 0.5)",  },
+  modalContent: {    width: "80%",    backgroundColor: "#333",    padding: 20,    borderRadius: 10,  },
+  modalTitle: {    color: "white",    fontSize: 18,    marginBottom: 10,    textAlign: "center",  },
+  modalInput: {    backgroundColor: "#555",    color: "white",    padding: 10,    borderRadius: 5,    marginBottom: 20,    textAlign: "center",},
+  modalButtons: {    flexDirection: "row",    justifyContent: "space-between",  },
 });
 
 export default CharacterSheetScreen;
