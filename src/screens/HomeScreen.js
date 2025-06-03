@@ -3,86 +3,21 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
+  TextInput,
   Button,
   StyleSheet,
-  SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Ionicons } from "@expo/vector-icons"; // Пакет іконок для хрестика
-import * as FileSystem from "expo-file-system";
+import CharacterCard from "../components/CharacterCard";
 import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import { Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const STORAGE_KEY = "DnD_Characters";
 
 const HomeScreen = ({ navigation }) => {
-  const [characters, setCharacters] = useState([]);
-
-  const updateCharacter = (updatedCharacter) => {
-    setCharacters((prevCharacters) =>
-      prevCharacters.map((char) =>
-        char.id === updatedCharacter.id ? updatedCharacter : char
-      )
-    );
-  };
-
-  useEffect(() => {
-    const loadCharacters = async () => {
-      try {
-        const storedCharacters = await AsyncStorage.getItem(STORAGE_KEY);
-        if (storedCharacters) {
-          setCharacters(JSON.parse(storedCharacters));
-        }
-      } catch (e) {
-        console.error("Помилка завантаження персонажів:", e);
-      }
-    };
-
-    loadCharacters();
-  }, []);
-
-  useEffect(() => {
-    const saveCharacters = async () => {
-      try {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
-      } catch (e) {
-        console.error("Помилка збереження персонажів:", e);
-      }
-    };
-
-    if (characters.length > 0) {
-      saveCharacters();
-    }
-  }, [characters]);
-
-  const addNewCharacter = (newCharacter) => {
-    setCharacters((prevCharacters) => [...prevCharacters, newCharacter]);
-  };
-
-  const removeCharacter = (characterId) => {
-    setCharacters((prevCharacters) =>
-      prevCharacters.filter((character) => character.id !== characterId)
-    );
-  };
-
-  const renderCharacterItem = ({ item }) => (
-    <View style={styles.characterItem}>
-      <TouchableOpacity
-        style={styles.characterInfo}
-        onPress={() =>
-          navigation.navigate("CharacterSheet", {
-            character: item,
-            onUpdateCharacter: updateCharacter,
-          })
-        }
-      >
-        <Text style={styles.characterText}>{item.name}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => removeCharacter(item.id)}>
-        <Ionicons name="close-circle" size={24} color="red" />
-      </TouchableOpacity>
-    </View>
-  );
 
   const importFromFile = async () => {
     try {
@@ -110,59 +45,151 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const [characters, setCharacters] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
+
+  useEffect(() => {
+    const loadCharacters = async () => {
+      try {
+        const stored = await AsyncStorage.getItem(STORAGE_KEY);
+        if (stored) setCharacters(JSON.parse(stored));
+      } catch (e) {
+        console.error("Помилка завантаження:", e);
+      }
+    };
+    loadCharacters();
+  }, []);
+
+  useEffect(() => {
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+  }, [characters]);
+
+  const filtered = characters
+    .filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) =>
+      sortAsc
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    );
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ flex: 1 }}>
-        <FlatList
-          data={characters}
-          renderItem={renderCharacterItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 120 }} // Додано відступ знизу
-        />
-        <View style={styles.buttonContainer}>
-          <Button title="Імпортувати героя" onPress={importFromFile} />
-          <Button
-            title="Створити нового героя"
-            onPress={() =>
-              navigation.navigate("CreateCharacter", {
-                onCreateCharacter: addNewCharacter,
-              })
-            }
-          />
+    <View style={styles.container}>
+      <View style={styles.topBar}>
+        <Text style={styles.sortLabel}>Ім'я: </Text>
+        <TouchableOpacity onPress={() => setSortAsc((s) => !s)}>
+          <Text style={styles.sortValue}>
+            {sortAsc ? "A - Z" : "Z - A"}{" "}
+            <Ionicons name="chevron-up" size={14} color="#2f95dc" />
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.slotBadge}>
+          <Text style={styles.slotText}>Slots: {characters.length}/15</Text>
         </View>
       </View>
-    </SafeAreaView>
-  );  
+
+      <TextInput
+        placeholder="Пошук героїв"
+        placeholderTextColor="#888"
+        style={styles.search}
+        value={search}
+        onChangeText={setSearch}
+      />
+
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        renderItem={({ item }) => (
+          <CharacterCard
+            character={item}
+            onPress={() =>
+              navigation.navigate("CharacterSheet", {
+                character: item,
+                onUpdateCharacter: (updated) => {
+                  const updatedList = characters.map((c) =>
+                    c.id === updated.id ? updated : c
+                  );
+                  setCharacters(updatedList);
+                },
+              })
+            }
+            onDelete={() =>
+              setCharacters((prev) =>
+                prev.filter((c) => c.id !== item.id)
+              )
+            }
+          />
+        )}
+      />
+
+      <View style={styles.buttonContainer}>
+        <View style={{ height: 8 }} />
+        <Button
+          title="Імпортувати героя"
+          onPress={importFromFile}
+        />
+        <View style={{ height: 8 }} />
+        <Button
+          title="Створити нового героя"
+          onPress={() =>
+            navigation.navigate("CreateCharacter", {
+              onCreateCharacter: (newChar) =>
+                setCharacters((prev) => [...prev, newChar]),
+            })
+          }
+        />
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 20,
+    backgroundColor: "#1c1c1e",
+    paddingHorizontal: 16,
   },
-  characterItem: {
+  topBar: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
+    marginTop: 12,
     marginBottom: 8,
-    backgroundColor: "#f0f0f0",
+  },
+  sortLabel: {
+    color: "white",
+    fontWeight: "bold",
+    marginRight: 4,
+  },
+  sortValue: {
+    color: "#2f95dc",
+    fontWeight: "600",
+    marginRight: 12,
+  },
+  slotBadge: {
+    backgroundColor: "#ff3b30",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginLeft: "auto",
+  },
+  slotText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+  search: {
+    backgroundColor: "#2c2c2e",
+    padding: 10,
     borderRadius: 8,
-  },
-  characterInfo: {
-    flex: 1,
-  },
-  characterText: {
-    fontSize: 18,
+    color: "white",
+    marginBottom: 10,
   },
   buttonContainer: {
     position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 25,
-    borderTopWidth: 1,
-    borderColor: "#333",
+    bottom: 20,
+    left: 16,
+    right: 16,
   },
 });
 
