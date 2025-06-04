@@ -1,54 +1,59 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { useCharacters } from "../context/CharacterContext";
+import { useNavigation } from "@react-navigation/native";
 
-const CreateCharacterScreen = ({ navigation, route }) => {
+const CreateCharacterScreen = () => {
   const [name, setName] = useState("");
-  const [level, setLevel] = useState("");
-  const [characterClass, setCharacterClass] = useState("");
+  const [charClass, setCharClass] = useState("");
+  const [race, setRace] = useState("");
+  const [level, setLevel] = useState("1");
 
-  const handleCreateCharacter = () => {
-    const newCharacter = {
-      id: Date.now().toString(),
-      name,
-      level,
-      class: characterClass,
-    };
+  const { addCharacter } = useCharacters();
+  const navigation = useNavigation();
 
-    if (route.params?.onCreateCharacter) {
-      route.params.onCreateCharacter(newCharacter);
+  const handleCreate = () => {
+    if (!name) {
+      Alert.alert("Помилка", "Ім'я не може бути порожнім");
+      return;
     }
 
+    const newChar = {
+      id: Date.now().toString(),
+      name,
+      class: charClass,
+      race,
+      level: parseInt(level),
+    };
+
+    addCharacter(newChar);
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Ім'я персонажа:</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Введіть ім'я"
-      />
+      <Text style={styles.label}>Ім’я:</Text>
+      <TextInput style={styles.input} value={name} onChangeText={setName} />
 
-      <Text style={styles.label}>Рівень персонажа:</Text>
-      <TextInput
-        style={styles.input}
-        value={level}
-        onChangeText={setLevel}
-        placeholder="Введіть рівень"
-        keyboardType="numeric"
-      />
+      <Text style={styles.label}>Клас:</Text>
+      <TextInput style={styles.input} value={charClass} onChangeText={setCharClass} />
 
-      <Text style={styles.label}>Клас персонажа:</Text>
-      <TextInput
-        style={styles.input}
-        value={characterClass}
-        onChangeText={setCharacterClass}
-        placeholder="Введіть клас"
-      />
+      <Text style={styles.label}>Раса:</Text>
+      <TextInput style={styles.input} value={race} onChangeText={setRace} />
 
-      <Button title="Створити персонажа" onPress={handleCreateCharacter} />
+      <Text style={styles.label}>Рівень:</Text>
+      <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType="numeric" />
+
+      <View style={{ marginTop: 20 }}>
+        <Button title="Створити" onPress={handleCreate} />
+      </View>
     </View>
   );
 };
@@ -56,18 +61,20 @@ const CreateCharacterScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
+    backgroundColor: "#1c1c1e",
   },
   label: {
+    color: "white",
+    marginTop: 12,
     fontSize: 16,
-    marginBottom: 8,
   },
   input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
+    backgroundColor: "#2c2c2e",
+    color: "white",
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 4,
   },
 });
 

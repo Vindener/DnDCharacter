@@ -131,13 +131,18 @@ const CharacterSheetScreen = ({ route, navigation }) => {
       return false; // Дозволяє стандартний вихід
     };
 
-    const unsubscribe = navigation.addListener("beforeRemove", saveCharacter);
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
 
-    return () => {
-      unsubscribe(); // Відписка від подій навігації
-      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+    const handler = () => {
+      return false; // Дозволяє стандартний вихід
     };
+
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      handler
+    );
+
+    return () => subscription.remove();
   }, [characterData]);
 
   // Функція для завантаження з AsyncStorage
