@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CharacterContext = createContext();
 
@@ -8,25 +8,28 @@ export const CharacterProvider = ({ children }) => {
   const MAX_CHARACTERS = 15;
 
   useEffect(() => {
+    setCharacters([]);
     loadCharacters();
   }, []);
 
   const loadCharacters = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem("characters");
+      const jsonValue = await AsyncStorage.getItem('characters');
       if (jsonValue != null) {
-        setCharacters(JSON.parse(jsonValue));
+        const parsed = JSON.parse(jsonValue);
+        const filtered = Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+        setCharacters(filtered);
       }
     } catch (e) {
-      console.error("Failed to load characters:", e);
+      console.error('Failed to load characters:', e);
     }
   };
 
   const saveCharacters = async (newCharacters) => {
     try {
-      await AsyncStorage.setItem("characters", JSON.stringify(newCharacters));
+      await AsyncStorage.setItem('characters', JSON.stringify(newCharacters));
     } catch (e) {
-      console.error("Failed to save characters:", e);
+      console.error('Failed to save characters:', e);
     }
   };
 
@@ -38,9 +41,7 @@ export const CharacterProvider = ({ children }) => {
   };
 
   const updateCharacter = (index, updatedCharacter) => {
-    const updated = characters.map((char, i) =>
-      i === index ? updatedCharacter : char
-    );
+    const updated = characters.map((char, i) => (i === index ? updatedCharacter : char));
     setCharacters(updated);
     saveCharacters(updated);
   };
