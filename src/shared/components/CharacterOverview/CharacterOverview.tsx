@@ -14,7 +14,7 @@ const CharacterOverview: React.FC<CharacterStatsProps> = ({ character }: Charact
         <Text style={styles.attributes}>Швидкість: {character.speed ?? '-'}</Text>
         <Text style={styles.attributes}>Захист: {character.ac ?? '-'}</Text>
         <Text style={styles.attributes}>
-          HP: {character.hp.current ?? '-'} / {character.hp.max ?? '-'}
+          HP: {character?.hp?.current ?? '-'} / {character?.hp?.max ?? '-'}
         </Text>
         <Text style={styles.attributes}>Ініціатива: {character.initiative ?? '-'}</Text>
       </View>

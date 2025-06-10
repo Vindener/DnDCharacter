@@ -13,7 +13,7 @@ const Attributes: React.FC<AttributesProps> = ({ data }) => {
   return (
     <View style={styles.container}>
       {attributes.map(({ key, label }) => (
-        <AttributesItem key={key} label={label} value={data.stats[key]} />
+        <AttributesItem key={key} label={label} value={data?.stats ? data.stats[key] : 0} />
       ))}
     </View>
   );

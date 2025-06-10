@@ -55,9 +55,9 @@ export default function Character({ route, navigation }: CharacterProps) {
   }, [characterData.id]);
 
   useEffect(() => {
-    setTempHp(characterData.hp.temp ?? 0);
-    setTempMaxHp(characterData.hp.max ?? 0);
-  }, [characterData.hp, characterData.hp.max]);
+    setTempHp(characterData?.hp?.temp ?? 0);
+    setTempMaxHp(characterData?.hp?.max ?? 0);
+  }, [characterData?.hp?.temp, characterData?.hp?.max]);
 
   const saveCharacter = async () => {
     if (!characterData.id) return;
