@@ -1,3 +1,12 @@
+import { Stats } from './Stats';
+import { SavingThrows } from './SavingThrows';
+import { Skills } from './Skills';
+import { HitPoints } from './HitPoints';
+import { DeathSaves } from './DeathSaves';
+import { Weapon } from './Weapon';
+import { Traits } from './Traits';
+import { Spells } from './Spells';
+
 export interface CharacterDto {
   id: string;
   name: string;
@@ -12,84 +21,25 @@ export interface CharacterDto {
   speed: number;
   ac: number; // Armor Class
   currency?: string; // золото
-  stats: {
-    strength: number;
-    dexterity: number;
-    constitution: number;
-    intelligence: number;
-    wisdom: number;
-    charisma: number;
-  };
-  savingThrows: {
-    // рятівні кидки, чи є перевага
-    strength: boolean;
-    dexterity: boolean;
-    constitution: boolean;
-    intelligence: boolean;
-    wisdom: boolean;
-    charisma: boolean;
-  };
-  skills: {
-    [key: string]: number;
-    acrobatics: number;
-    animalHandling: number;
-    arcana: number;
-    athletics: number;
-    deception: number;
-    history: number;
-    insight: number;
-    intimidation: number;
-    investigation: number;
-    medicine: number;
-    nature: number;
-    perception: number;
-    performance: number;
-    persuasion: number;
-    religion: number;
-    sleightOfHand: number;
-    stealth: number;
-    survival: number;
-  };
+  stats: Stats;
+  savingThrows: SavingThrows;
+  skills: Skills;
+
   proficiencies: string[]; // навички, інструменти, зброя, мови
-  hp: {
-    max: number;
-    current: number;
-    temp: number;
-  };
-  hitDice: string; // "3d10"
-  deathSaves: {
-    successes: number;
-    failures: number;
-  };
+  hp: HitPoints;
+  hitDice: string;
+  deathSaves: DeathSaves;
+
   inventory: string[];
   armorClassDetails?: string;
-  weapons?: {
-    name: string;
-    attackBonus: number;
-    damage: string;
-  }[];
+  weapons?: Weapon[];
   tools?: string[];
-  traits: {
-    personality: string;
-    ideals: string;
-    bonds: string;
-    flaws: string;
-  };
+
+  traits: Traits;
   featuresAndTraits?: string[]; // Особливості класові, расові, фон
-  spells: {
-    spellcastingAbility: string; // "Intelligence" і тд
-    spellSaveDC: number;
-    spellAttackBonus: number;
-    spellSlots: {
-      [level: number]: {
-        max: number;
-        used: number;
-      };
-    };
-    knownSpells: string[];
-    preparedSpells: string[];
-    cantrips: string[];
-  };
+
+  spells: Spells;
+
   notes?: string;
   alliesAndOrganizations?: string;
   backstory?: string;
@@ -97,4 +47,4 @@ export interface CharacterDto {
   photoUri?: string;
 }
 
-//TODO - fix any
+//TODO - fix  - complete
