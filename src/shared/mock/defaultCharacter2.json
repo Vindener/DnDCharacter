@@ -1,0 +1,88 @@
+{
+  "id": "char001",
+  "name": "Elara Moonshadow",
+  "class": "Wizard",
+  "subclass": "School of Evocation",
+  "race": "Elf",
+  "subrace": "High Elf",
+  "background": "Sage",
+  "level": 5,
+  "experience": 6500,
+  "initiative": 3,
+  "speed": 30,
+  "ac": 14,
+  "stats": {
+    "strength": 8,
+    "dexterity": 16,
+    "constitution": 12,
+    "intelligence": 18,
+    "wisdom": 14,
+    "charisma": 10
+  },
+  "skills": {
+    "acrobatics": 2,
+    "animalHandling": 0,
+    "arcana": 6,
+    "athletics": -1,
+    "deception": 0,
+    "history": 6,
+    "insight": 2,
+    "intimidation": 0,
+    "investigation": 4,
+    "medicine": 2,
+    "nature": 4,
+    "perception": 4,
+    "performance": 0,
+    "persuasion": 0,
+    "religion": 5,
+    "sleightOfHand": 2,
+    "stealth": 2,
+    "survival": 2
+  },
+  "proficiencies": ["Daggers", "Quarterstaffs", "Light Crossbows", "Common", "Elvish"],
+  "hp": {
+    "max": 28,
+    "current": 20,
+    "temp": 0
+  },
+  "hitDice": "5d6",
+  "deathSaves": {
+    "successes": 1,
+    "failures": 0
+  },
+  "inventory": ["Spellbook", "Component Pouch", "Scholar's Robes", "Potion of Healing"],
+  "armorClassDetails": "Mage Armor (AC = 13 + Dex modifier)",
+  "weapons": [
+    {
+      "name": "Quarterstaff",
+      "attackBonus": 2,
+      "damage": "1d6"
+    }
+  ],
+  "tools": [],
+  "traits": {
+    "personality": "I’m always polite and respectful.",
+    "ideals": "Knowledge. The path to power and self-improvement is through knowledge.",
+    "bonds": "I’ve been searching my whole life for the answer to a certain question.",
+    "flaws": "I am easily distracted by the promise of information."
+  },
+  "featuresAndTraits": ["Arcane Recovery", "Spellcasting", "Evocation Savant", "Sculpt Spells", "Darkvision", "Fey Ancestry"],
+  "spells": {
+    "spellcastingAbility": "Intelligence",
+    "spellSaveDC": 14,
+    "spellAttackBonus": 6,
+    "spellSlots": {
+      "1": { "max": 4, "used": 2 },
+      "2": { "max": 3, "used": 1 },
+      "3": { "max": 2, "used": 0 }
+    },
+    "knownSpells": ["Mage Armor", "Magic Missile", "Detect Magic", "Shield", "Scorching Ray", "Fireball"],
+    "preparedSpells": ["Mage Armor", "Magic Missile", "Shield", "Scorching Ray", "Fireball"],
+    "cantrips": ["Prestidigitation", "Fire Bolt", "Mage Hand"]
+  },
+  "notes": "Has a mysterious arcane tattoo.",
+  "alliesAndOrganizations": "College of the Arcane Mind",
+  "backstory": "Elara grew up in an elven library and seeks forbidden knowledge.",
+  "campaign": "Rise of the Shadow Lords",
+  "photoUri": "https://example.com/images/elara.png"
+}
