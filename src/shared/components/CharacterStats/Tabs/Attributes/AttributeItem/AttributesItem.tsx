@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { styles } from '@/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style';
-import { useCharacters } from '@/context/CharacterContext';
+import useCharacterStore from '@/context/CharacterContext';
 
 interface AttributesItemProps {
   label: string;
@@ -9,25 +9,22 @@ interface AttributesItemProps {
 }
 
 export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value }) => {
-  const { characters, updateCharacter } = useCharacters();
+  const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
+  const character = useCharacterStore((s: any) => s.selectedCharacter);
   const modifier = Math.floor((value - 10) / 2);
 
   const rollD20WithModifier = (mod: number) => {
     const roll = Math.floor(Math.random() * 20) + 1;
     const total = roll + mod;
     console.log('Результат кидка', `Випав результат: ${roll} + ${mod}(мод.) = ${total}`);
-    //   TODO - create custom modal for dice roll result
+    //   TODO add custom modal here
   };
 
   const handleTextChange = (text: string) => {
     const numericValue = parseInt(text, 10);
-    if (!isNaN(numericValue)) {
-      const index = 0;
-      const character = characters[index];
-      if (character) {
-        const updatedCharacter = { ...character, [label.toLowerCase()]: numericValue };
-        updateCharacter(index, updatedCharacter);
-      }
+    if (!isNaN(numericValue) && character) {
+      const updatedCharacter = { ...character, [label.toLowerCase()]: numericValue };
+      updateCharacter(updatedCharacter);
     }
   };
 

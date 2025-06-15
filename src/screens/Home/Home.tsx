@@ -1,34 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, Button, TouchableOpacity, ListRenderItem } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import { View, Text, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
 import { CharacterCard } from '@/shared/components/CharacterCard/CharacterCard';
-import { useCharacters } from '@/context/CharacterContext';
 import { importCharacterFromFile } from '@/shared/services/fileSerice';
+import useCharacterStore from '@/context/CharacterContext';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { TabStackParamList } from '@/navigation/TabNavigator';
 
-type Props = {
-  navigation: any;
-};
-
-const STORAGE_KEY = 'DnD_Characters';
-
-const Home: React.FC<Props> = ({ navigation }) => {
-  const { characters, addCharacter } = useCharacters();
+const Home = () => {
+  const characters = useCharacterStore((s) => s.characters);
+  const addCharacter = useCharacterStore((s) => s.addCharacter);
+  const loadCharacters = useCharacterStore((s) => s.loadCharacters);
   const [search, setSearch] = useState('');
   const [sortAsc, setSortAsc] = useState(true);
+  const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'Home'>>();
 
   useEffect(() => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
-  }, [characters]);
+    loadCharacters();
+  }, []);
 
-  // const filtered = characters
-  //   .filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
-  //   .sort((a, b) => (sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
+  const filtered = characters
+    .filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => (sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
 
-  console.log('characters', characters);
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -45,11 +41,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
 
       <TextInput placeholder='Пошук героїв' placeholderTextColor='#888' style={styles.search} value={search} onChangeText={setSearch} />
 
-      <FlatList
-        data={characters}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <CharacterCard character={item} key={item.id} />}
-      />
+      <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <CharacterCard character={item} />} />
 
       <View style={styles.buttonContainer}>
         <View style={{ height: 8 }} />
@@ -57,7 +49,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
           title='Імпортувати героя'
           onPress={async () => {
             const character = await importCharacterFromFile();
-            if (character) addCharacter(character);
+            if (character) await addCharacter(character);
           }}
         />
         <View style={{ height: 8 }} />

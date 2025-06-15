@@ -1,8 +1,8 @@
 import React, { JSX, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useCharacters } from '@/context/CharacterContext';
 import { styles } from '@/screens/CreateCharacter/style';
+import useCharacterStore from '@/context/CharacterContext';
 
 type Character = {
   id: string;
@@ -13,16 +13,17 @@ type Character = {
 };
 
 const CreateCharacter = (): JSX.Element => {
-  const [name, setName] = useState<string>('');
-  const [charClass, setCharClass] = useState<string>('');
-  const [race, setRace] = useState<string>('');
-  const [level, setLevel] = useState<string>('1');
+  const [name, setName] = useState('');
+  const [charClass, setCharClass] = useState('');
+  const [race, setRace] = useState('');
+  const [level, setLevel] = useState('1');
 
-  const { addCharacter, characters } = useCharacters();
+  // TODO fix any
+  const addCharacter = useCharacterStore((state: any) => state.addCharacter);
   const navigation = useNavigation();
 
-  const handleCreate = () => {
-    if (!name) {
+  const handleCreate = async () => {
+    if (!name.trim()) {
       Alert.alert('Помилка', "Ім'я не може бути порожнім");
       return;
     }
@@ -35,7 +36,7 @@ const CreateCharacter = (): JSX.Element => {
       level: parseInt(level, 10),
     };
 
-    addCharacter(newChar);
+    await addCharacter(newChar);
     navigation.goBack();
   };
 

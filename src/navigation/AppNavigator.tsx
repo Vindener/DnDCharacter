@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from '../screens/Home/Home';
-import CreateCharacter from '../screens/CreateCharacter/CreateCharacter';
-import CharacterSheet from '../screens/Character/Character';
-import { Character } from '@/types/Character';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Header from '@/modules/Header/Header';
 import { Ionicons } from '@expo/vector-icons';
-import Settings from '@/screens/Settings/Settings';
 import EmptyPlaceholder from '@/shared/components/EmptyPlaceholder';
 import TabNavigator from '@/navigation/TabNavigator';
-import { useThemeContext } from '@/context/ThemeContext';
+import { CharacterDto } from '@/types/Character';
+import useThemeStore from '@/context/ThemeContext';
 
 export type AppStackParamList = {
   Library: undefined;
-  Heroes: { onCreateCharacter: (newChar: Character) => void };
-  Guide: { character: Character; onUpdateCharacter: (updated: Character) => void };
+  Heroes: { onCreateCharacter: (newChar: CharacterDto) => void };
+  Guide: { character: CharacterDto; onUpdateCharacter: (updated: CharacterDto) => void };
   Settings: undefined;
 };
 
 const Stack = createBottomTabNavigator<AppStackParamList>();
 
 export default function AppNavigator() {
-  const { theme } = useThemeContext();
+  const theme = useThemeStore((s) => s.theme);
+  const loadTheme = useThemeStore((s) => s.loadTheme);
+
+  useEffect(() => {
+    loadTheme();
+  }, []);
 
   function getIconName(routeName: string): keyof typeof Ionicons.glyphMap {
     switch (routeName) {
