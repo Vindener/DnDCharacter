@@ -7,7 +7,6 @@ import DiceRoller from '../screens/DiceRoller/DiceRoller';
 import Home from '../screens/Home/Home';
 import Settings from '@/screens/Settings/Settings';
 import Header from '@/modules/Header/Header';
-import { useThemeContext } from '@/context/ThemeContext';
 import CreateCharacter from '@/screens/CreateCharacter/CreateCharacter';
 import { CharacterDto } from '@/types/Character';
 
@@ -19,7 +18,7 @@ export type TabStackParamList = {
   Character: {
     character: CharacterDto;
   };
-  CreateCharacter: { onCreateCharacter: (newChar: any) => void };
+  CreateCharacter: undefined;
   Settings: undefined;
 };
 

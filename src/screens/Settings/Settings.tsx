@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, Switch } from 'react-native';
 import { styles } from '@/screens/Settings/styles';
-import { useThemeContext } from '@/context/ThemeContext';
+import useThemeStore from '@/context/ThemeContext';
 
-const Settings: React.FC = () => {
-  const { isDark, toggleTheme } = useThemeContext();
+const Settings = () => {
+  const isDark = useThemeStore((s) => s.isDark);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
   return (
     <View style={styles.container}>

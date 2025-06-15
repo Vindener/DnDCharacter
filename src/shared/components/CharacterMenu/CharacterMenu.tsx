@@ -6,12 +6,13 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { shareAsync } from 'expo-sharing';
 import { importCharacterFromFile } from '@/shared/services/fileSerice';
-import { useCharacters } from '@/context/CharacterContext';
 import { CharacterDto } from '@/types/Character';
 import { styles } from './style';
+import useCharacterStore from '@/context/CharacterContext';
 
 export default function CharacterMenu({ character }: { character: CharacterDto }) {
-  const { addCharacter } = useCharacters();
+  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
+  const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
   const [menuVisible, setMenuVisible] = useState(false);
   const [characterData, setCharacterData] = useState<CharacterDto>(character);
 
@@ -27,20 +28,6 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-
-  const saveCharacter = async () => {
-    if (!characterData.id) return;
-    try {
-      await AsyncStorage.setItem(`characterData_${characterData.id}`, JSON.stringify(characterData));
-    } catch {}
-  };
-
-  const loadCharacter = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(`characterData_${characterData.id}`);
-      if (stored) setCharacterData(JSON.parse(stored));
-    } catch {}
-  };
 
   const exportToFile = async () => {
     try {
@@ -60,18 +47,20 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
       });
       if (!result.canceled) {
         const uri = result.assets[0].uri;
-        setCharacterData((prev) => ({ ...prev, photoUri: uri }));
+        const updated = { ...characterData, photoUri: uri };
+        setCharacterData(updated);
+        updateCharacter(updated);
       }
     } catch {}
   };
 
   const removePhoto = () => {
-    setCharacterData((prev) => ({ ...prev, photoUri: undefined }));
+    const updated = { ...characterData, photoUri: undefined };
+    setCharacterData(updated);
+    updateCharacter(updated);
   };
 
-  const renameCharacter = () => {
-    // insert modal logic externally
-  };
+  const renameCharacter = () => {};
 
   const importCharacter = async () => {
     const imported = await importCharacterFromFile();

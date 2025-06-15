@@ -1,13 +1,7 @@
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import { CharacterDto } from '@/types/Character';
 
-type CharacterData = {
-  id?: string;
-  name: string;
-  [key: string]: any;
-};
-
-export const importCharacterFromFile = async (): Promise<CharacterData | null> => {
+export const importCharacterFromFile = async (): Promise<CharacterDto | null> => {
   try {
     const result = await DocumentPicker.getDocumentAsync({
       type: 'application/json',

@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { shareAsync } from 'expo-sharing';
-import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import * as ImagePicker from 'expo-image-picker';
-import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-import { useCharacters } from '@/context/CharacterContext';
-// import { styles } from '@/screens/Character/style';
 import { styles } from './style';
-import { importCharacterFromFile } from '@/shared/services/fileSerice';
-import { useRoute } from '@react-navigation/native';
 import { CharacterDto } from '@/types/Character';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
 import CharacterOverview from '@/shared/components/CharacterOverview/CharacterOverview';
 import CharacterStats from '@/shared/components/CharacterStats/CharacterStats';
+import useCharacterStore from '@/context/CharacterContext';
 
 interface CharacterProps {
   route: {
@@ -25,28 +19,20 @@ interface CharacterProps {
   navigation: any;
 }
 
-export default function Character({ route, navigation }: CharacterProps) {
-  const { characters, addCharacter } = useCharacters();
+export default function Character({ route }: CharacterProps) {
+  const { addCharacter } = useCharacterStore();
   const { character } = route.params;
 
-  // TODO fix any
   const [characterData, setCharacterData] = useState<CharacterDto | any>(character);
-  // const [characterData, setCharacterData] = useState<CharacterData>(characters[0]);
-
-  const [menuVisible, setMenuVisible] = useState(false);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
   const [newName, setNewName] = useState('');
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempHp, setTempHp] = useState(0);
   const [tempMaxHp, setTempMaxHp] = useState(0);
 
-  // useEffect(() => {
-  //   if (character) setCharacterData(character);
-  // }, [character]);
-
   useEffect(() => {
     if (characterData.id) {
-      AsyncStorage.getItem(`characterData_${characterData.id}`)
+      FileSystem.readAsStringAsync(FileSystem.documentDirectory + `characterData_${characterData.id}.json`)
         .then((stored) => {
           if (stored) setCharacterData(JSON.parse(stored));
         })
@@ -62,14 +48,8 @@ export default function Character({ route, navigation }: CharacterProps) {
   const saveCharacter = async () => {
     if (!characterData.id) return;
     try {
-      await AsyncStorage.setItem(`characterData_${characterData.id}`, JSON.stringify(characterData));
-    } catch {}
-  };
-
-  const loadCharacter = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('characterData');
-      if (jsonValue) setCharacterData(JSON.parse(jsonValue));
+      const path = FileSystem.documentDirectory + `characterData_${characterData.id}.json`;
+      await FileSystem.writeAsStringAsync(path, JSON.stringify(characterData));
     } catch {}
   };
 
@@ -123,9 +103,6 @@ export default function Character({ route, navigation }: CharacterProps) {
     setCharacterData((prev: any) => ({ ...prev, hp: tempHp, maxHp: tempMaxHp }));
     setIsHpModalVisible(false);
   };
-
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
 
   return (
     <View style={styles.container}>

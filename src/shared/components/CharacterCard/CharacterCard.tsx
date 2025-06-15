@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './style';
-import { useCharacters } from '@/context/CharacterContext';
 import { CharacterDto } from '@/types/Character';
 import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import { TabStackParamList } from '@/navigation/TabNavigator';
+import useCharacterStore from '@/context/CharacterContext';
 
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
 
@@ -14,20 +14,17 @@ interface CharacterCardProps {
   character: CharacterDto;
 }
 
+// TODO fix any
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   const navigation = useNavigation<NavigationProp>();
-  const { characters, removeCharacter, updateCharacter } = useCharacters();
-  const newChar = character;
+  const removeCharacter = useCharacterStore((s: any) => s.removeCharacter);
 
   const handlePress = () => {
     navigation.navigate('Character', { character });
   };
 
-  // TODO move this logic to store and just import deleteCharacter here
-  // not sure if it should be done since we will use Zustand
   const handleDelete = () => {
-    const index = characters.findIndex((c: any) => c.id === character.id);
-    if (index !== -1) removeCharacter(index);
+    removeCharacter(character.id);
   };
 
   return (
