@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { shareAsync } from 'expo-sharing';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -8,7 +8,6 @@ import { CharacterDto } from '@/types/Character';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
 import CharacterOverview from '@/shared/components/CharacterOverview/CharacterOverview';
 import CharacterStats from '@/shared/components/CharacterStats/CharacterStats';
-import useCharacterStore from '@/context/CharacterContext';
 
 interface CharacterProps {
   route: {
@@ -20,7 +19,6 @@ interface CharacterProps {
 }
 
 export default function Character({ route }: CharacterProps) {
-  const { addCharacter } = useCharacterStore();
   const { character } = route.params;
 
   const [characterData, setCharacterData] = useState<CharacterDto | any>(character);
@@ -128,7 +126,7 @@ export default function Character({ route }: CharacterProps) {
         </TouchableOpacity>
       </View>
 
-      <CharacterOverview character={characterData} />
+      <CharacterOverview character={characterData.id} />
       <CharacterStats character={characterData} />
     </View>
   );

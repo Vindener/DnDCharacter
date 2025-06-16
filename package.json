@@ -36,6 +36,7 @@
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-tab-view": "^4.0.5",
+    "react-native-uuid": "^2.0.3",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "^0.20.0",
     "react-navigation": "^5.0.0",
