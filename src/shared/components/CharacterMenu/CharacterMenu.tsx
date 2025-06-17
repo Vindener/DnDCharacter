@@ -101,14 +101,6 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
         <MenuItem
           onPress={() => {
             closeMenu();
-            importCharacter();
-          }}
-        >
-          Імпорт JSON
-        </MenuItem>
-        <MenuItem
-          onPress={() => {
-            closeMenu();
             exportToFile();
           }}
         >
