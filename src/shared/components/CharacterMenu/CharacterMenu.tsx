@@ -3,12 +3,10 @@ import { Text, TouchableOpacity } from 'react-native';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
-import { shareAsync } from 'expo-sharing';
-import { importCharacterFromFile } from '@/shared/services/fileSerice';
 import { CharacterDto } from '@/types/Character';
 import { styles } from './style';
-import useCharacterStore from '@/context/CharacterContext';
+import useCharacterStore from '@/context/Character-store';
+import FileService from '@/shared/services/fileSerice';
 
 export default function CharacterMenu({ character }: { character: CharacterDto }) {
   const addCharacter = useCharacterStore((s: any) => s.addCharacter);
@@ -28,15 +26,6 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-
-  const exportToFile = async () => {
-    try {
-      const jsonData = JSON.stringify(characterData, null, 2);
-      const fileUri = FileSystem.documentDirectory + 'character.json';
-      await FileSystem.writeAsStringAsync(fileUri, jsonData, { encoding: FileSystem.EncodingType.UTF8 });
-      await shareAsync(fileUri);
-    } catch {}
-  };
 
   const pickPhoto = async () => {
     try {
@@ -63,7 +52,7 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
   const renameCharacter = () => {};
 
   const importCharacter = async () => {
-    const imported = await importCharacterFromFile();
+    const imported = await FileService.importCurrentCharacter(character.id);
     if (imported) addCharacter(imported);
   };
 
@@ -101,7 +90,7 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
         <MenuItem
           onPress={() => {
             closeMenu();
-            exportToFile();
+            FileService.exportCharacter(characterData);
           }}
         >
           Експорт JSON

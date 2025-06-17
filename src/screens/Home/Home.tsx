@@ -3,11 +3,11 @@ import { View, Text, FlatList, TextInput, Button, TouchableOpacity } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
 import { CharacterCard } from '@/shared/components/CharacterCard/CharacterCard';
-import { importCharacterFromFile } from '@/shared/services/fileSerice';
-import useCharacterStore from '@/context/CharacterContext';
+import useCharacterStore from '@/context/Character-store';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { TabStackParamList } from '@/navigation/TabNavigator';
+import FileService from '@/shared/services/fileSerice';
 
 const Home = () => {
   const characters = useCharacterStore((s) => s.characters);
@@ -41,14 +41,14 @@ const Home = () => {
 
       <TextInput placeholder='Пошук героїв' placeholderTextColor='#888' style={styles.search} value={search} onChangeText={setSearch} />
 
-      <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <CharacterCard character={item} />} />
+      <FlatList data={filtered} keyExtractor={(item) => String(item.id)} renderItem={({ item }) => <CharacterCard character={item} />} />
 
       <View style={styles.buttonContainer}>
         <View style={{ height: 8 }} />
         <Button
           title='Імпортувати героя'
           onPress={async () => {
-            const character = await importCharacterFromFile();
+            const character = await FileService.importCharacterFromFile();
             if (character) await addCharacter(character);
           }}
         />

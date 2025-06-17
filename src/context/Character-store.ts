@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CharacterDto } from '@/types/Character';
+import { StatKey } from '@/shared/const/attributes';
+import { uuid } from 'expo-modules-core';
 
 const MAX_CHARACTERS = 15;
 
@@ -10,8 +12,9 @@ interface CharacterStore {
   loadCharacters: () => Promise<void>;
   saveCharacters: (newCharacters: CharacterDto[]) => Promise<void>;
   addCharacter: (character: CharacterDto) => Promise<void>;
-  updateCharacter: (index: number, updatedCharacter: CharacterDto) => Promise<void>;
-  removeCharacter: (index: number) => Promise<void>;
+  updateCharacter: (id: string, updatedCharacter: CharacterDto) => Promise<void>;
+  updateCharacterAttribute: (id: string, key: StatKey, value: number) => CharacterDto;
+  removeCharacter: (id: string) => Promise<void>;
 }
 
 const STORAGE_KEY = 'characters';
@@ -39,19 +42,41 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   addCharacter: async (character: CharacterDto) => {
     const { characters, saveCharacters } = get();
     if (characters.length >= MAX_CHARACTERS) return;
-    const updated = [...characters, character];
+    const characterWithId = { ...character, id: character.id || uuid.v4() };
+    const updated = [...characters, characterWithId];
+    await saveCharacters(updated);
+    console.log(updated);
+  },
+
+  updateCharacter: async (id: string, updatedCharacter: CharacterDto) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? updatedCharacter : char));
     await saveCharacters(updated);
   },
 
-  updateCharacter: async (index: number, updatedCharacter: CharacterDto) => {
-    const { characters, saveCharacters } = get();
-    const updated = characters.map((char, i) => (i === index ? updatedCharacter : char));
-    await saveCharacters(updated);
+  updateCharacterAttribute: (id: string, key: StatKey, value: number): CharacterDto => {
+    let updatedCharacter: CharacterDto;
+    set((state) => {
+      const updated = state.characters.map((char) => {
+        if (char.id !== id) return char;
+        updatedCharacter = {
+          ...char,
+          stats: {
+            ...char.stats,
+            [key]: value,
+          },
+        };
+        return updatedCharacter;
+      });
+      return { characters: updated };
+    });
+    get().saveCharacters(get().characters);
+    return updatedCharacter!;
   },
 
-  removeCharacter: async (index: number) => {
+  removeCharacter: async (id: string) => {
     const { characters, saveCharacters } = get();
-    const updated = characters.filter((_, i) => i !== index);
+    const updated = characters.filter((char) => char.id !== id);
     await saveCharacters(updated);
   },
 }));

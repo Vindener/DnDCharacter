@@ -6,7 +6,7 @@ import { styles } from './style';
 import { CharacterDto } from '@/types/Character';
 import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import { TabStackParamList } from '@/navigation/TabNavigator';
-import useCharacterStore from '@/context/CharacterContext';
+import useCharacterStore from '@/context/Character-store';
 
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
 

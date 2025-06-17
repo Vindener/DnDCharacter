@@ -1,28 +1,73 @@
 import * as DocumentPicker from 'expo-document-picker';
 import { CharacterDto } from '@/types/Character';
+import useCharacterStore from '@/context/Character-store';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 
-export const importCharacterFromFile = async (): Promise<CharacterDto | null> => {
-  try {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: 'application/json',
-      copyToCacheDirectory: false,
-      multiple: false,
-    });
+class FileService {
+  static async importCharacterFromFile(): Promise<CharacterDto | null> {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+        copyToCacheDirectory: false,
+        multiple: false,
+      });
 
-    if (result.canceled || !result.assets?.length) {
+      if (result.canceled || !result.assets?.length) return null;
+
+      const uri = result.assets[0].uri;
+      const response = await fetch(uri);
+      const jsonData = await response.json();
+
+      if (!jsonData.id) jsonData.id = Date.now().toString();
+
+      return jsonData;
+    } catch (error) {
+      console.error('Error importing character:', error);
       return null;
     }
-
-    const base64uri = result.assets[0].uri;
-    const base64Data = base64uri.split(',')[1];
-    const binary = Uint8Array.from(atob(base64Data), (c) => c.charCodeAt(0));
-    const decodedString = new TextDecoder('utf-8').decode(binary);
-    const jsonData = JSON.parse(decodedString);
-
-    if (!jsonData.id) jsonData.id = Date.now().toString();
-
-    return jsonData;
-  } catch (e: any) {
-    return null;
   }
-};
+
+  static async importCurrentCharacter(id: string): Promise<CharacterDto | null> {
+    try {
+      const character = await this.importCharacterFromFile();
+      if (!character) return null;
+
+      const { characters, saveCharacters } = useCharacterStore.getState();
+      const index = characters.findIndex((c) => c.id === id);
+      if (index === -1) return null;
+
+      const updatedCharacters = [...characters];
+      updatedCharacters[index] = character;
+      await saveCharacters(updatedCharacters);
+      return character;
+    } catch {
+      return null;
+    }
+  }
+
+  static async exportCharacter(character: CharacterDto) {
+    try {
+      const { id, ...characterWithoutId } = character;
+      const jsonString = JSON.stringify(characterWithoutId, null, 2);
+      if (typeof window !== 'undefined' && window.document) {
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${character.name.replace(/\s+/g, '_') || 'character'}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        return;
+      }
+      const fileName = `${character.name.replace(/\s+/g, '_') || 'character'}.json`;
+      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+      await FileSystem.writeAsStringAsync(fileUri, jsonString, { encoding: FileSystem.EncodingType.UTF8 });
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.error('Error exporting character:', error);
+    }
+  }
+}
+
+export default FileService;
