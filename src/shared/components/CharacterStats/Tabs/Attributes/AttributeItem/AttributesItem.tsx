@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { styles } from '@/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { StatKey } from '@/shared/const/attributes';
+import { Modal } from '@/shared/components/Modal/Modal';
+import Loader from '@/shared/components/Loader/Loader';
 
 interface AttributesItemProps {
   label: string;
@@ -14,6 +16,7 @@ interface AttributesItemProps {
 export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value, statKey, onChange }) => {
   const [inputValue, setInputValue] = useState(`${value}`);
   const [modifier, setModifier] = useState(calculateModifier(value));
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setInputValue(`${value}`);
@@ -21,9 +24,7 @@ export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value, st
   }, [value]);
 
   const rollD20WithModifier = (mod: number) => {
-    const roll = Math.floor(Math.random() * 20) + 1;
-    const total = roll + mod;
-    console.log(`Roll: ${roll} + Modifier: ${mod} = Total: ${total}`);
+    return Math.floor(Math.random() * 20) + 1 + mod;
   };
 
   const handleTextChange = (text: string) => {
@@ -46,14 +47,22 @@ export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value, st
     }
   };
 
+
   return (
     <View style={styles.row}>
       <Text style={styles.label}>{label}</Text>
       <TextInput style={styles.input} keyboardType='numeric' value={inputValue} onChangeText={handleTextChange} onBlur={handleBlur} />
       <Text style={styles.modifier}>{modifier >= 0 ? `+${modifier}` : `${modifier}`}</Text>
-      <TouchableOpacity style={styles.rollButton} onPress={() => rollD20WithModifier(modifier)}>
+      <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
         <Text style={styles.rollButtonText}>🎲</Text>
       </TouchableOpacity>
+      <Modal
+        isVisible={isVisible}
+        onClose={() => setIsVisible(false)}
+      >
+        <Loader/>
+        <Text style={styles.rollResult}>Roll result: {rollD20WithModifier(modifier)}</Text>
+      </Modal>
     </View>
   );
 };

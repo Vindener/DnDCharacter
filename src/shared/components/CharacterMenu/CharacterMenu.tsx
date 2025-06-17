@@ -3,8 +3,6 @@ import { Text, TouchableOpacity } from 'react-native';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
-import { shareAsync } from 'expo-sharing';
 import { CharacterDto } from '@/types/Character';
 import { styles } from './style';
 import useCharacterStore from '@/context/Character-store';
@@ -89,14 +87,6 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
           Змінити ім'я
         </MenuItem>
         <MenuDivider />
-        <MenuItem
-          onPress={() => {
-            closeMenu();
-            importCharacter();
-          }}
-        >
-          Імпорт JSON
-        </MenuItem>
         <MenuItem
           onPress={() => {
             closeMenu();
