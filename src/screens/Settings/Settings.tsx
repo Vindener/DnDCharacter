@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Switch } from 'react-native';
 import { styles } from '@/screens/Settings/styles';
-import useThemeStore from '@/context/ThemeContext';
+import useThemeStore from '@/context/Theme-store';
 
 const Settings = () => {
   const isDark = useThemeStore((s) => s.isDark);

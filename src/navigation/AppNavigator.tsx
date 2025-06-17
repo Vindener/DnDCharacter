@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import EmptyPlaceholder from '@/shared/components/EmptyPlaceholder';
 import TabNavigator from '@/navigation/TabNavigator';
 import { CharacterDto } from '@/types/Character';
-import useThemeStore from '@/context/ThemeContext';
+import useThemeStore from '@/context/Theme-store';
 
 export type AppStackParamList = {
   Library: undefined;

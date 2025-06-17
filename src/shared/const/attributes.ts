@@ -1,6 +1,6 @@
 import { CharacterDto } from '@/types/Character';
 
-type StatKey = keyof CharacterDto['stats'];
+export type StatKey = keyof CharacterDto['stats'];
 
 interface Attribute {
   key: StatKey;

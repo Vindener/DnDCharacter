@@ -2,7 +2,7 @@ import React, { JSX, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '@/screens/CreateCharacter/style';
-import useCharacterStore from '@/context/CharacterContext';
+import useCharacterStore from '@/context/Character-store';
 
 type Character = {
   id: string;
