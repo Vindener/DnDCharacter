@@ -7,17 +7,19 @@ import Spells from './Tabs/Spells/Spells';
 import Inventory from './Tabs/Inventory/Inventory';
 import Proficiencies from './Tabs/Proficiencies/Proficiencies';
 import Notes from './Tabs/Notes/Notes';
+import BackStory from './Tabs/BackStory/BackStory';
 import { styles } from '@/shared/components/CharacterStats/style';
 import { CharacterDto } from '@/types/Character';
+import { CharacterTabs } from '@/shared/const/CharacterTabs';
 
 interface CharacterStatsProps {
   character: CharacterDto;
 }
 
 const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterStatsProps) => {
-  const [selectedTab, setSelectedTab] = useState<'Attributes' | 'Spells' | 'Inventory' | 'Proficiencies' | 'Notes'>('Attributes');
+  const [selectedTab, setSelectedTab] = useState<CharacterTabs>('Attributes');
 
-  const handleTabChange = (newTab: 'Attributes' | 'Spells' | 'Inventory' | 'Proficiencies' | 'Notes') => {
+  const handleTabChange = (newTab: CharacterTabs) => {
     setSelectedTab(newTab);
   };
 
@@ -32,6 +34,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
         <Picker.Item label='Закляття' value='Spells' />
         <Picker.Item label='Інвентар' value='Inventory' />
         <Picker.Item label='Професійні навички' value='Proficiencies' />
+        <Picker.Item label='Історія героя' value='BackStory' />
         <Picker.Item label='Нотатки' value='Notes' />
       </Picker>
 
@@ -39,6 +42,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
       {selectedTab === 'Spells' && <Spells data={character} />}
       {selectedTab === 'Inventory' && <Inventory data={character} />}
       {selectedTab === 'Proficiencies' && <Proficiencies data={character} />}
+      {selectedTab === 'BackStory' && <BackStory data={character} />}
       {selectedTab === 'Notes' && <Notes data={character} />}
     </View>
   );
