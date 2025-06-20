@@ -14,6 +14,9 @@ interface CharacterStore {
   addCharacter: (character: CharacterDto) => Promise<void>;
   updateCharacter: (id: string, updatedCharacter: CharacterDto) => Promise<void>;
   updateCharacterAttribute: (id: string, key: StatKey, value: number) => CharacterDto;
+  updateCharacterInventory: (id: string, inventory: string[]) => void;
+  updateCharacterProficiencies: (id: string, inventory: string[]) => void;
+  updateCharacterNotes: (id: string, inventory: string) => void;
   removeCharacter: (id: string) => Promise<void>;
 }
 
@@ -72,6 +75,24 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     });
     get().saveCharacters(get().characters);
     return updatedCharacter!;
+  },
+  updateCharacterInventory: (id: string, inventory: string[]) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, inventory } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
+  updateCharacterProficiencies: (id: string, inventory: string[]) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, inventory } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
+  updateCharacterNotes: (id: string, notes: string) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, notes } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
   },
 
   removeCharacter: async (id: string) => {
