@@ -20,4 +20,12 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
   },
   rollButtonText: { color: 'white', fontSize: 16 },
+  memoInput: {
+    backgroundColor: '#555',
+    color: 'white',
+    padding: 10,
+    borderRadius: 5,
+    height: 150,
+    textAlignVertical: 'top',
+  },
 });

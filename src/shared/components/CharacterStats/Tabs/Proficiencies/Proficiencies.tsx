@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { styles } from '@/shared/components/CharacterStats/Tabs/Proficiencies/style';
+import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 
