@@ -20,6 +20,7 @@ interface CharacterStore {
   updateCharacterCampaign: (id: string, campaign: string) => void;
   updateCharacterBackstory: (id: string, campaign: string) => void;
   updateCharacterAlliesAndOrganizations: (id: string, campaign: string) => void;
+  updateCharacterSkills: (id: string, skills: { [key: string]: number }) => void;
   removeCharacter: (id: string) => Promise<void>;
 }
 
@@ -112,6 +113,12 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   updateCharacterAlliesAndOrganizations: (id: string, alliesAndOrganizations: string) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? { ...char, alliesAndOrganizations } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
+  updateCharacterSkills: (id: string, skills: { [key: string]: number }) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, skills } : char));
     set({ characters: updated });
     saveCharacters(updated);
   },

@@ -8,6 +8,7 @@ import Inventory from './Tabs/Inventory/Inventory';
 import Proficiencies from './Tabs/Proficiencies/Proficiencies';
 import Notes from './Tabs/Notes/Notes';
 import BackStory from './Tabs/BackStory/BackStory';
+import Skills from './Tabs/Skills/Skills';
 import { styles } from '@/shared/components/CharacterStats/style';
 import { CharacterDto } from '@/types/Character';
 import { CharacterTabs } from '@/shared/const/CharacterTabs';
@@ -31,6 +32,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
         onValueChange={(itemValue) => handleTabChange(itemValue as 'Attributes' | 'Spells')}
       >
         <Picker.Item label='Характеристики' value='Attributes' />
+        <Picker.Item label='Skills' value='Skills' />
         <Picker.Item label='Закляття' value='Spells' />
         <Picker.Item label='Інвентар' value='Inventory' />
         <Picker.Item label='Професійні навички' value='Proficiencies' />
@@ -39,6 +41,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
       </Picker>
 
       {selectedTab === 'Attributes' && <Attributes data={character} />}
+      {selectedTab === 'Skills' && <Skills data={character} />}
       {selectedTab === 'Spells' && <Spells data={character} />}
       {selectedTab === 'Inventory' && <Inventory data={character} />}
       {selectedTab === 'Proficiencies' && <Proficiencies data={character} />}

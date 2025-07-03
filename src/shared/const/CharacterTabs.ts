@@ -1,1 +1,1 @@
-export type CharacterTabs = 'Attributes' | 'Spells' | 'Inventory' | 'Proficiencies' | 'Notes' | 'BackStory';
+export type CharacterTabs = 'Attributes' | 'Spells' | 'Inventory' | 'Proficiencies' | 'Notes' | 'BackStory' |'Skills';
