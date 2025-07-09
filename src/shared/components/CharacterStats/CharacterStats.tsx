@@ -8,6 +8,7 @@ import Inventory from './Tabs/Inventory/Inventory';
 import Proficiencies from './Tabs/Proficiencies/Proficiencies';
 import Notes from './Tabs/Notes/Notes';
 import BackStory from './Tabs/BackStory/BackStory';
+import TraitsTab from './Tabs/Traits/Traits';
 import Skills from './Tabs/Skills/Skills';
 import { styles } from '@/shared/components/CharacterStats/style';
 import { CharacterDto } from '@/types/Character';
@@ -40,6 +41,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
         <Picker.Item label='Професійні навички' value='Proficiencies' />
         <Picker.Item label='Історія героя' value='BackStory' />
         <Picker.Item label='Нотатки' value='Notes' />
+        <Picker.Item label='Риси' value='Traits' />
       </Picker>
 
       {selectedTab === 'Attributes' && <Attributes data={character} />}
@@ -49,6 +51,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
       {selectedTab === 'Proficiencies' && <Proficiencies data={character} />}
       {selectedTab === 'BackStory' && <BackStory data={character} />}
       {selectedTab === 'Notes' && <Notes data={character} />}
+      {selectedTab === 'Traits' && <TraitsTab data={character} />}
     </View>
   );
 };
