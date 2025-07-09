@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CharacterDto } from '@/types/Character';
 import { StatKey } from '@/shared/const/attributes';
+import { Spells } from '@/types/Spells';
 import { uuid } from 'expo-modules-core';
 
 const MAX_CHARACTERS = 15;
@@ -22,6 +23,7 @@ interface CharacterStore {
   updateCharacterCampaign: (id: string, campaign: string) => void;
   updateCharacterBackstory: (id: string, campaign: string) => void;
   updateCharacterAlliesAndOrganizations: (id: string, campaign: string) => void;
+  updateCharacterSpells: (id: string, spells: Spells) => void;
   updateCharacterSkills: (id: string, skills: { [key: string]: number }) => void;
   removeCharacter: (id: string) => Promise<void>;
 }
@@ -117,6 +119,12 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   updateCharacterAlliesAndOrganizations: (id: string, alliesAndOrganizations: string) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? { ...char, alliesAndOrganizations } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
+  updateCharacterSpells: (id: string, spells: Spells) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, spells } : char));
     set({ characters: updated });
     saveCharacters(updated);
   },
