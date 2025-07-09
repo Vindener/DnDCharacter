@@ -6,7 +6,6 @@ import * as FileSystem from 'expo-file-system';
 import { styles } from './style';
 import { CharacterDto } from '@/types/Character';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
-import CharacterOverview from '@/shared/components/CharacterOverview/CharacterOverview';
 import CharacterStats from '@/shared/components/CharacterStats/CharacterStats';
 import useCharacterStore from '@/context/Character-store';
 
@@ -127,7 +126,6 @@ export default function Character({ route }: CharacterProps) {
         </TouchableOpacity>
       </View>
 
-      <CharacterOverview />
       <CharacterStats character={characterData} />
     </View>
   );
