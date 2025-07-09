@@ -12,6 +12,7 @@ import Skills from './Tabs/Skills/Skills';
 import { styles } from '@/shared/components/CharacterStats/style';
 import { CharacterDto } from '@/types/Character';
 import { CharacterTabs } from '@/shared/const/CharacterTabs';
+import CharacterOverview from '../CharacterOverview/CharacterOverview';
 
 interface CharacterStatsProps {
   character: CharacterDto;
@@ -26,13 +27,14 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
 
   return (
     <View style={styles.tabsContainer}>
+      <CharacterOverview />
       <Picker
         selectedValue={selectedTab}
         style={styles.picker}
         onValueChange={(itemValue) => handleTabChange(itemValue as 'Attributes' | 'Spells')}
       >
         <Picker.Item label='Характеристики' value='Attributes' />
-        <Picker.Item label='Skills' value='Skills' />
+        <Picker.Item label='Навички' value='Skills' />
         <Picker.Item label='Закляття' value='Spells' />
         <Picker.Item label='Інвентар' value='Inventory' />
         <Picker.Item label='Професійні навички' value='Proficiencies' />

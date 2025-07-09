@@ -9,6 +9,8 @@ const MAX_CHARACTERS = 15;
 interface CharacterStore {
   characters: CharacterDto[];
   maxCharacters: number;
+  currentCharacterId: string | null;
+  setCurrentCharacterId: (id: string) => void;
   loadCharacters: () => Promise<void>;
   saveCharacters: (newCharacters: CharacterDto[]) => Promise<void>;
   addCharacter: (character: CharacterDto) => Promise<void>;
@@ -29,6 +31,8 @@ const STORAGE_KEY = 'characters';
 const useCharacterStore = create<CharacterStore>((set, get) => ({
   characters: [],
   maxCharacters: MAX_CHARACTERS,
+  currentCharacterId: null,
+  setCurrentCharacterId: (id) => set({ currentCharacterId: id }),
 
   loadCharacters: async () => {
     try {
