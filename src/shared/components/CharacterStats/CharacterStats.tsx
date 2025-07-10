@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import Attributes from './Tabs/Attributes/Attributes';
 import Spells from './Tabs/Spells/Spells';
+import Combat from './Tabs/Combat/Combat';
 import Inventory from './Tabs/Inventory/Inventory';
 import Proficiencies from './Tabs/Proficiencies/Proficiencies';
 import Notes from './Tabs/Notes/Notes';
@@ -29,14 +30,11 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
   return (
     <View style={styles.tabsContainer}>
       <CharacterOverview />
-      <Picker
-        selectedValue={selectedTab}
-        style={styles.picker}
-        onValueChange={(itemValue) => handleTabChange(itemValue as 'Attributes' | 'Spells')}
-      >
+      <Picker selectedValue={selectedTab} style={styles.picker} onValueChange={(itemValue) => handleTabChange(itemValue as CharacterTabs)}>
         <Picker.Item label='Характеристики' value='Attributes' />
         <Picker.Item label='Навички' value='Skills' />
         <Picker.Item label='Закляття' value='Spells' />
+        <Picker.Item label='Бій' value='Combat' />
         <Picker.Item label='Інвентар та зброя' value='Inventory' />
         <Picker.Item label='Професійні навички' value='Proficiencies' />
         <Picker.Item label='Історія героя' value='BackStory' />
@@ -47,6 +45,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
       {selectedTab === 'Attributes' && <Attributes data={character} />}
       {selectedTab === 'Skills' && <Skills data={character} />}
       {selectedTab === 'Spells' && <Spells data={character} />}
+      {selectedTab === 'Combat' && <Combat data={character} />}
       {selectedTab === 'Inventory' && <Inventory data={character} />}
       {selectedTab === 'Proficiencies' && <Proficiencies data={character} />}
       {selectedTab === 'BackStory' && <BackStory data={character} />}
