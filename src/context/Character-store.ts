@@ -4,6 +4,7 @@ import { CharacterDto } from '@/types/Character';
 import { StatKey } from '@/shared/const/attributes';
 import { Spells } from '@/types/Spells';
 import { Traits } from '@/types/Traits';
+import { Weapon } from '@/types/Weapon';
 import { uuid } from 'expo-modules-core';
 
 const MAX_CHARACTERS = 15;
@@ -20,6 +21,7 @@ interface CharacterStore {
   updateCharacterAttribute: (id: string, key: StatKey, value: number) => CharacterDto;
   updateCharacterInventory: (id: string, inventory: string[]) => void;
   updateCharacterProficiencies: (id: string, proficiencies: string[]) => void;
+  updateCharacterWeapons: (id: string, weapons: Weapon[]) => void;
   updateCharacterNotes: (id: string, inventory: string) => void;
   updateCharacterCampaign: (id: string, campaign: string) => void;
   updateCharacterBackstory: (id: string, campaign: string) => void;
@@ -97,6 +99,12 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   updateCharacterProficiencies: (id: string, proficiencies: string[]) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? { ...char, proficiencies } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
+  updateCharacterWeapons: (id: string, weapons: Weapon[]) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, weapons } : char));
     set({ characters: updated });
     saveCharacters(updated);
   },

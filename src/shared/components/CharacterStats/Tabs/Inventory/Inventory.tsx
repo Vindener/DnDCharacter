@@ -4,6 +4,7 @@ import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { Ionicons } from '@expo/vector-icons';
+import Weapon from '../Weapons/Weapon';
 
 interface InventoryProps {
   data: CharacterDto;
@@ -35,6 +36,8 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
 
   return (
     <View style={styles.container}>
+      <Weapon data={data} />
+      
       <Text style={styles.label}>Інвентар персонажа:</Text>
 
       <FlatList

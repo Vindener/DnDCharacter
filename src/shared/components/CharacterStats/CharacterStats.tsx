@@ -37,7 +37,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
         <Picker.Item label='Характеристики' value='Attributes' />
         <Picker.Item label='Навички' value='Skills' />
         <Picker.Item label='Закляття' value='Spells' />
-        <Picker.Item label='Інвентар' value='Inventory' />
+        <Picker.Item label='Інвентар та зброя' value='Inventory' />
         <Picker.Item label='Професійні навички' value='Proficiencies' />
         <Picker.Item label='Історія героя' value='BackStory' />
         <Picker.Item label='Нотатки' value='Notes' />

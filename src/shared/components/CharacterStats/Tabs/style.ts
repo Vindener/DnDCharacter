@@ -20,6 +20,10 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
   },
   rollButtonText: { color: 'white', fontSize: 16 },
+  rollResult: {
+    color: 'white',
+    textAlign: 'center',
+  },
   memoInput: {
     backgroundColor: '#555',
     color: 'white',
