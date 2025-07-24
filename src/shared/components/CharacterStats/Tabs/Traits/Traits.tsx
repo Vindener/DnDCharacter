@@ -12,9 +12,10 @@ interface TraitsProps {
 const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
   const updateCharacterTraits = useCharacterStore((s) => s.updateCharacterTraits);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const traits = character?.traits ?? ({ personality: '', ideals: '', bonds: '', flaws: '' } as TraitsType);
 
   const handleChange = (key: keyof TraitsType, value: string) => {
-    const newTraits = { ...(character?.traits || {}), [key]: value } as TraitsType;
+    const newTraits = { ...traits, [key]: value } as TraitsType;
     updateCharacterTraits(data.id, newTraits);
   };
 
@@ -25,7 +26,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
         style={styles.memoInput}
         multiline
         numberOfLines={2}
-        value={character?.traits.personality || ''}
+        value={traits.personality}
         onChangeText={(text) => handleChange('personality', text)}
         placeholder='Введіть особистість'
         placeholderTextColor='#888'
@@ -39,7 +40,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
         style={styles.memoInput}
         multiline
         numberOfLines={2}
-        value={character?.traits.ideals || ''}
+        value={traits.ideals}
         onChangeText={(text) => handleChange('ideals', text)}
         placeholder='Введіть ідеали'
         placeholderTextColor='#888'
@@ -53,7 +54,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
         style={styles.memoInput}
         multiline
         numberOfLines={2}
-        value={character?.traits.bonds || ''}
+        value={traits.bonds}
         onChangeText={(text) => handleChange('bonds', text)}
         placeholder='Введіть зв`язки'
         placeholderTextColor='#888'
@@ -67,7 +68,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
         style={styles.memoInput}
         multiline
         numberOfLines={2}
-        value={character?.traits.flaws || ''}
+        value={traits.flaws}
         onChangeText={(text) => handleChange('flaws', text)}
         placeholder='Введіть вади'
         placeholderTextColor='#888'
