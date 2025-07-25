@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import useCharacterStore from '@/context/Character-store';
-import { styles } from '@/shared/components/CharacterOverview/style';
-
+import { getStyles } from '@/shared/components/CharacterOverview/style';
+import useThemeStore from '@/context/Theme-store';
 
 const CharacterOverview: React.FC = () => {
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === currentCharacterId));
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   if (!character) return null;
   return (

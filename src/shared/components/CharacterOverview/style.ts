@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   content: { flex: 1, minHeight: 60 },
   statsRow: {
     flexDirection: 'row',
@@ -8,6 +10,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   attributes: {
-    color: '#fff',
+    color: c.text,
   },
 });

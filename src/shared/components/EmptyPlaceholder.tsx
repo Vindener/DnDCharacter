@@ -1,24 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import useThemeStore from '@/context/Theme-store';
 
-const EmptyPlaceholder: React.FC = () => (
-  <View style={styles.container}>
-    <Text style={styles.text}>Coming soon...</Text>
-  </View>
-);
-
-const styles = StyleSheet.create({
+const EmptyPlaceholder: React.FC = () => {
+const colors = useThemeStore((s) => s.colors);
+const styles = React.useMemo(
+  () =>
+StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1c1c1e',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
   text: {
-    color: '#888',
+    color: colors.textSecondary,
     fontSize: 20,
     fontStyle: 'italic',
   },
-});
+}),
+  [colors],
+);
+return (
+  <View style={styles.container}>
+    <Text style={styles.text}>Coming soon...</Text>
+  </View>
+);
+};
 
 export default EmptyPlaceholder;

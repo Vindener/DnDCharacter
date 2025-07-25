@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 
@@ -14,6 +15,8 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
   const updateCharacterBackstory = useCharacterStore((s) => s.updateCharacterBackstory);
   const updateCharacterAlliesAndOrganizations = useCharacterStore((s) => s.updateCharacterAlliesAndOrganizations);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const handleChangeCampaign = (text: string) => {
     updateCharacterCampaign(data.id, text);

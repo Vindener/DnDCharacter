@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   wrapper: {
     height: '100%',
     width: '100%',
@@ -11,8 +13,8 @@ export const styles = StyleSheet.create({
   },
   container: {
     position: 'relative',
-    backgroundColor: '#222222',
-    color: 'white',
+    backgroundColor: c.card,
+    color: c.text,
     borderRadius: 13,
     padding: 32,
     width: '90%',
@@ -26,16 +28,16 @@ export const styles = StyleSheet.create({
   },
   closeText: {
     fontSize: 20,
-    color: '#fff',
+    color: c.text,
   },
   title: {
     fontSize: 18,
-    color: '#fff',
+    color: c.text,
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 14,
-    color: '#fff',
+    color: c.text,
     marginBottom: 16,
   },
   content: {

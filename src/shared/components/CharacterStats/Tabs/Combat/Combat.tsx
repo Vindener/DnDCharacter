@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import { CharacterDto } from '@/types/Character';
 import { HitPoints } from '@/types/HitPoints';
@@ -18,6 +19,8 @@ const EMPTY_DEATH: DeathSaves = { successes: 1, failures: 1 };
 const Combat: React.FC<CombatProps> = ({ data }) => {
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [initiative, setInitiative] = useState(character?.initiative ?? 1);
   const [speed, setSpeed] = useState(character?.speed ?? 1);

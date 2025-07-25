@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
@@ -10,5 +12,6 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 20,
     marginBottom: 10,
+    color: c.text,
   },
 });

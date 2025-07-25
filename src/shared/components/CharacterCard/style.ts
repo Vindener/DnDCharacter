@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#2c2c2e',
+    backgroundColor: c.card,
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
@@ -14,23 +16,23 @@ export const styles = StyleSheet.create({
     height: 48,
     borderRadius: 6,
     marginRight: 12,
-    backgroundColor: '#444',
+    backgroundColor: c.inputBackground,
   },
   info: {
     flex: 1,
   },
   name: {
-    color: 'white',
+    color: c.text,
     fontSize: 16,
     fontWeight: '600',
   },
   meta: {
-    color: 'gray',
+    color: c.textSecondary,
     fontSize: 13,
     marginTop: 2,
   },
   classText: {
-    color: '#999',
+    color: c.textSecondary,
     fontSize: 13,
   },
   separator: {

@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TextInput, Button, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from './styles';
+import { getStyles } from './styles';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterCard } from '@/shared/components/CharacterCard/CharacterCard';
 import useCharacterStore from '@/context/Character-store';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { TabStackParamList } from '@/navigation/TabNavigator';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 import FileService from '@/shared/services/fileSerice';
 
 const Home = () => {
   const characters = useCharacterStore((s) => s.characters);
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const loadCharacters = useCharacterStore((s) => s.loadCharacters);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [search, setSearch] = useState('');
   const [sortAsc, setSortAsc] = useState(true);
   const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'Home'>>();

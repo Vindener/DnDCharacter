@@ -1,6 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   diceButton: {
     position: 'absolute',
     bottom: 20,
@@ -10,14 +12,14 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
   },
   diceText: {
-    color: 'white',
+    color: c.text,
     fontSize: 24,
   },
   diceMenu: {
     position: 'absolute',
     bottom: 80,
     right: 20,
-    backgroundColor: '#333',
+    backgroundColor: c.card,
     padding: 10,
     borderRadius: 10,
     flexWrap: 'wrap',
@@ -27,13 +29,13 @@ export const styles = StyleSheet.create({
   diceOption: {
     width: '30%',
     margin: 5,
-    backgroundColor: '#444',
+    backgroundColor: c.inputBackground,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
   },
   diceOptionText: {
-    color: 'white',
+    color: c.text,
     fontSize: 16,
   },
   diceClose: {
@@ -45,7 +47,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   diceCloseText: {
-    color: 'white',
+    color: c.text,
     fontSize: 16,
   },
   modalContainer: {
@@ -55,13 +57,13 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalContent: {
-    backgroundColor: '#333',
+    backgroundColor: c.card,
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
   },
   modalTitle: {
-    color: 'white',
+    color: c.text,
     fontSize: 18,
     marginBottom: 10,
   },
@@ -77,12 +79,12 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
   },
   modalButtonText: {
-    color: 'white',
+    color: c.text,
     fontSize: 16,
   },
   input: {
-    backgroundColor: '#555',
-    color: 'white',
+    backgroundColor: c.inputBackground,
+    color: c.text,
     padding: 8,
     borderRadius: 5,
     width: 60,

@@ -18,6 +18,7 @@ const Stack = createBottomTabNavigator<AppStackParamList>();
 
 export default function AppNavigator() {
   const theme = useThemeStore((s) => s.theme);
+  const colors = useThemeStore((s) => s.colors);
   const loadTheme = useThemeStore((s) => s.loadTheme);
 
   useEffect(() => {
@@ -43,8 +44,8 @@ export default function AppNavigator() {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarActiveTintColor: '#ff2d55',
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: { backgroundColor: '#121212', borderTopWidth: 0 },
+          tabBarInactiveTintColor: colors.textSecondary,
+          tabBarStyle: { backgroundColor: colors.card, borderTopWidth: 0 },
           tabBarIcon: ({ color, size }) => {
             const iconName = getIconName(route.name);
             return <Ionicons name={iconName} size={size} color={color} />;

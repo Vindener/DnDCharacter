@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import { TextInput, MultiTextInput } from '@/shared/components/TextInput/Index';
+import { TextInput, MultiTextInput } from '@/shared/components/TextInput/index';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import { Spells as SpellsType } from '@/types/Spells';
 import useCharacterStore from '@/context/Character-store';
@@ -24,6 +25,8 @@ const EMPTY_SPELLS: SpellsType = {
 const Spells: React.FC<SpellsProps> = ({ data }) => {
   const updateCharacterSpells = useCharacterStore((s) => s.updateCharacterSpells);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [spells, setSpells] = useState<SpellsType>(character?.spells || EMPTY_SPELLS);
   const [knownSpellsText, setKnownSpellsText] = useState((character?.spells?.knownSpells || []).join('\n'));

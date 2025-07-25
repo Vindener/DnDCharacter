@@ -2,14 +2,17 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { styles } from './style';
-import { TabStackParamList } from '@/navigation/TabNavigator';
+import { getStyles } from './style';
+import useThemeStore from '@/context/Theme-store';
+import type { TabStackParamList } from '@/navigation/types';
 
 type Navigation = StackNavigationProp<TabStackParamList>;
 
 const Header = () => {
   const navigation = useNavigation<Navigation>();
   const route = useRoute();
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const getTitle = () => {
     switch (route.name) {

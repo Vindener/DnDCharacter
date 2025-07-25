@@ -11,6 +11,8 @@ import Notes from './Tabs/Notes/Notes';
 import BackStory from './Tabs/BackStory/BackStory';
 import TraitsTab from './Tabs/Traits/Traits';
 import Skills from './Tabs/Skills/Skills';
+import { getStyles } from '@/shared/components/CharacterStats/style';
+import useThemeStore from '@/context/Theme-store';
 import { styles } from '@/shared/components/CharacterStats/style';
 import { CharacterDto } from '@/types/Character';
 import { CharacterTabs } from '@/shared/const/CharacterTabs';
@@ -22,6 +24,8 @@ interface CharacterStatsProps {
 
 const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterStatsProps) => {
   const [selectedTab, setSelectedTab] = useState<CharacterTabs>('Attributes');
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const handleTabChange = (newTab: CharacterTabs) => {
     setSelectedTab(newTab);
