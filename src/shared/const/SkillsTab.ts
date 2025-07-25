@@ -1,0 +1,21 @@
+export const SKILL_NAMES: Record<string, string> = {
+  acrobatics: 'Акробатика',
+  animalHandling: 'Догляд за тваринами',
+  arcana: 'Аркана',
+  athletics: 'Атлетика',
+  deception: 'Обман',
+  history: 'Історія',
+  insight: 'Проникливість',
+  intimidation: 'Залякування',
+  investigation: 'Розслідування',
+  medicine: 'Медицина',
+  nature: 'Природа',
+  perception: 'Уважність',
+  performance: 'Виступи',
+  persuasion: 'Переконання',
+  religion: 'Релігія',
+  sleightOfHand: 'Спритність рук',
+  stealth: 'Потайливість',
+  survival: 'Виживання',
+};
+  

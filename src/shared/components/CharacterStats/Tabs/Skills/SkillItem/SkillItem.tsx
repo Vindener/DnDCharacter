@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import TextInput  from '@/shared/components/TextInput/TextInput';
-import { styles } from '@/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style';
-import { calculateModifier } from '@/shared/helpers/calculateModifier';
-import { StatKey } from '@/shared/const/attributes';
+import { styles } from './style';
 import { Modal } from '@/shared/components/Modal/Modal';
 import Loader from '@/shared/components/Loader/Loader';
 
-interface AttributesItemProps {
+interface SkillItemProps {
   label: string;
   value: number;
-  statKey: StatKey;
-  onChange: (key: StatKey, value: number) => void;
+  skillKey: string;
+  onChange: (key: string, value: number) => void;
 }
 
-export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value, statKey, onChange }) => {
+export const SkillItem: React.FC<SkillItemProps> = ({ label, value, skillKey, onChange }) => {
   const [inputValue, setInputValue] = useState(`${value}`);
-  const [modifier, setModifier] = useState(calculateModifier(value));
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setInputValue(`${value}`);
-    setModifier(calculateModifier(value));
   }, [value]);
 
   const rollD20WithModifier = (mod: number) => {
@@ -30,36 +26,27 @@ export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value, st
 
   const handleTextChange = (text: string) => {
     setInputValue(text);
-    const numericValue = parseInt(text, 10);
-    if (!isNaN(numericValue)) {
-      setModifier(calculateModifier(numericValue));
-    } else {
-      setModifier(calculateModifier(value));
-    }
   };
 
   const handleBlur = () => {
     const numericValue = parseInt(inputValue, 10);
     if (!isNaN(numericValue)) {
-      onChange(statKey, numericValue);
+      onChange(skillKey, numericValue);
     } else {
       setInputValue(`${value}`);
-      setModifier(calculateModifier(value));
     }
   };
-
 
   return (
     <View style={styles.row}>
       <Text style={styles.label}>{label}</Text>
       <TextInput value={inputValue} onChangeText={handleTextChange} onBlur={handleBlur} />
-      <Text style={styles.modifier}>{modifier >= 0 ? `+${modifier}` : `${modifier}`}</Text>
       <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
         <Text style={styles.rollButtonText}>🎲</Text>
       </TouchableOpacity>
       <Modal isVisible={isVisible} onClose={() => setIsVisible(false)}>
         <Loader />
-        <Text style={styles.rollResult}>Roll result: {rollD20WithModifier(modifier)}</Text>
+        <Text style={styles.rollResult}>Roll result: {rollD20WithModifier(parseInt(inputValue, 10) || 0)}</Text>
       </Modal>
     </View>
   );

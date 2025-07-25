@@ -6,8 +6,10 @@ import * as FileSystem from 'expo-file-system';
 import { styles } from './style';
 import { CharacterDto } from '@/types/Character';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
-import CharacterOverview from '@/shared/components/CharacterOverview/CharacterOverview';
 import CharacterStats from '@/shared/components/CharacterStats/CharacterStats';
+import useCharacterStore from '@/context/Character-store';
+import { Modal } from '@/shared/components/Modal/Modal';
+import TextInput from '@/shared/components/TextInput/TextInput';
 
 interface CharacterProps {
   route: {
@@ -21,12 +23,15 @@ interface CharacterProps {
 export default function Character({ route }: CharacterProps) {
   const { character } = route.params;
 
+  const updateCharacter = useCharacterStore((s) => s.updateCharacter);
+
   const [characterData, setCharacterData] = useState<CharacterDto | any>(character);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
   const [newName, setNewName] = useState('');
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempHp, setTempHp] = useState(0);
   const [tempMaxHp, setTempMaxHp] = useState(0);
+  const [hpDelta, setHpDelta] = useState('');
 
   useEffect(() => {
     if (characterData.id) {
@@ -98,8 +103,22 @@ export default function Character({ route }: CharacterProps) {
   };
 
   const handleSaveHp = () => {
-    setCharacterData((prev: any) => ({ ...prev, hp: tempHp, maxHp: tempMaxHp }));
+    const updated = {
+      ...characterData,
+      hp: { ...characterData.hp, current: tempHp, max: tempMaxHp },
+    };
+    setCharacterData(updated);
+    if (updated.id) updateCharacter(updated.id, updated);
     setIsHpModalVisible(false);
+    setHpDelta('');
+  };
+
+  const adjustHp = (delta: number) => {
+    const value = isNaN(delta) ? 0 : delta;
+    setTempHp((prev) => {
+      const next = Math.min(Math.max(prev + value, 0), tempMaxHp);
+      return next;
+    });
   };
 
   return (
@@ -115,7 +134,7 @@ export default function Character({ route }: CharacterProps) {
 
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.characterName}>{characterData.name}</Text>
-          <CharacterMenu character={characterData} />
+          <CharacterMenu character={characterData} onChange={setCharacterData} />
         </View>
 
         <Text style={styles.level}>Рівень {characterData.level}</Text>
@@ -126,8 +145,27 @@ export default function Character({ route }: CharacterProps) {
         </TouchableOpacity>
       </View>
 
-      <CharacterOverview character={characterData.id} />
       <CharacterStats character={characterData} />
+      <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={handleSaveHp} title='HP'>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+          <Text style={{ color: 'white', flex: 1 }}>Max</Text>
+          <TextInput value={String(tempMaxHp)} onChangeText={handleMaxHPChange} />
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+          <Text style={{ color: 'white', flex: 1 }}>Current</Text>
+          <TextInput value={String(tempHp)} onChangeText={handleHPChange} />
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ color: 'white', flex: 1 }}>Change</Text>
+          <TextInput value={hpDelta} onChangeText={setHpDelta} />
+          <TouchableOpacity onPress={() => adjustHp(Number(hpDelta))} style={{ marginLeft: 8 }}>
+            <Text style={{ color: 'white' }}>+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => adjustHp(-Number(hpDelta))} style={{ marginLeft: 8 }}>
+            <Text style={{ color: 'white' }}>-</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }

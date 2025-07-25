@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, ScrollView, Text } from 'react-native';
-import { CharacterDto } from '@/types/Character';
+import useCharacterStore from '@/context/Character-store';
 import { styles } from '@/shared/components/CharacterOverview/style';
 
-interface CharacterStatsProps {
-  character: CharacterDto;
-}
 
-const CharacterOverview: React.FC<CharacterStatsProps> = ({ character }: CharacterStatsProps) => {
+const CharacterOverview: React.FC = () => {
+  const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
+  const character = useCharacterStore((s) => s.characters.find((c) => c.id === currentCharacterId));
+
+  if (!character) return null;
   return (
     <ScrollView style={styles.content}>
       <View style={styles.statsRow}>

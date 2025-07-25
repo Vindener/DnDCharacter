@@ -18,8 +18,10 @@ interface CharacterCardProps {
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   const navigation = useNavigation<NavigationProp>();
   const removeCharacter = useCharacterStore((s: any) => s.removeCharacter);
+  const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
 
   const handlePress = () => {
+    setCurrentCharacterId(character.id);
     navigation.navigate('Character', { character });
   };
 
