@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
@@ -17,11 +18,11 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
   const handleChangeCampaign = (text: string) => {
     updateCharacterCampaign(data.id, text);
   };
-  
+
   const handleChangeBackstory = (text: string) => {
     updateCharacterBackstory(data.id, text);
   };
-  
+
   const handleChangeAlliesAndOrganizations = (text: string) => {
     updateCharacterAlliesAndOrganizations(data.id, text);
   };
@@ -29,45 +30,27 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Компанія:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline={true}
+      <MultiTextInput
         numberOfLines={2}
         value={character?.campaign || ''}
         onChangeText={handleChangeCampaign}
         placeholder='Введіть компанію'
-        placeholderTextColor='#888'
-        returnKeyType='default'
-        textAlignVertical='top'
-        enablesReturnKeyAutomatically={false}
       />
 
       <Text style={styles.label}>Історія героя:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline={true}
+      <MultiTextInput
         numberOfLines={5}
         value={character?.backstory || ''}
         onChangeText={handleChangeBackstory}
         placeholder='Введіть історія героя'
-        placeholderTextColor='#888'
-        returnKeyType='default'
-        textAlignVertical='top'
-        enablesReturnKeyAutomatically={false}
       />
 
       <Text style={styles.label}>Союзники та організації:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline={true}
+      <MultiTextInput
         numberOfLines={5}
         value={character?.alliesAndOrganizations || ''}
         onChangeText={handleChangeAlliesAndOrganizations}
         placeholder='Введіть союзники та організації героя'
-        placeholderTextColor='#888'
-        returnKeyType='default'
-        textAlignVertical='top'
-        enablesReturnKeyAutomatically={false}
       />
     </View>
   );

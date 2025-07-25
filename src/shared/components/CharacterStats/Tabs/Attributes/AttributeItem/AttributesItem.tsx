@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import TextInput  from '@/shared/components/TextInput/TextInput';
 import { styles } from '@/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { StatKey } from '@/shared/const/attributes';
@@ -51,16 +52,13 @@ export const AttributesItem: React.FC<AttributesItemProps> = ({ label, value, st
   return (
     <View style={styles.row}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput style={styles.input} keyboardType='numeric' value={inputValue} onChangeText={handleTextChange} onBlur={handleBlur} />
+      <TextInput value={inputValue} onChangeText={handleTextChange} onBlur={handleBlur} />
       <Text style={styles.modifier}>{modifier >= 0 ? `+${modifier}` : `${modifier}`}</Text>
       <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
         <Text style={styles.rollButtonText}>🎲</Text>
       </TouchableOpacity>
-      <Modal
-        isVisible={isVisible}
-        onClose={() => setIsVisible(false)}
-      >
-        <Loader/>
+      <Modal isVisible={isVisible} onClose={() => setIsVisible(false)}>
+        <Loader />
         <Text style={styles.rollResult}>Roll result: {rollD20WithModifier(modifier)}</Text>
       </Modal>
     </View>

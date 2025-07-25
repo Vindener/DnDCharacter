@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import TextInput from '@/shared/components/TextInput/TextInput';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import useCharacterStore from '@/context/Character-store';
@@ -99,36 +100,36 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
     <ScrollView style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.label}>Ініціатива:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${initiative}`} onChangeText={handleInitiativeChange} />
+        <TextInput value={`${initiative}`} onChangeText={handleInitiativeChange} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Швидкість:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${speed}`} onChangeText={handleSpeedChange} />
+        <TextInput value={`${speed}`} onChangeText={handleSpeedChange} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>AC:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${ac}`} onChangeText={handleAcChange} />
+        <TextInput value={`${ac}`} onChangeText={handleAcChange} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Деталі броні:</Text>
-        <TextInput style={[styles.input, { flex: 1 }]} value={armorDetails} onChangeText={handleArmorDetailsChange} />
+        <TextInput style={{ flex: 1 }} value={armorDetails} onChangeText={handleArmorDetailsChange} />
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Hit Dice:</Text>
-        <TextInput style={[styles.input, { flex: 1 }]} value={hitDice} onChangeText={handleHitDiceChange} />
+        <TextInput style={{ flex: 1 }} value={hitDice} onChangeText={handleHitDiceChange} />
       </View>
       <Text style={styles.label}>HP:</Text>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 70 }]}>Max:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${hp.max}`} onChangeText={(t) => handleHpChange('max', t)} />
+        <TextInput value={`${hp.max}`} onChangeText={(t) => handleHpChange('max', t)} />
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 70 }]}>Current:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${hp.current}`} onChangeText={(t) => handleHpChange('current', t)} />
+        <TextInput value={`${hp.current}`} onChangeText={(t) => handleHpChange('current', t)} />
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 70 }]}>Temp:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${hp.temp}`} onChangeText={(t) => handleHpChange('temp', t)} />
+        <TextInput value={`${hp.temp}`} onChangeText={(t) => handleHpChange('temp', t)} />
       </View>
       <Text style={styles.label}>Death Saves:</Text>
       <View style={[styles.row, { marginLeft: 10 }]}>

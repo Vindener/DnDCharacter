@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
@@ -19,18 +20,7 @@ const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Нотатки:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline={true}
-        numberOfLines={6}
-        value={character?.notes || ''}
-        onChangeText={handleChange}
-        placeholder='Введіть ваші нотатки'
-        placeholderTextColor='#888'
-        returnKeyType='default'
-        textAlignVertical='top'
-        enablesReturnKeyAutomatically={false}
-      />
+      <MultiTextInput numberOfLines={6} value={character?.notes || ''} onChangeText={handleChange} placeholder='Введіть ваші нотатки' />
     </View>
   );
 };

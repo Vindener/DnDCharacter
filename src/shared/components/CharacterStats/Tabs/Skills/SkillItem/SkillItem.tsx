@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import TextInput  from '@/shared/components/TextInput/TextInput';
 import { styles } from './style';
 import { Modal } from '@/shared/components/Modal/Modal';
 import Loader from '@/shared/components/Loader/Loader';
@@ -39,7 +40,7 @@ export const SkillItem: React.FC<SkillItemProps> = ({ label, value, skillKey, on
   return (
     <View style={styles.row}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput style={styles.input} keyboardType='numeric' value={inputValue} onChangeText={handleTextChange} onBlur={handleBlur} />
+      <TextInput value={inputValue} onChangeText={handleTextChange} onBlur={handleBlur} />
       <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
         <Text style={styles.rollButtonText}>🎲</Text>
       </TouchableOpacity>

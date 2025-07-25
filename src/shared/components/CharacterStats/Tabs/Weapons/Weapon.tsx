@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import TextInput  from '@/shared/components/TextInput/TextInput';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/shared/components/CharacterStats/Tabs/style';
@@ -81,19 +82,11 @@ const Weapon: React.FC<WeaponProps> = ({ data }) => {
         <View key={index} style={{ marginBottom: 12 }}>
           <View style={styles.row}>
             <Text style={styles.label}>Назва:</Text>
-            <TextInput
-              style={[styles.input, { flex: 1 }]}
-              value={weapon.name}
-              onChangeText={(t) => handleChange(index, 'name', t)}
-              placeholder='Назва'
-              placeholderTextColor='#888'
-            />
+            <TextInput style={{ flex: 1 }} value={weapon.name} onChangeText={(t) => handleChange(index, 'name', t)} placeholder='Назва' />
           </View>
           <View style={[styles.row, { alignItems: 'center' }]}>
             <Text style={styles.label}>Бонус атаки:</Text>
             <TextInput
-              style={styles.input}
-              keyboardType='numeric'
               value={`${weapon.attackBonus}`}
               onChangeText={(t) => handleChange(index, 'attackBonus', t)}
             />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
@@ -37,7 +38,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
   return (
     <View style={styles.container}>
       <Weapon data={data} />
-      
+
       <Text style={styles.label}>Інвентар персонажа:</Text>
 
       <FlatList
@@ -45,8 +46,10 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
         keyExtractor={(_, idx) => idx.toString()}
         renderItem={({ item, index }) => (
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <TextInput
-              style={[styles.memoInput, { flex: 1, height: 40 }]}
+            <MultiTextInput
+              multiline={false}
+              numberOfLines={1}
+              style={{ flex: 1, height: 40 }}
               value={item}
               onChangeText={(text) => handleChangeItem(text, index)}
               placeholder='Назва предмета'

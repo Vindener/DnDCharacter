@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { TextInput, MultiTextInput } from '@/shared/components/TextInput/Index';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterDto } from '@/types/Character';
@@ -98,22 +99,17 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
     <ScrollView style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.label}>Здатність:</Text>
-        <TextInput style={[styles.input, { flex: 1 }]} value={spells.spellcastingAbility} onChangeText={handleAbilityChange} />
+        <TextInput style={{ flex: 1 }} value={spells.spellcastingAbility} onChangeText={handleAbilityChange} />
       </View>
 
       <View style={styles.row}>
         <Text style={styles.label}>Spell Save DC:</Text>
-        <TextInput style={styles.input} keyboardType='numeric' value={`${spells.spellSaveDC}`} onChangeText={handleSaveDCChange} />
+        <TextInput value={`${spells.spellSaveDC}`} onChangeText={handleSaveDCChange} />
       </View>
 
       <View style={styles.row}>
         <Text style={styles.label}>Spell Attack Bonus:</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType='numeric'
-          value={`${spells.spellAttackBonus}`}
-          onChangeText={handleAttackBonusChange}
-        />
+        <TextInput value={`${spells.spellAttackBonus}`} onChangeText={handleAttackBonusChange} />
       </View>
 
       <Text style={styles.label}>Spell Slots:</Text>
@@ -125,20 +121,14 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>Макс:</Text>
               <TextInput
-                style={[styles.input, { marginHorizontal: 4 }]}
-                keyboardType='numeric'
+                style={{ marginHorizontal: 4 }}
                 value={`${spells.spellSlots[level].max}`}
                 onChangeText={(t) => handleSlotChange(level, 'max', t)}
               />
             </View>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>Вик:</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType='numeric'
-                value={`${spells.spellSlots[level].used}`}
-                onChangeText={(t) => handleSlotChange(level, 'used', t)}
-              />
+              <TextInput value={`${spells.spellSlots[level].used}`} onChangeText={(t) => handleSlotChange(level, 'used', t)} />
             </View>
           </View>
         ))}
@@ -148,37 +138,23 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
       </TouchableOpacity>
 
       <Text style={styles.label}>Відомі закляття:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline
+      <MultiTextInput
         numberOfLines={4}
         value={knownSpellsText}
         onChangeText={handleKnownSpellsChange}
         placeholder='Введіть відомі закляття'
-        placeholderTextColor='#888'
       />
 
       <Text style={styles.label}>Підготовлені закляття:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline
+      <MultiTextInput
         numberOfLines={4}
         value={preparedSpellsText}
         onChangeText={handlePreparedSpellsChange}
         placeholder='Введіть підготовлені закляття'
-        placeholderTextColor='#888'
       />
 
       <Text style={styles.label}>Кантіпси:</Text>
-      <TextInput
-        style={styles.memoInput}
-        multiline
-        numberOfLines={4}
-        value={cantripsText}
-        onChangeText={handleCantripsChange}
-        placeholder='Введіть кантіпси'
-        placeholderTextColor='#888'
-      />
+      <MultiTextInput numberOfLines={4} value={cantripsText} onChangeText={handleCantripsChange} placeholder='Введіть кантіпси' />
     </ScrollView>
   );
 };
