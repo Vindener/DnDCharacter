@@ -4,9 +4,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
-import type { TabStackParamList } from '@/navigation/types';
+import type { AppStackParamList } from '@/navigation/AppNavigator';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 
-type Navigation = StackNavigationProp<TabStackParamList>;
+type Navigation = StackNavigationProp<AppStackParamList & TabStackParamList>;
 
 const Header = () => {
   const navigation = useNavigation<Navigation>();
@@ -27,7 +28,7 @@ const Header = () => {
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Heroes', { screen: 'Settings' })}>
         <View style={styles.logoCircle}>
           <Text style={styles.logoText}>D</Text>
         </View>
