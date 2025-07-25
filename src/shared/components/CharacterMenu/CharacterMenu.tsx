@@ -7,12 +7,20 @@ import { CharacterDto } from '@/types/Character';
 import { styles } from './style';
 import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
+import { Modal } from '@/shared/components/Modal/Modal';
+import TextInput from '@/shared/components/TextInput/TextInput';
 
-export default function CharacterMenu({ character }: { character: CharacterDto }) {
+interface CharacterMenuProps {
+  character: CharacterDto;
+  onChange?: (character: CharacterDto) => void;
+}
+export default function CharacterMenu({ character, onChange }: CharacterMenuProps) {
   const addCharacter = useCharacterStore((s: any) => s.addCharacter);
   const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
   const [menuVisible, setMenuVisible] = useState(false);
   const [characterData, setCharacterData] = useState<CharacterDto>(character);
+  const [isNameModalVisible, setIsNameModalVisible] = useState(false);
+  const [newName, setNewName] = useState(character.name);
 
   useEffect(() => {
     if (character.id) {
@@ -38,7 +46,8 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
         const uri = result.assets[0].uri;
         const updated = { ...characterData, photoUri: uri };
         setCharacterData(updated);
-        updateCharacter(updated);
+        if (characterData.id) updateCharacter(characterData.id, updated);
+        onChange?.(updated);
       }
     } catch {}
   };
@@ -46,14 +55,31 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
   const removePhoto = () => {
     const updated = { ...characterData, photoUri: undefined };
     setCharacterData(updated);
-    updateCharacter(updated);
+    if (characterData.id) updateCharacter(characterData.id, updated);
+    onChange?.(updated);
   };
 
-  const renameCharacter = () => {};
+  const renameCharacter = () => {
+    setNewName(characterData.name);
+    setIsNameModalVisible(true);
+  };
+
+  const handleNameChange = () => {
+    if (!newName.trim()) return;
+    const updated = { ...characterData, name: newName };
+    setCharacterData(updated);
+    if (characterData.id) updateCharacter(characterData.id, updated);
+    onChange?.(updated);
+    setIsNameModalVisible(false);
+  };
 
   const importCharacter = async () => {
     const imported = await FileService.importCurrentCharacter(character.id);
-    if (imported) addCharacter(imported);
+    if (imported) {
+      addCharacter(imported);
+      setCharacterData(imported);
+      onChange?.(imported);
+    }
   };
 
   return (
@@ -96,6 +122,9 @@ export default function CharacterMenu({ character }: { character: CharacterDto }
           Експорт JSON
         </MenuItem>
       </Menu>
+      <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
+        <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
+      </Modal>
     </>
   );
 }
