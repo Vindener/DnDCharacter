@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "DnDCharacter",
-    "slug": "DnDCharacter",
-    "version": "0.10.0",
+    "name": "MythgateDND",
+    "slug": "MythgateDND",
+    "version": "0.28.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,10 +19,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vindener.MythgateDND"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6d4ab658-1bc9-48a0-8c86-eeffa8f2a85e"
+      }
+    },
+    "owner": "vindener"
   }
 }
