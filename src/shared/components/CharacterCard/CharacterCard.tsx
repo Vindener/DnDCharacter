@@ -47,7 +47,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
         <Text style={styles.classText}>{character.class || 'Клас'}</Text>
       </View>
       <TouchableOpacity onPress={handleDelete}>
-        <Ionicons name='ellipsis-vertical' size={20} color={colors.text} />
+        <Ionicons name='trash-outline' size={20} color={colors.text} />
       </TouchableOpacity>
     </TouchableOpacity>
   );

@@ -3,7 +3,7 @@ import { ThemeColors } from '@/shared/styles/theme';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: c.background, overflow: 'scroll' },
+  container: { flex: 1, padding: 16, backgroundColor: c.background },
   header: { marginBottom: 16, alignItems: 'center' },
   characterPhoto: { width: 120, height: 120, borderRadius: 60, marginBottom: 8 },
   placeholderPhoto: {
