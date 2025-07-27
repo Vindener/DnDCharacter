@@ -7,12 +7,14 @@ import TabNavigator from '@/navigation/TabNavigator';
 import { CharacterDto } from '@/types/Character';
 import useThemeStore from '@/context/Theme-store';
 import Header from '@/modules/Header/Header';
+import Initiative from '@/screens/Initiative/Initiative';
 
 export type AppStackParamList = {
   Library: undefined;
   Heroes: { onCreateCharacter: (newChar: CharacterDto) => void };
   Guide: { character: CharacterDto; onUpdateCharacter: (updated: CharacterDto) => void };
   Settings: undefined;
+  Initiative: undefined;
 };
 
 const Stack = createBottomTabNavigator<AppStackParamList>();
@@ -34,6 +36,8 @@ export default function AppNavigator() {
         return 'person-outline';
       case 'Guide':
         return 'flag-outline';
+      case 'Initiative':
+        return 'bonfire-outline';
       default:
         return 'ellipse';
     }
@@ -55,6 +59,7 @@ export default function AppNavigator() {
       >
         <Stack.Screen name='Library' component={EmptyPlaceholder} />
         <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Initiative' }} />
         <Stack.Screen name='Guide' component={EmptyPlaceholder} />
       </Stack.Navigator>
     </NavigationContainer>
