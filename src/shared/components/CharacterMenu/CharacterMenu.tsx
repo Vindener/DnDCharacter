@@ -28,6 +28,12 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
   const [isExpModalVisible, setIsExpModalVisible] = useState(false);
   const [tempExp, setTempExp] = useState(character.experience ?? 0);
   const [expDelta, setExpDelta] = useState('');
+  const [isSpeedModalVisible, setIsSpeedModalVisible] = useState(false);
+  const [tempSpeed, setTempSpeed] = useState(character.speed ?? 0);
+  const [isAcModalVisible, setIsAcModalVisible] = useState(false);
+  const [tempAc, setTempAc] = useState(character.ac ?? 0);
+  const [isInitModalVisible, setIsInitModalVisible] = useState(false);
+  const [tempInit, setTempInit] = useState(character.initiative ?? 0);
 
   useEffect(() => {
     if (character.id) {
@@ -38,6 +44,12 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
             setCharacterData(parsed);
             const xp = Number(parsed.experience);
             setTempExp(Number.isFinite(xp) ? xp : 0);
+            const sp = Number(parsed.speed);
+            setTempSpeed(Number.isFinite(sp) ? sp : 0);
+            const ac = Number(parsed.ac);
+            setTempAc(Number.isFinite(ac) ? ac : 0);
+            const init = Number(parsed.initiative);
+            setTempInit(Number.isFinite(init) ? init : 0);
           }
         })
         .catch(() => {});
@@ -51,6 +63,27 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
       setExpDelta('');
     }
   }, [isExpModalVisible, characterData.experience]);
+
+  useEffect(() => {
+    if (isSpeedModalVisible) {
+      const sp = Number(characterData.speed);
+      setTempSpeed(Number.isFinite(sp) ? sp : 0);
+    }
+  }, [isSpeedModalVisible, characterData.speed]);
+
+  useEffect(() => {
+    if (isAcModalVisible) {
+      const ac = Number(characterData.ac);
+      setTempAc(Number.isFinite(ac) ? ac : 0);
+    }
+  }, [isAcModalVisible, characterData.ac]);
+
+  useEffect(() => {
+    if (isInitModalVisible) {
+      const init = Number(characterData.initiative);
+      setTempInit(Number.isFinite(init) ? init : 0);
+    }
+  }, [isInitModalVisible, characterData.initiative]);
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
@@ -114,13 +147,31 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
     setExpDelta('');
   };
 
-  const importCharacter = async () => {
-    const imported = await FileService.importCurrentCharacter(character.id);
-    if (imported) {
-      addCharacter(imported);
-      setCharacterData(imported);
-      onChange?.(imported);
-    }
+  const handleSaveSpeed = () => {
+    const value = Math.max(0, tempSpeed);
+    const updated = { ...characterData, speed: value };
+    setCharacterData(updated);
+    if (characterData.id) updateCharacter(characterData.id, updated);
+    onChange?.(updated);
+    setIsSpeedModalVisible(false);
+  };
+
+  const handleSaveAc = () => {
+    const value = Math.min(Math.max(0, tempAc), 20);
+    const updated = { ...characterData, ac: value };
+    setCharacterData(updated);
+    if (characterData.id) updateCharacter(characterData.id, updated);
+    onChange?.(updated);
+    setIsAcModalVisible(false);
+  };
+
+  const handleSaveInit = () => {
+    const value = Math.max(0, tempInit);
+    const updated = { ...characterData, initiative: value };
+    setCharacterData(updated);
+    if (characterData.id) updateCharacter(characterData.id, updated);
+    onChange?.(updated);
+    setIsInitModalVisible(false);
   };
 
   return (
@@ -153,13 +204,38 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Змінити ім'я
         </MenuItem>
+        <MenuDivider />
         <MenuItem
           onPress={() => {
             closeMenu();
             setIsExpModalVisible(true);
           }}
         >
-          Додати досвід
+          Редагувати досвід
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            closeMenu();
+            setIsSpeedModalVisible(true);
+          }}
+        >
+          Редагувати швидкість
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            closeMenu();
+            setIsAcModalVisible(true);
+          }}
+        >
+          Редагувати захист
+        </MenuItem>
+        <MenuItem
+          onPress={() => {
+            closeMenu();
+            setIsInitModalVisible(true);
+          }}
+        >
+          Редагувати ініціативу
         </MenuItem>
         <MenuDivider />
         <MenuItem
@@ -173,6 +249,36 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
         <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
+      </Modal>
+      <Modal isVisible={isSpeedModalVisible} onClose={() => setIsSpeedModalVisible(false)} onSubmit={handleSaveSpeed} title='Швидкість'>
+        <TextInput
+          value={String(tempSpeed)}
+          onChangeText={(t) => {
+            const val = parseInt(t, 10);
+            setTempSpeed(isNaN(val) ? 0 : val);
+          }}
+          keyboardType='numeric'
+        />
+      </Modal>
+      <Modal isVisible={isAcModalVisible} onClose={() => setIsAcModalVisible(false)} onSubmit={handleSaveAc} title='Захист'>
+        <TextInput
+          value={String(tempAc)}
+          onChangeText={(t) => {
+            const val = parseInt(t, 10);
+            setTempAc(isNaN(val) ? 0 : val);
+          }}
+          keyboardType='numeric'
+        />
+      </Modal>
+      <Modal isVisible={isInitModalVisible} onClose={() => setIsInitModalVisible(false)} onSubmit={handleSaveInit} title='Ініціатива'>
+        <TextInput
+          value={String(tempInit)}
+          onChangeText={(t) => {
+            const val = parseInt(t, 10);
+            setTempInit(isNaN(val) ? 0 : val);
+          }}
+          keyboardType='numeric'
+        />
       </Modal>
       <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title='Досвід'>
         <Text style={{ color: 'white', marginBottom: 8 }}>Рівень: {getLevelByExperience(tempExp)}</Text>
