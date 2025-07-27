@@ -9,15 +9,21 @@ class FileService {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'application/json',
-        copyToCacheDirectory: false,
+        // copy the selected file to app cache so we can read it reliably on
+        // both development and release builds
+        copyToCacheDirectory: true,
         multiple: false,
       });
 
       if (result.canceled || !result.assets?.length) return null;
 
       const uri = result.assets[0].uri;
-      const response = await fetch(uri);
-      const jsonData = await response.json();
+      // Use FileSystem API to read the file instead of fetch which fails for
+      // content URIs on Android release builds
+      const jsonString = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+      const jsonData = JSON.parse(jsonString);
 
       if (!jsonData.id) jsonData.id = Date.now().toString();
 

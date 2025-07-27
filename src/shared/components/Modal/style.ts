@@ -17,8 +17,9 @@ StyleSheet.create({
     color: c.text,
     borderRadius: 13,
     padding: 32,
-    width: '90%',
-    maxWidth: 400,
+    width: '100%',
+    maxWidth: '100%',
+    height: '75%',
   },
   close: {
     position: 'absolute',

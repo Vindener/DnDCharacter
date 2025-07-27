@@ -1,6 +1,6 @@
-import React, { JSX, useEffect } from 'react';
+import React, { JSX, useEffect, useRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { NavigationContainerRef, StackActions, useNavigation } from '@react-navigation/native';
 
 import Character from '../screens/Character/Character';
 import DiceRoller from '../screens/DiceRoller/DiceRoller';
@@ -26,10 +26,11 @@ const Stack = createStackNavigator<TabStackParamList>();
 
 export default function TabNavigator(): JSX.Element {
   const navigation = useNavigation();
+  const stackRef = useRef<NavigationContainerRef<TabStackParamList>>(null);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      navigation.dispatch(StackActions.popToTop());
+      stackRef.current?.dispatch(StackActions.popToTop());
     });
     return unsubscribe;
   }, [navigation]);

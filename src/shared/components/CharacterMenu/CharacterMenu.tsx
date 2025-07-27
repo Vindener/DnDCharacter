@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
@@ -10,6 +10,7 @@ import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
+import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
 
 interface CharacterMenuProps {
   character: CharacterDto;
@@ -24,16 +25,32 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
   const [characterData, setCharacterData] = useState<CharacterDto>(character);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
   const [newName, setNewName] = useState(character.name);
+  const [isExpModalVisible, setIsExpModalVisible] = useState(false);
+  const [tempExp, setTempExp] = useState(character.experience ?? 0);
+  const [expDelta, setExpDelta] = useState('');
 
   useEffect(() => {
     if (character.id) {
       AsyncStorage.getItem(`characterData_${character.id}`)
         .then((stored) => {
-          if (stored) setCharacterData(JSON.parse(stored));
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            setCharacterData(parsed);
+            const xp = Number(parsed.experience);
+            setTempExp(Number.isFinite(xp) ? xp : 0);
+          }
         })
         .catch(() => {});
     }
   }, [character.id]);
+
+  useEffect(() => {
+    if (isExpModalVisible) {
+      const xp = Number(characterData.experience);
+      setTempExp(Number.isFinite(xp) ? xp : 0);
+      setExpDelta('');
+    }
+  }, [isExpModalVisible, characterData.experience]);
 
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
@@ -76,6 +93,27 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
     setIsNameModalVisible(false);
   };
 
+  const adjustExp = (delta: number) => {
+    setTempExp((prev) => Math.max(prev + delta, 0));
+  };
+
+  const applyInputDelta = (sign: number) => {
+    const value = Number(expDelta);
+    if (!Number.isFinite(value)) return;
+    adjustExp(sign * value);
+    setExpDelta('');
+  };
+
+  const handleSaveExp = () => {
+    const newLevel = getLevelByExperience(tempExp);
+    const updated = { ...characterData, experience: tempExp, level: newLevel };
+    setCharacterData(updated);
+    if (characterData.id) updateCharacter(characterData.id, updated);
+    onChange?.(updated);
+    setIsExpModalVisible(false);
+    setExpDelta('');
+  };
+
   const importCharacter = async () => {
     const imported = await FileService.importCurrentCharacter(character.id);
     if (imported) {
@@ -115,6 +153,14 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Змінити ім'я
         </MenuItem>
+        <MenuItem
+          onPress={() => {
+            closeMenu();
+            setIsExpModalVisible(true);
+          }}
+        >
+          Додати досвід
+        </MenuItem>
         <MenuDivider />
         <MenuItem
           onPress={() => {
@@ -127,6 +173,47 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
         <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
+      </Modal>
+      <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title='Досвід'>
+        <Text style={{ color: 'white', marginBottom: 8 }}>Рівень: {getLevelByExperience(tempExp)}</Text>
+        <Text style={{ color: 'white', marginBottom: 8 }}>Досвід: {tempExp}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+          <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: 8 }} />
+          <TouchableOpacity onPress={() => applyInputDelta(1)} style={styles.adjustButton}>
+            <Text style={styles.adjustText}>+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => applyInputDelta(-1)} style={styles.adjustButton}>
+            <Text style={styles.adjustText}>-</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 12 }}>
+          <TouchableOpacity onPress={() => adjustExp(10)} style={styles.adjustButton}>
+            <Text style={styles.adjustText}>+10</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => adjustExp(-10)} style={styles.adjustButton}>
+            <Text style={styles.adjustText}>-10</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView style={{ maxHeight: 150 }}>
+          {EXPERIENCE_TABLE.map((row) => (
+            <View key={row.level} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text
+                style={{
+                  color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
+                }}
+              >
+                {row.level} lvl
+              </Text>
+              <Text
+                style={{
+                  color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
+                }}
+              >
+                {row.exp}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
       </Modal>
     </>
   );

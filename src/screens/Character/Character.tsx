@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { shareAsync } from 'expo-sharing';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
@@ -11,6 +12,7 @@ import CharacterStats from '@/shared/components/CharacterStats/CharacterStats';
 import useCharacterStore from '@/context/Character-store';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
+import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 
 interface CharacterProps {
   route: {
@@ -35,6 +37,7 @@ export default function Character({ route }: CharacterProps) {
   const [tempHp, setTempHp] = useState(0);
   const [tempMaxHp, setTempMaxHp] = useState(0);
   const [hpDelta, setHpDelta] = useState('');
+  const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
 
   useEffect(() => {
     if (characterData.id) {
@@ -125,6 +128,7 @@ export default function Character({ route }: CharacterProps) {
   };
 
   return (
+  <View style={{ flex: 1 }}>
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         {characterData.photoUri ? (
@@ -170,5 +174,12 @@ export default function Character({ route }: CharacterProps) {
         </View>
       </Modal>
     </ScrollView>
-  );
+    <TouchableOpacity style={styles.diceIcon} onPress={() => setIsDiceModalVisible(true)}>
+      <MaterialCommunityIcons name='dice-d20-outline' size={32} color={colors.text} />
+    </TouchableOpacity>
+    <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)}>
+      <DiceRoller />
+    </Modal>
+  </View>
+);
 }

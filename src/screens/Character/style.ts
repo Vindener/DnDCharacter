@@ -20,4 +20,13 @@ StyleSheet.create({
   level: { fontSize: 16, color: c.text },
   exp: { fontSize: 14, color: c.text },
   changeHP: { fontSize: 16, color: c.text },
+  diceIcon: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    padding: 8,
+    borderRadius: 24,
+    backgroundColor: c.card,
+    zIndex: 1,
+  },
 });
