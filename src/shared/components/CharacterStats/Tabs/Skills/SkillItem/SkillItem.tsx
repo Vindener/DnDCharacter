@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import TextInput  from '@/shared/components/TextInput/TextInput';
-import { styles } from './style';
+import { getStyles } from './style';
+import useThemeStore from '@/context/Theme-store';
 import { Modal } from '@/shared/components/Modal/Modal';
 import Loader from '@/shared/components/Loader/Loader';
 
@@ -15,6 +16,8 @@ interface SkillItemProps {
 export const SkillItem: React.FC<SkillItemProps> = ({ label, value, skillKey, onChange }) => {
   const [inputValue, setInputValue] = useState(`${value}`);
   const [isVisible, setIsVisible] = useState(false);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   useEffect(() => {
     setInputValue(`${value}`);

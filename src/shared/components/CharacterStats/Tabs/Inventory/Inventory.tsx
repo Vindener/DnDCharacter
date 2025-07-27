@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +15,9 @@ interface InventoryProps {
 const Inventory: React.FC<InventoryProps> = ({ data }) => {
   const updateCharacterInventory = useCharacterStore((s) => s.updateCharacterInventory);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
-
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
+  
   const [items, setItems] = useState<string[]>(character?.inventory || []);
 
   const handleAddItem = () => {

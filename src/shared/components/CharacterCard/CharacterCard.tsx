@@ -2,10 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from './style';
+import { getStyles } from './style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
-import { TabStackParamList } from '@/navigation/TabNavigator';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useCharacterStore from '@/context/Character-store';
 
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
@@ -18,6 +19,8 @@ interface CharacterCardProps {
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   const navigation = useNavigation<NavigationProp>();
   const removeCharacter = useCharacterStore((s: any) => s.removeCharacter);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
 
   const handlePress = () => {
@@ -44,7 +47,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
         <Text style={styles.classText}>{character.class || 'Клас'}</Text>
       </View>
       <TouchableOpacity onPress={handleDelete}>
-        <Ionicons name='ellipsis-vertical' size={20} color='white' />
+        <Ionicons name='trash-outline' size={20} color={colors.text} />
       </TouchableOpacity>
     </TouchableOpacity>
   );

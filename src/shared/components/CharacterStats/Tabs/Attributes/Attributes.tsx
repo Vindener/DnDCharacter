@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import { attributes } from '@/shared/const/attributes';
 import { AttributesItem } from '@/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem';
@@ -13,6 +14,8 @@ interface AttributesProps {
 
 const Attributes: React.FC<AttributesProps> = ({ data }) => {
   const updateCharacterAttribute = useCharacterStore((s) => s.updateCharacterAttribute);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const handleChange = (key: StatKey, value: number) => {
     updateCharacterAttribute(data.id ,key, value);

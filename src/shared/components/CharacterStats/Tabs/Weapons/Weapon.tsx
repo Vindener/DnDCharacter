@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import TextInput  from '@/shared/components/TextInput/TextInput';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import { Weapon as WeaponType } from '@/types/Weapon';
 import useCharacterStore from '@/context/Character-store';
@@ -40,6 +41,8 @@ const rollDamageWithBonus = (notation: string, bonus: number) => {
 const Weapon: React.FC<WeaponProps> = ({ data }) => {
   const updateCharacterWeapons = useCharacterStore((s) => s.updateCharacterWeapons);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [weapons, setWeapons] = useState<WeaponType[]>(character?.weapons || []);
   const [visibleIndex, setVisibleIndex] = useState<number | null>(null);

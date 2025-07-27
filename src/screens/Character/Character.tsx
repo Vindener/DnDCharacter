@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { shareAsync } from 'expo-sharing';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import { styles } from './style';
+import { getStyles } from './style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
 import CharacterStats from '@/shared/components/CharacterStats/CharacterStats';
@@ -24,6 +25,8 @@ export default function Character({ route }: CharacterProps) {
   const { character } = route.params;
 
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [characterData, setCharacterData] = useState<CharacterDto | any>(character);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
@@ -122,7 +125,7 @@ export default function Character({ route }: CharacterProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         {characterData.photoUri ? (
           <Image source={{ uri: characterData.photoUri }} style={styles.characterPhoto} />
@@ -166,6 +169,6 @@ export default function Character({ route }: CharacterProps) {
           </TouchableOpacity>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 }

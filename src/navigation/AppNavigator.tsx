@@ -6,6 +6,7 @@ import EmptyPlaceholder from '@/shared/components/EmptyPlaceholder';
 import TabNavigator from '@/navigation/TabNavigator';
 import { CharacterDto } from '@/types/Character';
 import useThemeStore from '@/context/Theme-store';
+import Header from '@/modules/Header/Header';
 
 export type AppStackParamList = {
   Library: undefined;
@@ -18,6 +19,7 @@ const Stack = createBottomTabNavigator<AppStackParamList>();
 
 export default function AppNavigator() {
   const theme = useThemeStore((s) => s.theme);
+  const colors = useThemeStore((s) => s.colors);
   const loadTheme = useThemeStore((s) => s.loadTheme);
 
   useEffect(() => {
@@ -41,10 +43,10 @@ export default function AppNavigator() {
     <NavigationContainer theme={theme}>
       <Stack.Navigator
         screenOptions={({ route }) => ({
-          headerShown: false,
+          header: () => <Header />,
           tabBarActiveTintColor: '#ff2d55',
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: { backgroundColor: '#121212', borderTopWidth: 0 },
+          tabBarInactiveTintColor: colors.textSecondary,
+          tabBarStyle: { backgroundColor: colors.card, borderTopWidth: 0 },
           tabBarIcon: ({ color, size }) => {
             const iconName = getIconName(route.name);
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -52,7 +54,7 @@ export default function AppNavigator() {
         })}
       >
         <Stack.Screen name='Library' component={EmptyPlaceholder} />
-        <Stack.Screen name='Heroes' component={TabNavigator} />
+        <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name='Guide' component={EmptyPlaceholder} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,9 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1c1c1e',
+    backgroundColor: c.background,
     paddingHorizontal: 16,
   },
   topBar: {
@@ -13,7 +15,7 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
   },
   sortLabel: {
-    color: 'white',
+    color: c.text,
     fontWeight: 'bold',
     marginRight: 4,
   },
@@ -30,15 +32,15 @@ export const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
   slotText: {
-    color: 'white',
+    color: c.text,
     fontSize: 12,
     fontWeight: 'bold',
   },
   search: {
-    backgroundColor: '#2c2c2e',
+    backgroundColor: c.card,
     padding: 10,
     borderRadius: 8,
-    color: 'white',
+    color: c.text,
     marginBottom: 10,
   },
   buttonContainer: {

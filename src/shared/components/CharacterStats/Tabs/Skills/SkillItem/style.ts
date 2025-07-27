@@ -1,25 +1,27 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  label: { color: 'white', fontSize: 16, flex: 1 },
+  label: { color: c.text, fontSize: 16, flex: 1 },
   input: {
-    backgroundColor: '#555',
-    color: 'white',
+    backgroundColor: c.inputBackground,
+    color: c.text,
     padding: 8,
     borderRadius: 5,
     width: 60,
     textAlign: 'center',
   },
   rollButton: {
-    backgroundColor: '#444',
+    backgroundColor: c.inputBackground,
     padding: 10,
     borderRadius: 5,
     marginLeft: 10,
   },
-  rollButtonText: { color: 'white', fontSize: 16 },
+  rollButtonText: { color: c.text, fontSize: 16 },
   rollResult: {
-    color: 'white',
+    color: c.text,
     textAlign: 'center',
   },
 });

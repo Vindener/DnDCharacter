@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Modal as RNModal, View, Text, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
-import { styles } from '@/shared/components/Modal/style';
+import { getStyles } from '@/shared/components/Modal/style';
+import useThemeStore from '@/context/Theme-store';
 
 interface ModalProps {
   title?: string;
@@ -19,10 +20,12 @@ export const Modal = ({
                         children,
                         isVisible,
                       }: ModalProps) => {
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   return (
-    <RNModal visible={isVisible} transparent animationType="fade">
-      <Pressable style={styles.wrapper}  onPress={onClose}>
-        <Pressable style={styles.container} onPress={event => event.stopPropagation()} >
+    <RNModal visible={isVisible} transparent animationType='fade'>
+      <Pressable style={styles.wrapper} onPress={onClose}>
+        <Pressable style={styles.container} onPress={(event) => event.stopPropagation()}>
           <TouchableOpacity onPress={onClose} style={styles.close}>
             <Text style={styles.closeText}>✕</Text>
           </TouchableOpacity>
@@ -30,12 +33,11 @@ export const Modal = ({
           {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
           <View style={styles.content}>
             {children}
-            {
-              onSubmit &&
+            {onSubmit && (
               <Pressable onPress={onSubmit} style={styles.submit}>
                 <Text style={styles.submitText}>Submit</Text>
               </Pressable>
-            }
+            )}
           </View>
         </Pressable>
       </Pressable>

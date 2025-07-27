@@ -4,7 +4,8 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { CharacterDto } from '@/types/Character';
-import { styles } from './style';
+import { getStyles } from './style';
+import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
 import { Modal } from '@/shared/components/Modal/Modal';
@@ -17,6 +18,8 @@ interface CharacterMenuProps {
 export default function CharacterMenu({ character, onChange }: CharacterMenuProps) {
   const addCharacter = useCharacterStore((s: any) => s.addCharacter);
   const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
   const [characterData, setCharacterData] = useState<CharacterDto>(character);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);

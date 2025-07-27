@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView } from 'react-native';
-import { styles } from '@/shared/components/CharacterStats/Tabs/style';
+import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
+import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { SKILL_NAMES } from '@/shared/const/SkillsTab';
@@ -34,6 +35,8 @@ interface SkillsProps {
 const Skills: React.FC<SkillsProps> = ({ data }) => {
   const updateCharacterSkills = useCharacterStore((s) => s.updateCharacterSkills);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [skills, setSkills] = useState<{ [key: string]: number }>(character?.skills || {});
 

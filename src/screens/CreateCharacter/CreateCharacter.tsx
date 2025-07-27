@@ -1,7 +1,8 @@
 import React, { JSX, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from '@/screens/CreateCharacter/style';
+import { getStyles } from '@/screens/CreateCharacter/style';
+import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 
 type Character = {
@@ -17,6 +18,8 @@ const CreateCharacter = (): JSX.Element => {
   const [charClass, setCharClass] = useState('');
   const [race, setRace] = useState('');
   const [level, setLevel] = useState('1');
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   // TODO fix any
   const addCharacter = useCharacterStore((state: any) => state.addCharacter);

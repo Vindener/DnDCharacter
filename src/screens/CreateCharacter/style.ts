@@ -1,19 +1,21 @@
 import { StyleSheet } from 'react-native';
+import { ThemeColors } from '@/shared/styles/theme';
 
-export const styles = StyleSheet.create({
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#1c1c1e',
+    backgroundColor: c.background,
   },
   label: {
-    color: 'white',
+    color: c.text,
     marginTop: 12,
     fontSize: 16,
   },
   input: {
-    backgroundColor: '#2c2c2e',
-    color: 'white',
+    backgroundColor: c.card,
+    color: c.text,
     padding: 10,
     borderRadius: 8,
     marginTop: 4,

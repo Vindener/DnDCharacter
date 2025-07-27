@@ -1,16 +1,17 @@
 import { StyleSheet } from 'react-native';
-
-export const styles = StyleSheet.create({
+import { ThemeColors } from '@/shared/styles/theme';
+export const getStyles = (c: ThemeColors) =>
+StyleSheet.create({
   header: {
     paddingTop: 30,
     height: 84,
-    backgroundColor: '#1c1c1e',
+    backgroundColor: c.card,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderColor: '#2c2c2e',
+    borderColor: c.border,
   },
   logoCircle: {
     width: 36,
@@ -21,12 +22,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoText: {
-    color: 'white',
+    color: c.text,
     fontSize: 18,
     fontWeight: 'bold',
   },
   title: {
-    color: 'white',
+    color: c.text,
     fontSize: 18,
     fontWeight: '600',
   },
