@@ -4,14 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getStyles } from '@/screens/CreateCharacter/style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
-
-type Character = {
-  id: string;
-  name: string;
-  class: string;
-  race: string;
-  level: number;
-};
+import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 
 const CreateCharacter = (): JSX.Element => {
   const [name, setName] = useState('');
@@ -31,13 +24,13 @@ const CreateCharacter = (): JSX.Element => {
       return;
     }
 
-    const newChar: Character = {
+    const newChar = createEmptyCharacter({
       id: Date.now().toString(),
       name,
       class: charClass,
       race,
       level: parseInt(level, 10),
-    };
+    });
 
     await addCharacter(newChar);
     navigation.goBack();

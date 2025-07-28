@@ -4,6 +4,7 @@ import { NavigationContainerRef, StackActions, useNavigation } from '@react-navi
 
 import Character from '../screens/Character/Character';
 import DiceRoller from '../screens/DiceRoller/DiceRoller';
+import Dice from '../screens/Dice/Dice';
 import Home from '../screens/Home/Home';
 import Settings from '@/screens/Settings/Settings';
 import Header from '@/modules/Header/Header';
@@ -13,6 +14,7 @@ import { CharacterDto } from '@/types/Character';
 export type TabStackParamList = {
   Home: undefined;
   DiceRoller: undefined;
+  Dice: { sides: number };
   // TODO - temporary fix, add proper typing
   // CharacterSheet: { character: CharacterData; onUpdateCharacter?: (updated: any) => void };
   Character: {
@@ -39,6 +41,7 @@ export default function TabNavigator(): JSX.Element {
     <Stack.Navigator>
       <Stack.Screen name='Home' component={Home} options={{ header: () => <Header /> }} />
       <Stack.Screen name='DiceRoller' component={DiceRoller} options={{ title: 'Кидок кубика' }} />
+      <Stack.Screen name='Dice' component={Dice} options={{ title: 'Кидок' }} />
       <Stack.Screen name='Character' component={Character} options={{ title: 'Лист персонажа' }} />
       <Stack.Screen name='CreateCharacter' component={CreateCharacter} options={{ title: 'Створити персонажа' }} />
       <Stack.Screen name='Settings' component={Settings} options={{ title: 'Settings', header: () => <Header /> }} />

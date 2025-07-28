@@ -1,46 +1,39 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ListRenderItem } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 
-const diceTypes: number[] = [4, 6, 8, 10, 12, 20];
+interface DiceProps {
+  route: {
+    params: {
+      sides: number;
+    };
+  };
+}
 
-const DiceRoller: React.FC = () => {
+const Dice: React.FC<DiceProps> = ({ route }) => {
+  const { sides } = route.params;
   const [result, setResult] = useState<number | null>(null);
   const colors = useThemeStore((s) => s.colors);
-  const styles = React.useMemo(() => useStyles(colors), [colors]);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
 
-  const rollDice = (sides: number) => {
+  const rollDice = () => {
     setResult(Math.floor(Math.random() * sides) + 1);
   };
 
-  const renderItem: ListRenderItem<number> = ({ item }) => (
-    <TouchableOpacity style={styles.diceButton} onPress={() => rollDice(item)}>
-      <Text style={styles.diceText}>К{item}</Text>
-    </TouchableOpacity>
-  );
+  useEffect(() => {
+    rollDice();
+  }, [sides]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Вибери кубик:</Text>
-      <FlatList data={diceTypes} keyExtractor={(item) => item.toString()} renderItem={renderItem} />
+      <Text style={styles.title}>К{sides}</Text>
       {result !== null && <Text style={styles.result}>Результат: {result}</Text>}
+      <TouchableOpacity onPress={rollDice} style={styles.rollButton}>
+        <Text style={styles.rollButtonText}>Кинути ще раз</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const useStyles = (c: ReturnType<typeof useThemeStore>['colors']) =>
-StyleSheet.create({
-  container: { flex: 1, padding: 16, justifyContent: 'center' },
-  title: { fontSize: 20, marginBottom: 16, textAlign: 'center' },
-  diceButton: {
-    padding: 16,
-    marginVertical: 4,
-    backgroundColor: '#2f95dc',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  diceText: { fontSize: 18, color: c.text },
-  result: { fontSize: 22, textAlign: 'center', marginTop: 16, color: c.text },
-});
-
-export default DiceRoller;
+export default Dice;

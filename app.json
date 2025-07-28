@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "MythgateDND",
-    "slug": "MythgateDND",
-    "version": "0.28.0",
+    "slug": "DnDCharacter",
+    "version": "0.30.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
