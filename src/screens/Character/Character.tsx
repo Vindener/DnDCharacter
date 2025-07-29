@@ -13,6 +13,9 @@ import useCharacterStore from '@/context/Character-store';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import DiceRoller from '@/screens/DiceRoller/DiceRoller';
+import Dice from '@/screens/Dice/Dice';
+import { calculateModifier } from '@/shared/helpers/calculateModifier';
+import { parseDice } from '@/shared/helpers/dice';
 
 interface CharacterProps {
   route: {
@@ -38,6 +41,12 @@ export default function Character({ route }: CharacterProps) {
   const [tempMaxHp, setTempMaxHp] = useState(0);
   const [hpDelta, setHpDelta] = useState('');
   const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
+  const [isRestModalVisible, setIsRestModalVisible] = useState(false);
+  const [restStep, setRestStep] = useState<'choose' | 'short' | 'roll'>('choose');
+  const [shortRestDice, setShortRestDice] = useState('1');
+  const [rollsNeeded, setRollsNeeded] = useState(0);
+  const [rollResults, setRollResults] = useState<number[]>([]);
+  const [diceSides, setDiceSides] = useState(0);
 
   useEffect(() => {
     if (characterData.id) {
@@ -50,9 +59,9 @@ export default function Character({ route }: CharacterProps) {
   }, [characterData.id]);
 
   useEffect(() => {
-    setTempHp(characterData?.hp?.temp ?? 0);
+    setTempHp(characterData?.hp?.current ?? 0);
     setTempMaxHp(characterData?.hp?.max ?? 0);
-  }, [characterData?.hp?.temp, characterData?.hp?.max]);
+  }, [characterData?.hp?.current, characterData?.hp?.max]);
 
   const saveCharacter = async () => {
     if (!characterData.id) return;
@@ -127,6 +136,63 @@ export default function Character({ route }: CharacterProps) {
     });
   };
 
+  const openRestModal = () => {
+    setRestStep('choose');
+    setShortRestDice('1');
+    setRollsNeeded(0);
+    setRollResults([]);
+    setDiceSides(0);
+    setIsRestModalVisible(true);
+  };
+
+  const startShortRestRoll = () => {
+    const { count, sides } = parseDice(characterData.hitDice || '0d0');
+    let num = parseInt(shortRestDice, 10);
+    if (isNaN(num) || num < 1) num = 1;
+    if (num > count) num = count;
+    setRollsNeeded(num);
+    setRollResults([]);
+    setDiceSides(sides);
+    setRestStep('roll');
+  };
+
+  const handleDiceRoll = (value: number) => {
+    setRollResults((prev) => (prev.length < rollsNeeded ? [...prev, value] : prev));
+  };
+
+  const applyShortRestRolls = () => {
+    const { count, sides } = parseDice(characterData.hitDice || '0d0');
+    const used = rollResults.length;
+    const conMod = calculateModifier(characterData.stats.constitution || 10);
+    const heal = rollResults.reduce((a, b) => a + b, 0) + conMod * used;
+    const newCurrent = Math.min(characterData.hp.current + heal, characterData.hp.max);
+    const updated = {
+      ...characterData,
+      hp: { ...characterData.hp, current: newCurrent },
+      hitDice: `${count - used}d${sides}`,
+    };
+    setCharacterData(updated);
+    if (updated.id) updateCharacter(updated.id, updated);
+    setIsRestModalVisible(false);
+  };
+
+  const handleLongRest = () => {
+    const { sides } = parseDice(characterData.hitDice || '0d0');
+    const newSlots = { ...(characterData.spells?.spellSlots || {}) };
+    Object.keys(newSlots).forEach((lvl) => {
+      newSlots[lvl] = { ...newSlots[lvl], used: 0 };
+    });
+    const updated = {
+      ...characterData,
+      hp: { ...characterData.hp, current: characterData.hp.max },
+      hitDice: `${characterData.level}d${sides}`,
+      spells: { ...characterData.spells, spellSlots: newSlots },
+    };
+    setCharacterData(updated);
+    if (updated.id) updateCharacter(updated.id, updated);
+    setIsRestModalVisible(false);
+  };
+
   return (
   <View style={{ flex: 1 }}>
     <ScrollView style={styles.container}>
@@ -149,6 +215,9 @@ export default function Character({ route }: CharacterProps) {
 
         <TouchableOpacity onPress={() => setIsHpModalVisible(true)}>
           <Text style={styles.changeHP}>Редагувати HP</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={openRestModal}>
+          <Text style={styles.restButton}>Відпочинок</Text>
         </TouchableOpacity>
       </View>
 
@@ -179,6 +248,45 @@ export default function Character({ route }: CharacterProps) {
     </TouchableOpacity>
     <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)}>
       <DiceRoller />
+    </Modal>
+    <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Відпочинок'>
+      {restStep === 'choose' && (
+        <>
+          <TouchableOpacity onPress={() => setRestStep('short')}>
+            <Text style={styles.restOption}>Короткий відпочинок</Text>
+          </TouchableOpacity>
+          <Text style={styles.restDesc}>
+            Короткий відпочинок триває щонайменше годину. Ви можете витратити кості хітів, щоб відновити здоров’я.
+          </Text>
+          <TouchableOpacity onPress={handleLongRest}>
+            <Text style={styles.restOption}>Довгий відпочинок</Text>
+          </TouchableOpacity>
+          <Text style={styles.restDesc}>Довгий відпочинок повністю відновлює HP та слоти заклять.</Text>
+        </>
+      )}
+      {restStep === 'short' && (
+        <>
+          <Text style={styles.restDesc}>Доступно: {characterData.hitDice}</Text>
+          <Text style={styles.restDesc}>Скільки кісток використати?</Text>
+          <TextInput value={shortRestDice} onChangeText={setShortRestDice} keyboardType='numeric' />
+          <TouchableOpacity onPress={startShortRestRoll}>
+            <Text style={styles.restOption}>Кинути</Text>
+          </TouchableOpacity>
+        </>
+      )}
+      {restStep === 'roll' && (
+        <>
+          <Text style={styles.restDesc}>
+            Кидок {rollResults.length + 1} з {rollsNeeded}
+          </Text>
+          <Dice sides={diceSides} onRoll={handleDiceRoll} />
+          {rollResults.length >= rollsNeeded && (
+            <TouchableOpacity onPress={applyShortRestRolls}>
+              <Text style={styles.restOption}>Застосувати</Text>
+            </TouchableOpacity>
+          )}
+        </>
+      )}
     </Modal>
   </View>
 );

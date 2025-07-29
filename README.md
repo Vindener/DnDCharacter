@@ -1,1 +1,1 @@
-DND React Project
+DND Chararcter Page React Native Project

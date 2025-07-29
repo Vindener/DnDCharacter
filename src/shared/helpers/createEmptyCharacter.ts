@@ -1,5 +1,27 @@
 import { CharacterDto } from '@/types/Character';
 
+const HIT_DICE_MAP: Record<string, number> = {
+  barbarian: 12,
+  fighter: 10,
+  paladin: 10,
+  ranger: 10,
+  bard: 8,
+  cleric: 8,
+  druid: 8,
+  monk: 8,
+  rogue: 8,
+  warlock: 8,
+  artificer: 8,
+  wizard: 6,
+  sorcerer: 6,
+};
+
+function getHitDiceSides(className: string): number {
+  const key = className.trim().toLowerCase();
+  return HIT_DICE_MAP[key] || 6;
+}
+
+
 export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): CharacterDto {
   return {
     id: overrides.id ?? '',
@@ -61,7 +83,7 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
       temp: 0,
       ...(overrides.hp || {}),
     },
-    hitDice: overrides.hitDice ?? '',
+    hitDice: overrides.hitDice ?? `${overrides.level ?? 1}d${getHitDiceSides(overrides.class ?? '')}`,
     deathSaves: {
       successes: 0,
       failures: 0,

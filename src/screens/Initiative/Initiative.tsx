@@ -62,23 +62,26 @@ const Initiative: React.FC = () => {
     pan.setValue(0);
   };
 
-   const moveUp = (index: number) => {
-     if (index === 0) return;
-     const newItems = [...items];
-     [newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]];
-     setItems(newItems);
-   };
+  const moveUp = (index: number) => {
+    if (index === 0) return;
+    const newItems = [...items];
+    [newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]];
+    setItems(newItems);
+  };
 
-   const moveDown = (index: number) => {
-     if (index === items.length - 1) return;
-     const newItems = [...items];
-     [newItems[index], newItems[index + 1]] = [newItems[index + 1], newItems[index]];
-     setItems(newItems);
-   };
-
+  const moveDown = (index: number) => {
+    if (index === items.length - 1) return;
+    const newItems = [...items];
+    [newItems[index], newItems[index + 1]] = [newItems[index + 1], newItems[index]];
+    setItems(newItems);
+  };
 
   const handleAdd = () => {
     setItems((prev) => [...prev, { id: Date.now().toString(), name: '', roll: '' }]);
+  };
+
+  const handleDelete = (index: number) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleChange = (index: number, key: keyof InitiativeItem, value: string) => {
@@ -121,6 +124,9 @@ const Initiative: React.FC = () => {
               <Ionicons name='arrow-down' size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={() => handleDelete(index)} style={{ marginLeft: 8 }}>
+            <Ionicons name='trash-outline' size={20} color='#d00' />
+          </TouchableOpacity>
         </TouchableOpacity>
       </Animated.View>
     );

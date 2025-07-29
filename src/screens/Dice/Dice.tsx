@@ -4,21 +4,25 @@ import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 
 interface DiceProps {
-  route: {
+  route?: {
     params: {
-      sides: number;
+      sides?: number;
     };
   };
+  sides?: number;
+  onRoll?: (value: number) => void;
 }
 
-const Dice: React.FC<DiceProps> = ({ route }) => {
-  const { sides } = route.params;
+const Dice: React.FC<DiceProps> = ({ route, sides: propSides, onRoll }) => {
+  const sides = propSides ?? route?.params?.sides ?? 6;
   const [result, setResult] = useState<number | null>(null);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const rollDice = () => {
-    setResult(Math.floor(Math.random() * sides) + 1);
+    const value = Math.floor(Math.random() * sides) + 1;
+    setResult(value);
+    onRoll?.(value);
   };
 
   useEffect(() => {
