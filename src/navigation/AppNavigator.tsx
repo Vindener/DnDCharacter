@@ -8,7 +8,8 @@ import { CharacterDto } from '@/types/Character';
 import useThemeStore from '@/context/Theme-store';
 import Header from '@/modules/Header/Header';
 import Initiative from '@/screens/Initiative/Initiative';
-import DM from '@/screens/DM/DM';
+import DMNavigator from '@/navigation/DMNavigator';
+import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 
 export type AppStackParamList = {
   Library: undefined;
@@ -17,6 +18,7 @@ export type AppStackParamList = {
   Settings: undefined;
   Initiative: undefined;
   DM: undefined;
+  Bestiary: undefined;
 };
 
 const Stack = createBottomTabNavigator<AppStackParamList>();
@@ -42,6 +44,8 @@ export default function AppNavigator() {
         return 'bonfire-outline';
       case 'DM':
         return 'people-outline';
+      case 'Bestiary':
+        return 'skull-outline';
       default:
         return 'ellipse';
     }
@@ -64,8 +68,8 @@ export default function AppNavigator() {
         <Stack.Screen name='Library' component={EmptyPlaceholder} />
         <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Initiative' }} />
-        <Stack.Screen name='DM' component={DM} options={{ title: 'DM' }} />
-        <Stack.Screen name='Guide' component={EmptyPlaceholder} />
+        <Stack.Screen name='DM' component={DMNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name='Bestiary' component={BestiaryNavigator} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

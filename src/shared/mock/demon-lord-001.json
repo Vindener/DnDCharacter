@@ -1,0 +1,22 @@
+{
+  "id": "demon-lord-001",
+  "name": "Zar'gul the Soul Eater",
+  "size": "Huge",
+  "type": "Fiend (Demon)",
+  "alignment": "Chaotic Evil",
+  "challenge": "18 (20,000 XP)",
+  "armorClass": 20,
+  "hitPoints": 310,
+  "speed": "40 ft., fly 60 ft.",
+  "stats": {
+    "strength": 26,
+    "dexterity": 14,
+    "constitution": 24,
+    "intelligence": 18,
+    "wisdom": 16,
+    "charisma": 22
+  },
+  "actions": "**Multiattack.** Zar'gul makes three attacks: one with his soul blade and two with his claws.\n\n**Soul Blade.** *Melee Weapon Attack:* +12 to hit, reach 10 ft., one target. *Hit:* 21 (3d10 + 5) necrotic damage.\n\n**Claw.** *Melee Weapon Attack:* +10 to hit, reach 5 ft., one target. *Hit:* 15 (2d8 + 6) slashing damage.\n\n**Soul Drain (Recharge 5–6).** Zar'gul targets one creature he can see within 60 feet. The target must succeed on a DC 18 Constitution saving throw or lose 25 (5d10) hit points and Zar'gul regains that amount.",
+  "photoUri": "https://example.com/images/monsters/zar-gul.png",
+  "notes": "Summoned only during blood moons. Weak to radiant damage. Immune to fire, poison, and charm."
+}

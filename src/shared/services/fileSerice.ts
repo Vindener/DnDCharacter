@@ -1,5 +1,6 @@
 import * as DocumentPicker from 'expo-document-picker';
 import { CharacterDto } from '@/types/Character';
+import { MonsterDto } from '@/types/Monster';
 import useCharacterStore from '@/context/Character-store';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
@@ -20,9 +21,15 @@ class FileService {
       const uri = result.assets[0].uri;
       // Use FileSystem API to read the file instead of fetch which fails for
       // content URIs on Android release builds
-      const jsonString = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
+      let jsonString: string;
+      if (typeof FileSystem.readAsStringAsync === 'function') {
+        jsonString = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+      } else {
+        const response = await fetch(uri);
+        jsonString = await response.text();
+      }
       const jsonData = JSON.parse(jsonString);
 
       if (!jsonData.id) jsonData.id = Date.now().toString();
@@ -30,6 +37,37 @@ class FileService {
       return jsonData;
     } catch (error) {
       console.error('Error importing character:', error);
+      return null;
+    }
+  }
+
+  static async importMonsterFromFile(): Promise<MonsterDto | null> {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+        copyToCacheDirectory: true,
+        multiple: false,
+      });
+
+      if (result.canceled || !result.assets?.length) return null;
+
+      const uri = result.assets[0].uri;
+      let jsonString: string;
+      if (typeof FileSystem.readAsStringAsync === 'function') {
+        jsonString = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+      } else {
+        const response = await fetch(uri);
+        jsonString = await response.text();
+      }
+      const jsonData = JSON.parse(jsonString);
+
+      if (!jsonData.id) jsonData.id = Date.now().toString();
+
+      return jsonData;
+    } catch (error) {
+      console.error('Error importing monster:', error);
       return null;
     }
   }
