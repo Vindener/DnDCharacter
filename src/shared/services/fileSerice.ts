@@ -72,6 +72,47 @@ class FileService {
     }
   }
 
+  static async importMonsterBookFromFile(): Promise<MonsterDto[] | null> {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+        copyToCacheDirectory: true,
+        multiple: false,
+      });
+
+      if (result.canceled || !result.assets?.length) return null;
+
+      const uri = result.assets[0].uri;
+      let jsonString: string;
+      if (typeof FileSystem.readAsStringAsync === 'function') {
+        jsonString = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.UTF8,
+        });
+      } else {
+        const response = await fetch(uri);
+        jsonString = await response.text();
+      }
+      const jsonData = JSON.parse(jsonString);
+
+      let monsters: MonsterDto[] | null = null;
+
+      if (Array.isArray(jsonData)) {
+        monsters = jsonData as MonsterDto[];
+      } else if (Array.isArray(jsonData.monsters)) {
+        monsters = jsonData.monsters as MonsterDto[];
+      } else if (jsonData.name) {
+        monsters = [jsonData as MonsterDto];
+      }
+
+      if (!monsters) return null;
+
+      return monsters.map((m) => ({ ...m, id: m.id || Date.now().toString() }));
+    } catch (error) {
+      console.error('Error importing monster book:', error);
+      return null;
+    }
+  }
+
   static async importCurrentCharacter(id: string): Promise<CharacterDto | null> {
     try {
       const character = await this.importCharacterFromFile();
@@ -110,6 +151,31 @@ class FileService {
       await Sharing.shareAsync(fileUri);
     } catch (error) {
       console.error('Error exporting character:', error);
+    }
+  }
+
+  static async exportMonster(monster: MonsterDto) {
+    try {
+      const { id, ...monsterWithoutId } = monster;
+      const jsonString = JSON.stringify(monsterWithoutId, null, 2);
+      if (typeof window !== 'undefined' && window.document) {
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${monster.name.replace(/\s+/g, '_') || 'monster'}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        return;
+      }
+      const fileName = `${monster.name.replace(/\s+/g, '_') || 'monster'}.json`;
+      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+      await FileSystem.writeAsStringAsync(fileUri, jsonString, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.error('Error exporting monster:', error);
     }
   }
 }

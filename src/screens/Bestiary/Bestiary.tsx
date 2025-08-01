@@ -9,6 +9,7 @@ import FileService from '@/shared/services/fileSerice';
 const Bestiary = () => {
   const monsters = useMonsterStore((s) => s.monsters);
   const addMonster = useMonsterStore((s) => s.addMonster);
+  const addMonsters = useMonsterStore((s) => s.addMonsters);
   const loadMonsters = useMonsterStore((s) => s.loadMonsters);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -18,7 +19,7 @@ const Bestiary = () => {
     loadMonsters();
   }, []);
 
-  const filtered = monsters.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()));
+  const filtered = monsters.filter((m) => (m.name || '').toLowerCase().includes(search.toLowerCase()));
 
   return (
     <View style={styles.container}>
@@ -34,6 +35,14 @@ const Bestiary = () => {
           onPress={async () => {
             const monster = await FileService.importMonsterFromFile();
             if (monster) await addMonster(monster);
+          }}
+        />
+        <View style={{ height: 8 }} />
+        <Button
+          title='Імпортувати книжку'
+          onPress={async () => {
+            const monstersFromBook = await FileService.importMonsterBookFromFile();
+            if (monstersFromBook) await addMonsters(monstersFromBook);
           }}
         />
         <View style={{ height: 8 }} />

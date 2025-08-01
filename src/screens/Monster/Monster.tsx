@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, Button } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
 import useThemeStore from '@/context/Theme-store';
@@ -7,6 +8,7 @@ import { getStyles } from './style';
 import { MonsterDto } from '@/types/Monster';
 import useMonsterStore from '@/context/Monster-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
+import FileService from '@/shared/services/fileSerice';
 import type { BestiaryStackParamList } from '@/navigation/BestiaryNavigator';
 
 type MonsterRouteProp = RouteProp<BestiaryStackParamList, 'Monster'>;
@@ -23,6 +25,28 @@ export default function Monster({ route }: Props) {
 
   const [data, setData] = useState<MonsterDto>(monster);
   const [editing, setEditing] = useState(false);
+
+  const pickPhoto = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
+        setData((prev) => ({ ...prev, photoUri: uri }));
+      }
+    } catch {}
+  };
+
+  const removePhoto = () => {
+    setData((prev) => ({ ...prev, photoUri: undefined }));
+  };
+
+  const exportCurrent = () => {
+    FileService.exportMonster(data);
+  };
 
   const handleSave = () => {
     updateMonster(data.id, data);
@@ -57,6 +81,17 @@ export default function Monster({ route }: Props) {
   return (
     <ScrollView style={styles.container}>
       {data.photoUri ? <Image source={{ uri: data.photoUri }} style={styles.photo} /> : <View style={styles.placeholderPhoto} />}
+      {editing && (
+        <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+          <Button title='Завантажити фото' onPress={pickPhoto} />
+          {data.photoUri && (
+            <>
+              <View style={{ width: 8 }} />
+              <Button title='Видалити фото' onPress={removePhoto} />
+            </>
+          )}
+        </View>
+      )}
       <View style={styles.headerRow}>
         {editing ? (
           <TextInput
@@ -141,6 +176,8 @@ export default function Monster({ route }: Props) {
       ) : (
         <Text style={styles.value}>{data.notes}</Text>
       )}
+      <View style={{ height: 12 }} />
+      <Button title='Експорт JSON' onPress={exportCurrent} />
     </ScrollView>
   );
 }

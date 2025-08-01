@@ -8,6 +8,7 @@ interface MonsterStore {
   loadMonsters: () => Promise<void>;
   saveMonsters: (newMonsters: MonsterDto[]) => Promise<void>;
   addMonster: (monster: MonsterDto) => Promise<void>;
+  addMonsters: (monsters: MonsterDto[]) => Promise<void>;
   updateMonster: (id: string, monster: MonsterDto) => Promise<void>;
   removeMonster: (id: string) => Promise<void>;
 }
@@ -36,8 +37,18 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
   addMonster: async (monster: MonsterDto) => {
     const { monsters, saveMonsters } = get();
     const monsterWithId = { ...monster, id: monster.id || uuid.v4() };
+    if (monsters.some((m) => m.id === monsterWithId.id)) return;
     const updated = [...monsters, monsterWithId];
     await saveMonsters(updated);
+  },
+
+  addMonsters: async (newMonsters: MonsterDto[]) => {
+    const { monsters, saveMonsters } = get();
+    const deduped = [
+      ...monsters,
+      ...newMonsters.map((m) => ({ ...m, id: m.id || uuid.v4() })).filter((m) => !monsters.some((ex) => ex.id === m.id)),
+    ];
+    await saveMonsters(deduped);
   },
 
   updateMonster: async (id: string, monster: MonsterDto) => {
