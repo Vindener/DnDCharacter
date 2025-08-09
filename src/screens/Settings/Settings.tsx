@@ -12,7 +12,6 @@ const Settings = () => {
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
-  // Custom coins logic
   const { coins, load, add, remove } = useCustomCoinsStore();
   React.useEffect(() => {
     load();
@@ -33,7 +32,6 @@ const Settings = () => {
     await add({ name: name.trim(), code: code.trim().toUpperCase() });
     closeModal();
   };
-  // Bestiary: import book
   const addMonsters = useMonsterStore((st) => st.addMonsters);
   const importMonsterBook = async () => {
     const monsters = await FileService.importMonsterBookFromFile();
@@ -45,11 +43,9 @@ const Settings = () => {
 
   return (
     <View style={styles.container}>
-      {/* Theme toggle */}
       <Text style={styles.label}>Темна тема</Text>
       <Switch value={isDark} onValueChange={toggleTheme} />
 
-      {/* Custom coins section */}
       <View style={{ width: '100%', marginTop: 24, maxWidth: 560 }}>
         <Text style={{ color: colors.text, fontSize: 18, marginBottom: 8 }}>Кастомні монети</Text>
 
@@ -90,7 +86,6 @@ const Settings = () => {
         />
       </View>
 
-      {/* Bestiary import section */}
       <View style={{ width: '100%', marginTop: 32, maxWidth: 560 }}>
         <Text style={{ color: colors.text, fontSize: 18, marginBottom: 8 }}>Бестіарій</Text>
         <TouchableOpacity
@@ -110,7 +105,7 @@ const Settings = () => {
       </View>
 
 
-      {/* Modal */}
+
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={closeModal}>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 20 }}>
           <View style={{ backgroundColor: colors.card, borderRadius: 12, padding: 16 }}>

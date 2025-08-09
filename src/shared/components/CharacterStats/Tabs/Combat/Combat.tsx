@@ -117,7 +117,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <TextInput value={`${speed}`} onChangeText={handleSpeedChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>AC:</Text>
+        <Text style={styles.label}>КД:</Text>
         <TextInput value={`${ac}`} onChangeText={handleAcChange} />
       </View>
       <View style={styles.row}>
@@ -125,23 +125,23 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <TextInput style={{ flex: 1 }} value={armorDetails} onChangeText={handleArmorDetailsChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Hit Dice:</Text>
+        <Text style={styles.label}>Кість хітів:</Text>
         <TextInput style={{ flex: 1 }} value={hitDice} onChangeText={handleHitDiceChange} />
       </View>
-      <Text style={styles.label}>HP:</Text>
+      <Text style={styles.label}>Хіти:</Text>
       <View style={[styles.row, { marginLeft: 10 }]}>
-        <Text style={[styles.label, { width: 70 }]}>Max:</Text>
+        <Text style={[styles.label, { width: 70 }]}>Максимальні:</Text>
         <TextInput value={`${hp.max}`} onChangeText={(t) => handleHpChange('max', t)} />
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
-        <Text style={[styles.label, { width: 70 }]}>Current:</Text>
+        <Text style={[styles.label, { width: 70 }]}>Поточні хіти:</Text>
         <TextInput value={`${hp.current}`} onChangeText={(t) => handleHpChange('current', t)} />
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
-        <Text style={[styles.label, { width: 70 }]}>Temp:</Text>
+        <Text style={[styles.label, { width: 70 }]}>Тимчасові хіти:</Text>
         <TextInput value={`${hp.temp}`} onChangeText={(t) => handleHpChange('temp', t)} />
       </View>
-      <Text style={styles.label}>Death Saves:</Text>
+      <Text style={styles.label}>Рятівні кидки:</Text>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 90 }]}>Успіхи:</Text>
         {[0, 1, 2].map((i) => (

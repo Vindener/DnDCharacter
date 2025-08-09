@@ -59,17 +59,14 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
 
   useEffect(() => { load(); }, []);
 
-  // Built-in coins local state
   const initial = data.coins ?? { gold: 0, silver: 0, copper: 0 };
   const [gold, setGold] = useState<number>(initial.gold ?? 0);
   const [silver, setSilver] = useState<number>(initial.silver ?? 0);
   const [copper, setCopper] = useState<number>(initial.copper ?? 0);
 
-  // Custom coins local state (id -> value)
   const initialCustom = data.customCoins ?? {};
   const [customMap, setCustomMap] = useState<{ [id: string]: number }>(initialCustom);
 
-  // Sync when character or store changes
   useEffect(() => {
     const nextBuiltIn = data.coins ?? { gold: 0, silver: 0, copper: 0 };
     setGold(nextBuiltIn.gold ?? 0);
@@ -77,14 +74,12 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
     setCopper(nextBuiltIn.copper ?? 0);
 
     const nextCustom = { ...(data.customCoins ?? {}) };
-    // Ensure we have keys for any new custom coins
     for (const c of customCoinsList) {
       if (nextCustom[c.id] == null) nextCustom[c.id] = 0;
     }
     setCustomMap(nextCustom);
   }, [data.id, data.coins?.gold, data.coins?.silver, data.coins?.copper, JSON.stringify(data.customCoins), JSON.stringify(customCoinsList.map(c => c.id))]);
 
-  // Commit helpers
   const commitBuiltIn = (next: { gold: number; silver: number; copper: number }) => {
     updateCharacterCoins(data.id, next);
   };
@@ -92,7 +87,6 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
     updateCharacterCustomCoins(data.id, next);
   };
 
-  // Update handlers
   const updateGold = (v: number) => {
     const vv = clampToNonNegativeInt(v);
     setGold(vv);
@@ -138,12 +132,10 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
     <View style={sharedStyles.container}>
       <Text style={local.sectionTitle}>Монети персонажа</Text>
 
-      {/* Built-in */}
       <Row label='Золото' value={gold} onChange={updateGold} />
       <Row label='Срібло' value={silver} onChange={updateSilver} />
       <Row label='Мідь' value={copper} onChange={updateCopper} />
 
-      {/* Custom */}
       <View style={local.divider} />
       <Text style={local.subTitle}>Кастомні монети</Text>
       {customCoinsList.length === 0 ? (

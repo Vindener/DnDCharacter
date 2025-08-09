@@ -9,7 +9,6 @@ import FileService from '@/shared/services/fileSerice';
 const Bestiary = () => {
   const monsters = useMonsterStore((s) => s.monsters);
   const addMonster = useMonsterStore((s) => s.addMonster);
-  const addMonsters = useMonsterStore((s) => s.addMonsters);
   const loadMonsters = useMonsterStore((s) => s.loadMonsters);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);

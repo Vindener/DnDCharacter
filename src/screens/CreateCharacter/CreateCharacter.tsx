@@ -18,7 +18,6 @@ const CreateCharacter = (): JSX.Element => {
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
-  // TODO fix any
   const addCharacter = useCharacterStore((state: any) => state.addCharacter);
   const navigation = useNavigation();
 

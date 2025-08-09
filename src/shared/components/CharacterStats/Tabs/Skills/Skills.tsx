@@ -55,8 +55,6 @@ const Skills: React.FC<SkillsProps> = ({ data }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.label}>Навички персонажа:</Text>
-
       {SKILLS_LIST.map((skill) => (
         <SkillItem key={skill} label={SKILL_NAMES[skill] || skill} skillKey={skill} value={skills[skill] || 0} onChange={handleChange} />
       ))}

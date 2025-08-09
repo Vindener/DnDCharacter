@@ -10,6 +10,7 @@ import Header from '@/modules/Header/Header';
 import Initiative from '@/screens/Initiative/Initiative';
 import DMNavigator from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
+import Support from '@/screens/Support/Support';
 
 export type AppStackParamList = {
   Library: undefined;
@@ -46,6 +47,8 @@ export default function AppNavigator() {
         return 'people-outline';
       case 'Bestiary':
         return 'skull-outline';
+      case 'Support':
+        return 'heart-outline';
       default:
         return 'ellipse';
     }
@@ -65,12 +68,15 @@ export default function AppNavigator() {
           },
         })}
       >
-        <Stack.Screen name='Library' component={EmptyPlaceholder} />
-        <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Initiative' }} />
+        {/* <Stack.Screen name='Library' component={EmptyPlaceholder} /> */}
+        <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false, title: 'Герої' }} />
+        <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Інціатива' }} />
         <Stack.Screen name='DM' component={DMNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name='Bestiary' component={BestiaryNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name='Bestiary' component={BestiaryNavigator} options={{ headerShown: false, title: 'Бестіарій' }} />
+        <Stack.Screen name='Support' component={Support} options={{ title: 'Підтримка' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+
