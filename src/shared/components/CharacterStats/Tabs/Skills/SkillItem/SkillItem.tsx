@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import TextInput  from '@/shared/components/TextInput/TextInput';
+import TextInput from '@/shared/components/TextInput/TextInput';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
-import { Modal } from '@/shared/components/Modal/Modal';
-import Loader from '@/shared/components/Loader/Loader';
+import RollResultModal from '@/shared/components/RollResultModal/RollResultModal';
 
 interface SkillItemProps {
   label: string;
@@ -24,7 +23,9 @@ export const SkillItem: React.FC<SkillItemProps> = ({ label, value, skillKey, on
   }, [value]);
 
   const rollD20WithModifier = (mod: number) => {
-    return Math.floor(Math.random() * 20) + 1 + mod;
+    const random = Math.floor(Math.random() * 20) + 1;
+    const modStr = mod >= 0 ? `+ ${mod}` : `- ${Math.abs(mod)}`;
+    return { total: random + mod, formula: `${random} ${modStr}`, random };
   };
 
   const handleTextChange = (text: string) => {
@@ -47,10 +48,11 @@ export const SkillItem: React.FC<SkillItemProps> = ({ label, value, skillKey, on
       <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
         <Text style={styles.rollButtonText}>🎲</Text>
       </TouchableOpacity>
-      <Modal isVisible={isVisible} onClose={() => setIsVisible(false)}>
-        <Loader />
-        <Text style={styles.rollResult}>Roll result: {rollD20WithModifier(parseInt(inputValue, 10) || 0)}</Text>
-      </Modal>
+      <RollResultModal
+        isVisible={isVisible}
+        onClose={() => setIsVisible(false)}
+        roll={() => rollD20WithModifier(parseInt(inputValue, 10) || 0)}
+      />
     </View>
   );
 };

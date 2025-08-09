@@ -1,6 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Animated, PanResponder, GestureResponderEvent } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { ScrollView, TouchableOpacity, View, Text } from 'react-native'; 
+import useCharacterStore from '@/context/Character-store';
+import { useFocusEffect } from '@react-navigation/native';
+import { Modal } from '@/shared/components/Modal/Modal';
 import { Ionicons } from '@expo/vector-icons';
+import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 import useThemeStore from '@/context/Theme-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { getStyles } from './style';
@@ -9,136 +13,197 @@ interface InitiativeItem {
   id: string;
   name: string;
   roll: string;
+  hits?: string; 
 }
 
 const Initiative: React.FC = () => {
-  const [items, setItems] = useState<InitiativeItem[]>([{ id: Date.now().toString(), name: '', roll: '' }]);
-  const draggingIndex = useRef<number | null>(null);
-  const startIndexRef = useRef(0);
-  const pan = useRef(new Animated.Value(0)).current;
-  const ITEM_HEIGHT = 56;
-  const [isDragging, setIsDragging] = useState(false);
   const colors = useThemeStore((s) => s.colors);
-  const styles = React.useMemo(() => getStyles(colors), [colors]);
+  const styles = getStyles(colors);
 
-  const reorder = (from: number, to: number) => {
-    if (from === to) return;
-    const updated = [...items];
-    const [moved] = updated.splice(from, 1);
-    updated.splice(to, 0, moved);
-    setItems(updated);
+  const [items, setItems] = useState<InitiativeItem[]>([{ id: Date.now().toString(), name: '', roll: '', hits: '' }]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [hitsEnabled, setHitsEnabled] = useState<boolean>(false);
+
+  const characters = useCharacterStore((s) => s.characters);
+  const loadCharacters = useCharacterStore((s) => s.loadCharacters);
+
+  const [isHeroPickerVisible, setHeroPickerVisible] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadCharacters(); 
+    }, [loadCharacters]),
+  );
+
+  const addHeroToInitiative = useCallback(
+    (heroId: string) => {
+      const hero = characters.find((c) => c.id === heroId);
+      if (!hero) return;
+      setItems((prev) => [{ id: `${Date.now()}`, name: hero.name || 'Без імені', roll: '', hits: '' }, ...prev]);
+      setHeroPickerVisible(false);
+    },
+    [characters],
+  );
+
+  const handleAdd = useCallback(() => {
+    setItems((prev) => [{ id: `${Date.now()}`, name: '', roll: '', hits: '' }, ...prev]);
+  }, []);
+
+  const handleRemove = useCallback((id: string) => {
+    setItems((prev) => prev.filter((it) => it.id !== id));
+  }, []);
+
+  const handleChangeById = useCallback((id: string, key: keyof InitiativeItem, value: string) => {
+    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [key]: value } : it)));
+  }, []);
+
+  const toNonNegativeInt = (raw: string) => {
+    const digits = raw.replace(/[^\d]/g, '');
+    if (!digits) return '0';
+    const normalized = String(parseInt(digits, 10));
+    return isNaN(Number(normalized)) ? '0' : normalized;
   };
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => isDragging,
-      onPanResponderMove: (_e, gesture) => {
-        pan.setValue(gesture.dy);
-        const currentIndex = startIndexRef.current + Math.round(gesture.dy / ITEM_HEIGHT);
-        const newIndex = Math.max(0, Math.min(items.length - 1, currentIndex));
-        if (draggingIndex.current !== null && newIndex !== draggingIndex.current) {
-          reorder(draggingIndex.current, newIndex);
-          draggingIndex.current = newIndex;
-        }
-      },
-      onPanResponderRelease: () => {
-        pan.setValue(0);
-        draggingIndex.current = null;
-        setIsDragging(false);
-      },
-      onPanResponderTerminate: () => {
-        pan.setValue(0);
-        draggingIndex.current = null;
-        setIsDragging(false);
-      },
-    }),
-  ).current;
+  const keyExtractor = useCallback((item: InitiativeItem) => item.id, []);
 
-  const handleLongPress = (index: number, e: GestureResponderEvent) => {
-    if (isDragging) return;
-    startIndexRef.current = index;
-    draggingIndex.current = index;
-    setIsDragging(true);
-    pan.setValue(0);
-  };
+  const renderItem = useCallback(
+    ({ item, drag, isActive, getIndex }: RenderItemParams<InitiativeItem>) => {
+      const currentIndex = typeof getIndex === 'function' ? getIndex() : undefined;
+      const safeIndex = currentIndex != null ? currentIndex : items.findIndex((it) => it.id === item.id);
 
-  const moveUp = (index: number) => {
-    if (index === 0) return;
-    const newItems = [...items];
-    [newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]];
-    setItems(newItems);
-  };
+      const draggingStyle = isActive ? { shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 5, transform: [{ scale: 1.01 }] } : null;
 
-  const moveDown = (index: number) => {
-    if (index === items.length - 1) return;
-    const newItems = [...items];
-    [newItems[index], newItems[index + 1]] = [newItems[index + 1], newItems[index]];
-    setItems(newItems);
-  };
+      return (
+        <View style={[styles.row, draggingStyle]}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onLongPress={() => {
+              if (!editingId) drag();
+            }}
+            delayLongPress={150}
+            style={styles.rowContent}
+          >
+            <Text style={styles.order}>{safeIndex + 1}.</Text>
 
-  const handleAdd = () => {
-    setItems((prev) => [...prev, { id: Date.now().toString(), name: '', roll: '' }]);
-  };
+            <TextInput
+              style={styles.inputName}
+              value={item.name}
+              placeholder="Ім'я"
+              onChangeText={(t) => handleChangeById(item.id, 'name', t)}
+              onFocus={() => setEditingId(item.id)}
+              onBlur={() => setEditingId((p) => (p === item.id ? null : p))}
+              returnKeyType='next'
+            />
 
-  const handleDelete = (index: number) => {
-    setItems((prev) => prev.filter((_, i) => i !== index));
-  };
+            <TextInput
+              style={styles.inputRoll}
+              value={item.roll}
+              placeholder='Кидок'
+              keyboardType='number-pad'
+              onChangeText={(t) => handleChangeById(item.id, 'roll', t)}
+              onFocus={() => setEditingId(item.id)}
+              onBlur={() => setEditingId((p) => (p === item.id ? null : p))}
+            />
 
-  const handleChange = (index: number, key: keyof InitiativeItem, value: string) => {
-    const newItems = [...items];
-    newItems[index][key] = value;
-    setItems(newItems);
-  };
+            {hitsEnabled && (
+              <TextInput
+                style={styles.inputHits}
+                value={item.hits ?? '0'}
+                placeholder='Хіти'
+                keyboardType='number-pad'
+                onChangeText={(t) => handleChangeById(item.id, 'hits', toNonNegativeInt(t))}
+                onFocus={() => setEditingId(item.id)}
+                onBlur={() => setEditingId((p) => (p === item.id ? null : p))}
+              />
+            )}
 
-  const renderItem = ({ item, index }: { item: InitiativeItem; index: number }) => {
-    const dragging = isDragging && index === draggingIndex.current;
-    return (
-      <Animated.View
-        style={[
-          styles.row,
-          dragging && {
-            zIndex: 1,
-            transform: [{ translateY: pan }],
-            shadowColor: '#000',
-            shadowOpacity: 0.2,
-            shadowRadius: 5,
-          },
-        ]}
-        {...(dragging ? panResponder.panHandlers : {})}
-      >
-        <TouchableOpacity activeOpacity={1} onLongPress={(e) => handleLongPress(index, e)} style={styles.rowContent}>
-          <Text style={styles.order}>{index + 1}.</Text>
-          <TextInput style={styles.inputName} value={item.name} onChangeText={(t) => handleChange(index, 'name', t)} placeholder="Ім'я" />
-          <TextInput
-            style={styles.inputRoll}
-            value={item.roll}
-            onChangeText={(t) => handleChange(index, 'roll', t)}
-            placeholder='Куб'
-            keyboardType='numeric'
-          />
-          <View style={styles.moveButtons}>
-            <TouchableOpacity onPress={() => moveUp(index)} disabled={index === 0}>
-              <Ionicons name='arrow-up' size={20} color={colors.text} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => moveDown(index)} disabled={index === items.length - 1} style={{ marginLeft: 4 }}>
-              <Ionicons name='arrow-down' size={20} color={colors.text} />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={() => handleDelete(index)} style={{ marginLeft: 8 }}>
-            <Ionicons name='trash-outline' size={20} color='#d00' />
+            <View style={styles.moveButtons}>
+              <Ionicons name='reorder-three-outline' size={24} color={colors.textSecondary} />
+            </View>
           </TouchableOpacity>
-        </TouchableOpacity>
-      </Animated.View>
-    );
-  };
+
+          <TouchableOpacity
+            onPress={() => handleRemove(item.id)}
+            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+            style={styles.deleteButton}
+            disabled={isActive}
+            accessibilityLabel='Видалити рядок'
+          >
+            <Ionicons name='trash-outline' size={22} color='#dc3545' />
+          </TouchableOpacity>
+        </View>
+      );
+    },
+    [
+      colors.textSecondary,
+      editingId,
+      handleChangeById,
+      items,
+      styles.row,
+      styles.rowContent,
+      styles.order,
+      styles.inputName,
+      styles.inputRoll,
+      styles.inputHits,
+      styles.moveButtons,
+      styles.deleteButton,
+      hitsEnabled,
+    ],
+  );
 
   return (
     <View style={styles.container}>
-      <FlatList data={items} keyExtractor={(item) => item.id} renderItem={renderItem} />
-      <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-        <Ionicons name='add-circle-outline' size={28} color='#28a745' />
-        <Text style={styles.addText}>Додати ще</Text>
-      </TouchableOpacity>
+      <DraggableFlatList
+        data={items}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        onDragEnd={({ data }) => setItems(data)}
+        keyboardShouldPersistTaps='handled'
+        contentContainerStyle={{ paddingBottom: 96 }}
+      />
+
+      <View style={styles.bottomBar}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
+            <Ionicons name='add-circle-outline' size={28} color='#28a745' />
+            <Text style={styles.addText}>Додати ще</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setHeroPickerVisible(true)}
+            style={styles.addHeroButton}
+            accessibilityLabel='Додати героя з переліку'
+          >
+            <Ionicons name='person-add-outline' size={22} color={colors.text} />
+            <Text style={styles.addHeroText}>Додати героя</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={styles.checkboxRow}
+          onPress={() => setHitsEnabled((v) => !v)}
+          accessibilityRole='checkbox'
+          accessibilityState={{ checked: hitsEnabled }}
+        >
+          <Ionicons name={hitsEnabled ? 'checkbox-outline' : 'square-outline'} size={22} color={colors.text} />
+          <Text style={styles.checkboxLabel}>Включити хіти</Text>
+        </TouchableOpacity>
+
+        <Modal title='Обрати героя' isVisible={isHeroPickerVisible} onClose={() => setHeroPickerVisible(false)}>
+          <ScrollView style={{ maxHeight: 320 }}>
+            {characters.length === 0 && <Text style={{ color: colors.textSecondary }}>Немає створених героїв</Text>}
+            {characters.map((hero) => (
+              <TouchableOpacity key={hero.id} onPress={() => addHeroToInitiative(hero.id)} style={styles.heroItem}>
+                <Ionicons name='person-outline' size={18} color={colors.textSecondary} />
+                <Text style={styles.heroItemText}>{hero.name || 'Без імені'}</Text>
+                <Text style={styles.heroItemText}>{hero.class || '???'}</Text>
+                <Text style={styles.heroItemText}>{hero.level || '? рівень'}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </Modal>
+      </View>
     </View>
   );
 };

@@ -21,8 +21,4 @@ StyleSheet.create({
     marginLeft: 10,
   },
   rollButtonText: { color: c.text, fontSize: 16 },
-  rollResult: {
-    color: c.text,
-    textAlign: 'center',
-  },
 });

@@ -22,10 +22,6 @@ StyleSheet.create({
     marginLeft: 10,
   },
   rollButtonText: { color: c.text, fontSize: 16 },
-  rollResult: {
-    color: c.text,
-    textAlign: 'center',
-  },
   memoInput: {
     backgroundColor: c.inputBackground,
     color: c.text,

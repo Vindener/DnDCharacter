@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import TextInput  from '@/shared/components/TextInput/TextInput';
+import TextInput from '@/shared/components/TextInput/TextInput';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
@@ -8,10 +8,8 @@ import useThemeStore from '@/context/Theme-store';
 import { CharacterDto } from '@/types/Character';
 import { Weapon as WeaponType } from '@/types/Weapon';
 import useCharacterStore from '@/context/Character-store';
-import { Modal } from '@/shared/components/Modal/Modal';
-import Loader from '@/shared/components/Loader/Loader';
+import RollResultModal from '@/shared/components/RollResultModal/RollResultModal';
 import { DICE_OPTIONS } from '@/shared/const/DiceOptions';
-
 
 interface WeaponProps {
   data: CharacterDto;
@@ -35,7 +33,9 @@ const rollDice = (notation: string) => {
 };
 
 const rollDamageWithBonus = (notation: string, bonus: number) => {
-  return rollDice(notation) + bonus;
+  const random = rollDice(notation);
+  const bonusStr = bonus >= 0 ? `+ ${bonus}` : `- ${Math.abs(bonus)}`;
+  return { total: random + bonus, formula: `${random} ${bonusStr}`, random };
 };
 
 const Weapon: React.FC<WeaponProps> = ({ data }) => {
@@ -89,10 +89,7 @@ const Weapon: React.FC<WeaponProps> = ({ data }) => {
           </View>
           <View style={[styles.row, { alignItems: 'center' }]}>
             <Text style={styles.label}>Бонус атаки:</Text>
-            <TextInput
-              value={`${weapon.attackBonus}`}
-              onChangeText={(t) => handleChange(index, 'attackBonus', t)}
-            />
+            <TextInput value={`${weapon.attackBonus}`} onChangeText={(t) => handleChange(index, 'attackBonus', t)} />
             <Text style={[styles.label, { marginLeft: 8 }]}>Урон:</Text>
             <Picker
               selectedValue={weapon.damage}
@@ -110,10 +107,11 @@ const Weapon: React.FC<WeaponProps> = ({ data }) => {
             <TouchableOpacity onPress={() => handleDeleteWeapon(index)} style={{ marginLeft: 8 }}>
               <Ionicons name='trash-outline' size={24} color='#d00' />
             </TouchableOpacity>
-            <Modal isVisible={visibleIndex === index} onClose={() => setVisibleIndex(null)}>
-              <Loader />
-              <Text style={styles.rollResult}>Roll result: {rollDamageWithBonus(weapon.damage, weapon.attackBonus)}</Text>
-            </Modal>
+            <RollResultModal
+              isVisible={visibleIndex === index}
+              onClose={() => setVisibleIndex(null)}
+              roll={() => rollDamageWithBonus(weapon.damage, weapon.attackBonus)}
+            />
           </View>
         </View>
       ))}
