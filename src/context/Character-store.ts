@@ -29,6 +29,8 @@ interface CharacterStore {
   updateCharacterTraits: (id: string, traits: Traits) => void;
   updateCharacterSpells: (id: string, spells: Spells) => void;
   updateCharacterSkills: (id: string, skills: { [key: string]: number }) => void;
+  updateCharacterCoins: (id: string, coins: { gold: number; silver: number; copper: number }) => void;
+  updateCharacterCustomCoins: (id: string, customCoins: { [id: string]: number }) => void;
   removeCharacter: (id: string) => Promise<void>;
 }
 
@@ -151,6 +153,20 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     saveCharacters(updated);
   },
 
+
+  updateCharacterCoins: (id: string, coins: { gold: number; silver: number; copper: number }) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, coins } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
+
+  updateCharacterCustomCoins: (id: string, customCoins: { [id: string]: number }) => {
+    const { characters, saveCharacters } = get();
+    const updated = characters.map((char) => (char.id === id ? { ...char, customCoins } : char));
+    set({ characters: updated });
+    saveCharacters(updated);
+  },
   removeCharacter: async (id: string) => {
     const { characters, saveCharacters } = get();
     const updated = characters.filter((char) => char.id !== id);

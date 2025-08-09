@@ -8,6 +8,7 @@ import useCharacterStore from '@/context/Character-store';
 import { CharacterDto } from '@/types/Character';
 import { HitPoints } from '@/types/HitPoints';
 import { DeathSaves } from '@/types/DeathSaves';
+import RollResultModal from '@/shared/components/RollResultModal/RollResultModal';
 
 interface CombatProps {
   data: CharacterDto;
@@ -29,6 +30,12 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
   const [hitDice, setHitDice] = useState(character?.hitDice || '');
   const [hp, setHp] = useState<HitPoints>(character?.hp || EMPTY_HP);
   const [deathSaves, setDeathSaves] = useState<DeathSaves>(character?.deathSaves || EMPTY_DEATH);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const rollD20 = () => {
+    const random = Math.floor(Math.random() * 20) + 1;
+    return { total: random , formula: `${random}`, random };
+  };
 
   useEffect(() => {
     if (!character) return;
@@ -143,6 +150,11 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
           </TouchableOpacity>
         ))}
       </View>
+      <View style={[styles.row, { margin: 'auto' }]}>
+        <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
+          <Text style={styles.rollButtonText}>🎲</Text>
+        </TouchableOpacity>
+      </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 90 }]}>Провали:</Text>
         {[0, 1, 2].map((i) => (
@@ -151,6 +163,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
           </TouchableOpacity>
         ))}
       </View>
+      <RollResultModal isVisible={isVisible} onClose={() => setIsVisible(false)} roll={() => rollD20()} />
     </ScrollView>
   );
 };

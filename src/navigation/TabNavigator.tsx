@@ -44,7 +44,7 @@ export default function TabNavigator(): JSX.Element {
       <Stack.Screen name='Dice' component={Dice} options={{ title: 'Кидок' }} />
       <Stack.Screen name='Character' component={Character} options={{ title: 'Лист персонажа' }} />
       <Stack.Screen name='CreateCharacter' component={CreateCharacter} options={{ title: 'Створити персонажа' }} />
-      <Stack.Screen name='Settings' component={Settings} options={{ title: 'Settings', header: () => <Header /> }} />
+      <Stack.Screen name='Settings' component={Settings} options={{ title: 'Settings', header: () => <Header />, unmountOnBlur: true }} />
     </Stack.Navigator>
   );
 }

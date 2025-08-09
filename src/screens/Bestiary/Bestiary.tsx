@@ -27,7 +27,15 @@ const Bestiary = () => {
         <Text style={{ color: colors.text }}>Бестіарій</Text>
       </View>
       <TextInput placeholder='Пошук монстрів' placeholderTextColor='#888' style={styles.search} value={search} onChangeText={setSearch} />
-      <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <MonsterCard monster={item} />} />
+      {!filtered || filtered.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+          <Text style={{ color: '#888', textAlign: 'center', marginBottom: 16 }}>
+            Немає монстрів. Зайдіть у Налаштування, щоб імпортувати книжку, або створіть власних.
+          </Text>
+        </View>
+      ) : (
+        <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <MonsterCard monster={item} />} />
+      )}
       <View style={styles.buttonContainer}>
         <View style={{ height: 8 }} />
         <Button
@@ -35,14 +43,6 @@ const Bestiary = () => {
           onPress={async () => {
             const monster = await FileService.importMonsterFromFile();
             if (monster) await addMonster(monster);
-          }}
-        />
-        <View style={{ height: 8 }} />
-        <Button
-          title='Імпортувати книжку'
-          onPress={async () => {
-            const monstersFromBook = await FileService.importMonsterBookFromFile();
-            if (monstersFromBook) await addMonsters(monstersFromBook);
           }}
         />
         <View style={{ height: 8 }} />

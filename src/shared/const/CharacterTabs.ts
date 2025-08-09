@@ -7,4 +7,5 @@ export type CharacterTabs =
   | 'Proficiencies'
   | 'BackStory'
   | 'Notes'
-  | 'Traits';
+  | 'Traits'
+  | 'Coins';

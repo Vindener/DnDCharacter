@@ -45,6 +45,12 @@ export interface CharacterDto {
   backstory?: string;
   campaign?: string;
   photoUri?: string;
+  coins?: {
+    gold: number;
+    silver: number;
+    copper: number;
+  };
+  customCoins?: { [id: string]: number };
 }
 
 //TODO - fix  - complete
