@@ -18,9 +18,17 @@ const Header = () => {
   const getTitle = () => {
     switch (route.name) {
       case 'Home':
-        return 'My Characters';
+        return 'Мої персонажі';
       case 'Settings':
-        return 'Settings';
+        return 'Налаштування';
+      case 'Initiative':
+        return 'Інціатива';
+      case 'DMHome':
+        return 'ДМ головна';
+      case 'List':
+        return 'Бестіарій';
+      case 'Support':
+        return 'Підтримка проекту';
       default:
         return route.name;
     }

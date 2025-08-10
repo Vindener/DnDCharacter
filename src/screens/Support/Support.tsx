@@ -3,9 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, Scro
 import useThemeStore from '@/context/Theme-store';
 
 const donateLinks = [
-  { label: 'PayPal', url: 'https://www.paypal.me/Vindener' },
-  { label: 'Buy Me a Coffee', url: 'https://www.buymeacoffee.com/Vindener' },
-  { label: 'Monobank (банка)', url: 'https://send.monobank.ua/jar/XXXXXXXXXXXX' },
+  // { label: 'Privat', url: 'https://www.paypal.me/Vindener' },
+  { label: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/vindener12x' },
+  { label: 'Monobank (банка)', url: 'https://send.monobank.ua/jar/7bLHe7oo8j' },
 ];
 
 const cryptoWallets = [{ label: 'USDT (TRC20)', value: 'TC3Ad4JQJDLeiBPCXRRqkKsikFFiTdjGvq' }];
@@ -98,6 +98,8 @@ export default function Support() {
       </ScrollView>
     </View>
   );
+
+
 
 
 }

@@ -23,7 +23,6 @@ const Bestiary = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Text style={{ color: colors.text }}>Бестіарій</Text>
       </View>
       <TextInput placeholder='Пошук монстрів' placeholderTextColor='#888' style={styles.search} value={search} onChangeText={setSearch} />
       {!filtered || filtered.length === 0 ? (

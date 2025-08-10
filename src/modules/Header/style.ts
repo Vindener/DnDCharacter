@@ -3,8 +3,8 @@ import { ThemeColors } from '@/shared/styles/theme';
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
   header: {
-    paddingTop: 30,
-    height: 84,
+    paddingTop: 8,
+    height: 64,
     backgroundColor: c.card,
     flexDirection: 'row',
     alignItems: 'center',
