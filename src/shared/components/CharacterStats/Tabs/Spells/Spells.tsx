@@ -106,16 +106,16 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Spell Save DC:</Text>
+        <Text style={styles.label}>Рятівний куб:</Text>
         <TextInput value={`${spells.spellSaveDC}`} onChangeText={handleSaveDCChange} />
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Spell Attack Bonus:</Text>
+        <Text style={styles.label}>Бонус атаки закляттям:</Text>
         <TextInput value={`${spells.spellAttackBonus}`} onChangeText={handleAttackBonusChange} />
       </View>
 
-      <Text style={styles.label}>Spell Slots:</Text>
+      <Text style={styles.label}>Слоти закляття:</Text>
       {Object.keys(spells.spellSlots)
         .sort()
         .map((level) => (
@@ -156,7 +156,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
         placeholder='Введіть підготовлені закляття'
       />
 
-      <Text style={styles.label}>Кантіпси:</Text>
+      <Text style={styles.label}>Заговори:</Text>
       <MultiTextInput numberOfLines={4} value={cantripsText} onChangeText={handleCantripsChange} placeholder='Введіть кантіпси' />
     </ScrollView>
   );

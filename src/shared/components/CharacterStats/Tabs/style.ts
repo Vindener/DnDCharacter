@@ -3,7 +3,7 @@ import { ThemeColors } from '@/shared/styles/theme';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
-  container: { padding: 20, backgroundColor: c.card },
+  container: { padding: 20, backgroundColor: c.card, marginBottom:20 },
   row: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   label: { color: c.text, fontSize: 16, flex: 1 },
   input: {
@@ -22,10 +22,6 @@ StyleSheet.create({
     marginLeft: 10,
   },
   rollButtonText: { color: c.text, fontSize: 16 },
-  rollResult: {
-    color: c.text,
-    textAlign: 'center',
-  },
   memoInput: {
     backgroundColor: c.inputBackground,
     color: c.text,

@@ -1,0 +1,32 @@
+export const CLASS_TRANSLATIONS: Record<string, string> = {
+  barbarian: 'Варвар',
+  fighter: 'Боєць',
+  paladin: 'Паладин',
+  ranger: 'Рейнджер',
+  bard: 'Бард',
+  cleric: 'Клірик',
+  druid: 'Друїд',
+  monk: 'Монах',
+  rogue: 'Розбійник',
+  warlock: 'Чаклун',
+  artificer: 'Артифісер',
+  wizard: 'Чарівник',
+  sorcerer: 'Чародій',
+};
+
+export const CLASS_OPTIONS = [
+  'barbarian',
+  'fighter',
+  'paladin',
+  'ranger',
+  'bard',
+  'cleric',
+  'druid',
+  'monk',
+  'rogue',
+  'warlock',
+  'artificer',
+  'wizard',
+  'sorcerer',
+  'custom',
+];

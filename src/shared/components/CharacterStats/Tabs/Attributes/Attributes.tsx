@@ -26,7 +26,7 @@ const Attributes: React.FC<AttributesProps> = ({ data }) => {
       {attributes.map(({ key, label }) => (
         <AttributesItem key={key} label={label} statKey={key} value={data?.stats ? data.stats[key] : 0} onChange={handleChange} />
     ))}
-      <Text style={styles.label}>Рятівні кидки:</Text>
+      {/* <Text style={styles.label}>Рятівні кидки:</Text> */}
       
     </View>
   );

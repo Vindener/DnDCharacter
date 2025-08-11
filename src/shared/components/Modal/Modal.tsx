@@ -12,20 +12,14 @@ interface ModalProps {
   isVisible: boolean;
 }
 
-export const Modal = ({
-                        title,
-                        subtitle,
-                        onSubmit,
-                        onClose,
-                        children,
-                        isVisible,
-                      }: ModalProps) => {
+export const Modal = ({ title, subtitle, onSubmit, onClose, children, isVisible }: ModalProps) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   return (
-    <RNModal visible={isVisible} transparent animationType='fade'>
-      <Pressable style={styles.wrapper} onPress={onClose}>
-        <Pressable style={styles.container} onPress={(event) => event.stopPropagation()}>
+    <RNModal visible={isVisible} transparent animationType='fade' onRequestClose={onClose}>
+      <View style={styles.wrapper}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
+        <View style={styles.container}>
           <TouchableOpacity onPress={onClose} style={styles.close}>
             <Text style={styles.closeText}>✕</Text>
           </TouchableOpacity>
@@ -39,8 +33,8 @@ export const Modal = ({
               </Pressable>
             )}
           </View>
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </RNModal>
   );
 };

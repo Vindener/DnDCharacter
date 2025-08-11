@@ -4,21 +4,20 @@ import { ThemeColors } from '@/shared/styles/theme';
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
   wrapper: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.492)',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 16,
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   container: {
-    position: 'relative',
+    flex: 1,
     backgroundColor: c.card,
-    color: c.text,
     borderRadius: 13,
-    padding: 32,
-    width: '90%',
-    maxWidth: 400,
+    padding: 24,
+    width: '100%',
+    maxWidth: 480,
+    maxHeight: '80%',
   },
   close: {
     position: 'absolute',
@@ -42,6 +41,7 @@ StyleSheet.create({
   },
   content: {
     paddingTop: 16,
+    flexGrow: 1,
   },
   submit: {
     marginTop: 16,

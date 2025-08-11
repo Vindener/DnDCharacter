@@ -34,7 +34,7 @@ const Home = () => {
         <Text style={styles.sortLabel}>Ім'я: </Text>
         <TouchableOpacity onPress={() => setSortAsc((s) => !s)}>
           <Text style={styles.sortValue}>
-            {sortAsc ? 'A - Z' : 'Z - A'} <Ionicons name='chevron-up' size={14} color='#2f95dc' />
+            {sortAsc ? 'А - Я' : 'Я - А'} <Ionicons name='chevron-up' size={14} color='#2f95dc' />
           </Text>
         </TouchableOpacity>
         <View style={styles.slotBadge}>
@@ -44,7 +44,15 @@ const Home = () => {
 
       <TextInput placeholder='Пошук героїв' placeholderTextColor='#888' style={styles.search} value={search} onChangeText={setSearch} />
 
-      <FlatList data={filtered} keyExtractor={(item) => String(item.id)} renderItem={({ item }) => <CharacterCard character={item} />} />
+      {!filtered || filtered.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+          <Text style={{ color: '#888', textAlign: 'center', marginBottom: 16 }}>
+            Немає персонажів. Імпортуйте або створіть власних.
+          </Text>
+        </View>
+      ) : (
+        <FlatList data={filtered} keyExtractor={(item) => String(item.id)} renderItem={({ item }) => <CharacterCard character={item} />} />
+      )}
 
       <View style={styles.buttonContainer}>
         <View style={{ height: 8 }} />

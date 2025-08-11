@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { WEAPONS_DB } from '@/shared/const/WeaponsDb';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
@@ -15,10 +16,24 @@ interface InventoryProps {
 const Inventory: React.FC<InventoryProps> = ({ data }) => {
   const updateCharacterInventory = useCharacterStore((s) => s.updateCharacterInventory);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
+  const updateCharacterWeapons = useCharacterStore((s) => s.updateCharacterWeapons);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   
   const [items, setItems] = useState<string[]>(character?.inventory || []);
+
+  const autoMoveIfWeapon = (text: string) => {
+    const norm = (text || '').trim().toLowerCase();
+    if (!norm) return false;
+    // find by exact name (UA) case-insensitive
+    const entry = WEAPONS_DB.find(w => w.name.toLowerCase() === norm);
+    if (!entry) return false;
+    // Move to weapons list
+    const currentWeapons = character?.weapons || [];
+    updateCharacterWeapons(data.id, [...currentWeapons, { name: entry.name, attackBonus: 0, damage: entry.damage }]);
+    Alert.alert('Переміщено', `“${entry.name}” додано до розділу Зброя`);
+    return true;
+  };
 
   const handleAddItem = () => {
     setItems((prev) => [...prev, '']); // додаємо пустий рядок
@@ -27,6 +42,10 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
   const handleChangeItem = (text: string, index: number) => {
     const newItems = [...items];
     newItems[index] = text;
+    // If weapon recognized, remove from inventory and move to weapons
+    if (autoMoveIfWeapon(text)) {
+      newItems.splice(index, 1);
+    }
     setItems(newItems);
     updateCharacterInventory(data.id, newItems);
   };

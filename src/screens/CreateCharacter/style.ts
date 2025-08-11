@@ -20,4 +20,11 @@ StyleSheet.create({
     borderRadius: 8,
     marginTop: 4,
   },
+  picker: {
+    backgroundColor: c.card,
+    color: c.text,
+    marginTop: 4,
+    borderRadius: 8,
+    height: 50,
+  },
 });

@@ -8,6 +8,7 @@ import useCharacterStore from '@/context/Character-store';
 import { CharacterDto } from '@/types/Character';
 import { HitPoints } from '@/types/HitPoints';
 import { DeathSaves } from '@/types/DeathSaves';
+import RollResultModal from '@/shared/components/RollResultModal/RollResultModal';
 
 interface CombatProps {
   data: CharacterDto;
@@ -29,6 +30,12 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
   const [hitDice, setHitDice] = useState(character?.hitDice || '');
   const [hp, setHp] = useState<HitPoints>(character?.hp || EMPTY_HP);
   const [deathSaves, setDeathSaves] = useState<DeathSaves>(character?.deathSaves || EMPTY_DEATH);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const rollD20 = () => {
+    const random = Math.floor(Math.random() * 20) + 1;
+    return { total: random , formula: `${random}`, random };
+  };
 
   useEffect(() => {
     if (!character) return;
@@ -110,7 +117,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <TextInput value={`${speed}`} onChangeText={handleSpeedChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>AC:</Text>
+        <Text style={styles.label}>КД:</Text>
         <TextInput value={`${ac}`} onChangeText={handleAcChange} />
       </View>
       <View style={styles.row}>
@@ -118,23 +125,23 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <TextInput style={{ flex: 1 }} value={armorDetails} onChangeText={handleArmorDetailsChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Hit Dice:</Text>
+        <Text style={styles.label}>Кість хітів:</Text>
         <TextInput style={{ flex: 1 }} value={hitDice} onChangeText={handleHitDiceChange} />
       </View>
-      <Text style={styles.label}>HP:</Text>
+      <Text style={styles.label}>Хіти:</Text>
       <View style={[styles.row, { marginLeft: 10 }]}>
-        <Text style={[styles.label, { width: 70 }]}>Max:</Text>
+        <Text style={[styles.label, { width: 70 }]}>Максимальні:</Text>
         <TextInput value={`${hp.max}`} onChangeText={(t) => handleHpChange('max', t)} />
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
-        <Text style={[styles.label, { width: 70 }]}>Current:</Text>
+        <Text style={[styles.label, { width: 70 }]}>Поточні хіти:</Text>
         <TextInput value={`${hp.current}`} onChangeText={(t) => handleHpChange('current', t)} />
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
-        <Text style={[styles.label, { width: 70 }]}>Temp:</Text>
+        <Text style={[styles.label, { width: 70 }]}>Тимчасові хіти:</Text>
         <TextInput value={`${hp.temp}`} onChangeText={(t) => handleHpChange('temp', t)} />
       </View>
-      <Text style={styles.label}>Death Saves:</Text>
+      <Text style={styles.label}>Рятівні кидки:</Text>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 90 }]}>Успіхи:</Text>
         {[0, 1, 2].map((i) => (
@@ -142,6 +149,11 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
             <Ionicons name={i < deathSaves.successes ? 'ellipse' : 'ellipse-outline'} size={24} color='#28a745' />
           </TouchableOpacity>
         ))}
+      </View>
+      <View style={[styles.row, { margin: 'auto' }]}>
+        <TouchableOpacity style={styles.rollButton} onPress={() => setIsVisible(true)}>
+          <Text style={styles.rollButtonText}>🎲</Text>
+        </TouchableOpacity>
       </View>
       <View style={[styles.row, { marginLeft: 10 }]}>
         <Text style={[styles.label, { width: 90 }]}>Провали:</Text>
@@ -151,6 +163,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
           </TouchableOpacity>
         ))}
       </View>
+      <RollResultModal isVisible={isVisible} onClose={() => setIsVisible(false)} roll={() => rollD20()} />
     </ScrollView>
   );
 };

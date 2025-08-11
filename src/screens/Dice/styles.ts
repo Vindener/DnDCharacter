@@ -3,6 +3,16 @@ import { ThemeColors } from '@/shared/styles/theme';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 16 },
+  title: { fontSize: 20, marginBottom: 16, color: c.text },
+  result: { fontSize: 22, marginTop: 16, color: c.text },
+  rollButton: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#6200EE',
+    borderRadius: 5,
+  },
+  rollButtonText: { color: c.text, fontSize: 16 },
   diceButton: {
     position: 'absolute',
     bottom: 20,

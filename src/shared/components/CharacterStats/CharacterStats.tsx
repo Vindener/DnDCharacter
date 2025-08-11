@@ -11,9 +11,9 @@ import Notes from './Tabs/Notes/Notes';
 import BackStory from './Tabs/BackStory/BackStory';
 import TraitsTab from './Tabs/Traits/Traits';
 import Skills from './Tabs/Skills/Skills';
+import Coins from './Tabs/Coins/Coins';
 import { getStyles } from '@/shared/components/CharacterStats/style';
 import useThemeStore from '@/context/Theme-store';
-import { styles } from '@/shared/components/CharacterStats/style';
 import { CharacterDto } from '@/types/Character';
 import { CharacterTabs } from '@/shared/const/CharacterTabs';
 import CharacterOverview from '../CharacterOverview/CharacterOverview';
@@ -44,6 +44,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
         <Picker.Item label='Історія героя' value='BackStory' />
         <Picker.Item label='Нотатки' value='Notes' />
         <Picker.Item label='Риси' value='Traits' />
+        <Picker.Item label='Монети' value='Coins' />
       </Picker>
 
       {selectedTab === 'Attributes' && <Attributes data={character} />}
@@ -55,6 +56,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
       {selectedTab === 'BackStory' && <BackStory data={character} />}
       {selectedTab === 'Notes' && <Notes data={character} />}
       {selectedTab === 'Traits' && <TraitsTab data={character} />}
+      {selectedTab === 'Coins' && <Coins data={character} />}
     </View>
   );
 };
