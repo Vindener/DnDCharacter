@@ -110,7 +110,7 @@ const Initiative: React.FC = () => {
               <TextInput
                 style={styles.inputHits}
                 value={item.hits ?? '0'}
-                placeholder='Хіти'
+                placeholder='ХП'
                 keyboardType='number-pad'
                 onChangeText={(t) => handleChangeById(item.id, 'hits', toNonNegativeInt(t))}
                 onFocus={() => setEditingId(item.id)}
@@ -187,7 +187,7 @@ const Initiative: React.FC = () => {
           accessibilityState={{ checked: hitsEnabled }}
         >
           <Ionicons name={hitsEnabled ? 'checkbox-outline' : 'square-outline'} size={22} color={colors.text} />
-          <Text style={styles.checkboxLabel}>Включити хіти</Text>
+          <Text style={styles.checkboxLabel}>Вкл. хіт</Text>
         </TouchableOpacity>
 
         <Modal title='Обрати героя' isVisible={isHeroPickerVisible} onClose={() => setHeroPickerVisible(false)}>

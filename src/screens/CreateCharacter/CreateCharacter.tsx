@@ -537,26 +537,48 @@ const CreateCharacter = (): JSX.Element => {
     </View>
   );
 
-  const StepNav = ({ backTo, nextTo, nextEnabled=true, nextLabel='Далі' }:{ backTo?:number; nextTo?:number; nextEnabled?:boolean; nextLabel?:string }) => (
-    <View style={{ flexDirection:'row', gap:12, marginTop: 20 }}>
-      {backTo ? <View style={{ flex:1 }}><Button title="Назад" onPress={()=>setStep(backTo)} /></View> : <View style={{ flex:1 }} />}
-      {nextTo ? <View style={{ flex:1 }}><Button title={nextLabel} onPress={()=>setStep(nextTo)} disabled={!nextEnabled} /></View> : <View style={{ flex:1 }} />}
+  const StepNav = ({
+    backTo,
+    nextTo,
+    nextEnabled = true,
+    nextLabel = 'Далі',
+  }: {
+    backTo?: number;
+    nextTo?: number;
+    nextEnabled?: boolean;
+    nextLabel?: string;
+  }) => (
+    <View style={{ flexDirection: 'row', gap: 12, marginTop: 20, marginBottom: 40 }}>
+      {backTo ? (
+        <View style={{ flex: 1 }}>
+          <Button title='Назад' onPress={() => setStep(backTo)} />
+        </View>
+      ) : (
+        <View style={{ flex: 1 }} />
+      )}
+      {nextTo ? (
+        <View style={{ flex: 1 }}>
+          <Button title={nextLabel} onPress={() => setStep(nextTo)} disabled={!nextEnabled} />
+        </View>
+      ) : (
+        <View style={{ flex: 1 }} />
+      )}
     </View>
   );
 
   return (
-    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+    <ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
       <ModeSwitcher />
 
       {mode === 'standard' ? (
         <>
           {step === 1 && (
             <>
-              <Header title="Крок 1: Ім’я, рівень, раса" />
+              <Header title='Крок 1: Ім’я, рівень, раса' />
               <Text style={styles.label}>Ім’я:</Text>
               <TextInput style={styles.input} value={name} onChangeText={setName} />
               <Text style={styles.label}>Рівень:</Text>
-              <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType="numeric" />
+              <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType='numeric' />
               <RacePicker />
               <StepNav nextTo={2} nextEnabled={validateStep1()} />
             </>
@@ -564,7 +586,7 @@ const CreateCharacter = (): JSX.Element => {
 
           {step === 2 && (
             <>
-              <Header title="Крок 2: Клас і підклас" />
+              <Header title='Крок 2: Клас і підклас' />
               <ClassPicker />
               <StepNav backTo={1} nextTo={3} nextEnabled={validateStep2()} />
             </>
@@ -572,22 +594,24 @@ const CreateCharacter = (): JSX.Element => {
 
           {step === 3 && (
             <>
-              <Header title="Крок 3: Характеристики" />
+              <Header title='Крок 3: Характеристики' />
               <StatMethodSwitcher />
               {statMethod === 'array' ? <ArrayEditor /> : <PointBuyEditor />}
               <View style={{ marginTop: 12 }}>
-                <Text style={{ color: c.text, fontWeight:'600', marginBottom: 4 }}>Попередні характеристики (із расовими бонусами):</Text>
-                {(Object.keys(finalStats) as AbilityKey[]).map((k)=>(
-                  <Text key={k} style={styles.label}>{ABILITY_NAMES_UA[k]}: <Text style={{ fontWeight:'700' }}>{finalStats[k]}</Text></Text>
+                <Text style={{ color: c.text, fontWeight: '600', marginBottom: 4 }}>Попередні характеристики (із расовими бонусами):</Text>
+                {(Object.keys(finalStats) as AbilityKey[]).map((k) => (
+                  <Text key={k} style={styles.label}>
+                    {ABILITY_NAMES_UA[k]}: <Text style={{ fontWeight: '700' }}>{finalStats[k]}</Text>
+                  </Text>
                 ))}
               </View>
-              <StepNav backTo={2} nextTo={4} nextEnabled={statMethod==='array' || pointBuyValid} />
+              <StepNav backTo={2} nextTo={4} nextEnabled={statMethod === 'array' || pointBuyValid} />
             </>
           )}
 
           {step === 4 && (
             <>
-              <Header title="Крок 4: Фон" />
+              <Header title='Крок 4: Фон' />
               <BackgroundPicker />
               <GearPicker />
               <StepNav backTo={3} nextTo={5} />
@@ -596,73 +620,102 @@ const CreateCharacter = (): JSX.Element => {
 
           {step === 5 && (
             <>
-              <Header title="Крок 5: Підтвердження" />
-              <Text style={styles.label}>Ім’я: <Text style={{ fontWeight:'600' }}>{name || '—'}</Text></Text>
-              <Text style={styles.label}>Рівень: <Text style={{ fontWeight:'600' }}>{level}</Text></Text>
-              <Text style={styles.label}>Раса: <Text style={{ fontWeight:'600' }}>{isCustomRace ? (customRace||'—') : (raceDef?.name || raceKey)}</Text></Text>
+              <Header title='Крок 5: Підтвердження' />
+              <Text style={styles.label}>
+                Ім’я: <Text style={{ fontWeight: '600' }}>{name || '—'}</Text>
+              </Text>
+              <Text style={styles.label}>
+                Рівень: <Text style={{ fontWeight: '600' }}>{level}</Text>
+              </Text>
+              <Text style={styles.label}>
+                Раса: <Text style={{ fontWeight: '600' }}>{isCustomRace ? customRace || '—' : raceDef?.name || raceKey}</Text>
+              </Text>
               {!!(isCustomRace ? customSubrace : subraceKey) && (
-                <Text style={styles.label}>Підраса: <Text style={{ fontWeight:'600' }}>{isCustomRace ? customSubrace : subraceKey}</Text></Text>
+                <Text style={styles.label}>
+                  Підраса: <Text style={{ fontWeight: '600' }}>{isCustomRace ? customSubrace : subraceKey}</Text>
+                </Text>
               )}
-              <Text style={styles.label}>Клас: <Text style={{ fontWeight:'600' }}>{localizedClassName}</Text></Text>
-              <Text style={styles.label}>Підклас: <Text style={{ fontWeight:'600' }}>{selectedClass === 'custom' ? (customSubclass||'—') : (subclass||'—')}</Text></Text>
+              <Text style={styles.label}>
+                Клас: <Text style={{ fontWeight: '600' }}>{localizedClassName}</Text>
+              </Text>
+              <Text style={styles.label}>
+                Підклас: <Text style={{ fontWeight: '600' }}>{selectedClass === 'custom' ? customSubclass || '—' : subclass || '—'}</Text>
+              </Text>
 
               <View style={{ marginTop: 12 }}>
-                <Text style={{ color: c.text, fontWeight:'700', marginBottom: 4 }}>Характеристики (фінальні):</Text>
-                {(Object.keys(finalStats) as AbilityKey[]).map((k)=>(
-                  <Text key={k} style={styles.label}>{ABILITY_NAMES_UA[k]}: <Text style={{ fontWeight:'700' }}>{finalStats[k]}</Text></Text>
+                <Text style={{ color: c.text, fontWeight: '700', marginBottom: 4 }}>Характеристики (фінальні):</Text>
+                {(Object.keys(finalStats) as AbilityKey[]).map((k) => (
+                  <Text key={k} style={styles.label}>
+                    {ABILITY_NAMES_UA[k]}: <Text style={{ fontWeight: '700' }}>{finalStats[k]}</Text>
+                  </Text>
                 ))}
               </View>
 
-              {/* Grouped features */}
               <FeaturesRace />
               <FeaturesClass />
               <FeaturesBackground />
 
               <View style={{ marginTop: 12 }}>
-                <Header title="Спорядження" />
+                <Header title='Спорядження' />
                 <Text style={{ color: c.text }}>
-                  {selectedClass === 'custom' ? 'Проста зброя, Рюкзак мандрівника' : (gearDef ? (gearDef.base.concat(gearDef.choices.map((ch,i)=>ch.options[gearSelections[i]||0] || ch.options[0])).join(', ') ) : '—')}
+                  {selectedClass === 'custom'
+                    ? 'Проста зброя, Рюкзак мандрівника'
+                    : gearDef
+                      ? gearDef.base.concat(gearDef.choices.map((ch, i) => ch.options[gearSelections[i] || 0] || ch.options[0])).join(', ')
+                      : '—'}
                 </Text>
               </View>
 
               <View style={{ marginTop: 12 }}>
-                <Header title="Монети" />
-                <Text style={{ color: c.text }}>{finalCoins.gold} золотих, {finalCoins.silver} срібних, {finalCoins.copper} мідних</Text>
+                <Header title='Монети' />
+                <Text style={{ color: c.text }}>
+                  {finalCoins.gold} золотих, {finalCoins.silver} срібних, {finalCoins.copper} мідних
+                </Text>
               </View>
 
-              <View style={{ flexDirection:'row', gap:8, marginTop:16 }}>
-                <View style={{ flex:1 }}><Button title="Редагувати расу" onPress={()=>setStep(1)} /></View>
-                <View style={{ flex:1 }}><Button title="Редагувати клас" onPress={()=>setStep(2)} /></View>
+              <View style={{ flexDirection: 'row', gap: 8, marginTop: 16 }}>
+                <View style={{ flex: 1 }}>
+                  <Button title='Редагувати расу' onPress={() => setStep(1)} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Button title='Редагувати клас' onPress={() => setStep(2)} />
+                </View>
               </View>
-              <View style={{ flexDirection:'row', gap:8, marginTop:8 }}>
-                <View style={{ flex:1 }}><Button title="Редагувати стати" onPress={()=>setStep(3)} /></View>
-                <View style={{ flex:1 }}><Button title="Редагувати фон" onPress={()=>setStep(4)} /></View>
+              <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
+                <View style={{ flex: 1 }}>
+                  <Button title='Редагувати стати' onPress={() => setStep(3)} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Button title='Редагувати фон' onPress={() => setStep(4)} />
+                </View>
               </View>
 
-              <View style={{ marginTop: 20 }}>
-                <Button title="Створити" onPress={onCreate} disabled={mode==='standard' && statMethod==='pointbuy' && !pointBuyValid} />
+              <View style={{ marginTop: 20, marginBottom:40 }}>
+                <Button title='Створити' onPress={onCreate} disabled={mode === 'standard' && statMethod === 'pointbuy' && !pointBuyValid} />
               </View>
             </>
           )}
         </>
       ) : (
         <>
-          <Header title="Швидке створення" />
+          <Header title='Швидке створення' />
           <Text style={styles.label}>Ім’я:</Text>
           <TextInput style={styles.input} value={name} onChangeText={setName} />
           <Text style={styles.label}>Рівень:</Text>
-          <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType="numeric" />
+          <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType='numeric' />
           <RacePicker />
           <ClassPicker />
           <BackgroundPicker />
           <View style={{ marginTop: 12 }}>
-            <Text style={{ color: c.text, fontWeight:'600', marginBottom: 4 }}>Характеристики (із расовими бонусами):</Text>
-            {(Object.keys(finalStats) as AbilityKey[]).map((k)=>(
-              <Text key={k} style={styles.label}>{ABILITY_NAMES_UA[k]}: <Text style={{ fontWeight:'700' }}>{finalStats[k]}</Text></Text>
+            <Text style={{ color: c.text, fontWeight: '600', marginBottom: 4 }}>Характеристики (із расовими бонусами):</Text>
+            {(Object.keys(finalStats) as AbilityKey[]).map((k) => (
+              <Text key={k} style={styles.label}>
+                {ABILITY_NAMES_UA[k]}: <Text style={{ fontWeight: '700' }}>{finalStats[k]}</Text>
+              </Text>
             ))}
           </View>
-          <View style={{ marginTop: 20 }}>
-            <Button title="Створити" onPress={onCreate} />
+          <View style={{ marginBottom: 40, marginTop: 20 }}>
+            <Button title='Створити' onPress={onCreate} />
           </View>
         </>
       )}
@@ -671,3 +724,5 @@ const CreateCharacter = (): JSX.Element => {
 };
 
 export default CreateCharacter;
+
+

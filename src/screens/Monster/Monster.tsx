@@ -176,8 +176,9 @@ export default function Monster({ route }: Props) {
       ) : (
         <Text style={styles.value}>{data.notes}</Text>
       )}
-      <View style={{ height: 12 }} />
-      <Button title='Експорт JSON' onPress={exportCurrent} />
+      <View style={{ marginTop: 12, marginBottom:20 }}>
+        <Button title='Експорт JSON' onPress={exportCurrent} />
+      </View>
     </ScrollView>
   );
 }
