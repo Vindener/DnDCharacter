@@ -30,7 +30,9 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env
+*.local
+google-services.json
 
 # typescript
 *.tsbuildinfo
