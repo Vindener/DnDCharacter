@@ -5,6 +5,7 @@ import useThemeStore from '@/context/Theme-store';
 import useCustomCoinsStore from '@/context/CustomCoins-store';
 import FileService from '@/shared/services/fileSerice';
 import useMonsterStore from '@/context/Monster-store';
+import Auth from '@/shared/components/Firebase/Auth';
 
 const Settings = () => {
   const isDark = useThemeStore((s) => s.isDark);
@@ -45,7 +46,7 @@ const Settings = () => {
     <View style={styles.container}>
       <Text style={styles.label}>Темна тема</Text>
       <Switch value={isDark} onValueChange={toggleTheme} />
-
+      <Auth />
       <View style={{ width: '100%', marginTop: 24, maxWidth: 560 }}>
         <Text style={{ color: colors.text, fontSize: 18, marginBottom: 8 }}>Кастомні монети</Text>
 

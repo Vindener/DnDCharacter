@@ -2,6 +2,7 @@
   "expo": {
     "name": "MythgateDND",
     "slug": "DnDCharacter",
+    "plugins": ["@react-native-google-signin/google-signin"],
     "version": "0.54.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,6 +21,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "googleServicesFile": "./google-services.json",
       "package": "com.vind.MythgateDND"
     },
     "web": {

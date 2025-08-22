@@ -3,8 +3,8 @@ import { ThemeColors } from '@/shared/styles/theme';
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
   header: {
-    paddingTop: 16,
-    height: 74,
+    paddingTop: 8,
+    height: 64,
     backgroundColor: c.card,
     flexDirection: 'row',
     alignItems: 'center',
@@ -20,6 +20,11 @@ StyleSheet.create({
     backgroundColor: '#ff2d55',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
   },
   logoText: {
     color: c.text,
