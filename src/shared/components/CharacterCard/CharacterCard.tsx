@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useCharacterStore from '@/context/Character-store';
 import { CLASS_TRANSLATIONS, CLASS_OPTIONS } from '@/shared/const/CharacterClass';
+import { subscribeCharacterSheet, deleteCharacterSheet } from '@/services/characterSheets';
 
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
 
@@ -24,12 +25,26 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
 
+  const [isShared, setIsShared] = useState(false);
+
+  useEffect(() => {
+    const unsub = subscribeCharacterSheet(character.id, (doc) => {
+      setIsShared(!!doc && Array.isArray(doc.editors) && doc.editors.length > 0);
+    });
+    return () => {
+      if (typeof unsub === 'function') unsub();
+    };
+  }, [character.id]);
+
   const handlePress = () => {
     setCurrentCharacterId(character.id);
     navigation.navigate('Character', { character });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    try {
+      await deleteCharacterSheet(character.id);
+    } catch (e) {}
     removeCharacter(character.id);
   };
 
@@ -41,7 +56,9 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
       {/*  style={styles.avatar}*/}
       {/*/>*/}
       <View style={styles.info}>
-        <Text style={styles.name}>{character.name}</Text>
+        <Text style={styles.name}>
+          {character.name} {isShared ? '· Shared' : ''}
+        </Text>
         <Text style={styles.meta}>
           Рівень {character.level || 1} <Text style={styles.separator}>|</Text> {character.race || 'Людина'}
         </Text>
@@ -53,3 +70,4 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
+

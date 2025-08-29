@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, View, Image } from 'react-native';
-import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress, logout } from '@/shared/services/auth/index';
 import Constants from 'expo-constants';
+import { ensureUserIndexOnLogin } from '@/services/users';
 
 
 export default function Auth() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  useEffect(() => {
+    if (user) {
+      ensureUserIndexOnLogin().catch(() => {});
+    }
+  }, [user]);
+
 
   configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
 
@@ -18,7 +25,7 @@ export default function Auth() {
   }
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
+    const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 

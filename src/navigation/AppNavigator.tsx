@@ -11,6 +11,7 @@ import Initiative from '@/screens/Initiative/Initiative';
 import DMNavigator from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
+import DocsDemo from '@/screens/DocsDemo/DocsDemo';
 
 export type AppStackParamList = {
   Library: undefined;
@@ -49,6 +50,8 @@ export default function AppNavigator() {
         return 'skull-outline';
       case 'Support':
         return 'heart-outline';
+      case 'Docs':
+        return 'document';
       default:
         return 'ellipse';
     }
@@ -73,6 +76,7 @@ export default function AppNavigator() {
         <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Інціатива' }} />
         <Stack.Screen name='DM' component={DMNavigator} options={{ headerShown: false }} />
         <Stack.Screen name='Bestiary' component={BestiaryNavigator} options={{ headerShown: false, title: 'Бестіарій' }} />
+        <Stack.Screen name='Docs' component={DocsDemo} options={{  title: 'DocsDemo' }} />
         <Stack.Screen name='Support' component={Support} options={{ title: 'Підтримка' }} />
       </Stack.Navigator>
     </NavigationContainer>

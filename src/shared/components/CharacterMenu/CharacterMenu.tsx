@@ -11,14 +11,20 @@ import FileService from '@/shared/services/fileSerice';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
+import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
+import { upsertCharacterSheetFromLocal, saveCharacterSheetAsNew } from '@/services/characterSheets';
 
 interface CharacterMenuProps {
   character: CharacterDto;
   onChange?: (character: CharacterDto) => void;
 }
-export default function CharacterMenu({ character, onChange }: CharacterMenuProps) {
-  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
+
+const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) => {
   const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
+  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
+  const removeCharacter = useCharacterStore((s: any) => s.removeCharacter);
+  const setCurrentCharacterId = useCharacterStore((s: any) => s.setCurrentCharacterId);
+
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -85,7 +91,29 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
     }
   }, [isInitModalVisible, characterData.initiative]);
 
+
+  const [shareOpen, setShareOpen] = useState(false);
   const openMenu = () => setMenuVisible(true);
+
+  const onSaveToCloud = async () => {
+    try {
+      await upsertCharacterSheetFromLocal(character as any);
+      console.log('[save] upsert ok for id', character.id);
+    } catch (e: any) {
+      console.warn('[save] upsert failed, will try save-as-new', e?.code || e?.message || e);
+      try {
+        const newId = await saveCharacterSheetAsNew(character as any);
+        console.log('[save] saved as NEW id', newId);
+        if (typeof onChange === 'function') {
+          onChange({ ...character, id: newId } as any);
+        }
+      } catch (e2: any) {
+        console.warn('[save] save-as-new failed', e2?.code || e2?.message || e2);
+      }
+    } finally {
+      closeMenu();
+    }
+  };
   const closeMenu = () => setMenuVisible(false);
 
   const pickPhoto = async () => {
@@ -246,6 +274,17 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Експорт JSON
         </MenuItem>
+        <MenuItem
+          onPress={() => {
+            setShareOpen(true);
+            closeMenu();
+          }}
+        >
+          Поділитися
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem onPress={onSaveToCloud}>Зберегти в хмарі</MenuItem>
+        <MenuDivider />
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
         <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
@@ -321,6 +360,11 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
           ))}
         </ScrollView>
       </Modal>
+      <ShareCharacterSheetModal visible={shareOpen} onClose={() => setShareOpen(false)} sheetId={character.id} />
     </>
   );
-}
+};
+
+export default CharacterMenu;
+
+

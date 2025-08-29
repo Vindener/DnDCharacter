@@ -16,6 +16,8 @@ import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 import Dice from '@/screens/Dice/Dice';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
+import { upsertCharacterSheetFromLocal, subscribeCharacterSheet, fetchCharacterSheet, autosaveCharacter } from '@/services/characterSheets';
+import { fbAuth } from '@/services/firebase';
 
 interface CharacterProps {
   route: {
@@ -26,8 +28,78 @@ interface CharacterProps {
   navigation: any;
 }
 
-export default function Character({ route }: CharacterProps) {
-  const { character } = route.params;
+export default function Character({ route }: Partial<CharacterProps> & { route?: any }) {
+  const storeCharacters = useCharacterStore((s) => s.characters);
+  const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
+  const routeCharacter = route?.params?.character as CharacterDto | undefined;
+  const fallbackFromStore = storeCharacters.find((c) => c.id === currentCharacterId) || storeCharacters[0];
+  const character = routeCharacter || fallbackFromStore;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  if (!character) {
+    const colors = useThemeStore((s) => s.colors);
+    const styles = React.useMemo(() => getStyles(colors), [colors]);
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: 'white' }}>Персонаж не знайдений</Text>
+      </View>
+    );
+  }
+
+  // Чи є цей персонаж у хмарі (щоб не редагувати локальну копію)
+  const [isCloudDoc, setIsCloudDoc] = useState<boolean | null>(null);
+
+  // REMOTE STATUS: перевірка наявності документа у Firestore
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        if (!character?.id) {
+          if (alive) setIsCloudDoc(null);
+          return;
+        }
+        const doc = await fetchCharacterSheet(character.id);
+        if (!alive) return;
+        setIsCloudDoc(!!doc);
+      } catch {
+        if (alive) setIsCloudDoc(null);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [character?.id]);
+
+  /* AUTOSAVE */
+  // uses autosaveCharacter if exported, else falls back to upsertCharacterSheetFromLocal
+  useEffect(() => {
+    const u = fbAuth.currentUser;
+    if (!u || !character?.id) return;
+    const interval = setInterval(async () => {
+      try {
+        const st = useCharacterStore.getState();
+        const latest = st.characters.find((c) => c.id === character.id) || character;
+        const saveFn: any = (typeof autosaveCharacter === 'function' ? autosaveCharacter : upsertCharacterSheetFromLocal);
+        const res: any = await saveFn(latest as any);
+
+        if (res?.created && res.id && res.id !== character.id) {
+          // поміняти локальний id на новий хмарний
+          const curr = st.characters.find((c) => c.id === character.id);
+          if (curr) {
+            st.addCharacter({ ...curr, id: res.id });
+            st.removeCharacter(character.id);
+            st.setCurrentCharacterId(res.id);
+            console.log('[autosave] created new cloud doc id', res.id, 'and swapped local id');
+          }
+        } else if (res?.id) {
+          console.log('[autosave] saved', res.id);
+        }
+      } catch (e) {
+        console.warn('[autosave] failed', e);
+      }
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [character?.id]);
 
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const colors = useThemeStore((s) => s.colors);
@@ -194,100 +266,124 @@ export default function Character({ route }: CharacterProps) {
   };
 
   return (
-  <View style={{ flex: 1 }}>
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        {characterData.photoUri ? (
-          <Image source={{ uri: characterData.photoUri }} style={styles.characterPhoto} />
-        ) : (
-          <View style={styles.placeholderPhoto}>
-            <Text style={styles.placeholderText}>Фото героя</Text>
-          </View>
-        )}
-
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.characterName}>{characterData.name}</Text>
-          <CharacterMenu character={characterData} onChange={setCharacterData} />
-        </View>
-
-        <Text style={styles.level}>Рівень {characterData.level}</Text>
-        <Text style={styles.exp}>Exp: {characterData.experience}</Text>
-
-        <TouchableOpacity onPress={() => setIsHpModalVisible(true)}>
-          <Text style={styles.changeHP}>Редагувати HP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={openRestModal}>
-          <Text style={styles.restButton}>Відпочинок</Text>
-        </TouchableOpacity>
-      </View>
-
-      <CharacterStats character={characterData} />
-      <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={handleSaveHp} title='HP'>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-          <Text style={{ color: 'white', flex: 1 }}>Max</Text>
-          <TextInput value={String(tempMaxHp)} onChangeText={handleMaxHPChange} />
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-          <Text style={{ color: 'white', flex: 1 }}>Current</Text>
-          <TextInput value={String(tempHp)} onChangeText={handleHPChange} />
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ color: 'white', flex: 1 }}>Change</Text>
-          <TextInput value={hpDelta} onChangeText={setHpDelta} />
-          <TouchableOpacity onPress={() => adjustHp(Number(hpDelta))} style={{ marginLeft: 8 }}>
-            <Text style={{ color: 'white' }}>+</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => adjustHp(-Number(hpDelta))} style={{ marginLeft: 8 }}>
-            <Text style={{ color: 'white' }}>-</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    </ScrollView>
-    <TouchableOpacity style={styles.diceIcon} onPress={() => setIsDiceModalVisible(true)}>
-      <MaterialCommunityIcons name='dice-d20-outline' size={32} color={colors.text} />
-    </TouchableOpacity>
-    <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)}>
-      <DiceRoller />
-    </Modal>
-    <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Відпочинок'>
-      {restStep === 'choose' && (
-        <>
-          <TouchableOpacity onPress={() => setRestStep('short')}>
-            <Text style={styles.restOption}>Короткий відпочинок</Text>
-          </TouchableOpacity>
-          <Text style={styles.restDesc}>
-            Короткий відпочинок триває щонайменше годину. Ви можете витратити кості хітів, щоб відновити здоров’я.
+    <View style={{ flex: 1 }}>
+      {/* CLOUD BANNER */}
+      {isCloudDoc === false ? (
+        <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
+          <Text style={{ color: '#f99', fontWeight: '600' }}>Зараз ви редагуєте локальну копію.</Text>
+          <Text style={{ color: '#ddd' }}>
+            Щоб бачити зміни в іншого користувача, відкрийте цей лист з розділу «Поділені зі мною» на головному екрані.
           </Text>
-          <TouchableOpacity onPress={handleLongRest}>
-            <Text style={styles.restOption}>Довгий відпочинок</Text>
-          </TouchableOpacity>
-          <Text style={styles.restDesc}>Довгий відпочинок повністю відновлює HP та слоти заклять.</Text>
-        </>
-      )}
-      {restStep === 'short' && (
-        <>
-          <Text style={styles.restDesc}>Доступно: {characterData.hitDice}</Text>
-          <Text style={styles.restDesc}>Скільки кісток використати?</Text>
-          <TextInput value={shortRestDice} onChangeText={setShortRestDice} keyboardType='numeric' />
-          <TouchableOpacity onPress={startShortRestRoll}>
-            <Text style={styles.restOption}>Кинути</Text>
-          </TouchableOpacity>
-        </>
-      )}
-      {restStep === 'roll' && (
-        <>
-          <Text style={styles.restDesc}>
-            Кидок {rollResults.length + 1} з {rollsNeeded}
+          <Text style={{ color: '#ddd' }}>
+            Для збереження в хмарну перейдіть в меню та оберіть "Зберегти в хмару" та перезайдіть на героя або зачейте(тестове).
           </Text>
-          <Dice sides={diceSides} onRoll={handleDiceRoll} />
-          {rollResults.length >= rollsNeeded && (
-            <TouchableOpacity onPress={applyShortRestRolls}>
-              <Text style={styles.restOption}>Застосувати</Text>
-            </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
+          <Text style={{ color: 'rgba(163, 255, 153, 1)', fontWeight: '600' }}>Зараз ви редагуєте хмарну копію.</Text>
+        </View>
+      )}
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          {characterData.photoUri ? (
+            <Image source={{ uri: characterData.photoUri }} style={styles.characterPhoto} />
+          ) : (
+            <View style={styles.placeholderPhoto}>
+              <Text style={styles.placeholderText}>Фото героя</Text>
+            </View>
           )}
-        </>
-      )}
-    </Modal>
-  </View>
-);
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.characterName}>{characterData.name}</Text>
+            <CharacterMenu character={characterData} onChange={setCharacterData} />
+          </View>
+
+          <Text style={styles.level}>Рівень {characterData.level}</Text>
+          <Text style={styles.exp}>Exp: {characterData.experience}</Text>
+
+          <TouchableOpacity onPress={() => setIsHpModalVisible(true)}>
+            <Text style={styles.changeHP}>Редагувати HP</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={openRestModal}>
+            <Text style={styles.restButton}>Відпочинок</Text>
+          </TouchableOpacity>
+        </View>
+
+        <CharacterStats character={characterData} />
+        <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={handleSaveHp} title='HP'>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+            <Text style={{ color: 'white', flex: 1 }}>Max</Text>
+            <TextInput value={String(tempMaxHp)} onChangeText={handleMaxHPChange} />
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+            <Text style={{ color: 'white', flex: 1 }}>Current</Text>
+            <TextInput value={String(tempHp)} onChangeText={handleHPChange} />
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: 'white', flex: 1 }}>Change</Text>
+            <TextInput value={hpDelta} onChangeText={setHpDelta} />
+            <TouchableOpacity onPress={() => adjustHp(Number(hpDelta))} style={{ marginLeft: 8 }}>
+              <Text style={{ color: 'white' }}>+</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => adjustHp(-Number(hpDelta))} style={{ marginLeft: 8 }}>
+              <Text style={{ color: 'white' }}>-</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      </ScrollView>
+      <TouchableOpacity style={styles.diceIcon} onPress={() => setIsDiceModalVisible(true)}>
+        <MaterialCommunityIcons name='dice-d20-outline' size={32} color={colors.text} />
+      </TouchableOpacity>
+      <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)}>
+        <DiceRoller />
+      </Modal>
+      <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Відпочинок'>
+        {restStep === 'choose' && (
+          <>
+            <TouchableOpacity onPress={() => setRestStep('short')}>
+              <Text style={styles.restOption}>Короткий відпочинок</Text>
+            </TouchableOpacity>
+            <Text style={styles.restDesc}>
+              Короткий відпочинок триває щонайменше годину. Ви можете витратити кості хітів, щоб відновити здоров’я.
+            </Text>
+            <TouchableOpacity onPress={handleLongRest}>
+              <Text style={styles.restOption}>Довгий відпочинок</Text>
+            </TouchableOpacity>
+            <Text style={styles.restDesc}>Довгий відпочинок повністю відновлює HP та слоти заклять.</Text>
+          </>
+        )}
+        {restStep === 'short' && (
+          <>
+            <Text style={styles.restDesc}>Доступно: {characterData.hitDice}</Text>
+            <Text style={styles.restDesc}>Скільки кісток використати?</Text>
+            <TextInput value={shortRestDice} onChangeText={setShortRestDice} keyboardType='numeric' />
+            <TouchableOpacity onPress={startShortRestRoll}>
+              <Text style={styles.restOption}>Кинути</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        {restStep === 'roll' && (
+          <>
+            <Text style={styles.restDesc}>
+              Кидок {rollResults.length + 1} з {rollsNeeded}
+            </Text>
+            <Dice sides={diceSides} onRoll={handleDiceRoll} />
+            {rollResults.length >= rollsNeeded && (
+              <TouchableOpacity onPress={applyShortRestRolls}>
+                <Text style={styles.restOption}>Застосувати</Text>
+              </TouchableOpacity>
+            )}
+          </>
+        )}
+      </Modal>
+    </View>
+  );
 }
+
+
+
+
+
+
+
+
