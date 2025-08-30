@@ -25,8 +25,9 @@ export const getStyles = (c: ThemeColors) =>
     },
     buttonContainer: {
       position: 'absolute',
-      bottom: 20,
-      left: 16,
-      right: 16,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      padding: 12,
     },
   });

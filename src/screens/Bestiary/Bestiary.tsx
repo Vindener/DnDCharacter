@@ -32,7 +32,7 @@ const Bestiary = () => {
           </Text>
         </View>
       ) : (
-        <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <MonsterCard monster={item} />} />
+        <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <MonsterCard monster={item} />}  contentContainerStyle={{ paddingBottom: 120 }} />
       )}
       <View style={styles.buttonContainer}>
         <View style={{ height: 8 }} />

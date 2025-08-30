@@ -34,7 +34,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const routeCharacter = route?.params?.character as CharacterDto | undefined;
   const fallbackFromStore = storeCharacters.find((c) => c.id === currentCharacterId) || storeCharacters[0];
   const character = routeCharacter || fallbackFromStore;
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   if (!character) {
     const colors = useThemeStore((s) => s.colors);
@@ -51,23 +50,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   // REMOTE STATUS: перевірка наявності документа у Firestore
   useEffect(() => {
-    let alive = true;
-    (async () => {
-      try {
-        if (!character?.id) {
-          if (alive) setIsCloudDoc(null);
-          return;
-        }
-        const doc = await fetchCharacterSheet(character.id);
-        if (!alive) return;
-        setIsCloudDoc(!!doc);
-      } catch {
-        if (alive) setIsCloudDoc(null);
-      }
-    })();
-    return () => {
-      alive = false;
-    };
+    
   }, [character?.id]);
 
   /* AUTOSAVE */
@@ -98,7 +81,25 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         console.warn('[autosave] failed', e);
       }
     }, 10000);
-    return () => clearInterval(interval);
+
+    let alive = true;
+    (async () => {
+      try {
+        if (!character?.id) {
+          if (alive) setIsCloudDoc(null);
+          return;
+        }
+        const doc = await fetchCharacterSheet(character.id);
+        if (!alive) return;
+        setIsCloudDoc(!!doc);
+      } catch {
+        if (alive) setIsCloudDoc(null);
+      }
+    })();
+    return () => {
+      clearInterval(interval);
+      alive = true;
+    };
   }, [character?.id]);
 
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
@@ -106,8 +107,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [characterData, setCharacterData] = useState<CharacterDto | any>(character);
-  const [isNameModalVisible, setIsNameModalVisible] = useState(false);
-  const [newName, setNewName] = useState('');
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempHp, setTempHp] = useState(0);
   const [tempMaxHp, setTempMaxHp] = useState(0);
@@ -134,47 +133,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setTempHp(characterData?.hp?.current ?? 0);
     setTempMaxHp(characterData?.hp?.max ?? 0);
   }, [characterData?.hp?.current, characterData?.hp?.max]);
-
-  const saveCharacter = async () => {
-    if (!characterData.id) return;
-    try {
-      const path = FileSystem.documentDirectory + `characterData_${characterData.id}.json`;
-      await FileSystem.writeAsStringAsync(path, JSON.stringify(characterData));
-    } catch {}
-  };
-
-  const exportToFile = async () => {
-    try {
-      const jsonData = JSON.stringify(characterData, null, 2);
-      const fileUri = FileSystem.documentDirectory + 'character.json';
-      await FileSystem.writeAsStringAsync(fileUri, jsonData, { encoding: FileSystem.EncodingType.UTF8 });
-      await shareAsync(fileUri);
-    } catch {}
-  };
-
-  const pickPhoto = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        quality: 1,
-      });
-      if (!result.canceled) {
-        const uri = result.assets[0].uri;
-        setCharacterData((prev: any) => ({ ...prev, photoUri: uri }));
-      }
-    } catch {}
-  };
-
-  const removePhoto = () => {
-    setCharacterData((prev: any) => ({ ...prev, photoUri: undefined }));
-  };
-
-  const handleNameChange = () => {
-    if (!newName.trim()) return;
-    setCharacterData((prev: any) => ({ ...prev, name: newName }));
-    setIsNameModalVisible(false);
-  };
 
   const handleHPChange = (text: string) => {
     const val = Number(text);
@@ -267,23 +225,23 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   return (
     <View style={{ flex: 1 }}>
-      {/* CLOUD BANNER */}
-      {isCloudDoc === false ? (
-        <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
-          <Text style={{ color: '#f99', fontWeight: '600' }}>Зараз ви редагуєте локальну копію.</Text>
-          <Text style={{ color: '#ddd' }}>
-            Щоб бачити зміни в іншого користувача, відкрийте цей лист з розділу «Поділені зі мною» на головному екрані.
-          </Text>
-          <Text style={{ color: '#ddd' }}>
-            Для збереження в хмарну перейдіть в меню та оберіть "Зберегти в хмару" та перезайдіть на героя або зачейте(тестове).
-          </Text>
-        </View>
-      ) : (
-        <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
-          <Text style={{ color: 'rgba(163, 255, 153, 1)', fontWeight: '600' }}>Зараз ви редагуєте хмарну копію.</Text>
-        </View>
-      )}
       <ScrollView style={styles.container}>
+        {/* CLOUD BANNER */}
+        {isCloudDoc === false ? (
+          <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
+            <Text style={{ color: '#f99', fontWeight: '600' }}>Зараз ви редагуєте локальну копію.</Text>
+            <Text style={{ color: '#ddd' }}>
+              Щоб бачити зміни в іншого користувача, відкрийте цей лист з розділу «Поділені зі мною» на головному екрані.
+            </Text>
+            <Text style={{ color: '#ddd' }}>
+              Для збереження в хмарну перейдіть в меню та оберіть "Зберегти в хмару" та перезайдіть на героя або зачейте(тестове).
+            </Text>
+          </View>
+        ) : (
+          <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
+            <Text style={{ color: 'rgba(163, 255, 153, 1)', fontWeight: '600' }}>Зараз ви редагуєте хмарну копію.</Text>
+          </View>
+        )}
         <View style={styles.header}>
           {characterData.photoUri ? (
             <Image source={{ uri: characterData.photoUri }} style={styles.characterPhoto} />
@@ -379,11 +337,3 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
-
-
-
-
-
-
-
-

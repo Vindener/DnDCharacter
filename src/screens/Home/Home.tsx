@@ -119,7 +119,7 @@ const Home = () => {
             <Text style={{ color: viewMode === 'shared' ? '#2f95dc' : '#888' }}>Поділені зі мною</Text>
           </TouchableOpacity>
           <View style={styles.slotBadge}>
-            <Text style={styles.slotText}>Slots: {characters.length}/15</Text>
+            <Text style={styles.slotText}>Слотів: {characters.length}/15</Text>
           </View>
         </View>
       </View>
@@ -131,6 +131,7 @@ const Home = () => {
       </TouchableOpacity>
 
       <View style={styles.topBar}></View>
+
       {viewMode !== 'local' ? (
         <>
           {!fbAuth.currentUser ? (
@@ -147,6 +148,7 @@ const Home = () => {
                   item.class?.toLowerCase?.().includes(search.toLowerCase()),
               )}
               keyExtractor={(item) => item.id}
+              contentContainerStyle={{ paddingBottom: 120 }}
               ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
               renderItem={({ item }) => (
                 <TouchableOpacity onPress={() => openRemote(item)} style={{ padding: 12, borderRadius: 12, backgroundColor: '#111' }}>
@@ -160,7 +162,6 @@ const Home = () => {
                   </Text>
                 </TouchableOpacity>
               )}
-              contentContainerStyle={{ padding: 12 }}
             />
           )}
         </>
@@ -179,13 +180,13 @@ const Home = () => {
               data={filtered}
               keyExtractor={(item) => String(item.id)}
               renderItem={({ item }) => <CharacterCard character={item} />}
+              contentContainerStyle={{ paddingBottom: 120 }}
             />
           )}
         </>
       )}
 
       <View style={styles.buttonContainer}>
-        <View style={{ height: 8 }} />
         <Button
           title='Імпортувати героя'
           onPress={async () => {
@@ -200,9 +201,6 @@ const Home = () => {
   );
 };
 
+
+
 export default Home;
-
-
-
-
-
