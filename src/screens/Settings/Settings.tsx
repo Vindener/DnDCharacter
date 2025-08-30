@@ -47,7 +47,7 @@ const Settings = () => {
       <Text style={styles.label}>Темна тема</Text>
       <Switch value={isDark} onValueChange={toggleTheme} />
       <Auth />
-      <View style={{ width: '100%', marginTop: 24, maxWidth: 560 }}>
+      <View style={{ width: '100%', marginTop: 12, maxWidth: 560 }}>
         <Text style={{ color: colors.text, fontSize: 18, marginBottom: 8 }}>Кастомні монети</Text>
 
         <TouchableOpacity

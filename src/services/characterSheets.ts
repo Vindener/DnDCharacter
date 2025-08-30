@@ -14,6 +14,7 @@ export type CharacterSheet = {
   class?: string;
   race?: string;
   level?: number;
+  experience: number;
   stats?: Record<string, number>;
   hp?: { current: number; max: number; temp?: number };
   ac?: number;
@@ -31,6 +32,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     name: dto.name,
     class: (dto as any).class || '',
     race: (dto as any).race || '',
+    experience: (dto as any).race || 0,
     level: (dto as any).level || 1,
     stats: (dto as any).stats || { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
     hp: (dto as any).hp || { current: 10, max: 10 },
@@ -261,3 +263,5 @@ export async function autosaveCharacter(dto: CharacterDto): Promise<{ id: string
     }
   }
 }
+
+

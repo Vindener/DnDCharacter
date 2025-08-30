@@ -187,19 +187,46 @@ const Home = () => {
       )}
 
       <View style={styles.buttonContainer}>
-        <Button
-          title='Імпортувати героя'
+        <TouchableOpacity
           onPress={async () => {
             const character = await FileService.importCharacterFromFile();
             if (character) await addCharacter(character);
           }}
-        />
-        <View style={{ height: 8 }} />
-        <Button title='Створити нового героя' onPress={() => navigation.navigate('CreateCharacter')} />
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            backgroundColor: colors.inputBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: colors.text, textAlign: 'center' }}>Імпортувати героя</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CreateCharacter')}
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            backgroundColor: colors.inputBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: colors.text, textAlign: 'center' }}>Створити нового героя</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
+
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TextInput, Button } from 'react-native';
+import { View, Text, FlatList, TextInput, Button,TouchableOpacity } from 'react-native';
 import useMonsterStore from '@/context/Monster-store';
 import { MonsterCard } from '@/shared/components/MonsterCard/MonsterCard';
 import useThemeStore from '@/context/Theme-store';
@@ -22,8 +22,7 @@ const Bestiary = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBar}>
-      </View>
+      <View style={styles.topBar}></View>
       <TextInput placeholder='Пошук монстрів' placeholderTextColor='#888' style={styles.search} value={search} onChangeText={setSearch} />
       {!filtered || filtered.length === 0 ? (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
@@ -32,20 +31,32 @@ const Bestiary = () => {
           </Text>
         </View>
       ) : (
-        <FlatList data={filtered} keyExtractor={(item) => item.id} renderItem={({ item }) => <MonsterCard monster={item} />}  contentContainerStyle={{ paddingBottom: 120 }} />
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <MonsterCard monster={item} />}
+          contentContainerStyle={{ paddingBottom: 120 }}
+        />
       )}
       <View style={styles.buttonContainer}>
-        <View style={{ height: 8 }} />
-        <Button
-          title='Імпортувати монстра'
+        <TouchableOpacity
           onPress={async () => {
             const monster = await FileService.importMonsterFromFile();
             if (monster) await addMonster(monster);
           }}
-        />
-        <View style={{ height: 8 }} />
-        <Button
-          title='Додати монстра'
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            backgroundColor: colors.inputBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: colors.text, textAlign: 'center' }}>Імпортувати монстра</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => {
             addMonster({
               id: Date.now().toString(),
@@ -60,7 +71,18 @@ const Bestiary = () => {
               },
             });
           }}
-        />
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            backgroundColor: colors.inputBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: colors.text, textAlign: 'center' }}>Додати монстра</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

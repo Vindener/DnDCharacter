@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, ScrollView, Pressable, ToastAndroid } from 'react-native';
-import * as Clipboard from 'expo-clipboard';
+import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, ScrollView } from 'react-native';
 import useThemeStore from '@/context/Theme-store';
 
 const donateLinks = [
@@ -50,7 +49,6 @@ export default function Support() {
         alignItems: 'center',
       },
       btnText: { color: colors.text, fontWeight: '600' },
-      copyHint: { position: 'absolute', right: 12, top: 8, fontSize: 12, opacity: 0.6, color: colors.textSecondary },
     }),
     [colors],
   );
@@ -74,29 +72,12 @@ export default function Support() {
 
   const openTelegram = () => openUrl('https://t.me/Vindener_work');
 
-  const copy = async (text: string) => {
-    try {
-      if (Clipboard?.setStringAsync) {
-        await Clipboard.setStringAsync(text);
-        if (Platform.OS === 'android') {
-          ToastAndroid.show('Скопійовано', ToastAndroid.SHORT);
-        } else {
-          Alert.alert('Скопійовано', 'Адресу додано в буфер обміну');
-        }
-      } else {
-        // Фолбек: підказка користувачу (поле і так selectTextOnFocus)
-        Alert.alert('Скопіюй вручну', 'Довге натискання → Копіювати');
-      }
-    } catch (e) {
-      Alert.alert('Не вдалося скопіювати', String(e));
-    }
-  };
-
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>Підтримати проєкт</Text>
+          <Text style={{ color: 'rgba(249, 136, 118, 1)', fontWeight: '600' }}>Зараз збираємо гроші для публікації в Google Play.</Text>
           <Text style={styles.text}>Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:</Text>
           <View style={styles.row}>
             {donateLinks.map((d) => (
@@ -107,20 +88,13 @@ export default function Support() {
           </View>
         </View>
 
-        {/* Криптогаманці з копіюванням по тапу */}
         <View style={styles.card}>
           <Text style={styles.title}>Криптогаманці</Text>
           {cryptoWallets.map((w) => (
-            <Pressable key={w.label} onPress={() => copy(w.value)} style={{ marginTop: 10, position: 'relative' }}>
+            <View key={w.label} style={{ marginTop: 10 }}>
               <Text style={[styles.text, { marginBottom: 6 }]}>{w.label}</Text>
-              <TextInput
-                value={w.value}
-                editable={false}
-                selectTextOnFocus
-                style={[styles.input, { paddingRight: 120 }]} // трохи місця під підказку праворуч
-              />
-              <Text style={styles.copyHint}>Натисни, щоб скопіювати</Text>
-            </Pressable>
+              <TextInput value={w.value} editable={true} selectTextOnFocus style={styles.input} />
+            </View>
           ))}
         </View>
 

@@ -274,6 +274,8 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
         >
           Експорт JSON
         </MenuItem>
+        <MenuDivider />
+        <MenuItem onPress={onSaveToCloud}>Зберегти в хмарі</MenuItem>
         <MenuItem
           onPress={() => {
             setShareOpen(true);
@@ -282,9 +284,6 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
         >
           Поділитися
         </MenuItem>
-        <MenuDivider />
-        <MenuItem onPress={onSaveToCloud}>Зберегти в хмарі</MenuItem>
-        <MenuDivider />
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
         <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
@@ -366,5 +365,6 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
 };
 
 export default CharacterMenu;
+
 
 

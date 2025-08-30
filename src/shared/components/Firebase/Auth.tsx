@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress, logout } from '@/shared/services/auth/index';
 import Constants from 'expo-constants';
 import { ensureUserIndexOnLogin } from '@/services/users';
-
+import useThemeStore from '@/context/Theme-store';
+import { getStyles } from '@/screens/Settings/styles';
 
 export default function Auth() {
   const [initializing, setInitializing] = useState(true);
@@ -15,6 +16,8 @@ export default function Auth() {
     }
   }, [user]);
 
+    const colors = useThemeStore((s) => s.colors);
+    const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
 
@@ -34,16 +37,42 @@ export default function Auth() {
   if (!user) {
     return (
       <View style={styles.container}>
-        <Button title='Увійти за допомогою Google' onPress={() => onGoogleButtonPress()} />
+        <TouchableOpacity
+          onPress={() => onGoogleButtonPress()}
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            backgroundColor: colors.inputBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: colors.text }}>Увійти за допомогою Google</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: user.photoURL }} style={{ height: 120, width: 120, borderRadius: 150, marginLeft: 50 }} />
+      <Image source={{ uri: user.photoURL }} style={{ height: 130, width: 130, borderRadius: 150, marginLeft: 10 }} />
       <Text>Вітаємо, {user.email}!</Text>
-      <Button title='Вийти' onPress={() => logout()} />
+      <TouchableOpacity
+        onPress={() => logout()}
+        style={{
+          paddingVertical: 10,
+          paddingHorizontal: 14,
+          backgroundColor: colors.inputBackground,
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: colors.border,
+          marginTop: 10,
+        }}
+      >
+        <Text style={{ color: colors.text }}>Вийти</Text>
+      </TouchableOpacity>
     </View>
   );
 }
