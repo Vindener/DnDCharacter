@@ -1,43 +1,55 @@
-import auth from '@react-native-firebase/auth';
-import { GoogleAuthProvider, getAuth, signInWithCredential, onAuthStateChanged, signOut } from '@react-native-firebase/auth';
+import auth, { GoogleAuthProvider } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { toast } from '@/shared/services/toast';
 
-/**
- * Викликай один раз при старті додатку (див. bootstrap.ts нижче)
- */
+let configured = false;
+
 export function configureGoogleSignIn(webClientId: string) {
+  if (configured) return;
   GoogleSignin.configure({
     webClientId,
-    offlineAccess: false,
     forceCodeForRefreshToken: false,
+    profileImageSize: 150,
   });
+  configured = true;
+  toast.info('Google Sign-In', 'Configured with webClientId');
 }
 
 export async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
+  try {
+    toast.info('Google Sign-In', 'Checking Play Services…');
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    // Get the users ID token
-    const signInResult = await GoogleSignin.signIn();
+    toast.info('Google Sign-In', 'Opening Google auth…');
 
-    // Try the new style of google-sign in result, from v13+ of that module
-    let idToken = signInResult.data?.idToken;
+    const res = await GoogleSignin.signIn();
+
+    // Підтримуємо новий і старий формат результату:
+    let idToken = (res as any)?.data?.idToken || (res as any)?.idToken;
     if (!idToken) {
-      // if you are using older versions of google-signin, try old style result
-      idToken = signInResult.idToken;
-    }
-    if (!idToken) {
+      toast.error('Google Sign-In', 'No ID token returned');
       throw new Error('No ID token found');
     }
+    toast.info('Google Sign-In', 'ID token received');
 
-    // Create a Google credential with the token
-    const googleCredential = GoogleAuthProvider.credential(signInResult.data.idToken);
+    const credential = GoogleAuthProvider.credential(idToken);
 
-    // Sign-in the user with the credential
-    return signInWithCredential(getAuth(), googleCredential);
+    toast.info('Firebase Auth', 'Signing in with credential…');
+    const r = await auth().signInWithCredential(credential);
+    toast.success('Firebase Auth', 'Signed in successfully');
+    return r;
+  } catch (err: any) {
+    const code = err?.code || err?.message || String(err);
+    toast.error('Auth error', typeof code === 'string' ? code : JSON.stringify(code));
+    throw err;
   }
-
-
+}
 
 export async function logout() {
-    signOut(getAuth()).then(() => console.log('User signed out!'));
+  try {
+    await auth().signOut();
+    toast.success('Signed out', 'You have been signed out');
+  } catch (err: any) {
+    toast.error('Sign out failed', err?.message || String(err));
+    throw err;
+  }
 }

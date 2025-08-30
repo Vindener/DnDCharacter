@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "608733335623-6bgmajrgrfg65emmv8fldqh30dgq7ukc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "1610458e0707cc8b26c506d844c6679579a66a56"
+          }
+        },
+        {
           "client_id": "608733335623-7c1448c3tjlhqoippdusvm4re1ptur5d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.vind.MythgateDND",
             "certificate_hash": "4e85c6ca38364343afa1109e8508854aca6d0e51"
-          }
-        },
-        {
-          "client_id": "608733335623-ds7l4vnhbtnqtg8kloi6kdhqnpbsu4g0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.vind.MythgateDND",
-            "certificate_hash": "c06dc5dd4289bc67fc05bb518919279523850cf8"
           }
         },
         {

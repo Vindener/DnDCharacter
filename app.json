@@ -6,7 +6,7 @@
       "@react-native-firebase/app",
       "@react-native-google-signin/google-signin"
     ],
-    "version": "0.69.2",
+    "version": "0.69.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vind.MythgateDND"
     },
     "android": {
       "adaptiveIcon": {
