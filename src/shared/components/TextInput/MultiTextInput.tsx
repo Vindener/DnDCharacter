@@ -1,6 +1,13 @@
-import React from 'react';
-import { View, StyleProp, ViewStyle } from 'react-native';
-import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
+import React, { useState } from 'react';
+import {
+  View,
+  StyleProp,
+  ViewStyle,
+  TextInput,
+  TextInputProps,
+  NativeSyntheticEvent,
+  TextInputContentSizeChangeEventData,
+} from 'react-native';
 import useThemeStore from '@/context/Theme-store';
 
 type MultiTextInputProps = {
@@ -9,7 +16,7 @@ type MultiTextInputProps = {
   minHeight?: number;
   maxHeight?: number;
   onSizeChange?: (h: number) => void;
-} & React.ComponentProps<typeof AutoGrowingTextInput>;
+} & TextInputProps;
 
 export default function MultiTextInput({
   containerStyle,
@@ -21,6 +28,13 @@ export default function MultiTextInput({
   ...props
 }: MultiTextInputProps) {
   const colors = useThemeStore((s) => s.colors);
+  const [height, setHeight] = useState(initialHeight);
+
+  const handleContentSizeChange = (e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
+    const newHeight = Math.min(maxHeight, Math.max(minHeight, e.nativeEvent.contentSize.height));
+    setHeight(newHeight);
+    if (onSizeChange) onSizeChange(newHeight);
+  };
 
   return (
     <View
@@ -38,12 +52,12 @@ export default function MultiTextInput({
         containerStyle,
       ]}
     >
-      <AutoGrowingTextInput
+      <TextInput
         {...props}
+        multiline
         style={[
           {
-            minHeight,
-            maxHeight,
+            height,
             paddingHorizontal: 12,
             paddingVertical: 10,
             color: colors.text,
@@ -51,14 +65,7 @@ export default function MultiTextInput({
           },
           style,
         ]}
-        scrollEnabled={true}
-        enableScrollToCaret
-        underlineColorAndroid='transparent'
-        maxHeight={maxHeight}
-        defaultHeight={initialHeight}
-        onHeightChanged={(h) => {
-          if (onSizeChange) onSizeChange(h);
-        }}
+        onContentSizeChange={handleContentSizeChange}
       />
     </View>
   );
