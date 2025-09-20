@@ -1,0 +1,36 @@
+import type { CharacterDto } from '@/types/Character';
+
+export type AbilityStatsKey = keyof CharacterDto['stats'];
+export type SkillKey = keyof CharacterDto['skills'];
+
+const skillToStat: Record<SkillKey, AbilityStatsKey> = {
+  // Strength
+  athletics: 'strength',
+
+  // Dexterity
+  acrobatics: 'dexterity',
+  sleightOfHand: 'dexterity',
+  stealth: 'dexterity',
+
+  // Intelligence
+  arcana: 'intelligence',
+  history: 'intelligence',
+  investigation: 'intelligence',
+  nature: 'intelligence',
+  religion: 'intelligence',
+
+  // Wisdom
+  animalHandling: 'wisdom',
+  insight: 'wisdom',
+  medicine: 'wisdom',
+  perception: 'wisdom',
+  survival: 'wisdom',
+
+  // Charisma
+  deception: 'charisma',
+  intimidation: 'charisma',
+  performance: 'charisma',
+  persuasion: 'charisma',
+};
+
+export default skillToStat;

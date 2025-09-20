@@ -19,8 +19,6 @@ StyleSheet.create({
   characterName: { fontSize: 24, fontWeight: 'bold', marginRight: 8, color: c.text },
   level: { fontSize: 16, color: c.text },
   exp: { fontSize: 14, color: c.text },
-  changeHP: { fontSize: 16, color: c.text },
-  restButton: { fontSize: 16, color: c.text, marginTop: 8 },
   restOption: { fontSize: 16, color: c.text, marginVertical: 8 },
   restDesc: { color: c.text, marginBottom: 8 },
   diceIcon: {
@@ -31,5 +29,24 @@ StyleSheet.create({
     borderRadius: 24,
     backgroundColor: c.card,
     zIndex: 1,
+  },
+  button: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginHorizontal: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  changeHP: {
+    backgroundColor: '#e63946', 
+  },
+  restButton: {
+    backgroundColor: '#457b9d', 
   },
 });

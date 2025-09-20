@@ -3,8 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, Scro
 import useThemeStore from '@/context/Theme-store';
 
 const donateLinks = [
-  // { label: 'Privat', url: 'https://www.paypal.me/Vindener' },
-  { label: 'ПриватБанк', url: 'https://www.privat24.ua/send/3bi8n' },
+  { label: 'ПриватБанк', url: 'http://www.privat24.ua/send/3bi8n' },
   { label: 'Monobank (банка)', url: 'https://send.monobank.ua/jar/7bLHe7oo8j' },
 ];
 

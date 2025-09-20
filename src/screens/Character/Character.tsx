@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { shareAsync } from 'expo-sharing';
-import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
@@ -34,6 +32,8 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const routeCharacter = route?.params?.character as CharacterDto | undefined;
   const fallbackFromStore = storeCharacters.find((c) => c.id === currentCharacterId) || storeCharacters[0];
   const character = routeCharacter || fallbackFromStore;
+  const [hideCloudBanner, setHideCloudBanner] = useState(false);
+  const [justSavedToCloud, setJustSavedToCloud] = useState(false);
 
   if (!character) {
     const colors = useThemeStore((s) => s.colors);
@@ -56,27 +56,20 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   /* AUTOSAVE */
   // uses autosaveCharacter if exported, else falls back to upsertCharacterSheetFromLocal
   useEffect(() => {
-    const u = fbAuth.currentUser;
-    if (!u || !character?.id) return;
+    if (!character?.id) return;
+
     const interval = setInterval(async () => {
       try {
         const st = useCharacterStore.getState();
         const latest = st.characters.find((c) => c.id === character.id) || character;
-        const saveFn: any = (typeof autosaveCharacter === 'function' ? autosaveCharacter : upsertCharacterSheetFromLocal);
-        const res: any = await saveFn(latest as any);
 
-        if (res?.created && res.id && res.id !== character.id) {
-          // поміняти локальний id на новий хмарний
-          const curr = st.characters.find((c) => c.id === character.id);
-          if (curr) {
-            st.addCharacter({ ...curr, id: res.id });
-            st.removeCharacter(character.id);
-            st.setCurrentCharacterId(res.id);
-            console.log('[autosave] created new cloud doc id', res.id, 'and swapped local id');
-          }
-        } else if (res?.id) {
-          console.log('[autosave] saved', res.id);
+        if (!isCloudDoc) {
+          st.updateCharacter(character.id, latest);
+          console.log('[autosave] saved locally', character.id);
+          return; 
         }
+        const res: any = await upsertCharacterSheetFromLocal(latest as any);
+        console.log('[autosave] saved to cloud', res.id);
       } catch (e) {
         console.warn('[autosave] failed', e);
       }
@@ -96,11 +89,12 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         if (alive) setIsCloudDoc(null);
       }
     })();
+
     return () => {
       clearInterval(interval);
-      alive = true;
+      alive = false; // виправлено з true на false
     };
-  }, [character?.id]);
+  }, [character?.id, isCloudDoc]);
 
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const colors = useThemeStore((s) => s.colors);
@@ -227,21 +221,54 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
         {/* CLOUD BANNER */}
-        {isCloudDoc === false ? (
-          <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
-            <Text style={{ color: '#f99', fontWeight: '600' }}>Зараз ви редагуєте локальну копію.</Text>
-            <Text style={{ color: '#ddd' }}>
-              Щоб бачити зміни в іншого користувача, відкрийте цей лист з розділу «Поділені зі мною» на головному екрані.
-            </Text>
-            <Text style={{ color: '#ddd' }}>
-              Для збереження в хмарну перейдіть в меню та оберіть "Зберегти в хмару" та перезайдіть на героя або зачейте(тестове).
-            </Text>
-          </View>
-        ) : (
-          <View style={{ padding: 10, backgroundColor: '#221', borderRadius: 10, margin: 10 }}>
-            <Text style={{ color: 'rgba(163, 255, 153, 1)', fontWeight: '600' }}>Зараз ви редагуєте хмарну копію.</Text>
-          </View>
-        )}
+        {!hideCloudBanner &&
+          (isCloudDoc === false ? (
+            <View
+              style={{
+                padding: 10,
+                backgroundColor: '#221',
+                borderRadius: 10,
+                margin: 10,
+                position: 'relative',
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setHideCloudBanner(true)}
+                hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                style={{ position: 'absolute', top: 6, right: 6, padding: 4 }}
+              >
+                <MaterialCommunityIcons name='close' size={18} color='#ccc' />
+              </TouchableOpacity>
+
+              <Text style={{ color: '#f99', fontWeight: '600' }}>Зараз ви редагуєте локальну копію.</Text>
+              <Text style={{ color: '#ddd' }}>
+                Щоб бачити зміни в іншого користувача, відкрийте цей лист з розділу «Поділені зі мною» на головному екрані.
+              </Text>
+              <Text style={{ color: '#ddd' }}>
+                Для збереження в хмарну перейдіть в меню та оберіть «Зберегти в хмару», потім перезайдіть на героя.
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={{
+                padding: 10,
+                backgroundColor: '#221',
+                borderRadius: 10,
+                margin: 10,
+                position: 'relative',
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setHideCloudBanner(true)}
+                hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                style={{ position: 'absolute', top: 6, right: 6, padding: 4 }}
+              >
+                <MaterialCommunityIcons name='close' size={18} color='#ccc' />
+              </TouchableOpacity>
+
+              <Text style={{ color: 'rgba(163, 255, 153, 1)', fontWeight: '600' }}>Зараз ви редагуєте хмарну копію.</Text>
+            </View>
+          ))}
         <View style={styles.header}>
           {characterData.photoUri ? (
             <Image source={{ uri: characterData.photoUri }} style={styles.characterPhoto} />
@@ -256,15 +283,20 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <CharacterMenu character={characterData} onChange={setCharacterData} />
           </View>
 
-          <Text style={styles.level}>Рівень {characterData.level}</Text>
-          <Text style={styles.exp}>Exp: {characterData.experience}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.level}>Рівень {characterData.level}</Text>
+            <Text style={styles.exp}> / Досвіду: {characterData.experience}</Text>
+          </View>
 
-          <TouchableOpacity onPress={() => setIsHpModalVisible(true)}>
-            <Text style={styles.changeHP}>Редагувати HP</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={openRestModal}>
-            <Text style={styles.restButton}>Відпочинок</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity style={[styles.button, styles.changeHP]} onPress={() => setIsHpModalVisible(true)}>
+              <Text style={styles.buttonText}>Редагувати HP</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.button, styles.restButton]} onPress={openRestModal}>
+              <Text style={styles.buttonText}>Відпочинок</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <CharacterStats character={characterData} />
@@ -337,3 +369,16 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

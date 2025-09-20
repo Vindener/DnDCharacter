@@ -17,6 +17,19 @@ export const getStyles = (c: ThemeColors) =>
       textAlign: 'center',
       fontWeight: 'bold',
     },
+    previousBlock: {
+      marginTop: 12,
+      alignItems: 'center',
+    },
+    previousTitle: {
+      fontSize: 14,
+      color: c.textSecondary,
+    },
+    previousText: {
+      fontSize: 16,
+      fontWeight: '500',
+      color: c.text,
+    },
     rerollButton: {
       marginTop: 10,
       padding: 10,

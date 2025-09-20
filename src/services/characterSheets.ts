@@ -4,41 +4,96 @@ import { ensureConnection } from './connections';
 import { findUserByEmail } from './users';
 import type { CharacterDto } from '@/types/Character';
 
-function uid() { const u = fbAuth.currentUser; if (!u) throw new Error('Not signed in'); return u.uid; }
+function uid() {
+  const u = fbAuth.currentUser;
+  if (!u) throw new Error('Not signed in');
+  return u.uid;
+}
 
 export type CharacterSheet = {
   ownerUid: string;
   owners: string[];
   editors: string[];
+
   name: string;
-  class?: string;
-  race?: string;
-  level?: number;
+  class: string;
+  subclass?: string;
+  race: string;
+  subrace?: string;
+
+  level: number;
   experience: number;
-  stats?: Record<string, number>;
-  hp?: { current: number; max: number; temp?: number };
-  ac?: number;
-  inventory?: any[];
+
+  stats: CharacterDto['stats'];
+  hp: CharacterDto['hp'];
+  ac: number;
+  initiative?: number;
+  speed?: number;
+  proficiencyBonus?: number;
+
+  weapons: CharacterDto['weapons'];
+  inventory: CharacterDto['inventory'];
+  skills: CharacterDto['skills'];
+  savingThrows: CharacterDto['savingThrows'];
+  deathSaves: CharacterDto['deathSaves'];
+  traits: CharacterDto['traits'];
+  spells: CharacterDto['spells'];
+
   notes?: string;
+  alliesAndOrganizations?: string;
+  backstory?: string;
+  campaign?: string;
+
+  coins?: CharacterDto['coins'];
+  customCoins?: CharacterDto['customCoins'];
+
+  photoUri?: string;
+
   createdAt: any;
   updatedAt: any;
 };
 
 function dtoToSheet(dto: CharacterDto): CharacterSheet {
+  const u = uid();
   return {
-    ownerUid: uid(),
-    owners: [uid()],
-    editors: [],
-    name: dto.name,
-    class: (dto as any).class || '',
-    race: (dto as any).race || '',
-    experience: (dto as any).race || 0,
-    level: (dto as any).level || 1,
-    stats: (dto as any).stats || { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-    hp: (dto as any).hp || { current: 10, max: 10 },
-    ac: (dto as any).ac || 10,
-    inventory: (dto as any).inventory || [],
-    notes: (dto as any).notes || '',
+    ownerUid: u,
+    owners: [u],
+
+    name: dto.name ?? '',
+    class: dto.class ?? '',
+    subclass: dto.subclass,
+    race: dto.race ?? '',
+    subrace: dto.subrace,
+
+    level: dto.level ?? 1,
+    // ВАЖЛИВО: раніше тут стояло dto.race — це ламало дані
+    experience: dto.experience ?? 0,
+
+    stats: dto.stats ?? { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+    hp: dto.hp ?? { current: 10, max: 10 },
+    ac: dto.ac ?? 10,
+    initiative: dto.initiative,
+    speed: dto.speed,
+    proficiencyBonus: dto.proficiencyBonus,
+
+    weapons: dto.weapons ?? [],
+    inventory: dto.inventory ?? [],
+    skills: dto.skills ?? ({} as any),
+    savingThrows: dto.savingThrows ?? ({} as any),
+    deathSaves: dto.deathSaves ?? { success: 0, fail: 0 },
+    traits: dto.traits ?? ({} as any),
+    spells: dto.spells ?? ({} as any),
+
+    notes: dto.notes ?? '',
+    alliesAndOrganizations: dto.alliesAndOrganizations,
+    backstory: dto.backstory,
+    campaign: dto.campaign,
+
+    coins: dto.coins ?? { gold: 0, silver: 0, copper: 0 },
+    customCoins: dto.customCoins, // якщо порожньо — просто не відправляємо undefined
+
+    photoUri: dto.photoUri,
+
     createdAt: now(),
     updatedAt: now(),
   };
@@ -47,7 +102,9 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
 export async function upsertCharacterSheetFromLocal(dto: CharacterDto) {
   const me = fbAuth.currentUser?.uid;
   if (!me) throw new Error('Not signed in');
+
   const ref = db.collection('characterSheets').doc(dto.id);
+
   try {
     let existingMeta: any = null;
     try {
@@ -56,12 +113,27 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterDto) {
       const exists = typeof e === 'function' ? !!e.call(snap) : !!e;
       if (exists) existingMeta = snap.data();
     } catch {}
+
     const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
+
+    if (existingMeta) {
+      payload.owners = existingMeta.owners || [me];
+      payload.editors = existingMeta.editors || [];
+    } else {
+      payload.owners = [me];
+      payload.editors = [];
+    }
+
     await ref.set(payload, { merge: true });
-    return dto.id;
+
+    if (existingMeta) {
+      return { id: dto.id, updated: true };
+    } else {
+      return { id: dto.id, created: true };
+    }
   } catch (e) {
     const newId = await saveCharacterSheetAsNew(dto);
-    return newId;
+    return { id: newId, created: true };
   }
 }
 
@@ -114,15 +186,32 @@ export async function removeEditor(sheetId: string, editorUid: string) {
 
 
 export async function saveCharacterSheetAsNew(dto: CharacterDto) {
-  const me = fbAuth.currentUser?.uid;
-  if (!me) throw new Error('Not signed in');
-  const ref = db.collection('characterSheets').doc(); // auto id
-  const toWrite = buildCloudDocFromLocal({ ...(dto as any), id: ref.id } as any, me);
-  await ref.set(toWrite);
-  return ref.id;
+  try {
+    const ref = db.collection('characterSheets').doc();
+    const content = stripUndefinedDeep(dtoToSheet(dto));
+    await ref.set(content);
+    console.log('LOG  [save] create ok for id', ref.id);
+    return ref.id;
+  } catch (err: any) {
+    console.warn('WARN [save] save-as-new failed', err?.message ?? err);
+    return null;
+  }
 }
 
-
+export function stripUndefinedDeep<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.filter((v) => v !== undefined).map((v) => stripUndefinedDeep(v)) as unknown as T;
+  }
+  if (value && typeof value === 'object') {
+    const out: any = {};
+    for (const [k, v] of Object.entries(value as any)) {
+      if (v === undefined) continue;
+      out[k] = stripUndefinedDeep(v);
+    }
+    return out;
+  }
+  return value;
+}
 
 export function subscribeMySheets(cb: (list: any[]) => void) {
   try {
@@ -199,7 +288,6 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
   } : {
     ownerUid,
     owners: [ownerUid],
-    editors: [],
     createdAt: now(),
   };
 
@@ -246,22 +334,15 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
 }
 
 
-export async function autosaveCharacter(dto: CharacterDto): Promise<{ id: string, created?: boolean } | null> {
-  const me = fbAuth.currentUser?.uid;
-  if (!me || !dto?.id) return null;
-  const ref = db.collection('characterSheets').doc(dto.id);
-  const content = buildCloudDocFromLocal(dto, me);
-  try {
-    await ref.set(content, { merge: true });
-    return { id: dto.id };
-  } catch {
-    try {
-      const newId = await saveCharacterSheetAsNew(dto);
-      return { id: newId, created: true };
-    } catch {
-      return null;
-    }
-  }
+export async function autosaveCharacter(dto: CharacterDto) {
+  return upsertCharacterSheetFromLocal(dto);
+
+
+
+
+
+
+
+
+
 }
-
-

@@ -118,19 +118,21 @@ const Home = () => {
           >
             <Text style={{ color: viewMode === 'shared' ? '#2f95dc' : '#888' }}>Поділені зі мною</Text>
           </TouchableOpacity>
-          <View style={styles.slotBadge}>
-            <Text style={styles.slotText}>Слотів: {characters.length}/15</Text>
-          </View>
         </View>
       </View>
-      <Text style={styles.sortLabel}>Ім'я: </Text>
-      <TouchableOpacity onPress={() => setSortAsc((s) => !s)}>
-        <Text style={styles.sortValue}>
-          {sortAsc ? 'А - Я' : 'Я - А'} <Ionicons name='chevron-up' size={14} color='#2f95dc' />
-        </Text>
-      </TouchableOpacity>
 
-      <View style={styles.topBar}></View>
+      <View style={styles.topBar}>
+        <Text style={styles.sortLabel}>Ім'я: </Text>
+        <TouchableOpacity onPress={() => setSortAsc((s) => !s)}>
+          <Text style={styles.sortValue}>
+            {sortAsc ? 'А - Я' : 'Я - А'} <Ionicons name='chevron-up' size={14} color='#2f95dc' />
+          </Text>
+        </TouchableOpacity>
+
+        <View style={styles.slotBadge}>
+          <Text style={styles.slotText}>Слотів: {characters.length}/15</Text>
+        </View>
+      </View>
 
       {viewMode !== 'local' ? (
         <>
@@ -222,12 +224,5 @@ const Home = () => {
     </View>
   );
 };
-
-
-
-
-
-
-
 
 export default Home;

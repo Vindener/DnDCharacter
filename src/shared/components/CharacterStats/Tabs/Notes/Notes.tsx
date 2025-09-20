@@ -23,7 +23,16 @@ const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Нотатки:</Text>
-      <MultiTextInput numberOfLines={6} value={character?.notes || ''} onChangeText={handleChange} placeholder='Введіть ваші нотатки' />
+      <MultiTextInput
+        value={character?.notes || ''}
+        onChangeText={handleChange}
+        placeholder='Введіть ваші нотатки'
+        resizable
+        initialHeight={160}
+        minHeight={100}
+        maxHeight={560}
+        resizeBoth 
+      />
     </View>
   );
 };

@@ -16,7 +16,7 @@ const EMPTY_SPELLS: SpellsType = {
   spellcastingAbility: '',
   spellSaveDC: 0,
   spellAttackBonus: 0,
-  spellSlots: {},
+  spellSlots: Object.fromEntries(Array.from({ length: 9 }, (_, i) => [i + 1, { max: 0, used: 0 }])),
   knownSpells: [],
   preparedSpells: [],
   cantrips: [],
@@ -73,6 +73,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
   const handleAddSlot = () => {
     const levels = Object.keys(spells.spellSlots).map((l) => parseInt(l, 10));
     const nextLevel = levels.length > 0 ? Math.max(...levels) + 1 : 1;
+    if (nextLevel > 9) return; // ❌ не дозволяємо додати понад 9
     const newSlots = {
       ...spells.spellSlots,
       [nextLevel]: { max: 0, used: 0 },
@@ -101,7 +102,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.row}>
-        <Text style={styles.label}>Здатність:</Text>
+        <Text style={styles.label}>Характеристика:</Text>
         <TextInput style={{ flex: 1 }} value={spells.spellcastingAbility} onChangeText={handleAbilityChange} />
       </View>
 
@@ -117,7 +118,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
 
       <Text style={styles.label}>Слоти закляття:</Text>
       {Object.keys(spells.spellSlots)
-        .sort()
+        .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
         .map((level) => (
           <View key={level} style={[styles.row, { marginLeft: 10 }]}>
             <Text style={[styles.label, { width: 50 }]}>Lvl {level}</Text>
@@ -135,14 +136,16 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
             </View>
           </View>
         ))}
-      <TouchableOpacity onPress={handleAddSlot} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
-        <Ionicons name='add-circle-outline' size={24} color='#28a745' />
-        <Text style={{ marginLeft: 8, color: '#28a745' }}>Додати рівень</Text>
-      </TouchableOpacity>
+      {!Object.keys(spells.spellSlots).includes('9') && (
+        <TouchableOpacity onPress={handleAddSlot} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
+          <Ionicons name='add-circle-outline' size={24} color='#28a745' />
+          <Text style={{ marginLeft: 8, color: '#28a745' }}>Додати рівень</Text>
+        </TouchableOpacity>
+      )}
 
       <Text style={styles.label}>Відомі закляття:</Text>
       <MultiTextInput
-        numberOfLines={4}
+        numberOfLines={8}
         value={knownSpellsText}
         onChangeText={handleKnownSpellsChange}
         placeholder='Введіть відомі закляття'
@@ -150,7 +153,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
 
       <Text style={styles.label}>Підготовлені закляття:</Text>
       <MultiTextInput
-        numberOfLines={4}
+        numberOfLines={8}
         value={preparedSpellsText}
         onChangeText={handlePreparedSpellsChange}
         placeholder='Введіть підготовлені закляття'

@@ -32,17 +32,17 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Компанія:</Text>
+      <Text style={styles.label}>Кампанія:</Text>
       <MultiTextInput
-        numberOfLines={2}
+        numberOfLines={8}
         value={character?.campaign || ''}
         onChangeText={handleChangeCampaign}
-        placeholder='Введіть компанію'
+        placeholder='Введіть кампанію'
       />
 
       <Text style={styles.label}>Історія героя:</Text>
       <MultiTextInput
-        numberOfLines={5}
+        numberOfLines={8}
         value={character?.backstory || ''}
         onChangeText={handleChangeBackstory}
         placeholder='Введіть історія героя'
@@ -50,7 +50,7 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
 
       <Text style={styles.label}>Союзники та організації:</Text>
       <MultiTextInput
-        numberOfLines={5}
+        numberOfLines={8}
         value={character?.alliesAndOrganizations || ''}
         onChangeText={handleChangeAlliesAndOrganizations}
         placeholder='Введіть союзники та організації героя'
