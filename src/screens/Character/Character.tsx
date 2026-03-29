@@ -38,6 +38,9 @@ import {
   mapRoleToHistoryActor,
 } from '@/shared/helpers/collaboration/status';
 import { collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
+import useSpellbookStore from '@/context/Spellbook-store';
+import { applySpellStatus, normalizeSpellName } from '@/shared/helpers/spellbook';
+import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 
 interface CharacterProps {
   route: {
@@ -110,6 +113,12 @@ const SKILL_LABELS: Record<string, string> = {
   stealth: 'Прихованість',
   survival: 'Виживання',
 };
+const MAGIC_STATUS_LABELS: Record<'available' | 'known' | 'prepared' | 'cantrip', string> = {
+  available: 'available',
+  known: 'known',
+  prepared: 'prepared',
+  cantrip: 'cantrip',
+};
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -153,6 +162,16 @@ function parseWeaponDamage(value: string): { count: number; sides: number; modif
   }
 
   return { count: 1, sides: 6, modifier: 0, normalized: '1d6' };
+}
+
+function parseRollableDamageFormula(value: string): { count: number; sides: number; modifier: number; normalized: string } | null {
+  const compact = String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '');
+  if (!compact) return null;
+  if (!/^(\d+)d(\d+)([+-]\d+)?$/.test(compact)) return null;
+  return parseWeaponDamage(compact);
 }
 
 function rollDiceValues(count: number, sides: number): number[] {
@@ -377,6 +396,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const loadUserTemplates = useTrackerTemplateStore((s) => s.loadUserTemplates);
   const addUserTemplateFromResource = useTrackerTemplateStore((s) => s.addUserTemplateFromResource);
   const removeUserTemplate = useTrackerTemplateStore((s) => s.removeUserTemplate);
+  const loadSpellbook = useSpellbookStore((s) => s.loadSpellbook);
+  const upsertCustomSpell = useSpellbookStore((s) => s.upsertCustomSpell);
+  const spellbookSpells = useSpellbookStore((s) => s.spells);
   const [sharedHistory, setSharedHistory] = useState<CharacterChangeHistoryEntry[]>([]);
   const netInfo = useNetInfo();
   const isOnline = isNetworkOnline(netInfo.isConnected);
@@ -390,6 +412,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
   const [weaponRollResult, setWeaponRollResult] = useState<WeaponRollResult | null>(null);
+  const [spellRollResult, setSpellRollResult] = useState<WeaponRollResult | null>(null);
   const [isRestModalVisible, setIsRestModalVisible] = useState(false);
   const [restStep, setRestStep] = useState<'choose' | 'short' | 'roll'>('choose');
   const [shortRestDice, setShortRestDice] = useState('1');
@@ -402,6 +425,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const [isQuickNoteModalVisible, setIsQuickNoteModalVisible] = useState(false);
   const [quickNoteInput, setQuickNoteInput] = useState('');
+  const [quickSpellName, setQuickSpellName] = useState('');
+  const [quickSpellLevel, setQuickSpellLevel] = useState('1');
+  const [quickSpellSearch, setQuickSpellSearch] = useState('');
+  const [isSpellQuickModalVisible, setIsSpellQuickModalVisible] = useState(false);
 
   const [collapsedSecondary, setCollapsedSecondary] = useState<Record<CharacterTab, boolean>>({
     Overview: false,
@@ -427,6 +454,59 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     const group = notesGroups.find((item) => item.id === 'seed-session' || ['session', 'сесія'].includes(item.title.toLowerCase()));
     return group?.content?.trim() || '';
   }, [notesGroups]);
+  const magicCombatSpells = useMemo(() => {
+    const normalizedPrepared = new Set((characterData.spells.preparedSpells || []).map((entry) => normalizeSpellName(entry)));
+    const normalizedCantrips = new Set((characterData.spells.cantrips || []).map((entry) => normalizeSpellName(entry)));
+    const normalizedKnown = new Set((characterData.spells.knownSpells || []).map((entry) => normalizeSpellName(entry)));
+
+    const spellbookByName = new Map(
+      (spellbookSpells || []).map((spell) => [normalizeSpellName(spell.name), spell] as const),
+    );
+
+    const collectedNames: string[] = [];
+    const seen = new Set<string>();
+    [...(characterData.spells.preparedSpells || []), ...(characterData.spells.cantrips || []), ...(characterData.spells.knownSpells || [])]
+      .map((entry) => String(entry || '').trim())
+      .filter(Boolean)
+      .forEach((entry) => {
+        const key = normalizeSpellName(entry);
+        if (!key || seen.has(key)) return;
+        seen.add(key);
+        collectedNames.push(entry);
+      });
+
+    return collectedNames.map((name) => {
+      const key = normalizeSpellName(name);
+      const fromSpellbook = spellbookByName.get(key);
+      const status = normalizedPrepared.has(key) ? 'prepared' : normalizedCantrips.has(key) ? 'cantrip' : normalizedKnown.has(key) ? 'known' : 'available';
+      return {
+        key,
+        name,
+        status,
+        damageProfiles: fromSpellbook?.damageProfiles || [],
+      };
+    });
+  }, [
+    characterData.spells.cantrips,
+    characterData.spells.knownSpells,
+    characterData.spells.preparedSpells,
+    spellbookSpells,
+  ]);
+  const quickSpellCandidates = useMemo(() => {
+    const filter = quickSpellSearch.trim().toLowerCase();
+    return [...(spellbookSpells || [])]
+      .filter((spell) => {
+        if (!filter) return true;
+        return spell.name.toLowerCase().includes(filter) || spell.school.toLowerCase().includes(filter);
+      })
+      .sort((a, b) => (a.level !== b.level ? a.level - b.level : a.name.localeCompare(b.name, 'uk')))
+      .slice(0, 10);
+  }, [quickSpellSearch, spellbookSpells]);
+  const selectedQuickSpell = useMemo<SpellbookSpell | null>(() => {
+    const key = normalizeSpellName(quickSpellName);
+    if (!key) return null;
+    return (spellbookSpells || []).find((spell) => normalizeSpellName(spell.name) === key) || null;
+  }, [quickSpellName, spellbookSpells]);
   const currentSync = syncByCharacter[baseCharacter.id];
   const conflictPaths = currentSync?.conflictPaths || [];
   const syncStatusLabel = useMemo(() => getSyncDisplayStatus(currentSync, netInfo.isConnected), [currentSync, netInfo.isConnected]);
@@ -455,6 +535,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   useEffect(() => {
     loadUserTemplates().catch(() => {});
   }, [loadUserTemplates]);
+
+  useEffect(() => {
+    loadSpellbook().catch(() => {});
+  }, [loadSpellbook]);
 
   useEffect(() => {
     ensureCharacterSync(baseCharacter.id, false).catch(() => {});
@@ -818,6 +902,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       title: `Влучення: ${weapon.name || 'Зброя'}`,
       details,
     });
+    setSpellRollResult(null);
   }, []);
 
   const rollWeaponDamage = useCallback((weapon: NonNullable<CharacterDto['weapons']>[number]) => {
@@ -837,6 +922,65 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         `Разом шкода: ${total}`,
       ],
     });
+    setSpellRollResult(null);
+  }, []);
+
+  const rollSpellAttack = useCallback((spellName: string) => {
+    const roll = Math.floor(Math.random() * 20) + 1;
+    const bonus = Number.isFinite(Number(characterData.spells.spellAttackBonus)) ? Number(characterData.spells.spellAttackBonus) : 0;
+    const total = roll + bonus;
+    const details: string[] = [
+      `d20: ${roll}`,
+      `Бонус атаки закляттям: ${bonus >= 0 ? `+${bonus}` : bonus}`,
+      `Разом: ${total}`,
+    ];
+    if (roll === 20) details.push('Критичне влучання');
+    if (roll === 1) details.push('Автопромах');
+
+    setSpellRollResult({
+      title: `Атака закляттям: ${spellName}`,
+      details,
+    });
+    setWeaponRollResult(null);
+  }, [characterData.spells.spellAttackBonus]);
+
+  const rollSpellDamage = useCallback((spellName: string, profile: SpellDamageProfile) => {
+    const parsed = parseRollableDamageFormula(profile.formula);
+
+    if (!parsed) {
+      setSpellRollResult({
+        title: `Шкода закляттям: ${spellName}`,
+        details: [
+          `Профіль: ${profile.label}`,
+          `Формула: ${profile.formula}`,
+          `Тип урону: ${profile.damageType}`,
+          profile.condition ? `Умова: ${profile.condition}` : '',
+          'Автокидок не підтримує цю формулу. Кинь вручну через Dice.',
+        ].filter(Boolean),
+      });
+      setWeaponRollResult(null);
+      return;
+    }
+
+    const rolls = rollDiceValues(parsed.count, parsed.sides);
+    const diceTotal = rolls.reduce((sum, value) => sum + value, 0);
+    const total = diceTotal + parsed.modifier;
+    const formula = `${parsed.normalized}${parsed.modifier > 0 ? `+${parsed.modifier}` : parsed.modifier < 0 ? parsed.modifier : ''}`;
+
+    setSpellRollResult({
+      title: `Шкода закляттям: ${spellName}`,
+      details: [
+        `Профіль: ${profile.label}`,
+        `Тип урону: ${profile.damageType}`,
+        `Формула: ${formula}`,
+        `Куби: [${rolls.join(', ')}]`,
+        `Сума кубів: ${diceTotal}`,
+        `Модифікатор: ${parsed.modifier >= 0 ? `+${parsed.modifier}` : parsed.modifier}`,
+        `Разом шкода: ${total}`,
+        profile.condition ? `Умова: ${profile.condition}` : '',
+      ].filter(Boolean),
+    });
+    setWeaponRollResult(null);
   }, []);
 
   const addCondition = useCallback(() => {
@@ -909,6 +1053,51 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       );
     },
     [patchCharacter],
+  );
+
+  const openSpellQuickModal = useCallback(() => {
+    setQuickSpellSearch('');
+    setSpellRollResult(null);
+    setIsSpellQuickModalVisible(true);
+  }, []);
+
+  const closeSpellQuickModal = useCallback(() => {
+    setIsSpellQuickModalVisible(false);
+    setQuickSpellSearch('');
+    setSpellRollResult(null);
+  }, []);
+
+  const pickExistingSpellForQuickAdd = useCallback((spell: SpellbookSpell) => {
+    setQuickSpellName(spell.name);
+    setQuickSpellLevel(String(clamp(Number(spell.level) || 1, 0, 9)));
+    setQuickSpellSearch(spell.name);
+  }, []);
+
+  const addSpellFromCharacter = useCallback(
+    (status: 'known' | 'prepared' | 'cantrip') => {
+      const spellName = quickSpellName.trim();
+      if (!spellName) return;
+
+      const safeLevel = clamp(parseNumber(quickSpellLevel, status === 'cantrip' ? 0 : 1), 0, 9);
+      const nextStatus = status;
+
+      patchCharacter((prev) => applySpellStatus(prev, spellName, nextStatus), [`magic.${nextStatus}`]);
+      void upsertCustomSpell({
+        name: spellName,
+        level: nextStatus === 'cantrip' ? 0 : safeLevel,
+        school: 'Власне',
+        tags: ['character-created'],
+      });
+
+      setQuickSpellName('');
+      if (nextStatus !== 'cantrip') {
+        setQuickSpellLevel(String(safeLevel));
+      } else {
+        setQuickSpellLevel('1');
+      }
+      closeSpellQuickModal();
+    },
+    [closeSpellQuickModal, patchCharacter, quickSpellLevel, quickSpellName, upsertCustomSpell],
   );
 
   const addCustomField = useCallback(() => {
@@ -1469,8 +1658,79 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           <Text style={styles.blockTextMuted}>Слоти не налаштовані</Text>
         )}
 
+        <Text style={styles.subSectionTitle}>Кидки заклять</Text>
+        {magicCombatSpells.length ? (
+          magicCombatSpells.map((spell) => {
+            const defaultProfile = spell.damageProfiles[0];
+            return (
+              <View key={`magic-combat-${spell.key}`} style={styles.weaponCombatCard}>
+                <View style={styles.rowLine}>
+                  <Text style={styles.rowLabel}>{spell.name}</Text>
+                  <Text style={styles.rowValue}>
+                    {MAGIC_STATUS_LABELS[spell.status]}
+                    {defaultProfile ? ` • ${defaultProfile.formula}` : ''}
+                  </Text>
+                </View>
+                <View style={styles.weaponActionRow}>
+                  <Pressable
+                    style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
+                    onPress={() => rollSpellAttack(spell.name)}
+                    android_ripple={{ color: '#999' }}
+                  >
+                    <Text style={styles.weaponActionText}>Атака (d20)</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[
+                      styles.weaponActionButton,
+                      styles.weaponActionButtonSecondary,
+                      !defaultProfile ? { opacity: 0.45 } : null,
+                    ]}
+                    onPress={() => defaultProfile && rollSpellDamage(spell.name, defaultProfile)}
+                    android_ripple={{ color: '#999' }}
+                    disabled={!defaultProfile}
+                  >
+                    <Text style={styles.weaponActionText}>
+                      {defaultProfile ? `Шкода (${defaultProfile.formula})` : 'Шкода (нема профілю)'}
+                    </Text>
+                  </Pressable>
+                </View>
+                {spell.damageProfiles.length > 1 &&
+                  spell.damageProfiles.slice(1).map((profile) => (
+                    <Pressable
+                      key={`${spell.key}-${profile.id}`}
+                      style={styles.secondaryAction}
+                      onPress={() => rollSpellDamage(spell.name, profile)}
+                      android_ripple={{ color: '#999' }}
+                    >
+                      <Text style={styles.secondaryActionText}>
+                        Шкода: {profile.label} ({profile.formula} {profile.damageType})
+                      </Text>
+                    </Pressable>
+                  ))}
+              </View>
+            );
+          })
+        ) : (
+          <Text style={styles.blockTextMuted}>Додайте закляття до Prepared/Known/Cantrip для швидких кидків.</Text>
+        )}
+
+        {!!spellRollResult && (
+          <View style={styles.editCardBlock}>
+            <Text style={styles.subSectionTitle}>{spellRollResult.title}</Text>
+            {spellRollResult.details.map((line, index) => (
+              <Text key={`${spellRollResult.title}-${index}`} style={styles.weaponRollResultLine}>
+                {line}
+              </Text>
+            ))}
+          </View>
+        )}
+
         {!collapsedSecondary.Magic && (
           <>
+            <Text style={styles.subSectionTitle}>Каніпси</Text>
+            <Text style={styles.blockText}>
+              {characterData.spells.cantrips.length ? characterData.spells.cantrips.join(', ') : 'Немає каніпсів'}
+            </Text>
             <Text style={styles.subSectionTitle}>Підготовлені закляття</Text>
             <Text style={styles.blockText}>
               {characterData.spells.preparedSpells.length ? characterData.spells.preparedSpells.join(', ') : 'Немає підготовлених'}
@@ -1873,6 +2133,13 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           'Бонус атаки',
           { keyboardType: 'number-pad' },
         )}
+        <View style={styles.editCardBlock}>
+          <Text style={styles.subSectionTitle}>Швидке додавання заклять</Text>
+          <Text style={styles.blockTextMuted}>Форма відкривається в модальному вікні, щоб не захаращувати екран редагування.</Text>
+          <Pressable style={styles.secondaryAction} onPress={openSpellQuickModal} android_ripple={{ color: '#999' }}>
+            <Text style={styles.secondaryActionText}>Відкрити додавання закляття</Text>
+          </Pressable>
+        </View>
         <Text style={styles.editLabel}>Підготовлені закляття (по одному в рядку)</Text>
         {renderTextInput(
           characterData.spells.preparedSpells.join('\n'),
@@ -1893,6 +2160,17 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               spells: { ...prev.spells, knownSpells: parseLines(next) },
             })),
           'Щит',
+          { multiline: true },
+        )}
+        <Text style={styles.editLabel}>Каніпси (по одному в рядку)</Text>
+        {renderTextInput(
+          characterData.spells.cantrips.join('\n'),
+          (next) =>
+            patchCharacter((prev) => ({
+              ...prev,
+              spells: { ...prev.spells, cantrips: parseLines(next) },
+            })),
+          'Вогняний болт',
           { multiline: true },
         )}
         <Text style={styles.subSectionTitle}>Слоти заклять</Text>
@@ -2592,6 +2870,112 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           placeholderTextColor={colors.textSecondary}
           multiline
         />
+      </Modal>
+
+      <Modal isVisible={isSpellQuickModalVisible} onClose={closeSpellQuickModal} title='Додати закляття'>
+        <Text style={styles.modalLabel}>Пошук у Spellbook</Text>
+        <RNTextInput
+          value={quickSpellSearch}
+          onChangeText={setQuickSpellSearch}
+          style={styles.modalInput}
+          placeholder='Введи назву або школу'
+          placeholderTextColor={colors.textSecondary}
+        />
+        {quickSpellCandidates.length ? (
+          quickSpellCandidates.map((spell) => (
+            <Pressable
+              key={`quick-spell-candidate-${spell.id}`}
+              style={styles.secondaryAction}
+              onPress={() => pickExistingSpellForQuickAdd(spell)}
+              android_ripple={{ color: '#999' }}
+            >
+              <Text style={styles.secondaryActionText}>
+                {spell.name} • {spell.level === 0 ? 'каніпс' : `рівень ${spell.level}`}
+              </Text>
+            </Pressable>
+          ))
+        ) : (
+          <Text style={styles.blockTextMuted}>Нічого не знайдено у spellbook.</Text>
+        )}
+
+        <Text style={styles.modalLabel}>Назва закляття</Text>
+        <RNTextInput
+          value={quickSpellName}
+          onChangeText={setQuickSpellName}
+          style={styles.modalInput}
+          placeholder='Назва закляття'
+          placeholderTextColor={colors.textSecondary}
+        />
+        <Text style={styles.modalLabel}>Рівень (0-9)</Text>
+        <RNTextInput
+          value={quickSpellLevel}
+          onChangeText={setQuickSpellLevel}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='1'
+          placeholderTextColor={colors.textSecondary}
+        />
+        {!!selectedQuickSpell && (
+          <View style={styles.editCardBlock}>
+            <Text style={styles.subSectionTitle}>Швидкі кидки: {selectedQuickSpell.name}</Text>
+            <View style={styles.weaponActionRow}>
+              <Pressable
+                style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
+                onPress={() => rollSpellAttack(selectedQuickSpell.name)}
+                android_ripple={{ color: '#999' }}
+              >
+                <Text style={styles.weaponActionText}>Атака (d20)</Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.weaponActionButton,
+                  styles.weaponActionButtonSecondary,
+                  !selectedQuickSpell.damageProfiles?.[0] ? { opacity: 0.45 } : null,
+                ]}
+                onPress={() => selectedQuickSpell.damageProfiles?.[0] && rollSpellDamage(selectedQuickSpell.name, selectedQuickSpell.damageProfiles[0])}
+                android_ripple={{ color: '#999' }}
+                disabled={!selectedQuickSpell.damageProfiles?.[0]}
+              >
+                <Text style={styles.weaponActionText}>
+                  {selectedQuickSpell.damageProfiles?.[0]
+                    ? `Шкода (${selectedQuickSpell.damageProfiles[0].formula})`
+                    : 'Шкода (нема профілю)'}
+                </Text>
+              </Pressable>
+            </View>
+            {(selectedQuickSpell.damageProfiles || []).slice(1).map((profile) => (
+              <Pressable
+                key={`quick-spell-profile-${selectedQuickSpell.id}-${profile.id}`}
+                style={styles.secondaryAction}
+                onPress={() => rollSpellDamage(selectedQuickSpell.name, profile)}
+                android_ripple={{ color: '#999' }}
+              >
+                <Text style={styles.secondaryActionText}>
+                  Шкода: {profile.label} ({profile.formula} {profile.damageType})
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+        {!!spellRollResult && (
+          <View style={styles.editCardBlock}>
+            <Text style={styles.subSectionTitle}>{spellRollResult.title}</Text>
+            {spellRollResult.details.map((line, index) => (
+              <Text key={`${spellRollResult.title}-quick-${index}`} style={styles.weaponRollResultLine}>
+                {line}
+              </Text>
+            ))}
+          </View>
+        )}
+        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('known')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.secondaryActionText}>+ Додати у відомі</Text>
+        </Pressable>
+        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('prepared')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.secondaryActionText}>+ Додати у підготовлені</Text>
+        </Pressable>
+        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('cantrip')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.secondaryActionText}>+ Додати як каніпс</Text>
+        </Pressable>
       </Modal>
 
       <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Відпочинок'>
