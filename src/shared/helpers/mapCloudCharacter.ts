@@ -62,6 +62,7 @@ export function mapCloudCharacterToLocalDto(doc: Record<string, unknown>): Chara
     alliesAndOrganizations: typeof doc.alliesAndOrganizations === 'string' ? doc.alliesAndOrganizations : undefined,
     backstory: typeof doc.backstory === 'string' ? doc.backstory : undefined,
     campaign: typeof doc.campaign === 'string' ? doc.campaign : undefined,
+    campaignId: typeof doc.campaignId === 'string' ? doc.campaignId : undefined,
     photoUri: typeof doc.photoUri === 'string' ? doc.photoUri : undefined,
   });
 }

@@ -14,8 +14,19 @@ import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import useAppRoleStore from '@/context/AppRole-store';
 import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
+import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
+import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import { loadLocalCampaignNotes } from '@/services/dmCampaignNotes';
+import type { DMCampaign } from '@/types/DM';
+import type { CharacterDto } from '@/types/Character';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
+
+type DashboardCharacter = {
+  id: string;
+  payload: CharacterDto;
+  source: 'local' | 'mine' | 'shared';
+};
 
 const toMillis = (value: TimestampLike): number => {
   if (!value) return 0;
@@ -30,7 +41,11 @@ const DM: React.FC = () => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const localCharacters = useCharacterStore((s) => s.characters);
+  const addCharacter = useCharacterStore((s) => s.addCharacter);
+  const updateCharacter = useCharacterStore((s) => s.updateCharacter);
+  const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const roleMode = useAppRoleStore((s) => s.role);
   const netInfo = useNetInfo();
 
@@ -38,9 +53,32 @@ const DM: React.FC = () => {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [mySheets, setMySheets] = useState<Record<string, unknown>[]>([]);
   const [sharedSheets, setSharedSheets] = useState<Record<string, unknown>[]>([]);
+  const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
+  const [notesCount, setNotesCount] = useState(0);
 
   const isSignedIn = useMemo(() => Boolean(fbAuth.currentUser), [authVersion]);
   const isOnline = isNetworkOnline(netInfo.isConnected);
+
+  useEffect(() => {
+    let unsubCampaigns = () => {};
+    let cancelled = false;
+
+    const run = async () => {
+      unsubCampaigns = await subscribeAccessibleCampaigns((next) => {
+        if (!cancelled) setCampaigns(next);
+      });
+
+      const notes = await loadLocalCampaignNotes();
+      if (!cancelled) setNotesCount(notes.length);
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      if (typeof unsubCampaigns === 'function') unsubCampaigns();
+    };
+  }, [authVersion]);
 
   useEffect(() => {
     if (!fbAuth.currentUser) {
@@ -62,21 +100,54 @@ const DM: React.FC = () => {
     };
   }, [authVersion]);
 
+  useEffect(() => {
+    const runMigration = async () => {
+      for (const character of localCharacters) {
+        if (character.campaignId || !String(character.campaign || '').trim()) continue;
+        const campaign = await ensureCampaignForName(String(character.campaign || ''));
+        if (!campaign) continue;
+        await updateCharacter(character.id, { ...character, campaignId: campaign.id });
+        await markLocalDraftPaths(character.id, ['overview.identity']);
+      }
+    };
+
+    void runMigration();
+  }, [localCharacters, markLocalDraftPaths, updateCharacter]);
+
   const pendingSyncCount = useMemo(
-    () => Object.values(syncByCharacter).filter((entry) => {
-      const status = getSyncDisplayStatus(entry, netInfo.isConnected);
-      return status === 'Pending sync' || status === 'Offline changes pending';
-    }).length,
+    () =>
+      Object.values(syncByCharacter).filter((entry) => {
+        const status = getSyncDisplayStatus(entry, netInfo.isConnected);
+        return status === 'Pending sync' || status === 'Offline changes pending';
+      }).length,
     [netInfo.isConnected, syncByCharacter],
   );
+
   const conflictCount = useMemo(
     () =>
       Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length,
     [netInfo.isConnected, syncByCharacter],
   );
 
-  const sharedTotal = sharedSheets.length;
-  const ownedCloudTotal = mySheets.length;
+  const unifiedParty = useMemo<DashboardCharacter[]>(() => {
+    const byId = new Map<string, DashboardCharacter>();
+
+    localCharacters.forEach((character) => {
+      byId.set(character.id, { id: character.id, payload: character, source: 'local' });
+    });
+
+    mySheets.forEach((doc) => {
+      const mapped = mapCloudCharacterToLocalDto(doc);
+      byId.set(mapped.id, { id: mapped.id, payload: mapped, source: 'mine' });
+    });
+
+    sharedSheets.forEach((doc) => {
+      const mapped = mapCloudCharacterToLocalDto(doc);
+      byId.set(mapped.id, { id: mapped.id, payload: mapped, source: 'shared' });
+    });
+
+    return Array.from(byId.values()).sort((a, b) => (a.payload.name || '').localeCompare(b.payload.name || ''));
+  }, [localCharacters, mySheets, sharedSheets]);
 
   const recentSharedUpdates = useMemo(() => {
     const all = [...mySheets, ...sharedSheets];
@@ -86,16 +157,39 @@ const DM: React.FC = () => {
       .slice(0, 4);
   }, [mySheets, sharedSheets]);
 
-  const openRootTab = (routeName: string) => {
+  const openRootTab = (routeName: string, params?: Record<string, unknown>) => {
     const parent = navigation.getParent() as any;
     if (!parent) return;
-    parent.navigate(routeName);
+    parent.navigate(routeName, params);
   };
 
-  const openHeroesNested = (screen: 'Spellbook' | 'Home') => {
+  const openHeroesNested = (screen: 'Spellbook' | 'Home', params?: Record<string, unknown>) => {
     const parent = navigation.getParent() as any;
     if (!parent) return;
-    parent.navigate('Heroes', { screen });
+    parent.navigate('Heroes', { screen, params });
+  };
+
+  const ensureLocalCharacter = async (character: CharacterDto) => {
+    const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
+    if (existing) {
+      await updateCharacter(existing.id, character);
+    } else {
+      await addCharacter(character);
+    }
+    return character;
+  };
+
+  const openFullSheet = async (character: CharacterDto) => {
+    const local = await ensureLocalCharacter(character);
+    setCurrentCharacterId(local.id);
+    const parent = navigation.getParent() as any;
+    if (!parent) return;
+    parent.navigate('Heroes', { screen: 'Character', params: { character: local } });
+  };
+
+  const openQuickEdit = async (character: CharacterDto) => {
+    const local = await ensureLocalCharacter(character);
+    navigation.navigate('DMQuickEdit', { characterId: local.id });
   };
 
   const onLogin = async () => {
@@ -111,109 +205,100 @@ const DM: React.FC = () => {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
         <Text style={styles.title}>Party Overview</Text>
-        <Text style={styles.hint}>Primary card для DM. Тут видно стан партії, shared-шари і sync-ризики.</Text>
+        <Text style={styles.hint}>DM-first dashboard across party health, share visibility, and sync risk.</Text>
         <View style={styles.statsRow}>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Local party: {localCharacters.length}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Cloud owned: {ownedCloudTotal}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Shared with me: {sharedTotal}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Network: {isOnline ? 'Online' : 'Offline'}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Role context: {roleMode}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Pending sync: {pendingSyncCount}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Conflicts: {conflictCount}</Text>
-          </View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Campaigns: {campaigns.length}</Text></View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Party size: {unifiedParty.length}</Text></View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Network: {isOnline ? 'Online' : 'Offline'}</Text></View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Pending sync: {pendingSyncCount}</Text></View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Conflicts: {conflictCount}</Text></View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Role: {roleMode}</Text></View>
         </View>
+        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMPartyOverview')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.authButtonText}>Open Full Party Overview</Text>
+        </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Shared Sheet Management</Text>
-        <Text style={styles.hint}>Lane для керування shared листами і review workflow.</Text>
-        <View style={styles.laneGrid}>
-          <Pressable
-            style={styles.laneButton}
-            onPress={() => navigation.navigate('DMSharedUpdates')}
-            android_ripple={{ color: '#999' }}
-          >
-            <Ionicons name='git-compare-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Shared Updates Queue</Text>
-          </Pressable>
-          <Pressable
-            style={styles.laneButton}
-            onPress={() => navigation.navigate('DMNotes')}
-            android_ripple={{ color: '#999' }}
-          >
-            <Ionicons name='document-text-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Review Notes</Text>
-          </Pressable>
-        </View>
-        {!isSignedIn && (
-          <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: '#999' }}>
-            <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Увійти через Google для shared sync'}</Text>
-          </Pressable>
-        )}
+        <Text style={styles.title}>Shared Character Access + Quick Edit</Text>
+        <Text style={styles.hint}>Open shared live copy, quick edit session-critical and expanded fields, or jump to full sheet.</Text>
+        {unifiedParty.slice(0, 4).map((item) => {
+          const syncStatus = getSyncDisplayStatus(syncByCharacter[item.id], netInfo.isConnected);
+          const shareStatus = getShareDisplayStatus({
+            isSharedSheet: item.source === 'shared',
+            role: roleMode,
+            source: item.source,
+          });
+
+          return (
+            <View key={item.id} style={styles.updateRow}>
+              <Text style={styles.updateTitle}>{item.payload.name || 'Character'}</Text>
+              <Text style={styles.updateMeta}>Source: {item.source}</Text>
+              <Text style={styles.updateMeta}>Sync status: {syncStatus}</Text>
+              {!!shareStatus && <Text style={styles.updateMeta}>Share status: {shareStatus}</Text>}
+              <View style={styles.laneGrid}>
+                <Pressable style={styles.laneButton} onPress={() => { void openFullSheet(item.payload); }} android_ripple={{ color: '#999' }}>
+                  <Ionicons name='link-outline' size={18} color={colors.text} />
+                  <Text style={styles.laneButtonText}>Open Shared Live Copy</Text>
+                </Pressable>
+                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: '#999' }}>
+                  <Ionicons name='create-outline' size={18} color={colors.text} />
+                  <Text style={styles.laneButtonText}>Quick Edit</Text>
+                </Pressable>
+                <Pressable style={styles.laneButton} onPress={() => { void openFullSheet(item.payload); }} android_ripple={{ color: '#999' }}>
+                  <Ionicons name='document-outline' size={18} color={colors.text} />
+                  <Text style={styles.laneButtonText}>Open Full Sheet</Text>
+                </Pressable>
+              </View>
+            </View>
+          );
+        })}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Session Tools Lane</Text>
+        <Text style={styles.title}>Campaign Notes</Text>
+        <Text style={styles.hint}>Cloud + offline campaign notes queue with sync/conflict status.</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Campaign notes: {notesCount}</Text></View>
+          <View style={styles.statChip}><Text style={styles.statChipText}>Campaigns tracked: {campaigns.length}</Text></View>
+        </View>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
+          android_ripple={{ color: '#999' }}
+        >
+          <Text style={styles.authButtonText}>Open Campaign Notes</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.title}>Encounter Prep Starter</Text>
+        <Text style={styles.hint}>Build encounter lineup from campaign party + bestiary and handoff to Initiative in one flow.</Text>
         <View style={styles.laneGrid}>
-          <Pressable style={styles.laneButton} onPress={() => navigation.navigate('EncounterCalculator')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='calculator-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Encounter Calculator</Text>
-          </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => navigation.navigate('LootGenerator')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='diamond-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Loot Generator</Text>
+          <Pressable style={styles.laneButton} onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })} android_ripple={{ color: '#999' }}>
+            <Ionicons name='rocket-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>Start Encounter Prep</Text>
           </Pressable>
           <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: '#999' }}>
             <Ionicons name='flame-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Initiative Board</Text>
+            <Text style={styles.laneButtonText}>Open Initiative</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => navigation.navigate('DMNotes')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='clipboard-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Session Notes</Text>
-          </Pressable>
-        </View>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.title}>Campaign Tools Lane</Text>
-        <View style={styles.laneGrid}>
           <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
             <Ionicons name='skull-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Bestiary</Text>
+            <Text style={styles.laneButtonText}>Bestiary Quick Access</Text>
           </Pressable>
           <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: '#999' }}>
             <Ionicons name='book-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Spellbook</Text>
-          </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Home')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='people-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Party Home</Text>
-          </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='time-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Recent Shared Updates</Text>
+            <Text style={styles.laneButtonText}>Spellbook Quick Access</Text>
           </Pressable>
         </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Recent Shared Updates Workflow</Text>
-        <Text style={styles.hint}>Останні cloud оновлення для швидкого review у DM queue.</Text>
+        <Text style={styles.title}>Recent Shared Changes</Text>
+        <Text style={styles.hint}>Compact feed with one tap to deep-review queue.</Text>
         {!recentSharedUpdates.length ? (
-          <Text style={styles.hint}>Поки немає shared оновлень.</Text>
+          <Text style={styles.hint}>No shared changes yet.</Text>
         ) : (
           recentSharedUpdates.map((item) => {
             const id = String(item.id || '');
@@ -229,13 +314,22 @@ const DM: React.FC = () => {
             return (
               <View key={`recent-${id}`} style={styles.updateRow}>
                 <Text style={styles.updateTitle}>{String(item.name || 'Character')}</Text>
-                <Text style={styles.updateMeta}>Sheet ID: {id || '—'}</Text>
                 <Text style={styles.updateMeta}>Updated: {timeLabel}</Text>
                 <Text style={styles.updateMeta}>Sync status: {syncStatus}</Text>
                 {!!shareStatus && <Text style={styles.updateMeta}>Share status: {shareStatus}</Text>}
               </View>
             );
           })
+        )}
+
+        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.authButtonText}>Open Shared Updates Queue</Text>
+        </Pressable>
+
+        {!isSignedIn && (
+          <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: '#999' }}>
+            <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Sign in with Google for shared sync'}</Text>
+          </Pressable>
         )}
       </View>
     </ScrollView>

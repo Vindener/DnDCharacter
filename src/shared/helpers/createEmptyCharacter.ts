@@ -119,6 +119,7 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     alliesAndOrganizations: overrides.alliesAndOrganizations,
     backstory: overrides.backstory,
     campaign: overrides.campaign,
+    campaignId: overrides.campaignId,
     photoUri: overrides.photoUri,
     sessionMode: overrides.sessionMode ?? false,
     conditions: overrides.conditions ?? [],

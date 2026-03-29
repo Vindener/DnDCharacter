@@ -12,10 +12,11 @@ import DMNavigator from '@/navigation/DMNavigator';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
+import type { InitiativeSeed } from '@/types/DM';
 
 export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
-  Initiative: undefined;
+  Initiative: { seed?: InitiativeSeed } | undefined;
   DM: NavigatorScreenParams<DMStackParamList> | undefined;
   Bestiary: undefined;
   Support: undefined;

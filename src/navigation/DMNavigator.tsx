@@ -7,6 +7,10 @@ import EncounterCalculator from '@/screens/DM/EncounterCalculator/EncounterCalcu
 import DMNotes from '@/screens/DM/DMNotes/DMNotes';
 import DMNoteEdit from '@/screens/DM/DMNotes/DMNoteEdit';
 import DMSharedUpdates from '@/screens/DM/DMSharedUpdates';
+import DMPartyOverview from '@/screens/DM/DMPartyOverview';
+import DMQuickEdit from '@/screens/DM/DMQuickEdit';
+import DMCampaignNotes from '@/screens/DM/DMCampaignNotes';
+import DMEncounterPrep from '@/screens/DM/DMEncounterPrep';
 import Header from '@/modules/Header/Header';
 
 export type DMStackParamList = {
@@ -16,6 +20,10 @@ export type DMStackParamList = {
   DMNotes: undefined;
   DMNoteEdit: { id: string };
   DMSharedUpdates: undefined;
+  DMPartyOverview: undefined;
+  DMQuickEdit: { characterId: string };
+  DMCampaignNotes: { campaignId?: string } | undefined;
+  DMEncounterPrep: { campaignId?: string } | undefined;
 };
 
 const Stack = createStackNavigator<DMStackParamList>();
@@ -39,6 +47,10 @@ export default function DMNavigator() {
       <Stack.Screen name='DMNotes' component={DMNotes} options={{ title: 'Нотатки' }} />
       <Stack.Screen name='DMNoteEdit' component={DMNoteEdit} options={{ title: 'Редагувати нотатку' }} />
       <Stack.Screen name='DMSharedUpdates' component={DMSharedUpdates} options={{ title: 'Shared Updates' }} />
+      <Stack.Screen name='DMPartyOverview' component={DMPartyOverview} options={{ title: 'Party Overview' }} />
+      <Stack.Screen name='DMQuickEdit' component={DMQuickEdit} options={{ title: 'DM Quick Edit' }} />
+      <Stack.Screen name='DMCampaignNotes' component={DMCampaignNotes} options={{ title: 'Campaign Notes' }} />
+      <Stack.Screen name='DMEncounterPrep' component={DMEncounterPrep} options={{ title: 'Encounter Prep Starter' }} />
     </Stack.Navigator>
   );
 }

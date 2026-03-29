@@ -55,6 +55,7 @@ export type CharacterSheet = {
   alliesAndOrganizations?: string;
   backstory?: string;
   campaign?: string;
+  campaignId?: string;
 
   coins?: CharacterDto['coins'];
   customCoins?: CharacterDto['customCoins'];
@@ -116,6 +117,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     alliesAndOrganizations: dto.alliesAndOrganizations,
     backstory: dto.backstory,
     campaign: dto.campaign,
+    campaignId: dto.campaignId,
 
     coins: dto.coins ?? { gold: 0, silver: 0, copper: 0 },
     customCoins: dto.customCoins, // якщо порожньо — просто не відправляємо undefined
@@ -434,6 +436,7 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
     subclass: (dto as any).subclass,
     subrace: (dto as any).subrace,
     campaign: (dto as any).campaign,
+    campaignId: (dto as any).campaignId,
     alliesAndOrganizations: (dto as any).alliesAndOrganizations,
     photoUri: (dto as any).photoUri,
     sessionMode: (dto as any).sessionMode,

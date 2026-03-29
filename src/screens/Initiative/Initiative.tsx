@@ -8,6 +8,8 @@ import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flat
 import useThemeStore from '@/context/Theme-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { getStyles } from './style';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { AppStackParamList } from '@/navigation/AppNavigator';
 
 interface InitiativeItem {
   id: string;
@@ -16,7 +18,9 @@ interface InitiativeItem {
   hits?: string; 
 }
 
-const Initiative: React.FC = () => {
+type Props = BottomTabScreenProps<AppStackParamList, 'Initiative'>;
+
+const Initiative: React.FC<Props> = ({ route, navigation }) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = getStyles(colors);
 
@@ -29,6 +33,21 @@ const Initiative: React.FC = () => {
   const loadCharacters = useCharacterStore((s) => s.loadCharacters);
 
   const [isHeroPickerVisible, setHeroPickerVisible] = useState(false);
+
+  React.useEffect(() => {
+    const seed = route.params?.seed;
+    if (!seed || !Array.isArray(seed.entries) || !seed.entries.length) return;
+
+    setItems(
+      seed.entries.map((entry) => ({
+        id: String(entry.id || `${Date.now()}`),
+        name: String(entry.name || ''),
+        roll: String(entry.roll || ''),
+        hits: entry.hits,
+      })),
+    );
+    navigation.setParams({ seed: undefined });
+  }, [navigation, route.params?.seed]);
 
   useFocusEffect(
     React.useCallback(() => {

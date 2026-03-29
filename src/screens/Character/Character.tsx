@@ -258,6 +258,7 @@ function mergeBySections(local: CharacterDto, remote: CharacterDto, pendingPaths
     next.notes = remote.notes;
     next.backstory = remote.backstory;
     next.campaign = remote.campaign;
+    next.campaignId = remote.campaignId;
     next.alliesAndOrganizations = remote.alliesAndOrganizations;
     next.notesBlocks = remote.notesBlocks;
     next.customNotesGroups = remote.customNotesGroups;

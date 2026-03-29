@@ -140,6 +140,7 @@ export interface CharacterDto {
   alliesAndOrganizations?: string;
   backstory?: string;
   campaign?: string;
+  campaignId?: string;
   photoUri?: string;
   coins?: {
     gold: number;
