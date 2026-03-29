@@ -70,7 +70,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
             <MultiTextInput
               multiline={false}
-              numberOfLines={1}
+              numberOfLines={8}
               style={{ flex: 1, height: 40 }}
               value={item}
               onChangeText={(text) => handleChangeItem(text, index)}

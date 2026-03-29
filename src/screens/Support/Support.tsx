@@ -3,8 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, Scro
 import useThemeStore from '@/context/Theme-store';
 
 const donateLinks = [
-  // { label: 'Privat', url: 'https://www.paypal.me/Vindener' },
-  { label: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/vindener12x' },
+  { label: 'ПриватБанк', url: 'http://www.privat24.ua/send/3bi8n' },
   { label: 'Monobank (банка)', url: 'https://send.monobank.ua/jar/7bLHe7oo8j' },
 ];
 
@@ -12,19 +11,46 @@ const cryptoWallets = [{ label: 'USDT (TRC20)', value: 'TC3Ad4JQJDLeiBPCXRRqkKsi
 
 export default function Support() {
   const colors = useThemeStore((s) => s.colors);
-  const styles = useMemo(() => ({
-    screen: { flex: 1, backgroundColor: colors.background },
-    container: { padding: 16, gap: 16 },
-    card: { backgroundColor: colors.card, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: colors.border },
-    title: { fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: 8 },
-    text: { color: colors.textSecondary, lineHeight: 20 },
-    row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
-    pill: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.inputBackground },
-    pillText: { color: colors.text },
-    input: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.inputBackground, color: colors.text, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 10, marginTop: 8 },
-    btn: { marginTop: 12, paddingVertical: 12, borderRadius: 10, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.inputBackground, alignItems: 'center' },
-    btnText: { color: colors.text, fontWeight: '600' }
-  }), [colors]);
+  const styles = useMemo(
+    () => ({
+      screen: { flex: 1, backgroundColor: colors.background },
+      container: { padding: 16, gap: 16 },
+      card: { backgroundColor: colors.card, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: colors.border },
+      title: { fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: 8 },
+      text: { color: colors.textSecondary, lineHeight: 20 },
+      row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
+      pill: {
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 999,
+        borderWidth: 1,
+        borderColor: colors.border,
+        backgroundColor: colors.inputBackground,
+      },
+      pillText: { color: colors.text },
+      input: {
+        borderWidth: 1,
+        borderColor: colors.border,
+        backgroundColor: colors.inputBackground,
+        color: colors.text,
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        marginTop: 8,
+      },
+      btn: {
+        marginTop: 12,
+        paddingVertical: 12,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: colors.border,
+        backgroundColor: colors.inputBackground,
+        alignItems: 'center',
+      },
+      btnText: { color: colors.text, fontWeight: '600' },
+    }),
+    [colors],
+  );
 
   const [feedback, setFeedback] = useState('');
   const [email, setEmail] = useState('');
@@ -50,6 +76,7 @@ export default function Support() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>Підтримати проєкт</Text>
+          <Text style={{ color: 'rgba(249, 136, 118, 1)', fontWeight: '600' }}>Зараз збираємо гроші для публікації в Google Play.</Text>
           <Text style={styles.text}>Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:</Text>
           <View style={styles.row}>
             {donateLinks.map((d) => (
@@ -65,7 +92,7 @@ export default function Support() {
           {cryptoWallets.map((w) => (
             <View key={w.label} style={{ marginTop: 10 }}>
               <Text style={[styles.text, { marginBottom: 6 }]}>{w.label}</Text>
-              <TextInput value={w.value} editable={false} selectTextOnFocus style={styles.input} />
+              <TextInput value={w.value} editable={true} selectTextOnFocus style={styles.input} />
             </View>
           ))}
         </View>
@@ -76,15 +103,15 @@ export default function Support() {
             value={feedback}
             onChangeText={setFeedback}
             multiline
-            placeholder="Напиши свої ідеї, баги або побажання..."
+            placeholder='Напиши свої ідеї, баги або побажання...'
             placeholderTextColor={colors.textSecondary}
             style={[styles.input, { minHeight: 100, textAlignVertical: 'top' }]}
           />
           <TextInput
             value={email}
             onChangeText={setEmail}
-            keyboardType="email-address"
-            placeholder="Email (за бажанням)"
+            keyboardType='email-address'
+            placeholder='Email (за бажанням)'
             placeholderTextColor={colors.textSecondary}
             style={styles.input}
           />
@@ -98,8 +125,4 @@ export default function Support() {
       </ScrollView>
     </View>
   );
-
-
-
-
 }

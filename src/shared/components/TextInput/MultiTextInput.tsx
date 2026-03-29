@@ -1,40 +1,72 @@
-import React from 'react';
-import { TextInputProps, StyleSheet } from 'react-native';
-import TextInput from './TextInput';
+import React, { useState } from 'react';
+import {
+  View,
+  StyleProp,
+  ViewStyle,
+  TextInput,
+  TextInputProps,
+  NativeSyntheticEvent,
+  TextInputContentSizeChangeEventData,
+} from 'react-native';
 import useThemeStore from '@/context/Theme-store';
 
-interface Props extends TextInputProps {
-  unstyled?: boolean;
-}
+type MultiTextInputProps = {
+  containerStyle?: StyleProp<ViewStyle>;
+  initialHeight?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  onSizeChange?: (h: number) => void;
+} & TextInputProps;
 
-const useStyles = (c: ReturnType<typeof useThemeStore>['colors']) =>
-StyleSheet.create({
-  memoInput: {
-    backgroundColor: c.inputBackground,
-    color: c.text,
-    padding: 10,
-    borderRadius: 5,
-    height: 150,
-    textAlignVertical: 'top',
-  },
-});
-
-const MultiTextInput: React.FC<Props> = ({ style, numberOfLines = 2, unstyled = false, ...rest }) => {
+export default function MultiTextInput({
+  containerStyle,
+  style,
+  initialHeight = 140,
+  minHeight = 80,
+  maxHeight = 480,
+  onSizeChange,
+  ...props
+}: MultiTextInputProps) {
   const colors = useThemeStore((s) => s.colors);
-  const styles = React.useMemo(() => useStyles(colors), [colors]);
-  const inputStyle = unstyled ? style : [styles.memoInput, style];
-  return (
-    <TextInput
-      unstyled
-      style={inputStyle}
-      multiline
-      numberOfLines={numberOfLines}
-      returnKeyType='default'
-      textAlignVertical='top'
-      enablesReturnKeyAutomatically={false}
-      {...rest}
-    />
-  );
-};
+  const [height, setHeight] = useState(initialHeight);
 
-export default MultiTextInput;
+  const handleContentSizeChange = (e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
+    const newHeight = Math.min(maxHeight, Math.max(minHeight, e.nativeEvent.contentSize.height));
+    setHeight(newHeight);
+    if (onSizeChange) onSizeChange(newHeight);
+  };
+
+  return (
+    <View
+      style={[
+        {
+          position: 'relative',
+          width: '100%',
+          minHeight,
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderRadius: 10,
+          backgroundColor: colors.inputBackground,
+          overflow: 'hidden',
+        },
+        containerStyle,
+      ]}
+    >
+      <TextInput
+        {...props}
+        multiline
+        style={[
+          {
+            height,
+            paddingHorizontal: 12,
+            paddingVertical: 10,
+            color: colors.text,
+            textAlignVertical: 'top',
+          },
+          style,
+        ]}
+        onContentSizeChange={handleContentSizeChange}
+      />
+    </View>
+  );
+}

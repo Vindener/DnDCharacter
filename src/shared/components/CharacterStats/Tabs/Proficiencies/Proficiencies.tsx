@@ -27,7 +27,7 @@ const Proficiencies: React.FC<ProficienciesProps> = ({ data }: ProficienciesProp
     <View style={styles.container}>
       <Text style={styles.label}>Професійні навички персонажа:</Text>
       <MultiTextInput
-        numberOfLines={6}
+        numberOfLines={8}
         value={proficienciesText}
         onChangeText={handleChange}
         placeholder='Введіть навички персонажа'

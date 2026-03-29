@@ -28,12 +28,12 @@ const Loader = () => {
 
   const strokeDashoffset = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 200],
+    outputRange: [0, 350],
   });
 
   return (
     <View style={styles.loader}>
-      <Svg width={150} height={150} viewBox="0 0 512 512">
+      <Svg width={250} height={250} viewBox="0 0 512 512">
         <AnimatedPath
           fill="none"
           stroke="#000"

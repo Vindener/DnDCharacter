@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,17 +8,18 @@ import { CharacterDto } from '@/types/Character';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
-import FileService from '@/shared/services/fileSerice';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
+import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
+import { upsertCharacterSheetFromLocal, saveCharacterSheetAsNew } from '@/services/characterSheets';
 
 interface CharacterMenuProps {
   character: CharacterDto;
   onChange?: (character: CharacterDto) => void;
 }
-export default function CharacterMenu({ character, onChange }: CharacterMenuProps) {
-  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
+
+const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) => {
   const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -85,7 +87,57 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
     }
   }, [isInitModalVisible, characterData.initiative]);
 
+
+  const [shareOpen, setShareOpen] = useState(false);
   const openMenu = () => setMenuVisible(true);
+
+  const onSaveToCloud = async () => {
+    try {
+      const res = await upsertCharacterSheetFromLocal(character as any);
+
+      if (res.created && res.id !== character.id && typeof onChange === 'function') {
+        onChange({ ...character, id: res.id } as any);
+      }
+
+      // setIsCloudDoc(true);
+      console.log('[save] cloud ok', res.id);
+
+      // 🔹 показуємо алерт
+      Alert.alert(
+        'Успіх',
+        res.created
+          ? 'Персонажа збережено у хмарі. Перезайдіть будь ласка на персонажа, щоб побачити актуальні зміни.'
+          : 'Зміни персонажа успішно оновлені у хмарі! Дякую Вам!',
+        [
+          {
+            text: 'Ок',
+            onPress: () => {
+              closeMenu();
+              if (typeof onChange === 'function') {
+                onChange({ ...character, id: res.id } as any);
+              }
+              // navigation.navigate("Character", { id: res.id });
+            },
+          },
+        ],
+      );
+    } catch (e: any) {
+      console.warn('[save] failed', e?.code || e?.message || e);
+      console.warn("[save] failed", e?.code || e?.message || e);
+
+    if (e?.message === "Not signed in") {
+      Alert.alert(
+        "Помилка авторизації",
+        "Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару."
+      );
+    } else {
+      Alert.alert(
+        "Помилка",
+        "Не вдалося зберегти у хмару. Спробуйте ще раз."
+      );
+    }
+  }
+  };
   const closeMenu = () => setMenuVisible(false);
 
   const pickPhoto = async () => {
@@ -179,8 +231,9 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
       <TouchableOpacity onPress={openMenu}>
         <Text style={styles.menuButton}>⋮</Text>
       </TouchableOpacity>
-      <Menu visible={menuVisible} onRequestClose={closeMenu} anchor={<></>}>
+      <Menu visible={menuVisible} onRequestClose={closeMenu} anchor={<></>} style={styles.menuContainer}>
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             pickPhoto();
@@ -188,7 +241,9 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Завантажити фото
         </MenuItem>
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             removePhoto();
@@ -196,7 +251,9 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Видалити фото
         </MenuItem>
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             renameCharacter();
@@ -204,8 +261,11 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Змінити ім'я
         </MenuItem>
-        <MenuDivider />
+
+        <MenuDivider color={colors.border} />
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             setIsExpModalVisible(true);
@@ -213,7 +273,9 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Редагувати досвід
         </MenuItem>
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             setIsSpeedModalVisible(true);
@@ -221,7 +283,9 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Редагувати швидкість
         </MenuItem>
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             setIsAcModalVisible(true);
@@ -229,7 +293,9 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Редагувати захист
         </MenuItem>
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
             closeMenu();
             setIsInitModalVisible(true);
@@ -237,14 +303,21 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
         >
           Редагувати ініціативу
         </MenuItem>
-        <MenuDivider />
+
+        <MenuDivider color={colors.border} />
+
+        <MenuItem textStyle={styles.menuItemText} onPress={onSaveToCloud}>
+          Зберегти в хмарі
+        </MenuItem>
+
         <MenuItem
+          textStyle={styles.menuItemText}
           onPress={() => {
+            setShareOpen(true);
             closeMenu();
-            FileService.exportCharacter(characterData);
           }}
         >
-          Експорт JSON
+          Поділитися
         </MenuItem>
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
@@ -321,6 +394,19 @@ export default function CharacterMenu({ character, onChange }: CharacterMenuProp
           ))}
         </ScrollView>
       </Modal>
+      <ShareCharacterSheetModal visible={shareOpen} onClose={() => setShareOpen(false)} sheetId={character.id} />
     </>
   );
-}
+};
+
+
+
+
+
+
+
+
+
+
+
+export default CharacterMenu;

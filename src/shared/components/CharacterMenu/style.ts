@@ -4,6 +4,16 @@ import { ThemeColors } from '@/shared/styles/theme';
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
   menuButton: { fontSize: 24, paddingHorizontal: 8, color: c.text },
+
+  menuContainer: {
+    backgroundColor: c.card,
+    borderColor: c.border,
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+
+  menuItemText: { color: c.text },
+
   adjustButton: {
     backgroundColor: c.inputBackground,
     borderRadius: 6,

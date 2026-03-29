@@ -28,7 +28,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
     <View style={styles.container}>
       <Text style={styles.label}>Риси характеру:</Text>
       <MultiTextInput
-        numberOfLines={2}
+        numberOfLines={8}
         value={traits.personality}
         onChangeText={(text) => handleChange('personality', text)}
         placeholder='Введіть особистість'
@@ -36,7 +36,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
 
       <Text style={styles.label}>Ідеали:</Text>
       <MultiTextInput
-        numberOfLines={2}
+        numberOfLines={8}
         value={traits.ideals}
         onChangeText={(text) => handleChange('ideals', text)}
         placeholder='Введіть ідеали'
@@ -44,7 +44,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
 
       <Text style={styles.label}>Зв`язки:</Text>
       <MultiTextInput
-        numberOfLines={2}
+        numberOfLines={8}
         value={traits.bonds}
         onChangeText={(text) => handleChange('bonds', text)}
         placeholder='Введіть зв`язки'
@@ -52,7 +52,7 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
 
       <Text style={styles.label}>Вади:</Text>
       <MultiTextInput
-        numberOfLines={2}
+        numberOfLines={8}
         value={traits.flaws}
         onChangeText={(text) => handleChange('flaws', text)}
         placeholder='Введіть вади'
