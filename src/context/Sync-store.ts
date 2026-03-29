@@ -9,6 +9,7 @@ interface SyncStore {
   ensureCharacterSync: (characterId: string, hasCloud?: boolean) => Promise<void>;
   setCloudAvailability: (characterId: string, hasCloud: boolean) => Promise<void>;
   markLocalDraft: (characterId: string, changedPath: string) => Promise<void>;
+  markLocalDraftPaths: (characterId: string, changedPaths: string[]) => Promise<void>;
   markCloudUploaded: (characterId: string) => Promise<void>;
   markCloudDownloaded: (characterId: string) => Promise<void>;
   markConflict: (characterId: string, conflictPaths: string[]) => Promise<void>;
@@ -98,6 +99,30 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   markLocalDraft: async (characterId, changedPath) => {
     const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, false);
     const nextPending = Array.from(new Set([...existing.pendingPaths, changedPath]));
+    const next: CharacterSyncState = {
+      ...existing,
+      localRevision: existing.localRevision + 1,
+      lastLocalChangeAt: Date.now(),
+      pendingPaths: nextPending,
+      status: resolveSyncStatus({
+        hasCloud: existing.hasCloud,
+        hasPendingPaths: nextPending.length > 0,
+        hasConflictPaths: existing.conflictPaths.length > 0,
+        localRevision: existing.localRevision + 1,
+        cloudRevision: existing.cloudRevision,
+      }),
+    };
+    const merged = { ...get().syncByCharacter, [characterId]: next };
+    set({ syncByCharacter: merged });
+    await persistSyncMap(merged);
+  },
+
+  markLocalDraftPaths: async (characterId, changedPaths) => {
+    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, false);
+    const cleanPaths = (changedPaths || []).map((path) => String(path || '').trim()).filter(Boolean);
+    if (!cleanPaths.length) return;
+
+    const nextPending = Array.from(new Set([...existing.pendingPaths, ...cleanPaths]));
     const next: CharacterSyncState = {
       ...existing,
       localRevision: existing.localRevision + 1,

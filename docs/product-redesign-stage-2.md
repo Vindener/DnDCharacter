@@ -13,6 +13,10 @@ Make character sheet a true in-session core feature that can replace paper sheet
 - first-class homebrew support;
 - visible sync/context status.
 
+Note on cross-stage consistency:
+- Stage 1 (`product-foundation-stage-1.md`) remains source-of-truth for role model and sync policy.
+- Stage 2 terminology follows Stage 1 role set: `Player`, `DM`, `Hybrid`.
+
 ## Scope Delivered In This Iteration
 
 1. Character screen redesign foundations:
@@ -34,7 +38,7 @@ Make character sheet a true in-session core feature that can replace paper sheet
 - persisted in local + cloud DTO mapping.
 
 3. Home redesign foundations:
-- role switch (`Player`, `DM`, `Both`);
+- role switch (`Player`, `DM`, `Hybrid`);
 - resume block with `Continue Session`;
 - live character preview cards with badges (`Local`, `Synced`, `Shared`, `Homebrew`);
 - DM preview block with quick entry points;
@@ -149,3 +153,4 @@ Stage 3 should focus on shared collaboration quality:
 - explicit sync state model in store;
 - conflict review UI;
 - DM party-first workflows and shared change timeline.
+

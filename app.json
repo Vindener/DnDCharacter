@@ -6,7 +6,7 @@
       "@react-native-firebase/app",
       "@react-native-google-signin/google-signin"
     ],
-    "version": "0.70.10",
+    "version": "0.71.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

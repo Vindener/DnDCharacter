@@ -52,6 +52,7 @@ export function mapCloudCharacterToLocalDto(doc: Record<string, unknown>): Chara
     customResetRules: Array.isArray(doc.customResetRules) ? (doc.customResetRules as CharacterDto['customResetRules']) : [],
     customFeatureBlocks: Array.isArray(doc.customFeatureBlocks) ? (doc.customFeatureBlocks as CharacterDto['customFeatureBlocks']) : [],
     customSpellLists: Array.isArray(doc.customSpellLists) ? (doc.customSpellLists as CharacterDto['customSpellLists']) : [],
+    combatTemplates: ((doc.combatTemplates || {}) as CharacterDto['combatTemplates']) || undefined,
     sessionMode: Boolean(doc.sessionMode),
     coins: ((doc.coins || undefined) as CharacterDto['coins']) || undefined,
     customCoins: ((doc.customCoins || undefined) as CharacterDto['customCoins']) || undefined,

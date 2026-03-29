@@ -17,6 +17,7 @@ import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 import Dice from '@/screens/Dice/Dice';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
+import type { CharacterChangeHistoryEntry } from '@/services/characterSheets';
 import { fetchCharacterSheet, subscribeCharacterSheet, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
@@ -36,6 +37,22 @@ type CharacterTab = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'H
 type SyncStatus = 'Local' | 'Pending' | 'Synced';
 
 const TAB_ORDER: CharacterTab[] = ['Overview', 'Combat', 'Magic', 'Inventory', 'Notes', 'Homebrew'];
+const TAB_PATH_PREFIX: Record<CharacterTab, string> = {
+  Overview: 'overview.',
+  Combat: 'combat.',
+  Magic: 'magic.',
+  Inventory: 'inventory.',
+  Notes: 'notes.',
+  Homebrew: 'homebrew.',
+};
+const TAB_DEFAULT_PATH: Record<CharacterTab, string> = {
+  Overview: 'overview.identity',
+  Combat: 'combat.core',
+  Magic: 'magic.core',
+  Inventory: 'inventory.core',
+  Notes: 'notes.session',
+  Homebrew: 'homebrew.fields',
+};
 const TRACKER_RULES: TrackerResetRule[] = ['none', 'short-rest', 'long-rest', 'session'];
 const FIELD_TYPES: CustomFieldType[] = ['text', 'number', 'boolean', 'select'];
 
@@ -124,6 +141,11 @@ function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
       relationships: character.notesBlocks?.relationships ?? '',
       quests: character.notesBlocks?.quests ?? '',
     },
+    combatTemplates: {
+      actions: character.combatTemplates?.actions ?? [],
+      bonusActions: character.combatTemplates?.bonusActions ?? [],
+      reactions: character.combatTemplates?.reactions ?? [],
+    },
     spells: {
       spellcastingAbility: character.spells?.spellcastingAbility ?? '',
       spellSaveDC: character.spells?.spellSaveDC ?? 0,
@@ -134,6 +156,25 @@ function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
       cantrips: character.spells?.cantrips ?? [],
     },
   };
+}
+
+function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((entry) => {
+      if (!entry || typeof entry !== 'object') return null;
+      const cast = entry as Record<string, unknown>;
+      const tab = String(cast.tab || 'Overview') as CharacterTab;
+      if (!TAB_ORDER.includes(tab)) return null;
+      return {
+        id: String(cast.id || ''),
+        uid: String(cast.uid || ''),
+        tab,
+        paths: Array.isArray(cast.paths) ? cast.paths.map((item) => String(item)) : [],
+        atMs: Number(cast.atMs || 0),
+      };
+    })
+    .filter((entry): entry is CharacterChangeHistoryEntry => Boolean(entry && entry.id && entry.uid && entry.tab));
 }
 
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
@@ -166,11 +207,12 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
-  const markLocalDraft = useSyncStore((s) => s.markLocalDraft);
+  const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const markCloudDownloaded = useSyncStore((s) => s.markCloudDownloaded);
   const markConflict = useSyncStore((s) => s.markConflict);
   const clearConflicts = useSyncStore((s) => s.clearConflicts);
+  const [sharedHistory, setSharedHistory] = useState<CharacterChangeHistoryEntry[]>([]);
 
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempCurrentHp, setTempCurrentHp] = useState('0');
@@ -211,6 +253,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const passivePerception = 10 + (characterData.skills?.perception ?? calculateModifier(characterData.stats.wisdom || 10));
   const hasHomebrew = (characterData.customFields?.length ?? 0) > 0 || (characterData.customTrackers?.length ?? 0) > 0;
   const currentSync = syncByCharacter[baseCharacter.id];
+  const conflictPaths = currentSync?.conflictPaths || [];
 
   const syncStatusLabel = useMemo<SyncStatus | 'Conflict'>(() => {
     const status = currentSync?.status;
@@ -250,6 +293,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         const exists = Boolean(doc);
         setIsCloudDoc(exists);
         setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
+        setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
         setSyncStatus(exists ? 'Synced' : 'Local');
         setCloudAvailability(baseCharacter.id, exists).catch(() => {});
       })
@@ -257,6 +301,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         if (!alive) return;
         setIsCloudDoc(false);
         setIsSharedSheet(false);
+        setSharedHistory([]);
         setSyncStatus('Local');
         setCloudAvailability(baseCharacter.id, false).catch(() => {});
       });
@@ -265,11 +310,12 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       const exists = Boolean(doc);
       setIsCloudDoc(exists);
       setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
+      setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
       setSyncStatus(exists ? 'Synced' : 'Local');
       setCloudAvailability(baseCharacter.id, exists).catch(() => {});
       const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
       if (exists && syncState?.pendingPaths?.length) {
-        markConflict(baseCharacter.id, ['sheet']).catch(() => {});
+        markConflict(baseCharacter.id, syncState.pendingPaths).catch(() => {});
       }
     });
 
@@ -297,9 +343,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (!fbAuth.currentUser) return;
     if (!isCloudDoc) return;
 
+    const pendingPathsForUpload = Array.from(new Set(currentSync?.pendingPaths || []));
     setSyncStatus('Pending');
     const timeout = setTimeout(() => {
-      upsertCharacterSheetFromLocal(characterData)
+      upsertCharacterSheetFromLocal(characterData, { historyPaths: pendingPathsForUpload })
         .then(() => {
           setSyncStatus('Synced');
           markCloudUploaded(characterData.id).catch(() => {});
@@ -308,18 +355,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           setSyncStatus('Local');
           const message = String(error?.message || '').toLowerCase();
           if (message.includes('conflict')) {
-            markConflict(characterData.id, ['sheet']).catch(() => {});
+            markConflict(characterData.id, pendingPathsForUpload.length ? pendingPathsForUpload : ['overview.identity']).catch(
+              () => {},
+            );
           }
         });
     }, 1200);
 
     return () => clearTimeout(timeout);
-  }, [characterData, isCloudDoc, markCloudUploaded, markConflict]);
+  }, [characterData, currentSync?.pendingPaths, isCloudDoc, markCloudUploaded, markConflict]);
 
-  const patchCharacter = useCallback((patcher: (prev: CharacterDto) => CharacterDto) => {
+  const patchCharacter = useCallback((patcher: (prev: CharacterDto) => CharacterDto, changedPaths?: string[]) => {
     setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
-    markLocalDraft(baseCharacter.id, 'sheet').catch(() => {});
-  }, [baseCharacter.id, markLocalDraft]);
+    const paths = changedPaths && changedPaths.length ? changedPaths : [TAB_DEFAULT_PATH[selectedTab]];
+    markLocalDraftPaths(baseCharacter.id, paths).catch(() => {});
+  }, [baseCharacter.id, markLocalDraftPaths, selectedTab]);
 
   const setNotesBlock = useCallback((key: keyof NonNullable<CharacterDto['notesBlocks']>, value: string) => {
     patchCharacter((prev) => ({
@@ -328,7 +378,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         ...prev.notesBlocks,
         [key]: value,
       },
-    }));
+    }), [`notes.${String(key)}`]);
   }, [patchCharacter]);
 
   const applyHpDelta = useCallback((delta: number) => {
@@ -338,7 +388,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         ...prev.hp,
         current: clamp(prev.hp.current + delta, 0, prev.hp.max),
       },
-    }));
+    }), ['combat.hp']);
   }, [patchCharacter]);
 
   const openHpModal = useCallback(() => {
@@ -358,7 +408,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         max: nextMax,
         current: nextCurrent,
       },
-    }));
+    }), ['combat.hp']);
 
     setIsHpModalVisible(false);
   }, [characterData.hp.current, characterData.hp.max, patchCharacter, tempCurrentHp, tempMaxHp]);
@@ -371,7 +421,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         ...prev.hp,
         temp: value,
       },
-    }));
+    }), ['combat.hp']);
     setTempShieldInput('0');
     setIsTempHpModalVisible(false);
   }, [characterData.hp.temp, patchCharacter, tempShieldInput]);
@@ -409,7 +459,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         },
         customTrackers: nextTrackers,
       };
-    });
+    }, ['combat.rest', 'combat.hp', 'magic.slots', 'homebrew.trackers']);
 
     setIsRestModalVisible(false);
   }, [characterData.hitDice, patchCharacter]);
@@ -460,7 +510,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         hitDice: `${Math.max(count - used, 0)}d${sides || 6}`,
         customTrackers: nextTrackers,
       };
-    });
+    }, ['combat.rest', 'combat.hp', 'homebrew.trackers']);
 
     setIsRestModalVisible(false);
   }, [characterData.hitDice, characterData.stats.constitution, patchCharacter, rollResults]);
@@ -472,7 +522,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     patchCharacter((prev) => ({
       ...prev,
       conditions: [...(prev.conditions || []), value],
-    }));
+    }), ['overview.conditions']);
 
     setConditionInput('');
     setIsConditionModalVisible(false);
@@ -482,7 +532,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     patchCharacter((prev) => ({
       ...prev,
       conditions: (prev.conditions || []).filter((_, idx) => idx !== index),
-    }));
+    }), ['overview.conditions']);
   }, [patchCharacter]);
 
   const addQuickSessionNote = useCallback(() => {
@@ -499,7 +549,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           session: merged,
         },
       };
-    });
+    }, ['notes.session']);
 
     setQuickNoteInput('');
     setIsQuickNoteModalVisible(false);
@@ -517,7 +567,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     patchCharacter((prev) => ({
       ...prev,
       customFields: [...(prev.customFields || []), newField],
-    }));
+    }), ['homebrew.fields']);
   }, [patchCharacter]);
 
   const updateCustomField = useCallback((fieldId: string, patch: Partial<CharacterCustomField>) => {
@@ -539,14 +589,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
         return { ...field, ...patch };
       }),
-    }));
+    }), ['homebrew.fields']);
   }, [patchCharacter]);
 
   const removeCustomField = useCallback((fieldId: string) => {
     patchCharacter((prev) => ({
       ...prev,
       customFields: (prev.customFields || []).filter((field) => field.id !== fieldId),
-    }));
+    }), ['homebrew.fields']);
   }, [patchCharacter]);
 
   const addTracker = useCallback(() => {
@@ -561,7 +611,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     patchCharacter((prev) => ({
       ...prev,
       customTrackers: [...(prev.customTrackers || []), tracker],
-    }));
+    }), ['homebrew.trackers']);
   }, [patchCharacter]);
 
   const updateTracker = useCallback((trackerId: string, patch: Partial<CharacterTracker>) => {
@@ -571,20 +621,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         if (tracker.id !== trackerId) return tracker;
         return { ...tracker, ...patch };
       }),
-    }));
+    }), ['homebrew.trackers']);
   }, [patchCharacter]);
 
   const removeTracker = useCallback((trackerId: string) => {
     patchCharacter((prev) => ({
       ...prev,
       customTrackers: (prev.customTrackers || []).filter((tracker) => tracker.id !== trackerId),
-    }));
+    }), ['homebrew.trackers']);
   }, [patchCharacter]);
 
   const resolveConflictWithLocal = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
     setSyncStatus('Pending');
-    upsertCharacterSheetFromLocal(characterData)
+    const historyPaths = Array.from(new Set(currentSync?.pendingPaths || []));
+    upsertCharacterSheetFromLocal(characterData, { historyPaths })
       .then(() => {
         setSyncStatus('Synced');
         markCloudUploaded(characterData.id).catch(() => {});
@@ -593,7 +644,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       .catch(() => {
         setSyncStatus('Local');
       });
-  }, [characterData, clearConflicts, markCloudUploaded]);
+  }, [characterData, clearConflicts, currentSync?.pendingPaths, markCloudUploaded]);
 
   const resolveConflictWithCloud = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_cloud', { characterId: characterData.id });
@@ -656,6 +707,33 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     return badges;
   }, [hasHomebrew, isCloudDoc, isSharedSheet, syncStatusLabel]);
 
+  const hasConflictForPrefixes = useCallback((prefixes: string[]) => {
+    if (!conflictPaths.length) return false;
+    return conflictPaths.some((path) => prefixes.some((prefix) => path.startsWith(prefix)));
+  }, [conflictPaths]);
+
+  const hasConflictForTab = useCallback((tab: CharacterTab) => {
+    return hasConflictForPrefixes([TAB_PATH_PREFIX[tab]]);
+  }, [hasConflictForPrefixes]);
+
+  const sectionConflictLabel = useCallback((prefixes: string[]) => {
+    if (!hasConflictForPrefixes(prefixes)) return null;
+    return (
+      <View style={styles.sectionConflictBadge}>
+        <Text style={styles.sectionConflictBadgeText}>Conflict</Text>
+      </View>
+    );
+  }, [hasConflictForPrefixes, styles.sectionConflictBadge, styles.sectionConflictBadgeText]);
+
+  const tabHistory = useMemo(() => {
+    if (!isSharedSheet) return [];
+    return sharedHistory
+      .filter((entry) => entry.tab === selectedTab)
+      .slice()
+      .sort((a, b) => (b.atMs || 0) - (a.atMs || 0))
+      .slice(0, 8);
+  }, [isSharedSheet, selectedTab, sharedHistory]);
+
   const openTab = useCallback((tab: CharacterTab) => setSelectedTab(tab), []);
   const toggleSecondary = useCallback((tab: CharacterTab) => {
     setCollapsedSecondary((prev) => ({ ...prev, [tab]: !prev[tab] }));
@@ -680,7 +758,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderOverviewPlay = () => (
     <>
       <View style={styles.cardPrimary}>
-        <Text style={styles.sectionTitle}>Основні характеристики</Text>
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Основні характеристики</Text>
+          {sectionConflictLabel(['overview.identity'])}
+        </View>
         <View style={styles.statGrid}>
           {STAT_LABELS.map((stat) => {
             const score = characterData.stats[stat.key] || 10;
@@ -698,7 +779,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
       <View style={styles.cardSecondary}>
         <View style={styles.cardHeaderRow}>
-          <Text style={styles.sectionTitle}>Top Skills</Text>
+          <View style={styles.sectionTitleRow}>
+            <Text style={styles.sectionTitle}>Top Skills</Text>
+            {sectionConflictLabel(['overview.conditions'])}
+          </View>
           <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Overview')} android_ripple={{ color: '#999' }}>
             <Text style={styles.collapseButtonText}>{collapsedSecondary.Overview ? 'Розгорнути' : 'Згорнути'}</Text>
           </Pressable>
@@ -739,11 +823,31 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderCombatPlay = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
-        <Text style={styles.sectionTitle}>Combat Tools</Text>
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Combat Tools</Text>
+          {sectionConflictLabel(['combat.core', 'combat.hp', 'combat.rest'])}
+        </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Combat')} android_ripple={{ color: '#999' }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Combat ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
       </View>
+
+      <Text style={styles.subSectionTitle}>Actions</Text>
+      <Text style={styles.blockText}>
+        {characterData.combatTemplates?.actions?.length ? `• ${characterData.combatTemplates.actions.join('\n• ')}` : '• Немає шаблонів дій'}
+      </Text>
+      <Text style={styles.subSectionTitle}>Bonus Actions</Text>
+      <Text style={styles.blockText}>
+        {characterData.combatTemplates?.bonusActions?.length
+          ? `• ${characterData.combatTemplates.bonusActions.join('\n• ')}`
+          : '• Немає шаблонів bonus actions'}
+      </Text>
+      <Text style={styles.subSectionTitle}>Reactions</Text>
+      <Text style={styles.blockText}>
+        {characterData.combatTemplates?.reactions?.length
+          ? `• ${characterData.combatTemplates.reactions.join('\n• ')}`
+          : '• Немає шаблонів reactions'}
+      </Text>
 
       <Text style={styles.subSectionTitle}>Attacks</Text>
       {characterData.weapons?.length ? (
@@ -779,7 +883,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     return (
       <View style={styles.cardSecondary}>
         <View style={styles.cardHeaderRow}>
-          <Text style={styles.sectionTitle}>Magic Snapshot</Text>
+          <View style={styles.sectionTitleRow}>
+            <Text style={styles.sectionTitle}>Magic Snapshot</Text>
+            {sectionConflictLabel(['magic.'])}
+          </View>
           <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Magic')} android_ripple={{ color: '#999' }}>
             <Text style={styles.collapseButtonText}>{collapsedSecondary.Magic ? 'Розгорнути' : 'Згорнути'}</Text>
           </Pressable>
@@ -839,7 +946,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderInventoryPlay = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
-        <Text style={styles.sectionTitle}>Inventory</Text>
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Inventory</Text>
+          {sectionConflictLabel(['inventory.'])}
+        </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Inventory')} android_ripple={{ color: '#999' }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Inventory ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
@@ -867,7 +977,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderNotesPlay = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
-        <Text style={styles.sectionTitle}>Notes</Text>
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Notes</Text>
+          {sectionConflictLabel(['notes.'])}
+        </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Notes')} android_ripple={{ color: '#999' }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Notes ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
@@ -894,7 +1007,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderHomebrewPlay = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
-        <Text style={styles.sectionTitle}>Homebrew</Text>
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Homebrew</Text>
+          {sectionConflictLabel(['homebrew.'])}
+        </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Homebrew')} android_ripple={{ color: '#999' }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Homebrew ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
@@ -983,7 +1099,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const renderOverviewEdit = () => (
     <View style={styles.cardSecondary}>
-      <Text style={styles.sectionTitle}>Identity</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Identity</Text>
+        {sectionConflictLabel(['overview.identity'])}
+      </View>
       <Text style={styles.editLabel}>Name</Text>
       {renderTextInput(characterData.name, (next) => patchCharacter((prev) => ({ ...prev, name: next })), 'Character name')}
       <Text style={styles.editLabel}>Class</Text>
@@ -1016,7 +1135,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const renderCombatEdit = () => (
     <View style={styles.cardSecondary}>
-      <Text style={styles.sectionTitle}>Combat Config</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Combat Config</Text>
+        {sectionConflictLabel(['combat.core', 'combat.hp', 'combat.rest'])}
+      </View>
       <Text style={styles.editLabel}>HP Current</Text>
       {renderTextInput(
         String(characterData.hp.current),
@@ -1024,7 +1146,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           patchCharacter((prev) => ({
             ...prev,
             hp: { ...prev.hp, current: clamp(parseNumber(next, prev.hp.current), 0, prev.hp.max) },
-          })),
+          }), ['combat.hp']),
         'Current HP',
         { keyboardType: 'number-pad' },
       )}
@@ -1038,7 +1160,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               ...prev,
               hp: { ...prev.hp, max, current: clamp(prev.hp.current, 0, max) },
             };
-          }),
+          }, ['combat.hp']),
         'Max HP',
         { keyboardType: 'number-pad' },
       )}
@@ -1049,30 +1171,86 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           patchCharacter((prev) => ({
             ...prev,
             hp: { ...prev.hp, temp: Math.max(0, parseNumber(next, prev.hp.temp)) },
-          })),
+          }), ['combat.hp']),
         'Temp HP',
         { keyboardType: 'number-pad' },
       )}
       <Text style={styles.editLabel}>AC</Text>
       {renderTextInput(
         String(characterData.ac),
-        (next) => patchCharacter((prev) => ({ ...prev, ac: Math.max(0, parseNumber(next, prev.ac)) })),
+        (next) => patchCharacter((prev) => ({ ...prev, ac: Math.max(0, parseNumber(next, prev.ac)) }), ['combat.core']),
         'Armor Class',
         { keyboardType: 'number-pad' },
       )}
       <Text style={styles.editLabel}>Speed</Text>
       {renderTextInput(
         String(characterData.speed),
-        (next) => patchCharacter((prev) => ({ ...prev, speed: Math.max(0, parseNumber(next, prev.speed)) })),
+        (next) => patchCharacter((prev) => ({ ...prev, speed: Math.max(0, parseNumber(next, prev.speed)) }), ['combat.core']),
         'Speed',
         { keyboardType: 'number-pad' },
       )}
       <Text style={styles.editLabel}>Initiative</Text>
       {renderTextInput(
         String(characterData.initiative),
-        (next) => patchCharacter((prev) => ({ ...prev, initiative: parseNumber(next, prev.initiative) })),
+        (next) => patchCharacter((prev) => ({ ...prev, initiative: parseNumber(next, prev.initiative) }), ['combat.core']),
         'Initiative',
         { keyboardType: 'number-pad' },
+      )}
+
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Combat Templates</Text>
+        {sectionConflictLabel(['combat.templates'])}
+      </View>
+      <Text style={styles.editLabel}>Actions (one per line)</Text>
+      {renderTextInput(
+        (characterData.combatTemplates?.actions || []).join('\n'),
+        (next) =>
+          patchCharacter(
+            (prev) => ({
+              ...prev,
+              combatTemplates: {
+                ...prev.combatTemplates,
+                actions: parseLines(next),
+              },
+            }),
+            ['combat.templates.actions'],
+          ),
+        'Attack with longsword',
+        { multiline: true },
+      )}
+      <Text style={styles.editLabel}>Bonus Actions (one per line)</Text>
+      {renderTextInput(
+        (characterData.combatTemplates?.bonusActions || []).join('\n'),
+        (next) =>
+          patchCharacter(
+            (prev) => ({
+              ...prev,
+              combatTemplates: {
+                ...prev.combatTemplates,
+                bonusActions: parseLines(next),
+              },
+            }),
+            ['combat.templates.bonus-actions'],
+          ),
+        'Second Wind',
+        { multiline: true },
+      )}
+      <Text style={styles.editLabel}>Reactions (one per line)</Text>
+      {renderTextInput(
+        (characterData.combatTemplates?.reactions || []).join('\n'),
+        (next) =>
+          patchCharacter(
+            (prev) => ({
+              ...prev,
+              combatTemplates: {
+                ...prev.combatTemplates,
+                reactions: parseLines(next),
+              },
+            }),
+            ['combat.templates.reactions'],
+          ),
+        'Opportunity Attack',
+        { multiline: true },
       )}
     </View>
   );
@@ -1082,7 +1260,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
     return (
       <View style={styles.cardSecondary}>
-        <Text style={styles.sectionTitle}>Magic Config</Text>
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Magic Config</Text>
+          {sectionConflictLabel(['magic.'])}
+        </View>
         <Text style={styles.editLabel}>Spellcasting Ability</Text>
         {renderTextInput(
           characterData.spells.spellcastingAbility,
@@ -1198,7 +1379,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const renderInventoryEdit = () => (
     <View style={styles.cardSecondary}>
-      <Text style={styles.sectionTitle}>Inventory Config</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Inventory Config</Text>
+        {sectionConflictLabel(['inventory.'])}
+      </View>
       <Text style={styles.editLabel}>Inventory (one item per line)</Text>
       {renderTextInput(
         characterData.inventory.join('\n'),
@@ -1272,7 +1456,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const renderNotesEdit = () => (
     <View style={styles.cardSecondary}>
-      <Text style={styles.sectionTitle}>Session & Story Notes</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Session & Story Notes</Text>
+        {sectionConflictLabel(['notes.'])}
+      </View>
       <Text style={styles.editLabel}>Session Notes</Text>
       {renderTextInput(characterData.notesBlocks?.session || '', (next) => setNotesBlock('session', next), 'What happened this session?', {
         multiline: true,
@@ -1299,7 +1486,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const renderHomebrewEdit = () => (
     <View style={styles.cardSecondary}>
-      <Text style={styles.sectionTitle}>Homebrew Fields</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Homebrew Fields</Text>
+        {sectionConflictLabel(['homebrew.fields'])}
+      </View>
       <TouchableOpacity style={styles.secondaryAction} onPress={addCustomField} activeOpacity={0.85}>
         <Text style={styles.secondaryActionText}>+ Додати custom field</Text>
       </TouchableOpacity>
@@ -1342,7 +1532,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         );
       })}
 
-      <Text style={styles.sectionTitle}>Flexible Trackers</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Flexible Trackers</Text>
+        {sectionConflictLabel(['homebrew.trackers'])}
+      </View>
       <TouchableOpacity style={styles.secondaryAction} onPress={addTracker} activeOpacity={0.85}>
         <Text style={styles.secondaryActionText}>+ Додати tracker</Text>
       </TouchableOpacity>
@@ -1446,7 +1639,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
             <Pressable
               style={[styles.sessionToggle, characterData.sessionMode ? styles.sessionToggleActive : null]}
-              onPress={() => patchCharacter((prev) => ({ ...prev, sessionMode: !prev.sessionMode }))}
+              onPress={() => patchCharacter((prev) => ({ ...prev, sessionMode: !prev.sessionMode }), ['overview.session-mode'])}
               android_ripple={{ color: '#999' }}
             >
               <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Session Mode</Text>
@@ -1481,7 +1674,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         )}
 
         <View style={styles.combatSummaryCard}>
-          <Text style={styles.summaryTitle}>Combat Summary</Text>
+          <View style={styles.sectionTitleRow}>
+            <Text style={styles.summaryTitle}>Combat Summary</Text>
+            {sectionConflictLabel(['combat.hp', 'combat.core'])}
+          </View>
           <View style={styles.summaryGrid}>
             <View style={styles.summaryTileWide}>
               <Text style={styles.summaryLabel}>HP</Text>
@@ -1556,15 +1752,34 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             {TAB_ORDER.map((tab) => (
               <Pressable
                 key={tab}
-                style={[styles.tabChip, selectedTab === tab ? styles.tabChipActive : null]}
+                style={[styles.tabChip, selectedTab === tab ? styles.tabChipActive : null, hasConflictForTab(tab) ? styles.tabChipConflict : null]}
                 onPress={() => openTab(tab)}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={[styles.tabChipText, selectedTab === tab ? styles.tabChipTextActive : null]}>{tab}</Text>
+                <View style={styles.tabChipInner}>
+                  <Text style={[styles.tabChipText, selectedTab === tab ? styles.tabChipTextActive : null]}>{tab}</Text>
+                  {hasConflictForTab(tab) && <MaterialCommunityIcons name='alert-circle' size={14} color='#f59e0b' />}
+                </View>
               </Pressable>
             ))}
           </ScrollView>
         </View>
+
+        {isSharedSheet && (
+          <View style={styles.cardSecondary}>
+            <View style={styles.sectionTitleRow}>
+              <Text style={styles.sectionTitle}>Shared Change History ({selectedTab})</Text>
+            </View>
+            {!tabHistory.length && <Text style={styles.blockTextMuted}>Для цієї вкладки ще немає shared історії.</Text>}
+            {tabHistory.map((entry) => (
+              <View key={entry.id} style={styles.historyRow}>
+                <Text style={styles.historyAuthor}>{entry.uid === fbAuth.currentUser?.uid ? 'You' : `User ${entry.uid.slice(0, 6)}`}</Text>
+                <Text style={styles.historyMeta}>{new Date(entry.atMs).toLocaleString()}</Text>
+                <Text style={styles.historyPaths}>{entry.paths.join(', ') || '—'}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         <View style={styles.tabContent}>{mode === 'play' ? renderTabContentPlay() : renderTabContentEdit()}</View>
       </ScrollView>

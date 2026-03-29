@@ -72,6 +72,12 @@ export interface CharacterNotesBlocks {
   quests?: string;
 }
 
+export interface CharacterCombatTemplates {
+  actions?: string[];
+  bonusActions?: string[];
+  reactions?: string[];
+}
+
 export interface CharacterDto {
   id: string;
   name: string;
@@ -128,6 +134,7 @@ export interface CharacterDto {
   customFeatureBlocks?: CharacterCustomFeatureBlock[];
   customSpellLists?: CharacterCustomSpellList[];
   notesBlocks?: CharacterNotesBlocks;
+  combatTemplates?: CharacterCombatTemplates;
 }
 
 //TODO - fix  - complete

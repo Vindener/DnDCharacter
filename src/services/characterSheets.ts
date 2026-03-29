@@ -1,8 +1,17 @@
 
-import { db, fbAuth, now, hasDoc, arrayUnion } from './firebase';
+import { db, fbAuth, now, hasDoc } from './firebase';
 import { ensureConnection } from './connections';
 import { findUserByEmail } from './users';
 import type { CharacterDto } from '@/types/Character';
+
+export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
+export type CharacterChangeHistoryEntry = {
+  id: string;
+  uid: string;
+  tab: CharacterTabKey;
+  paths: string[];
+  atMs: number;
+};
 
 function uid() {
   const u = fbAuth.currentUser;
@@ -56,6 +65,8 @@ export type CharacterSheet = {
   customFeatureBlocks?: CharacterDto['customFeatureBlocks'];
   customSpellLists?: CharacterDto['customSpellLists'];
   notesBlocks?: CharacterDto['notesBlocks'];
+  combatTemplates?: CharacterDto['combatTemplates'];
+  changeHistory?: CharacterChangeHistoryEntry[];
 
   photoUri?: string;
 
@@ -112,6 +123,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     customFeatureBlocks: dto.customFeatureBlocks ?? [],
     customSpellLists: dto.customSpellLists ?? [],
     notesBlocks: dto.notesBlocks ?? {},
+    combatTemplates: dto.combatTemplates ?? { actions: [], bonusActions: [], reactions: [] },
 
     photoUri: dto.photoUri,
 
@@ -120,7 +132,52 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
   };
 }
 
-export async function upsertCharacterSheetFromLocal(dto: CharacterDto) {
+function mapPathToTab(path: string): CharacterTabKey {
+  if (path.startsWith('overview.')) return 'Overview';
+  if (path.startsWith('combat.')) return 'Combat';
+  if (path.startsWith('magic.')) return 'Magic';
+  if (path.startsWith('inventory.')) return 'Inventory';
+  if (path.startsWith('notes.')) return 'Notes';
+  if (path.startsWith('homebrew.')) return 'Homebrew';
+  return 'Overview';
+}
+
+function buildHistoryEntries(uidValue: string, paths: string[], atMs: number): CharacterChangeHistoryEntry[] {
+  const byTab = new Map<CharacterTabKey, string[]>();
+  for (const path of paths) {
+    const trimmed = String(path || '').trim();
+    if (!trimmed) continue;
+    const tab = mapPathToTab(trimmed);
+    const existing = byTab.get(tab) || [];
+    if (!existing.includes(trimmed)) existing.push(trimmed);
+    byTab.set(tab, existing);
+  }
+
+  const out: CharacterChangeHistoryEntry[] = [];
+  byTab.forEach((tabPaths, tab) => {
+    out.push({
+      id: `${uidValue}-${tab}-${atMs}`,
+      uid: uidValue,
+      tab,
+      paths: tabPaths,
+      atMs,
+    });
+  });
+
+  return out;
+}
+
+function mergeBoundedHistory(existing: unknown, additions: CharacterChangeHistoryEntry[], maxItems = 50): CharacterChangeHistoryEntry[] {
+  const base = Array.isArray(existing) ? (existing as CharacterChangeHistoryEntry[]) : [];
+  const merged = [...base, ...additions]
+    .filter((item) => item && typeof item.uid === 'string' && typeof item.tab === 'string')
+    .sort((a, b) => (a.atMs || 0) - (b.atMs || 0));
+
+  if (merged.length <= maxItems) return merged;
+  return merged.slice(merged.length - maxItems);
+}
+
+export async function upsertCharacterSheetFromLocal(dto: CharacterDto, options?: { historyPaths?: string[] }) {
   const me = fbAuth.currentUser?.uid;
   if (!me) throw new Error('Not signed in');
 
@@ -136,6 +193,12 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterDto) {
     } catch {}
 
     const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
+    const historyPaths = options?.historyPaths || [];
+    if (historyPaths.length) {
+      const atMs = Date.now();
+      const additions = buildHistoryEntries(me, historyPaths, atMs);
+      payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additions, 50);
+    }
 
     if (existingMeta) {
       payload.owners = existingMeta.owners || [me];
@@ -357,6 +420,7 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
     customFeatureBlocks: (dto as any).customFeatureBlocks,
     customSpellLists: (dto as any).customSpellLists,
     notesBlocks: (dto as any).notesBlocks,
+    combatTemplates: (dto as any).combatTemplates,
   };
 
   return __cleanUndefined(full);

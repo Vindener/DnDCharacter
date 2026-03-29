@@ -321,9 +321,17 @@ export const getStyles = (c: ThemeColors) =>
       borderWidth: 1,
       borderColor: c.border,
     },
+    tabChipInner: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+    },
     tabChipActive: {
       backgroundColor: c.text,
       borderColor: c.text,
+    },
+    tabChipConflict: {
+      borderColor: '#f59e0b',
     },
     tabChipText: {
       color: c.text,
@@ -336,6 +344,28 @@ export const getStyles = (c: ThemeColors) =>
 
     tabContent: {
       gap: 10,
+    },
+    historyRow: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      padding: 9,
+      gap: 3,
+    },
+    historyAuthor: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '700',
+    },
+    historyMeta: {
+      color: c.textSecondary,
+      fontSize: 11,
+    },
+    historyPaths: {
+      color: c.text,
+      fontSize: 11,
+      lineHeight: 16,
     },
     cardPrimary: {
       backgroundColor: c.card,
@@ -360,9 +390,29 @@ export const getStyles = (c: ThemeColors) =>
       justifyContent: 'space-between',
       gap: 8,
     },
+    sectionTitleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      flexWrap: 'wrap',
+      flex: 1,
+    },
     sectionTitle: {
       color: c.text,
       fontSize: 15,
+      fontWeight: '700',
+    },
+    sectionConflictBadge: {
+      borderRadius: 99,
+      borderWidth: 1,
+      borderColor: '#f59e0b',
+      backgroundColor: '#3f2f0f',
+      paddingVertical: 2,
+      paddingHorizontal: 8,
+    },
+    sectionConflictBadgeText: {
+      color: '#fbbf24',
+      fontSize: 10,
       fontWeight: '700',
     },
     subSectionTitle: {

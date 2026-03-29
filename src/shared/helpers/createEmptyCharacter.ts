@@ -135,5 +135,11 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
       quests: '',
       ...(overrides.notesBlocks || {}),
     },
+    combatTemplates: {
+      actions: [],
+      bonusActions: [],
+      reactions: [],
+      ...(overrides.combatTemplates || {}),
+    },
   };
 }

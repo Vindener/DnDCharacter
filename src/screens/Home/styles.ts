@@ -147,6 +147,51 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: 11,
       fontWeight: '600',
     },
+    conflictBadge: {
+      backgroundColor: '#7f1d1d',
+      borderWidth: 1,
+      borderColor: '#dc2626',
+    },
+    conflictBadgeText: {
+      color: '#fff',
+    },
+
+    timelineRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+      paddingVertical: 7,
+    },
+    timelineBadge: {
+      borderRadius: 99,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      minWidth: 62,
+      alignItems: 'center',
+    },
+    timelineBadgeText: {
+      color: c.text,
+      fontSize: 10,
+      fontWeight: '700',
+    },
+    timelineContent: {
+      flex: 1,
+      gap: 1,
+    },
+    timelineText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    timelineMeta: {
+      color: c.textSecondary,
+      fontSize: 11,
+    },
 
     dmGrid: {
       flexDirection: 'row',
@@ -169,6 +214,25 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: 12,
       fontWeight: '700',
       textAlign: 'center',
+    },
+    pendingButton: {
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 10,
+      paddingHorizontal: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+      marginTop: 2,
+      marginBottom: 4,
+    },
+    pendingButtonText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '700',
     },
 
     quickGrid: {

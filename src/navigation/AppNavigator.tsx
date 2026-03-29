@@ -9,13 +9,14 @@ import useThemeStore from '@/context/Theme-store';
 import Header from '@/modules/Header/Header';
 import Initiative from '@/screens/Initiative/Initiative';
 import DMNavigator from '@/navigation/DMNavigator';
+import type { DMStackParamList } from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
 
 export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
   Initiative: undefined;
-  DM: undefined;
+  DM: NavigatorScreenParams<DMStackParamList> | undefined;
   Bestiary: undefined;
   Support: undefined;
 };

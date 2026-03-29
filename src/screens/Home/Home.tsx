@@ -3,7 +3,9 @@ import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity } from '
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
+import type { AppStackParamList } from '@/navigation/AppNavigator';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
@@ -33,6 +35,21 @@ type CharacterPreview = {
 };
 
 const mapRemoteToLocalDto = (doc: Record<string, unknown>): CharacterDto => mapCloudCharacterToLocalDto(doc);
+
+const toMillis = (value: unknown): number => {
+  if (!value || typeof value !== 'object') return 0;
+  const cast = value as { toMillis?: () => number; seconds?: number };
+  if (typeof cast.toMillis === 'function') return cast.toMillis();
+  if (typeof cast.seconds === 'number') return cast.seconds * 1000;
+  return 0;
+};
+
+type TimelineEvent = {
+  id: string;
+  atMs: number;
+  type: 'local-edit' | 'synced' | 'shared-update';
+  text: string;
+};
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
@@ -200,10 +217,16 @@ const Home = () => {
     void openCharacter(current);
   };
 
-  const openRootTab = (routeName: string) => {
-    const parentNav = navigation.getParent();
+  const openRootTab = (routeName: keyof AppStackParamList) => {
+    const parentNav = navigation.getParent<BottomTabNavigationProp<AppStackParamList>>();
     if (!parentNav) return;
-    parentNav.navigate(routeName as never);
+    parentNav.navigate(routeName);
+  };
+
+  const openSharedUpdatesQueue = () => {
+    const parentNav = navigation.getParent<BottomTabNavigationProp<AppStackParamList>>();
+    if (!parentNav) return;
+    parentNav.navigate('DM', { screen: 'DMSharedUpdates' });
   };
 
   const onImport = async () => {
@@ -228,6 +251,53 @@ const Home = () => {
 
   const effectiveLastSyncAt = storeLastSyncAt ?? cloudPulseAt;
   const lastSyncLabel = effectiveLastSyncAt ? new Date(effectiveLastSyncAt).toLocaleTimeString() : '—';
+
+  const timeline = useMemo<TimelineEvent[]>(() => {
+    const characterNameById = new Map<string, string>();
+    previewList.forEach((item) => {
+      characterNameById.set(item.id, item.name);
+    });
+
+    const syncEvents = Object.values(syncByCharacter).flatMap((entry) => {
+      const name = characterNameById.get(entry.characterId) || entry.characterId;
+      const events: TimelineEvent[] = [];
+      if (entry.lastLocalChangeAt) {
+        events.push({
+          id: `${entry.characterId}-local-${entry.lastLocalChangeAt}`,
+          atMs: entry.lastLocalChangeAt,
+          type: 'local-edit',
+          text: `${name}: Local edit`,
+        });
+      }
+      if (entry.lastSyncAt) {
+        events.push({
+          id: `${entry.characterId}-sync-${entry.lastSyncAt}`,
+          atMs: entry.lastSyncAt,
+          type: 'synced',
+          text: `${name}: Synced`,
+        });
+      }
+      return events;
+    });
+
+    const sharedEvents: TimelineEvent[] = sharedCloud
+      .map((doc) => {
+        const atMs = toMillis(doc.updatedAt);
+        if (!atMs) return null;
+        const name = String(doc.name || 'Character');
+        return {
+          id: `${String(doc.id || name)}-shared-${atMs}`,
+          atMs,
+          type: 'shared-update' as const,
+          text: `${name}: Shared update`,
+        };
+      })
+      .filter(Boolean) as TimelineEvent[];
+
+    return [...syncEvents, ...sharedEvents]
+      .sort((a, b) => b.atMs - a.atMs)
+      .slice(0, 12);
+  }, [previewList, sharedCloud, syncByCharacter]);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -271,6 +341,31 @@ const Home = () => {
       </View>
 
       <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Last Active Session Timeline</Text>
+        <Text style={styles.sectionHint}>Останні локальні правки, синк і shared-оновлення.</Text>
+        {!timeline.length && <Text style={styles.sectionHint}>Подій поки немає.</Text>}
+        {timeline.map((event) => {
+          const badge =
+            event.type === 'local-edit'
+              ? 'Local'
+              : event.type === 'synced'
+                ? 'Synced'
+                : 'Shared';
+          return (
+            <View key={event.id} style={styles.timelineRow}>
+              <View style={styles.timelineBadge}>
+                <Text style={styles.timelineBadgeText}>{badge}</Text>
+              </View>
+              <View style={styles.timelineContent}>
+                <Text style={styles.timelineText}>{event.text}</Text>
+                <Text style={styles.timelineMeta}>{new Date(event.atMs).toLocaleString()}</Text>
+              </View>
+            </View>
+          );
+        })}
+      </View>
+
+      <View style={styles.card}>
         <Text style={styles.sectionTitle}>Characters Preview</Text>
         <TextInput
           value={search}
@@ -300,8 +395,8 @@ const Home = () => {
             </View>
             <View style={styles.badgeRow}>
               {item.statuses.map((status) => (
-                <View key={`${item.id}-${status}`} style={styles.badge}>
-                  <Text style={styles.badgeText}>{status}</Text>
+                <View key={`${item.id}-${status}`} style={[styles.badge, status === 'Conflict' ? styles.conflictBadge : null]}>
+                  <Text style={[styles.badgeText, status === 'Conflict' ? styles.conflictBadgeText : null]}>{status}</Text>
                 </View>
               ))}
             </View>
@@ -315,6 +410,10 @@ const Home = () => {
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>DM Panel Preview</Text>
           <Text style={styles.sectionHint}>Active party, pending shared updates, швидкий доступ до DM-потоку.</Text>
+          <Pressable style={styles.pendingButton} onPress={openSharedUpdatesQueue} android_ripple={{ color: '#999' }}>
+            <Ionicons name='git-compare-outline' size={18} color={colors.text} />
+            <Text style={styles.pendingButtonText}>Pending Shared Updates ({sharedCloud.length})</Text>
+          </Pressable>
           <Text style={styles.lineText}>Pending shared changes: {sharedCloud.length}</Text>
           <Text style={styles.lineText}>Active party size: {previewList.length}</Text>
 
