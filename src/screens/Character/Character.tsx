@@ -21,6 +21,7 @@ import { fetchCharacterSheet, subscribeCharacterSheet, upsertCharacterSheetFromL
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
+import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 
 interface CharacterProps {
   route: {
@@ -111,6 +112,11 @@ function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
     conditions: character.conditions ?? [],
     customFields: character.customFields ?? [],
     customTrackers: character.customTrackers ?? [],
+    customSections: character.customSections ?? [],
+    customResources: character.customResources ?? [],
+    customResetRules: character.customResetRules ?? [],
+    customFeatureBlocks: character.customFeatureBlocks ?? [],
+    customSpellLists: character.customSpellLists ?? [],
     notesBlocks: {
       session: character.notesBlocks?.session ?? '',
       campaign: character.notesBlocks?.campaign ?? '',
@@ -214,6 +220,15 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (status === 'conflict') return 'Conflict';
     return 'Pending';
   }, [currentSync?.status, syncStatus]);
+
+  useEffect(() => {
+    if (currentSync?.status === 'conflict') {
+      trackProductEvent('sync_conflict_detected', {
+        characterId: baseCharacter.id,
+        paths: currentSync.conflictPaths,
+      });
+    }
+  }, [baseCharacter.id, currentSync?.conflictPaths, currentSync?.status]);
 
   useEffect(() => {
     setCharacterData(ensureCharacterDefaults(baseCharacter));
@@ -567,6 +582,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [patchCharacter]);
 
   const resolveConflictWithLocal = useCallback(() => {
+    trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
     setSyncStatus('Pending');
     upsertCharacterSheetFromLocal(characterData)
       .then(() => {
@@ -580,6 +596,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [characterData, clearConflicts, markCloudUploaded]);
 
   const resolveConflictWithCloud = useCallback(() => {
+    trackProductEvent('sync_conflict_resolved_cloud', { characterId: characterData.id });
     fetchCharacterSheet(characterData.id)
       .then((doc) => {
         if (!doc) return;
@@ -594,6 +611,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [characterData.id, clearConflicts, markCloudDownloaded, updateCharacter]);
 
   const resolveConflictManual = useCallback(() => {
+    trackProductEvent('sync_conflict_resolved_later', { characterId: characterData.id });
     clearConflicts(characterData.id).catch(() => {});
   }, [characterData.id, clearConflicts]);
 
@@ -1509,7 +1527,18 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <Text style={styles.sectionTitle}>Quick Action Bar</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.quickActionsRow}>
               {quickActions.map((action) => (
-                <Pressable key={action.id} style={styles.quickActionButton} onPress={action.onPress} android_ripple={{ color: '#999' }}>
+                <Pressable
+                  key={action.id}
+                  style={styles.quickActionButton}
+                  onPress={() => {
+                    trackProductEvent('quick_action_used', {
+                      characterId: characterData.id,
+                      actionId: action.id,
+                    });
+                    action.onPress();
+                  }}
+                  android_ripple={{ color: '#999' }}
+                >
                   <MaterialCommunityIcons name={action.icon as never} size={18} color={colors.text} />
                   <Text style={styles.quickActionText}>{action.label}</Text>
                 </Pressable>

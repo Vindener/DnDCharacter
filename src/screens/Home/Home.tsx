@@ -16,6 +16,7 @@ import useAppRoleStore from '@/context/AppRole-store';
 import { APP_ROLES } from '@/types/Product';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
+import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 
 type CharacterPreview = {
   id: string;
@@ -180,6 +181,10 @@ const Home = () => {
 
     setCurrentCharacterId(character.id);
     navigation.navigate('Character', { character: character.payload });
+    trackProductEvent('character_opened', {
+      characterId: character.id,
+      source: character.source,
+    });
   };
 
   const continueSession = () => {
@@ -188,6 +193,10 @@ const Home = () => {
       navigation.navigate('CreateCharacter');
       return;
     }
+    trackProductEvent('session_continue', {
+      characterId: current.id,
+      role: roleMode,
+    });
     void openCharacter(current);
   };
 
@@ -233,6 +242,7 @@ const Home = () => {
               style={[styles.roleChip, roleMode === option ? styles.roleChipActive : null]}
               onPress={() => {
                 void setRoleMode(option);
+                trackProductEvent('role_changed', { role: option });
               }}
               android_ripple={{ color: '#999' }}
             >

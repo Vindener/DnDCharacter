@@ -122,6 +122,11 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     conditions: overrides.conditions ?? [],
     customFields: overrides.customFields ?? [],
     customTrackers: overrides.customTrackers ?? [],
+    customSections: overrides.customSections ?? [],
+    customResources: overrides.customResources ?? [],
+    customResetRules: overrides.customResetRules ?? [],
+    customFeatureBlocks: overrides.customFeatureBlocks ?? [],
+    customSpellLists: overrides.customSpellLists ?? [],
     notesBlocks: {
       session: '',
       campaign: '',

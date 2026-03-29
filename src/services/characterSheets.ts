@@ -50,6 +50,11 @@ export type CharacterSheet = {
   conditions?: CharacterDto['conditions'];
   customFields?: CharacterDto['customFields'];
   customTrackers?: CharacterDto['customTrackers'];
+  customSections?: CharacterDto['customSections'];
+  customResources?: CharacterDto['customResources'];
+  customResetRules?: CharacterDto['customResetRules'];
+  customFeatureBlocks?: CharacterDto['customFeatureBlocks'];
+  customSpellLists?: CharacterDto['customSpellLists'];
   notesBlocks?: CharacterDto['notesBlocks'];
 
   photoUri?: string;
@@ -101,6 +106,11 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     conditions: dto.conditions ?? [],
     customFields: dto.customFields ?? [],
     customTrackers: dto.customTrackers ?? [],
+    customSections: dto.customSections ?? [],
+    customResources: dto.customResources ?? [],
+    customResetRules: dto.customResetRules ?? [],
+    customFeatureBlocks: dto.customFeatureBlocks ?? [],
+    customSpellLists: dto.customSpellLists ?? [],
     notesBlocks: dto.notesBlocks ?? {},
 
     photoUri: dto.photoUri,
@@ -341,6 +351,11 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
     conditions: (dto as any).conditions,
     customFields: (dto as any).customFields,
     customTrackers: (dto as any).customTrackers,
+    customSections: (dto as any).customSections,
+    customResources: (dto as any).customResources,
+    customResetRules: (dto as any).customResetRules,
+    customFeatureBlocks: (dto as any).customFeatureBlocks,
+    customSpellLists: (dto as any).customSpellLists,
     notesBlocks: (dto as any).notesBlocks,
   };
 

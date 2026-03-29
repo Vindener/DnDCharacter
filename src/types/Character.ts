@@ -18,6 +18,7 @@ export interface CharacterCustomField {
 }
 
 export type TrackerResetRule = 'none' | 'short-rest' | 'long-rest' | 'session';
+export type TrackerVisibility = 'player' | 'dm' | 'both';
 
 export interface CharacterTracker {
   id: string;
@@ -25,7 +26,42 @@ export interface CharacterTracker {
   current: number;
   max?: number;
   resetRule: TrackerResetRule;
+  visibility?: TrackerVisibility;
   color?: string;
+}
+
+export interface CharacterCustomSection {
+  id: string;
+  title: string;
+  content: string;
+}
+
+export interface CharacterCustomResource {
+  id: string;
+  label: string;
+  current: number;
+  max?: number;
+  resetRule: TrackerResetRule;
+}
+
+export interface CharacterCustomResetRule {
+  id: string;
+  targetId: string;
+  trigger: 'short-rest' | 'long-rest' | 'session-start';
+  mode: 'set' | 'increment' | 'decrement';
+  value: number;
+}
+
+export interface CharacterCustomFeatureBlock {
+  id: string;
+  title: string;
+  entries: string[];
+}
+
+export interface CharacterCustomSpellList {
+  id: string;
+  title: string;
+  spells: string[];
 }
 
 export interface CharacterNotesBlocks {
@@ -86,6 +122,11 @@ export interface CharacterDto {
   conditions?: string[];
   customFields?: CharacterCustomField[];
   customTrackers?: CharacterTracker[];
+  customSections?: CharacterCustomSection[];
+  customResources?: CharacterCustomResource[];
+  customResetRules?: CharacterCustomResetRule[];
+  customFeatureBlocks?: CharacterCustomFeatureBlock[];
+  customSpellLists?: CharacterCustomSpellList[];
   notesBlocks?: CharacterNotesBlocks;
 }
 
