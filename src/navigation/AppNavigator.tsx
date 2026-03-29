@@ -39,8 +39,6 @@ export default function AppNavigator() {
         return 'book-outline';
       case 'Heroes':
         return 'person-outline';
-      case 'Guide':
-        return 'flag-outline';
       case 'Initiative':
         return 'bonfire-outline';
       case 'DM':

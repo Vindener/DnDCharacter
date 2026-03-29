@@ -32,6 +32,10 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
   const addCharacter = useCharacterStore((s: any) => s.addCharacter);
   const setCurrentCharacterId = useCharacterStore((s: any) => s.setCurrentCharacterId);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
+  const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
+  const removeCharacterSync = useSyncStore((s) => s.removeCharacterSync);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -47,6 +51,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
   const [tempAc, setTempAc] = useState(character.ac ?? 0);
   const [isInitModalVisible, setIsInitModalVisible] = useState(false);
   const [tempInit, setTempInit] = useState(character.initiative ?? 0);
+  const isCharacterInCloud = isCloudDoc || Boolean(characterData.id && syncByCharacter[characterData.id]?.hasCloud);
 
   useEffect(() => {
     if (character.id) {
@@ -104,77 +109,83 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
   const onSaveToCloud = async () => {
     try {
-      const res = await upsertCharacterSheetFromLocal(character as any);
+      const sourceCharacter = { ...characterData };
+      if (!sourceCharacter.id) throw new Error('Character has no id');
 
-      if (res.created && res.id !== character.id && typeof onChange === 'function') {
-        onChange({ ...character, id: res.id } as any);
+      const res = await upsertCharacterSheetFromLocal(sourceCharacter as any);
+      let syncedCharacter = sourceCharacter;
+      let targetSheetId = sourceCharacter.id;
+
+      if (res?.id && res.id !== sourceCharacter.id) {
+        syncedCharacter = { ...sourceCharacter, id: res.id };
+        await updateCharacter(sourceCharacter.id, syncedCharacter);
+        await removeCharacterSync(sourceCharacter.id);
+        await ensureCharacterSync(syncedCharacter.id, true);
+        targetSheetId = syncedCharacter.id;
+      } else {
+        await ensureCharacterSync(targetSheetId, true);
       }
 
-      // setIsCloudDoc(true);
-      console.log('[save] cloud ok', res.id);
+      await setCloudAvailability(targetSheetId, true);
+      await markCloudUploaded(targetSheetId);
+      setCurrentCharacterId(targetSheetId);
+      setCharacterData(syncedCharacter);
+      onChange?.(syncedCharacter);
 
-      // 🔹 показуємо алерт
+      const successMessage = res?.created
+        ? 'Персонажа збережено у хмарі.'
+        : 'Зміни персонажа успішно оновлені у хмарі.';
+
       Alert.alert(
         'Успіх',
-        res.created
-          ? 'Персонажа збережено у хмарі. Перезайдіть будь ласка на персонажа, щоб побачити актуальні зміни.'
-          : 'Зміни персонажа успішно оновлені у хмарі! Дякую Вам!',
+        successMessage,
         [
           {
             text: 'Ок',
             onPress: () => {
               closeMenu();
-              if (typeof onChange === 'function') {
-                onChange({ ...character, id: res.id } as any);
+              if (targetSheetId !== character.id) {
+                navigation.navigate('Character', { character: syncedCharacter });
               }
-              // navigation.navigate("Character", { id: res.id });
             },
           },
         ],
       );
     } catch (e: any) {
       console.warn('[save] failed', e?.code || e?.message || e);
-      console.warn("[save] failed", e?.code || e?.message || e);
-
-    if (e?.message === "Not signed in") {
-      Alert.alert(
-        "Помилка авторизації",
-        "Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару."
-      );
-    } else {
-      Alert.alert(
-        "Помилка",
-        "Не вдалося зберегти у хмару. Спробуйте ще раз."
-      );
+      if (e?.message === 'Not signed in') {
+        Alert.alert('Помилка авторизації', 'Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару.');
+      } else {
+        Alert.alert('Помилка', 'Не вдалося зберегти у хмару. Спробуйте ще раз.');
+      }
     }
-  }
   };
   const closeMenu = () => setMenuVisible(false);
 
   const createDetachedCopy = async (mode: 'local-copy' | 'duplicate-shared') => {
-    const suffix = mode === 'local-copy' ? 'Local copy' : 'Shared duplicate';
+    const suffix = mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат';
     const copy: CharacterDto = {
       ...characterData,
       id: String(uuid.v4()),
-      name: `${characterData.name || 'Character'} (${suffix})`,
+      name: `${characterData.name || 'Персонаж'} (${suffix})`,
     };
 
     await addCharacter(copy);
     await ensureCharacterSync(copy.id, false);
     setCurrentCharacterId(copy.id);
 
-    Alert.alert('Готово', mode === 'local-copy' ? 'Створено локальну копію без live sync.' : 'Створено незалежний дублікат із shared листа.');
+    Alert.alert('Готово', mode === 'local-copy' ? 'Створено локальну копію без живої синхронізації.' : 'Створено незалежний дублікат зі спільного листа.');
     navigation.navigate('Character', { character: copy });
   };
 
   const openSharedLiveCopy = () => {
-    if (!isCloudDoc) {
-      Alert.alert('Shared live copy', 'Для live-режиму спочатку створіть cloud версію.');
+    if (!isCharacterInCloud) {
+      Alert.alert('Спільна жива копія', 'Для живого режиму спочатку створіть хмарну версію.');
       return;
     }
 
     onSyncNow?.();
-    Alert.alert('Shared live copy', 'Поточний лист відкрито в live-режимі з cloud sync.');
+    Alert.alert('Спільна жива копія', 'Поточний лист відкрито в живому режимі з хмарною синхронізацією.');
   };
 
   const pickPhoto = async () => {
@@ -344,7 +355,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         <MenuDivider color={colors.border} />
 
         <MenuItem textStyle={styles.menuItemText} onPress={onSaveToCloud}>
-          Зберегти в хмарі
+          {isCharacterInCloud ? 'Оновити в хмарі' : 'Зберегти в хмарі'}
         </MenuItem>
         <MenuItem
           textStyle={styles.menuItemText}
@@ -353,7 +364,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             onSyncNow?.();
           }}
         >
-          Sync now
+          Синхронізувати зараз
         </MenuItem>
         <MenuItem
           textStyle={styles.menuItemText}
@@ -362,7 +373,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             openSharedLiveCopy();
           }}
         >
-          Shared live copy
+          Спільна жива копія
         </MenuItem>
         <MenuItem
           textStyle={styles.menuItemText}
@@ -371,7 +382,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             void createDetachedCopy('local-copy');
           }}
         >
-          Create local copy
+          Створити локальну копію
         </MenuItem>
         {isSharedSheet && (
           <MenuItem
@@ -381,7 +392,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
               void createDetachedCopy('duplicate-shared');
             }}
           >
-            Duplicate from shared
+            Дублювати зі спільного
           </MenuItem>
         )}
 
@@ -456,7 +467,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
                   color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
                 }}
               >
-                {row.level} lvl
+                {row.level} рів.
               </Text>
               <Text
                 style={{

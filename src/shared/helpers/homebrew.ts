@@ -9,11 +9,11 @@ import type {
 } from '@/types/Character';
 
 const NOTE_GROUP_SEED: Array<{ key: keyof NonNullable<CharacterDto['notesBlocks']>; title: string; order: number }> = [
-  { key: 'session', title: 'Session', order: 0 },
-  { key: 'campaign', title: 'Campaign', order: 1 },
-  { key: 'goals', title: 'Goals', order: 2 },
-  { key: 'relationships', title: 'Relationships', order: 3 },
-  { key: 'quests', title: 'Quests', order: 4 },
+  { key: 'session', title: 'Сесія', order: 0 },
+  { key: 'campaign', title: 'Кампанія', order: 1 },
+  { key: 'goals', title: 'Цілі', order: 2 },
+  { key: 'relationships', title: 'Зв’язки', order: 3 },
+  { key: 'quests', title: 'Квести', order: 4 },
 ];
 
 const FIELD_TYPES: CustomFieldType[] = ['text', 'number', 'boolean', 'select'];
@@ -59,7 +59,7 @@ function normalizeResource(resource: CharacterCustomResource): CharacterCustomRe
 function trackerToResource(tracker: CharacterTracker): CharacterCustomResource {
   return normalizeResource({
     id: tracker.id || `${Date.now()}-${Math.random()}`,
-    label: tracker.label || 'Resource',
+    label: tracker.label || 'Ресурс',
     current: tracker.current ?? 0,
     max: tracker.max,
     resetRule: tracker.resetRule || 'none',
@@ -83,7 +83,7 @@ function normalizeNotesGroups(groups: CharacterDto['customNotesGroups']): Charac
   return groups
     .map((group, index) => ({
       id: String(group.id || `notes-group-${index}`),
-      title: String(group.title || `Group ${index + 1}`),
+      title: String(group.title || `Група ${index + 1}`),
       content: String(group.content || ''),
       order: typeof group.order === 'number' ? group.order : index,
       origin: (group.origin === 'custom' ? 'custom' : 'seeded') as CharacterCustomNotesGroup['origin'],
@@ -102,7 +102,7 @@ function legacyToEntries(character: CharacterDto): CharacterHomebrewEntry[] {
         id: `legacy-spell-${list.id}-${index}`,
         kind: 'spell',
         name,
-        description: list.title ? `From legacy spell list: ${list.title}` : 'Migrated from legacy spell list',
+        description: list.title ? `Із застарілого списку заклять: ${list.title}` : 'Перенесено із застарілого списку заклять',
         tags: list.title ? [list.title] : [],
       });
     });
@@ -116,7 +116,7 @@ function legacyToEntries(character: CharacterDto): CharacterHomebrewEntry[] {
         id: `legacy-feature-${block.id}-${index}`,
         kind: 'ability',
         name,
-        description: block.title ? `From legacy feature block: ${block.title}` : 'Migrated from legacy feature block',
+        description: block.title ? `Із застарілого блоку особливостей: ${block.title}` : 'Перенесено із застарілого блоку особливостей',
         tags: block.title ? [block.title] : [],
       });
     });
@@ -196,7 +196,9 @@ export function appendQuickSessionNote(character: CharacterDto, note: string): C
   const trimmed = note.trim();
   if (!trimmed) return character;
   const groups = character.customNotesGroups || [];
-  const sessionGroup = groups.find((group) => group.id === 'seed-session' || group.title.toLowerCase() === 'session');
+  const sessionGroup = groups.find(
+    (group) => group.id === 'seed-session' || group.title.toLowerCase() === 'session' || group.title.toLowerCase() === 'сесія',
+  );
   if (sessionGroup) {
     const merged = sessionGroup.content?.trim() ? `${sessionGroup.content.trim()}\n• ${trimmed}` : `• ${trimmed}`;
     return {
@@ -210,7 +212,7 @@ export function appendQuickSessionNote(character: CharacterDto, note: string): C
       ...groups,
       {
         id: `notes-group-${Date.now()}`,
-        title: 'Session',
+        title: 'Сесія',
         content: `• ${trimmed}`,
         order: groups.length,
         origin: 'custom',

@@ -21,7 +21,7 @@ const Spellbook = () => {
     const result: SpellItem[] = [];
 
     characters.forEach((character) => {
-      const name = character.name || 'Character';
+      const name = character.name || 'Персонаж';
       const known = character.spells?.knownSpells || [];
       const prepared = character.spells?.preparedSpells || [];
       const cantrips = character.spells?.cantrips || [];
@@ -55,7 +55,7 @@ const Spellbook = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Spellbook</Text>
+      <Text style={styles.title}>Книга заклять</Text>
       <Text style={styles.hint}>Швидкий список заклять з усіх локальних персонажів.</Text>
 
       <TextInput
@@ -75,10 +75,11 @@ const Spellbook = () => {
             <Text style={styles.meta}>{item.listType} • {item.source}</Text>
           </View>
         )}
-        ListEmptyComponent={<Text style={styles.empty}>Заклять поки немає. Додай spells у Character Sheet.</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>Заклять поки немає. Додай закляття в лист персонажа.</Text>}
       />
     </View>
   );
 };
 
 export default Spellbook;
+

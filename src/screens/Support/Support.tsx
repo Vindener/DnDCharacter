@@ -112,7 +112,7 @@ export default function Support() {
             value={email}
             onChangeText={setEmail}
             keyboardType='email-address'
-            placeholder='Email (за бажанням)'
+            placeholder='Ел. пошта (за бажанням)'
             placeholderTextColor={colors.textSecondary}
             style={styles.input}
           />

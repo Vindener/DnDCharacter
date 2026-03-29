@@ -31,6 +31,18 @@ export const getStyles = (c: ThemeColors) =>
       color: c.textSecondary,
       fontSize: 12,
     },
+    characterLimitText: {
+      fontWeight: '800',
+    },
+    characterLimitTextSafe: {
+      color: '#166534',
+    },
+    characterLimitTextWarn: {
+      color: '#92400e',
+    },
+    characterLimitTextDanger: {
+      color: '#b91c1c',
+    },
 
     greetingTitle: {
       color: c.text,
@@ -289,6 +301,42 @@ export const getStyles = (c: ThemeColors) =>
     },
     authButtonText: {
       color: c.text,
+      fontWeight: '700',
+    },
+    authUserRow: {
+      marginTop: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+    },
+    authAvatar: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      borderWidth: 1,
+      borderColor: c.border,
+    },
+    authUserTextWrap: {
+      flex: 1,
+      gap: 6,
+    },
+    authUserEmail: {
+      color: c.text,
+      fontSize: 13,
+      fontWeight: '600',
+    },
+    authLogoutButton: {
+      alignSelf: 'flex-start',
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 6,
+      paddingHorizontal: 10,
+    },
+    authLogoutText: {
+      color: c.text,
+      fontSize: 12,
       fontWeight: '700',
     },
   });

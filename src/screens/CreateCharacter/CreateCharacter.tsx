@@ -190,7 +190,7 @@ const CreateCharacter = (): JSX.Element => {
   const availableSubclasses = selectedClass === 'custom' ? [] : SUBCLASSES[selectedClass] || [];
 
   const localizedClassName = useMemo(() => {
-    if (selectedClass === 'custom') return customClassName || 'Custom';
+    if (selectedClass === 'custom') return customClassName || 'Власний';
     return CLASS_TRANSLATIONS[selectedClass] || selectedClass;
   }, [selectedClass, customClassName]);
 
@@ -303,11 +303,11 @@ const CreateCharacter = (): JSX.Element => {
     const email = inviteEmail.trim();
     if (!email) return true;
     if (!EMAIL_REGEX.test(email)) {
-      if (showAlert) Alert.alert('Помилка', 'Email для шерінгу має некоректний формат.');
+      if (showAlert) Alert.alert('Помилка', 'Електронна пошта для шерінгу має некоректний формат.');
       return false;
     }
     if (storageMode === 'local-only') {
-      if (showAlert) Alert.alert('Помилка', 'Шерінг доступний тільки у режимі Local + Cloud.');
+      if (showAlert) Alert.alert('Помилка', 'Шерінг доступний тільки у режимі "Локально + Хмара".');
       return false;
     }
     return true;
@@ -316,40 +316,40 @@ const CreateCharacter = (): JSX.Element => {
   const stepTitle = useMemo(() => {
     switch (step) {
       case 1:
-        return 'Крок 1. Start Method';
+        return 'Крок 1. Метод старту';
       case 2:
-        return 'Крок 2. Basics';
+        return 'Крок 2. Базові дані';
       case 3:
-        return 'Крок 3. Class';
+        return 'Крок 3. Клас';
       case 4:
-        return 'Крок 4. Stats';
+        return 'Крок 4. Характеристики';
       case 5:
-        return 'Крок 5. Background & Gear';
+        return 'Крок 5. Передісторія і спорядження';
       case 6:
-        return 'Крок 6. Storage & Share';
+        return 'Крок 6. Збереження і шерінг';
       case 7:
-        return 'Крок 7. Review';
+        return 'Крок 7. Перевірка';
       default:
-        return 'Create Character';
+        return 'Створення персонажа';
     }
   }, [step]);
 
   const reviewHints = useMemo(() => {
     const lines: string[] = [];
-    lines.push('Local: зберігає лист тільки на цьому пристрої, доступно офлайн завжди.');
-    lines.push('Cloud: зберігає лист у хмарі та синхронізує зміни між пристроями.');
-    lines.push('Shared: відкриває live-співпрацю з DM/Player та показує source markers.');
+    lines.push('Локально: зберігає лист тільки на цьому пристрої, офлайн-доступ завжди.');
+    lines.push('Хмара: зберігає лист у хмарі та синхронізує зміни між пристроями.');
+    lines.push('Спільно: відкриває живу співпрацю з DM/гравцем і показує маркери джерела змін.');
 
     if (storageMode === 'local-only') {
-      lines.push('Поточний вибір: Local only. Лист залишиться локальним.');
-      lines.push('Cloud/share можна підключити пізніше через Sync now або Share menu.');
+      lines.push('Поточний вибір: Локально. Лист залишиться локальним.');
+      lines.push('Хмару/шерінг можна підключити пізніше через "Синхронізувати зараз" або меню шерінгу.');
     } else if (isSignedIn) {
-      lines.push('Поточний вибір: Local + Cloud. Лист збережеться локально і в cloud.');
-      lines.push('Після створення побачите Sync status + Share status на Home/Character/DM.');
-      if (inviteEmail.trim()) lines.push(`Після cloud save буде надіслано доступ редактору: ${inviteEmail.trim()}`);
+      lines.push('Поточний вибір: Локально + Хмара. Лист збережеться локально і в хмарі.');
+      lines.push('Після створення побачите статус синхронізації та шерінгу на Home/Character/DM.');
+      if (inviteEmail.trim()) lines.push(`Після збереження в хмару буде надіслано доступ редактору: ${inviteEmail.trim()}`);
     } else {
-      lines.push('Обрано Local + Cloud, але ви ще не авторизовані.');
-      lines.push('Увійдіть через Google, інакше буде лише Local only.');
+      lines.push('Обрано режим "Локально + Хмара", але ви ще не авторизовані.');
+      lines.push('Увійдіть через Google, інакше залишиться лише локальний режим.');
     }
     return lines;
   }, [storageMode, isSignedIn, inviteEmail]);
@@ -358,7 +358,7 @@ const CreateCharacter = (): JSX.Element => {
     if (step === 2 && !validateStep2(true)) return;
     if (step === 3 && !validateStep3(true)) return;
     if (step === 4 && statMethod === 'pointbuy' && !pointBuyValid) {
-      Alert.alert('Помилка', 'Point Buy перевищує ліміт 27.');
+      Alert.alert('Помилка', 'Розподіл балів перевищує ліміт 27.');
       return;
     }
     if (step === 5 && !validateStep5(true)) return;
@@ -388,7 +388,7 @@ const CreateCharacter = (): JSX.Element => {
     }
     if (statMethod === 'pointbuy' && !pointBuyValid) {
       setStep(4);
-      Alert.alert('Помилка', 'Point Buy перевищує ліміт 27.');
+      Alert.alert('Помилка', 'Розподіл балів перевищує ліміт 27.');
       return;
     }
     if (!validateStep5(true)) {
@@ -403,7 +403,7 @@ const CreateCharacter = (): JSX.Element => {
     const cloudRequested = storageMode === 'local-cloud';
     if (cloudRequested && !isSignedIn) {
       setStep(6);
-      Alert.alert('Cloud недоступний', 'Для режиму Local + Cloud потрібно увійти через Google.');
+      Alert.alert('Хмара недоступна', 'Для режиму "Локально + Хмара" потрібно увійти через Google.');
       return;
     }
 
@@ -475,13 +475,13 @@ const CreateCharacter = (): JSX.Element => {
       setCurrentCharacterId(createdCharacter.id);
 
       if (!cloudRequested) {
-        Alert.alert('Готово', 'Персонажа створено у режимі Local only.');
+        Alert.alert('Готово', 'Персонажа створено в локальному режимі.');
       } else if (cloudSaved && !shareError) {
-        Alert.alert('Готово', 'Персонажа створено і синхронізовано з cloud.');
+        Alert.alert('Готово', 'Персонажа створено і синхронізовано з хмарою.');
       } else if (cloudSaved && shareError) {
         Alert.alert('Частково готово', `Лист синхронізовано, але шерінг не виконано: ${shareError}`);
       } else {
-        Alert.alert('Частково готово', 'Персонажа створено локально, але cloud-sync не спрацював.');
+        Alert.alert('Частково готово', 'Персонажа створено локально, але синхронізація з хмарою не спрацювала.');
       }
 
       navigation.navigate('Character', { character: createdCharacter });
@@ -627,7 +627,7 @@ const CreateCharacter = (): JSX.Element => {
           <Text style={styles.label}>Назва власного класу</Text>
           <TextInput style={styles.input} value={customClassName} onChangeText={setCustomClassName} />
           <Text style={styles.label}>Підклас (необов’язково)</Text>
-          <TextInput style={styles.input} value={customSubclass} onChangeText={setCustomSubclass} placeholder='Наприклад: Shadow Dancer' />
+          <TextInput style={styles.input} value={customSubclass} onChangeText={setCustomSubclass} placeholder='Наприклад: Танцюрист тіней' />
         </>
       ) : (
         <>
@@ -800,23 +800,23 @@ const CreateCharacter = (): JSX.Element => {
     <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps='handled'>
       <View style={styles.progressRow}>
         <Text style={styles.progressText}>
-          Step {step}/{TOTAL_STEPS}
+          Крок {step}/{TOTAL_STEPS}
         </Text>
-        <Text style={styles.progressText}>{startMethod === 'guided' ? 'Guided Flow' : 'Quick Start Flow'}</Text>
+        <Text style={styles.progressText}>{startMethod === 'guided' ? 'Покроковий режим' : 'Швидкий старт'}</Text>
       </View>
       <Text style={styles.title}>{stepTitle}</Text>
 
       {step === 1 && (
         <View style={styles.card}>
           <Header title='Оберіть стартовий метод' />
-          <Text style={styles.sectionHint}>Guided дає повний контроль по кроках. Quick оптимізує старт і зберігає 7-step структуру.</Text>
+          <Text style={styles.sectionHint}>Покроковий режим дає повний контроль. Швидкий старт оптимізує початок і зберігає 7-крокову структуру.</Text>
 
           <Pressable
             style={[styles.methodCard, startMethod === 'guided' ? styles.methodCardActive : null]}
             onPress={() => setStartMethod('guided')}
             android_ripple={{ color: '#999' }}
           >
-            <Text style={styles.methodTitle}>Guided (повний контроль)</Text>
+            <Text style={styles.methodTitle}>Покроково (повний контроль)</Text>
             <Text style={styles.methodMeta}>Повні підказки на кожному кроці, з ручним контролем параметрів.</Text>
           </Pressable>
 
@@ -825,12 +825,12 @@ const CreateCharacter = (): JSX.Element => {
             onPress={() => setStartMethod('quick')}
             android_ripple={{ color: '#999' }}
           >
-            <Text style={styles.methodTitle}>Quick (швидкий старт)</Text>
+            <Text style={styles.methodTitle}>Швидко (швидкий старт)</Text>
             <Text style={styles.methodMeta}>Рекомендовані дефолти для швидкого проходження кроків.</Text>
           </Pressable>
 
-          <Header title='Character Template' />
-          <Text style={styles.sectionHint}>Template застосовується тільки під час створення і залишається повністю редагованим.</Text>
+          <Header title='Шаблон персонажа' />
+          <Text style={styles.sectionHint}>Шаблон застосовується лише під час створення і залишається повністю редагованим.</Text>
           {CHARACTER_TEMPLATE_PRESETS.map((template) => (
             <Pressable
               key={template.id}
@@ -843,7 +843,7 @@ const CreateCharacter = (): JSX.Element => {
             </Pressable>
           ))}
 
-          <StepNav onNext={goNextFromStep} nextLabel='До Basics' />
+          <StepNav onNext={goNextFromStep} nextLabel='До базових даних' />
         </View>
       )}
 
@@ -858,7 +858,7 @@ const CreateCharacter = (): JSX.Element => {
 
           <RacePicker />
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До Class' nextDisabled={!validateStep2(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До класу' nextDisabled={!validateStep2(false)} />
         </View>
       )}
 
@@ -866,7 +866,7 @@ const CreateCharacter = (): JSX.Element => {
         <View style={styles.card}>
           <Header title='Клас і підклас' />
           <ClassPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До Stats' nextDisabled={!validateStep3(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До характеристик' nextDisabled={!validateStep3(false)} />
         </View>
       )}
 
@@ -875,7 +875,7 @@ const CreateCharacter = (): JSX.Element => {
           <Header title='Характеристики' />
           <Text style={styles.sectionHint}>
             {startMethod === 'quick'
-              ? 'Quick Start: рекомендовано стандартний масив. За потреби переключіть на Point Buy.'
+              ? 'Швидкий старт: рекомендовано стандартний масив. За потреби перемкніться на розподіл балів.'
               : 'Оберіть спосіб розподілу характеристик.'}
           </Text>
 
@@ -892,7 +892,7 @@ const CreateCharacter = (): JSX.Element => {
               onPress={() => setStatMethod('pointbuy')}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={[styles.toggleButtonText, statMethod === 'pointbuy' ? styles.toggleButtonTextActive : null]}>Point Buy (27)</Text>
+              <Text style={[styles.toggleButtonText, statMethod === 'pointbuy' ? styles.toggleButtonTextActive : null]}>Розподіл балів (27)</Text>
             </Pressable>
           </View>
 
@@ -907,7 +907,7 @@ const CreateCharacter = (): JSX.Element => {
             ))}
           </View>
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До Background' nextDisabled={statMethod === 'pointbuy' && !pointBuyValid} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До передісторії' nextDisabled={statMethod === 'pointbuy' && !pointBuyValid} />
         </View>
       )}
 
@@ -916,18 +916,18 @@ const CreateCharacter = (): JSX.Element => {
           <Header title='Предісторія та стартовий інвентар' />
           <BackgroundPicker />
           <GearPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До Storage' nextDisabled={!validateStep5(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До збереження' nextDisabled={!validateStep5(false)} />
         </View>
       )}
 
       {step === 6 && (
         <View style={styles.card}>
-          <Header title='Storage та Share' />
+          <Header title='Збереження та шерінг' />
           <Text style={styles.sectionHint}>Оберіть, як зберігати персонажа після створення.</Text>
           <View style={styles.infoBox}>
-            <Text style={styles.sectionHint}>Local: тільки цей пристрій, максимальна офлайн-надійність.</Text>
-            <Text style={styles.sectionHint}>Cloud: sync між пристроями + manual/auto sync feedback.</Text>
-            <Text style={styles.sectionHint}>Shared: live copy для DM/Player із change source marker та history light.</Text>
+            <Text style={styles.sectionHint}>Локально: тільки цей пристрій, максимальна офлайн-надійність.</Text>
+            <Text style={styles.sectionHint}>Хмара: синхронізація між пристроями + ручний/авто статус синхронізації.</Text>
+            <Text style={styles.sectionHint}>Спільно: жива копія для DM/гравця з маркером джерела змін та легкою історією.</Text>
           </View>
 
           <View style={styles.toggleRow}>
@@ -936,20 +936,20 @@ const CreateCharacter = (): JSX.Element => {
               onPress={() => setStorageMode('local-only')}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={[styles.toggleButtonText, storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>Local only</Text>
+              <Text style={[styles.toggleButtonText, storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>Локально</Text>
             </Pressable>
             <Pressable
               style={[styles.toggleButton, storageMode === 'local-cloud' ? styles.toggleButtonActive : null]}
               onPress={() => setStorageMode('local-cloud')}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={[styles.toggleButtonText, storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>Local + Cloud</Text>
+              <Text style={[styles.toggleButtonText, storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>Локально + Хмара</Text>
             </Pressable>
           </View>
 
           <View style={styles.infoBox}>
-            <Text style={styles.sectionHint}>Cloud auth: {isSignedIn ? 'Підключено' : 'Не підключено'}</Text>
-            {!isSignedIn && storageMode === 'local-cloud' && <Text style={styles.warningText}>Для cloud-sync потрібно увійти через Google.</Text>}
+            <Text style={styles.sectionHint}>Авторизація хмари: {isSignedIn ? 'Підключено' : 'Не підключено'}</Text>
+            {!isSignedIn && storageMode === 'local-cloud' && <Text style={styles.warningText}>Для синхронізації з хмарою потрібно увійти через Google.</Text>}
             {!isSignedIn && storageMode === 'local-cloud' && (
               <Pressable
                 style={[styles.navButton, styles.navButtonPrimary, isSigningIn ? styles.navButtonDisabled : null]}
@@ -966,7 +966,7 @@ const CreateCharacter = (): JSX.Element => {
             )}
           </View>
 
-          <Text style={styles.label}>Запросити редактора (email, optional)</Text>
+          <Text style={styles.label}>Запросити редактора (ел. пошта, необов’язково)</Text>
           <TextInput
             style={styles.input}
             value={inviteEmail}
@@ -977,15 +977,15 @@ const CreateCharacter = (): JSX.Element => {
             placeholderTextColor={c.textSecondary}
             editable={storageMode === 'local-cloud'}
           />
-          {storageMode === 'local-only' && <Text style={styles.helperText}>Шерінг доступний лише у режимі Local + Cloud.</Text>}
+          {storageMode === 'local-only' && <Text style={styles.helperText}>Шерінг доступний лише в режимі "Локально + Хмара".</Text>}
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До Review' nextDisabled={!validateStep6(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До перевірки' nextDisabled={!validateStep6(false)} />
         </View>
       )}
 
       {step === 7 && (
         <View style={styles.card}>
-          <Header title='Review перед створенням' />
+          <Header title='Перевірка перед створенням' />
 
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Ім’я</Text>
@@ -1008,20 +1008,20 @@ const CreateCharacter = (): JSX.Element => {
             <Text style={styles.summaryValue}>{resolvedBackground || '—'}</Text>
           </View>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Storage</Text>
-            <Text style={styles.summaryValue}>{storageMode === 'local-only' ? 'Local only' : 'Local + Cloud'}</Text>
+            <Text style={styles.summaryLabel}>Збереження</Text>
+            <Text style={styles.summaryValue}>{storageMode === 'local-only' ? 'Локально' : 'Локально + Хмара'}</Text>
           </View>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Template</Text>
+            <Text style={styles.summaryLabel}>Шаблон</Text>
             <Text style={styles.summaryValue}>{characterTemplateId}</Text>
           </View>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Share invite</Text>
+            <Text style={styles.summaryLabel}>Запрошення</Text>
             <Text style={styles.summaryValue}>{inviteEmail.trim() || '—'}</Text>
           </View>
 
           <View style={styles.infoBox}>
-            <Text style={styles.label}>Sync onboarding hints</Text>
+            <Text style={styles.label}>Підказки щодо синхронізації</Text>
             {reviewHints.map((line) => (
               <Text key={line} style={styles.sectionHint}>
                 • {line}

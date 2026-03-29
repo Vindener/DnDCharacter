@@ -149,7 +149,9 @@ export const getStyles = (c: ThemeColors) =>
     modeButton: {
       flex: 1,
       paddingVertical: 9,
+      paddingHorizontal: 8,
       alignItems: 'center',
+      justifyContent: 'center',
       backgroundColor: c.background,
     },
     modeButtonActive: {
@@ -159,6 +161,7 @@ export const getStyles = (c: ThemeColors) =>
       color: c.text,
       fontWeight: '700',
       fontSize: 13,
+      textAlign: 'center',
     },
     modeButtonTextActive: {
       color: c.background,
@@ -182,6 +185,31 @@ export const getStyles = (c: ThemeColors) =>
     },
     sessionToggleTextActive: {
       color: '#fff',
+    },
+    sessionModeNote: {
+      marginTop: 8,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 8,
+      paddingHorizontal: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    sessionModeNoteActive: {
+      backgroundColor: '#d1e7dd',
+      borderColor: '#198754',
+    },
+    sessionModeNoteText: {
+      color: c.textSecondary,
+      fontSize: 12,
+      flex: 1,
+    },
+    sessionModeNoteTextActive: {
+      color: '#0f5132',
+      fontWeight: '600',
     },
 
     conflictCard: {
@@ -519,6 +547,47 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
       maxWidth: '55%',
       textAlign: 'right',
+    },
+    weaponCombatCard: {
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      padding: 8,
+      gap: 8,
+    },
+    weaponActionRow: {
+      flexDirection: 'row',
+      gap: 8,
+    },
+    weaponActionButton: {
+      flex: 1,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      paddingVertical: 9,
+      paddingHorizontal: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    weaponActionButtonPrimary: {
+      backgroundColor: '#255ddf',
+      borderColor: '#255ddf',
+    },
+    weaponActionButtonSecondary: {
+      backgroundColor: '#7a3e16',
+      borderColor: '#7a3e16',
+    },
+    weaponActionText: {
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: '700',
+      textAlign: 'center',
+    },
+    weaponRollResultLine: {
+      color: c.text,
+      fontSize: 13,
+      lineHeight: 18,
     },
     blockText: {
       color: c.text,

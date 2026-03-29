@@ -107,7 +107,7 @@ const DMPartyOverview = () => {
 
       const campaign = getCampaignForCharacter(payload, campaigns);
       const campaignId = campaign?.id || payload.campaignId || `legacy-${String(payload.campaign || 'uncategorized').trim().toLowerCase()}`;
-      const campaignName = campaign?.name || String(payload.campaign || 'Unassigned campaign');
+      const campaignName = campaign?.name || String(payload.campaign || 'Кампанія не призначена');
 
       byId.set(payload.id, {
         id: payload.id,
@@ -171,14 +171,14 @@ const DMPartyOverview = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>Party Overview</Text>
-        <Text style={styles.hint}>Unified local + cloud + shared party grouping with campaign-aware buckets.</Text>
+        <Text style={styles.title}>Огляд групи</Text>
+        <Text style={styles.hint}>Єдине групування локальних, хмарних і спільних персонажів за кампаніями.</Text>
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Campaigns: {grouped.length}</Text>
+            <Text style={styles.statChipText}>Кампанії: {grouped.length}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Characters: {party.length}</Text>
+            <Text style={styles.statChipText}>Персонажі: {party.length}</Text>
           </View>
         </View>
       </View>
@@ -186,28 +186,28 @@ const DMPartyOverview = () => {
       {grouped.map((group) => (
         <View key={group.id} style={styles.card}>
           <Text style={styles.title}>{group.name}</Text>
-          <Text style={styles.hint}>Campaign ID: {group.id}</Text>
+          <Text style={styles.hint}>ID кампанії: {group.id}</Text>
 
           {group.items.map((item) => (
             <View key={item.id} style={styles.updateRow}>
               <Text style={styles.updateTitle}>{item.payload.name || 'Character'}</Text>
-              <Text style={styles.updateMeta}>Source: {item.source}</Text>
-              <Text style={styles.updateMeta}>Sync status: {item.syncStatus}</Text>
-              {!!item.shareStatus && <Text style={styles.updateMeta}>Share status: {item.shareStatus}</Text>}
-              <Text style={styles.updateMeta}>Class/Race: {item.payload.class || 'Class'} / {item.payload.race || 'Race'}</Text>
+              <Text style={styles.updateMeta}>Джерело: {item.source}</Text>
+              <Text style={styles.updateMeta}>Статус синхронізації: {item.syncStatus}</Text>
+              {!!item.shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {item.shareStatus}</Text>}
+              <Text style={styles.updateMeta}>Клас/раса: {item.payload.class || 'Клас'} / {item.payload.race || 'Раса'}</Text>
 
               <View style={styles.laneGrid}>
                 <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: '#999' }}>
                   <Ionicons name='link-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Open Shared Live Copy</Text>
+                  <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
                 </Pressable>
                 <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: '#999' }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Quick Edit</Text>
+                  <Text style={styles.laneButtonText}>Швидке редагування</Text>
                 </Pressable>
                 <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: '#999' }}>
                   <Ionicons name='document-text-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Open Full Sheet</Text>
+                  <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
                 </Pressable>
               </View>
             </View>
@@ -217,7 +217,7 @@ const DMPartyOverview = () => {
 
       {!grouped.length && (
         <View style={styles.card}>
-          <Text style={styles.hint}>No characters available for party overview yet.</Text>
+          <Text style={styles.hint}>Для огляду групи поки немає доступних персонажів.</Text>
         </View>
       )}
     </ScrollView>

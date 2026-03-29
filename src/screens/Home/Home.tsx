@@ -1,22 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
-import type { AppStackParamList } from '@/navigation/AppNavigator';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
-import { fbAuth } from '@/services/firebase';
-import { onGoogleButtonPress } from '@/shared/services/auth/index';
+import { ensureUserIndexOnLogin } from '@/services/users';
+import { useAuth, configureGoogleSignIn, onGoogleButtonPress } from '@/shared/services/auth/index';
 import type { CharacterDto } from '@/types/Character';
-import useAppRoleStore from '@/context/AppRole-store';
-import { APP_ROLES } from '@/types/Product';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
@@ -56,10 +52,30 @@ type TimelineEvent = {
   text: string;
 };
 
+const STATUS_TRANSLATIONS: Record<string, string> = {
+  'Local only': 'Лише локально',
+  Synced: 'Синхронізовано',
+  'Pending sync': 'Очікує синхронізації',
+  'Offline changes pending': 'Очікують офлайн-зміни',
+  'Conflict detected': 'Виявлено конфлікт',
+  'Shared with DM': 'Поділено з DM',
+  'Shared with Player': 'Поділено з гравцем',
+  Homebrew: 'Авторський',
+};
+
+const TIMELINE_BADGE_TRANSLATIONS: Record<TimelineEvent['type'], string> = {
+  'local-edit': 'Локально',
+  synced: 'Синк',
+  'shared-update': 'Спільне',
+};
+
+const translateLabel = (value: string, dictionary: Record<string, string>): string => dictionary[value] || value;
+
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
+  const { user } = useAuth();
 
   const characters = useCharacterStore((s) => s.characters);
   const loadCharacters = useCharacterStore((s) => s.loadCharacters);
@@ -67,32 +83,33 @@ const Home = () => {
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
+  const lastSessionCharacterId = useCharacterStore((s) => s.lastSessionCharacterId);
+  const setLastSessionCharacterId = useCharacterStore((s) => s.setLastSessionCharacterId);
+  const maxCharacters = useCharacterStore((s) => s.maxCharacters);
 
-  const roleMode = useAppRoleStore((s) => s.role);
-  const setRoleMode = useAppRoleStore((s) => s.setRole);
-  const loadRoleMode = useAppRoleStore((s) => s.loadRole);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
 
   const [search, setSearch] = useState('');
-  const [authVersion, setAuthVersion] = useState(0);
   const [myCloud, setMyCloud] = useState<Record<string, unknown>[]>([]);
   const [sharedCloud, setSharedCloud] = useState<Record<string, unknown>[]>([]);
   const [cloudPulseAt, setCloudPulseAt] = useState<number | null>(null);
   const netInfo = useNetInfo();
 
-  const isSignedIn = Boolean(fbAuth.currentUser);
+  const isSignedIn = Boolean(user);
   const isOnline = isNetworkOnline(netInfo.isConnected);
+  const providerPhoto = user?.photoURL || user?.providerData?.find(Boolean)?.photoURL || null;
+  const userEmail = user?.email || user?.providerData?.find((item) => item?.email)?.email || 'Користувач Google';
+
+  useEffect(() => {
+    configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
+  }, []);
 
   useEffect(() => {
     loadCharacters();
   }, [loadCharacters]);
-
-  useEffect(() => {
-    loadRoleMode();
-  }, [loadRoleMode]);
 
   useEffect(() => {
     loadSyncMeta();
@@ -105,7 +122,7 @@ const Home = () => {
   }, [characters, ensureCharacterSync]);
 
   useEffect(() => {
-    if (!fbAuth.currentUser) {
+    if (!user) {
       setMyCloud([]);
       setSharedCloud([]);
       return;
@@ -131,7 +148,13 @@ const Home = () => {
       if (typeof unsubMine === 'function') unsubMine();
       if (typeof unsubShared === 'function') unsubShared();
     };
-  }, [authVersion, setCloudAvailability]);
+  }, [setCloudAvailability, user]);
+
+  useEffect(() => {
+    if (user) {
+      ensureUserIndexOnLogin().catch(() => {});
+    }
+  }, [user]);
 
   const previewList = useMemo(() => {
     const byId = new Map<string, CharacterPreview>();
@@ -151,7 +174,7 @@ const Home = () => {
           Boolean(existing?.shareStatus),
         source,
         isOwnedByMe: source !== 'shared',
-        role: roleMode,
+        role: 'Player',
       });
 
       const statuses = new Set<string>();
@@ -161,9 +184,9 @@ const Home = () => {
 
       const next: CharacterPreview = {
         id: payload.id,
-        name: payload.name || 'Character',
-        className: payload.class || 'Class',
-        race: payload.race || 'Race',
+        name: payload.name || 'Персонаж',
+        className: payload.class || 'Клас',
+        race: payload.race || 'Раса',
         level: payload.level || 1,
         hpCurrent: payload.hp?.current || 0,
         hpMax: payload.hp?.max || 0,
@@ -193,7 +216,7 @@ const Home = () => {
         );
       })
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [characters, myCloud, netInfo.isConnected, roleMode, sharedCloud, search, syncByCharacter]);
+  }, [characters, myCloud, netInfo.isConnected, sharedCloud, search, syncByCharacter]);
 
   const pendingSyncCount = useMemo(() => {
     return Object.values(syncByCharacter).filter((entry) => {
@@ -205,6 +228,25 @@ const Home = () => {
   const conflictCount = useMemo(() => {
     return Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length;
   }, [netInfo.isConnected, syncByCharacter]);
+
+  const userCharacterCount = useMemo(() => {
+    const ids = new Set<string>();
+    characters.forEach((character) => {
+      if (character.id) ids.add(character.id);
+    });
+    myCloud.forEach((doc) => {
+      const id = String(doc.id || '').trim();
+      if (id) ids.add(id);
+    });
+    return ids.size;
+  }, [characters, myCloud]);
+
+  const characterLimitTone = useMemo<'safe' | 'warn' | 'danger'>(() => {
+    if (maxCharacters <= 0) return 'danger';
+    if (userCharacterCount >= maxCharacters) return 'danger';
+    if (userCharacterCount >= Math.ceil(maxCharacters * 0.8)) return 'warn';
+    return 'safe';
+  }, [maxCharacters, userCharacterCount]);
 
   const openCharacter = async (character: CharacterPreview) => {
     const existsLocal = characters.find((c) => c.id === character.id);
@@ -224,28 +266,21 @@ const Home = () => {
   };
 
   const continueSession = () => {
-    const current = previewList.find((item) => item.id === currentCharacterId) || previewList[0];
+    const current =
+      previewList.find((item) => item.id === lastSessionCharacterId) ||
+      previewList.find((item) => item.id === currentCharacterId) ||
+      previewList.find((item) => item.payload.sessionMode) ||
+      previewList[0];
     if (!current) {
       navigation.navigate('CreateCharacter');
       return;
     }
+    void setLastSessionCharacterId(current.id);
     trackProductEvent('session_continue', {
       characterId: current.id,
-      role: roleMode,
+      role: 'Player',
     });
     void openCharacter(current);
-  };
-
-  const openRootTab = (routeName: keyof AppStackParamList) => {
-    const parentNav = navigation.getParent<BottomTabNavigationProp<AppStackParamList>>();
-    if (!parentNav) return;
-    parentNav.navigate(routeName);
-  };
-
-  const openSharedUpdatesQueue = () => {
-    const parentNav = navigation.getParent<BottomTabNavigationProp<AppStackParamList>>();
-    if (!parentNav) return;
-    parentNav.navigate('DM', { screen: 'DMSharedUpdates' });
   };
 
   const onImport = async () => {
@@ -256,9 +291,9 @@ const Home = () => {
   const onLogin = async () => {
     try {
       await onGoogleButtonPress();
-      setAuthVersion((prev) => prev + 1);
     } catch {}
   };
+
 
   const storeLastSyncAt = useMemo(() => {
     const values = Object.values(syncByCharacter)
@@ -285,7 +320,7 @@ const Home = () => {
           id: `${entry.characterId}-local-${entry.lastLocalChangeAt}`,
           atMs: entry.lastLocalChangeAt,
           type: 'local-edit',
-          text: `${name}: Local edit`,
+          text: `${name}: Локальна правка`,
         });
       }
       if (entry.lastSyncAt) {
@@ -293,7 +328,7 @@ const Home = () => {
           id: `${entry.characterId}-sync-${entry.lastSyncAt}`,
           atMs: entry.lastSyncAt,
           type: 'synced',
-          text: `${name}: Synced`,
+          text: `${name}: Синхронізовано`,
         });
       }
       return events;
@@ -303,12 +338,12 @@ const Home = () => {
       .map((doc) => {
         const atMs = toMillis(doc.updatedAt);
         if (!atMs) return null;
-        const name = String(doc.name || 'Character');
+        const name = String(doc.name || 'Персонаж');
         return {
           id: `${String(doc.id || name)}-shared-${atMs}`,
           atMs,
           type: 'shared-update' as const,
-          text: `${name}: Shared update`,
+          text: `${name}: Оновлення спільного листа`,
         };
       })
       .filter(Boolean) as TimelineEvent[];
@@ -320,78 +355,76 @@ const Home = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.card}>
-        <Text style={styles.greetingTitle}>Home • {roleMode} Mode</Text>
-        <Text style={styles.greetingMeta}>Живий центр сесії: персонажі, статус синку, швидкий доступ до DM-інструментів.</Text>
 
-        <View style={styles.roleSwitchRow}>
-          {APP_ROLES.map((option) => (
-            <Pressable
-              key={option}
-              style={[styles.roleChip, roleMode === option ? styles.roleChipActive : null]}
-              onPress={() => {
-                void setRoleMode(option);
-                trackProductEvent('role_changed', { role: option });
-              }}
-              android_ripple={{ color: '#999' }}
-            >
-              <Text style={[styles.roleChipText, roleMode === option ? styles.roleChipTextActive : null]}>{option}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </View>
 
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Local vs Cloud vs Shared</Text>
-        <Text style={styles.sectionHint}>Local: працює без інтернету. Cloud: синк між пристроями. Shared: live-collaboration з DM/Player.</Text>
-        <Text style={styles.lineText}>Чому краще за PDF/notes app: live sync, source markers, conflict-safe merge.</Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Resume</Text>
-        <Text style={styles.sectionHint}>Останні листи та поточний session-start.</Text>
-        <TouchableOpacity style={styles.resumeButton} onPress={continueSession} activeOpacity={0.85}>
-          <Text style={styles.resumeButtonText}>Continue Session</Text>
-        </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Продовжити</Text>
 
         {sharedCloud.slice(0, 2).map((doc) => (
-          <Text key={String(doc.id)} style={styles.lineText}>• Shared active: {String(doc.name || 'Character')}</Text>
+          <Text key={String(doc.id)} style={styles.lineText}>
+            • Активний спільний лист: {String(doc.name || 'Персонаж')}
+          </Text>
         ))}
 
         {!isSignedIn && (
           <TouchableOpacity style={styles.authButton} onPress={onLogin} activeOpacity={0.85}>
-            <Text style={styles.authButtonText}>Увійти через Google для cloud-sync</Text>
+            <Text style={styles.authButtonText}>Увійти за допомогою Google</Text>
           </TouchableOpacity>
         )}
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Last Active Session Timeline</Text>
-        <Text style={styles.sectionHint}>Останні локальні правки, синк і shared-оновлення.</Text>
-        {!timeline.length && <Text style={styles.sectionHint}>Подій поки немає.</Text>}
-        {timeline.map((event) => {
-          const badge =
-            event.type === 'local-edit'
-              ? 'Local'
-              : event.type === 'synced'
-                ? 'Synced'
-                : 'Shared';
-          return (
-            <View key={event.id} style={styles.timelineRow}>
-              <View style={styles.timelineBadge}>
-                <Text style={styles.timelineBadgeText}>{badge}</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.timelineText}>{event.text}</Text>
-                <Text style={styles.timelineMeta}>{new Date(event.atMs).toLocaleString()}</Text>
-              </View>
+        {isSignedIn && (
+          <View style={styles.authUserRow}>
+            {providerPhoto ? <Image source={{ uri: providerPhoto }} style={styles.authAvatar} resizeMode='cover' /> : null}
+            <View style={styles.authUserTextWrap}>
+              <Text style={styles.authUserEmail}>Вітаємо, {userEmail}!</Text>
             </View>
-          );
-        })}
+          </View>
+        )}
+
+        <Text style={styles.sectionHint}>Останні листи та швидкий старт поточної сесії.</Text>
+        <TouchableOpacity style={styles.resumeButton} onPress={continueSession} activeOpacity={0.85}>
+          <Text style={styles.resumeButtonText}>Продовжити сесію</Text>
+        </TouchableOpacity>
+      </View>
+      
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Швидкі дії</Text>
+        <View style={styles.quickGrid}>
+          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('CreateCharacter')} android_ripple={{ color: '#999' }}>
+            <Ionicons name='person-add-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Створити персонажа</Text>
+          </Pressable>
+          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: '#999' }}>
+            <Ionicons name='download-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Імпортувати</Text>
+          </Pressable>
+          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('Spellbook')} android_ripple={{ color: '#999' }}>
+            <Ionicons name='book-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити заклинання</Text>
+          </Pressable>
+          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: '#999' }}>
+            <Ionicons name='play-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Почати сесію</Text>
+          </Pressable>
+        </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Characters Preview</Text>
+        <Text style={styles.sectionTitle}>Огляд персонажів</Text>
+        <Text style={styles.sectionHint}>
+          Персонажів користувача ({isSignedIn ? userEmail : 'локальний профіль'}):{' '}
+          <Text
+            style={[
+              styles.characterLimitText,
+              characterLimitTone === 'safe'
+                ? styles.characterLimitTextSafe
+                : characterLimitTone === 'warn'
+                  ? styles.characterLimitTextWarn
+                  : styles.characterLimitTextDanger,
+            ]}
+          >
+            {userCharacterCount}/{maxCharacters}
+          </Text>
+        </Text>
         <TextInput
           value={search}
           onChangeText={setSearch}
@@ -411,19 +444,27 @@ const Home = () => {
           >
             <View style={styles.characterHeader}>
               <Text style={styles.characterName}>{item.name}</Text>
-              <Text style={styles.characterMeta}>Lv.{item.level}</Text>
+              <Text style={styles.characterMeta}>Рів. {item.level}</Text>
             </View>
-            <Text style={styles.characterMeta}>{item.className} / {item.race}</Text>
+            <Text style={styles.characterMeta}>
+              {item.className} / {item.race}
+            </Text>
             <View style={styles.characterStatsRow}>
-              <Text style={styles.characterStat}>HP {item.hpCurrent}/{item.hpMax}</Text>
+              <Text style={styles.characterStat}>
+                HP {item.hpCurrent}/{item.hpMax}
+              </Text>
               <Text style={styles.characterStat}>AC {item.ac}</Text>
             </View>
-            <Text style={styles.characterMeta}>Sync status: {item.syncStatus}</Text>
-            {!!item.shareStatus && <Text style={styles.characterMeta}>Share status: {item.shareStatus}</Text>}
+            <Text style={styles.characterMeta}>Стан синхронізації: {translateLabel(item.syncStatus, STATUS_TRANSLATIONS)}</Text>
+            {!!item.shareStatus && (
+              <Text style={styles.characterMeta}>Статус спільного доступу: {translateLabel(item.shareStatus, STATUS_TRANSLATIONS)}</Text>
+            )}
             <View style={styles.badgeRow}>
               {item.statuses.map((status) => (
                 <View key={`${item.id}-${status}`} style={[styles.badge, status === 'Conflict detected' ? styles.conflictBadge : null]}>
-                  <Text style={[styles.badgeText, status === 'Conflict detected' ? styles.conflictBadgeText : null]}>{status}</Text>
+                  <Text style={[styles.badgeText, status === 'Conflict detected' ? styles.conflictBadgeText : null]}>
+                    {translateLabel(status, STATUS_TRANSLATIONS)}
+                  </Text>
                 </View>
               ))}
             </View>
@@ -433,85 +474,43 @@ const Home = () => {
         {!previewList.length && <Text style={styles.sectionHint}>Поки немає персонажів. Створи або імпортуй лист.</Text>}
       </View>
 
-      {(roleMode === 'DM' || roleMode === 'Hybrid') && (
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>DM Panel Preview</Text>
-          <Text style={styles.sectionHint}>Active party, pending shared updates, швидкий доступ до DM-потоку.</Text>
-          <Pressable style={styles.pendingButton} onPress={openSharedUpdatesQueue} android_ripple={{ color: '#999' }}>
-            <Ionicons name='git-compare-outline' size={18} color={colors.text} />
-            <Text style={styles.pendingButtonText}>Pending Shared Updates ({sharedCloud.length})</Text>
-          </Pressable>
-          <Text style={styles.lineText}>Pending shared changes: {sharedCloud.length}</Text>
-          <Text style={styles.lineText}>Active party size: {previewList.length}</Text>
-
-          <View style={styles.dmGrid}>
-            <Pressable style={styles.dmButton} onPress={() => openRootTab('DM')} android_ripple={{ color: '#999' }}>
-              <Ionicons name='people-outline' size={18} color={colors.text} />
-              <Text style={styles.dmButtonText}>Open DM</Text>
-            </Pressable>
-            <Pressable style={styles.dmButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: '#999' }}>
-              <Ionicons name='flame-outline' size={18} color={colors.text} />
-              <Text style={styles.dmButtonText}>Open Initiative</Text>
-            </Pressable>
-            <Pressable style={styles.dmButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
-              <Ionicons name='skull-outline' size={18} color={colors.text} />
-              <Text style={styles.dmButtonText}>Open Bestiary</Text>
-            </Pressable>
-            <Pressable style={styles.dmButton} onPress={() => openRootTab('DM')} android_ripple={{ color: '#999' }}>
-              <Ionicons name='document-text-outline' size={18} color={colors.text} />
-              <Text style={styles.dmButtonText}>Recent Edits</Text>
-            </Pressable>
-          </View>
-        </View>
-      )}
-
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.quickGrid}>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('CreateCharacter')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='person-add-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Create Character</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: '#999' }}>
-            <Ionicons name='download-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Import</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('Spellbook')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='book-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Open Spellbook</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='skull-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Open Bestiary</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: '#999' }}>
-            <Ionicons name='play-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Start Session</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={() => openRootTab('DM')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='construct-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>DM Tools</Text>
-          </Pressable>
-        </View>
+        <Text style={styles.sectionTitle}>Хронологія останньої сесії</Text>
+        <Text style={styles.sectionHint}>Останні локальні правки, синхронізація й оновлення спільних листів.</Text>
+        {!timeline.length && <Text style={styles.sectionHint}>Подій поки немає.</Text>}
+        {timeline.map((event) => {
+          const badge = translateLabel(event.type, TIMELINE_BADGE_TRANSLATIONS);
+          return (
+            <View key={event.id} style={styles.timelineRow}>
+              <View style={styles.timelineBadge}>
+                <Text style={styles.timelineBadgeText}>{badge}</Text>
+              </View>
+              <View style={styles.timelineContent}>
+                <Text style={styles.timelineText}>{event.text}</Text>
+                <Text style={styles.timelineMeta}>{new Date(event.atMs).toLocaleString()}</Text>
+              </View>
+            </View>
+          );
+        })}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Sync Status</Text>
+        <Text style={styles.sectionTitle}>Стан синхронізації</Text>
         <View style={styles.syncRow}>
           <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>{isOnline ? 'Network: Online' : 'Network: Offline'}</Text>
+            <Text style={styles.syncPillText}>{isOnline ? 'Мережа: онлайн' : 'Мережа: офлайн'}</Text>
           </View>
           <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>{isSignedIn ? 'Cloud auth: Connected' : 'Cloud auth: Sign in required'}</Text>
+            <Text style={styles.syncPillText}>{isSignedIn ? 'Хмара: підключено' : 'Хмара: потрібен вхід'}</Text>
           </View>
           <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>Sync pending: {pendingSyncCount}</Text>
+            <Text style={styles.syncPillText}>Очікує синхронізації: {pendingSyncCount}</Text>
           </View>
           <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>Conflicts: {conflictCount}</Text>
+            <Text style={styles.syncPillText}>Конфлікти: {conflictCount}</Text>
           </View>
           <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>Last sync: {lastSyncLabel}</Text>
+            <Text style={styles.syncPillText}>Остання синхронізація: {lastSyncLabel}</Text>
           </View>
         </View>
       </View>

@@ -9,13 +9,15 @@ import { uuid } from 'expo-modules-core';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import useSyncStore from '@/context/Sync-store';
 
-const MAX_CHARACTERS = 15;
+const MAX_CHARACTERS = 10;
 
 interface CharacterStore {
   characters: CharacterDto[];
   maxCharacters: number;
   currentCharacterId: string | null;
+  lastSessionCharacterId: string | null;
   setCurrentCharacterId: (id: string) => void;
+  setLastSessionCharacterId: (id: string | null) => Promise<void>;
   loadCharacters: () => Promise<void>;
   saveCharacters: (newCharacters: CharacterDto[]) => Promise<void>;
   addCharacter: (character: CharacterDto) => Promise<void>;
@@ -37,6 +39,7 @@ interface CharacterStore {
 }
 
 const STORAGE_KEY = 'characters';
+const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
 
 function normalizeCharacter(character: CharacterDto): CharacterDto {
   const normalized = createEmptyCharacter(character);
@@ -50,14 +53,33 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   characters: [],
   maxCharacters: MAX_CHARACTERS,
   currentCharacterId: null,
+  lastSessionCharacterId: null,
   setCurrentCharacterId: (id) => set({ currentCharacterId: id }),
+  setLastSessionCharacterId: async (id) => {
+    try {
+      if (id) {
+        await AsyncStorage.setItem(LAST_SESSION_CHARACTER_ID_KEY, id);
+      } else {
+        await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+      }
+      set({ lastSessionCharacterId: id || null });
+    } catch {}
+  },
 
   loadCharacters: async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+      const [jsonValue, storedLastSessionId] = await Promise.all([
+        AsyncStorage.getItem(STORAGE_KEY),
+        AsyncStorage.getItem(LAST_SESSION_CHARACTER_ID_KEY),
+      ]);
       const parsed: CharacterDto[] = JSON.parse(jsonValue || '[]');
       const filtered = Array.isArray(parsed) ? parsed.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
-      set({ characters: filtered });
+      const existingIds = new Set(filtered.map((character) => character.id));
+      const safeLastSessionId = storedLastSessionId && existingIds.has(storedLastSessionId) ? storedLastSessionId : null;
+      set({ characters: filtered, lastSessionCharacterId: safeLastSessionId });
+      if (!safeLastSessionId && storedLastSessionId) {
+        await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+      }
     } catch {}
   },
 
@@ -178,9 +200,12 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     saveCharacters(updated);
   },
   removeCharacter: async (id: string) => {
-    const { characters, saveCharacters } = get();
+    const { characters, saveCharacters, lastSessionCharacterId, setLastSessionCharacterId } = get();
     const updated = characters.filter((char) => char.id !== id);
     await saveCharacters(updated);
+    if (lastSessionCharacterId === id) {
+      await setLastSessionCharacterId(null);
+    }
     await useSyncStore.getState().removeCharacterSync(id);
   },
 }));

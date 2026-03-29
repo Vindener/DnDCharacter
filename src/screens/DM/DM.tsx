@@ -204,24 +204,63 @@ const DM: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>Party Overview</Text>
-        <Text style={styles.hint}>DM-first dashboard across party health, share visibility, and sync risk.</Text>
+        <Text style={styles.title}>Огляд групи</Text>
+        <Text style={styles.hint}>DM-орієнтований дашборд стану групи, спільного доступу та ризиків синхронізації.</Text>
         <View style={styles.statsRow}>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Campaigns: {campaigns.length}</Text></View>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Party size: {unifiedParty.length}</Text></View>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Network: {isOnline ? 'Online' : 'Offline'}</Text></View>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Pending sync: {pendingSyncCount}</Text></View>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Conflicts: {conflictCount}</Text></View>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Role: {roleMode}</Text></View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Кампанії: {campaigns.length}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Розмір групи: {unifiedParty.length}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Мережа: {isOnline ? 'Онлайн' : 'Офлайн'}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Очікує синхронізації: {pendingSyncCount}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Конфлікти: {conflictCount}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Роль: {roleMode}</Text>
+          </View>
         </View>
         <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMPartyOverview')} android_ripple={{ color: '#999' }}>
-          <Text style={styles.authButtonText}>Open Full Party Overview</Text>
+          <Text style={styles.authButtonText}>Відкрити повний огляд групи</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Shared Character Access + Quick Edit</Text>
-        <Text style={styles.hint}>Open shared live copy, quick edit session-critical and expanded fields, or jump to full sheet.</Text>
+        <Text style={styles.title}>Підготовка сутички</Text>
+        <Text style={styles.hint}>Зберіть склад сутички з групи кампанії та бестіарію і передайте в Ініціативу одним потоком.</Text>
+        <View style={styles.laneGrid}>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })}
+            android_ripple={{ color: '#999' }}
+          >
+            <Ionicons name='rocket-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>Почати підготовку сутички</Text>
+          </Pressable>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: '#999' }}>
+            <Ionicons name='flame-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>Відкрити ініціативу</Text>
+          </Pressable>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
+            <Ionicons name='skull-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>Швидкий доступ до бестіарію</Text>
+          </Pressable>
+          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: '#999' }}>
+            <Ionicons name='book-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>Швидкий доступ до книги заклять</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.title}>Доступ до спільних персонажів + швидке редагування</Text>
+        <Text style={styles.hint}>Відкрийте спільну живу копію, швидко редагуйте критичні для сесії поля або перейдіть до повного листа.</Text>
         {unifiedParty.slice(0, 4).map((item) => {
           const syncStatus = getSyncDisplayStatus(syncByCharacter[item.id], netInfo.isConnected);
           const shareStatus = getShareDisplayStatus({
@@ -233,21 +272,39 @@ const DM: React.FC = () => {
           return (
             <View key={item.id} style={styles.updateRow}>
               <Text style={styles.updateTitle}>{item.payload.name || 'Character'}</Text>
-              <Text style={styles.updateMeta}>Source: {item.source}</Text>
-              <Text style={styles.updateMeta}>Sync status: {syncStatus}</Text>
-              {!!shareStatus && <Text style={styles.updateMeta}>Share status: {shareStatus}</Text>}
+              <Text style={styles.updateMeta}>Джерело: {item.source}</Text>
+              <Text style={styles.updateMeta}>Статус синхронізації: {syncStatus}</Text>
+              {!!shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {shareStatus}</Text>}
               <View style={styles.laneGrid}>
-                <Pressable style={styles.laneButton} onPress={() => { void openFullSheet(item.payload); }} android_ripple={{ color: '#999' }}>
+                <Pressable
+                  style={styles.laneButton}
+                  onPress={() => {
+                    void openFullSheet(item.payload);
+                  }}
+                  android_ripple={{ color: '#999' }}
+                >
                   <Ionicons name='link-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Open Shared Live Copy</Text>
+                  <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: '#999' }}>
+                <Pressable
+                  style={styles.laneButton}
+                  onPress={() => {
+                    void openQuickEdit(item.payload);
+                  }}
+                  android_ripple={{ color: '#999' }}
+                >
                   <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Quick Edit</Text>
+                  <Text style={styles.laneButtonText}>Швидке редагування</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openFullSheet(item.payload); }} android_ripple={{ color: '#999' }}>
+                <Pressable
+                  style={styles.laneButton}
+                  onPress={() => {
+                    void openFullSheet(item.payload);
+                  }}
+                  android_ripple={{ color: '#999' }}
+                >
                   <Ionicons name='document-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Open Full Sheet</Text>
+                  <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
                 </Pressable>
               </View>
             </View>
@@ -256,49 +313,30 @@ const DM: React.FC = () => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Campaign Notes</Text>
-        <Text style={styles.hint}>Cloud + offline campaign notes queue with sync/conflict status.</Text>
+        <Text style={styles.title}>Нотатки кампанії</Text>
+        <Text style={styles.hint}>Черга нотаток кампанії з підтримкою хмари й офлайну та статусами синхронізації/конфліктів.</Text>
         <View style={styles.statsRow}>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Campaign notes: {notesCount}</Text></View>
-          <View style={styles.statChip}><Text style={styles.statChipText}>Campaigns tracked: {campaigns.length}</Text></View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Нотатки кампанії: {notesCount}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Кампаній відстежується: {campaigns.length}</Text>
+          </View>
         </View>
         <Pressable
           style={styles.authButton}
           onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
           android_ripple={{ color: '#999' }}
         >
-          <Text style={styles.authButtonText}>Open Campaign Notes</Text>
+          <Text style={styles.authButtonText}>Відкрити нотатки кампанії</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Encounter Prep Starter</Text>
-        <Text style={styles.hint}>Build encounter lineup from campaign party + bestiary and handoff to Initiative in one flow.</Text>
-        <View style={styles.laneGrid}>
-          <Pressable style={styles.laneButton} onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })} android_ripple={{ color: '#999' }}>
-            <Ionicons name='rocket-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Start Encounter Prep</Text>
-          </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='flame-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Open Initiative</Text>
-          </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='skull-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Bestiary Quick Access</Text>
-          </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: '#999' }}>
-            <Ionicons name='book-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Spellbook Quick Access</Text>
-          </Pressable>
-        </View>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.title}>Recent Shared Changes</Text>
-        <Text style={styles.hint}>Compact feed with one tap to deep-review queue.</Text>
+        <Text style={styles.title}>Останні спільні зміни</Text>
+        <Text style={styles.hint}>Компактна стрічка з переходом у чергу детального перегляду в один дотик.</Text>
         {!recentSharedUpdates.length ? (
-          <Text style={styles.hint}>No shared changes yet.</Text>
+          <Text style={styles.hint}>Спільних змін поки немає.</Text>
         ) : (
           recentSharedUpdates.map((item) => {
             const id = String(item.id || '');
@@ -314,21 +352,21 @@ const DM: React.FC = () => {
             return (
               <View key={`recent-${id}`} style={styles.updateRow}>
                 <Text style={styles.updateTitle}>{String(item.name || 'Character')}</Text>
-                <Text style={styles.updateMeta}>Updated: {timeLabel}</Text>
-                <Text style={styles.updateMeta}>Sync status: {syncStatus}</Text>
-                {!!shareStatus && <Text style={styles.updateMeta}>Share status: {shareStatus}</Text>}
+                <Text style={styles.updateMeta}>Оновлено: {timeLabel}</Text>
+                <Text style={styles.updateMeta}>Статус синхронізації: {syncStatus}</Text>
+                {!!shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {shareStatus}</Text>}
               </View>
             );
           })
         )}
 
         <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: '#999' }}>
-          <Text style={styles.authButtonText}>Open Shared Updates Queue</Text>
+          <Text style={styles.authButtonText}>Відкрити чергу спільних оновлень</Text>
         </Pressable>
 
         {!isSignedIn && (
           <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: '#999' }}>
-            <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Sign in with Google for shared sync'}</Text>
+            <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Увійти через Google для спільної синхронізації'}</Text>
           </Pressable>
         )}
       </View>

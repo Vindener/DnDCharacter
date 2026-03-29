@@ -45,19 +45,19 @@ export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterC
               android_ripple={{ color: '#888' }}
             >
               <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={16} color={colors.text} />
-              <Text style={styles.pinText}>{isPinned ? 'Pinned' : 'Pin'}</Text>
+              <Text style={styles.pinText}>{isPinned ? 'Закріплено' : 'Закріпити'}</Text>
             </Pressable>
           )}
         </View>
-        <Text style={styles.meta}>{monster.type || 'Type unknown'}</Text>
+        <Text style={styles.meta}>{monster.type || 'Тип невідомий'}</Text>
         <View style={styles.quickRow}>
           <Text style={styles.quickMeta}>CR {monster.challenge || '—'}</Text>
           <Text style={styles.quickMeta}>AC {monster.armorClass ?? '—'}</Text>
           <Text style={styles.quickMeta}>HP {monster.hitPoints ?? '—'}</Text>
         </View>
-        {!!monster.environment && <Text style={styles.meta}>Env: {monster.environment}</Text>}
-        {!!monster.source && <Text style={styles.meta}>Source: {monster.source}</Text>}
-        {!!monster.tags?.length && <Text style={styles.meta}>Tags: {monster.tags.join(', ')}</Text>}
+        {!!monster.environment && <Text style={styles.meta}>Середовище: {monster.environment}</Text>}
+        {!!monster.source && <Text style={styles.meta}>Джерело: {monster.source}</Text>}
+        {!!monster.tags?.length && <Text style={styles.meta}>Теги: {monster.tags.join(', ')}</Text>}
       </View>
       <TouchableOpacity
         onPress={(event) => {

@@ -70,16 +70,16 @@ type SourceLabelArgs = {
 };
 
 export function getChangeSourceLabel({ uid, actorRole, currentUid }: SourceLabelArgs): string {
-  if (currentUid && uid && currentUid === uid) return 'edited by You';
-  if (actorRole === 'DM') return 'edited by DM';
-  if (actorRole === 'Player') return 'edited by Player';
-  if (!uid) return 'edited remotely';
-  return `edited by ${uid.slice(0, 6)}`;
+  if (currentUid && uid && currentUid === uid) return 'редаговано вами';
+  if (actorRole === 'DM') return 'редаговано DM';
+  if (actorRole === 'Player') return 'редаговано гравцем';
+  if (!uid) return 'редаговано віддалено';
+  return `редаговано ${uid.slice(0, 6)}`;
 }
 
 export function summarizeHistoryPaths(paths: string[]): string {
   const clean = (paths || []).map((path) => String(path || '').trim()).filter(Boolean);
-  if (!clean.length) return 'No path details';
+  if (!clean.length) return 'Немає деталей шляху';
   if (clean.length <= 2) return clean.join(', ');
   return `${clean.slice(0, 2).join(', ')} +${clean.length - 2}`;
 }

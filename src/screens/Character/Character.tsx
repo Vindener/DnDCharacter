@@ -49,8 +49,19 @@ interface CharacterProps {
 
 type CharacterMode = 'play' | 'edit';
 type CharacterTab = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
+type BadgeKind = 'neutral' | 'success' | 'warning' | 'accent' | 'danger';
+type SyncBadge = { id: string; label: string; kind: BadgeKind };
+type WeaponRollResult = { title: string; details: string[] };
 
 const TAB_ORDER: CharacterTab[] = ['Overview', 'Combat', 'Magic', 'Inventory', 'Notes', 'Homebrew'];
+const TAB_LABELS: Record<CharacterTab, string> = {
+  Overview: 'Огляд',
+  Combat: 'Бій',
+  Magic: 'Магія',
+  Inventory: 'Інвентар',
+  Notes: 'Нотатки',
+  Homebrew: 'Власне',
+};
 const TAB_PATH_PREFIX: Record<CharacterTab, string> = {
   Overview: 'overview.',
   Combat: 'combat.',
@@ -114,6 +125,44 @@ function parseLines(value: string): string[] {
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
+}
+
+function parseWeaponDamage(value: string): { count: number; sides: number; modifier: number; normalized: string } {
+  const compact = String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '');
+  const match = compact.match(/^(\d+)d(\d+)([+-]\d+)?$/);
+  if (match) {
+    return {
+      count: Math.max(parseInt(match[1], 10) || 1, 1),
+      sides: Math.max(parseInt(match[2], 10) || 6, 2),
+      modifier: parseInt(match[3] || '0', 10) || 0,
+      normalized: `${Math.max(parseInt(match[1], 10) || 1, 1)}d${Math.max(parseInt(match[2], 10) || 6, 2)}`,
+    };
+  }
+
+  const fallback = parseDice(compact);
+  if (fallback.count > 0 && fallback.sides > 0) {
+    return {
+      count: fallback.count,
+      sides: fallback.sides,
+      modifier: 0,
+      normalized: `${fallback.count}d${fallback.sides}`,
+    };
+  }
+
+  return { count: 1, sides: 6, modifier: 0, normalized: '1d6' };
+}
+
+function rollDiceValues(count: number, sides: number): number[] {
+  const safeCount = Math.max(1, count);
+  const safeSides = Math.max(2, sides);
+  const results: number[] = [];
+  for (let index = 0; index < safeCount; index += 1) {
+    results.push(Math.floor(Math.random() * safeSides) + 1);
+  }
+  return results;
 }
 
 function buildProficiencyByLevel(level: number): number {
@@ -282,6 +331,8 @@ function mergeBySections(local: CharacterDto, remote: CharacterDto, pendingPaths
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
   const storeCharacters = useCharacterStore((s) => s.characters);
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
+  const lastSessionCharacterId = useCharacterStore((s) => s.lastSessionCharacterId);
+  const setLastSessionCharacterId = useCharacterStore((s) => s.setLastSessionCharacterId);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
 
   const routeCharacter = route?.params?.character;
@@ -309,7 +360,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const [isCloudDoc, setIsCloudDoc] = useState<boolean>(false);
   const [isSharedSheet, setIsSharedSheet] = useState<boolean>(false);
   const [isOwnedByMe, setIsOwnedByMe] = useState<boolean>(true);
-  const [syncFeedback, setSyncFeedback] = useState<string>('Waiting for local changes');
+  const [syncFeedback, setSyncFeedback] = useState<string>('Очікування локальних змін');
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
@@ -338,6 +389,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const [tempShieldInput, setTempShieldInput] = useState('0');
 
   const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
+  const [weaponRollResult, setWeaponRollResult] = useState<WeaponRollResult | null>(null);
   const [isRestModalVisible, setIsRestModalVisible] = useState(false);
   const [restStep, setRestStep] = useState<'choose' | 'short' | 'roll'>('choose');
   const [shortRestDice, setShortRestDice] = useState('1');
@@ -372,7 +424,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     return (characterData.customNotesGroups || []).slice().sort((a, b) => a.order - b.order);
   }, [characterData.customNotesGroups]);
   const sessionNotes = useMemo(() => {
-    const group = notesGroups.find((item) => item.id === 'seed-session' || item.title.toLowerCase() === 'session');
+    const group = notesGroups.find((item) => item.id === 'seed-session' || ['session', 'сесія'].includes(item.title.toLowerCase()));
     return group?.content?.trim() || '';
   }, [notesGroups]);
   const currentSync = syncByCharacter[baseCharacter.id];
@@ -422,7 +474,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         setIsOwnedByMe(owned);
         setIsSharedSheet(Boolean(doc && Array.isArray((doc as any).editors) && (doc as any).editors.length > 0));
         setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
-        setSyncFeedback(exists ? 'Cloud doc connected' : 'Local-only character');
+        setSyncFeedback(exists ? 'Підключено хмарний документ' : 'Лише локальний персонаж');
         setCloudAvailability(baseCharacter.id, exists).catch(() => {});
       })
       .catch(() => {
@@ -431,7 +483,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         setIsOwnedByMe(true);
         setIsSharedSheet(false);
         setSharedHistory([]);
-        setSyncFeedback('Local-only character');
+        setSyncFeedback('Лише локальний персонаж');
         setCloudAvailability(baseCharacter.id, false).catch(() => {});
       });
 
@@ -446,7 +498,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       setIsSharedSheet(Boolean(doc && Array.isArray((doc as any).editors) && (doc as any).editors.length > 0));
       const history = sanitizeChangeHistory(doc?.changeHistory);
       setSharedHistory(history);
-      setSyncFeedback(exists ? 'Cloud doc connected' : 'Local-only character');
+      setSyncFeedback(exists ? 'Підключено хмарний документ' : 'Лише локальний персонаж');
       setCloudAvailability(baseCharacter.id, exists).catch(() => {});
 
       const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
@@ -463,14 +515,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         const conflictForPending = collectConflictPaths(pendingPaths, remotePathsSinceLastSync);
         if (conflictForPending.length) {
           markConflict(baseCharacter.id, conflictForPending).catch(() => {});
-          setSyncFeedback('Conflict detected. Review required.');
+          setSyncFeedback('Виявлено конфлікт. Потрібна перевірка.');
           return;
         }
 
         if (remotePathsSinceLastSync.length) {
           const merged = mergeBySections(characterDataRef.current, remoteDto, pendingPaths);
           setCharacterData(merged);
-          setSyncFeedback('Section merge applied from cloud');
+          setSyncFeedback('Злиття секції з хмари застосовано');
         }
         return;
       }
@@ -478,9 +530,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       setCharacterData(remoteDto);
       void updateCharacter(remoteDto.id, remoteDto);
       markCloudDownloaded(remoteDto.id).catch(() => {});
-      setSyncFeedback('Downloaded latest cloud revision');
+      setSyncFeedback('Завантажено останню хмарну ревізію');
       if (!pendingPaths.length && remotePathsSinceLastSync.length) {
-        setSyncTransport(remoteDto.id, 'downloading', 'Downloaded latest cloud revision').catch(() => {});
+        setSyncTransport(remoteDto.id, 'downloading', 'Завантажено останню хмарну ревізію').catch(() => {});
       }
     });
 
@@ -512,25 +564,25 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (!pendingPathsForUpload.length) return;
 
     if (!isOnline) {
-      setSyncFeedback(`Offline queue: ${pendingPathsForUpload.length} pending path(s)`);
-      setSyncTransport(characterData.id, 'idle', `Offline queue: ${pendingPathsForUpload.length} pending path(s)`).catch(() => {});
+      setSyncFeedback(`Офлайн-черга: ${pendingPathsForUpload.length} шлях(ів) очікує`);
+      setSyncTransport(characterData.id, 'idle', `Офлайн-черга: ${pendingPathsForUpload.length} шлях(ів) очікує`).catch(() => {});
       return;
     }
 
     const actorRole: CharacterActorRole = mapRoleToHistoryActor(roleMode);
-    setSyncFeedback('Uploading local changes...');
-    setSyncTransport(characterData.id, 'uploading', 'Uploading local changes...').catch(() => {});
+    setSyncFeedback('Вивантаження локальних змін...');
+    setSyncTransport(characterData.id, 'uploading', 'Вивантаження локальних змін...').catch(() => {});
     const timeout = setTimeout(() => {
       upsertCharacterSheetFromLocal(characterData, { historyPaths: pendingPathsForUpload, actorRole })
         .then(() => {
-          setSyncFeedback('Auto-synced just now');
-          setSyncTransport(characterData.id, 'synced', 'Auto-synced just now').catch(() => {});
+          setSyncFeedback('Щойно автосинхронізовано');
+          setSyncTransport(characterData.id, 'synced', 'Щойно автосинхронізовано').catch(() => {});
           markCloudUploaded(characterData.id).catch(() => {});
         })
         .catch((error) => {
           const message = String(error?.message || '').toLowerCase();
-          setSyncFeedback(message.includes('network') ? 'Retrying after network error...' : 'Sync failed. Retry from Sync now.');
-          markSyncError(characterData.id, message || 'Sync failed').catch(() => {});
+          setSyncFeedback(message.includes('network') ? 'Повтор після мережевої помилки...' : 'Помилка синхронізації. Повторіть через "Синхронізувати зараз".');
+          markSyncError(characterData.id, message || 'Помилка синхронізації').catch(() => {});
           if (message.includes('conflict')) {
             markConflict(characterData.id, pendingPathsForUpload.length ? pendingPathsForUpload : ['overview.identity']).catch(
               () => {},
@@ -558,6 +610,18 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     markLocalDraftPaths(baseCharacter.id, paths).catch(() => {});
   }, [baseCharacter.id, markLocalDraftPaths, selectedTab]);
 
+  const toggleSessionMode = useCallback(() => {
+    const nextSessionMode = !characterData.sessionMode;
+    patchCharacter((prev) => ({ ...prev, sessionMode: nextSessionMode }), ['overview.session-mode']);
+    if (nextSessionMode) {
+      void setLastSessionCharacterId(baseCharacter.id);
+      return;
+    }
+    if (lastSessionCharacterId === baseCharacter.id) {
+      void setLastSessionCharacterId(null);
+    }
+  }, [baseCharacter.id, characterData.sessionMode, lastSessionCharacterId, patchCharacter, setLastSessionCharacterId]);
+
   const setNotesGroup = useCallback((groupId: string, value: string) => {
     patchCharacter((prev) => ({
       ...prev,
@@ -573,7 +637,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       const nextOrder = (prev.customNotesGroups || []).length;
       const nextGroup: CharacterCustomNotesGroup = {
         id: `notes-group-${Date.now()}`,
-        title: 'Custom Group',
+        title: 'Власна група',
         content: '',
         order: nextOrder,
         origin: 'custom',
@@ -738,6 +802,43 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setIsRestModalVisible(false);
   }, [characterData.hitDice, characterData.stats.constitution, patchCharacter, rollResults]);
 
+  const rollWeaponAttack = useCallback((weapon: NonNullable<CharacterDto['weapons']>[number]) => {
+    const roll = Math.floor(Math.random() * 20) + 1;
+    const bonus = Number.isFinite(Number(weapon.attackBonus)) ? Number(weapon.attackBonus) : 0;
+    const total = roll + bonus;
+    const details: string[] = [
+      `d20: ${roll}`,
+      `Бонус атаки: ${bonus >= 0 ? `+${bonus}` : bonus}`,
+      `Разом: ${total}`,
+    ];
+    if (roll === 20) details.push('Критичне влучання');
+    if (roll === 1) details.push('Автопромах');
+
+    setWeaponRollResult({
+      title: `Влучення: ${weapon.name || 'Зброя'}`,
+      details,
+    });
+  }, []);
+
+  const rollWeaponDamage = useCallback((weapon: NonNullable<CharacterDto['weapons']>[number]) => {
+    const parsed = parseWeaponDamage(weapon.damage || '1d6');
+    const rolls = rollDiceValues(parsed.count, parsed.sides);
+    const diceTotal = rolls.reduce((sum, value) => sum + value, 0);
+    const total = diceTotal + parsed.modifier;
+    const formula = `${parsed.normalized}${parsed.modifier > 0 ? `+${parsed.modifier}` : parsed.modifier < 0 ? parsed.modifier : ''}`;
+
+    setWeaponRollResult({
+      title: `Шкода: ${weapon.name || 'Зброя'}`,
+      details: [
+        `Формула: ${formula}`,
+        `Куби: [${rolls.join(', ')}]`,
+        `Сума кубів: ${diceTotal}`,
+        `Модифікатор: ${parsed.modifier >= 0 ? `+${parsed.modifier}` : parsed.modifier}`,
+        `Разом шкода: ${total}`,
+      ],
+    });
+  }, []);
+
   const addCondition = useCallback(() => {
     const value = conditionInput.trim();
     if (!value) return;
@@ -769,10 +870,51 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setSelectedTab('Notes');
   }, [patchCharacter, quickNoteInput]);
 
+  const addWeapon = useCallback(() => {
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        weapons: [...(prev.weapons || []), { name: 'Нова зброя', attackBonus: 0, damage: '1d6' }],
+      }),
+      ['combat.weapons'],
+    );
+  }, [patchCharacter]);
+
+  const updateWeaponAt = useCallback(
+    (index: number, patch: Partial<NonNullable<CharacterDto['weapons']>[number]>) => {
+      patchCharacter(
+        (prev) => {
+          const nextWeapons = [...(prev.weapons || [])];
+          const current = nextWeapons[index] || { name: '', attackBonus: 0, damage: '1d6' };
+          nextWeapons[index] = { ...current, ...patch };
+          return {
+            ...prev,
+            weapons: nextWeapons,
+          };
+        },
+        ['combat.weapons'],
+      );
+    },
+    [patchCharacter],
+  );
+
+  const removeWeaponAt = useCallback(
+    (index: number) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          weapons: (prev.weapons || []).filter((_, weaponIndex) => weaponIndex !== index),
+        }),
+        ['combat.weapons'],
+      );
+    },
+    [patchCharacter],
+  );
+
   const addCustomField = useCallback(() => {
     const newField: CharacterCustomField = {
       id: Date.now().toString(),
-      label: 'Custom Field',
+      label: 'Власне поле',
       type: 'text',
       value: '',
     };
@@ -816,7 +958,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const addResource = useCallback(() => {
     const resource: CharacterCustomResource = {
       id: Date.now().toString(),
-      label: 'Custom Resource',
+      label: 'Власний ресурс',
       current: 0,
       max: 10,
       resetRule: 'none',
@@ -869,7 +1011,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         ...(prev.customSections || []),
         {
           id: `custom-section-${Date.now()}`,
-          title: 'Custom Section',
+          title: 'Власний розділ',
           content: '',
         },
       ],
@@ -901,7 +1043,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         {
           id: `homebrew-entry-${Date.now()}`,
           kind,
-          name: `Custom ${kind}`,
+          name: `Власне: ${kind}`,
           description: '',
           tags: [],
         },
@@ -929,19 +1071,19 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const resolveConflictWithLocal = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
-    setSyncFeedback('Applying local version to cloud...');
-    setSyncTransport(characterData.id, 'uploading', 'Applying local version to cloud...').catch(() => {});
+    setSyncFeedback('Застосування локальної версії до хмари...');
+    setSyncTransport(characterData.id, 'uploading', 'Застосування локальної версії до хмари...').catch(() => {});
     const historyPaths = Array.from(new Set(currentSync?.pendingPaths || []));
     upsertCharacterSheetFromLocal(characterData, { historyPaths, actorRole: mapRoleToHistoryActor(roleMode) })
       .then(() => {
-        setSyncFeedback('Conflict resolved using local version');
-        setSyncTransport(characterData.id, 'synced', 'Conflict resolved using local version').catch(() => {});
+        setSyncFeedback('Конфлікт вирішено локальною версією');
+        setSyncTransport(characterData.id, 'synced', 'Конфлікт вирішено локальною версією').catch(() => {});
         markCloudUploaded(characterData.id).catch(() => {});
         clearConflicts(characterData.id).catch(() => {});
       })
       .catch(() => {
-        setSyncFeedback('Failed to resolve conflict with local version');
-        markSyncError(characterData.id, 'Failed to resolve conflict with local version').catch(() => {});
+        setSyncFeedback('Не вдалося вирішити конфлікт локальною версією');
+        markSyncError(characterData.id, 'Не вдалося вирішити конфлікт локальною версією').catch(() => {});
       });
   }, [characterData, clearConflicts, currentSync?.pendingPaths, markCloudUploaded, markSyncError, roleMode, setSyncTransport]);
 
@@ -956,8 +1098,8 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         void updateCharacter(normalized.id, normalized);
         markCloudDownloaded(normalized.id).catch(() => {});
         clearConflicts(normalized.id).catch(() => {});
-        setSyncTransport(normalized.id, 'downloading', 'Conflict resolved using cloud version').catch(() => {});
-        setSyncFeedback('Conflict resolved using cloud version');
+        setSyncTransport(normalized.id, 'downloading', 'Конфлікт вирішено хмарною версією').catch(() => {});
+        setSyncFeedback('Конфлікт вирішено хмарною версією');
       })
       .catch(() => {});
   }, [characterData.id, clearConflicts, markCloudDownloaded, setSyncTransport, updateCharacter]);
@@ -965,16 +1107,16 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const resolveConflictManual = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_later', { characterId: characterData.id });
     clearConflicts(characterData.id).catch(() => {});
-    setSyncFeedback('Conflict cleared. Manual review deferred.');
+    setSyncFeedback('Конфлікт знято. Ручну перевірку відкладено.');
   }, [characterData.id, clearConflicts]);
 
   const syncNow = useCallback(() => {
     if (!fbAuth.currentUser) {
-      setSyncFeedback('Sign in required for cloud sync');
+      setSyncFeedback('Для синхронізації з хмарою потрібен вхід');
       return;
     }
     if (!isOnline) {
-      setSyncFeedback('Offline queue active. Reconnect and retry Sync now.');
+      setSyncFeedback('Активна офлайн-черга. Відновіть з’єднання і повторіть синхронізацію.');
       return;
     }
 
@@ -983,20 +1125,20 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     const historyPaths = pendingPaths.length ? pendingPaths : [fallbackPath];
     const actorRole: CharacterActorRole = mapRoleToHistoryActor(roleMode);
 
-    setSyncFeedback('Syncing now...');
-    setSyncTransport(characterData.id, 'syncing', 'Syncing now...').catch(() => {});
+    setSyncFeedback('Синхронізація...');
+    setSyncTransport(characterData.id, 'syncing', 'Синхронізація...').catch(() => {});
     upsertCharacterSheetFromLocal(characterData, { historyPaths, actorRole })
       .then(() => {
         setIsCloudDoc(true);
         setCloudAvailability(characterData.id, true).catch(() => {});
         markCloudUploaded(characterData.id).catch(() => {});
-        setSyncTransport(characterData.id, 'synced', 'Synced').catch(() => {});
-        setSyncFeedback('Synced');
+        setSyncTransport(characterData.id, 'synced', 'Синхронізовано').catch(() => {});
+        setSyncFeedback('Синхронізовано');
       })
       .catch((error) => {
-        const message = String(error?.message || 'Sync failed');
+        const message = String(error?.message || 'Помилка синхронізації');
         markSyncError(characterData.id, message).catch(() => {});
-        setSyncFeedback(`Sync failed: ${message}`);
+        setSyncFeedback(`Помилка синхронізації: ${message}`);
       });
   }, [
     characterData,
@@ -1013,20 +1155,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const quickActions = [
     { id: 'minus-hp', label: '-HP', icon: 'heart-minus-outline', onPress: () => applyHpDelta(-1) },
     { id: 'plus-hp', label: '+HP', icon: 'heart-plus-outline', onPress: () => applyHpDelta(1) },
+    { id: 'edit-hp', label: 'Редактор HP', icon: 'heart-cog-outline', onPress: openHpModal },
     {
       id: 'temp-hp',
-      label: 'Temp HP',
+      label: 'Тимчасове HP',
       icon: 'shield-half-full',
       onPress: () => {
         setTempShieldInput(String(characterData.hp.temp));
         setIsTempHpModalVisible(true);
       },
     },
-    { id: 'roll', label: 'Roll', icon: 'dice-multiple-outline', onPress: () => setIsDiceModalVisible(true) },
-    { id: 'short-rest', label: 'Short Rest', icon: 'coffee-outline', onPress: startShortRestFlow },
-    { id: 'long-rest', label: 'Long Rest', icon: 'weather-night', onPress: applyLongRest },
-    { id: 'condition', label: 'Condition', icon: 'alert-circle-outline', onPress: () => setIsConditionModalVisible(true) },
-    { id: 'note', label: 'Note', icon: 'notebook-outline', onPress: () => setIsQuickNoteModalVisible(true) },
+    { id: 'roll', label: 'Кинути', icon: 'dice-multiple-outline', onPress: () => setIsDiceModalVisible(true) },
+    { id: 'short-rest', label: 'Короткий відпочинок', icon: 'coffee-outline', onPress: startShortRestFlow },
+    { id: 'long-rest', label: 'Довгий відпочинок', icon: 'weather-night', onPress: applyLongRest },
+    { id: 'condition', label: 'Стан', icon: 'alert-circle-outline', onPress: () => setIsConditionModalVisible(true) },
+    { id: 'note', label: 'Нотатка', icon: 'notebook-outline', onPress: () => setIsQuickNoteModalVisible(true) },
   ];
 
   const sortedSkills = useMemo(() => {
@@ -1035,15 +1178,22 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [characterData.skills]);
 
   const syncBadges = useMemo(() => {
-    const badges: Array<{ label: string; kind: 'neutral' | 'success' | 'warning' | 'accent' | 'danger' }> = [];
-    badges.push({
-      label: syncStatusLabel,
-      kind: getSyncStatusKind(syncStatusLabel),
-    });
-    if (shareStatusLabel) badges.push({ label: shareStatusLabel, kind: 'accent' });
-    if (!isCloudDoc) badges.push({ label: 'Local only', kind: 'neutral' });
-    if (hasHomebrew) badges.push({ label: 'Homebrew', kind: 'warning' });
-    if (!isOnline) badges.push({ label: 'Offline', kind: 'warning' });
+    const badges: SyncBadge[] = [];
+    const seen = new Set<string>();
+    const pushBadge = (label: string, kind: BadgeKind) => {
+      const safeLabel = String(label || '').trim();
+      if (!safeLabel) return;
+      const id = `${kind}:${safeLabel.toLowerCase()}`;
+      if (seen.has(id)) return;
+      seen.add(id);
+      badges.push({ id, label: safeLabel, kind });
+    };
+
+    pushBadge(syncStatusLabel, getSyncStatusKind(syncStatusLabel));
+    if (shareStatusLabel) pushBadge(shareStatusLabel, 'accent');
+    if (!isCloudDoc) pushBadge('Лише локально', 'neutral');
+    if (hasHomebrew) pushBadge('Власне', 'warning');
+    if (!isOnline) pushBadge('Офлайн', 'warning');
     return badges;
   }, [hasHomebrew, isCloudDoc, isOnline, shareStatusLabel, syncStatusLabel]);
 
@@ -1060,7 +1210,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (!hasConflictForPrefixes(prefixes)) return null;
     return (
       <View style={styles.sectionConflictBadge}>
-        <Text style={styles.sectionConflictBadgeText}>Conflict</Text>
+        <Text style={styles.sectionConflictBadgeText}>Конфлікт</Text>
       </View>
     );
   }, [hasConflictForPrefixes, styles.sectionConflictBadge, styles.sectionConflictBadgeText]);
@@ -1088,7 +1238,8 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setCollapsedSecondary((prev) => ({ ...prev, [tab]: !prev[tab] }));
   }, []);
 
-  const renderBadge = useCallback((label: string, kind: 'neutral' | 'success' | 'warning' | 'accent' | 'danger') => {
+  const renderBadge = useCallback((badge: SyncBadge) => {
+    const { id, label, kind } = badge;
     const badgeStyle: Array<any> = [styles.badge];
     const badgeText: Array<any> = [styles.badgeText];
 
@@ -1099,7 +1250,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (kind !== 'neutral') badgeText.push(styles.badgeTextInverted);
 
     return (
-      <View key={`${label}-${kind}`} style={badgeStyle}>
+      <View key={id} style={badgeStyle}>
         <Text style={badgeText}>{label}</Text>
       </View>
     );
@@ -1138,7 +1289,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       <View style={styles.cardSecondary}>
         <View style={styles.cardHeaderRow}>
           <View style={styles.sectionTitleRow}>
-            <Text style={styles.sectionTitle}>Top Skills</Text>
+            <Text style={styles.sectionTitle}>Ключові навички</Text>
             {sectionConflictLabel(['overview.conditions'])}
           </View>
           <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Overview')} android_ripple={{ color: '#999' }}>
@@ -1155,11 +1306,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
         {!collapsedSecondary.Overview && (
           <>
-            <Text style={styles.subSectionTitle}>Proficiencies</Text>
+            <Text style={styles.subSectionTitle}>Професії</Text>
             <Text style={styles.blockText}>{characterData.proficiencies.length ? characterData.proficiencies.join(', ') : 'Немає'}</Text>
-            <Text style={styles.subSectionTitle}>Traits & Features</Text>
+            <Text style={styles.subSectionTitle}>Риси та особливості</Text>
             <Text style={styles.blockText}>{characterData.featuresAndTraits?.length ? characterData.featuresAndTraits.join(', ') : 'Немає'}</Text>
-            <Text style={styles.subSectionTitle}>Current Conditions</Text>
+            <Text style={styles.subSectionTitle}>Поточні стани</Text>
             {characterData.conditions?.length ? (
               characterData.conditions.map((condition, idx) => (
                 <View key={`${condition}-${idx}`} style={styles.conditionRow}>
@@ -1182,7 +1333,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Combat Tools</Text>
+          <Text style={styles.sectionTitle}>Бойові інструменти</Text>
           {sectionConflictLabel(['combat.core', 'combat.hp', 'combat.rest'])}
         </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Combat')} android_ripple={{ color: '#999' }}>
@@ -1190,42 +1341,75 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         </Pressable>
       </View>
 
-      <Text style={styles.subSectionTitle}>Actions</Text>
+      <Text style={styles.subSectionTitle}>Дії</Text>
       <Text style={styles.blockText}>
         {characterData.combatTemplates?.actions?.length ? `• ${characterData.combatTemplates.actions.join('\n• ')}` : '• Немає шаблонів дій'}
       </Text>
-      <Text style={styles.subSectionTitle}>Bonus Actions</Text>
+      <Text style={styles.subSectionTitle}>Бонусні дії</Text>
       <Text style={styles.blockText}>
         {characterData.combatTemplates?.bonusActions?.length
           ? `• ${characterData.combatTemplates.bonusActions.join('\n• ')}`
-          : '• Немає шаблонів bonus actions'}
+          : '• Немає шаблонів бонусних дій'}
       </Text>
-      <Text style={styles.subSectionTitle}>Reactions</Text>
+      <Text style={styles.subSectionTitle}>Реакції</Text>
       <Text style={styles.blockText}>
         {characterData.combatTemplates?.reactions?.length
           ? `• ${characterData.combatTemplates.reactions.join('\n• ')}`
-          : '• Немає шаблонів reactions'}
+          : '• Немає шаблонів реакцій'}
       </Text>
 
-      <Text style={styles.subSectionTitle}>Attacks</Text>
+      <Text style={styles.subSectionTitle}>Атаки</Text>
       {characterData.weapons?.length ? (
-        characterData.weapons.map((weapon, idx) => (
-          <View key={`${weapon.name}-${idx}`} style={styles.rowLine}>
-            <Text style={styles.rowLabel}>{weapon.name}</Text>
-            <Text style={styles.rowValue}>+{weapon.attackBonus} / {weapon.damage}</Text>
-          </View>
-        ))
+        characterData.weapons.map((weapon, idx) => {
+          const attackBonus = Number.isFinite(Number(weapon.attackBonus)) ? Number(weapon.attackBonus) : 0;
+          const damageFormula = String(weapon.damage || '1d6');
+          return (
+            <View key={`${weapon.name}-${idx}`} style={styles.weaponCombatCard}>
+              <View style={styles.rowLine}>
+                <Text style={styles.rowLabel}>{weapon.name || `Зброя ${idx + 1}`}</Text>
+                <Text style={styles.rowValue}>{`${attackBonus >= 0 ? '+' : ''}${attackBonus} / ${damageFormula}`}</Text>
+              </View>
+              <View style={styles.weaponActionRow}>
+                <Pressable
+                  style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
+                  onPress={() => rollWeaponAttack(weapon)}
+                  android_ripple={{ color: '#999' }}
+                >
+                  <Text style={styles.weaponActionText}>Влучення (d20)</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.weaponActionButton, styles.weaponActionButtonSecondary]}
+                  onPress={() => rollWeaponDamage(weapon)}
+                  android_ripple={{ color: '#999' }}
+                >
+                  <Text style={styles.weaponActionText}>Шкода ({damageFormula})</Text>
+                </Pressable>
+              </View>
+            </View>
+          );
+        })
       ) : (
         <Text style={styles.blockTextMuted}>Зброя не додана</Text>
       )}
 
+      {!!weaponRollResult && (
+        <View style={styles.editCardBlock}>
+          <Text style={styles.subSectionTitle}>{weaponRollResult.title}</Text>
+          {weaponRollResult.details.map((line, index) => (
+            <Text key={`${weaponRollResult.title}-${index}`} style={styles.weaponRollResultLine}>
+              {line}
+            </Text>
+          ))}
+        </View>
+      )}
+
       {!collapsedSecondary.Combat && (
         <>
-          <Text style={styles.subSectionTitle}>Death Saves</Text>
+          <Text style={styles.subSectionTitle}>Кидки смерті</Text>
           <Text style={styles.blockText}>
             Успіхи: {characterData.deathSaves?.successes ?? 0} | Провали: {characterData.deathSaves?.failures ?? 0}
           </Text>
-          <Text style={styles.subSectionTitle}>Combat Notes</Text>
+          <Text style={styles.subSectionTitle}>Бойові нотатки</Text>
           <Text style={styles.blockText}>{sessionNotes || 'Немає нотаток сесії'}</Text>
         </>
       )}
@@ -1242,7 +1426,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       <View style={styles.cardSecondary}>
         <View style={styles.cardHeaderRow}>
           <View style={styles.sectionTitleRow}>
-            <Text style={styles.sectionTitle}>Magic Snapshot</Text>
+            <Text style={styles.sectionTitle}>Огляд магії</Text>
             {sectionConflictLabel(['magic.'])}
           </View>
           <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Magic')} android_ripple={{ color: '#999' }}>
@@ -1251,15 +1435,15 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         </View>
 
         <View style={styles.rowLine}>
-          <Text style={styles.rowLabel}>Spellcasting</Text>
+          <Text style={styles.rowLabel}>Чаклування</Text>
           <Text style={styles.rowValue}>{characterData.spells.spellcastingAbility || '—'}</Text>
         </View>
         <View style={styles.rowLine}>
-          <Text style={styles.rowLabel}>Save DC</Text>
+          <Text style={styles.rowLabel}>Складність</Text>
           <Text style={styles.rowValue}>{characterData.spells.spellSaveDC || 0}</Text>
         </View>
         <View style={styles.rowLine}>
-          <Text style={styles.rowLabel}>Attack Bonus</Text>
+          <Text style={styles.rowLabel}>Бонус атаки</Text>
           <Text style={styles.rowValue}>
             {characterData.spells.spellAttackBonus >= 0
               ? `+${characterData.spells.spellAttackBonus}`
@@ -1267,7 +1451,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           </Text>
         </View>
 
-        <Text style={styles.subSectionTitle}>Slots</Text>
+        <Text style={styles.subSectionTitle}>Слоти</Text>
         {slotLevels.length ? (
           slotLevels.map((level) => {
             const slot = characterData.spells.spellSlots[level];
@@ -1287,11 +1471,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
         {!collapsedSecondary.Magic && (
           <>
-            <Text style={styles.subSectionTitle}>Prepared Spells</Text>
+            <Text style={styles.subSectionTitle}>Підготовлені закляття</Text>
             <Text style={styles.blockText}>
               {characterData.spells.preparedSpells.length ? characterData.spells.preparedSpells.join(', ') : 'Немає підготовлених'}
             </Text>
-            <Text style={styles.subSectionTitle}>Known Spells</Text>
+            <Text style={styles.subSectionTitle}>Відомі закляття</Text>
             <Text style={styles.blockText}>
               {characterData.spells.knownSpells.length ? characterData.spells.knownSpells.join(', ') : 'Немає відомих'}
             </Text>
@@ -1305,7 +1489,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Inventory</Text>
+          <Text style={styles.sectionTitle}>Інвентар</Text>
           {sectionConflictLabel(['inventory.'])}
         </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Inventory')} android_ripple={{ color: '#999' }}>
@@ -1325,7 +1509,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         <Text style={styles.blockTextMuted}>Інвентар порожній</Text>
       )}
 
-      <Text style={styles.subSectionTitle}>Currency</Text>
+      <Text style={styles.subSectionTitle}>Валюта</Text>
       <Text style={styles.blockText}>
         GP {characterData.coins?.gold ?? 0} | SP {characterData.coins?.silver ?? 0} | CP {characterData.coins?.copper ?? 0}
       </Text>
@@ -1336,7 +1520,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Notes</Text>
+          <Text style={styles.sectionTitle}>Нотатки</Text>
           {sectionConflictLabel(['homebrew.notes-groups'])}
         </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Notes')} android_ripple={{ color: '#999' }}>
@@ -1360,7 +1544,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     <View style={styles.cardSecondary}>
       <View style={styles.cardHeaderRow}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Homebrew</Text>
+          <Text style={styles.sectionTitle}>Власне</Text>
           {sectionConflictLabel(['homebrew.'])}
         </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Homebrew')} android_ripple={{ color: '#999' }}>
@@ -1368,7 +1552,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         </Pressable>
       </View>
 
-      <Text style={styles.subSectionTitle}>Custom Fields</Text>
+      <Text style={styles.subSectionTitle}>Власні поля</Text>
       {characterData.customFields?.length ? (
         characterData.customFields.map((field) => (
           <View key={field.id} style={styles.rowLine}>
@@ -1382,7 +1566,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
       {!collapsedSecondary.Homebrew && (
         <>
-          <Text style={styles.subSectionTitle}>Custom Resources</Text>
+          <Text style={styles.subSectionTitle}>Власні ресурси</Text>
           {characterData.customResources?.length ? (
             characterData.customResources.map((resource) => (
               <View key={resource.id} style={styles.trackerCard}>
@@ -1419,7 +1603,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <Text style={styles.blockTextMuted}>Ресурси не додані</Text>
           )}
 
-          <Text style={styles.subSectionTitle}>Custom Sections</Text>
+          <Text style={styles.subSectionTitle}>Власні розділи</Text>
           {characterData.customSections?.length ? (
             characterData.customSections.map((section) => (
               <View key={section.id}>
@@ -1431,7 +1615,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <Text style={styles.blockTextMuted}>Секції не додані</Text>
           )}
 
-          <Text style={styles.subSectionTitle}>Homebrew Entries</Text>
+          <Text style={styles.subSectionTitle}>Власні записи</Text>
           {characterData.homebrewEntries?.length ? (
             characterData.homebrewEntries.map((entry) => (
               <View key={entry.id} style={styles.editCardBlock}>
@@ -1443,7 +1627,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               </View>
             ))
           ) : (
-            <Text style={styles.blockTextMuted}>Entries не додані</Text>
+            <Text style={styles.blockTextMuted}>Записи не додані</Text>
           )}
         </>
       )}
@@ -1479,30 +1663,44 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderOverviewEdit = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Identity</Text>
+        <Text style={styles.sectionTitle}>Ідентичність</Text>
         {sectionConflictLabel(['overview.identity'])}
       </View>
-      <Text style={styles.editLabel}>Name</Text>
-      {renderTextInput(characterData.name, (next) => patchCharacter((prev) => ({ ...prev, name: next })), 'Character name')}
-      <Text style={styles.editLabel}>Class</Text>
-      {renderTextInput(characterData.class, (next) => patchCharacter((prev) => ({ ...prev, class: next })), 'Class')}
-      <Text style={styles.editLabel}>Race</Text>
-      {renderTextInput(characterData.race, (next) => patchCharacter((prev) => ({ ...prev, race: next })), 'Race')}
-      <Text style={styles.editLabel}>Level</Text>
+      <Text style={styles.editLabel}>Ім’я</Text>
+      {renderTextInput(characterData.name, (next) => patchCharacter((prev) => ({ ...prev, name: next })), 'Ім’я персонажа')}
+      <Text style={styles.editLabel}>Клас</Text>
+      {renderTextInput(characterData.class, (next) => patchCharacter((prev) => ({ ...prev, class: next })), 'Клас')}
+      <Text style={styles.editLabel}>Раса</Text>
+      {renderTextInput(characterData.race, (next) => patchCharacter((prev) => ({ ...prev, race: next })), 'Раса')}
+      <Text style={styles.editLabel}>Кампанія</Text>
+      {renderTextInput(
+        characterData.campaign || '',
+        (next) =>
+          patchCharacter(
+            (prev) => ({
+              ...prev,
+              campaign: next,
+              campaignId: undefined,
+            }),
+            ['overview.identity'],
+          ),
+        'Назва кампанії',
+      )}
+      <Text style={styles.editLabel}>Рівень</Text>
       {renderTextInput(
         String(characterData.level),
         (next) => patchCharacter((prev) => ({ ...prev, level: clamp(parseNumber(next, prev.level), 1, 20) })),
         '1-20',
         { keyboardType: 'number-pad' },
       )}
-      <Text style={styles.editLabel}>Experience</Text>
+      <Text style={styles.editLabel}>Досвід</Text>
       {renderTextInput(
         String(characterData.experience),
         (next) => patchCharacter((prev) => ({ ...prev, experience: Math.max(0, parseNumber(next, prev.experience)) })),
         'XP',
         { keyboardType: 'number-pad' },
       )}
-      <Text style={styles.editLabel}>Proficiency Bonus</Text>
+      <Text style={styles.editLabel}>Бонус майстерності</Text>
       {renderTextInput(
         String(characterData.proficiencyBonus ?? proficiency),
         (next) => patchCharacter((prev) => ({ ...prev, proficiencyBonus: clamp(parseNumber(next, proficiency), 1, 10) })),
@@ -1515,10 +1713,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderCombatEdit = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Combat Config</Text>
+        <Text style={styles.sectionTitle}>Налаштування бою</Text>
         {sectionConflictLabel(['combat.core', 'combat.hp', 'combat.rest'])}
       </View>
-      <Text style={styles.editLabel}>HP Current</Text>
+      <Text style={styles.editLabel}>Поточне HP</Text>
       {renderTextInput(
         String(characterData.hp.current),
         (next) =>
@@ -1526,10 +1724,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             ...prev,
             hp: { ...prev.hp, current: clamp(parseNumber(next, prev.hp.current), 0, prev.hp.max) },
           }), ['combat.hp']),
-        'Current HP',
+        'Поточне HP',
         { keyboardType: 'number-pad' },
       )}
-      <Text style={styles.editLabel}>HP Max</Text>
+      <Text style={styles.editLabel}>Макс. HP</Text>
       {renderTextInput(
         String(characterData.hp.max),
         (next) =>
@@ -1540,10 +1738,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               hp: { ...prev.hp, max, current: clamp(prev.hp.current, 0, max) },
             };
           }, ['combat.hp']),
-        'Max HP',
+        'Макс. HP',
         { keyboardType: 'number-pad' },
       )}
-      <Text style={styles.editLabel}>Temp HP</Text>
+      <Text style={styles.editLabel}>Тимчасове HP</Text>
       {renderTextInput(
         String(characterData.hp.temp),
         (next) =>
@@ -1551,36 +1749,36 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             ...prev,
             hp: { ...prev.hp, temp: Math.max(0, parseNumber(next, prev.hp.temp)) },
           }), ['combat.hp']),
-        'Temp HP',
+        'Тимчасове HP',
         { keyboardType: 'number-pad' },
       )}
       <Text style={styles.editLabel}>AC</Text>
       {renderTextInput(
         String(characterData.ac),
         (next) => patchCharacter((prev) => ({ ...prev, ac: Math.max(0, parseNumber(next, prev.ac)) }), ['combat.core']),
-        'Armor Class',
+        'Клас захисту',
         { keyboardType: 'number-pad' },
       )}
-      <Text style={styles.editLabel}>Speed</Text>
+      <Text style={styles.editLabel}>Швидкість</Text>
       {renderTextInput(
         String(characterData.speed),
         (next) => patchCharacter((prev) => ({ ...prev, speed: Math.max(0, parseNumber(next, prev.speed)) }), ['combat.core']),
-        'Speed',
+        'Швидкість',
         { keyboardType: 'number-pad' },
       )}
-      <Text style={styles.editLabel}>Initiative</Text>
+      <Text style={styles.editLabel}>Ініціатива</Text>
       {renderTextInput(
         String(characterData.initiative),
         (next) => patchCharacter((prev) => ({ ...prev, initiative: parseNumber(next, prev.initiative) }), ['combat.core']),
-        'Initiative',
+        'Ініціатива',
         { keyboardType: 'number-pad' },
       )}
 
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Combat Templates</Text>
+        <Text style={styles.sectionTitle}>Бойові шаблони</Text>
         {sectionConflictLabel(['combat.templates'])}
       </View>
-      <Text style={styles.editLabel}>Actions (one per line)</Text>
+      <Text style={styles.editLabel}>Дії (по одній в рядку)</Text>
       {renderTextInput(
         (characterData.combatTemplates?.actions || []).join('\n'),
         (next) =>
@@ -1594,10 +1792,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             }),
             ['combat.templates.actions'],
           ),
-        'Attack with longsword',
+        'Атака довгим мечем',
         { multiline: true },
       )}
-      <Text style={styles.editLabel}>Bonus Actions (one per line)</Text>
+      <Text style={styles.editLabel}>Бонусні дії (по одній в рядку)</Text>
       {renderTextInput(
         (characterData.combatTemplates?.bonusActions || []).join('\n'),
         (next) =>
@@ -1611,10 +1809,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             }),
             ['combat.templates.bonus-actions'],
           ),
-        'Second Wind',
+        'Друге дихання',
         { multiline: true },
       )}
-      <Text style={styles.editLabel}>Reactions (one per line)</Text>
+      <Text style={styles.editLabel}>Реакції (по одній в рядку)</Text>
       {renderTextInput(
         (characterData.combatTemplates?.reactions || []).join('\n'),
         (next) =>
@@ -1628,7 +1826,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             }),
             ['combat.templates.reactions'],
           ),
-        'Opportunity Attack',
+        'Атака при нагоді',
         { multiline: true },
       )}
     </View>
@@ -1640,10 +1838,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     return (
       <View style={styles.cardSecondary}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Magic Config</Text>
+          <Text style={styles.sectionTitle}>Налаштування магії</Text>
           {sectionConflictLabel(['magic.'])}
         </View>
-        <Text style={styles.editLabel}>Spellcasting Ability</Text>
+        <Text style={styles.editLabel}>Характеристика чаклування</Text>
         {renderTextInput(
           characterData.spells.spellcastingAbility,
           (next) =>
@@ -1653,7 +1851,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             })),
           'INT / WIS / CHA',
         )}
-        <Text style={styles.editLabel}>Spell Save DC</Text>
+        <Text style={styles.editLabel}>Складність заклять (DC)</Text>
         {renderTextInput(
           String(characterData.spells.spellSaveDC),
           (next) =>
@@ -1664,7 +1862,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           'DC',
           { keyboardType: 'number-pad' },
         )}
-        <Text style={styles.editLabel}>Spell Attack Bonus</Text>
+        <Text style={styles.editLabel}>Бонус атаки заклять</Text>
         {renderTextInput(
           String(characterData.spells.spellAttackBonus),
           (next) =>
@@ -1672,10 +1870,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               ...prev,
               spells: { ...prev.spells, spellAttackBonus: parseNumber(next, prev.spells.spellAttackBonus) },
             })),
-          'Attack Bonus',
+          'Бонус атаки',
           { keyboardType: 'number-pad' },
         )}
-        <Text style={styles.editLabel}>Prepared Spells (one per line)</Text>
+        <Text style={styles.editLabel}>Підготовлені закляття (по одному в рядку)</Text>
         {renderTextInput(
           characterData.spells.preparedSpells.join('\n'),
           (next) =>
@@ -1683,10 +1881,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               ...prev,
               spells: { ...prev.spells, preparedSpells: parseLines(next) },
             })),
-          'Magic Missile',
+          'Магічна стріла',
           { multiline: true },
         )}
-        <Text style={styles.editLabel}>Known Spells (one per line)</Text>
+        <Text style={styles.editLabel}>Відомі закляття (по одному в рядку)</Text>
         {renderTextInput(
           characterData.spells.knownSpells.join('\n'),
           (next) =>
@@ -1694,15 +1892,15 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               ...prev,
               spells: { ...prev.spells, knownSpells: parseLines(next) },
             })),
-          'Shield',
+          'Щит',
           { multiline: true },
         )}
-        <Text style={styles.subSectionTitle}>Spell Slots</Text>
+        <Text style={styles.subSectionTitle}>Слоти заклять</Text>
         {slotLevels.map((level) => {
           const slot = characterData.spells.spellSlots[level] || { max: 0, used: 0 };
           return (
             <View key={`slot-edit-${level}`} style={styles.slotEditRow}>
-              <Text style={styles.rowLabel}>Lvl {level}</Text>
+              <Text style={styles.rowLabel}>Рів. {level}</Text>
               <RNTextInput
                 value={String(slot.max)}
                 onChangeText={(next) =>
@@ -1722,7 +1920,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                   }))
                 }
                 keyboardType='number-pad'
-                placeholder='max'
+                placeholder='макс'
                 placeholderTextColor={colors.textSecondary}
                 style={styles.slotInput}
               />
@@ -1745,7 +1943,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                   }))
                 }
                 keyboardType='number-pad'
-                placeholder='used'
+                placeholder='викор'
                 placeholderTextColor={colors.textSecondary}
                 style={styles.slotInput}
               />
@@ -1759,24 +1957,58 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderInventoryEdit = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Inventory Config</Text>
+        <Text style={styles.sectionTitle}>Налаштування інвентаря</Text>
         {sectionConflictLabel(['inventory.'])}
       </View>
-      <Text style={styles.editLabel}>Inventory (one item per line)</Text>
+      <Text style={styles.editLabel}>Інвентар (по одному предмету в рядку)</Text>
       {renderTextInput(
         characterData.inventory.join('\n'),
         (next) => patchCharacter((prev) => ({ ...prev, inventory: parseLines(next) })),
-        'Rope\nTorch',
+        'Мотузка\nСмолоскип',
         { multiline: true },
       )}
-      <Text style={styles.editLabel}>Notes</Text>
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Налаштування зброї</Text>
+        {sectionConflictLabel(['combat.weapons'])}
+      </View>
+      <TouchableOpacity style={styles.secondaryAction} onPress={addWeapon} activeOpacity={0.85}>
+        <Text style={styles.secondaryActionText}>+ Додати зброю</Text>
+      </TouchableOpacity>
+      {(characterData.weapons || []).map((weapon, index) => (
+        <View key={`weapon-config-${index}`} style={styles.editCardBlock}>
+          <Text style={styles.editLabel}>Назва зброї</Text>
+          {renderTextInput(
+            weapon.name || '',
+            (next) => updateWeaponAt(index, { name: next }),
+            'Короткий меч',
+          )}
+          <Text style={styles.editLabel}>Бонус атаки</Text>
+          {renderTextInput(
+            String(weapon.attackBonus ?? 0),
+            (next) => updateWeaponAt(index, { attackBonus: parseNumber(next, Number(weapon.attackBonus) || 0) }),
+            '+5',
+            { keyboardType: 'numeric' },
+          )}
+          <Text style={styles.editLabel}>Шкода (XdY або XdY+Z)</Text>
+          {renderTextInput(
+            weapon.damage || '',
+            (next) => updateWeaponAt(index, { damage: next }),
+            '1d8+3',
+            { keyboardType: 'default' },
+          )}
+          <TouchableOpacity style={styles.removeButton} onPress={() => removeWeaponAt(index)} activeOpacity={0.85}>
+            <Text style={styles.removeButtonText}>Видалити зброю</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+      <Text style={styles.editLabel}>Нотатки</Text>
       {renderTextInput(
         characterData.notes || '',
         (next) => patchCharacter((prev) => ({ ...prev, notes: next })),
-        'General notes',
+        'Загальні нотатки',
         { multiline: true },
       )}
-      <Text style={styles.editLabel}>Coins (GP / SP / CP)</Text>
+      <Text style={styles.editLabel}>Монети (GP / SP / CP)</Text>
       <View style={styles.slotEditRow}>
         <RNTextInput
           value={String(characterData.coins?.gold ?? 0)}
@@ -1836,21 +2068,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderNotesEdit = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Notes Groups</Text>
+        <Text style={styles.sectionTitle}>Групи нотаток</Text>
         {sectionConflictLabel(['homebrew.notes-groups'])}
       </View>
       <TouchableOpacity style={styles.secondaryAction} onPress={addNotesGroup} activeOpacity={0.85}>
-        <Text style={styles.secondaryActionText}>+ Додати notes group</Text>
+        <Text style={styles.secondaryActionText}>+ Додати групу нотаток</Text>
       </TouchableOpacity>
       {notesGroups.map((group) => (
         <View key={group.id} style={styles.editCardBlock}>
-          <Text style={styles.editLabel}>Group Title</Text>
-          {renderTextInput(group.title, (next) => updateNotesGroupMeta(group.id, { title: next }), 'Group title')}
-          <Text style={styles.editLabel}>Group Content</Text>
-          {renderTextInput(group.content || '', (next) => setNotesGroup(group.id, next), 'Notes content', { multiline: true })}
+          <Text style={styles.editLabel}>Назва групи</Text>
+          {renderTextInput(group.title, (next) => updateNotesGroupMeta(group.id, { title: next }), 'Назва групи')}
+          <Text style={styles.editLabel}>Вміст групи</Text>
+          {renderTextInput(group.content || '', (next) => setNotesGroup(group.id, next), 'Вміст нотаток', { multiline: true })}
           {group.origin === 'custom' && (
             <TouchableOpacity style={styles.removeButton} onPress={() => removeNotesGroup(group.id)} activeOpacity={0.85}>
-              <Text style={styles.removeButtonText}>Видалити notes group</Text>
+              <Text style={styles.removeButtonText}>Видалити групу нотаток</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -1861,11 +2093,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderHomebrewEdit = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Homebrew Fields</Text>
+        <Text style={styles.sectionTitle}>Власні поля</Text>
         {sectionConflictLabel(['homebrew.fields'])}
       </View>
       <TouchableOpacity style={styles.secondaryAction} onPress={addCustomField} activeOpacity={0.85}>
-        <Text style={styles.secondaryActionText}>+ Додати custom field</Text>
+        <Text style={styles.secondaryActionText}>+ Додати власне поле</Text>
       </TouchableOpacity>
 
       {(characterData.customFields || []).map((field) => {
@@ -1873,11 +2105,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         const nextType = FIELD_TYPES[(currentTypeIndex + 1) % FIELD_TYPES.length];
         return (
           <View key={field.id} style={styles.editCardBlock}>
-            <Text style={styles.editLabel}>Label</Text>
-            {renderTextInput(field.label, (next) => updateCustomField(field.id, { label: next }), 'Field label')}
+            <Text style={styles.editLabel}>Назва</Text>
+            {renderTextInput(field.label, (next) => updateCustomField(field.id, { label: next }), 'Назва поля')}
 
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.rowLabel}>Type: {field.type}</Text>
+              <Text style={styles.rowLabel}>Тип: {field.type}</Text>
               <Pressable
                 style={styles.collapseButton}
                 onPress={() => updateCustomField(field.id, { type: nextType })}
@@ -1893,22 +2125,22 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 onPress={() => updateCustomField(field.id, { value: !Boolean(field.value) })}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.blockText}>{Boolean(field.value) ? 'True' : 'False'}</Text>
+                <Text style={styles.blockText}>{Boolean(field.value) ? 'Так' : 'Ні'}</Text>
               </Pressable>
             ) : field.type === 'select' ? (
               <>
-                <Text style={styles.editLabel}>Options (one per line)</Text>
+                <Text style={styles.editLabel}>Опції (по одній в рядку)</Text>
                 {renderTextInput(
                   (field.options || []).join('\n'),
                   (next) => updateCustomField(field.id, { options: parseLines(next) }),
-                  'Option A\nOption B',
+                  'Опція A\nОпція B',
                   { multiline: true },
                 )}
-                <Text style={styles.editLabel}>Value</Text>
-                {renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), 'Value')}
+                <Text style={styles.editLabel}>Значення</Text>
+                {renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), 'Значення')}
               </>
             ) : (
-              renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), 'Value')
+              renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), 'Значення')
             )}
 
             <TouchableOpacity style={styles.removeButton} onPress={() => removeCustomField(field.id)} activeOpacity={0.85}>
@@ -1919,13 +2151,13 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       })}
 
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Custom Resources</Text>
+        <Text style={styles.sectionTitle}>Власні ресурси</Text>
         {sectionConflictLabel(['homebrew.resources'])}
       </View>
       <TouchableOpacity style={styles.secondaryAction} onPress={addResource} activeOpacity={0.85}>
-        <Text style={styles.secondaryActionText}>+ Додати resource</Text>
+        <Text style={styles.secondaryActionText}>+ Додати ресурс</Text>
       </TouchableOpacity>
-      <Text style={styles.subSectionTitle}>System Templates</Text>
+      <Text style={styles.subSectionTitle}>Системні шаблони</Text>
       {SYSTEM_RESOURCE_TEMPLATES.map((template) => (
         <Pressable
           key={template.id}
@@ -1933,10 +2165,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           onPress={() => applyResourceTemplate(template.resource)}
           android_ripple={{ color: '#999' }}
         >
-          <Text style={styles.secondaryActionText}>Apply: {template.name}</Text>
+          <Text style={styles.secondaryActionText}>Застосувати: {template.name}</Text>
         </Pressable>
       ))}
-      {!!userTemplates.length && <Text style={styles.subSectionTitle}>User Templates</Text>}
+      {!!userTemplates.length && <Text style={styles.subSectionTitle}>Шаблони користувача</Text>}
       {userTemplates.map((template) => (
         <View key={template.id} style={styles.editCardBlock}>
           <Text style={styles.rowLabel}>{template.name}</Text>
@@ -1948,7 +2180,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             onPress={() => applyResourceTemplate(template.resource)}
             android_ripple={{ color: '#999' }}
           >
-            <Text style={styles.secondaryActionText}>Apply User Template</Text>
+            <Text style={styles.secondaryActionText}>Застосувати шаблон користувача</Text>
           </Pressable>
           <TouchableOpacity style={styles.removeButton} onPress={() => removeUserTemplate(template.id)} activeOpacity={0.85}>
             <Text style={styles.removeButtonText}>Видалити шаблон</Text>
@@ -1961,16 +2193,16 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         const nextRule = TRACKER_RULES[(ruleIndex + 1) % TRACKER_RULES.length];
         return (
           <View key={resource.id} style={styles.editCardBlock}>
-            <Text style={styles.editLabel}>Resource Label</Text>
-            {renderTextInput(resource.label, (next) => updateResource(resource.id, { label: next }), 'Resource name')}
-            <Text style={styles.editLabel}>Current</Text>
+            <Text style={styles.editLabel}>Назва ресурсу</Text>
+            {renderTextInput(resource.label, (next) => updateResource(resource.id, { label: next }), 'Назва ресурсу')}
+            <Text style={styles.editLabel}>Поточне</Text>
             {renderTextInput(
               String(resource.current),
               (next) => updateResource(resource.id, { current: Math.max(0, parseNumber(next, resource.current)) }),
               'Current',
               { keyboardType: 'number-pad' },
             )}
-            <Text style={styles.editLabel}>Max (optional)</Text>
+            <Text style={styles.editLabel}>Макс. (необов’язково)</Text>
             {renderTextInput(
               String(resource.max ?? ''),
               (next) => {
@@ -1988,7 +2220,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 onPress={() => updateResource(resource.id, { resetRule: nextRule })}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.collapseButtonText}>Змінити reset</Text>
+                <Text style={styles.collapseButtonText}>Змінити відновлення</Text>
               </Pressable>
             </View>
             <Pressable
@@ -1996,50 +2228,50 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               onPress={() => saveUserTemplateFromResource(resource)}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={styles.secondaryActionText}>Save as User Template</Text>
+              <Text style={styles.secondaryActionText}>Зберегти як шаблон користувача</Text>
             </Pressable>
 
             <TouchableOpacity style={styles.removeButton} onPress={() => removeResource(resource.id)} activeOpacity={0.85}>
-              <Text style={styles.removeButtonText}>Видалити resource</Text>
+              <Text style={styles.removeButtonText}>Видалити ресурс</Text>
             </TouchableOpacity>
           </View>
         );
       })}
 
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Custom Sections</Text>
+        <Text style={styles.sectionTitle}>Власні розділи</Text>
         {sectionConflictLabel(['homebrew.sections'])}
       </View>
       <TouchableOpacity style={styles.secondaryAction} onPress={addCustomSection} activeOpacity={0.85}>
-        <Text style={styles.secondaryActionText}>+ Додати section</Text>
+        <Text style={styles.secondaryActionText}>+ Додати розділ</Text>
       </TouchableOpacity>
       {(characterData.customSections || []).map((section) => (
         <View key={section.id} style={styles.editCardBlock}>
-          <Text style={styles.editLabel}>Section Title</Text>
-          {renderTextInput(section.title, (next) => updateCustomSection(section.id, { title: next }), 'Section title')}
-          <Text style={styles.editLabel}>Section Content</Text>
-          {renderTextInput(section.content, (next) => updateCustomSection(section.id, { content: next }), 'Section content', {
+          <Text style={styles.editLabel}>Назва розділу</Text>
+          {renderTextInput(section.title, (next) => updateCustomSection(section.id, { title: next }), 'Назва розділу')}
+          <Text style={styles.editLabel}>Вміст розділу</Text>
+          {renderTextInput(section.content, (next) => updateCustomSection(section.id, { content: next }), 'Вміст розділу', {
             multiline: true,
           })}
           <TouchableOpacity style={styles.removeButton} onPress={() => removeCustomSection(section.id)} activeOpacity={0.85}>
-            <Text style={styles.removeButtonText}>Видалити section</Text>
+            <Text style={styles.removeButtonText}>Видалити розділ</Text>
           </TouchableOpacity>
         </View>
       ))}
 
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Homebrew Entries</Text>
+        <Text style={styles.sectionTitle}>Власні записи</Text>
         {sectionConflictLabel(['homebrew.entries'])}
       </View>
       <View style={styles.slotEditRow}>
         <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('spell')} android_ripple={{ color: '#999' }}>
-          <Text style={styles.secondaryActionText}>+ Spell</Text>
+          <Text style={styles.secondaryActionText}>+ Закляття</Text>
         </Pressable>
         <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('ability')} android_ripple={{ color: '#999' }}>
-          <Text style={styles.secondaryActionText}>+ Ability</Text>
+          <Text style={styles.secondaryActionText}>+ Здібність</Text>
         </Pressable>
         <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('feat')} android_ripple={{ color: '#999' }}>
-          <Text style={styles.secondaryActionText}>+ Feat</Text>
+          <Text style={styles.secondaryActionText}>+ Риса</Text>
         </Pressable>
       </View>
       {(characterData.homebrewEntries || []).map((entry) => {
@@ -2048,28 +2280,28 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         const nextKind = kinds[(kindIndex + 1) % kinds.length];
         return (
           <View key={entry.id} style={styles.editCardBlock}>
-            <Text style={styles.editLabel}>Name</Text>
-            {renderTextInput(entry.name, (next) => updateHomebrewEntry(entry.id, { name: next }), 'Entry name')}
-            <Text style={styles.editLabel}>Description</Text>
-            {renderTextInput(entry.description, (next) => updateHomebrewEntry(entry.id, { description: next }), 'Description', {
+            <Text style={styles.editLabel}>Назва</Text>
+            {renderTextInput(entry.name, (next) => updateHomebrewEntry(entry.id, { name: next }), 'Назва запису')}
+            <Text style={styles.editLabel}>Опис</Text>
+            {renderTextInput(entry.description, (next) => updateHomebrewEntry(entry.id, { description: next }), 'Опис', {
               multiline: true,
             })}
-            <Text style={styles.editLabel}>Tags (one per line)</Text>
-            {renderTextInput((entry.tags || []).join('\n'), (next) => updateHomebrewEntry(entry.id, { tags: parseLines(next) }), 'tag-a\ntag-b', {
+            <Text style={styles.editLabel}>Теги (по одному в рядку)</Text>
+            {renderTextInput((entry.tags || []).join('\n'), (next) => updateHomebrewEntry(entry.id, { tags: parseLines(next) }), 'тег-а\nтег-б', {
               multiline: true,
             })}
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.rowLabel}>Kind: {entry.kind}</Text>
+              <Text style={styles.rowLabel}>Тип: {entry.kind}</Text>
               <Pressable
                 style={styles.collapseButton}
                 onPress={() => updateHomebrewEntry(entry.id, { kind: nextKind })}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.collapseButtonText}>Змінити kind</Text>
+                <Text style={styles.collapseButtonText}>Змінити тип</Text>
               </Pressable>
             </View>
             <TouchableOpacity style={styles.removeButton} onPress={() => removeHomebrewEntry(entry.id)} activeOpacity={0.85}>
-              <Text style={styles.removeButtonText}>Видалити entry</Text>
+              <Text style={styles.removeButtonText}>Видалити запис</Text>
             </TouchableOpacity>
           </View>
         );
@@ -2111,17 +2343,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 />
               </View>
               <Text style={styles.characterMeta}>
-                {characterData.class || 'Class'} / {characterData.race || 'Race'} / Lv.{characterData.level}
+                {characterData.class || 'Клас'} / {characterData.race || 'Раса'} / Рів.{characterData.level}
               </Text>
-              <View style={styles.badgesRow}>{syncBadges.map((badge) => renderBadge(badge.label, badge.kind))}</View>
+              <Text style={styles.characterMeta}>
+                Кампанія: {String(characterData.campaign || '').trim() || 'Не призначена'}
+                {characterData.campaignId ? ` • ID: ${characterData.campaignId}` : ''}
+              </Text>
+              <View style={styles.badgesRow}>{syncBadges.map(renderBadge)}</View>
               <View style={styles.syncIndicatorRow}>
-                <Text style={styles.syncIndicatorText}>Sync status: {syncStatusLabel}</Text>
-                <Text style={styles.syncIndicatorText}>Feedback: {syncFeedback}</Text>
+                <Text style={styles.syncIndicatorText}>Статус синхронізації: {syncStatusLabel}</Text>
+                <Text style={styles.syncIndicatorText}>Статус: {syncFeedback}</Text>
                 {currentSync?.transportMessage ? <Text style={styles.syncIndicatorText}>{currentSync.transportMessage}</Text> : null}
               </View>
               <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: '#999' }}>
                 <MaterialCommunityIcons name='sync' size={16} color={colors.text} />
-                <Text style={styles.syncNowButtonText}>Sync now</Text>
+                <Text style={styles.syncNowButtonText}>Синхронізувати зараз</Text>
               </Pressable>
             </View>
           </View>
@@ -2133,23 +2369,27 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 onPress={() => setMode('play')}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>Play Mode</Text>
+                <Text numberOfLines={1} style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>
+                  Режим гри
+                </Text>
               </Pressable>
               <Pressable
                 style={[styles.modeButton, mode === 'edit' ? styles.modeButtonActive : null]}
                 onPress={() => setMode('edit')}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>Edit Mode</Text>
+                <Text numberOfLines={1} style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>
+                  Режим редагування
+                </Text>
               </Pressable>
             </View>
 
             <Pressable
               style={[styles.sessionToggle, characterData.sessionMode ? styles.sessionToggleActive : null]}
-              onPress={() => patchCharacter((prev) => ({ ...prev, sessionMode: !prev.sessionMode }), ['overview.session-mode'])}
+              onPress={toggleSessionMode}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Session Mode</Text>
+              <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Режим сесії</Text>
             </Pressable>
           </View>
         </View>
@@ -2158,23 +2398,23 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           <View style={styles.conflictCard}>
             <View style={styles.conflictHeader}>
               <MaterialCommunityIcons name='alert-circle-outline' size={20} color='#f59e0b' />
-              <Text style={styles.conflictTitle}>Sync conflict detected</Text>
+              <Text style={styles.conflictTitle}>Виявлено конфлікт синхронізації</Text>
             </View>
             <Text style={styles.conflictText}>
               Локальні та cloud зміни перетнулися в одній секції. Обери стратегію злиття.
             </Text>
             {currentSync.conflictPaths.length > 0 && (
-              <Text style={styles.conflictPaths}>Paths: {currentSync.conflictPaths.join(', ')}</Text>
+              <Text style={styles.conflictPaths}>Шляхи: {currentSync.conflictPaths.join(', ')}</Text>
             )}
             <View style={styles.conflictActionsRow}>
               <Pressable style={styles.conflictAction} onPress={resolveConflictWithLocal} android_ripple={{ color: '#999' }}>
-                <Text style={styles.conflictActionText}>Keep Local</Text>
+                <Text style={styles.conflictActionText}>Залишити локальне</Text>
               </Pressable>
               <Pressable style={styles.conflictAction} onPress={resolveConflictWithCloud} android_ripple={{ color: '#999' }}>
-                <Text style={styles.conflictActionText}>Use Cloud</Text>
+                <Text style={styles.conflictActionText}>Використати хмару</Text>
               </Pressable>
               <Pressable style={styles.conflictAction} onPress={resolveConflictManual} android_ripple={{ color: '#999' }}>
-                <Text style={styles.conflictActionText}>Resolve Later</Text>
+                <Text style={styles.conflictActionText}>Вирішити пізніше</Text>
               </Pressable>
             </View>
           </View>
@@ -2182,7 +2422,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
         <View style={styles.combatSummaryCard}>
           <View style={styles.sectionTitleRow}>
-            <Text style={styles.summaryTitle}>Combat Summary</Text>
+            <Text style={styles.summaryTitle}>Бойовий підсумок</Text>
             {sectionConflictLabel(['combat.hp', 'combat.core'])}
           </View>
           <View style={styles.summaryGrid}>
@@ -2191,7 +2431,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               <Text style={styles.summaryValue}>
                 {characterData.hp.current}/{characterData.hp.max}
               </Text>
-              <Text style={styles.summarySubValue}>Temp {characterData.hp.temp}</Text>
+              <Text style={styles.summarySubValue}>Тимч. {characterData.hp.temp}</Text>
               <View style={styles.hpBarBase}>
                 <View style={[styles.hpBarFill, { width: `${clamp(hpPercent, 0, 100)}%` }]} />
               </View>
@@ -2201,25 +2441,25 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               <Text style={styles.summaryValue}>{characterData.ac}</Text>
             </View>
             <View style={styles.summaryTile}>
-              <Text style={styles.summaryLabel}>Speed</Text>
+              <Text style={styles.summaryLabel}>Швидк.</Text>
               <Text style={styles.summaryValue}>{characterData.speed}</Text>
             </View>
             <View style={styles.summaryTile}>
-              <Text style={styles.summaryLabel}>Initiative</Text>
+              <Text style={styles.summaryLabel}>Ініц.</Text>
               <Text style={styles.summaryValue}>
                 {characterData.initiative >= 0 ? `+${characterData.initiative}` : characterData.initiative}
               </Text>
             </View>
             <View style={styles.summaryTile}>
-              <Text style={styles.summaryLabel}>Prof.</Text>
+              <Text style={styles.summaryLabel}>Майст.</Text>
               <Text style={styles.summaryValue}>+{proficiency}</Text>
             </View>
             <View style={styles.summaryTile}>
-              <Text style={styles.summaryLabel}>Spell DC</Text>
+              <Text style={styles.summaryLabel}>DC заклять</Text>
               <Text style={styles.summaryValue}>{characterData.spells.spellSaveDC || 0}</Text>
             </View>
             <View style={styles.summaryTile}>
-              <Text style={styles.summaryLabel}>Passive Perception</Text>
+              <Text style={styles.summaryLabel}>Пасивне сприйняття</Text>
               <Text style={styles.summaryValue}>{passivePerception}</Text>
             </View>
           </View>
@@ -2227,7 +2467,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
         {mode === 'play' && (
           <View style={styles.quickActionsWrapper}>
-            <Text style={styles.sectionTitle}>Quick Action Bar</Text>
+            <Text style={styles.sectionTitle}>Панель швидких дій</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.quickActionsRow}>
               {quickActions.map((action) => (
                 <Pressable
@@ -2246,10 +2486,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                   <Text style={styles.quickActionText}>{action.label}</Text>
                 </Pressable>
               ))}
-              <Pressable style={styles.quickActionButton} onPress={openHpModal} android_ripple={{ color: '#999' }}>
-                <MaterialCommunityIcons name='heart-cog-outline' size={18} color={colors.text} />
-                <Text style={styles.quickActionText}>HP</Text>
-              </Pressable>
             </ScrollView>
           </View>
         )}
@@ -2264,7 +2500,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 android_ripple={{ color: '#999' }}
               >
                 <View style={styles.tabChipInner}>
-                  <Text style={[styles.tabChipText, selectedTab === tab ? styles.tabChipTextActive : null]}>{tab}</Text>
+                  <Text style={[styles.tabChipText, selectedTab === tab ? styles.tabChipTextActive : null]}>{TAB_LABELS[tab]}</Text>
                   {hasConflictForTab(tab) && <MaterialCommunityIcons name='alert-circle' size={14} color='#f59e0b' />}
                 </View>
               </Pressable>
@@ -2275,14 +2511,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         {isSharedSheet && (
           <View style={styles.cardSecondary}>
             <View style={styles.sectionTitleRow}>
-              <Text style={styles.sectionTitle}>Shared Change History ({selectedTab})</Text>
+              <Text style={styles.sectionTitle}>Історія спільних змін ({TAB_LABELS[selectedTab]})</Text>
             </View>
             {latestTabChangeLabel && (
               <Text style={styles.blockTextMuted}>
-                Last change marker: {latestTabChangeLabel} at {new Date(latestTabChange.atMs).toLocaleString()}
+                Маркер останньої зміни: {latestTabChangeLabel} о {new Date(latestTabChange.atMs).toLocaleString()}
               </Text>
             )}
-            {!tabHistory.length && <Text style={styles.blockTextMuted}>Для цієї вкладки ще немає shared історії.</Text>}
+            {!tabHistory.length && <Text style={styles.blockTextMuted}>Для цієї вкладки ще немає спільної історії.</Text>}
             {tabHistory.map((entry) => (
               <View key={entry.id} style={styles.historyRow}>
                 <Text style={styles.historyAuthor}>
@@ -2299,28 +2535,28 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       </ScrollView>
 
       <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={saveHpModal} title='HP'>
-        <Text style={styles.modalLabel}>Current HP</Text>
+        <Text style={styles.modalLabel}>Поточне HP</Text>
         <RNTextInput
           value={tempCurrentHp}
           onChangeText={setTempCurrentHp}
           keyboardType='number-pad'
           style={styles.modalInput}
-          placeholder='Current'
+          placeholder='Поточне'
           placeholderTextColor={colors.textSecondary}
         />
-        <Text style={styles.modalLabel}>Max HP</Text>
+        <Text style={styles.modalLabel}>Макс. HP</Text>
         <RNTextInput
           value={tempMaxHp}
           onChangeText={setTempMaxHp}
           keyboardType='number-pad'
           style={styles.modalInput}
-          placeholder='Max'
+          placeholder='Макс.'
           placeholderTextColor={colors.textSecondary}
         />
       </Modal>
 
-      <Modal isVisible={isTempHpModalVisible} onClose={() => setIsTempHpModalVisible(false)} onSubmit={saveTempHp} title='Temp HP'>
-        <Text style={styles.modalLabel}>Temp HP value</Text>
+      <Modal isVisible={isTempHpModalVisible} onClose={() => setIsTempHpModalVisible(false)} onSubmit={saveTempHp} title='Тимчасове HP'>
+        <Text style={styles.modalLabel}>Значення тимчасового HP</Text>
         <RNTextInput
           value={tempShieldInput}
           onChangeText={setTempShieldInput}
@@ -2331,47 +2567,47 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         />
       </Modal>
 
-      <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} title='Roll'>
+      <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} title='Кидок'>
         <DiceRoller />
       </Modal>
 
-      <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title='Add Condition'>
-        <Text style={styles.modalLabel}>Condition</Text>
+      <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title='Додати стан'>
+        <Text style={styles.modalLabel}>Стан</Text>
         <RNTextInput
           value={conditionInput}
           onChangeText={setConditionInput}
           style={styles.modalInput}
-          placeholder='Poisoned'
+          placeholder='Отруєний'
           placeholderTextColor={colors.textSecondary}
         />
       </Modal>
 
-      <Modal isVisible={isQuickNoteModalVisible} onClose={() => setIsQuickNoteModalVisible(false)} onSubmit={addQuickSessionNote} title='Quick Note'>
-        <Text style={styles.modalLabel}>Session note</Text>
+      <Modal isVisible={isQuickNoteModalVisible} onClose={() => setIsQuickNoteModalVisible(false)} onSubmit={addQuickSessionNote} title='Швидка нотатка'>
+        <Text style={styles.modalLabel}>Нотатка сесії</Text>
         <RNTextInput
           value={quickNoteInput}
           onChangeText={setQuickNoteInput}
           style={[styles.modalInput, styles.modalInputMultiline]}
-          placeholder='Write quick note...'
+          placeholder='Напишіть коротку нотатку...'
           placeholderTextColor={colors.textSecondary}
           multiline
         />
       </Modal>
 
-      <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Rest'>
+      <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Відпочинок'>
         {restStep === 'choose' && (
           <>
             <TouchableOpacity onPress={() => setRestStep('short')} style={styles.restButton}>
-              <Text style={styles.restButtonText}>Short Rest</Text>
+              <Text style={styles.restButtonText}>Короткий відпочинок</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={applyLongRest} style={styles.restButton}>
-              <Text style={styles.restButtonText}>Long Rest</Text>
+              <Text style={styles.restButtonText}>Довгий відпочинок</Text>
             </TouchableOpacity>
           </>
         )}
         {restStep === 'short' && (
           <>
-            <Text style={styles.modalLabel}>Available hit dice: {characterData.hitDice}</Text>
+            <Text style={styles.modalLabel}>Доступні кості хітів: {characterData.hitDice}</Text>
             <RNTextInput
               value={shortRestDice}
               onChangeText={setShortRestDice}
@@ -2381,7 +2617,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               placeholderTextColor={colors.textSecondary}
             />
             <TouchableOpacity onPress={startShortRestRoll} style={styles.restButton}>
-              <Text style={styles.restButtonText}>Roll Hit Dice</Text>
+              <Text style={styles.restButtonText}>Кинути кості хітів</Text>
             </TouchableOpacity>
           </>
         )}
@@ -2393,7 +2629,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <Dice sides={diceSides} onRoll={(value: number) => setRollResults((prev) => (prev.length < rollsNeeded ? [...prev, value] : prev))} />
             {rollResults.length >= rollsNeeded && (
               <TouchableOpacity onPress={applyShortRestRolls} style={styles.restButton}>
-                <Text style={styles.restButtonText}>Apply Rest</Text>
+                <Text style={styles.restButtonText}>Застосувати відпочинок</Text>
               </TouchableOpacity>
             )}
           </>

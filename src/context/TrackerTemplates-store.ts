@@ -33,10 +33,10 @@ const useTrackerTemplateStore = create<TrackerTemplateStore>((set, get) => ({
       const normalized: ResourceTemplate[] = parsed
         .map((entry: any, index: number) => ({
           id: String(entry?.id || `user-template-${index}`),
-          name: String(entry?.name || `Template ${index + 1}`),
+          name: String(entry?.name || `Шаблон ${index + 1}`),
           source: 'user' as const,
           resource: {
-            label: String(entry?.resource?.label || 'Resource'),
+            label: String(entry?.resource?.label || 'Ресурс'),
             current: Math.max(0, Number(entry?.resource?.current) || 0),
             max: typeof entry?.resource?.max === 'number' ? Math.max(0, entry.resource.max) : undefined,
             resetRule: entry?.resource?.resetRule || 'none',
@@ -55,10 +55,10 @@ const useTrackerTemplateStore = create<TrackerTemplateStore>((set, get) => ({
     const current = get().userTemplates;
     const next: ResourceTemplate = {
       id: `user-template-${Date.now()}`,
-      name: (name || resource.label || 'Custom Template').trim(),
+      name: (name || resource.label || 'Власний шаблон').trim(),
       source: 'user',
       resource: {
-        label: resource.label || 'Resource',
+        label: resource.label || 'Ресурс',
         current: Math.max(0, Number(resource.current) || 0),
         max: typeof resource.max === 'number' ? Math.max(0, resource.max) : undefined,
         resetRule: resource.resetRule || 'none',

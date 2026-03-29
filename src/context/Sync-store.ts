@@ -83,11 +83,12 @@ const useSyncStore = create<SyncStore>((set, get) => ({
     const current = get().syncByCharacter[characterId];
     if (current) {
       const normalizedCurrent = normalizeState(characterId, current);
+      const resolvedHasCloud = normalizedCurrent.hasCloud || hasCloud;
       const next: CharacterSyncState = {
         ...normalizedCurrent,
-        hasCloud,
+        hasCloud: resolvedHasCloud,
         status: resolveSyncStatus({
-          hasCloud,
+          hasCloud: resolvedHasCloud,
           hasPendingPaths: normalizedCurrent.pendingPaths.length > 0,
           hasConflictPaths: normalizedCurrent.conflictPaths.length > 0,
           localRevision: normalizedCurrent.localRevision,

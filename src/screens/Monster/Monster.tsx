@@ -155,13 +155,13 @@ export default function Monster({ route }: Props) {
       <Text style={styles.label}>Складність (CR): {editing ? '' : data.challenge || '—'}</Text>
       {editing && <TextInput style={styles.input} value={data.challenge || ''} onChangeText={(text) => setData((prev) => ({ ...prev, challenge: text }))} />}
 
-      <Text style={styles.label}>Environment: {editing ? '' : data.environment || '—'}</Text>
+      <Text style={styles.label}>Середовище: {editing ? '' : data.environment || '—'}</Text>
       {editing && <TextInput style={styles.input} value={data.environment || ''} onChangeText={(text) => setData((prev) => ({ ...prev, environment: text }))} />}
 
-      <Text style={styles.label}>Source: {editing ? '' : data.source || '—'}</Text>
+      <Text style={styles.label}>Джерело: {editing ? '' : data.source || '—'}</Text>
       {editing && <TextInput style={styles.input} value={data.source || ''} onChangeText={(text) => setData((prev) => ({ ...prev, source: text }))} />}
 
-      <Text style={styles.label}>Tags: {editing ? '' : (data.tags || []).join(', ') || '—'}</Text>
+      <Text style={styles.label}>Теги: {editing ? '' : (data.tags || []).join(', ') || '—'}</Text>
       {editing && (
         <TextInput
           style={styles.input}

@@ -185,7 +185,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     result.selectedParty.forEach((player) => {
       entries.push({
         id: `player-${player.id}`,
-        name: player.name || 'Player',
+        name: player.name || 'Гравець',
         roll: '',
         hits: String(player.hp?.current || 0),
       });
@@ -216,8 +216,8 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>Encounter Prep Starter</Text>
-        <Text style={styles.hint}>Select campaign, pick party and monsters, then start Initiative with seeded entries.</Text>
+        <Text style={styles.title}>Підготовка сутички</Text>
+        <Text style={styles.hint}>Оберіть кампанію, групу та монстрів, потім запустіть Ініціативу з підготовленими записами.</Text>
         <View style={styles.statsRow}>
           {campaigns.map((campaign) => (
             <Pressable
@@ -233,8 +233,8 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Party ({result.selectedParty.length})</Text>
-        {!party.length && <Text style={styles.hint}>No party members linked to selected campaign.</Text>}
+        <Text style={styles.title}>Група ({result.selectedParty.length})</Text>
+        {!party.length && <Text style={styles.hint}>До вибраної кампанії не прив’язано учасників групи.</Text>}
         {party.map((player) => {
           const selected = selectedPlayers[player.id];
           return (
@@ -244,19 +244,19 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               onPress={() => setSelectedPlayers((prev) => ({ ...prev, [player.id]: !prev[player.id] }))}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={styles.updateTitle}>{player.name || 'Character'} {selected ? '• Selected' : ''}</Text>
-              <Text style={styles.updateMeta}>Lvl {player.level || 1} • Init {player.initiative || 0} • HP {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
+              <Text style={styles.updateTitle}>{player.name || 'Персонаж'} {selected ? '• Обрано' : ''}</Text>
+              <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • HP {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
             </Pressable>
           );
         })}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Monsters</Text>
+        <Text style={styles.title}>Монстри</Text>
         <TextInput
           value={monsterSearch}
           onChangeText={setMonsterSearch}
-          placeholder={pinnedMonsters.length ? 'Search pinned bestiary' : 'Search bestiary'}
+          placeholder={pinnedMonsters.length ? 'Пошук у закріпленому бестіарії' : 'Пошук у бестіарії'}
           placeholderTextColor={colors.textSecondary}
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
         />
@@ -265,18 +265,18 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
           <Pressable
             key={monster.id}
             style={styles.updateRow}
-            onPress={() => addMonster(monster.name || 'Monster', monster.challenge || '0')}
+            onPress={() => addMonster(monster.name || 'Монстр', monster.challenge || '0')}
             android_ripple={{ color: '#999' }}
           >
-            <Text style={styles.updateTitle}>{monster.name || 'Monster'}</Text>
-            <Text style={styles.updateMeta}>CR {monster.challenge || '0'} • {monster.type || 'Unknown type'}</Text>
+            <Text style={styles.updateTitle}>{monster.name || 'Монстр'}</Text>
+            <Text style={styles.updateMeta}>CR {monster.challenge || '0'} • {monster.type || 'Невідомий тип'}</Text>
           </Pressable>
         ))}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Encounter Lineup ({encounterMonsters.length})</Text>
-        {!encounterMonsters.length && <Text style={styles.hint}>Add monsters from the list above.</Text>}
+        <Text style={styles.title}>Склад сутички ({encounterMonsters.length})</Text>
+        {!encounterMonsters.length && <Text style={styles.hint}>Додайте монстрів зі списку вище.</Text>}
         {encounterMonsters.map((monster) => (
           <View key={monster.id} style={styles.updateRow}>
             <Text style={styles.updateTitle}>{monster.name}</Text>
@@ -293,7 +293,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                 }}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.laneButtonText}>Count -1</Text>
+                <Text style={styles.laneButtonText}>К-сть -1</Text>
               </Pressable>
               <Pressable
                 style={styles.laneButton}
@@ -304,10 +304,10 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                 }}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.laneButtonText}>Count +1</Text>
+                <Text style={styles.laneButtonText}>К-сть +1</Text>
               </Pressable>
               <Pressable style={styles.laneButton} onPress={() => removeMonster(monster.id)} android_ripple={{ color: '#999' }}>
-                <Text style={styles.laneButtonText}>Remove</Text>
+                <Text style={styles.laneButtonText}>Видалити</Text>
               </Pressable>
             </View>
           </View>
@@ -315,14 +315,14 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Difficulty Preview</Text>
-        <Text style={styles.updateMeta}>Campaign: {selectedCampaign?.name || '—'}</Text>
-        <Text style={styles.updateMeta}>Difficulty: {result.difficulty}</Text>
-        <Text style={styles.updateMeta}>Adjusted XP: {result.adjustedXP}</Text>
-        <Text style={styles.updateMeta}>XP per player: {result.xpPerPlayer}</Text>
+        <Text style={styles.title}>Оцінка складності</Text>
+        <Text style={styles.updateMeta}>Кампанія: {selectedCampaign?.name || '—'}</Text>
+        <Text style={styles.updateMeta}>Складність: {result.difficulty}</Text>
+        <Text style={styles.updateMeta}>Скоригований XP: {result.adjustedXP}</Text>
+        <Text style={styles.updateMeta}>XP на гравця: {result.xpPerPlayer}</Text>
 
         <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: '#999' }}>
-          <Text style={styles.authButtonText}>Start Initiative</Text>
+          <Text style={styles.authButtonText}>Почати ініціативу</Text>
         </Pressable>
       </View>
     </ScrollView>

@@ -10,26 +10,26 @@ export type ResourceTemplate = {
 export const SYSTEM_RESOURCE_TEMPLATES: ResourceTemplate[] = [
   {
     id: 'sys-arcane-charges',
-    name: 'Arcane Charges',
+    name: 'Арканні заряди',
     source: 'system',
-    resource: { label: 'Arcane Charges', current: 3, max: 3, resetRule: 'long-rest' },
+    resource: { label: 'Арканні заряди', current: 3, max: 3, resetRule: 'long-rest' },
   },
   {
     id: 'sys-stamina',
-    name: 'Stamina',
+    name: 'Витривалість',
     source: 'system',
-    resource: { label: 'Stamina', current: 4, max: 4, resetRule: 'short-rest' },
+    resource: { label: 'Витривалість', current: 4, max: 4, resetRule: 'short-rest' },
   },
   {
     id: 'sys-grit',
-    name: 'Grit',
+    name: 'Рішучість',
     source: 'system',
-    resource: { label: 'Grit', current: 2, max: 2, resetRule: 'short-rest' },
+    resource: { label: 'Рішучість', current: 2, max: 2, resetRule: 'short-rest' },
   },
   {
     id: 'sys-session-clock',
-    name: 'Session Clock',
+    name: 'Лічильник сесії',
     source: 'system',
-    resource: { label: 'Session Clock', current: 0, max: 6, resetRule: 'session' },
+    resource: { label: 'Лічильник сесії', current: 0, max: 6, resetRule: 'session' },
   },
 ];

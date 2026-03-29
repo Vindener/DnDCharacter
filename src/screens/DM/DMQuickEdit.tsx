@@ -11,6 +11,7 @@ import { appendQuickSessionNote } from '@/shared/helpers/homebrew';
 import type { CharacterDto } from '@/types/Character';
 import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
+import { Modal } from '@/shared/components/Modal/Modal';
 
 type Props = StackScreenProps<DMStackParamList, 'DMQuickEdit'>;
 
@@ -19,13 +20,14 @@ const toNumber = (value: string, fallback = 0): number => {
   return Number.isFinite(parsed) ? parsed : fallback;
 };
 
-const DMQuickEdit: React.FC<Props> = ({ route }) => {
+const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
   const { characterId } = route.params;
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
   const character = useCharacterStore((s) => s.characters.find((item) => item.id === characterId));
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
+  const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
 
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
@@ -36,7 +38,11 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
   const [conditionInput, setConditionInput] = useState('');
   const [inventoryInput, setInventoryInput] = useState('');
   const [shortNoteInput, setShortNoteInput] = useState('');
-  const [syncFeedback, setSyncFeedback] = useState('Ready');
+  const [syncFeedback, setSyncFeedback] = useState('Готово');
+  const [isHpModalVisible, setIsHpModalVisible] = useState(false);
+  const [tempCurrentHp, setTempCurrentHp] = useState('');
+  const [tempMaxHp, setTempMaxHp] = useState('');
+  const [tempTempHp, setTempTempHp] = useState('');
 
   const commitPatch = async (buildNext: (prev: CharacterDto) => CharacterDto, paths: string[]) => {
     const current = useCharacterStore.getState().characters.find((item) => item.id === characterId);
@@ -50,21 +56,21 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
     await ensureCharacterSync(current.id, isSignedIn);
 
     if (!isSignedIn) {
-      setSyncFeedback('Saved locally');
+      setSyncFeedback('Збережено локально');
       return;
     }
 
     try {
-      await setSyncTransport(current.id, 'syncing', 'Syncing DM quick edit...');
+      await setSyncTransport(current.id, 'syncing', 'Синхронізація швидкого редагування DM...');
       await upsertCharacterSheetFromLocal(next, {
         historyPaths: paths,
         actorRole: 'DM',
       });
       await markCloudUploaded(current.id);
-      await setSyncTransport(current.id, 'synced', 'Synced');
-      setSyncFeedback('Synced');
+      await setSyncTransport(current.id, 'synced', 'Синхронізовано');
+      setSyncFeedback('Синхронізовано');
     } catch (error) {
-      const message = String((error as Error)?.message || 'Sync failed');
+      const message = String((error as Error)?.message || 'Помилка синхронізації');
       await markSyncError(current.id, message);
       setSyncFeedback(message);
     }
@@ -75,13 +81,53 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
     return Object.entries(character.spells?.spellSlots || {}).sort((a, b) => Number(a[0]) - Number(b[0]));
   }, [character]);
 
+  const openFullEdit = () => {
+    if (!character) return;
+    setCurrentCharacterId(character.id);
+    const parent = navigation.getParent() as any;
+    if (!parent) return;
+    parent.navigate('Heroes', { screen: 'Character', params: { character } });
+  };
+
+  const openHpModal = () => {
+    if (!character) return;
+    setTempCurrentHp(String(character.hp?.current || 0));
+    setTempMaxHp(String(character.hp?.max || 1));
+    setTempTempHp(String(character.hp?.temp || 0));
+    setIsHpModalVisible(true);
+  };
+
+  const saveHpModal = () => {
+    if (!character) return;
+    const currentFallback = character.hp?.current || 0;
+    const maxFallback = Math.max(1, character.hp?.max || 1);
+    const tempFallback = character.hp?.temp || 0;
+    const nextMax = Math.max(1, toNumber(tempMaxHp, maxFallback));
+    const nextCurrent = Math.min(nextMax, Math.max(0, toNumber(tempCurrentHp, currentFallback)));
+    const nextTemp = Math.max(0, toNumber(tempTempHp, tempFallback));
+
+    void commitPatch(
+      (prev) => ({
+        ...prev,
+        hp: {
+          ...prev.hp,
+          max: nextMax,
+          current: nextCurrent,
+          temp: nextTemp,
+        },
+      }),
+      ['combat.hp'],
+    );
+    setIsHpModalVisible(false);
+  };
+
   if (!character) {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
           <View style={styles.card}>
-            <Text style={styles.title}>DM Quick Edit</Text>
-            <Text style={styles.hint}>Character not found in local storage.</Text>
+            <Text style={styles.title}>Швидке редагування DM</Text>
+            <Text style={styles.hint}>Персонажа не знайдено в локальному сховищі.</Text>
           </View>
         </View>
       </View>
@@ -91,13 +137,17 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>DM Quick Edit • {character.name || 'Character'}</Text>
-        <Text style={styles.hint}>Expanded quick edit with DM attribution and shared history markers.</Text>
-        <Text style={styles.hint}>Feedback: {syncFeedback}</Text>
+        <Text style={styles.title}>Швидке редагування DM • {character.name || 'Персонаж'}</Text>
+        <Text style={styles.hint}>Розширене швидке редагування з атрибуцією DM та маркерами історії спільних змін.</Text>
+        <Text style={styles.hint}>Статус: {syncFeedback}</Text>
+        <Pressable style={styles.topActionButton} onPress={openFullEdit} android_ripple={{ color: '#999' }}>
+          <Ionicons name='document-text-outline' size={18} color={colors.text} />
+          <Text style={styles.topActionButtonText}>Відкрити повне редагування</Text>
+        </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>HP / AC / Initiative</Text>
+        <Text style={styles.title}>HP / AC / Ініціатива</Text>
         <View style={styles.laneGrid}>
           <Pressable
             style={styles.laneButton}
@@ -136,12 +186,16 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
             android_ripple={{ color: '#999' }}
           >
             <Ionicons name='shield-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Temp HP +1</Text>
+            <Text style={styles.laneButtonText}>Тимчасове HP +1</Text>
+          </Pressable>
+          <Pressable style={styles.laneButton} onPress={openHpModal} android_ripple={{ color: '#999' }}>
+            <Ionicons name='create-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>Змінити HP</Text>
           </Pressable>
         </View>
 
-        <Text style={styles.updateMeta}>Current HP: {character.hp?.current || 0}/{character.hp?.max || 0} • Temp: {character.hp?.temp || 0}</Text>
-        <Text style={styles.updateMeta}>AC: {character.ac || 0} • Initiative: {character.initiative || 0}</Text>
+        <Text style={styles.updateMeta}>Поточне HP: {character.hp?.current || 0}/{character.hp?.max || 0} • Тимч.: {character.hp?.temp || 0}</Text>
+        <Text style={styles.updateMeta}>AC: {character.ac || 0} • Ініціатива: {character.initiative || 0}</Text>
 
         <View style={styles.laneGrid}>
           <Pressable
@@ -162,17 +216,17 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
             android_ripple={{ color: '#999' }}
           >
             <Ionicons name='flash-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Initiative +1</Text>
+            <Text style={styles.laneButtonText}>Ініціатива +1</Text>
           </Pressable>
         </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Conditions</Text>
+        <Text style={styles.title}>Стани</Text>
         <TextInput
           value={conditionInput}
           onChangeText={setConditionInput}
-          placeholder='Condition name'
+          placeholder='Назва стану'
           placeholderTextColor={colors.textSecondary}
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
         />
@@ -194,7 +248,7 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
             android_ripple={{ color: '#999' }}
           >
             <Ionicons name='add-circle-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Add condition</Text>
+            <Text style={styles.laneButtonText}>Додати стан</Text>
           </Pressable>
           <Pressable
             style={styles.laneButton}
@@ -204,19 +258,19 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
             android_ripple={{ color: '#999' }}
           >
             <Ionicons name='close-circle-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Clear conditions</Text>
+            <Text style={styles.laneButtonText}>Очистити стани</Text>
           </Pressable>
         </View>
-        <Text style={styles.updateMeta}>Current: {(character.conditions || []).join(', ') || 'No conditions'}</Text>
+        <Text style={styles.updateMeta}>Поточні: {(character.conditions || []).join(', ') || 'Немає станів'}</Text>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Spell Slots</Text>
-        {!spellSlotEntries.length && <Text style={styles.hint}>No spell slots configured.</Text>}
+        <Text style={styles.title}>Слоти заклять</Text>
+        {!spellSlotEntries.length && <Text style={styles.hint}>Слоти заклять не налаштовані.</Text>}
         {spellSlotEntries.map(([level, slot]) => (
           <View key={level} style={styles.updateRow}>
-            <Text style={styles.updateTitle}>Level {level}</Text>
-            <Text style={styles.updateMeta}>Used {slot.used}/{slot.max}</Text>
+            <Text style={styles.updateTitle}>Рівень {level}</Text>
+            <Text style={styles.updateMeta}>Використано {slot.used}/{slot.max}</Text>
             <View style={styles.laneGrid}>
               <Pressable
                 style={styles.laneButton}
@@ -240,7 +294,7 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
                 }}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.laneButtonText}>Used -1</Text>
+                <Text style={styles.laneButtonText}>Використано -1</Text>
               </Pressable>
               <Pressable
                 style={styles.laneButton}
@@ -267,7 +321,7 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
                 }}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.laneButtonText}>Used +1</Text>
+                <Text style={styles.laneButtonText}>Використано +1</Text>
               </Pressable>
               <Pressable
                 style={styles.laneButton}
@@ -292,7 +346,7 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
                 }}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.laneButtonText}>Max +1</Text>
+                <Text style={styles.laneButtonText}>Макс. +1</Text>
               </Pressable>
             </View>
           </View>
@@ -300,11 +354,11 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Custom Resources</Text>
-        {!(character.customResources || []).length && <Text style={styles.hint}>No custom resources.</Text>}
+        <Text style={styles.title}>Власні ресурси</Text>
+        {!(character.customResources || []).length && <Text style={styles.hint}>Немає власних ресурсів.</Text>}
         {(character.customResources || []).map((resource) => (
           <View key={resource.id} style={styles.updateRow}>
-            <Text style={styles.updateTitle}>{resource.label || 'Resource'}</Text>
+            <Text style={styles.updateTitle}>{resource.label || 'Ресурс'}</Text>
             <Text style={styles.updateMeta}>{resource.current}/{resource.max ?? '-'}</Text>
             <View style={styles.laneGrid}>
               <Pressable
@@ -352,11 +406,11 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Inventory</Text>
+        <Text style={styles.title}>Інвентар</Text>
         <TextInput
           value={inventoryInput}
           onChangeText={setInventoryInput}
-          placeholder='Add inventory item'
+          placeholder='Додати предмет в інвентар'
           placeholderTextColor={colors.textSecondary}
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
         />
@@ -373,7 +427,7 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
           }}
           android_ripple={{ color: '#999' }}
         >
-          <Text style={styles.laneButtonText}>Add item</Text>
+          <Text style={styles.laneButtonText}>Додати предмет</Text>
         </Pressable>
         {(character.inventory || []).map((item) => (
           <View key={`inv-${item}`} style={styles.updateRow}>
@@ -388,18 +442,18 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
               }}
               android_ripple={{ color: '#999' }}
             >
-              <Text style={styles.laneButtonText}>Remove</Text>
+              <Text style={styles.laneButtonText}>Видалити</Text>
             </Pressable>
           </View>
         ))}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Short Note Append</Text>
+        <Text style={styles.title}>Додати коротку нотатку</Text>
         <TextInput
           value={shortNoteInput}
           onChangeText={setShortNoteInput}
-          placeholder='Write quick note'
+          placeholder='Введіть коротку нотатку'
           placeholderTextColor={colors.textSecondary}
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
           multiline
@@ -414,9 +468,39 @@ const DMQuickEdit: React.FC<Props> = ({ route }) => {
           }}
           android_ripple={{ color: '#999' }}
         >
-          <Text style={styles.laneButtonText}>Append note</Text>
+          <Text style={styles.laneButtonText}>Додати нотатку</Text>
         </Pressable>
       </View>
+
+      <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={saveHpModal} title='Змінити HP'>
+        <Text style={styles.modalLabel}>Поточне HP</Text>
+        <TextInput
+          value={tempCurrentHp}
+          onChangeText={setTempCurrentHp}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='Поточне HP'
+          placeholderTextColor={colors.textSecondary}
+        />
+        <Text style={styles.modalLabel}>Максимальне HP</Text>
+        <TextInput
+          value={tempMaxHp}
+          onChangeText={setTempMaxHp}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='Максимальне HP'
+          placeholderTextColor={colors.textSecondary}
+        />
+        <Text style={styles.modalLabel}>Тимчасове HP</Text>
+        <TextInput
+          value={tempTempHp}
+          onChangeText={setTempTempHp}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='Тимчасове HP'
+          placeholderTextColor={colors.textSecondary}
+        />
+      </Modal>
     </ScrollView>
   );
 };

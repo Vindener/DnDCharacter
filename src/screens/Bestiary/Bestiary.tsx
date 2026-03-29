@@ -96,8 +96,8 @@ const Bestiary = () => {
   return (
     <View style={styles.container}>
       <View style={styles.sectionCard}>
-        <Text style={styles.sectionTitle}>DM Quick View</Text>
-        <Text style={styles.sectionHint}>Фільтри для швидкого пошуку монстрів у сесії та pin-список для encounter.</Text>
+        <Text style={styles.sectionTitle}>Швидкий огляд DM</Text>
+        <Text style={styles.sectionHint}>Фільтри для швидкого пошуку монстрів у сесії та список закріплень для сутички.</Text>
         <TextInput
           placeholder='Пошук монстрів'
           placeholderTextColor={colors.textSecondary}
@@ -110,7 +110,7 @@ const Bestiary = () => {
           <View style={styles.laneCell}>
             <Text style={styles.sectionHint}>CR</Text>
             <Picker selectedValue={crFilter} onValueChange={(value: CRFilter) => setCrFilter(value)} style={styles.picker}>
-              <Picker.Item label='All' value='all' />
+              <Picker.Item label='Усі' value='all' />
               <Picker.Item label='CR 0-1' value='0-1' />
               <Picker.Item label='CR 2-4' value='2-4' />
               <Picker.Item label='CR 5-10' value='5-10' />
@@ -118,9 +118,9 @@ const Bestiary = () => {
             </Picker>
           </View>
           <View style={styles.laneCell}>
-            <Text style={styles.sectionHint}>Type</Text>
+            <Text style={styles.sectionHint}>Тип</Text>
             <Picker selectedValue={typeFilter} onValueChange={(value: string) => setTypeFilter(value)} style={styles.picker}>
-              <Picker.Item label='All' value='all' />
+              <Picker.Item label='Усі' value='all' />
               {typeOptions.map((option) => (
                 <Picker.Item key={option} label={option} value={option} />
               ))}
@@ -130,18 +130,18 @@ const Bestiary = () => {
 
         <View style={styles.laneRow}>
           <View style={styles.laneCell}>
-            <Text style={styles.sectionHint}>Environment</Text>
+            <Text style={styles.sectionHint}>Середовище</Text>
             <Picker selectedValue={environmentFilter} onValueChange={(value: string) => setEnvironmentFilter(value)} style={styles.picker}>
-              <Picker.Item label='All' value='all' />
+              <Picker.Item label='Усі' value='all' />
               {environmentOptions.map((option) => (
                 <Picker.Item key={option} label={option} value={option} />
               ))}
             </Picker>
           </View>
           <View style={styles.laneCell}>
-            <Text style={styles.sectionHint}>Source</Text>
+            <Text style={styles.sectionHint}>Джерело</Text>
             <Picker selectedValue={sourceFilter} onValueChange={(value: string) => setSourceFilter(value)} style={styles.picker}>
-              <Picker.Item label='All' value='all' />
+              <Picker.Item label='Усі' value='all' />
               {sourceOptions.map((option) => (
                 <Picker.Item key={option} label={option} value={option} />
               ))}
@@ -151,7 +151,7 @@ const Bestiary = () => {
 
         {!!tagOptions.length && (
           <View>
-            <Text style={styles.sectionHint}>Tags</Text>
+            <Text style={styles.sectionHint}>Теги</Text>
             <View style={styles.tagsWrap}>
               {tagOptions.map((tag) => {
                 const active = selectedTags.includes(tag);
@@ -173,7 +173,7 @@ const Bestiary = () => {
 
       <View style={styles.sectionCard}>
         <View style={styles.pinnedRow}>
-          <Text style={styles.sectionTitle}>Encounter Pins ({pinnedMonsters.length})</Text>
+          <Text style={styles.sectionTitle}>Закріплені для сутички ({pinnedMonsters.length})</Text>
           {!!pinnedMonsters.length && (
             <Pressable style={styles.clearPinsButton} onPress={() => clearPinnedMonsters()} android_ripple={{ color: '#999' }}>
               <Text style={styles.clearPinsText}>Очистити</Text>
@@ -182,7 +182,7 @@ const Bestiary = () => {
         </View>
 
         {!pinnedMonsters.length ? (
-          <Text style={styles.sectionHint}>Позначайте монстрів як Pin зі списку нижче для швидкого encounter lineup.</Text>
+          <Text style={styles.sectionHint}>Позначайте монстрів як «Закріпити» зі списку нижче для швидкого формування сутички.</Text>
         ) : (
           pinnedMonsters.map((monster) => (
             <MonsterCard
@@ -234,7 +234,7 @@ const Bestiary = () => {
           onPress={() => {
             void addMonster({
               id: Date.now().toString(),
-              name: 'Monster',
+              name: 'Монстр',
               stats: {
                 strength: 10,
                 dexterity: 10,
@@ -243,8 +243,8 @@ const Bestiary = () => {
                 wisdom: 10,
                 charisma: 10,
               },
-              environment: 'Unknown',
-              source: 'Custom',
+              environment: 'Невідомо',
+              source: 'Власне',
               tags: [],
             });
           }}
