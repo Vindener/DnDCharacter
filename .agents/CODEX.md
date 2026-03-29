@@ -38,3 +38,16 @@ Avoid by default:
 - cross-project architectural rewrites;
 - dependency churn;
 - folder restructuring for style only.
+
+## Codex Behavior
+
+When implementing features:
+
+- First think: "Will this be used during session?"
+- If yes → optimize for speed and clarity
+- If no → allow deeper UI
+
+Always ask:
+- Is this 1-2 tap action?
+- Is this readable during gameplay?
+- Is this necessary on main screen?

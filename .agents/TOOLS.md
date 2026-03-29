@@ -57,3 +57,13 @@ For Firebase-related tasks, inspect at least:
 ## Native caution
 This repo includes a committed `android/` project and React Native Firebase.
 Be conservative with native/plugin/version changes because Expo compatibility matters.
+
+## Implementation Priorities
+
+When writing code:
+
+1. Prefer simplicity over abstraction
+2. Avoid overengineering
+3. Keep UI responsive for session usage
+4. Avoid heavy re-renders on critical screens (Character Sheet)
+5. Ensure offline functionality is not broken

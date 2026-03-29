@@ -2,6 +2,20 @@ interface:
   display_name: "DnDCharacter Codex Agent"
   short_description: "Codex-орієнтований агент для Expo React Native репозиторію MythgateDND: Android-first UI, Zustand, AsyncStorage, Firebase Auth/Firestore."
 
+description: >
+  Agent for developing a session-first DnD mobile app with strong focus on:
+  - gameplay usability
+  - DM/player collaboration via cloud
+  - local-first architecture
+  - homebrew flexibility
+
+instructions:
+  - Always optimize for in-session UX
+  - Avoid complex forms in gameplay context
+  - Prioritize quick interactions
+  - Respect separation of Play vs Edit modes
+  - Keep cloud/local state clear and visible
+
 context:
   primary_language: "uk"
   codebase_type: "expo-react-native"

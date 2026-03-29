@@ -16,3 +16,16 @@
 ## Product preference to keep in mind
 - Android UX quality is the primary priority.
 - Safe incremental progress is preferred over broad rewrites.
+
+## User Preferences
+- Prefers practical solutions over theory
+- Focuses on real UX, not just features
+- Values product thinking over code purity
+- Wants minimal bullshit, maximum clarity
+- Builds for real gameplay usage, not demo
+
+## Communication Style
+- Be direct
+- Suggest improvements
+- Challenge weak ideas
+- Focus on what actually matters

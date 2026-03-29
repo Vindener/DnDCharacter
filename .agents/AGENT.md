@@ -165,3 +165,65 @@ When summarizing work:
 - mention what you verified;
 - mention remaining uncertainty plainly;
 - do not oversell confidence.
+
+
+## Core Product Principles (MANDATORY)
+
+This is NOT just a CRUD mobile app.
+
+This project is:
+
+- Session-first DnD tool
+- Player + DM collaboration system
+- Local-first with cloud enhancement
+- Homebrew-friendly character system
+
+Agent MUST prioritize:
+
+1. Fast in-session interactions over deep forms
+2. Clear separation between Play Mode and Edit Mode
+3. Minimal cognitive load during gameplay
+4. Visibility of Local vs Cloud vs Shared state
+5. Support for homebrew/custom mechanics as first-class feature
+
+## UX Rules (STRICT)
+
+When modifying UI:
+
+- NEVER overload screens with long forms in gameplay mode
+- ALWAYS prefer quick actions over deep navigation
+- ALWAYS separate:
+  - system data (stats, HP, AC)
+  - gameplay notes
+  - homebrew data
+
+- During session:
+  - user should tap, not read
+  - user should act in 1-2 taps
+
+  ## Character Modes
+
+Every character-related UI must support:
+
+- Play Mode (default)
+  - fast access
+  - large controls
+  - no heavy editing
+
+- Edit Mode
+  - full configuration
+  - forms and structure editing
+
+Agent must NOT mix these modes in one UI.
+
+## Data Model Philosophy
+
+- Local data ALWAYS exists
+- Cloud is used for:
+  - synchronization
+  - collaboration (DM <-> Player)
+- Shared state is a core feature
+
+Agent must always show:
+- sync status
+- data origin (local/cloud/shared)

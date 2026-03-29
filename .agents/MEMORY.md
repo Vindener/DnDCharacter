@@ -36,3 +36,23 @@ The app already includes these user-facing domains:
 - Prefer improving typing in files that are already being touched.
 - Do not invent repository capabilities that are not present.
 - Prefer Ukrainian in explanations unless code or the task naturally requires English.
+
+## Product Identity
+
+This project is a mobile DnD tool with:
+
+- Character sheet optimized for gameplay sessions
+- DM tools for managing party and shared characters
+- Cloud synchronization for collaboration
+- Local storage as base reliability layer
+- Strong support for homebrew mechanics
+
+## Key Features (IMPORTANT)
+
+- Play Mode vs Edit Mode
+- Quick Action Bar (HP, Rest, Roll, etc.)
+- Combat Summary Card
+- Flexible resource trackers
+- Custom fields (homebrew)
+- Session Mode (low cognitive load)
+- Shared characters between DM and players
