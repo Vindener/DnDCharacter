@@ -12,10 +12,10 @@ import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSh
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth/index';
 import type { CharacterDto } from '@/types/Character';
-import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import useAppRoleStore from '@/context/AppRole-store';
 import { APP_ROLES } from '@/types/Product';
 import useSyncStore from '@/context/Sync-store';
+import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 
 type CharacterPreview = {
   id: string;
@@ -31,32 +31,7 @@ type CharacterPreview = {
   payload: CharacterDto;
 };
 
-const mapRemoteToLocalDto = (doc: Record<string, unknown>): CharacterDto =>
-  createEmptyCharacter({
-    id: String(doc.id || Date.now().toString()),
-    name: String(doc.name || 'Character'),
-    class: String(doc.class || ''),
-    race: String(doc.race || ''),
-    level: Number(doc.level || 1),
-    experience: Number(doc.experience || 0),
-    ac: Number(doc.ac || 10),
-    speed: Number(doc.speed || 30),
-    initiative: Number(doc.initiative || 0),
-    hp: {
-      max: Number((doc.hp as any)?.max || 10),
-      current: Number((doc.hp as any)?.current || 10),
-      temp: Number((doc.hp as any)?.temp || 0),
-    },
-    inventory: Array.isArray(doc.inventory) ? (doc.inventory as string[]) : [],
-    notes: String(doc.notes || ''),
-    conditions: Array.isArray(doc.conditions) ? (doc.conditions as string[]) : [],
-    customFields: Array.isArray(doc.customFields) ? (doc.customFields as CharacterDto['customFields']) : [],
-    customTrackers: Array.isArray(doc.customTrackers) ? (doc.customTrackers as CharacterDto['customTrackers']) : [],
-    notesBlocks: (doc.notesBlocks as CharacterDto['notesBlocks']) || undefined,
-    spells: (doc.spells as CharacterDto['spells']) || undefined,
-    weapons: Array.isArray(doc.weapons) ? (doc.weapons as CharacterDto['weapons']) : [],
-    proficiencies: Array.isArray(doc.proficiencies) ? (doc.proficiencies as string[]) : [],
-  });
+const mapRemoteToLocalDto = (doc: Record<string, unknown>): CharacterDto => mapCloudCharacterToLocalDto(doc);
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();

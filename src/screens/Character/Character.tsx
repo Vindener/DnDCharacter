@@ -20,6 +20,7 @@ import { parseDice } from '@/shared/helpers/dice';
 import { fetchCharacterSheet, subscribeCharacterSheet, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
+import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 
 interface CharacterProps {
   route: {
@@ -161,7 +162,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markLocalDraft = useSyncStore((s) => s.markLocalDraft);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
+  const markCloudDownloaded = useSyncStore((s) => s.markCloudDownloaded);
   const markConflict = useSyncStore((s) => s.markConflict);
+  const clearConflicts = useSyncStore((s) => s.clearConflicts);
 
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempCurrentHp, setTempCurrentHp] = useState('0');
@@ -249,13 +252,17 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
       setSyncStatus(exists ? 'Synced' : 'Local');
       setCloudAvailability(baseCharacter.id, exists).catch(() => {});
+      const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
+      if (exists && syncState?.pendingPaths?.length) {
+        markConflict(baseCharacter.id, ['sheet']).catch(() => {});
+      }
     });
 
     return () => {
       alive = false;
       if (typeof unsubscribe === 'function') unsubscribe();
     };
-  }, [baseCharacter.id, setCloudAvailability]);
+  }, [baseCharacter.id, markConflict, setCloudAvailability]);
 
   useEffect(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -558,6 +565,37 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       customTrackers: (prev.customTrackers || []).filter((tracker) => tracker.id !== trackerId),
     }));
   }, [patchCharacter]);
+
+  const resolveConflictWithLocal = useCallback(() => {
+    setSyncStatus('Pending');
+    upsertCharacterSheetFromLocal(characterData)
+      .then(() => {
+        setSyncStatus('Synced');
+        markCloudUploaded(characterData.id).catch(() => {});
+        clearConflicts(characterData.id).catch(() => {});
+      })
+      .catch(() => {
+        setSyncStatus('Local');
+      });
+  }, [characterData, clearConflicts, markCloudUploaded]);
+
+  const resolveConflictWithCloud = useCallback(() => {
+    fetchCharacterSheet(characterData.id)
+      .then((doc) => {
+        if (!doc) return;
+        const mapped = mapCloudCharacterToLocalDto(doc as Record<string, unknown>);
+        const normalized = ensureCharacterDefaults(mapped);
+        setCharacterData(normalized);
+        void updateCharacter(normalized.id, normalized);
+        markCloudDownloaded(normalized.id).catch(() => {});
+        clearConflicts(normalized.id).catch(() => {});
+      })
+      .catch(() => {});
+  }, [characterData.id, clearConflicts, markCloudDownloaded, updateCharacter]);
+
+  const resolveConflictManual = useCallback(() => {
+    clearConflicts(characterData.id).catch(() => {});
+  }, [characterData.id, clearConflicts]);
 
   const quickActions = [
     { id: 'minus-hp', label: '-HP', icon: 'heart-minus-outline', onPress: () => applyHpDelta(-1) },
@@ -1397,6 +1435,32 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             </Pressable>
           </View>
         </View>
+
+        {currentSync?.status === 'conflict' && (
+          <View style={styles.conflictCard}>
+            <View style={styles.conflictHeader}>
+              <MaterialCommunityIcons name='alert-circle-outline' size={20} color='#f59e0b' />
+              <Text style={styles.conflictTitle}>Sync conflict detected</Text>
+            </View>
+            <Text style={styles.conflictText}>
+              Локальні та хмарні зміни перетнулися. Обери стратегію злиття.
+            </Text>
+            {currentSync.conflictPaths.length > 0 && (
+              <Text style={styles.conflictPaths}>Paths: {currentSync.conflictPaths.join(', ')}</Text>
+            )}
+            <View style={styles.conflictActionsRow}>
+              <Pressable style={styles.conflictAction} onPress={resolveConflictWithLocal} android_ripple={{ color: '#999' }}>
+                <Text style={styles.conflictActionText}>Keep Local</Text>
+              </Pressable>
+              <Pressable style={styles.conflictAction} onPress={resolveConflictWithCloud} android_ripple={{ color: '#999' }}>
+                <Text style={styles.conflictActionText}>Use Cloud</Text>
+              </Pressable>
+              <Pressable style={styles.conflictAction} onPress={resolveConflictManual} android_ripple={{ color: '#999' }}>
+                <Text style={styles.conflictActionText}>Resolve Later</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
 
         <View style={styles.combatSummaryCard}>
           <Text style={styles.summaryTitle}>Combat Summary</Text>

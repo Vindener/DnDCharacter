@@ -4,6 +4,7 @@ DND Chararcter Page React Native Project
 
 - [Stage 1: Product Foundation / UX Foundation](docs/product-foundation-stage-1.md)
 - [Stage 2: Redesign Character Experience](docs/product-redesign-stage-2.md)
+- [Stage 3: Collaboration & Sync Workflow](docs/product-collaboration-stage-3.md)
 
 ## Run
 

@@ -154,6 +154,56 @@ export const getStyles = (c: ThemeColors) =>
       color: '#fff',
     },
 
+    conflictCard: {
+      backgroundColor: c.card,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: '#f59e0b',
+      padding: 12,
+      elevation: 2,
+      gap: 8,
+    },
+    conflictHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    conflictTitle: {
+      color: c.text,
+      fontSize: 14,
+      fontWeight: '700',
+    },
+    conflictText: {
+      color: c.textSecondary,
+      fontSize: 12,
+      lineHeight: 18,
+    },
+    conflictPaths: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    conflictActionsRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+    },
+    conflictAction: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 9,
+      paddingHorizontal: 10,
+      minWidth: 94,
+      alignItems: 'center',
+    },
+    conflictActionText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '700',
+    },
+
     combatSummaryCard: {
       backgroundColor: c.card,
       borderRadius: 16,
