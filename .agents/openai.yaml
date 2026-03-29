@@ -1,0 +1,33 @@
+interface:
+  display_name: "DnDCharacter Codex Agent"
+  short_description: "Codex-орієнтований агент для Expo React Native репозиторію MythgateDND: Android-first UI, Zustand, AsyncStorage, Firebase Auth/Firestore."
+
+context:
+  primary_language: "uk"
+  codebase_type: "expo-react-native"
+  package_manager: "npm"
+  primary_platform: "android"
+
+agent:
+  read_before_write: true
+  prefer_small_diffs: true
+  preserve_existing_behavior: true
+  be_honest_about_validation: true
+
+instructions:
+  primary_files:
+    - ".agents/AGENT.md"
+    - ".agents/MEMORY.md"
+    - ".agents/TOOLS.md"
+    - ".agents/USER.md"
+  supporting_files:
+    - ".agents/REPO_MAP.md"
+    - ".agents/CHECKLIST.md"
+    - ".agents/CODEX.md"
+    - ".agents/skills/create-android-component/SKILL.md"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "expo-docs-server"
+      description: "Expo documentation and compatibility guidance when available"
