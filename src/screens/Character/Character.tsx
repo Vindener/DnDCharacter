@@ -39,7 +39,7 @@ import {
 } from '@/shared/helpers/collaboration/status';
 import { collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { applySpellStatus, normalizeSpellName } from '@/shared/helpers/spellbook';
+import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 
 interface CharacterProps {
@@ -429,6 +429,12 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const [quickSpellLevel, setQuickSpellLevel] = useState('1');
   const [quickSpellSearch, setQuickSpellSearch] = useState('');
   const [isSpellQuickModalVisible, setIsSpellQuickModalVisible] = useState(false);
+  const [preparedSpellsDraft, setPreparedSpellsDraft] = useState('');
+  const [knownSpellsDraft, setKnownSpellsDraft] = useState('');
+  const [cantripsDraft, setCantripsDraft] = useState('');
+  const [isPreparedSpellsDraftFocused, setIsPreparedSpellsDraftFocused] = useState(false);
+  const [isKnownSpellsDraftFocused, setIsKnownSpellsDraftFocused] = useState(false);
+  const [isCantripsDraftFocused, setIsCantripsDraftFocused] = useState(false);
 
   const [collapsedSecondary, setCollapsedSecondary] = useState<Record<CharacterTab, boolean>>({
     Overview: false,
@@ -507,6 +513,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (!key) return null;
     return (spellbookSpells || []).find((spell) => normalizeSpellName(spell.name) === key) || null;
   }, [quickSpellName, spellbookSpells]);
+  const preparedSpellNameSet = useMemo(() => {
+    const next = new Set<string>();
+    (characterData.spells.preparedSpells || []).forEach((entry) => {
+      const key = normalizeSpellName(entry);
+      if (!key) return;
+      next.add(key);
+    });
+    return next;
+  }, [characterData.spells.preparedSpells]);
+  const preparedSpellsCount = preparedSpellNameSet.size;
+  const preparedSpellsLimit = useMemo(() => getPreparedSpellsLimit(characterData), [characterData]);
+  const selectedQuickSpellKey = normalizeSpellName(quickSpellName);
+  const isQuickSpellAlreadyPrepared = Boolean(selectedQuickSpellKey && preparedSpellNameSet.has(selectedQuickSpellKey));
+  const canAddPreparedFromQuickModal =
+    preparedSpellsLimit === null || isQuickSpellAlreadyPrepared || preparedSpellsCount < preparedSpellsLimit;
   const currentSync = syncByCharacter[baseCharacter.id];
   const conflictPaths = currentSync?.conflictPaths || [];
   const syncStatusLabel = useMemo(() => getSyncDisplayStatus(currentSync, netInfo.isConnected), [currentSync, netInfo.isConnected]);
@@ -527,6 +548,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   useEffect(() => {
     setCharacterData(ensureCharacterDefaults(baseCharacter));
   }, [baseCharacter.id]);
+
+  useEffect(() => {
+    if (isPreparedSpellsDraftFocused) return;
+    setPreparedSpellsDraft(characterData.spells.preparedSpells.join('\n'));
+  }, [characterData.spells.preparedSpells, isPreparedSpellsDraftFocused]);
+
+  useEffect(() => {
+    if (isKnownSpellsDraftFocused) return;
+    setKnownSpellsDraft(characterData.spells.knownSpells.join('\n'));
+  }, [characterData.spells.knownSpells, isKnownSpellsDraftFocused]);
+
+  useEffect(() => {
+    if (isCantripsDraftFocused) return;
+    setCantripsDraft(characterData.spells.cantrips.join('\n'));
+  }, [characterData.spells.cantrips, isCantripsDraftFocused]);
 
   useEffect(() => {
     loadSyncMeta().catch(() => {});
@@ -1080,8 +1116,23 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
       const safeLevel = clamp(parseNumber(quickSpellLevel, status === 'cantrip' ? 0 : 1), 0, 9);
       const nextStatus = status;
+      const spellKey = normalizeSpellName(spellName);
+      const alreadyPrepared = preparedSpellNameSet.has(spellKey);
 
-      patchCharacter((prev) => applySpellStatus(prev, spellName, nextStatus), [`magic.${nextStatus}`]);
+      if (nextStatus === 'prepared' && preparedSpellsLimit !== null && !alreadyPrepared && preparedSpellsCount >= preparedSpellsLimit) {
+        setSpellRollResult({
+          title: 'Ліміт підготовлених заклять',
+          details: [
+            `Підготовлено ${preparedSpellsCount}/${preparedSpellsLimit}. Приберіть одне підготовлене закляття або підвищіть рівень/характеристику.`,
+          ],
+        });
+        return;
+      }
+
+      patchCharacter(
+        (prev) => applySpellStatus(prev, spellName, nextStatus, { preparedLimit: preparedSpellsLimit }),
+        [`magic.${nextStatus}`],
+      );
       void upsertCustomSpell({
         name: spellName,
         level: nextStatus === 'cantrip' ? 0 : safeLevel,
@@ -1097,8 +1148,38 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       }
       closeSpellQuickModal();
     },
-    [closeSpellQuickModal, patchCharacter, quickSpellLevel, quickSpellName, upsertCustomSpell],
+    [
+      closeSpellQuickModal,
+      patchCharacter,
+      preparedSpellNameSet,
+      preparedSpellsCount,
+      preparedSpellsLimit,
+      quickSpellLevel,
+      quickSpellName,
+      upsertCustomSpell,
+    ],
   );
+
+  const commitPreparedSpellsDraft = useCallback(() => {
+    patchCharacter((prev) => ({
+      ...prev,
+      spells: { ...prev.spells, preparedSpells: parseLines(preparedSpellsDraft) },
+    }));
+  }, [patchCharacter, preparedSpellsDraft]);
+
+  const commitKnownSpellsDraft = useCallback(() => {
+    patchCharacter((prev) => ({
+      ...prev,
+      spells: { ...prev.spells, knownSpells: parseLines(knownSpellsDraft) },
+    }));
+  }, [knownSpellsDraft, patchCharacter]);
+
+  const commitCantripsDraft = useCallback(() => {
+    patchCharacter((prev) => ({
+      ...prev,
+      spells: { ...prev.spells, cantrips: parseLines(cantripsDraft) },
+    }));
+  }, [cantripsDraft, patchCharacter]);
 
   const addCustomField = useCallback(() => {
     const newField: CharacterCustomField = {
@@ -1733,6 +1814,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             </Text>
             <Text style={styles.subSectionTitle}>Підготовлені закляття</Text>
             <Text style={styles.blockText}>
+              {preparedSpellsLimit !== null ? `Ліміт: ${preparedSpellsCount}/${preparedSpellsLimit}. ` : ''}
               {characterData.spells.preparedSpells.length ? characterData.spells.preparedSpells.join(', ') : 'Немає підготовлених'}
             </Text>
             <Text style={styles.subSectionTitle}>Відомі закляття</Text>
@@ -2136,43 +2218,57 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         <View style={styles.editCardBlock}>
           <Text style={styles.subSectionTitle}>Швидке додавання заклять</Text>
           <Text style={styles.blockTextMuted}>Форма відкривається в модальному вікні, щоб не захаращувати екран редагування.</Text>
+          {preparedSpellsLimit !== null && (
+            <Text style={styles.blockTextMuted}>
+              Підготовлено: {preparedSpellsCount}/{preparedSpellsLimit}
+            </Text>
+          )}
           <Pressable style={styles.secondaryAction} onPress={openSpellQuickModal} android_ripple={{ color: '#999' }}>
             <Text style={styles.secondaryActionText}>Відкрити додавання закляття</Text>
           </Pressable>
         </View>
         <Text style={styles.editLabel}>Підготовлені закляття (по одному в рядку)</Text>
-        {renderTextInput(
-          characterData.spells.preparedSpells.join('\n'),
-          (next) =>
-            patchCharacter((prev) => ({
-              ...prev,
-              spells: { ...prev.spells, preparedSpells: parseLines(next) },
-            })),
-          'Магічна стріла',
-          { multiline: true },
-        )}
+        <RNTextInput
+          value={preparedSpellsDraft}
+          onChangeText={setPreparedSpellsDraft}
+          onFocus={() => setIsPreparedSpellsDraftFocused(true)}
+          onBlur={() => {
+            setIsPreparedSpellsDraftFocused(false);
+            commitPreparedSpellsDraft();
+          }}
+          placeholder='Магічна стріла'
+          placeholderTextColor={colors.textSecondary}
+          style={[styles.editInput, styles.editInputMultiline]}
+          multiline
+        />
         <Text style={styles.editLabel}>Відомі закляття (по одному в рядку)</Text>
-        {renderTextInput(
-          characterData.spells.knownSpells.join('\n'),
-          (next) =>
-            patchCharacter((prev) => ({
-              ...prev,
-              spells: { ...prev.spells, knownSpells: parseLines(next) },
-            })),
-          'Щит',
-          { multiline: true },
-        )}
-        <Text style={styles.editLabel}>Каніпси (по одному в рядку)</Text>
-        {renderTextInput(
-          characterData.spells.cantrips.join('\n'),
-          (next) =>
-            patchCharacter((prev) => ({
-              ...prev,
-              spells: { ...prev.spells, cantrips: parseLines(next) },
-            })),
-          'Вогняний болт',
-          { multiline: true },
-        )}
+        <RNTextInput
+          value={knownSpellsDraft}
+          onChangeText={setKnownSpellsDraft}
+          onFocus={() => setIsKnownSpellsDraftFocused(true)}
+          onBlur={() => {
+            setIsKnownSpellsDraftFocused(false);
+            commitKnownSpellsDraft();
+          }}
+          placeholder='Щит'
+          placeholderTextColor={colors.textSecondary}
+          style={[styles.editInput, styles.editInputMultiline]}
+          multiline
+        />
+        <Text style={styles.editLabel}>Кантріпи (по одному в рядку)</Text>
+        <RNTextInput
+          value={cantripsDraft}
+          onChangeText={setCantripsDraft}
+          onFocus={() => setIsCantripsDraftFocused(true)}
+          onBlur={() => {
+            setIsCantripsDraftFocused(false);
+            commitCantripsDraft();
+          }}
+          placeholder='Вогняний болт'
+          placeholderTextColor={colors.textSecondary}
+          style={[styles.editInput, styles.editInputMultiline]}
+          multiline
+        />
         <Text style={styles.subSectionTitle}>Слоти заклять</Text>
         {slotLevels.map((level) => {
           const slot = characterData.spells.spellSlots[level] || { max: 0, used: 0 };
@@ -2646,8 +2742,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 style={[styles.modeButton, mode === 'play' ? styles.modeButtonActive : null]}
                 onPress={() => setMode('play')}
                 android_ripple={{ color: '#999' }}
+                accessibilityRole='button'
+                accessibilityState={{ selected: mode === 'play' }}
               >
-                <Text numberOfLines={1} style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}
+                >
                   Режим гри
                 </Text>
               </Pressable>
@@ -2655,8 +2757,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
                 style={[styles.modeButton, mode === 'edit' ? styles.modeButtonActive : null]}
                 onPress={() => setMode('edit')}
                 android_ripple={{ color: '#999' }}
+                accessibilityRole='button'
+                accessibilityState={{ selected: mode === 'edit' }}
               >
-                <Text numberOfLines={1} style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}
+                >
                   Режим редагування
                 </Text>
               </Pressable>
@@ -2967,10 +3075,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             ))}
           </View>
         )}
+        {preparedSpellsLimit !== null && (
+          <Text style={styles.blockTextMuted}>Підготовлено: {preparedSpellsCount}/{preparedSpellsLimit}</Text>
+        )}
+        {preparedSpellsLimit !== null && !canAddPreparedFromQuickModal && !isQuickSpellAlreadyPrepared && (
+          <Text style={styles.blockTextMuted}>Ліміт підготовлених заклять досягнуто для цього персонажа.</Text>
+        )}
         <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('known')} android_ripple={{ color: '#999' }}>
           <Text style={styles.secondaryActionText}>+ Додати у відомі</Text>
         </Pressable>
-        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('prepared')} android_ripple={{ color: '#999' }}>
+        <Pressable
+          style={[styles.secondaryAction, !canAddPreparedFromQuickModal ? { opacity: 0.45 } : null]}
+          onPress={() => addSpellFromCharacter('prepared')}
+          android_ripple={{ color: '#999' }}
+          disabled={!canAddPreparedFromQuickModal}
+        >
           <Text style={styles.secondaryActionText}>+ Додати у підготовлені</Text>
         </Pressable>
         <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('cantrip')} android_ripple={{ color: '#999' }}>

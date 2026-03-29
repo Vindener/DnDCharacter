@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, normalizeSpellName } from '@/shared/helpers/spellbook';
+import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
 import { Modal } from '@/shared/components/Modal/Modal';
 import type { CharacterSpellStatus, Dnd5DamageType, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { getStyles } from './styles';
@@ -146,6 +146,7 @@ const Spellbook = () => {
   const [modalDescription, setModalDescription] = useState('');
   const [modalTags, setModalTags] = useState('');
   const [modalDamageProfiles, setModalDamageProfiles] = useState('');
+  const [preparedLimitNotice, setPreparedLimitNotice] = useState('');
 
   useEffect(() => {
     loadSpellbook().catch(() => {});
@@ -172,6 +173,22 @@ const Spellbook = () => {
     () => characters.find((character) => character.id === selectedCharacterId) || null,
     [characters, selectedCharacterId],
   );
+
+  const selectedPreparedSpellNames = useMemo(() => {
+    const names = new Set<string>();
+    (selectedCharacter?.spells?.preparedSpells || []).forEach((name) => {
+      const key = normalizeSpellName(name);
+      if (!key) return;
+      names.add(key);
+    });
+    return names;
+  }, [selectedCharacter?.spells?.preparedSpells]);
+  const selectedPreparedLimit = useMemo(() => getPreparedSpellsLimit(selectedCharacter), [selectedCharacter]);
+  const selectedPreparedCount = selectedPreparedSpellNames.size;
+
+  useEffect(() => {
+    setPreparedLimitNotice('');
+  }, [selectedCharacterId]);
 
   const favoriteSet = useMemo(() => new Set(favoriteSpellIds), [favoriteSpellIds]);
 
@@ -231,7 +248,19 @@ const Spellbook = () => {
 
   const assignSpellStatus = (spellName: string, status: CharacterSpellStatus) => {
     if (!selectedCharacter) return;
-    const updated = applySpellStatus(selectedCharacter, spellName, status);
+
+    const updated = applySpellStatus(selectedCharacter, spellName, status, { preparedLimit: selectedPreparedLimit });
+
+    if (status === 'prepared' && updated === selectedCharacter && selectedPreparedLimit !== null) {
+      const key = normalizeSpellName(spellName);
+      const alreadyPrepared = selectedPreparedSpellNames.has(key);
+      if (!alreadyPrepared && selectedPreparedCount >= selectedPreparedLimit) {
+        setPreparedLimitNotice('Ліміт підготовлених заклять: ' + selectedPreparedCount + '/' + selectedPreparedLimit + '.');
+        return;
+      }
+    }
+
+    setPreparedLimitNotice('');
     void updateCharacter(selectedCharacter.id, updated);
   };
 
@@ -374,6 +403,10 @@ const Spellbook = () => {
             </Pressable>
           ))}
         </ScrollView>
+        {selectedCharacter && selectedPreparedLimit !== null ? (
+          <Text style={styles.preparedInfo}>Підготовлено: {selectedPreparedCount}/{selectedPreparedLimit}</Text>
+        ) : null}
+        {selectedCharacter && preparedLimitNotice ? <Text style={styles.preparedWarning}>{preparedLimitNotice}</Text> : null}
       </View>
 
       {!isLoaded ? <Text style={styles.empty}>Завантаження книги заклять...</Text> : null}
@@ -386,6 +419,8 @@ const Spellbook = () => {
           const status = getCharacterSpellStatus(selectedCharacter, item.name);
           const isFavorite = favoriteSet.has(item.id);
           const canFavorite = item.source !== 'imported';
+          const canSetPrepared =
+            !selectedCharacter || selectedPreparedLimit === null || status === 'prepared' || selectedPreparedCount < selectedPreparedLimit;
 
           return (
             <View style={styles.card}>
@@ -447,9 +482,10 @@ const Spellbook = () => {
                     <Text style={[styles.statusButtonText, status === 'known' ? styles.statusButtonTextActive : null]}>Відоме</Text>
                   </Pressable>
                   <Pressable
-                    style={[styles.statusButton, status === 'prepared' ? styles.statusButtonActive : null]}
+                    style={[styles.statusButton, status === 'prepared' ? styles.statusButtonActive : null, !canSetPrepared ? { opacity: 0.45 } : null]}
                     onPress={() => assignSpellStatus(item.name, 'prepared')}
                     android_ripple={{ color: '#999' }}
+                    disabled={!canSetPrepared}
                   >
                     <Text style={[styles.statusButtonText, status === 'prepared' ? styles.statusButtonTextActive : null]}>Підготовлене</Text>
                   </Pressable>
@@ -559,5 +595,4 @@ const Spellbook = () => {
 };
 
 export default Spellbook;
-
 

@@ -201,6 +201,17 @@ export const getStyles = (c: ThemeColors) =>
       color: c.textSecondary,
       fontSize: 12,
     },
+    preparedInfo: {
+      color: c.textSecondary,
+      fontSize: 12,
+      marginTop: 4,
+    },
+    preparedWarning: {
+      color: '#b45309',
+      fontSize: 12,
+      marginTop: 4,
+      fontWeight: '600',
+    },
     cardActionRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -281,6 +292,4 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: 16,
     },
   });
-
-
 
