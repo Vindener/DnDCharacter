@@ -7,6 +7,35 @@ import { Weapon } from './Weapon';
 import { Traits } from './Traits';
 import { Spells } from './Spells';
 
+export type CustomFieldType = 'text' | 'number' | 'boolean' | 'select';
+
+export interface CharacterCustomField {
+  id: string;
+  label: string;
+  type: CustomFieldType;
+  value: string | number | boolean;
+  options?: string[];
+}
+
+export type TrackerResetRule = 'none' | 'short-rest' | 'long-rest' | 'session';
+
+export interface CharacterTracker {
+  id: string;
+  label: string;
+  current: number;
+  max?: number;
+  resetRule: TrackerResetRule;
+  color?: string;
+}
+
+export interface CharacterNotesBlocks {
+  session?: string;
+  campaign?: string;
+  goals?: string;
+  relationships?: string;
+  quests?: string;
+}
+
 export interface CharacterDto {
   id: string;
   name: string;
@@ -20,6 +49,8 @@ export interface CharacterDto {
   initiative: number;
   speed: number;
   ac: number; // Armor Class
+  proficiencyBonus?: number;
+  alignment?: string;
   currency?: string; // золото
   stats: Stats;
   savingThrows: SavingThrows;
@@ -51,6 +82,11 @@ export interface CharacterDto {
     copper: number;
   };
   customCoins?: { [id: string]: number };
+  sessionMode?: boolean;
+  conditions?: string[];
+  customFields?: CharacterCustomField[];
+  customTrackers?: CharacterTracker[];
+  notesBlocks?: CharacterNotesBlocks;
 }
 
 //TODO - fix  - complete

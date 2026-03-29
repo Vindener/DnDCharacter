@@ -36,6 +36,8 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     initiative: overrides.initiative ?? 0,
     speed: overrides.speed ?? 0,
     ac: overrides.ac ?? 0,
+    proficiencyBonus: overrides.proficiencyBonus ?? 2,
+    alignment: overrides.alignment,
     currency: overrides.currency,
     stats: {
       strength: 10,
@@ -116,5 +118,17 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     backstory: overrides.backstory,
     campaign: overrides.campaign,
     photoUri: overrides.photoUri,
+    sessionMode: overrides.sessionMode ?? false,
+    conditions: overrides.conditions ?? [],
+    customFields: overrides.customFields ?? [],
+    customTrackers: overrides.customTrackers ?? [],
+    notesBlocks: {
+      session: '',
+      campaign: '',
+      goals: '',
+      relationships: '',
+      quests: '',
+      ...(overrides.notesBlocks || {}),
+    },
   };
 }

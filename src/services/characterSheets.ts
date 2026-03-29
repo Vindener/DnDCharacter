@@ -46,6 +46,11 @@ export type CharacterSheet = {
 
   coins?: CharacterDto['coins'];
   customCoins?: CharacterDto['customCoins'];
+  sessionMode?: CharacterDto['sessionMode'];
+  conditions?: CharacterDto['conditions'];
+  customFields?: CharacterDto['customFields'];
+  customTrackers?: CharacterDto['customTrackers'];
+  notesBlocks?: CharacterDto['notesBlocks'];
 
   photoUri?: string;
 
@@ -58,6 +63,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
   return {
     ownerUid: u,
     owners: [u],
+    editors: [],
 
     name: dto.name ?? '',
     class: dto.class ?? '',
@@ -91,6 +97,11 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
 
     coins: dto.coins ?? { gold: 0, silver: 0, copper: 0 },
     customCoins: dto.customCoins, // якщо порожньо — просто не відправляємо undefined
+    sessionMode: dto.sessionMode ?? false,
+    conditions: dto.conditions ?? [],
+    customFields: dto.customFields ?? [],
+    customTrackers: dto.customTrackers ?? [],
+    notesBlocks: dto.notesBlocks ?? {},
 
     photoUri: dto.photoUri,
 
@@ -277,8 +288,6 @@ function __cleanUndefined(obj: any): any {
 }
 
 
-import type { CharacterDto } from '@/types/Character';
-
 function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: any) {
   const baseMeta = existing ? {
     ownerUid: existing.ownerUid || ownerUid,
@@ -328,6 +337,11 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
     campaign: (dto as any).campaign,
     alliesAndOrganizations: (dto as any).alliesAndOrganizations,
     photoUri: (dto as any).photoUri,
+    sessionMode: (dto as any).sessionMode,
+    conditions: (dto as any).conditions,
+    customFields: (dto as any).customFields,
+    customTrackers: (dto as any).customTrackers,
+    notesBlocks: (dto as any).notesBlocks,
   };
 
   return __cleanUndefined(full);
