@@ -5,8 +5,10 @@ import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import type {
   CharacterCustomField,
+  CharacterCustomNotesGroup,
+  CharacterCustomResource,
   CharacterDto,
-  CharacterTracker,
+  CharacterHomebrewEntry,
   CustomFieldType,
   TrackerResetRule,
 } from '@/types/Character';
@@ -23,6 +25,8 @@ import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
+import { appendQuickSessionNote, isHomebrewCharacter, normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
+import useTrackerTemplateStore, { SYSTEM_RESOURCE_TEMPLATES } from '@/context/TrackerTemplates-store';
 
 interface CharacterProps {
   route: {
@@ -42,7 +46,7 @@ const TAB_PATH_PREFIX: Record<CharacterTab, string> = {
   Combat: 'combat.',
   Magic: 'magic.',
   Inventory: 'inventory.',
-  Notes: 'notes.',
+  Notes: 'homebrew.notes-groups',
   Homebrew: 'homebrew.',
 };
 const TAB_DEFAULT_PATH: Record<CharacterTab, string> = {
@@ -50,7 +54,7 @@ const TAB_DEFAULT_PATH: Record<CharacterTab, string> = {
   Combat: 'combat.core',
   Magic: 'magic.core',
   Inventory: 'inventory.core',
-  Notes: 'notes.session',
+  Notes: 'homebrew.notes-groups',
   Homebrew: 'homebrew.fields',
 };
 const TRACKER_RULES: TrackerResetRule[] = ['none', 'short-rest', 'long-rest', 'session'];
@@ -107,13 +111,13 @@ function buildProficiencyByLevel(level: number): number {
   return 2 + Math.floor((safeLevel - 1) / 4);
 }
 
-function getTrackerResetValue(tracker: CharacterTracker): number {
-  if (typeof tracker.max === 'number') return tracker.max;
+function getResourceResetValue(resource: CharacterCustomResource): number {
+  if (typeof resource.max === 'number') return resource.max;
   return 0;
 }
 
 function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
-  return {
+  const withDefaults: CharacterDto = {
     ...character,
     hp: {
       max: character.hp?.max ?? 10,
@@ -127,10 +131,13 @@ function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
     featuresAndTraits: character.featuresAndTraits ?? [],
     notes: character.notes ?? '',
     conditions: character.conditions ?? [],
+    characterTemplateId: character.characterTemplateId ?? 'standard-5e',
     customFields: character.customFields ?? [],
     customTrackers: character.customTrackers ?? [],
     customSections: character.customSections ?? [],
     customResources: character.customResources ?? [],
+    customNotesGroups: character.customNotesGroups ?? [],
+    homebrewEntries: character.homebrewEntries ?? [],
     customResetRules: character.customResetRules ?? [],
     customFeatureBlocks: character.customFeatureBlocks ?? [],
     customSpellLists: character.customSpellLists ?? [],
@@ -156,6 +163,7 @@ function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
       cantrips: character.spells?.cantrips ?? [],
     },
   };
+  return normalizeHomebrewV3(withDefaults);
 }
 
 function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
@@ -212,6 +220,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const markCloudDownloaded = useSyncStore((s) => s.markCloudDownloaded);
   const markConflict = useSyncStore((s) => s.markConflict);
   const clearConflicts = useSyncStore((s) => s.clearConflicts);
+  const userTemplates = useTrackerTemplateStore((s) => s.userTemplates);
+  const loadUserTemplates = useTrackerTemplateStore((s) => s.loadUserTemplates);
+  const addUserTemplateFromResource = useTrackerTemplateStore((s) => s.addUserTemplateFromResource);
+  const removeUserTemplate = useTrackerTemplateStore((s) => s.removeUserTemplate);
   const [sharedHistory, setSharedHistory] = useState<CharacterChangeHistoryEntry[]>([]);
 
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
@@ -251,7 +263,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const proficiency = characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level);
   const passivePerception = 10 + (characterData.skills?.perception ?? calculateModifier(characterData.stats.wisdom || 10));
-  const hasHomebrew = (characterData.customFields?.length ?? 0) > 0 || (characterData.customTrackers?.length ?? 0) > 0;
+  const hasHomebrew = isHomebrewCharacter(characterData);
+  const notesGroups = useMemo(() => {
+    return (characterData.customNotesGroups || []).slice().sort((a, b) => a.order - b.order);
+  }, [characterData.customNotesGroups]);
+  const sessionNotes = useMemo(() => {
+    const group = notesGroups.find((item) => item.id === 'seed-session' || item.title.toLowerCase() === 'session');
+    return group?.content?.trim() || '';
+  }, [notesGroups]);
   const currentSync = syncByCharacter[baseCharacter.id];
   const conflictPaths = currentSync?.conflictPaths || [];
 
@@ -280,6 +299,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   useEffect(() => {
     loadSyncMeta().catch(() => {});
   }, [loadSyncMeta]);
+
+  useEffect(() => {
+    loadUserTemplates().catch(() => {});
+  }, [loadUserTemplates]);
 
   useEffect(() => {
     ensureCharacterSync(baseCharacter.id, false).catch(() => {});
@@ -371,14 +394,50 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     markLocalDraftPaths(baseCharacter.id, paths).catch(() => {});
   }, [baseCharacter.id, markLocalDraftPaths, selectedTab]);
 
-  const setNotesBlock = useCallback((key: keyof NonNullable<CharacterDto['notesBlocks']>, value: string) => {
+  const setNotesGroup = useCallback((groupId: string, value: string) => {
     patchCharacter((prev) => ({
       ...prev,
-      notesBlocks: {
-        ...prev.notesBlocks,
-        [key]: value,
-      },
-    }), [`notes.${String(key)}`]);
+      customNotesGroups: (prev.customNotesGroups || []).map((group) => {
+        if (group.id !== groupId) return group;
+        return { ...group, content: value };
+      }),
+    }), ['homebrew.notes-groups']);
+  }, [patchCharacter]);
+
+  const addNotesGroup = useCallback(() => {
+    patchCharacter((prev) => {
+      const nextOrder = (prev.customNotesGroups || []).length;
+      const nextGroup: CharacterCustomNotesGroup = {
+        id: `notes-group-${Date.now()}`,
+        title: 'Custom Group',
+        content: '',
+        order: nextOrder,
+        origin: 'custom',
+      };
+      return {
+        ...prev,
+        customNotesGroups: [...(prev.customNotesGroups || []), nextGroup],
+      };
+    }, ['homebrew.notes-groups']);
+  }, [patchCharacter]);
+
+  const updateNotesGroupMeta = useCallback((groupId: string, patch: Partial<CharacterCustomNotesGroup>) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      customNotesGroups: (prev.customNotesGroups || []).map((group) => {
+        if (group.id !== groupId) return group;
+        return { ...group, ...patch };
+      }),
+    }), ['homebrew.notes-groups']);
+  }, [patchCharacter]);
+
+  const removeNotesGroup = useCallback((groupId: string) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      customNotesGroups: (prev.customNotesGroups || [])
+        .filter((group) => group.id !== groupId)
+        .map((group, index) => ({ ...group, order: index })),
+    }), ['homebrew.notes-groups']);
   }, [patchCharacter]);
 
   const applyHpDelta = useCallback((delta: number) => {
@@ -438,11 +497,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         nextSpellSlots[level] = { ...slot, used: 0 };
       });
 
-      const nextTrackers = (prev.customTrackers || []).map((tracker) => {
-        if (tracker.resetRule === 'long-rest' || tracker.resetRule === 'short-rest') {
-          return { ...tracker, current: getTrackerResetValue(tracker) };
+      const nextResources = (prev.customResources || []).map((resource) => {
+        if (resource.resetRule === 'long-rest' || resource.resetRule === 'short-rest') {
+          return { ...resource, current: getResourceResetValue(resource) };
         }
-        return tracker;
+        return resource;
       });
 
       return {
@@ -457,9 +516,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           ...prev.spells,
           spellSlots: nextSpellSlots,
         },
-        customTrackers: nextTrackers,
+        customResources: nextResources,
       };
-    }, ['combat.rest', 'combat.hp', 'magic.slots', 'homebrew.trackers']);
+    }, ['combat.rest', 'combat.hp', 'magic.slots', 'homebrew.resources']);
 
     setIsRestModalVisible(false);
   }, [characterData.hitDice, patchCharacter]);
@@ -494,11 +553,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     const heal = rollResults.reduce((sum, result) => sum + result, 0) + conMod * used;
 
     patchCharacter((prev) => {
-      const nextTrackers = (prev.customTrackers || []).map((tracker) => {
-        if (tracker.resetRule === 'short-rest') {
-          return { ...tracker, current: getTrackerResetValue(tracker) };
+      const nextResources = (prev.customResources || []).map((resource) => {
+        if (resource.resetRule === 'short-rest') {
+          return { ...resource, current: getResourceResetValue(resource) };
         }
-        return tracker;
+        return resource;
       });
 
       return {
@@ -508,9 +567,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           current: clamp(prev.hp.current + heal, 0, prev.hp.max),
         },
         hitDice: `${Math.max(count - used, 0)}d${sides || 6}`,
-        customTrackers: nextTrackers,
+        customResources: nextResources,
       };
-    }, ['combat.rest', 'combat.hp', 'homebrew.trackers']);
+    }, ['combat.rest', 'combat.hp', 'homebrew.resources']);
 
     setIsRestModalVisible(false);
   }, [characterData.hitDice, characterData.stats.constitution, patchCharacter, rollResults]);
@@ -539,17 +598,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     const note = quickNoteInput.trim();
     if (!note) return;
 
-    patchCharacter((prev) => {
-      const previous = prev.notesBlocks?.session?.trim();
-      const merged = previous ? `${previous}\n• ${note}` : `• ${note}`;
-      return {
-        ...prev,
-        notesBlocks: {
-          ...prev.notesBlocks,
-          session: merged,
-        },
-      };
-    }, ['notes.session']);
+    patchCharacter((prev) => appendQuickSessionNote(prev, note), ['homebrew.notes-groups']);
 
     setQuickNoteInput('');
     setIsQuickNoteModalVisible(false);
@@ -576,18 +625,19 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       customFields: (prev.customFields || []).map((field) => {
         if (field.id !== fieldId) return field;
 
-        const nextType = patch.type ?? field.type;
-        const nextValue = patch.value ?? field.value;
-
-        if (nextType === 'number' && typeof nextValue === 'string') {
-          return { ...field, ...patch, value: parseNumber(nextValue, 0) };
+        const merged = { ...field, ...patch };
+        if (merged.type === 'number') {
+          return { ...merged, value: parseNumber(String(merged.value ?? 0), 0) };
         }
-
-        if (nextType === 'boolean' && typeof nextValue !== 'boolean') {
-          return { ...field, ...patch, value: nextValue === 'true' };
+        if (merged.type === 'boolean') {
+          return { ...merged, value: Boolean(merged.value) };
         }
-
-        return { ...field, ...patch };
+        if (merged.type === 'select') {
+          const options = (merged.options || []).map((option) => String(option).trim()).filter(Boolean);
+          const value = String(merged.value ?? '');
+          return { ...merged, options, value: options.includes(value) ? value : (options[0] || '') };
+        }
+        return { ...merged, value: String(merged.value ?? '') };
       }),
     }), ['homebrew.fields']);
   }, [patchCharacter]);
@@ -599,10 +649,10 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     }), ['homebrew.fields']);
   }, [patchCharacter]);
 
-  const addTracker = useCallback(() => {
-    const tracker: CharacterTracker = {
+  const addResource = useCallback(() => {
+    const resource: CharacterCustomResource = {
       id: Date.now().toString(),
-      label: 'Custom Tracker',
+      label: 'Custom Resource',
       current: 0,
       max: 10,
       resetRule: 'none',
@@ -610,25 +660,107 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
     patchCharacter((prev) => ({
       ...prev,
-      customTrackers: [...(prev.customTrackers || []), tracker],
-    }), ['homebrew.trackers']);
+      customResources: [...(prev.customResources || []), resource],
+    }), ['homebrew.resources']);
   }, [patchCharacter]);
 
-  const updateTracker = useCallback((trackerId: string, patch: Partial<CharacterTracker>) => {
+  const updateResource = useCallback((resourceId: string, patch: Partial<CharacterCustomResource>) => {
     patchCharacter((prev) => ({
       ...prev,
-      customTrackers: (prev.customTrackers || []).map((tracker) => {
-        if (tracker.id !== trackerId) return tracker;
-        return { ...tracker, ...patch };
+      customResources: (prev.customResources || []).map((resource) => {
+        if (resource.id !== resourceId) return resource;
+        return { ...resource, ...patch };
       }),
-    }), ['homebrew.trackers']);
+    }), ['homebrew.resources']);
   }, [patchCharacter]);
 
-  const removeTracker = useCallback((trackerId: string) => {
+  const removeResource = useCallback((resourceId: string) => {
     patchCharacter((prev) => ({
       ...prev,
-      customTrackers: (prev.customTrackers || []).filter((tracker) => tracker.id !== trackerId),
-    }), ['homebrew.trackers']);
+      customResources: (prev.customResources || []).filter((resource) => resource.id !== resourceId),
+    }), ['homebrew.resources']);
+  }, [patchCharacter]);
+
+  const saveUserTemplateFromResource = useCallback((resource: CharacterCustomResource) => {
+    addUserTemplateFromResource(resource, resource.label).catch(() => {});
+  }, [addUserTemplateFromResource]);
+
+  const applyResourceTemplate = useCallback((resource: Omit<CharacterCustomResource, 'id'>) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      customResources: [
+        ...(prev.customResources || []),
+        {
+          ...resource,
+          id: `resource-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
+        },
+      ],
+    }), ['homebrew.resources']);
+  }, [patchCharacter]);
+
+  const addCustomSection = useCallback(() => {
+    patchCharacter((prev) => ({
+      ...prev,
+      customSections: [
+        ...(prev.customSections || []),
+        {
+          id: `custom-section-${Date.now()}`,
+          title: 'Custom Section',
+          content: '',
+        },
+      ],
+    }), ['homebrew.sections']);
+  }, [patchCharacter]);
+
+  const updateCustomSection = useCallback((sectionId: string, patch: Partial<NonNullable<CharacterDto['customSections']>[number]>) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      customSections: (prev.customSections || []).map((section) => {
+        if (section.id !== sectionId) return section;
+        return { ...section, ...patch };
+      }),
+    }), ['homebrew.sections']);
+  }, [patchCharacter]);
+
+  const removeCustomSection = useCallback((sectionId: string) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      customSections: (prev.customSections || []).filter((section) => section.id !== sectionId),
+    }), ['homebrew.sections']);
+  }, [patchCharacter]);
+
+  const addHomebrewEntry = useCallback((kind: CharacterHomebrewEntry['kind']) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      homebrewEntries: [
+        ...(prev.homebrewEntries || []),
+        {
+          id: `homebrew-entry-${Date.now()}`,
+          kind,
+          name: `Custom ${kind}`,
+          description: '',
+          tags: [],
+        },
+      ],
+    }), ['homebrew.entries']);
+  }, [patchCharacter]);
+
+  const updateHomebrewEntry = useCallback((entryId: string, patch: Partial<CharacterHomebrewEntry>) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      homebrewEntries: (prev.homebrewEntries || []).map((entry) => {
+        if (entry.id !== entryId) return entry;
+        if (patch.tags && !Array.isArray(patch.tags)) return entry;
+        return { ...entry, ...patch };
+      }),
+    }), ['homebrew.entries']);
+  }, [patchCharacter]);
+
+  const removeHomebrewEntry = useCallback((entryId: string) => {
+    patchCharacter((prev) => ({
+      ...prev,
+      homebrewEntries: (prev.homebrewEntries || []).filter((entry) => entry.id !== entryId),
+    }), ['homebrew.entries']);
   }, [patchCharacter]);
 
   const resolveConflictWithLocal = useCallback(() => {
@@ -868,7 +1000,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             Успіхи: {characterData.deathSaves?.successes ?? 0} | Провали: {characterData.deathSaves?.failures ?? 0}
           </Text>
           <Text style={styles.subSectionTitle}>Combat Notes</Text>
-          <Text style={styles.blockText}>{characterData.notesBlocks?.session?.trim() || 'Немає нотаток сесії'}</Text>
+          <Text style={styles.blockText}>{sessionNotes || 'Немає нотаток сесії'}</Text>
         </>
       )}
     </View>
@@ -979,28 +1111,22 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       <View style={styles.cardHeaderRow}>
         <View style={styles.sectionTitleRow}>
           <Text style={styles.sectionTitle}>Notes</Text>
-          {sectionConflictLabel(['notes.'])}
+          {sectionConflictLabel(['homebrew.notes-groups'])}
         </View>
         <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Notes')} android_ripple={{ color: '#999' }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Notes ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
       </View>
 
-      <Text style={styles.subSectionTitle}>Session</Text>
-      <Text style={styles.blockText}>{characterData.notesBlocks?.session?.trim() || 'Немає сесійних нотаток'}</Text>
-
-      {!collapsedSecondary.Notes && (
-        <>
-          <Text style={styles.subSectionTitle}>Campaign</Text>
-          <Text style={styles.blockText}>{characterData.notesBlocks?.campaign?.trim() || 'Немає нотаток кампанії'}</Text>
-          <Text style={styles.subSectionTitle}>Goals</Text>
-          <Text style={styles.blockText}>{characterData.notesBlocks?.goals?.trim() || 'Немає цілей'}</Text>
-          <Text style={styles.subSectionTitle}>Relationships</Text>
-          <Text style={styles.blockText}>{characterData.notesBlocks?.relationships?.trim() || 'Немає'}</Text>
-          <Text style={styles.subSectionTitle}>Quests</Text>
-          <Text style={styles.blockText}>{characterData.notesBlocks?.quests?.trim() || 'Немає'}</Text>
-        </>
-      )}
+      {!notesGroups.length && <Text style={styles.blockTextMuted}>Нотаток поки немає.</Text>}
+      {notesGroups
+        .filter((_, index) => !collapsedSecondary.Notes || index < 1)
+        .map((group) => (
+          <View key={group.id}>
+            <Text style={styles.subSectionTitle}>{group.title}</Text>
+            <Text style={styles.blockText}>{group.content?.trim() || 'Порожньо'}</Text>
+          </View>
+        ))}
     </View>
   );
 
@@ -1030,32 +1156,32 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
       {!collapsedSecondary.Homebrew && (
         <>
-          <Text style={styles.subSectionTitle}>Flexible Trackers</Text>
-          {characterData.customTrackers?.length ? (
-            characterData.customTrackers.map((tracker) => (
-              <View key={tracker.id} style={styles.trackerCard}>
+          <Text style={styles.subSectionTitle}>Custom Resources</Text>
+          {characterData.customResources?.length ? (
+            characterData.customResources.map((resource) => (
+              <View key={resource.id} style={styles.trackerCard}>
                 <View style={styles.trackerHeader}>
-                  <Text style={styles.trackerName}>{tracker.label}</Text>
-                  <Text style={styles.trackerMeta}>{tracker.resetRule}</Text>
+                  <Text style={styles.trackerName}>{resource.label}</Text>
+                  <Text style={styles.trackerMeta}>{resource.resetRule}</Text>
                 </View>
                 <View style={styles.trackerControls}>
                   <Pressable
                     style={styles.quickCircle}
                     android_ripple={{ color: '#999' }}
-                    onPress={() => updateTracker(tracker.id, { current: Math.max(0, tracker.current - 1) })}
+                    onPress={() => updateResource(resource.id, { current: Math.max(0, resource.current - 1) })}
                   >
                     <Text style={styles.quickCircleText}>-</Text>
                   </Pressable>
                   <Text style={styles.trackerValue}>
-                    {tracker.current}
-                    {typeof tracker.max === 'number' ? `/${tracker.max}` : ''}
+                    {resource.current}
+                    {typeof resource.max === 'number' ? `/${resource.max}` : ''}
                   </Text>
                   <Pressable
                     style={styles.quickCircle}
                     android_ripple={{ color: '#999' }}
                     onPress={() => {
-                      const max = typeof tracker.max === 'number' ? tracker.max : Number.POSITIVE_INFINITY;
-                      updateTracker(tracker.id, { current: Math.min(tracker.current + 1, max) });
+                      const max = typeof resource.max === 'number' ? resource.max : Number.POSITIVE_INFINITY;
+                      updateResource(resource.id, { current: Math.min(resource.current + 1, max) });
                     }}
                   >
                     <Text style={styles.quickCircleText}>+</Text>
@@ -1064,7 +1190,34 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               </View>
             ))
           ) : (
-            <Text style={styles.blockTextMuted}>Трекери не додані</Text>
+            <Text style={styles.blockTextMuted}>Ресурси не додані</Text>
+          )}
+
+          <Text style={styles.subSectionTitle}>Custom Sections</Text>
+          {characterData.customSections?.length ? (
+            characterData.customSections.map((section) => (
+              <View key={section.id}>
+                <Text style={styles.rowLabel}>{section.title}</Text>
+                <Text style={styles.blockText}>{section.content?.trim() || 'Порожньо'}</Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.blockTextMuted}>Секції не додані</Text>
+          )}
+
+          <Text style={styles.subSectionTitle}>Homebrew Entries</Text>
+          {characterData.homebrewEntries?.length ? (
+            characterData.homebrewEntries.map((entry) => (
+              <View key={entry.id} style={styles.editCardBlock}>
+                <View style={styles.cardHeaderRow}>
+                  <Text style={styles.rowLabel}>{entry.name}</Text>
+                  <Text style={styles.blockTextMuted}>{entry.kind}</Text>
+                </View>
+                <Text style={styles.blockText}>{entry.description || 'Без опису'}</Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.blockTextMuted}>Entries не додані</Text>
           )}
         </>
       )}
@@ -1457,30 +1610,25 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const renderNotesEdit = () => (
     <View style={styles.cardSecondary}>
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Session & Story Notes</Text>
-        {sectionConflictLabel(['notes.'])}
+        <Text style={styles.sectionTitle}>Notes Groups</Text>
+        {sectionConflictLabel(['homebrew.notes-groups'])}
       </View>
-      <Text style={styles.editLabel}>Session Notes</Text>
-      {renderTextInput(characterData.notesBlocks?.session || '', (next) => setNotesBlock('session', next), 'What happened this session?', {
-        multiline: true,
-      })}
-      <Text style={styles.editLabel}>Campaign Notes</Text>
-      {renderTextInput(characterData.notesBlocks?.campaign || '', (next) => setNotesBlock('campaign', next), 'Campaign context', {
-        multiline: true,
-      })}
-      <Text style={styles.editLabel}>Goals</Text>
-      {renderTextInput(characterData.notesBlocks?.goals || '', (next) => setNotesBlock('goals', next), 'Character goals', {
-        multiline: true,
-      })}
-      <Text style={styles.editLabel}>Relationships</Text>
-      {renderTextInput(
-        characterData.notesBlocks?.relationships || '',
-        (next) => setNotesBlock('relationships', next),
-        'NPC / party relationships',
-        { multiline: true },
-      )}
-      <Text style={styles.editLabel}>Quests</Text>
-      {renderTextInput(characterData.notesBlocks?.quests || '', (next) => setNotesBlock('quests', next), 'Open quests', { multiline: true })}
+      <TouchableOpacity style={styles.secondaryAction} onPress={addNotesGroup} activeOpacity={0.85}>
+        <Text style={styles.secondaryActionText}>+ Додати notes group</Text>
+      </TouchableOpacity>
+      {notesGroups.map((group) => (
+        <View key={group.id} style={styles.editCardBlock}>
+          <Text style={styles.editLabel}>Group Title</Text>
+          {renderTextInput(group.title, (next) => updateNotesGroupMeta(group.id, { title: next }), 'Group title')}
+          <Text style={styles.editLabel}>Group Content</Text>
+          {renderTextInput(group.content || '', (next) => setNotesGroup(group.id, next), 'Notes content', { multiline: true })}
+          {group.origin === 'custom' && (
+            <TouchableOpacity style={styles.removeButton} onPress={() => removeNotesGroup(group.id)} activeOpacity={0.85}>
+              <Text style={styles.removeButtonText}>Видалити notes group</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ))}
     </View>
   );
 
@@ -1521,6 +1669,18 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               >
                 <Text style={styles.blockText}>{Boolean(field.value) ? 'True' : 'False'}</Text>
               </Pressable>
+            ) : field.type === 'select' ? (
+              <>
+                <Text style={styles.editLabel}>Options (one per line)</Text>
+                {renderTextInput(
+                  (field.options || []).join('\n'),
+                  (next) => updateCustomField(field.id, { options: parseLines(next) }),
+                  'Option A\nOption B',
+                  { multiline: true },
+                )}
+                <Text style={styles.editLabel}>Value</Text>
+                {renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), 'Value')}
+              </>
             ) : (
               renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), 'Value')
             )}
@@ -1533,51 +1693,157 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       })}
 
       <View style={styles.sectionTitleRow}>
-        <Text style={styles.sectionTitle}>Flexible Trackers</Text>
-        {sectionConflictLabel(['homebrew.trackers'])}
+        <Text style={styles.sectionTitle}>Custom Resources</Text>
+        {sectionConflictLabel(['homebrew.resources'])}
       </View>
-      <TouchableOpacity style={styles.secondaryAction} onPress={addTracker} activeOpacity={0.85}>
-        <Text style={styles.secondaryActionText}>+ Додати tracker</Text>
+      <TouchableOpacity style={styles.secondaryAction} onPress={addResource} activeOpacity={0.85}>
+        <Text style={styles.secondaryActionText}>+ Додати resource</Text>
       </TouchableOpacity>
+      <Text style={styles.subSectionTitle}>System Templates</Text>
+      {SYSTEM_RESOURCE_TEMPLATES.map((template) => (
+        <Pressable
+          key={template.id}
+          style={styles.secondaryAction}
+          onPress={() => applyResourceTemplate(template.resource)}
+          android_ripple={{ color: '#999' }}
+        >
+          <Text style={styles.secondaryActionText}>Apply: {template.name}</Text>
+        </Pressable>
+      ))}
+      {!!userTemplates.length && <Text style={styles.subSectionTitle}>User Templates</Text>}
+      {userTemplates.map((template) => (
+        <View key={template.id} style={styles.editCardBlock}>
+          <Text style={styles.rowLabel}>{template.name}</Text>
+          <Text style={styles.blockTextMuted}>
+            {template.resource.label} • {template.resource.current}/{template.resource.max ?? '∞'} • {template.resource.resetRule}
+          </Text>
+          <Pressable
+            style={styles.secondaryAction}
+            onPress={() => applyResourceTemplate(template.resource)}
+            android_ripple={{ color: '#999' }}
+          >
+            <Text style={styles.secondaryActionText}>Apply User Template</Text>
+          </Pressable>
+          <TouchableOpacity style={styles.removeButton} onPress={() => removeUserTemplate(template.id)} activeOpacity={0.85}>
+            <Text style={styles.removeButtonText}>Видалити шаблон</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
 
-      {(characterData.customTrackers || []).map((tracker) => {
-        const ruleIndex = TRACKER_RULES.indexOf(tracker.resetRule);
+      {(characterData.customResources || []).map((resource) => {
+        const ruleIndex = TRACKER_RULES.indexOf(resource.resetRule);
         const nextRule = TRACKER_RULES[(ruleIndex + 1) % TRACKER_RULES.length];
         return (
-          <View key={tracker.id} style={styles.editCardBlock}>
-            <Text style={styles.editLabel}>Tracker Label</Text>
-            {renderTextInput(tracker.label, (next) => updateTracker(tracker.id, { label: next }), 'Tracker name')}
+          <View key={resource.id} style={styles.editCardBlock}>
+            <Text style={styles.editLabel}>Resource Label</Text>
+            {renderTextInput(resource.label, (next) => updateResource(resource.id, { label: next }), 'Resource name')}
             <Text style={styles.editLabel}>Current</Text>
             {renderTextInput(
-              String(tracker.current),
-              (next) => updateTracker(tracker.id, { current: Math.max(0, parseNumber(next, tracker.current)) }),
+              String(resource.current),
+              (next) => updateResource(resource.id, { current: Math.max(0, parseNumber(next, resource.current)) }),
               'Current',
               { keyboardType: 'number-pad' },
             )}
             <Text style={styles.editLabel}>Max (optional)</Text>
             {renderTextInput(
-              String(tracker.max ?? ''),
+              String(resource.max ?? ''),
               (next) => {
                 const parsed = next.trim() === '' ? undefined : Math.max(0, parseNumber(next, 0));
-                updateTracker(tracker.id, { max: parsed });
+                updateResource(resource.id, { max: parsed });
               },
               'Max',
               { keyboardType: 'number-pad' },
             )}
 
             <View style={styles.cardHeaderRow}>
-              <Text style={styles.rowLabel}>Reset: {tracker.resetRule}</Text>
+              <Text style={styles.rowLabel}>Reset: {resource.resetRule}</Text>
               <Pressable
                 style={styles.collapseButton}
-                onPress={() => updateTracker(tracker.id, { resetRule: nextRule })}
+                onPress={() => updateResource(resource.id, { resetRule: nextRule })}
                 android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.collapseButtonText}>Змінити reset</Text>
               </Pressable>
             </View>
+            <Pressable
+              style={styles.secondaryAction}
+              onPress={() => saveUserTemplateFromResource(resource)}
+              android_ripple={{ color: '#999' }}
+            >
+              <Text style={styles.secondaryActionText}>Save as User Template</Text>
+            </Pressable>
 
-            <TouchableOpacity style={styles.removeButton} onPress={() => removeTracker(tracker.id)} activeOpacity={0.85}>
-              <Text style={styles.removeButtonText}>Видалити tracker</Text>
+            <TouchableOpacity style={styles.removeButton} onPress={() => removeResource(resource.id)} activeOpacity={0.85}>
+              <Text style={styles.removeButtonText}>Видалити resource</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      })}
+
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Custom Sections</Text>
+        {sectionConflictLabel(['homebrew.sections'])}
+      </View>
+      <TouchableOpacity style={styles.secondaryAction} onPress={addCustomSection} activeOpacity={0.85}>
+        <Text style={styles.secondaryActionText}>+ Додати section</Text>
+      </TouchableOpacity>
+      {(characterData.customSections || []).map((section) => (
+        <View key={section.id} style={styles.editCardBlock}>
+          <Text style={styles.editLabel}>Section Title</Text>
+          {renderTextInput(section.title, (next) => updateCustomSection(section.id, { title: next }), 'Section title')}
+          <Text style={styles.editLabel}>Section Content</Text>
+          {renderTextInput(section.content, (next) => updateCustomSection(section.id, { content: next }), 'Section content', {
+            multiline: true,
+          })}
+          <TouchableOpacity style={styles.removeButton} onPress={() => removeCustomSection(section.id)} activeOpacity={0.85}>
+            <Text style={styles.removeButtonText}>Видалити section</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+
+      <View style={styles.sectionTitleRow}>
+        <Text style={styles.sectionTitle}>Homebrew Entries</Text>
+        {sectionConflictLabel(['homebrew.entries'])}
+      </View>
+      <View style={styles.slotEditRow}>
+        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('spell')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.secondaryActionText}>+ Spell</Text>
+        </Pressable>
+        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('ability')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.secondaryActionText}>+ Ability</Text>
+        </Pressable>
+        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('feat')} android_ripple={{ color: '#999' }}>
+          <Text style={styles.secondaryActionText}>+ Feat</Text>
+        </Pressable>
+      </View>
+      {(characterData.homebrewEntries || []).map((entry) => {
+        const kinds: CharacterHomebrewEntry['kind'][] = ['spell', 'ability', 'feat'];
+        const kindIndex = kinds.indexOf(entry.kind);
+        const nextKind = kinds[(kindIndex + 1) % kinds.length];
+        return (
+          <View key={entry.id} style={styles.editCardBlock}>
+            <Text style={styles.editLabel}>Name</Text>
+            {renderTextInput(entry.name, (next) => updateHomebrewEntry(entry.id, { name: next }), 'Entry name')}
+            <Text style={styles.editLabel}>Description</Text>
+            {renderTextInput(entry.description, (next) => updateHomebrewEntry(entry.id, { description: next }), 'Description', {
+              multiline: true,
+            })}
+            <Text style={styles.editLabel}>Tags (one per line)</Text>
+            {renderTextInput((entry.tags || []).join('\n'), (next) => updateHomebrewEntry(entry.id, { tags: parseLines(next) }), 'tag-a\ntag-b', {
+              multiline: true,
+            })}
+            <View style={styles.cardHeaderRow}>
+              <Text style={styles.rowLabel}>Kind: {entry.kind}</Text>
+              <Pressable
+                style={styles.collapseButton}
+                onPress={() => updateHomebrewEntry(entry.id, { kind: nextKind })}
+                android_ripple={{ color: '#999' }}
+              >
+                <Text style={styles.collapseButtonText}>Змінити kind</Text>
+              </Pressable>
+            </View>
+            <TouchableOpacity style={styles.removeButton} onPress={() => removeHomebrewEntry(entry.id)} activeOpacity={0.85}>
+              <Text style={styles.removeButtonText}>Видалити entry</Text>
             </TouchableOpacity>
           </View>
         );

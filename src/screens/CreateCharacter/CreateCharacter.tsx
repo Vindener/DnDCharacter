@@ -16,12 +16,13 @@ import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
 import { BACKGROUNDS } from '@/shared/const/Backgrounds';
 import { SUBCLASS_DETAILS } from '@/shared/const/SubclassDetails';
 import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterDto, CharacterTemplateId } from '@/types/Character';
 import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import { addEditorByEmail, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
 
 type StartMethod = 'guided' | 'quick';
 type StatMethod = 'array' | 'pointbuy';
@@ -120,6 +121,7 @@ const CreateCharacter = (): JSX.Element => {
 
   const [step, setStep] = useState<number>(1);
   const [startMethod, setStartMethod] = useState<StartMethod>('guided');
+  const [characterTemplateId, setCharacterTemplateId] = useState<CharacterTemplateId>('standard-5e');
 
   const [name, setName] = useState('');
   const [level, setLevel] = useState('1');
@@ -406,6 +408,7 @@ const CreateCharacter = (): JSX.Element => {
 
       const lvl = Number(level);
       const localId = uuid.v4();
+      const templatePatch = buildTemplatePatch(characterTemplateId);
 
       const character = createEmptyCharacter({
         id: localId,
@@ -418,6 +421,10 @@ const CreateCharacter = (): JSX.Element => {
         level: lvl,
         stats: finalStats,
         skills: autoFillSkills(finalStats),
+        characterTemplateId,
+        customResources: templatePatch.customResources,
+        customSections: templatePatch.customSections,
+        homebrewEntries: templatePatch.homebrewEntries,
       });
 
       character.inventory = chosenInventory;
@@ -818,6 +825,20 @@ const CreateCharacter = (): JSX.Element => {
             <Text style={styles.methodMeta}>Рекомендовані дефолти для швидкого проходження кроків.</Text>
           </Pressable>
 
+          <Header title='Character Template' />
+          <Text style={styles.sectionHint}>Template застосовується тільки під час створення і залишається повністю редагованим.</Text>
+          {CHARACTER_TEMPLATE_PRESETS.map((template) => (
+            <Pressable
+              key={template.id}
+              style={[styles.methodCard, characterTemplateId === template.id ? styles.methodCardActive : null]}
+              onPress={() => setCharacterTemplateId(template.id)}
+              android_ripple={{ color: '#999' }}
+            >
+              <Text style={styles.methodTitle}>{template.title}</Text>
+              <Text style={styles.methodMeta}>{template.description}</Text>
+            </Pressable>
+          ))}
+
           <StepNav onNext={goNextFromStep} nextLabel='До Basics' />
         </View>
       )}
@@ -980,6 +1001,10 @@ const CreateCharacter = (): JSX.Element => {
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Storage</Text>
             <Text style={styles.summaryValue}>{storageMode === 'local-only' ? 'Local only' : 'Local + Cloud'}</Text>
+          </View>
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Template</Text>
+            <Text style={styles.summaryValue}>{characterTemplateId}</Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={styles.summaryLabel}>Share invite</Text>

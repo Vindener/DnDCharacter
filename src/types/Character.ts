@@ -8,6 +8,7 @@ import { Traits } from './Traits';
 import { Spells } from './Spells';
 
 export type CustomFieldType = 'text' | 'number' | 'boolean' | 'select';
+export type CharacterTemplateId = 'standard-5e' | 'homebrew-light' | 'homebrew-heavy' | 'caster' | 'martial' | 'custom-blank';
 
 export interface CharacterCustomField {
   id: string;
@@ -42,6 +43,8 @@ export interface CharacterCustomResource {
   current: number;
   max?: number;
   resetRule: TrackerResetRule;
+  visibility?: TrackerVisibility;
+  color?: string;
 }
 
 export interface CharacterCustomResetRule {
@@ -62,6 +65,26 @@ export interface CharacterCustomSpellList {
   id: string;
   title: string;
   spells: string[];
+}
+
+export type HomebrewEntryKind = 'spell' | 'ability' | 'feat';
+
+export interface CharacterHomebrewEntry {
+  id: string;
+  kind: HomebrewEntryKind;
+  name: string;
+  description: string;
+  tags: string[];
+  activation?: 'action' | 'bonus' | 'reaction' | 'passive' | 'special';
+  linkedResourceId?: string;
+}
+
+export interface CharacterCustomNotesGroup {
+  id: string;
+  title: string;
+  content: string;
+  order: number;
+  origin: 'seeded' | 'custom';
 }
 
 export interface CharacterNotesBlocks {
@@ -124,15 +147,19 @@ export interface CharacterDto {
     copper: number;
   };
   customCoins?: { [id: string]: number };
+  characterTemplateId?: CharacterTemplateId;
   sessionMode?: boolean;
   conditions?: string[];
   customFields?: CharacterCustomField[];
+  // Deprecated compatibility field. Canonical resource model is customResources.
   customTrackers?: CharacterTracker[];
   customSections?: CharacterCustomSection[];
   customResources?: CharacterCustomResource[];
   customResetRules?: CharacterCustomResetRule[];
   customFeatureBlocks?: CharacterCustomFeatureBlock[];
   customSpellLists?: CharacterCustomSpellList[];
+  customNotesGroups?: CharacterCustomNotesGroup[];
+  homebrewEntries?: CharacterHomebrewEntry[];
   notesBlocks?: CharacterNotesBlocks;
   combatTemplates?: CharacterCombatTemplates;
 }

@@ -8,7 +8,7 @@ type SpellItem = {
   key: string;
   name: string;
   source: string;
-  listType: 'known' | 'prepared' | 'cantrip';
+  listType: 'known' | 'prepared' | 'cantrip' | 'homebrew';
 };
 
 const Spellbook = () => {
@@ -35,6 +35,16 @@ const Spellbook = () => {
       cantrips.forEach((spell, index) => {
         result.push({ key: `${character.id}-c-${index}-${spell}`, name: spell, source: name, listType: 'cantrip' });
       });
+      (character.homebrewEntries || [])
+        .filter((entry) => entry.kind === 'spell')
+        .forEach((entry, index) => {
+          result.push({
+            key: `${character.id}-hb-${index}-${entry.id}`,
+            name: entry.name,
+            source: `${name} (homebrew)`,
+            listType: 'homebrew',
+          });
+        });
     });
 
     const filter = search.trim().toLowerCase();

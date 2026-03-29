@@ -57,10 +57,13 @@ export type CharacterSheet = {
   customCoins?: CharacterDto['customCoins'];
   sessionMode?: CharacterDto['sessionMode'];
   conditions?: CharacterDto['conditions'];
+  characterTemplateId?: CharacterDto['characterTemplateId'];
   customFields?: CharacterDto['customFields'];
   customTrackers?: CharacterDto['customTrackers'];
   customSections?: CharacterDto['customSections'];
   customResources?: CharacterDto['customResources'];
+  customNotesGroups?: CharacterDto['customNotesGroups'];
+  homebrewEntries?: CharacterDto['homebrewEntries'];
   customResetRules?: CharacterDto['customResetRules'];
   customFeatureBlocks?: CharacterDto['customFeatureBlocks'];
   customSpellLists?: CharacterDto['customSpellLists'];
@@ -115,14 +118,17 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     customCoins: dto.customCoins, // якщо порожньо — просто не відправляємо undefined
     sessionMode: dto.sessionMode ?? false,
     conditions: dto.conditions ?? [],
+    characterTemplateId: dto.characterTemplateId ?? 'standard-5e',
     customFields: dto.customFields ?? [],
-    customTrackers: dto.customTrackers ?? [],
+    customTrackers: dto.customTrackers,
     customSections: dto.customSections ?? [],
     customResources: dto.customResources ?? [],
+    customNotesGroups: dto.customNotesGroups ?? [],
+    homebrewEntries: dto.homebrewEntries ?? [],
     customResetRules: dto.customResetRules ?? [],
     customFeatureBlocks: dto.customFeatureBlocks ?? [],
     customSpellLists: dto.customSpellLists ?? [],
-    notesBlocks: dto.notesBlocks ?? {},
+    notesBlocks: dto.notesBlocks,
     combatTemplates: dto.combatTemplates ?? { actions: [], bonusActions: [], reactions: [] },
 
     photoUri: dto.photoUri,
@@ -412,10 +418,13 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
     photoUri: (dto as any).photoUri,
     sessionMode: (dto as any).sessionMode,
     conditions: (dto as any).conditions,
+    characterTemplateId: (dto as any).characterTemplateId,
     customFields: (dto as any).customFields,
     customTrackers: (dto as any).customTrackers,
     customSections: (dto as any).customSections,
     customResources: (dto as any).customResources,
+    customNotesGroups: (dto as any).customNotesGroups,
+    homebrewEntries: (dto as any).homebrewEntries,
     customResetRules: (dto as any).customResetRules,
     customFeatureBlocks: (dto as any).customFeatureBlocks,
     customSpellLists: (dto as any).customSpellLists,

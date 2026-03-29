@@ -148,9 +148,17 @@ Stage 2 is considered complete when:
 
 ## Next Step
 
-Stage 3 should focus on shared collaboration quality:
+Stage 3 should focus on Homebrew-first system quality:
+
+- canonical homebrew model (`characterTemplateId`, `customResources`, `customNotesGroups`, `homebrewEntries`);
+- template-driven Create Character flow (`standard-5e`, `homebrew-light`, `homebrew-heavy`, `caster`, `martial`, `custom-blank`);
+- migration and normalization from legacy fields (`customTrackers`, `notesBlocks`, `customSpellLists`, `customFeatureBlocks`);
+- derived Homebrew badge logic and expanded Homebrew/Spellbook UX.
+
+Stage 4 should focus on shared collaboration quality:
 
 - explicit sync state model in store;
 - conflict review UI;
 - DM party-first workflows and shared change timeline.
+
 

@@ -275,3 +275,10 @@ Stage 1 file scope is now fully implemented in product foundation layer:
 - flow instrumentation is added for role/session/open/quick-action/conflict events.
 
 
+
+## 12. Cross-stage Note (2026-03-29)
+
+- Stage 3 is defined as Homebrew-first system and is documented in `docs/product-homebrew-stage-3.md`.
+- Stage 1 remains source-of-truth for role/capability model and baseline sync/conflict policy.
+
+

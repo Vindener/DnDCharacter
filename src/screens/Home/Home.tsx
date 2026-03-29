@@ -19,6 +19,7 @@ import { APP_ROLES } from '@/types/Product';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
+import { isHomebrewCharacter } from '@/shared/helpers/homebrew';
 
 type CharacterPreview = {
   id: string;
@@ -141,7 +142,7 @@ const Home = () => {
       if (syncState?.status === 'in-sync') statuses.add('Synced');
       if (syncState?.status === 'pending-upload' || syncState?.status === 'pending-download') statuses.add('Pending');
       if (syncState?.status === 'conflict') statuses.add('Conflict');
-      if ((payload.customFields?.length || 0) > 0 || (payload.customTrackers?.length || 0) > 0) statuses.add('Homebrew');
+      if (isHomebrewCharacter(payload)) statuses.add('Homebrew');
 
       const next: CharacterPreview = {
         id: payload.id,

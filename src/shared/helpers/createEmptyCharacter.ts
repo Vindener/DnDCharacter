@@ -1,4 +1,5 @@
 import { CharacterDto } from '@/types/Character';
+import { normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
 
 const HIT_DICE_MAP: Record<string, number> = {
   barbarian: 12,
@@ -23,7 +24,7 @@ function getHitDiceSides(className: string): number {
 
 
 export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): CharacterDto {
-  return {
+  const base: CharacterDto = {
     id: overrides.id ?? '',
     name: overrides.name ?? '',
     class: overrides.class ?? '',
@@ -39,6 +40,7 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     proficiencyBonus: overrides.proficiencyBonus ?? 2,
     alignment: overrides.alignment,
     currency: overrides.currency,
+    characterTemplateId: overrides.characterTemplateId ?? 'standard-5e',
     stats: {
       strength: 10,
       dexterity: 10,
@@ -127,6 +129,8 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     customResetRules: overrides.customResetRules ?? [],
     customFeatureBlocks: overrides.customFeatureBlocks ?? [],
     customSpellLists: overrides.customSpellLists ?? [],
+    customNotesGroups: overrides.customNotesGroups ?? [],
+    homebrewEntries: overrides.homebrewEntries ?? [],
     notesBlocks: {
       session: '',
       campaign: '',
@@ -142,4 +146,6 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
       ...(overrides.combatTemplates || {}),
     },
   };
+
+  return normalizeHomebrewV3(base);
 }
