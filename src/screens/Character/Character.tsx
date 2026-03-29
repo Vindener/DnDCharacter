@@ -19,6 +19,7 @@ import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
 import { fetchCharacterSheet, subscribeCharacterSheet, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
+import useSyncStore from '@/context/Sync-store';
 
 interface CharacterProps {
   route: {
@@ -154,6 +155,13 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const [isCloudDoc, setIsCloudDoc] = useState<boolean>(false);
   const [isSharedSheet, setIsSharedSheet] = useState<boolean>(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('Local');
+  const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
+  const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
+  const markLocalDraft = useSyncStore((s) => s.markLocalDraft);
+  const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
+  const markConflict = useSyncStore((s) => s.markConflict);
 
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempCurrentHp, setTempCurrentHp] = useState('0');
@@ -193,10 +201,28 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const proficiency = characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level);
   const passivePerception = 10 + (characterData.skills?.perception ?? calculateModifier(characterData.stats.wisdom || 10));
   const hasHomebrew = (characterData.customFields?.length ?? 0) > 0 || (characterData.customTrackers?.length ?? 0) > 0;
+  const currentSync = syncByCharacter[baseCharacter.id];
+
+  const syncStatusLabel = useMemo<SyncStatus | 'Conflict'>(() => {
+    const status = currentSync?.status;
+    if (!status) return syncStatus;
+    if (status === 'local-only') return 'Local';
+    if (status === 'in-sync') return 'Synced';
+    if (status === 'conflict') return 'Conflict';
+    return 'Pending';
+  }, [currentSync?.status, syncStatus]);
 
   useEffect(() => {
     setCharacterData(ensureCharacterDefaults(baseCharacter));
   }, [baseCharacter.id]);
+
+  useEffect(() => {
+    loadSyncMeta().catch(() => {});
+  }, [loadSyncMeta]);
+
+  useEffect(() => {
+    ensureCharacterSync(baseCharacter.id, false).catch(() => {});
+  }, [baseCharacter.id, ensureCharacterSync]);
 
   useEffect(() => {
     let alive = true;
@@ -207,12 +233,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         setIsCloudDoc(exists);
         setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
         setSyncStatus(exists ? 'Synced' : 'Local');
+        setCloudAvailability(baseCharacter.id, exists).catch(() => {});
       })
       .catch(() => {
         if (!alive) return;
         setIsCloudDoc(false);
         setIsSharedSheet(false);
         setSyncStatus('Local');
+        setCloudAvailability(baseCharacter.id, false).catch(() => {});
       });
 
     const unsubscribe = subscribeCharacterSheet(baseCharacter.id, (doc) => {
@@ -220,13 +248,14 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       setIsCloudDoc(exists);
       setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
       setSyncStatus(exists ? 'Synced' : 'Local');
+      setCloudAvailability(baseCharacter.id, exists).catch(() => {});
     });
 
     return () => {
       alive = false;
       if (typeof unsubscribe === 'function') unsubscribe();
     };
-  }, [baseCharacter.id]);
+  }, [baseCharacter.id, setCloudAvailability]);
 
   useEffect(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -249,16 +278,26 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setSyncStatus('Pending');
     const timeout = setTimeout(() => {
       upsertCharacterSheetFromLocal(characterData)
-        .then(() => setSyncStatus('Synced'))
-        .catch(() => setSyncStatus('Local'));
+        .then(() => {
+          setSyncStatus('Synced');
+          markCloudUploaded(characterData.id).catch(() => {});
+        })
+        .catch((error) => {
+          setSyncStatus('Local');
+          const message = String(error?.message || '').toLowerCase();
+          if (message.includes('conflict')) {
+            markConflict(characterData.id, ['sheet']).catch(() => {});
+          }
+        });
     }, 1200);
 
     return () => clearTimeout(timeout);
-  }, [characterData, isCloudDoc]);
+  }, [characterData, isCloudDoc, markCloudUploaded, markConflict]);
 
   const patchCharacter = useCallback((patcher: (prev: CharacterDto) => CharacterDto) => {
     setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
-  }, []);
+    markLocalDraft(baseCharacter.id, 'sheet').catch(() => {});
+  }, [baseCharacter.id, markLocalDraft]);
 
   const setNotesBlock = useCallback((key: keyof NonNullable<CharacterDto['notesBlocks']>, value: string) => {
     patchCharacter((prev) => ({
@@ -547,14 +586,19 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const syncBadges = useMemo(() => {
     const badges: Array<{ label: string; kind: 'neutral' | 'success' | 'warning' | 'accent' }> = [];
     badges.push({
-      label: syncStatus,
-      kind: syncStatus === 'Synced' ? 'success' : syncStatus === 'Pending' ? 'warning' : 'neutral',
+      label: syncStatusLabel,
+      kind:
+        syncStatusLabel === 'Synced'
+          ? 'success'
+          : syncStatusLabel === 'Pending' || syncStatusLabel === 'Conflict'
+            ? 'warning'
+            : 'neutral',
     });
     if (!isCloudDoc) badges.push({ label: 'Local', kind: 'neutral' });
     if (isSharedSheet) badges.push({ label: 'Shared with DM', kind: 'accent' });
     if (hasHomebrew) badges.push({ label: 'Homebrew', kind: 'warning' });
     return badges;
-  }, [hasHomebrew, isCloudDoc, isSharedSheet, syncStatus]);
+  }, [hasHomebrew, isCloudDoc, isSharedSheet, syncStatusLabel]);
 
   const openTab = useCallback((tab: CharacterTab) => setSelectedTab(tab), []);
   const toggleSecondary = useCallback((tab: CharacterTab) => {

@@ -6,6 +6,8 @@ import { Spells } from '@/types/Spells';
 import { Traits } from '@/types/Traits';
 import { Weapon } from '@/types/Weapon';
 import { uuid } from 'expo-modules-core';
+import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
+import useSyncStore from '@/context/Sync-store';
 
 const MAX_CHARACTERS = 15;
 
@@ -28,13 +30,21 @@ interface CharacterStore {
   updateCharacterAlliesAndOrganizations: (id: string, campaign: string) => void;
   updateCharacterTraits: (id: string, traits: Traits) => void;
   updateCharacterSpells: (id: string, spells: Spells) => void;
-  updateCharacterSkills: (id: string, skills: { [key: string]: number }) => void;
+  updateCharacterSkills: (id: string, skills: CharacterDto['skills']) => void;
   updateCharacterCoins: (id: string, coins: { gold: number; silver: number; copper: number }) => void;
   updateCharacterCustomCoins: (id: string, customCoins: { [id: string]: number }) => void;
   removeCharacter: (id: string) => Promise<void>;
 }
 
 const STORAGE_KEY = 'characters';
+
+function normalizeCharacter(character: CharacterDto): CharacterDto {
+  const normalized = createEmptyCharacter(character);
+  return {
+    ...normalized,
+    id: character.id || normalized.id || uuid.v4(),
+  };
+}
 
 const useCharacterStore = create<CharacterStore>((set, get) => ({
   characters: [],
@@ -46,7 +56,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     try {
       const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
       const parsed: CharacterDto[] = JSON.parse(jsonValue || '[]');
-      const filtered = Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+      const filtered = Array.isArray(parsed) ? parsed.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
       set({ characters: filtered });
     } catch {}
   },
@@ -61,7 +71,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   addCharacter: async (character: CharacterDto) => {
     const { characters, saveCharacters } = get();
     if (characters.length >= MAX_CHARACTERS) return;
-    const characterWithId = { ...character, id: character.id || uuid.v4() };
+    const characterWithId = normalizeCharacter({ ...character, id: character.id || uuid.v4() });
     const updated = [...characters, characterWithId];
     await saveCharacters(updated);
     console.log(updated);
@@ -69,7 +79,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
 
   updateCharacter: async (id: string, updatedCharacter: CharacterDto) => {
     const { characters, saveCharacters } = get();
-    const updated = characters.map((char) => (char.id === id ? updatedCharacter : char));
+    const updated = characters.map((char) => (char.id === id ? normalizeCharacter(updatedCharacter) : char));
     await saveCharacters(updated);
   },
 
@@ -146,7 +156,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     set({ characters: updated });
     saveCharacters(updated);
   },
-  updateCharacterSkills: (id: string, skills: { [key: string]: number }) => {
+  updateCharacterSkills: (id: string, skills: CharacterDto['skills']) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? { ...char, skills } : char));
     set({ characters: updated });
@@ -171,6 +181,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     const { characters, saveCharacters } = get();
     const updated = characters.filter((char) => char.id !== id);
     await saveCharacters(updated);
+    await useSyncStore.getState().removeCharacterSync(id);
   },
 }));
 

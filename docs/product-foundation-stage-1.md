@@ -257,3 +257,19 @@ Stage 1 is complete when:
 - explicit mode switch and session quick actions surface;
 - typed sync metadata in store;
 - conflict UI for shared edits.
+
+## 11. Stage 1 Implementation Status (2026-03-29)
+
+Stage 1 is now anchored in codebase foundations:
+
+1. Roles fixed (`Player`, `DM`, `Hybrid`) with persisted app-level role state.
+2. Local/cloud/last-sync/conflict model formalized as typed sync state and persisted sync store.
+3. Conflict policy codified in helper logic (`collectConflictPaths`, `resolveSyncStatus`).
+4. Character schema extended for session/homebrew foundation (`sessionMode`, `conditions`, `customFields`, `customTrackers`, `notesBlocks`).
+5. Local data normalization added in character store to keep old records compatible with new schema.
+6. Cloud DTO mapping updated to carry Stage 1 foundation fields.
+
+Remaining Stage 1-adjacent work (UX layer):
+
+- dedicated conflict resolution UI (policy exists, full resolver screen is Stage 3 scope);
+- richer flow instrumentation per scenario (event tracking/telemetry).

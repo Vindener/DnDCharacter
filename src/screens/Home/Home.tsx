@@ -13,8 +13,9 @@ import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth/index';
 import type { CharacterDto } from '@/types/Character';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
-
-type RoleMode = 'Player' | 'DM' | 'Both';
+import useAppRoleStore from '@/context/AppRole-store';
+import { APP_ROLES } from '@/types/Product';
+import useSyncStore from '@/context/Sync-store';
 
 type CharacterPreview = {
   id: string;
@@ -29,8 +30,6 @@ type CharacterPreview = {
   source: 'local' | 'mine' | 'shared';
   payload: CharacterDto;
 };
-
-const ROLE_OPTIONS: RoleMode[] = ['Player', 'DM', 'Both'];
 
 const mapRemoteToLocalDto = (doc: Record<string, unknown>): CharacterDto =>
   createEmptyCharacter({
@@ -71,18 +70,39 @@ const Home = () => {
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
 
-  const [roleMode, setRoleMode] = useState<RoleMode>('Both');
+  const roleMode = useAppRoleStore((s) => s.role);
+  const setRoleMode = useAppRoleStore((s) => s.setRole);
+  const loadRoleMode = useAppRoleStore((s) => s.loadRole);
+  const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
+  const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
+
   const [search, setSearch] = useState('');
   const [authVersion, setAuthVersion] = useState(0);
   const [myCloud, setMyCloud] = useState<Record<string, unknown>[]>([]);
   const [sharedCloud, setSharedCloud] = useState<Record<string, unknown>[]>([]);
-  const [lastSyncAt, setLastSyncAt] = useState<number | null>(null);
+  const [cloudPulseAt, setCloudPulseAt] = useState<number | null>(null);
 
   const isSignedIn = Boolean(fbAuth.currentUser);
 
   useEffect(() => {
     loadCharacters();
   }, [loadCharacters]);
+
+  useEffect(() => {
+    loadRoleMode();
+  }, [loadRoleMode]);
+
+  useEffect(() => {
+    loadSyncMeta();
+  }, [loadSyncMeta]);
+
+  useEffect(() => {
+    characters.forEach((character) => {
+      void ensureCharacterSync(character.id, false);
+    });
+  }, [characters, ensureCharacterSync]);
 
   useEffect(() => {
     if (!fbAuth.currentUser) {
@@ -93,19 +113,25 @@ const Home = () => {
 
     const unsubMine = subscribeMySheets((list) => {
       setMyCloud((list || []) as Record<string, unknown>[]);
-      setLastSyncAt(Date.now());
+      setCloudPulseAt(Date.now());
+      (list || []).forEach((doc: any) => {
+        if (doc?.id) void setCloudAvailability(String(doc.id), true);
+      });
     });
 
     const unsubShared = subscribeSharedWithMe((list) => {
       setSharedCloud((list || []) as Record<string, unknown>[]);
-      setLastSyncAt(Date.now());
+      setCloudPulseAt(Date.now());
+      (list || []).forEach((doc: any) => {
+        if (doc?.id) void setCloudAvailability(String(doc.id), true);
+      });
     });
 
     return () => {
       if (typeof unsubMine === 'function') unsubMine();
       if (typeof unsubShared === 'function') unsubShared();
     };
-  }, [authVersion]);
+  }, [authVersion, setCloudAvailability]);
 
   const previewList = useMemo(() => {
     const byId = new Map<string, CharacterPreview>();
@@ -113,10 +139,15 @@ const Home = () => {
     const pushPreview = (payload: CharacterDto, source: 'local' | 'mine' | 'shared') => {
       const existing = byId.get(payload.id);
       const statuses = new Set(existing?.statuses || []);
+      const syncState = syncByCharacter[payload.id];
 
-      if (source === 'local') statuses.add('Local');
-      if (source === 'mine') statuses.add('Synced');
+      if (source === 'local' && !syncState) statuses.add('Local');
+      if (source === 'mine' && !syncState) statuses.add('Synced');
       if (source === 'shared') statuses.add('Shared');
+      if (syncState?.status === 'local-only') statuses.add('Local');
+      if (syncState?.status === 'in-sync') statuses.add('Synced');
+      if (syncState?.status === 'pending-upload' || syncState?.status === 'pending-download') statuses.add('Pending');
+      if (syncState?.status === 'conflict') statuses.add('Conflict');
       if ((payload.customFields?.length || 0) > 0 || (payload.customTrackers?.length || 0) > 0) statuses.add('Homebrew');
 
       const next: CharacterPreview = {
@@ -151,12 +182,17 @@ const Home = () => {
         );
       })
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [characters, myCloud, sharedCloud, search]);
+  }, [characters, myCloud, sharedCloud, search, syncByCharacter]);
 
   const pendingSyncCount = useMemo(() => {
-    const cloudIds = new Set([...myCloud.map((d) => String(d.id || '')), ...sharedCloud.map((d) => String(d.id || ''))]);
-    return characters.filter((c) => !cloudIds.has(c.id)).length;
-  }, [characters, myCloud, sharedCloud]);
+    return Object.values(syncByCharacter).filter(
+      (entry) => entry.status === 'pending-upload' || entry.status === 'pending-download',
+    ).length;
+  }, [syncByCharacter]);
+
+  const conflictCount = useMemo(() => {
+    return Object.values(syncByCharacter).filter((entry) => entry.status === 'conflict').length;
+  }, [syncByCharacter]);
 
   const openCharacter = async (character: CharacterPreview) => {
     const existsLocal = characters.find((c) => c.id === character.id);
@@ -198,7 +234,16 @@ const Home = () => {
     } catch {}
   };
 
-  const lastSyncLabel = lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString() : '—';
+  const storeLastSyncAt = useMemo(() => {
+    const values = Object.values(syncByCharacter)
+      .map((entry) => entry.lastSyncAt)
+      .filter((value): value is number => typeof value === 'number');
+    if (!values.length) return null;
+    return Math.max(...values);
+  }, [syncByCharacter]);
+
+  const effectiveLastSyncAt = storeLastSyncAt ?? cloudPulseAt;
+  const lastSyncLabel = effectiveLastSyncAt ? new Date(effectiveLastSyncAt).toLocaleTimeString() : '—';
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -207,11 +252,13 @@ const Home = () => {
         <Text style={styles.greetingMeta}>Живий центр сесії: персонажі, статус синку, швидкий доступ до DM-інструментів.</Text>
 
         <View style={styles.roleSwitchRow}>
-          {ROLE_OPTIONS.map((option) => (
+          {APP_ROLES.map((option) => (
             <Pressable
               key={option}
               style={[styles.roleChip, roleMode === option ? styles.roleChipActive : null]}
-              onPress={() => setRoleMode(option)}
+              onPress={() => {
+                void setRoleMode(option);
+              }}
               android_ripple={{ color: '#999' }}
             >
               <Text style={[styles.roleChipText, roleMode === option ? styles.roleChipTextActive : null]}>{option}</Text>
@@ -279,7 +326,7 @@ const Home = () => {
         {!previewList.length && <Text style={styles.sectionHint}>Поки немає персонажів. Створи або імпортуй лист.</Text>}
       </View>
 
-      {(roleMode === 'DM' || roleMode === 'Both') && (
+      {(roleMode === 'DM' || roleMode === 'Hybrid') && (
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>DM Panel Preview</Text>
           <Text style={styles.sectionHint}>Active party, pending shared updates, швидкий доступ до DM-потоку.</Text>
@@ -345,6 +392,9 @@ const Home = () => {
           </View>
           <View style={styles.syncPill}>
             <Text style={styles.syncPillText}>Sync pending: {pendingSyncCount}</Text>
+          </View>
+          <View style={styles.syncPill}>
+            <Text style={styles.syncPillText}>Conflicts: {conflictCount}</Text>
           </View>
           <View style={styles.syncPill}>
             <Text style={styles.syncPillText}>Last sync: {lastSyncLabel}</Text>
