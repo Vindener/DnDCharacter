@@ -6,6 +6,7 @@ import LootGenerator from '@/screens/DM/LootGenerator/LootGenerator';
 import EncounterCalculator from '@/screens/DM/EncounterCalculator/EncounterCalculator';
 import DMNotes from '@/screens/DM/DMNotes/DMNotes';
 import DMNoteEdit from '@/screens/DM/DMNotes/DMNoteEdit';
+import DMSharedUpdates from '@/screens/DM/DMSharedUpdates';
 import Header from '@/modules/Header/Header';
 
 export type DMStackParamList = {
@@ -14,6 +15,7 @@ export type DMStackParamList = {
   EncounterCalculator: undefined;
   DMNotes: undefined;
   DMNoteEdit: { id: string };
+  DMSharedUpdates: undefined;
 };
 
 const Stack = createStackNavigator<DMStackParamList>();
@@ -36,6 +38,7 @@ export default function DMNavigator() {
       <Stack.Screen name='EncounterCalculator' component={EncounterCalculator} options={{ title: 'Калькулятор бою' }} />
       <Stack.Screen name='DMNotes' component={DMNotes} options={{ title: 'Нотатки' }} />
       <Stack.Screen name='DMNoteEdit' component={DMNoteEdit} options={{ title: 'Редагувати нотатку' }} />
+      <Stack.Screen name='DMSharedUpdates' component={DMSharedUpdates} options={{ title: 'Shared Updates' }} />
     </Stack.Navigator>
   );
 }

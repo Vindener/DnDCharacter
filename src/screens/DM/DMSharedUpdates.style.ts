@@ -6,10 +6,7 @@ export const getStyles = (c: ThemeColors) =>
     container: {
       flex: 1,
       backgroundColor: c.background,
-    },
-    content: {
       padding: 14,
-      paddingBottom: 24,
       gap: 10,
     },
     card: {
@@ -30,12 +27,12 @@ export const getStyles = (c: ThemeColors) =>
       color: c.textSecondary,
       fontSize: 12,
     },
-    statsRow: {
+    filterRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 8,
+      gap: 6,
     },
-    statChip: {
+    filterChip: {
       borderRadius: 99,
       borderWidth: 1,
       borderColor: c.border,
@@ -43,61 +40,75 @@ export const getStyles = (c: ThemeColors) =>
       paddingVertical: 5,
       paddingHorizontal: 10,
     },
-    statChipText: {
+    filterChipActive: {
+      borderColor: c.text,
+      backgroundColor: c.text,
+    },
+    filterChipText: {
       color: c.text,
       fontSize: 11,
       fontWeight: '700',
     },
-    laneGrid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: 8,
+    filterChipTextActive: {
+      color: c.background,
     },
-    laneButton: {
-      width: '48%',
+    itemCard: {
       borderRadius: 12,
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.background,
-      paddingVertical: 10,
-      paddingHorizontal: 10,
-      alignItems: 'center',
-      gap: 4,
-    },
-    laneButtonText: {
-      color: c.text,
-      fontWeight: '700',
-      fontSize: 12,
-      textAlign: 'center',
-    },
-    updateRow: {
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: c.border,
-      backgroundColor: c.background,
       padding: 10,
-      gap: 2,
+      gap: 6,
+      marginBottom: 10,
     },
-    updateTitle: {
+    itemTitle: {
       color: c.text,
+      fontSize: 14,
       fontWeight: '700',
-      fontSize: 13,
     },
-    updateMeta: {
+    itemMeta: {
       color: c.textSecondary,
       fontSize: 12,
     },
-    authButton: {
+    statusRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 6,
+    },
+    statusChip: {
+      borderRadius: 99,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      paddingVertical: 3,
+      paddingHorizontal: 8,
+    },
+    statusChipText: {
+      color: c.text,
+      fontSize: 11,
+      fontWeight: '700',
+    },
+    actionsRow: {
+      flexDirection: 'row',
+      gap: 6,
+      flexWrap: 'wrap',
+    },
+    actionButton: {
       borderRadius: 10,
       borderWidth: 1,
       borderColor: c.border,
-      backgroundColor: c.background,
-      paddingVertical: 10,
-      alignItems: 'center',
-      marginTop: 4,
+      backgroundColor: c.card,
+      paddingVertical: 8,
+      paddingHorizontal: 10,
     },
-    authButtonText: {
+    actionButtonText: {
       color: c.text,
+      fontSize: 12,
       fontWeight: '700',
+    },
+    emptyText: {
+      color: c.textSecondary,
+      textAlign: 'center',
+      marginTop: 20,
     },
   });
