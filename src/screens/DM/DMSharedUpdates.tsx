@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import { uuid } from 'expo-modules-core';
+import { subscribeMySheets, subscribeSharedWithMe, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './DMSharedUpdates.style';
@@ -11,6 +13,15 @@ import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useCharacterStore from '@/context/Character-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import type { CharacterDto } from '@/types/Character';
+import useSyncStore from '@/context/Sync-store';
+import useAppRoleStore from '@/context/AppRole-store';
+import {
+  getChangeSourceLabel,
+  getShareDisplayStatus,
+  getSyncDisplayStatus,
+  isNetworkOnline,
+  mapRoleToHistoryActor,
+} from '@/shared/helpers/collaboration/status';
 
 type FilterKey = 'all' | 'mine' | 'shared' | 'needs-review';
 type SharedRecord = {
@@ -19,6 +30,13 @@ type SharedRecord = {
   source: 'mine' | 'shared';
   updatedAtMs: number;
   payload: Record<string, unknown>;
+  changeHistory: Array<{
+    id: string;
+    uid: string;
+    actorRole?: string;
+    summary?: string;
+    atMs: number;
+  }>;
 };
 
 const REVIEWED_STORAGE_KEY = 'DM_SHARED_REVIEWED_V1';
@@ -31,6 +49,24 @@ const toMillis = (value: unknown): number => {
   return 0;
 };
 
+const sanitizeHistory = (value: unknown): SharedRecord['changeHistory'] => {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item): SharedRecord['changeHistory'][number] | null => {
+      if (!item || typeof item !== 'object') return null;
+      const cast = item as Record<string, unknown>;
+      const actorRole = cast.actorRole === 'DM' || cast.actorRole === 'Player' ? cast.actorRole : undefined;
+      return {
+        id: String(cast.id || ''),
+        uid: String(cast.uid || ''),
+        actorRole,
+        summary: typeof cast.summary === 'string' ? cast.summary : undefined,
+        atMs: Number(cast.atMs || 0),
+      };
+    })
+    .filter((item): item is SharedRecord['changeHistory'][number] => Boolean(item && item.id && item.uid));
+};
+
 const DMSharedUpdates = () => {
   const navigation = useNavigation<StackNavigationProp<DMStackParamList, 'DMSharedUpdates'>>();
   const colors = useThemeStore((s) => s.colors);
@@ -40,12 +76,19 @@ const DMSharedUpdates = () => {
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
+  const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
+  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const roleMode = useAppRoleStore((s) => s.role);
+  const netInfo = useNetInfo();
 
   const [authVersion, setAuthVersion] = useState(0);
   const [filter, setFilter] = useState<FilterKey>('all');
   const [mySheets, setMySheets] = useState<Record<string, unknown>[]>([]);
   const [sharedSheets, setSharedSheets] = useState<Record<string, unknown>[]>([]);
   const [reviewedMap, setReviewedMap] = useState<Record<string, number>>({});
+  const isOnline = isNetworkOnline(netInfo.isConnected);
 
   useEffect(() => {
     AsyncStorage.getItem(REVIEWED_STORAGE_KEY)
@@ -88,6 +131,7 @@ const DMSharedUpdates = () => {
       source: 'mine' as const,
       updatedAtMs: toMillis(sheet.updatedAt),
       payload: sheet,
+      changeHistory: sanitizeHistory(sheet.changeHistory),
     }));
     const shared = sharedSheets.map((sheet) => ({
       id: String(sheet.id || ''),
@@ -95,6 +139,7 @@ const DMSharedUpdates = () => {
       source: 'shared' as const,
       updatedAtMs: toMillis(sheet.updatedAt),
       payload: sheet,
+      changeHistory: sanitizeHistory(sheet.changeHistory),
     }));
 
     const merged = [...mine, ...shared];
@@ -105,13 +150,23 @@ const DMSharedUpdates = () => {
     return records.map((record) => {
       const reviewedAt = reviewedMap[record.id] || 0;
       const needsReview = record.updatedAtMs > reviewedAt;
+      const syncStatus = getSyncDisplayStatus(syncByCharacter[record.id], netInfo.isConnected);
+      const shareStatus = getShareDisplayStatus({
+        isSharedSheet: record.source === 'shared' || Array.isArray(record.payload.editors),
+        role: roleMode,
+        source: record.source === 'shared' ? 'shared' : 'mine',
+      });
+      const latestHistory = record.changeHistory.slice().sort((a, b) => (b.atMs || 0) - (a.atMs || 0))[0];
       return {
         ...record,
         reviewedAt,
         needsReview,
+        syncStatus,
+        shareStatus,
+        latestHistory,
       };
     });
-  }, [records, reviewedMap]);
+  }, [netInfo.isConnected, records, reviewedMap, roleMode, syncByCharacter]);
 
   const filtered = useMemo(() => {
     if (filter === 'all') return withReviewState;
@@ -150,11 +205,56 @@ const DMSharedUpdates = () => {
     root.navigate('Heroes', { screen: 'Character', params: { character } });
   };
 
+  const createDetachedCopy = async (doc: Record<string, unknown>, mode: 'local-copy' | 'duplicate-shared') => {
+    const mapped = mapCloudCharacterToLocalDto(doc);
+    const copy: CharacterDto = {
+      ...mapped,
+      id: String(uuid.v4()),
+      name: `${mapped.name || 'Character'} (${mode === 'local-copy' ? 'Local copy' : 'Shared duplicate'})`,
+    };
+
+    await addCharacter(copy);
+    await ensureCharacterSync(copy.id, false);
+    setCurrentCharacterId(copy.id);
+    const root = navigation.getParent() as any;
+    if (!root) return;
+    root.navigate('Heroes', { screen: 'Character', params: { character: copy } });
+  };
+
+  const syncNow = async (item: SharedRecord) => {
+    if (!isOnline) {
+      await setSyncTransport(item.id, 'idle', 'Offline queue');
+      return;
+    }
+
+    const normalized = mapCloudCharacterToLocalDto(item.payload);
+    const existing = characters.find((character) => character.id === normalized.id);
+    if (existing) {
+      await updateCharacter(existing.id, normalized);
+    } else {
+      await addCharacter(normalized);
+    }
+    try {
+      await ensureCharacterSync(normalized.id, true);
+      await setSyncTransport(normalized.id, 'syncing', 'Syncing now...');
+      await upsertCharacterSheetFromLocal(normalized, {
+        historyPaths: ['overview.identity'],
+        actorRole: mapRoleToHistoryActor(roleMode),
+      });
+      await markCloudUploaded(normalized.id);
+      await setSyncTransport(normalized.id, 'synced', 'Synced');
+    } catch (error) {
+      const message = String((error as Error)?.message || 'Sync failed');
+      await setSyncTransport(normalized.id, 'error', message);
+    }
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 20 }}>
       <View style={styles.card}>
         <Text style={styles.title}>Shared Updates Queue</Text>
         <Text style={styles.hint}>Workflow: перегляд змін, маркування review, відкриття у локальному Character листі.</Text>
+        <Text style={styles.hint}>Network: {isOnline ? 'Online' : 'Offline'} • Role: {roleMode}</Text>
         <View style={styles.filterRow}>
           {(['all', 'mine', 'shared', 'needs-review'] as FilterKey[]).map((item) => {
             const active = filter === item;
@@ -177,6 +277,13 @@ const DMSharedUpdates = () => {
       {filtered.map((item) => {
         const localCopyExists = characters.some((character) => character.id === item.id);
         const updatedLabel = item.updatedAtMs ? new Date(item.updatedAtMs).toLocaleString() : '—';
+        const latestHistoryLabel = item.latestHistory
+          ? getChangeSourceLabel({
+              uid: item.latestHistory.uid,
+              actorRole: item.latestHistory.actorRole,
+              currentUid: fbAuth.currentUser?.uid,
+            })
+          : null;
 
         return (
           <View key={`shared-${item.source}-${item.id}`} style={styles.itemCard}>
@@ -184,6 +291,13 @@ const DMSharedUpdates = () => {
             <Text style={styles.itemMeta}>Sheet ID: {item.id}</Text>
             <Text style={styles.itemMeta}>Source: {item.source}</Text>
             <Text style={styles.itemMeta}>Updated at: {updatedLabel}</Text>
+            <Text style={styles.itemMeta}>Sync status: {item.syncStatus}</Text>
+            {!!item.shareStatus && <Text style={styles.itemMeta}>Share status: {item.shareStatus}</Text>}
+            {latestHistoryLabel && (
+              <Text style={styles.itemMeta}>
+                Last marker: {latestHistoryLabel} ({item.latestHistory?.summary || 'No summary'})
+              </Text>
+            )}
             <View style={styles.statusRow}>
               <View style={styles.statusChip}>
                 <Text style={styles.statusChipText}>{item.needsReview ? 'Needs review' : 'Reviewed'}</Text>
@@ -192,6 +306,20 @@ const DMSharedUpdates = () => {
                 <Text style={styles.statusChipText}>{localCopyExists ? 'Local copy exists' : 'No local copy'}</Text>
               </View>
             </View>
+            {!!item.changeHistory.length && (
+              <View style={styles.historyBox}>
+                {item.changeHistory
+                  .slice()
+                  .sort((a, b) => (b.atMs || 0) - (a.atMs || 0))
+                  .slice(0, 3)
+                  .map((entry) => (
+                    <Text key={entry.id} style={styles.historyText}>
+                      {getChangeSourceLabel({ uid: entry.uid, actorRole: entry.actorRole, currentUid: fbAuth.currentUser?.uid })} •{' '}
+                      {entry.summary || 'No summary'} • {new Date(entry.atMs).toLocaleString()}
+                    </Text>
+                  ))}
+              </View>
+            )}
             <View style={styles.actionsRow}>
               <Pressable
                 style={styles.actionButton}
@@ -200,7 +328,7 @@ const DMSharedUpdates = () => {
                 }}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.actionButtonText}>{localCopyExists ? 'Open Local Copy' : 'Add + Open Local'}</Text>
+                <Text style={styles.actionButtonText}>Shared live copy</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}
@@ -210,6 +338,33 @@ const DMSharedUpdates = () => {
                 android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.actionButtonText}>Mark Reviewed</Text>
+              </Pressable>
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => {
+                  void syncNow(item);
+                }}
+                android_ripple={{ color: '#999' }}
+              >
+                <Text style={styles.actionButtonText}>Sync now</Text>
+              </Pressable>
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => {
+                  void createDetachedCopy(item.payload, 'local-copy');
+                }}
+                android_ripple={{ color: '#999' }}
+              >
+                <Text style={styles.actionButtonText}>Local copy</Text>
+              </Pressable>
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => {
+                  void createDetachedCopy(item.payload, 'duplicate-shared');
+                }}
+                android_ripple={{ color: '#999' }}
+              >
+                <Text style={styles.actionButtonText}>Duplicate from shared</Text>
               </Pressable>
             </View>
           </View>

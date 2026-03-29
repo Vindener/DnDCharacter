@@ -336,16 +336,20 @@ const CreateCharacter = (): JSX.Element => {
 
   const reviewHints = useMemo(() => {
     const lines: string[] = [];
+    lines.push('Local: зберігає лист тільки на цьому пристрої, доступно офлайн завжди.');
+    lines.push('Cloud: зберігає лист у хмарі та синхронізує зміни між пристроями.');
+    lines.push('Shared: відкриває live-співпрацю з DM/Player та показує source markers.');
+
     if (storageMode === 'local-only') {
-      lines.push('Лист збережеться локально на пристрої.');
-      lines.push('Cloud-sync можна підключити пізніше з меню персонажа.');
+      lines.push('Поточний вибір: Local only. Лист залишиться локальним.');
+      lines.push('Cloud/share можна підключити пізніше через Sync now або Share menu.');
     } else if (isSignedIn) {
-      lines.push('Лист буде збережено локально і в cloud.');
-      lines.push('Sync-статус стане visible на Home/Character після створення.');
+      lines.push('Поточний вибір: Local + Cloud. Лист збережеться локально і в cloud.');
+      lines.push('Після створення побачите Sync status + Share status на Home/Character/DM.');
       if (inviteEmail.trim()) lines.push(`Після cloud save буде надіслано доступ редактору: ${inviteEmail.trim()}`);
     } else {
       lines.push('Обрано Local + Cloud, але ви ще не авторизовані.');
-      lines.push('Увійдіть через Google на кроці Storage, інакше лист залишиться лише локально.');
+      lines.push('Увійдіть через Google, інакше буде лише Local only.');
     }
     return lines;
   }, [storageMode, isSignedIn, inviteEmail]);
@@ -920,6 +924,11 @@ const CreateCharacter = (): JSX.Element => {
         <View style={styles.card}>
           <Header title='Storage та Share' />
           <Text style={styles.sectionHint}>Оберіть, як зберігати персонажа після створення.</Text>
+          <View style={styles.infoBox}>
+            <Text style={styles.sectionHint}>Local: тільки цей пристрій, максимальна офлайн-надійність.</Text>
+            <Text style={styles.sectionHint}>Cloud: sync між пристроями + manual/auto sync feedback.</Text>
+            <Text style={styles.sectionHint}>Shared: live copy для DM/Player із change source marker та history light.</Text>
+          </View>
 
           <View style={styles.toggleRow}>
             <Pressable

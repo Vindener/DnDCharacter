@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import { uuid } from 'expo-modules-core';
 import { CharacterDto } from '@/types/Character';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
+import useSyncStore from '@/context/Sync-store';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
-import { upsertCharacterSheetFromLocal, saveCharacterSheetAsNew } from '@/services/characterSheets';
+import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 
 interface CharacterMenuProps {
   character: CharacterDto;
   onChange?: (character: CharacterDto) => void;
+  isCloudDoc?: boolean;
+  isSharedSheet?: boolean;
+  onSyncNow?: () => void;
 }
 
-const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) => {
+const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, onSyncNow }) => {
+  const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
+  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
+  const setCurrentCharacterId = useCharacterStore((s: any) => s.setCurrentCharacterId);
+  const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -139,6 +150,32 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
   }
   };
   const closeMenu = () => setMenuVisible(false);
+
+  const createDetachedCopy = async (mode: 'local-copy' | 'duplicate-shared') => {
+    const suffix = mode === 'local-copy' ? 'Local copy' : 'Shared duplicate';
+    const copy: CharacterDto = {
+      ...characterData,
+      id: String(uuid.v4()),
+      name: `${characterData.name || 'Character'} (${suffix})`,
+    };
+
+    await addCharacter(copy);
+    await ensureCharacterSync(copy.id, false);
+    setCurrentCharacterId(copy.id);
+
+    Alert.alert('Готово', mode === 'local-copy' ? 'Створено локальну копію без live sync.' : 'Створено незалежний дублікат із shared листа.');
+    navigation.navigate('Character', { character: copy });
+  };
+
+  const openSharedLiveCopy = () => {
+    if (!isCloudDoc) {
+      Alert.alert('Shared live copy', 'Для live-режиму спочатку створіть cloud версію.');
+      return;
+    }
+
+    onSyncNow?.();
+    Alert.alert('Shared live copy', 'Поточний лист відкрито в live-режимі з cloud sync.');
+  };
 
   const pickPhoto = async () => {
     try {
@@ -309,6 +346,44 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
         <MenuItem textStyle={styles.menuItemText} onPress={onSaveToCloud}>
           Зберегти в хмарі
         </MenuItem>
+        <MenuItem
+          textStyle={styles.menuItemText}
+          onPress={() => {
+            closeMenu();
+            onSyncNow?.();
+          }}
+        >
+          Sync now
+        </MenuItem>
+        <MenuItem
+          textStyle={styles.menuItemText}
+          onPress={() => {
+            closeMenu();
+            openSharedLiveCopy();
+          }}
+        >
+          Shared live copy
+        </MenuItem>
+        <MenuItem
+          textStyle={styles.menuItemText}
+          onPress={() => {
+            closeMenu();
+            void createDetachedCopy('local-copy');
+          }}
+        >
+          Create local copy
+        </MenuItem>
+        {isSharedSheet && (
+          <MenuItem
+            textStyle={styles.menuItemText}
+            onPress={() => {
+              closeMenu();
+              void createDetachedCopy('duplicate-shared');
+            }}
+          >
+            Duplicate from shared
+          </MenuItem>
+        )}
 
         <MenuItem
           textStyle={styles.menuItemText}

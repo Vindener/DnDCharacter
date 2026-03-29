@@ -93,6 +93,9 @@ export const getStyles = (c: ThemeColors) =>
     badgeAccent: {
       backgroundColor: '#2f95dc',
     },
+    badgeDanger: {
+      backgroundColor: '#8b1e1e',
+    },
     badgeText: {
       color: c.text,
       fontSize: 11,
@@ -100,6 +103,33 @@ export const getStyles = (c: ThemeColors) =>
     },
     badgeTextInverted: {
       color: '#fff',
+    },
+    syncIndicatorRow: {
+      marginTop: 4,
+      gap: 2,
+    },
+    syncIndicatorText: {
+      color: c.textSecondary,
+      fontSize: 11,
+    },
+    syncNowButton: {
+      marginTop: 6,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 8,
+      paddingHorizontal: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 6,
+      alignSelf: 'flex-start',
+    },
+    syncNowButtonText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '700',
     },
 
     modeRow: {

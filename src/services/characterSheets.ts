@@ -5,11 +5,14 @@ import { findUserByEmail } from './users';
 import type { CharacterDto } from '@/types/Character';
 
 export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
+export type CharacterActorRole = 'DM' | 'Player';
 export type CharacterChangeHistoryEntry = {
   id: string;
   uid: string;
+  actorRole?: CharacterActorRole;
   tab: CharacterTabKey;
   paths: string[];
+  summary?: string;
   atMs: number;
 };
 
@@ -148,7 +151,19 @@ function mapPathToTab(path: string): CharacterTabKey {
   return 'Overview';
 }
 
-function buildHistoryEntries(uidValue: string, paths: string[], atMs: number): CharacterChangeHistoryEntry[] {
+function summarizePaths(paths: string[]): string {
+  const clean = (paths || []).map((path) => String(path || '').trim()).filter(Boolean);
+  if (!clean.length) return 'No path details';
+  if (clean.length <= 2) return clean.join(', ');
+  return `${clean.slice(0, 2).join(', ')} +${clean.length - 2}`;
+}
+
+function buildHistoryEntries(
+  uidValue: string,
+  paths: string[],
+  atMs: number,
+  actorRole?: CharacterActorRole,
+): CharacterChangeHistoryEntry[] {
   const byTab = new Map<CharacterTabKey, string[]>();
   for (const path of paths) {
     const trimmed = String(path || '').trim();
@@ -164,8 +179,10 @@ function buildHistoryEntries(uidValue: string, paths: string[], atMs: number): C
     out.push({
       id: `${uidValue}-${tab}-${atMs}`,
       uid: uidValue,
+      actorRole,
       tab,
       paths: tabPaths,
+      summary: summarizePaths(tabPaths),
       atMs,
     });
   });
@@ -183,7 +200,10 @@ function mergeBoundedHistory(existing: unknown, additions: CharacterChangeHistor
   return merged.slice(merged.length - maxItems);
 }
 
-export async function upsertCharacterSheetFromLocal(dto: CharacterDto, options?: { historyPaths?: string[] }) {
+export async function upsertCharacterSheetFromLocal(
+  dto: CharacterDto,
+  options?: { historyPaths?: string[]; actorRole?: CharacterActorRole },
+) {
   const me = fbAuth.currentUser?.uid;
   if (!me) throw new Error('Not signed in');
 
@@ -202,7 +222,7 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterDto, options?:
     const historyPaths = options?.historyPaths || [];
     if (historyPaths.length) {
       const atMs = Date.now();
-      const additions = buildHistoryEntries(me, historyPaths, atMs);
+      const additions = buildHistoryEntries(me, historyPaths, atMs, options?.actorRole);
       payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additions, 50);
     }
 

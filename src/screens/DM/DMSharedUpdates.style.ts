@@ -93,6 +93,19 @@ export const getStyles = (c: ThemeColors) =>
       gap: 6,
       flexWrap: 'wrap',
     },
+    historyBox: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      padding: 8,
+      gap: 4,
+    },
+    historyText: {
+      color: c.textSecondary,
+      fontSize: 11,
+      lineHeight: 15,
+    },
     actionButton: {
       borderRadius: 10,
       borderWidth: 1,

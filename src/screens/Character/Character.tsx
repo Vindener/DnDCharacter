@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, Pressable, TextInput as RNTextInput } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import type {
@@ -19,7 +20,7 @@ import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 import Dice from '@/screens/Dice/Dice';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
-import type { CharacterChangeHistoryEntry } from '@/services/characterSheets';
+import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/services/characterSheets';
 import { fetchCharacterSheet, subscribeCharacterSheet, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
@@ -27,6 +28,16 @@ import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter'
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 import { appendQuickSessionNote, isHomebrewCharacter, normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
 import useTrackerTemplateStore, { SYSTEM_RESOURCE_TEMPLATES } from '@/context/TrackerTemplates-store';
+import useAppRoleStore from '@/context/AppRole-store';
+import {
+  getChangeSourceLabel,
+  getShareDisplayStatus,
+  getSyncDisplayStatus,
+  getSyncStatusKind,
+  isNetworkOnline,
+  mapRoleToHistoryActor,
+} from '@/shared/helpers/collaboration/status';
+import { collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
 
 interface CharacterProps {
   route: {
@@ -38,7 +49,6 @@ interface CharacterProps {
 
 type CharacterMode = 'play' | 'edit';
 type CharacterTab = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
-type SyncStatus = 'Local' | 'Pending' | 'Synced';
 
 const TAB_ORDER: CharacterTab[] = ['Overview', 'Combat', 'Magic', 'Inventory', 'Notes', 'Homebrew'];
 const TAB_PATH_PREFIX: Record<CharacterTab, string> = {
@@ -169,20 +179,103 @@ function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
 function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
   if (!Array.isArray(value)) return [];
   return value
-    .map((entry) => {
+    .map((entry): CharacterChangeHistoryEntry | null => {
       if (!entry || typeof entry !== 'object') return null;
       const cast = entry as Record<string, unknown>;
       const tab = String(cast.tab || 'Overview') as CharacterTab;
       if (!TAB_ORDER.includes(tab)) return null;
+      const actorRole: CharacterActorRole | undefined =
+        cast.actorRole === 'DM' || cast.actorRole === 'Player' ? cast.actorRole : undefined;
       return {
         id: String(cast.id || ''),
         uid: String(cast.uid || ''),
+        actorRole,
         tab,
         paths: Array.isArray(cast.paths) ? cast.paths.map((item) => String(item)) : [],
+        summary: typeof cast.summary === 'string' ? cast.summary : undefined,
         atMs: Number(cast.atMs || 0),
       };
     })
     .filter((entry): entry is CharacterChangeHistoryEntry => Boolean(entry && entry.id && entry.uid && entry.tab));
+}
+
+function getPendingSections(paths: string[]): Set<string> {
+  const sections = new Set<string>();
+  (paths || []).forEach((path) => {
+    const section = pathToSyncSection(path);
+    if (section !== 'unknown') sections.add(section);
+  });
+  return sections;
+}
+
+function mergeBySections(local: CharacterDto, remote: CharacterDto, pendingPaths: string[]): CharacterDto {
+  const pendingSections = getPendingSections(pendingPaths);
+  const next = { ...local };
+
+  if (!pendingSections.has('overview')) {
+    next.name = remote.name;
+    next.class = remote.class;
+    next.subclass = remote.subclass;
+    next.race = remote.race;
+    next.subrace = remote.subrace;
+    next.background = remote.background;
+    next.level = remote.level;
+    next.experience = remote.experience;
+    next.stats = remote.stats;
+    next.skills = remote.skills;
+    next.savingThrows = remote.savingThrows;
+    next.traits = remote.traits;
+    next.featuresAndTraits = remote.featuresAndTraits;
+    next.proficiencyBonus = remote.proficiencyBonus;
+  }
+
+  if (!pendingSections.has('combat')) {
+    next.hp = remote.hp;
+    next.ac = remote.ac;
+    next.initiative = remote.initiative;
+    next.speed = remote.speed;
+    next.hitDice = remote.hitDice;
+    next.deathSaves = remote.deathSaves;
+    next.weapons = remote.weapons;
+    next.conditions = remote.conditions;
+    next.combatTemplates = remote.combatTemplates;
+    next.sessionMode = remote.sessionMode;
+  }
+
+  if (!pendingSections.has('magic')) {
+    next.spells = remote.spells;
+  }
+
+  if (!pendingSections.has('inventory')) {
+    next.inventory = remote.inventory;
+    next.coins = remote.coins;
+    next.customCoins = remote.customCoins;
+    next.tools = remote.tools;
+    next.proficiencies = remote.proficiencies;
+  }
+
+  if (!pendingSections.has('notes')) {
+    next.notes = remote.notes;
+    next.backstory = remote.backstory;
+    next.campaign = remote.campaign;
+    next.alliesAndOrganizations = remote.alliesAndOrganizations;
+    next.notesBlocks = remote.notesBlocks;
+    next.customNotesGroups = remote.customNotesGroups;
+  }
+
+  if (!pendingSections.has('homebrew')) {
+    next.characterTemplateId = remote.characterTemplateId;
+    next.customFields = remote.customFields;
+    next.customTrackers = remote.customTrackers;
+    next.customSections = remote.customSections;
+    next.customResources = remote.customResources;
+    next.customResetRules = remote.customResetRules;
+    next.customFeatureBlocks = remote.customFeatureBlocks;
+    next.customSpellLists = remote.customSpellLists;
+    next.homebrewEntries = remote.homebrewEntries;
+  }
+
+  return ensureCharacterDefaults(next);
 }
 
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
@@ -206,11 +299,16 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }
 
   const [characterData, setCharacterData] = useState<CharacterDto>(ensureCharacterDefaults(baseCharacter));
+  const characterDataRef = useRef<CharacterDto>(ensureCharacterDefaults(baseCharacter));
+  useEffect(() => {
+    characterDataRef.current = characterData;
+  }, [characterData]);
   const [mode, setMode] = useState<CharacterMode>('play');
   const [selectedTab, setSelectedTab] = useState<CharacterTab>('Overview');
   const [isCloudDoc, setIsCloudDoc] = useState<boolean>(false);
   const [isSharedSheet, setIsSharedSheet] = useState<boolean>(false);
-  const [syncStatus, setSyncStatus] = useState<SyncStatus>('Local');
+  const [isOwnedByMe, setIsOwnedByMe] = useState<boolean>(true);
+  const [syncFeedback, setSyncFeedback] = useState<string>('Waiting for local changes');
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
@@ -220,11 +318,16 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   const markCloudDownloaded = useSyncStore((s) => s.markCloudDownloaded);
   const markConflict = useSyncStore((s) => s.markConflict);
   const clearConflicts = useSyncStore((s) => s.clearConflicts);
+  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
+  const roleMode = useAppRoleStore((s) => s.role);
   const userTemplates = useTrackerTemplateStore((s) => s.userTemplates);
   const loadUserTemplates = useTrackerTemplateStore((s) => s.loadUserTemplates);
   const addUserTemplateFromResource = useTrackerTemplateStore((s) => s.addUserTemplateFromResource);
   const removeUserTemplate = useTrackerTemplateStore((s) => s.removeUserTemplate);
   const [sharedHistory, setSharedHistory] = useState<CharacterChangeHistoryEntry[]>([]);
+  const netInfo = useNetInfo();
+  const isOnline = isNetworkOnline(netInfo.isConnected);
 
   const [isHpModalVisible, setIsHpModalVisible] = useState(false);
   const [tempCurrentHp, setTempCurrentHp] = useState('0');
@@ -273,15 +376,11 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [notesGroups]);
   const currentSync = syncByCharacter[baseCharacter.id];
   const conflictPaths = currentSync?.conflictPaths || [];
-
-  const syncStatusLabel = useMemo<SyncStatus | 'Conflict'>(() => {
-    const status = currentSync?.status;
-    if (!status) return syncStatus;
-    if (status === 'local-only') return 'Local';
-    if (status === 'in-sync') return 'Synced';
-    if (status === 'conflict') return 'Conflict';
-    return 'Pending';
-  }, [currentSync?.status, syncStatus]);
+  const syncStatusLabel = useMemo(() => getSyncDisplayStatus(currentSync, netInfo.isConnected), [currentSync, netInfo.isConnected]);
+  const shareStatusLabel = useMemo(
+    () => getShareDisplayStatus({ isSharedSheet, role: roleMode, isOwnedByMe }),
+    [isOwnedByMe, isSharedSheet, roleMode],
+  );
 
   useEffect(() => {
     if (currentSync?.status === 'conflict') {
@@ -314,31 +413,73 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       .then((doc) => {
         if (!alive) return;
         const exists = Boolean(doc);
+        const owners = Array.isArray((doc as any)?.owners) ? ((doc as any).owners as string[]) : [];
+        const ownerUid = typeof (doc as any)?.ownerUid === 'string' ? (doc as any).ownerUid : '';
+        const me = fbAuth.currentUser?.uid || '';
+        const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
         setIsCloudDoc(exists);
-        setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
+        setIsOwnedByMe(owned);
+        setIsSharedSheet(Boolean(doc && Array.isArray((doc as any).editors) && (doc as any).editors.length > 0));
         setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
-        setSyncStatus(exists ? 'Synced' : 'Local');
+        setSyncFeedback(exists ? 'Cloud doc connected' : 'Local-only character');
         setCloudAvailability(baseCharacter.id, exists).catch(() => {});
       })
       .catch(() => {
         if (!alive) return;
         setIsCloudDoc(false);
+        setIsOwnedByMe(true);
         setIsSharedSheet(false);
         setSharedHistory([]);
-        setSyncStatus('Local');
+        setSyncFeedback('Local-only character');
         setCloudAvailability(baseCharacter.id, false).catch(() => {});
       });
 
     const unsubscribe = subscribeCharacterSheet(baseCharacter.id, (doc) => {
       const exists = Boolean(doc);
+      const owners = Array.isArray((doc as any)?.owners) ? ((doc as any).owners as string[]) : [];
+      const ownerUid = typeof (doc as any)?.ownerUid === 'string' ? (doc as any).ownerUid : '';
+      const me = fbAuth.currentUser?.uid || '';
+      const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
       setIsCloudDoc(exists);
-      setIsSharedSheet(Boolean(doc && Array.isArray(doc.editors) && doc.editors.length > 0));
-      setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
-      setSyncStatus(exists ? 'Synced' : 'Local');
+      setIsOwnedByMe(owned);
+      setIsSharedSheet(Boolean(doc && Array.isArray((doc as any).editors) && (doc as any).editors.length > 0));
+      const history = sanitizeChangeHistory(doc?.changeHistory);
+      setSharedHistory(history);
+      setSyncFeedback(exists ? 'Cloud doc connected' : 'Local-only character');
       setCloudAvailability(baseCharacter.id, exists).catch(() => {});
+
       const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
-      if (exists && syncState?.pendingPaths?.length) {
-        markConflict(baseCharacter.id, syncState.pendingPaths).catch(() => {});
+      const pendingPaths = syncState?.pendingPaths || [];
+      if (!exists) return;
+
+      const remoteDto = ensureCharacterDefaults(mapCloudCharacterToLocalDto(doc as Record<string, unknown>));
+      const remotePathsSinceLastSync = history
+        .filter((entry) => entry.uid && entry.uid !== me)
+        .filter((entry) => (syncState?.lastSyncAt || 0) === 0 || entry.atMs > (syncState?.lastSyncAt || 0))
+        .flatMap((entry) => entry.paths || []);
+
+      if (pendingPaths.length) {
+        const conflictForPending = collectConflictPaths(pendingPaths, remotePathsSinceLastSync);
+        if (conflictForPending.length) {
+          markConflict(baseCharacter.id, conflictForPending).catch(() => {});
+          setSyncFeedback('Conflict detected. Review required.');
+          return;
+        }
+
+        if (remotePathsSinceLastSync.length) {
+          const merged = mergeBySections(characterDataRef.current, remoteDto, pendingPaths);
+          setCharacterData(merged);
+          setSyncFeedback('Section merge applied from cloud');
+        }
+        return;
+      }
+
+      setCharacterData(remoteDto);
+      void updateCharacter(remoteDto.id, remoteDto);
+      markCloudDownloaded(remoteDto.id).catch(() => {});
+      setSyncFeedback('Downloaded latest cloud revision');
+      if (!pendingPaths.length && remotePathsSinceLastSync.length) {
+        setSyncTransport(remoteDto.id, 'downloading', 'Downloaded latest cloud revision').catch(() => {});
       }
     });
 
@@ -346,7 +487,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       alive = false;
       if (typeof unsubscribe === 'function') unsubscribe();
     };
-  }, [baseCharacter.id, markConflict, setCloudAvailability]);
+  }, [baseCharacter.id, markCloudDownloaded, markConflict, setCloudAvailability, setSyncTransport, updateCharacter]);
 
   useEffect(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -367,16 +508,28 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (!isCloudDoc) return;
 
     const pendingPathsForUpload = Array.from(new Set(currentSync?.pendingPaths || []));
-    setSyncStatus('Pending');
+    if (!pendingPathsForUpload.length) return;
+
+    if (!isOnline) {
+      setSyncFeedback(`Offline queue: ${pendingPathsForUpload.length} pending path(s)`);
+      setSyncTransport(characterData.id, 'idle', `Offline queue: ${pendingPathsForUpload.length} pending path(s)`).catch(() => {});
+      return;
+    }
+
+    const actorRole: CharacterActorRole = mapRoleToHistoryActor(roleMode);
+    setSyncFeedback('Uploading local changes...');
+    setSyncTransport(characterData.id, 'uploading', 'Uploading local changes...').catch(() => {});
     const timeout = setTimeout(() => {
-      upsertCharacterSheetFromLocal(characterData, { historyPaths: pendingPathsForUpload })
+      upsertCharacterSheetFromLocal(characterData, { historyPaths: pendingPathsForUpload, actorRole })
         .then(() => {
-          setSyncStatus('Synced');
+          setSyncFeedback('Auto-synced just now');
+          setSyncTransport(characterData.id, 'synced', 'Auto-synced just now').catch(() => {});
           markCloudUploaded(characterData.id).catch(() => {});
         })
         .catch((error) => {
-          setSyncStatus('Local');
           const message = String(error?.message || '').toLowerCase();
+          setSyncFeedback(message.includes('network') ? 'Retrying after network error...' : 'Sync failed. Retry from Sync now.');
+          markSyncError(characterData.id, message || 'Sync failed').catch(() => {});
           if (message.includes('conflict')) {
             markConflict(characterData.id, pendingPathsForUpload.length ? pendingPathsForUpload : ['overview.identity']).catch(
               () => {},
@@ -386,7 +539,17 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     }, 1200);
 
     return () => clearTimeout(timeout);
-  }, [characterData, currentSync?.pendingPaths, isCloudDoc, markCloudUploaded, markConflict]);
+  }, [
+    characterData,
+    currentSync?.pendingPaths,
+    isCloudDoc,
+    isOnline,
+    markCloudUploaded,
+    markConflict,
+    markSyncError,
+    roleMode,
+    setSyncTransport,
+  ]);
 
   const patchCharacter = useCallback((patcher: (prev: CharacterDto) => CharacterDto, changedPaths?: string[]) => {
     setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
@@ -765,18 +928,21 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const resolveConflictWithLocal = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
-    setSyncStatus('Pending');
+    setSyncFeedback('Applying local version to cloud...');
+    setSyncTransport(characterData.id, 'uploading', 'Applying local version to cloud...').catch(() => {});
     const historyPaths = Array.from(new Set(currentSync?.pendingPaths || []));
-    upsertCharacterSheetFromLocal(characterData, { historyPaths })
+    upsertCharacterSheetFromLocal(characterData, { historyPaths, actorRole: mapRoleToHistoryActor(roleMode) })
       .then(() => {
-        setSyncStatus('Synced');
+        setSyncFeedback('Conflict resolved using local version');
+        setSyncTransport(characterData.id, 'synced', 'Conflict resolved using local version').catch(() => {});
         markCloudUploaded(characterData.id).catch(() => {});
         clearConflicts(characterData.id).catch(() => {});
       })
       .catch(() => {
-        setSyncStatus('Local');
+        setSyncFeedback('Failed to resolve conflict with local version');
+        markSyncError(characterData.id, 'Failed to resolve conflict with local version').catch(() => {});
       });
-  }, [characterData, clearConflicts, currentSync?.pendingPaths, markCloudUploaded]);
+  }, [characterData, clearConflicts, currentSync?.pendingPaths, markCloudUploaded, markSyncError, roleMode, setSyncTransport]);
 
   const resolveConflictWithCloud = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_cloud', { characterId: characterData.id });
@@ -789,14 +955,59 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         void updateCharacter(normalized.id, normalized);
         markCloudDownloaded(normalized.id).catch(() => {});
         clearConflicts(normalized.id).catch(() => {});
+        setSyncTransport(normalized.id, 'downloading', 'Conflict resolved using cloud version').catch(() => {});
+        setSyncFeedback('Conflict resolved using cloud version');
       })
       .catch(() => {});
-  }, [characterData.id, clearConflicts, markCloudDownloaded, updateCharacter]);
+  }, [characterData.id, clearConflicts, markCloudDownloaded, setSyncTransport, updateCharacter]);
 
   const resolveConflictManual = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_later', { characterId: characterData.id });
     clearConflicts(characterData.id).catch(() => {});
+    setSyncFeedback('Conflict cleared. Manual review deferred.');
   }, [characterData.id, clearConflicts]);
+
+  const syncNow = useCallback(() => {
+    if (!fbAuth.currentUser) {
+      setSyncFeedback('Sign in required for cloud sync');
+      return;
+    }
+    if (!isOnline) {
+      setSyncFeedback('Offline queue active. Reconnect and retry Sync now.');
+      return;
+    }
+
+    const pendingPaths = Array.from(new Set(currentSync?.pendingPaths || []));
+    const fallbackPath = TAB_DEFAULT_PATH[selectedTab];
+    const historyPaths = pendingPaths.length ? pendingPaths : [fallbackPath];
+    const actorRole: CharacterActorRole = mapRoleToHistoryActor(roleMode);
+
+    setSyncFeedback('Syncing now...');
+    setSyncTransport(characterData.id, 'syncing', 'Syncing now...').catch(() => {});
+    upsertCharacterSheetFromLocal(characterData, { historyPaths, actorRole })
+      .then(() => {
+        setIsCloudDoc(true);
+        setCloudAvailability(characterData.id, true).catch(() => {});
+        markCloudUploaded(characterData.id).catch(() => {});
+        setSyncTransport(characterData.id, 'synced', 'Synced').catch(() => {});
+        setSyncFeedback('Synced');
+      })
+      .catch((error) => {
+        const message = String(error?.message || 'Sync failed');
+        markSyncError(characterData.id, message).catch(() => {});
+        setSyncFeedback(`Sync failed: ${message}`);
+      });
+  }, [
+    characterData,
+    currentSync?.pendingPaths,
+    isOnline,
+    markCloudUploaded,
+    markSyncError,
+    roleMode,
+    selectedTab,
+    setCloudAvailability,
+    setSyncTransport,
+  ]);
 
   const quickActions = [
     { id: 'minus-hp', label: '-HP', icon: 'heart-minus-outline', onPress: () => applyHpDelta(-1) },
@@ -823,21 +1034,17 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [characterData.skills]);
 
   const syncBadges = useMemo(() => {
-    const badges: Array<{ label: string; kind: 'neutral' | 'success' | 'warning' | 'accent' }> = [];
+    const badges: Array<{ label: string; kind: 'neutral' | 'success' | 'warning' | 'accent' | 'danger' }> = [];
     badges.push({
       label: syncStatusLabel,
-      kind:
-        syncStatusLabel === 'Synced'
-          ? 'success'
-          : syncStatusLabel === 'Pending' || syncStatusLabel === 'Conflict'
-            ? 'warning'
-            : 'neutral',
+      kind: getSyncStatusKind(syncStatusLabel),
     });
-    if (!isCloudDoc) badges.push({ label: 'Local', kind: 'neutral' });
-    if (isSharedSheet) badges.push({ label: 'Shared with DM', kind: 'accent' });
+    if (shareStatusLabel) badges.push({ label: shareStatusLabel, kind: 'accent' });
+    if (!isCloudDoc) badges.push({ label: 'Local only', kind: 'neutral' });
     if (hasHomebrew) badges.push({ label: 'Homebrew', kind: 'warning' });
+    if (!isOnline) badges.push({ label: 'Offline', kind: 'warning' });
     return badges;
-  }, [hasHomebrew, isCloudDoc, isSharedSheet, syncStatusLabel]);
+  }, [hasHomebrew, isCloudDoc, isOnline, shareStatusLabel, syncStatusLabel]);
 
   const hasConflictForPrefixes = useCallback((prefixes: string[]) => {
     if (!conflictPaths.length) return false;
@@ -866,18 +1073,28 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       .slice(0, 8);
   }, [isSharedSheet, selectedTab, sharedHistory]);
 
+  const latestTabChange = tabHistory[0];
+  const latestTabChangeLabel = latestTabChange
+    ? getChangeSourceLabel({
+        uid: latestTabChange.uid,
+        actorRole: latestTabChange.actorRole,
+        currentUid: fbAuth.currentUser?.uid,
+      })
+    : null;
+
   const openTab = useCallback((tab: CharacterTab) => setSelectedTab(tab), []);
   const toggleSecondary = useCallback((tab: CharacterTab) => {
     setCollapsedSecondary((prev) => ({ ...prev, [tab]: !prev[tab] }));
   }, []);
 
-  const renderBadge = useCallback((label: string, kind: 'neutral' | 'success' | 'warning' | 'accent') => {
+  const renderBadge = useCallback((label: string, kind: 'neutral' | 'success' | 'warning' | 'accent' | 'danger') => {
     const badgeStyle: Array<any> = [styles.badge];
     const badgeText: Array<any> = [styles.badgeText];
 
     if (kind === 'success') badgeStyle.push(styles.badgeSuccess);
     if (kind === 'warning') badgeStyle.push(styles.badgeWarning);
     if (kind === 'accent') badgeStyle.push(styles.badgeAccent);
+    if (kind === 'danger') badgeStyle.push(styles.badgeDanger);
     if (kind !== 'neutral') badgeText.push(styles.badgeTextInverted);
 
     return (
@@ -885,7 +1102,15 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         <Text style={badgeText}>{label}</Text>
       </View>
     );
-  }, [styles.badge, styles.badgeAccent, styles.badgeSuccess, styles.badgeText, styles.badgeTextInverted, styles.badgeWarning]);
+  }, [
+    styles.badge,
+    styles.badgeAccent,
+    styles.badgeDanger,
+    styles.badgeSuccess,
+    styles.badgeText,
+    styles.badgeTextInverted,
+    styles.badgeWarning,
+  ]);
 
   const renderOverviewPlay = () => (
     <>
@@ -1876,12 +2101,27 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <View style={styles.headerInfo}>
               <View style={styles.nameRow}>
                 <Text style={styles.characterName}>{characterData.name || 'Без імені'}</Text>
-                <CharacterMenu character={characterData} onChange={(next) => setCharacterData(ensureCharacterDefaults(next))} />
+                <CharacterMenu
+                  character={characterData}
+                  isCloudDoc={isCloudDoc}
+                  isSharedSheet={isSharedSheet}
+                  onSyncNow={syncNow}
+                  onChange={(next) => setCharacterData(ensureCharacterDefaults(next))}
+                />
               </View>
               <Text style={styles.characterMeta}>
                 {characterData.class || 'Class'} / {characterData.race || 'Race'} / Lv.{characterData.level}
               </Text>
               <View style={styles.badgesRow}>{syncBadges.map((badge) => renderBadge(badge.label, badge.kind))}</View>
+              <View style={styles.syncIndicatorRow}>
+                <Text style={styles.syncIndicatorText}>Sync status: {syncStatusLabel}</Text>
+                <Text style={styles.syncIndicatorText}>Feedback: {syncFeedback}</Text>
+                {currentSync?.transportMessage ? <Text style={styles.syncIndicatorText}>{currentSync.transportMessage}</Text> : null}
+              </View>
+              <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: '#999' }}>
+                <MaterialCommunityIcons name='sync' size={16} color={colors.text} />
+                <Text style={styles.syncNowButtonText}>Sync now</Text>
+              </Pressable>
             </View>
           </View>
 
@@ -1920,7 +2160,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               <Text style={styles.conflictTitle}>Sync conflict detected</Text>
             </View>
             <Text style={styles.conflictText}>
-              Локальні та хмарні зміни перетнулися. Обери стратегію злиття.
+              Локальні та cloud зміни перетнулися в одній секції. Обери стратегію злиття.
             </Text>
             {currentSync.conflictPaths.length > 0 && (
               <Text style={styles.conflictPaths}>Paths: {currentSync.conflictPaths.join(', ')}</Text>
@@ -2036,12 +2276,19 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <View style={styles.sectionTitleRow}>
               <Text style={styles.sectionTitle}>Shared Change History ({selectedTab})</Text>
             </View>
+            {latestTabChangeLabel && (
+              <Text style={styles.blockTextMuted}>
+                Last change marker: {latestTabChangeLabel} at {new Date(latestTabChange.atMs).toLocaleString()}
+              </Text>
+            )}
             {!tabHistory.length && <Text style={styles.blockTextMuted}>Для цієї вкладки ще немає shared історії.</Text>}
             {tabHistory.map((entry) => (
               <View key={entry.id} style={styles.historyRow}>
-                <Text style={styles.historyAuthor}>{entry.uid === fbAuth.currentUser?.uid ? 'You' : `User ${entry.uid.slice(0, 6)}`}</Text>
+                <Text style={styles.historyAuthor}>
+                  {getChangeSourceLabel({ uid: entry.uid, actorRole: entry.actorRole, currentUid: fbAuth.currentUser?.uid })}
+                </Text>
                 <Text style={styles.historyMeta}>{new Date(entry.atMs).toLocaleString()}</Text>
-                <Text style={styles.historyPaths}>{entry.paths.join(', ') || '—'}</Text>
+                <Text style={styles.historyPaths}>{entry.summary || entry.paths.join(', ') || '—'}</Text>
               </View>
             ))}
           </View>

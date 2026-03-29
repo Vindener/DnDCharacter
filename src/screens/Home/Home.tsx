@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -20,6 +21,7 @@ import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 import { isHomebrewCharacter } from '@/shared/helpers/homebrew';
+import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 
 type CharacterPreview = {
   id: string;
@@ -30,6 +32,8 @@ type CharacterPreview = {
   hpCurrent: number;
   hpMax: number;
   ac: number;
+  syncStatus: string;
+  shareStatus: string | null;
   statuses: string[];
   source: 'local' | 'mine' | 'shared';
   payload: CharacterDto;
@@ -77,8 +81,10 @@ const Home = () => {
   const [myCloud, setMyCloud] = useState<Record<string, unknown>[]>([]);
   const [sharedCloud, setSharedCloud] = useState<Record<string, unknown>[]>([]);
   const [cloudPulseAt, setCloudPulseAt] = useState<number | null>(null);
+  const netInfo = useNetInfo();
 
   const isSignedIn = Boolean(fbAuth.currentUser);
+  const isOnline = isNetworkOnline(netInfo.isConnected);
 
   useEffect(() => {
     loadCharacters();
@@ -130,18 +136,27 @@ const Home = () => {
   const previewList = useMemo(() => {
     const byId = new Map<string, CharacterPreview>();
 
-    const pushPreview = (payload: CharacterDto, source: 'local' | 'mine' | 'shared') => {
+    const pushPreview = (
+      payload: CharacterDto,
+      source: 'local' | 'mine' | 'shared',
+      rawDoc?: Record<string, unknown> | null,
+    ) => {
       const existing = byId.get(payload.id);
-      const statuses = new Set(existing?.statuses || []);
       const syncState = syncByCharacter[payload.id];
+      const syncStatus = getSyncDisplayStatus(syncState, netInfo.isConnected);
+      const shareStatus = getShareDisplayStatus({
+        isSharedSheet:
+          source === 'shared' ||
+          Boolean(rawDoc && Array.isArray(rawDoc.editors) && rawDoc.editors.length > 0) ||
+          Boolean(existing?.shareStatus),
+        source,
+        isOwnedByMe: source !== 'shared',
+        role: roleMode,
+      });
 
-      if (source === 'local' && !syncState) statuses.add('Local');
-      if (source === 'mine' && !syncState) statuses.add('Synced');
-      if (source === 'shared') statuses.add('Shared');
-      if (syncState?.status === 'local-only') statuses.add('Local');
-      if (syncState?.status === 'in-sync') statuses.add('Synced');
-      if (syncState?.status === 'pending-upload' || syncState?.status === 'pending-download') statuses.add('Pending');
-      if (syncState?.status === 'conflict') statuses.add('Conflict');
+      const statuses = new Set<string>();
+      statuses.add(syncStatus);
+      if (shareStatus) statuses.add(shareStatus);
       if (isHomebrewCharacter(payload)) statuses.add('Homebrew');
 
       const next: CharacterPreview = {
@@ -153,6 +168,8 @@ const Home = () => {
         hpCurrent: payload.hp?.current || 0,
         hpMax: payload.hp?.max || 0,
         ac: payload.ac || 0,
+        syncStatus,
+        shareStatus,
         statuses: Array.from(statuses),
         source,
         payload,
@@ -162,8 +179,8 @@ const Home = () => {
     };
 
     characters.forEach((localChar) => pushPreview(localChar, 'local'));
-    myCloud.forEach((doc) => pushPreview(mapRemoteToLocalDto(doc), 'mine'));
-    sharedCloud.forEach((doc) => pushPreview(mapRemoteToLocalDto(doc), 'shared'));
+    myCloud.forEach((doc) => pushPreview(mapRemoteToLocalDto(doc), 'mine', doc));
+    sharedCloud.forEach((doc) => pushPreview(mapRemoteToLocalDto(doc), 'shared', doc));
 
     const text = search.trim().toLowerCase();
     return Array.from(byId.values())
@@ -176,17 +193,18 @@ const Home = () => {
         );
       })
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [characters, myCloud, sharedCloud, search, syncByCharacter]);
+  }, [characters, myCloud, netInfo.isConnected, roleMode, sharedCloud, search, syncByCharacter]);
 
   const pendingSyncCount = useMemo(() => {
-    return Object.values(syncByCharacter).filter(
-      (entry) => entry.status === 'pending-upload' || entry.status === 'pending-download',
-    ).length;
-  }, [syncByCharacter]);
+    return Object.values(syncByCharacter).filter((entry) => {
+      const status = getSyncDisplayStatus(entry, netInfo.isConnected);
+      return status === 'Pending sync' || status === 'Offline changes pending';
+    }).length;
+  }, [netInfo.isConnected, syncByCharacter]);
 
   const conflictCount = useMemo(() => {
-    return Object.values(syncByCharacter).filter((entry) => entry.status === 'conflict').length;
-  }, [syncByCharacter]);
+    return Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length;
+  }, [netInfo.isConnected, syncByCharacter]);
 
   const openCharacter = async (character: CharacterPreview) => {
     const existsLocal = characters.find((c) => c.id === character.id);
@@ -324,6 +342,12 @@ const Home = () => {
       </View>
 
       <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Local vs Cloud vs Shared</Text>
+        <Text style={styles.sectionHint}>Local: працює без інтернету. Cloud: синк між пристроями. Shared: live-collaboration з DM/Player.</Text>
+        <Text style={styles.lineText}>Чому краще за PDF/notes app: live sync, source markers, conflict-safe merge.</Text>
+      </View>
+
+      <View style={styles.card}>
         <Text style={styles.sectionTitle}>Resume</Text>
         <Text style={styles.sectionHint}>Останні листи та поточний session-start.</Text>
         <TouchableOpacity style={styles.resumeButton} onPress={continueSession} activeOpacity={0.85}>
@@ -394,10 +418,12 @@ const Home = () => {
               <Text style={styles.characterStat}>HP {item.hpCurrent}/{item.hpMax}</Text>
               <Text style={styles.characterStat}>AC {item.ac}</Text>
             </View>
+            <Text style={styles.characterMeta}>Sync status: {item.syncStatus}</Text>
+            {!!item.shareStatus && <Text style={styles.characterMeta}>Share status: {item.shareStatus}</Text>}
             <View style={styles.badgeRow}>
               {item.statuses.map((status) => (
-                <View key={`${item.id}-${status}`} style={[styles.badge, status === 'Conflict' ? styles.conflictBadge : null]}>
-                  <Text style={[styles.badgeText, status === 'Conflict' ? styles.conflictBadgeText : null]}>{status}</Text>
+                <View key={`${item.id}-${status}`} style={[styles.badge, status === 'Conflict detected' ? styles.conflictBadge : null]}>
+                  <Text style={[styles.badgeText, status === 'Conflict detected' ? styles.conflictBadgeText : null]}>{status}</Text>
                 </View>
               ))}
             </View>
@@ -473,7 +499,10 @@ const Home = () => {
         <Text style={styles.sectionTitle}>Sync Status</Text>
         <View style={styles.syncRow}>
           <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>{isSignedIn ? 'Cloud OK' : 'Offline mode (local-only)'}</Text>
+            <Text style={styles.syncPillText}>{isOnline ? 'Network: Online' : 'Network: Offline'}</Text>
+          </View>
+          <View style={styles.syncPill}>
+            <Text style={styles.syncPillText}>{isSignedIn ? 'Cloud auth: Connected' : 'Cloud auth: Sign in required'}</Text>
           </View>
           <View style={styles.syncPill}>
             <Text style={styles.syncPillText}>Sync pending: {pendingSyncCount}</Text>

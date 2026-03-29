@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
@@ -11,6 +12,8 @@ import useSyncStore from '@/context/Sync-store';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
+import useAppRoleStore from '@/context/AppRole-store';
+import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
 
@@ -28,6 +31,8 @@ const DM: React.FC = () => {
 
   const localCharacters = useCharacterStore((s) => s.characters);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const roleMode = useAppRoleStore((s) => s.role);
+  const netInfo = useNetInfo();
 
   const [authVersion, setAuthVersion] = useState(0);
   const [isSigningIn, setIsSigningIn] = useState(false);
@@ -35,6 +40,7 @@ const DM: React.FC = () => {
   const [sharedSheets, setSharedSheets] = useState<Record<string, unknown>[]>([]);
 
   const isSignedIn = useMemo(() => Boolean(fbAuth.currentUser), [authVersion]);
+  const isOnline = isNetworkOnline(netInfo.isConnected);
 
   useEffect(() => {
     if (!fbAuth.currentUser) {
@@ -57,15 +63,16 @@ const DM: React.FC = () => {
   }, [authVersion]);
 
   const pendingSyncCount = useMemo(
-    () =>
-      Object.values(syncByCharacter).filter(
-        (entry) => entry.status === 'pending-upload' || entry.status === 'pending-download',
-      ).length,
-    [syncByCharacter],
+    () => Object.values(syncByCharacter).filter((entry) => {
+      const status = getSyncDisplayStatus(entry, netInfo.isConnected);
+      return status === 'Pending sync' || status === 'Offline changes pending';
+    }).length,
+    [netInfo.isConnected, syncByCharacter],
   );
   const conflictCount = useMemo(
-    () => Object.values(syncByCharacter).filter((entry) => entry.status === 'conflict').length,
-    [syncByCharacter],
+    () =>
+      Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length,
+    [netInfo.isConnected, syncByCharacter],
   );
 
   const sharedTotal = sharedSheets.length;
@@ -114,6 +121,12 @@ const DM: React.FC = () => {
           </View>
           <View style={styles.statChip}>
             <Text style={styles.statChipText}>Shared with me: {sharedTotal}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Network: {isOnline ? 'Online' : 'Offline'}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>Role context: {roleMode}</Text>
           </View>
           <View style={styles.statChip}>
             <Text style={styles.statChipText}>Pending sync: {pendingSyncCount}</Text>
@@ -206,11 +219,20 @@ const DM: React.FC = () => {
             const id = String(item.id || '');
             const updatedAt = toMillis(item.updatedAt as TimestampLike);
             const timeLabel = updatedAt ? new Date(updatedAt).toLocaleString() : '—';
+            const syncState = syncByCharacter[id];
+            const syncStatus = getSyncDisplayStatus(syncState, netInfo.isConnected);
+            const shareStatus = getShareDisplayStatus({
+              isSharedSheet: Array.isArray(item.editors) ? item.editors.length > 0 : false,
+              role: roleMode,
+              source: sharedSheets.some((sheet) => String(sheet.id || '') === id) ? 'shared' : 'mine',
+            });
             return (
               <View key={`recent-${id}`} style={styles.updateRow}>
                 <Text style={styles.updateTitle}>{String(item.name || 'Character')}</Text>
                 <Text style={styles.updateMeta}>Sheet ID: {id || '—'}</Text>
                 <Text style={styles.updateMeta}>Updated: {timeLabel}</Text>
+                <Text style={styles.updateMeta}>Sync status: {syncStatus}</Text>
+                {!!shareStatus && <Text style={styles.updateMeta}>Share status: {shareStatus}</Text>}
               </View>
             );
           })

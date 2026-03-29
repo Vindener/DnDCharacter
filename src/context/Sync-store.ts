@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { CharacterSyncMap, CharacterSyncState } from '@/types/Sync';
+import type { CharacterSyncMap, CharacterSyncState, SyncTransportState } from '@/types/Sync';
 import { resolveSyncStatus } from '@/shared/helpers/sync/conflictPolicy';
 
 interface SyncStore {
@@ -14,6 +14,8 @@ interface SyncStore {
   markCloudDownloaded: (characterId: string) => Promise<void>;
   markConflict: (characterId: string, conflictPaths: string[]) => Promise<void>;
   clearConflicts: (characterId: string) => Promise<void>;
+  setSyncTransport: (characterId: string, state: SyncTransportState, message?: string | null) => Promise<void>;
+  markSyncError: (characterId: string, message: string) => Promise<void>;
   removeCharacterSync: (characterId: string) => Promise<void>;
 }
 
@@ -30,6 +32,27 @@ function buildDefaultState(characterId: string, hasCloud = false): CharacterSync
     pendingPaths: [],
     conflictPaths: [],
     status: hasCloud ? 'in-sync' : 'local-only',
+    transportState: 'idle',
+    transportMessage: null,
+    lastSyncError: null,
+    lastSyncAttemptAt: null,
+  };
+}
+
+function normalizeState(characterId: string, raw: Partial<CharacterSyncState> | null | undefined): CharacterSyncState {
+  const fallback = buildDefaultState(characterId, Boolean(raw?.hasCloud));
+  if (!raw) return fallback;
+
+  return {
+    ...fallback,
+    ...raw,
+    characterId,
+    pendingPaths: Array.isArray(raw.pendingPaths) ? raw.pendingPaths : [],
+    conflictPaths: Array.isArray(raw.conflictPaths) ? raw.conflictPaths : [],
+    transportState: raw.transportState || 'idle',
+    transportMessage: raw.transportMessage ?? null,
+    lastSyncError: raw.lastSyncError ?? null,
+    lastSyncAttemptAt: raw.lastSyncAttemptAt ?? null,
   };
 }
 
@@ -47,7 +70,11 @@ const useSyncStore = create<SyncStore>((set, get) => ({
       const raw = await AsyncStorage.getItem(STORAGE_KEY);
       const parsed = JSON.parse(raw || '{}');
       if (parsed && typeof parsed === 'object') {
-        set({ syncByCharacter: parsed as CharacterSyncMap });
+        const normalized: CharacterSyncMap = {};
+        Object.entries(parsed as Record<string, Partial<CharacterSyncState>>).forEach(([id, entry]) => {
+          normalized[id] = normalizeState(id, entry);
+        });
+        set({ syncByCharacter: normalized });
       }
     } catch {}
   },
@@ -55,15 +82,16 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   ensureCharacterSync: async (characterId, hasCloud = false) => {
     const current = get().syncByCharacter[characterId];
     if (current) {
+      const normalizedCurrent = normalizeState(characterId, current);
       const next: CharacterSyncState = {
-        ...current,
+        ...normalizedCurrent,
         hasCloud,
         status: resolveSyncStatus({
           hasCloud,
-          hasPendingPaths: current.pendingPaths.length > 0,
-          hasConflictPaths: current.conflictPaths.length > 0,
-          localRevision: current.localRevision,
-          cloudRevision: current.cloudRevision,
+          hasPendingPaths: normalizedCurrent.pendingPaths.length > 0,
+          hasConflictPaths: normalizedCurrent.conflictPaths.length > 0,
+          localRevision: normalizedCurrent.localRevision,
+          cloudRevision: normalizedCurrent.cloudRevision,
         }),
       };
       const merged = { ...get().syncByCharacter, [characterId]: next };
@@ -79,7 +107,7 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   },
 
   setCloudAvailability: async (characterId, hasCloud) => {
-    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, hasCloud);
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, hasCloud));
     const next: CharacterSyncState = {
       ...existing,
       hasCloud,
@@ -97,13 +125,17 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   },
 
   markLocalDraft: async (characterId, changedPath) => {
-    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, false);
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, false));
     const nextPending = Array.from(new Set([...existing.pendingPaths, changedPath]));
     const next: CharacterSyncState = {
       ...existing,
       localRevision: existing.localRevision + 1,
       lastLocalChangeAt: Date.now(),
+      lastSyncAttemptAt: Date.now(),
       pendingPaths: nextPending,
+      transportState: 'idle',
+      transportMessage: null,
+      lastSyncError: null,
       status: resolveSyncStatus({
         hasCloud: existing.hasCloud,
         hasPendingPaths: nextPending.length > 0,
@@ -118,7 +150,7 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   },
 
   markLocalDraftPaths: async (characterId, changedPaths) => {
-    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, false);
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, false));
     const cleanPaths = (changedPaths || []).map((path) => String(path || '').trim()).filter(Boolean);
     if (!cleanPaths.length) return;
 
@@ -127,7 +159,11 @@ const useSyncStore = create<SyncStore>((set, get) => ({
       ...existing,
       localRevision: existing.localRevision + 1,
       lastLocalChangeAt: Date.now(),
+      lastSyncAttemptAt: Date.now(),
       pendingPaths: nextPending,
+      transportState: 'idle',
+      transportMessage: null,
+      lastSyncError: null,
       status: resolveSyncStatus({
         hasCloud: existing.hasCloud,
         hasPendingPaths: nextPending.length > 0,
@@ -142,7 +178,7 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   },
 
   markCloudUploaded: async (characterId) => {
-    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, true);
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, true));
     const nextRevision = Math.max(existing.localRevision, existing.cloudRevision);
     const next: CharacterSyncState = {
       ...existing,
@@ -151,7 +187,11 @@ const useSyncStore = create<SyncStore>((set, get) => ({
       pendingPaths: [],
       conflictPaths: [],
       lastSyncAt: Date.now(),
+      lastSyncAttemptAt: Date.now(),
       status: 'in-sync',
+      transportState: 'synced',
+      transportMessage: 'Auto-synced just now',
+      lastSyncError: null,
     };
     const merged = { ...get().syncByCharacter, [characterId]: next };
     set({ syncByCharacter: merged });
@@ -159,7 +199,7 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   },
 
   markCloudDownloaded: async (characterId) => {
-    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, true);
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, true));
     const nextRevision = Math.max(existing.localRevision, existing.cloudRevision + 1);
     const next: CharacterSyncState = {
       ...existing,
@@ -169,7 +209,11 @@ const useSyncStore = create<SyncStore>((set, get) => ({
       pendingPaths: [],
       conflictPaths: [],
       lastSyncAt: Date.now(),
+      lastSyncAttemptAt: Date.now(),
       status: 'in-sync',
+      transportState: 'downloading',
+      transportMessage: 'Downloaded latest cloud revision',
+      lastSyncError: null,
     };
     const merged = { ...get().syncByCharacter, [characterId]: next };
     set({ syncByCharacter: merged });
@@ -177,13 +221,17 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   },
 
   markConflict: async (characterId, conflictPaths) => {
-    const existing = get().syncByCharacter[characterId] || buildDefaultState(characterId, true);
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, true));
     const mergedConflicts = Array.from(new Set([...existing.conflictPaths, ...conflictPaths]));
     const next: CharacterSyncState = {
       ...existing,
       hasCloud: true,
       conflictPaths: mergedConflicts,
       status: 'conflict',
+      transportState: 'error',
+      transportMessage: 'Conflict requires review',
+      lastSyncError: 'Conflict detected',
+      lastSyncAttemptAt: Date.now(),
     };
     const merged = { ...get().syncByCharacter, [characterId]: next };
     set({ syncByCharacter: merged });
@@ -193,16 +241,47 @@ const useSyncStore = create<SyncStore>((set, get) => ({
   clearConflicts: async (characterId) => {
     const existing = get().syncByCharacter[characterId];
     if (!existing) return;
+    const normalizedExisting = normalizeState(characterId, existing);
     const next: CharacterSyncState = {
-      ...existing,
+      ...normalizedExisting,
       conflictPaths: [],
       status: resolveSyncStatus({
-        hasCloud: existing.hasCloud,
-        hasPendingPaths: existing.pendingPaths.length > 0,
+        hasCloud: normalizedExisting.hasCloud,
+        hasPendingPaths: normalizedExisting.pendingPaths.length > 0,
         hasConflictPaths: false,
-        localRevision: existing.localRevision,
-        cloudRevision: existing.cloudRevision,
+        localRevision: normalizedExisting.localRevision,
+        cloudRevision: normalizedExisting.cloudRevision,
       }),
+      transportState: 'idle',
+      transportMessage: null,
+      lastSyncError: null,
+    };
+    const merged = { ...get().syncByCharacter, [characterId]: next };
+    set({ syncByCharacter: merged });
+    await persistSyncMap(merged);
+  },
+
+  setSyncTransport: async (characterId, state, message = null) => {
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, false));
+    const next: CharacterSyncState = {
+      ...existing,
+      transportState: state,
+      transportMessage: message,
+      lastSyncAttemptAt: Date.now(),
+    };
+    const merged = { ...get().syncByCharacter, [characterId]: next };
+    set({ syncByCharacter: merged });
+    await persistSyncMap(merged);
+  },
+
+  markSyncError: async (characterId, message) => {
+    const existing = normalizeState(characterId, get().syncByCharacter[characterId] || buildDefaultState(characterId, false));
+    const next: CharacterSyncState = {
+      ...existing,
+      transportState: 'error',
+      transportMessage: message || 'Sync failed',
+      lastSyncError: message || 'Sync failed',
+      lastSyncAttemptAt: Date.now(),
     };
     const merged = { ...get().syncByCharacter, [characterId]: next };
     set({ syncByCharacter: merged });
