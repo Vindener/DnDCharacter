@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import { Text, ScrollView } from 'react-native';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';

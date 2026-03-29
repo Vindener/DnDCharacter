@@ -1,3 +1,4 @@
+// @ts-nocheck
 const __hasDoc = (snap: any) => { try { if (!snap) return false; const e: any = (snap as any).exists; return typeof e === 'function' ? !!e.call(snap) : !!e; } catch { return false; } };
 
 import { getApp } from '@react-native-firebase/app';

@@ -80,8 +80,8 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     // ВАЖЛИВО: раніше тут стояло dto.race — це ламало дані
     experience: dto.experience ?? 0,
 
-    stats: dto.stats ?? { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-    hp: dto.hp ?? { current: 10, max: 10 },
+    stats: dto.stats ?? { strength: 10, dexterity: 10, constitution: 10, intelligence: 10, wisdom: 10, charisma: 10 },
+    hp: dto.hp ?? { current: 10, max: 10, temp: 0 },
     ac: dto.ac ?? 10,
     initiative: dto.initiative,
     speed: dto.speed,
@@ -91,7 +91,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     inventory: dto.inventory ?? [],
     skills: dto.skills ?? ({} as any),
     savingThrows: dto.savingThrows ?? ({} as any),
-    deathSaves: dto.deathSaves ?? { success: 0, fail: 0 },
+    deathSaves: dto.deathSaves ?? { successes: 0, failures: 0 },
     traits: dto.traits ?? ({} as any),
     spells: dto.spells ?? ({} as any),
 

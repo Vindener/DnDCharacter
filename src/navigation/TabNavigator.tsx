@@ -40,14 +40,14 @@ export default function TabNavigator(): JSX.Element {
   }, [navigation]);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator id={undefined}>
       <Stack.Screen name='Home' component={Home} options={{ header: () => <Header /> }} />
       <Stack.Screen name='DiceRoller' component={DiceRoller} options={{ title: 'Кидок кубика' }} />
       <Stack.Screen name='Dice' component={Dice} options={{ title: 'Кидок' }} />
       <Stack.Screen name='Character' component={Character} options={{ title: 'Лист персонажа' }} />
       <Stack.Screen name='CreateCharacter' component={CreateCharacter} options={{ title: 'Створити персонажа' }} />
       <Stack.Screen name='Spellbook' component={Spellbook} options={{ title: 'Spellbook' }} />
-      <Stack.Screen name='Settings' component={Settings} options={{ title: 'Settings', header: () => <Header />, unmountOnBlur: true }} />
+      <Stack.Screen name='Settings' component={Settings} options={{ title: 'Settings', header: () => <Header /> }} />
     </Stack.Navigator>
   );
 }

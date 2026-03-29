@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/stack';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type { BestiaryStackParamList } from '@/navigation/BestiaryNavigator';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
@@ -16,7 +16,7 @@ interface MonsterCardProps {
 }
 
 export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterCardProps) => {
-  const navigation = useNavigation<NativeStackNavigationProp<BestiaryStackParamList, 'List'>>();
+  const navigation = useNavigation<StackNavigationProp<BestiaryStackParamList, 'List'>>();
   const removeMonster = useMonsterStore((s) => s.removeMonster);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);

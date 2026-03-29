@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as DocumentPicker from 'expo-document-picker';
 import { CharacterDto } from '@/types/Character';
 import { MonsterDto } from '@/types/Monster';

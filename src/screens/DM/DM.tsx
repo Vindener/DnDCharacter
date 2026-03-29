@@ -80,15 +80,15 @@ const DM: React.FC = () => {
   }, [mySheets, sharedSheets]);
 
   const openRootTab = (routeName: string) => {
-    const parent = navigation.getParent();
+    const parent = navigation.getParent() as any;
     if (!parent) return;
-    parent.navigate(routeName as never);
+    parent.navigate(routeName);
   };
 
   const openHeroesNested = (screen: 'Spellbook' | 'Home') => {
-    const parent = navigation.getParent();
+    const parent = navigation.getParent() as any;
     if (!parent) return;
-    parent.navigate('Heroes' as never, { screen } as never);
+    parent.navigate('Heroes', { screen });
   };
 
   const onLogin = async () => {

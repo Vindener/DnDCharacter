@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import type { NavigatorScreenParams } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import EmptyPlaceholder from '@/shared/components/EmptyPlaceholder';
 import TabNavigator from '@/navigation/TabNavigator';
-import { CharacterDto } from '@/types/Character';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useThemeStore from '@/context/Theme-store';
 import Header from '@/modules/Header/Header';
 import Initiative from '@/screens/Initiative/Initiative';
@@ -13,13 +13,11 @@ import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
 
 export type AppStackParamList = {
-  Library: undefined;
-  Heroes: { onCreateCharacter: (newChar: CharacterDto) => void };
-  Guide: { character: CharacterDto; onUpdateCharacter: (updated: CharacterDto) => void };
-  Settings: undefined;
+  Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
   Initiative: undefined;
   DM: undefined;
   Bestiary: undefined;
+  Support: undefined;
 };
 
 const Stack = createBottomTabNavigator<AppStackParamList>();
@@ -57,6 +55,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
+        id={undefined}
         screenOptions={({ route }) => ({
           header: () => <Header />,
           tabBarActiveTintColor: '#ff2d55',

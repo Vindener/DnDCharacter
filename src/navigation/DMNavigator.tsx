@@ -32,7 +32,7 @@ export default function DMNavigator() {
   }, [navigation]);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator id={undefined}>
       <Stack.Screen name='DMHome' component={DM} options={{ header: () => <Header /> }} />
       <Stack.Screen name='LootGenerator' component={LootGenerator} options={{ title: 'Генератор добичі' }} />
       <Stack.Screen name='EncounterCalculator' component={EncounterCalculator} options={{ title: 'Калькулятор бою' }} />

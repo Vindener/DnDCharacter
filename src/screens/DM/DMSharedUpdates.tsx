@@ -145,9 +145,9 @@ const DMSharedUpdates = () => {
   const openInHeroes = async (doc: Record<string, unknown>) => {
     const character = await ensureLocalCharacter(doc);
     setCurrentCharacterId(character.id);
-    const root = navigation.getParent();
+    const root = navigation.getParent() as any;
     if (!root) return;
-    root.navigate('Heroes' as never, { screen: 'Character', params: { character } } as never);
+    root.navigate('Heroes', { screen: 'Character', params: { character } });
   };
 
   return (

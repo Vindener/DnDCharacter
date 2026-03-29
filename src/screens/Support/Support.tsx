@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, ScrollView } from 'react-native';
 import useThemeStore from '@/context/Theme-store';

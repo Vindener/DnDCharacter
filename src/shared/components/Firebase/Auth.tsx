@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import auth from '@react-native-firebase/auth';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
+import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress, logout } from '@/shared/services/auth/index';
-import Constants from 'expo-constants';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/Settings/styles';
 
 export default function Auth() {
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   useEffect(() => {
     if (user) {
       ensureUserIndexOnLogin().catch(() => {});
@@ -22,8 +21,8 @@ export default function Auth() {
   configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
 
   // Handle user state changes
-  function handleAuthStateChanged(user) {
-    setUser(user);
+  function handleAuthStateChanged(nextUser: FirebaseAuthTypes.User | null) {
+    setUser(nextUser);
     if (initializing) setInitializing(false);
   }
 
@@ -76,7 +75,3 @@ export default function Auth() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-
-});
