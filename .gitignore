@@ -37,7 +37,9 @@ yarn-error.*
 
 .idea
 
-# google-services.json
+# для білду треба закоментувати
+google-services.json
+android/app/google-services.json
 # .env
 
 # /android

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, Button } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity, Button, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
@@ -17,6 +17,43 @@ interface Props {
   route: MonsterRouteProp;
 }
 
+const COLLAPSE_LIMIT = 180;
+
+const previewText = (value?: string): string => {
+  if (!value) return '—';
+  if (value.length <= COLLAPSE_LIMIT) return value;
+  return `${value.slice(0, COLLAPSE_LIMIT).trim()}…`;
+};
+
+const CollapsibleTextBlock = ({
+  title,
+  value,
+  expanded,
+  onToggle,
+  style,
+}: {
+  title: string;
+  value?: string;
+  expanded: boolean;
+  onToggle: () => void;
+  style: ReturnType<typeof getStyles>;
+}) => {
+  const text = expanded ? value || '—' : previewText(value);
+  const canToggle = (value || '').length > COLLAPSE_LIMIT;
+
+  return (
+    <View style={style.collapsibleBlock}>
+      <Text style={style.label}>{title}</Text>
+      <Text style={style.value}>{text}</Text>
+      {canToggle && (
+        <Pressable style={style.collapseButton} onPress={onToggle} android_ripple={{ color: '#999' }}>
+          <Text style={style.collapseButtonText}>{expanded ? 'Згорнути' : 'Показати більше'}</Text>
+        </Pressable>
+      )}
+    </View>
+  );
+};
+
 export default function Monster({ route }: Props) {
   const { monster } = route.params;
   const updateMonster = useMonsterStore((s) => s.updateMonster);
@@ -25,6 +62,8 @@ export default function Monster({ route }: Props) {
 
   const [data, setData] = useState<MonsterDto>(monster);
   const [editing, setEditing] = useState(false);
+  const [actionsExpanded, setActionsExpanded] = useState(false);
+  const [notesExpanded, setNotesExpanded] = useState(false);
 
   const pickPhoto = async () => {
     try {
@@ -58,11 +97,11 @@ export default function Monster({ route }: Props) {
       unstyled
       style={styles.statInput}
       value={String(data.stats[key])}
-      onChangeText={(t) => {
-        const val = parseInt(t, 10);
+      onChangeText={(text) => {
+        const val = Number.parseInt(text, 10);
         setData((prev) => ({
           ...prev,
-          stats: { ...prev.stats, [key]: isNaN(val) ? 0 : val },
+          stats: { ...prev.stats, [key]: Number.isNaN(val) ? 0 : val },
         }));
       }}
       keyboardType='numeric'
@@ -79,10 +118,10 @@ export default function Monster({ route }: Props) {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
       {data.photoUri ? <Image source={{ uri: data.photoUri }} style={styles.photo} /> : <View style={styles.placeholderPhoto} />}
       {editing && (
-        <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+        <View style={styles.photoButtonsRow}>
           <Button title='Завантажити фото' onPress={pickPhoto} />
           {data.photoUri && (
             <>
@@ -92,13 +131,10 @@ export default function Monster({ route }: Props) {
           )}
         </View>
       )}
+
       <View style={styles.headerRow}>
         {editing ? (
-          <TextInput
-            style={[styles.name, styles.nameInput]}
-            value={data.name}
-            onChangeText={(t) => setData((prev) => ({ ...prev, name: t }))}
-          />
+          <TextInput style={[styles.name, styles.nameInput]} value={data.name} onChangeText={(text) => setData((prev) => ({ ...prev, name: text }))} />
         ) : (
           <Text style={styles.name}>{data.name}</Text>
         )}
@@ -107,44 +143,63 @@ export default function Monster({ route }: Props) {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.label}>Тип: {editing ? '' : data.type}</Text>
-      {editing && <TextInput style={styles.input} value={data.type || ''} onChangeText={(t) => setData((p) => ({ ...p, type: t }))} />}
+      <Text style={styles.label}>Тип: {editing ? '' : data.type || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.type || ''} onChangeText={(text) => setData((prev) => ({ ...prev, type: text }))} />}
 
-      <Text style={styles.label}>Розмір: {editing ? '' : data.size}</Text>
-      {editing && <TextInput style={styles.input} value={data.size || ''} onChangeText={(t) => setData((p) => ({ ...p, size: t }))} />}
+      <Text style={styles.label}>Розмір: {editing ? '' : data.size || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.size || ''} onChangeText={(text) => setData((prev) => ({ ...prev, size: text }))} />}
 
-      <Text style={styles.label}>Світогляд: {editing ? '' : data.alignment}</Text>
-      {editing && (
-        <TextInput style={styles.input} value={data.alignment || ''} onChangeText={(t) => setData((p) => ({ ...p, alignment: t }))} />
-      )}
+      <Text style={styles.label}>Світогляд: {editing ? '' : data.alignment || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.alignment || ''} onChangeText={(text) => setData((prev) => ({ ...prev, alignment: text }))} />}
 
-      <Text style={styles.label}>Складність: {editing ? '' : data.challenge}</Text>
-      {editing && (
-        <TextInput style={styles.input} value={data.challenge || ''} onChangeText={(t) => setData((p) => ({ ...p, challenge: t }))} />
-      )}
+      <Text style={styles.label}>Складність (CR): {editing ? '' : data.challenge || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.challenge || ''} onChangeText={(text) => setData((prev) => ({ ...prev, challenge: text }))} />}
 
-      <Text style={styles.label}>Клас доспіхів: {editing ? '' : data.armorClass}</Text>
+      <Text style={styles.label}>Середовище: {editing ? '' : data.environment || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.environment || ''} onChangeText={(text) => setData((prev) => ({ ...prev, environment: text }))} />}
+
+      <Text style={styles.label}>Джерело: {editing ? '' : data.source || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.source || ''} onChangeText={(text) => setData((prev) => ({ ...prev, source: text }))} />}
+
+      <Text style={styles.label}>Теги: {editing ? '' : (data.tags || []).join(', ') || '—'}</Text>
       {editing && (
         <TextInput
           style={styles.input}
-          value={data.armorClass ? String(data.armorClass) : ''}
-          onChangeText={(t) => setData((p) => ({ ...p, armorClass: parseInt(t, 10) || 0 }))}
+          value={(data.tags || []).join(', ')}
+          onChangeText={(text) =>
+            setData((prev) => ({
+              ...prev,
+              tags: text
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter(Boolean),
+            }))
+          }
+        />
+      )}
+
+      <Text style={styles.label}>Клас доспіхів: {editing ? '' : data.armorClass ?? '—'}</Text>
+      {editing && (
+        <TextInput
+          style={styles.input}
+          value={typeof data.armorClass === 'number' ? String(data.armorClass) : ''}
+          onChangeText={(text) => setData((prev) => ({ ...prev, armorClass: Number.parseInt(text, 10) || 0 }))}
           keyboardType='numeric'
         />
       )}
 
-      <Text style={styles.label}>ХП: {editing ? '' : data.hitPoints}</Text>
+      <Text style={styles.label}>ХП: {editing ? '' : data.hitPoints ?? '—'}</Text>
       {editing && (
         <TextInput
           style={styles.input}
-          value={data.hitPoints ? String(data.hitPoints) : ''}
-          onChangeText={(t) => setData((p) => ({ ...p, hitPoints: parseInt(t, 10) || 0 }))}
+          value={typeof data.hitPoints === 'number' ? String(data.hitPoints) : ''}
+          onChangeText={(text) => setData((prev) => ({ ...prev, hitPoints: Number.parseInt(text, 10) || 0 }))}
           keyboardType='numeric'
         />
       )}
 
-      <Text style={styles.label}>Швидкість: {editing ? '' : data.speed}</Text>
-      {editing && <TextInput style={styles.input} value={data.speed || ''} onChangeText={(t) => setData((p) => ({ ...p, speed: t }))} />}
+      <Text style={styles.label}>Швидкість: {editing ? '' : data.speed || '—'}</Text>
+      {editing && <TextInput style={styles.input} value={data.speed || ''} onChangeText={(text) => setData((prev) => ({ ...prev, speed: text }))} />}
 
       <Text style={styles.sectionTitle}>Характеристики</Text>
       <View style={styles.statRow}>
@@ -158,25 +213,33 @@ export default function Monster({ route }: Props) {
         <Stat label='ХАР' stat='charisma' />
       </View>
 
-      <Text style={styles.label}>Дії:</Text>
       {editing ? (
-        <TextInput
-          style={styles.textArea}
-          multiline
-          value={data.actions || ''}
-          onChangeText={(t) => setData((p) => ({ ...p, actions: t }))}
-        />
+        <>
+          <Text style={styles.label}>Дії</Text>
+          <TextInput style={styles.textArea} multiline value={data.actions || ''} onChangeText={(text) => setData((prev) => ({ ...prev, actions: text }))} />
+          <Text style={styles.label}>Нотатки</Text>
+          <TextInput style={styles.textArea} multiline value={data.notes || ''} onChangeText={(text) => setData((prev) => ({ ...prev, notes: text }))} />
+        </>
       ) : (
-        <Text style={styles.value}>{data.actions}</Text>
+        <>
+          <CollapsibleTextBlock
+            title='Дії'
+            value={data.actions}
+            expanded={actionsExpanded}
+            onToggle={() => setActionsExpanded((prev) => !prev)}
+            style={styles}
+          />
+          <CollapsibleTextBlock
+            title='Нотатки'
+            value={data.notes}
+            expanded={notesExpanded}
+            onToggle={() => setNotesExpanded((prev) => !prev)}
+            style={styles}
+          />
+        </>
       )}
 
-      <Text style={styles.label}>Нотатки:</Text>
-      {editing ? (
-        <TextInput style={styles.textArea} multiline value={data.notes || ''} onChangeText={(t) => setData((p) => ({ ...p, notes: t }))} />
-      ) : (
-        <Text style={styles.value}>{data.notes}</Text>
-      )}
-      <View style={{ marginTop: 12, marginBottom:20 }}>
+      <View style={{ marginTop: 12 }}>
         <Button title='Експорт JSON' onPress={exportCurrent} />
       </View>
     </ScrollView>

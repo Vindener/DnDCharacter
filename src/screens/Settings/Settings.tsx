@@ -116,7 +116,7 @@ const Settings = () => {
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="Напр., Platinum"
+              placeholder="Напр., Платина"
               placeholderTextColor={colors.text}
               style={{ borderWidth: 1, borderColor: colors.border, backgroundColor: colors.inputBackground, color: colors.text, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 8, marginBottom: 12 }}
             />
@@ -125,7 +125,7 @@ const Settings = () => {
             <TextInput
               value={code}
               onChangeText={setCode}
-              placeholder="Напр., PLAT"
+              placeholder="Напр., ПЛТ"
               placeholderTextColor={colors.text}
               autoCapitalize="characters"
               style={{ borderWidth: 1, borderColor: colors.border, backgroundColor: colors.inputBackground, color: colors.text, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 8, marginBottom: 16 }}

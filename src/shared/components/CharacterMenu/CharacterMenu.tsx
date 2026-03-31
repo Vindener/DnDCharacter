@@ -1,26 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import { uuid } from 'expo-modules-core';
 import { CharacterDto } from '@/types/Character';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
+import useSyncStore from '@/context/Sync-store';
 import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
-import { upsertCharacterSheetFromLocal, saveCharacterSheetAsNew } from '@/services/characterSheets';
+import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 
 interface CharacterMenuProps {
   character: CharacterDto;
   onChange?: (character: CharacterDto) => void;
+  isCloudDoc?: boolean;
+  isSharedSheet?: boolean;
+  onSyncNow?: () => void;
 }
 
-const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) => {
+const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, onSyncNow }) => {
+  const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
+  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
+  const setCurrentCharacterId = useCharacterStore((s: any) => s.setCurrentCharacterId);
+  const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
+  const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
+  const removeCharacterSync = useSyncStore((s) => s.removeCharacterSync);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -36,6 +51,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
   const [tempAc, setTempAc] = useState(character.ac ?? 0);
   const [isInitModalVisible, setIsInitModalVisible] = useState(false);
   const [tempInit, setTempInit] = useState(character.initiative ?? 0);
+  const isCharacterInCloud = isCloudDoc || Boolean(characterData.id && syncByCharacter[characterData.id]?.hasCloud);
 
   useEffect(() => {
     if (character.id) {
@@ -93,52 +109,84 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
 
   const onSaveToCloud = async () => {
     try {
-      const res = await upsertCharacterSheetFromLocal(character as any);
+      const sourceCharacter = { ...characterData };
+      if (!sourceCharacter.id) throw new Error('Character has no id');
 
-      if (res.created && res.id !== character.id && typeof onChange === 'function') {
-        onChange({ ...character, id: res.id } as any);
+      const res = await upsertCharacterSheetFromLocal(sourceCharacter as any);
+      let syncedCharacter = sourceCharacter;
+      let targetSheetId = sourceCharacter.id;
+
+      if (res?.id && res.id !== sourceCharacter.id) {
+        syncedCharacter = { ...sourceCharacter, id: res.id };
+        await updateCharacter(sourceCharacter.id, syncedCharacter);
+        await removeCharacterSync(sourceCharacter.id);
+        await ensureCharacterSync(syncedCharacter.id, true);
+        targetSheetId = syncedCharacter.id;
+      } else {
+        await ensureCharacterSync(targetSheetId, true);
       }
 
-      // setIsCloudDoc(true);
-      console.log('[save] cloud ok', res.id);
+      await setCloudAvailability(targetSheetId, true);
+      await markCloudUploaded(targetSheetId);
+      setCurrentCharacterId(targetSheetId);
+      setCharacterData(syncedCharacter);
+      onChange?.(syncedCharacter);
 
-      // 🔹 показуємо алерт
+      const successMessage = res?.created
+        ? 'Персонажа збережено у хмарі.'
+        : 'Зміни персонажа успішно оновлені у хмарі.';
+
       Alert.alert(
         'Успіх',
-        res.created
-          ? 'Персонажа збережено у хмарі. Перезайдіть будь ласка на персонажа, щоб побачити актуальні зміни.'
-          : 'Зміни персонажа успішно оновлені у хмарі! Дякую Вам!',
+        successMessage,
         [
           {
             text: 'Ок',
             onPress: () => {
               closeMenu();
-              if (typeof onChange === 'function') {
-                onChange({ ...character, id: res.id } as any);
+              if (targetSheetId !== character.id) {
+                navigation.navigate('Character', { character: syncedCharacter });
               }
-              // navigation.navigate("Character", { id: res.id });
             },
           },
         ],
       );
     } catch (e: any) {
       console.warn('[save] failed', e?.code || e?.message || e);
-      console.warn("[save] failed", e?.code || e?.message || e);
-
-    if (e?.message === "Not signed in") {
-      Alert.alert(
-        "Помилка авторизації",
-        "Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару."
-      );
-    } else {
-      Alert.alert(
-        "Помилка",
-        "Не вдалося зберегти у хмару. Спробуйте ще раз."
-      );
+      if (e?.message === 'Not signed in') {
+        Alert.alert('Помилка авторизації', 'Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару.');
+      } else {
+        Alert.alert('Помилка', 'Не вдалося зберегти у хмару. Спробуйте ще раз.');
+      }
     }
-  }
   };
   const closeMenu = () => setMenuVisible(false);
+
+  const createDetachedCopy = async (mode: 'local-copy' | 'duplicate-shared') => {
+    const suffix = mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат';
+    const copy: CharacterDto = {
+      ...characterData,
+      id: String(uuid.v4()),
+      name: `${characterData.name || 'Персонаж'} (${suffix})`,
+    };
+
+    await addCharacter(copy);
+    await ensureCharacterSync(copy.id, false);
+    setCurrentCharacterId(copy.id);
+
+    Alert.alert('Готово', mode === 'local-copy' ? 'Створено локальну копію без живої синхронізації.' : 'Створено незалежний дублікат зі спільного листа.');
+    navigation.navigate('Character', { character: copy });
+  };
+
+  const openSharedLiveCopy = () => {
+    if (!isCharacterInCloud) {
+      Alert.alert('Спільна жива копія', 'Для живого режиму спочатку створіть хмарну версію.');
+      return;
+    }
+
+    onSyncNow?.();
+    Alert.alert('Спільна жива копія', 'Поточний лист відкрито в живому режимі з хмарною синхронізацією.');
+  };
 
   const pickPhoto = async () => {
     try {
@@ -307,8 +355,46 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
         <MenuDivider color={colors.border} />
 
         <MenuItem textStyle={styles.menuItemText} onPress={onSaveToCloud}>
-          Зберегти в хмарі
+          {isCharacterInCloud ? 'Оновити в хмарі' : 'Зберегти в хмарі'}
         </MenuItem>
+        <MenuItem
+          textStyle={styles.menuItemText}
+          onPress={() => {
+            closeMenu();
+            onSyncNow?.();
+          }}
+        >
+          Синхронізувати зараз
+        </MenuItem>
+        <MenuItem
+          textStyle={styles.menuItemText}
+          onPress={() => {
+            closeMenu();
+            openSharedLiveCopy();
+          }}
+        >
+          Спільна жива копія
+        </MenuItem>
+        <MenuItem
+          textStyle={styles.menuItemText}
+          onPress={() => {
+            closeMenu();
+            void createDetachedCopy('local-copy');
+          }}
+        >
+          Створити локальну копію
+        </MenuItem>
+        {isSharedSheet && (
+          <MenuItem
+            textStyle={styles.menuItemText}
+            onPress={() => {
+              closeMenu();
+              void createDetachedCopy('duplicate-shared');
+            }}
+          >
+            Дублювати зі спільного
+          </MenuItem>
+        )}
 
         <MenuItem
           textStyle={styles.menuItemText}
@@ -381,7 +467,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange }) =>
                   color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
                 }}
               >
-                {row.level} lvl
+                {row.level} рів.
               </Text>
               <Text
                 style={{

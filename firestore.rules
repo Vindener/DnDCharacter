@@ -55,5 +55,59 @@ service cloud.firestore {
              && request.resource.data.editors == resource.data.editors );
       allow delete: if isOwner();
     }
+
+    match /dmCampaigns/{campaignId} {
+      function isCampaignOwner() {
+        return isSignedIn() && (
+          resource.data.ownerUid == uid() ||
+          (resource.data.owners != null && uid() in resource.data.owners)
+        );
+      }
+      function isCampaignEditor() {
+        return isSignedIn() && (
+          isCampaignOwner() ||
+          (resource.data.editors != null && uid() in resource.data.editors)
+        );
+      }
+
+      allow get, list: if isCampaignEditor();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerUid == uid()
+        && request.resource.data.owners != null
+        && uid() in request.resource.data.owners;
+      allow update: if isCampaignOwner()
+        || ( isCampaignEditor()
+             && request.resource.data.ownerUid == resource.data.ownerUid
+             && request.resource.data.owners == resource.data.owners
+             && request.resource.data.editors == resource.data.editors );
+      allow delete: if isCampaignOwner();
+    }
+
+    match /dmCampaignNotes/{noteId} {
+      function isNoteOwner() {
+        return isSignedIn() && (
+          resource.data.ownerUid == uid() ||
+          (resource.data.owners != null && uid() in resource.data.owners)
+        );
+      }
+      function isNoteEditor() {
+        return isSignedIn() && (
+          isNoteOwner() ||
+          (resource.data.editors != null && uid() in resource.data.editors)
+        );
+      }
+
+      allow get, list: if isNoteEditor();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerUid == uid()
+        && request.resource.data.owners != null
+        && uid() in request.resource.data.owners;
+      allow update: if isNoteOwner()
+        || ( isNoteEditor()
+             && request.resource.data.ownerUid == resource.data.ownerUid
+             && request.resource.data.owners == resource.data.owners
+             && request.resource.data.editors == resource.data.editors );
+      allow delete: if isNoteOwner();
+    }
   }
 }

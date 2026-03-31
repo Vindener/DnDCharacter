@@ -1,8 +1,20 @@
 
-import { db, fbAuth, now, hasDoc, arrayUnion } from './firebase';
+import { db, fbAuth, now, hasDoc } from './firebase';
 import { ensureConnection } from './connections';
 import { findUserByEmail } from './users';
 import type { CharacterDto } from '@/types/Character';
+
+export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
+export type CharacterActorRole = 'DM' | 'Player';
+export type CharacterChangeHistoryEntry = {
+  id: string;
+  uid: string;
+  actorRole?: CharacterActorRole;
+  tab: CharacterTabKey;
+  paths: string[];
+  summary?: string;
+  atMs: number;
+};
 
 function uid() {
   const u = fbAuth.currentUser;
@@ -43,9 +55,25 @@ export type CharacterSheet = {
   alliesAndOrganizations?: string;
   backstory?: string;
   campaign?: string;
+  campaignId?: string;
 
   coins?: CharacterDto['coins'];
   customCoins?: CharacterDto['customCoins'];
+  sessionMode?: CharacterDto['sessionMode'];
+  conditions?: CharacterDto['conditions'];
+  characterTemplateId?: CharacterDto['characterTemplateId'];
+  customFields?: CharacterDto['customFields'];
+  customTrackers?: CharacterDto['customTrackers'];
+  customSections?: CharacterDto['customSections'];
+  customResources?: CharacterDto['customResources'];
+  customNotesGroups?: CharacterDto['customNotesGroups'];
+  homebrewEntries?: CharacterDto['homebrewEntries'];
+  customResetRules?: CharacterDto['customResetRules'];
+  customFeatureBlocks?: CharacterDto['customFeatureBlocks'];
+  customSpellLists?: CharacterDto['customSpellLists'];
+  notesBlocks?: CharacterDto['notesBlocks'];
+  combatTemplates?: CharacterDto['combatTemplates'];
+  changeHistory?: CharacterChangeHistoryEntry[];
 
   photoUri?: string;
 
@@ -58,6 +86,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
   return {
     ownerUid: u,
     owners: [u],
+    editors: [],
 
     name: dto.name ?? '',
     class: dto.class ?? '',
@@ -69,8 +98,8 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     // ВАЖЛИВО: раніше тут стояло dto.race — це ламало дані
     experience: dto.experience ?? 0,
 
-    stats: dto.stats ?? { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-    hp: dto.hp ?? { current: 10, max: 10 },
+    stats: dto.stats ?? { strength: 10, dexterity: 10, constitution: 10, intelligence: 10, wisdom: 10, charisma: 10 },
+    hp: dto.hp ?? { current: 10, max: 10, temp: 0 },
     ac: dto.ac ?? 10,
     initiative: dto.initiative,
     speed: dto.speed,
@@ -80,7 +109,7 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     inventory: dto.inventory ?? [],
     skills: dto.skills ?? ({} as any),
     savingThrows: dto.savingThrows ?? ({} as any),
-    deathSaves: dto.deathSaves ?? { success: 0, fail: 0 },
+    deathSaves: dto.deathSaves ?? { successes: 0, failures: 0 },
     traits: dto.traits ?? ({} as any),
     spells: dto.spells ?? ({} as any),
 
@@ -88,9 +117,24 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     alliesAndOrganizations: dto.alliesAndOrganizations,
     backstory: dto.backstory,
     campaign: dto.campaign,
+    campaignId: dto.campaignId,
 
     coins: dto.coins ?? { gold: 0, silver: 0, copper: 0 },
     customCoins: dto.customCoins, // якщо порожньо — просто не відправляємо undefined
+    sessionMode: dto.sessionMode ?? false,
+    conditions: dto.conditions ?? [],
+    characterTemplateId: dto.characterTemplateId ?? 'standard-5e',
+    customFields: dto.customFields ?? [],
+    customTrackers: dto.customTrackers,
+    customSections: dto.customSections ?? [],
+    customResources: dto.customResources ?? [],
+    customNotesGroups: dto.customNotesGroups ?? [],
+    homebrewEntries: dto.homebrewEntries ?? [],
+    customResetRules: dto.customResetRules ?? [],
+    customFeatureBlocks: dto.customFeatureBlocks ?? [],
+    customSpellLists: dto.customSpellLists ?? [],
+    notesBlocks: dto.notesBlocks,
+    combatTemplates: dto.combatTemplates ?? { actions: [], bonusActions: [], reactions: [] },
 
     photoUri: dto.photoUri,
 
@@ -99,7 +143,69 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
   };
 }
 
-export async function upsertCharacterSheetFromLocal(dto: CharacterDto) {
+function mapPathToTab(path: string): CharacterTabKey {
+  if (path.startsWith('overview.')) return 'Overview';
+  if (path.startsWith('combat.')) return 'Combat';
+  if (path.startsWith('magic.')) return 'Magic';
+  if (path.startsWith('inventory.')) return 'Inventory';
+  if (path.startsWith('notes.')) return 'Notes';
+  if (path.startsWith('homebrew.')) return 'Homebrew';
+  return 'Overview';
+}
+
+function summarizePaths(paths: string[]): string {
+  const clean = (paths || []).map((path) => String(path || '').trim()).filter(Boolean);
+  if (!clean.length) return 'No path details';
+  if (clean.length <= 2) return clean.join(', ');
+  return `${clean.slice(0, 2).join(', ')} +${clean.length - 2}`;
+}
+
+function buildHistoryEntries(
+  uidValue: string,
+  paths: string[],
+  atMs: number,
+  actorRole?: CharacterActorRole,
+): CharacterChangeHistoryEntry[] {
+  const byTab = new Map<CharacterTabKey, string[]>();
+  for (const path of paths) {
+    const trimmed = String(path || '').trim();
+    if (!trimmed) continue;
+    const tab = mapPathToTab(trimmed);
+    const existing = byTab.get(tab) || [];
+    if (!existing.includes(trimmed)) existing.push(trimmed);
+    byTab.set(tab, existing);
+  }
+
+  const out: CharacterChangeHistoryEntry[] = [];
+  byTab.forEach((tabPaths, tab) => {
+    out.push({
+      id: `${uidValue}-${tab}-${atMs}`,
+      uid: uidValue,
+      actorRole,
+      tab,
+      paths: tabPaths,
+      summary: summarizePaths(tabPaths),
+      atMs,
+    });
+  });
+
+  return out;
+}
+
+function mergeBoundedHistory(existing: unknown, additions: CharacterChangeHistoryEntry[], maxItems = 50): CharacterChangeHistoryEntry[] {
+  const base = Array.isArray(existing) ? (existing as CharacterChangeHistoryEntry[]) : [];
+  const merged = [...base, ...additions]
+    .filter((item) => item && typeof item.uid === 'string' && typeof item.tab === 'string')
+    .sort((a, b) => (a.atMs || 0) - (b.atMs || 0));
+
+  if (merged.length <= maxItems) return merged;
+  return merged.slice(merged.length - maxItems);
+}
+
+export async function upsertCharacterSheetFromLocal(
+  dto: CharacterDto,
+  options?: { historyPaths?: string[]; actorRole?: CharacterActorRole },
+) {
   const me = fbAuth.currentUser?.uid;
   if (!me) throw new Error('Not signed in');
 
@@ -115,6 +221,12 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterDto) {
     } catch {}
 
     const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
+    const historyPaths = options?.historyPaths || [];
+    if (historyPaths.length) {
+      const atMs = Date.now();
+      const additions = buildHistoryEntries(me, historyPaths, atMs, options?.actorRole);
+      payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additions, 50);
+    }
 
     if (existingMeta) {
       payload.owners = existingMeta.owners || [me];
@@ -277,8 +389,6 @@ function __cleanUndefined(obj: any): any {
 }
 
 
-import type { CharacterDto } from '@/types/Character';
-
 function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: any) {
   const baseMeta = existing ? {
     ownerUid: existing.ownerUid || ownerUid,
@@ -326,8 +436,23 @@ function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: 
     subclass: (dto as any).subclass,
     subrace: (dto as any).subrace,
     campaign: (dto as any).campaign,
+    campaignId: (dto as any).campaignId,
     alliesAndOrganizations: (dto as any).alliesAndOrganizations,
     photoUri: (dto as any).photoUri,
+    sessionMode: (dto as any).sessionMode,
+    conditions: (dto as any).conditions,
+    characterTemplateId: (dto as any).characterTemplateId,
+    customFields: (dto as any).customFields,
+    customTrackers: (dto as any).customTrackers,
+    customSections: (dto as any).customSections,
+    customResources: (dto as any).customResources,
+    customNotesGroups: (dto as any).customNotesGroups,
+    homebrewEntries: (dto as any).homebrewEntries,
+    customResetRules: (dto as any).customResetRules,
+    customFeatureBlocks: (dto as any).customFeatureBlocks,
+    customSpellLists: (dto as any).customSpellLists,
+    notesBlocks: (dto as any).notesBlocks,
+    combatTemplates: (dto as any).combatTemplates,
   };
 
   return __cleanUndefined(full);

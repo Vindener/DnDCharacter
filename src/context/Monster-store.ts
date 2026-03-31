@@ -5,32 +5,44 @@ import { uuid } from 'expo-modules-core';
 
 interface MonsterStore {
   monsters: MonsterDto[];
+  pinnedMonsterIds: string[];
   loadMonsters: () => Promise<void>;
   saveMonsters: (newMonsters: MonsterDto[]) => Promise<void>;
   addMonster: (monster: MonsterDto) => Promise<void>;
   addMonsters: (monsters: MonsterDto[]) => Promise<void>;
   updateMonster: (id: string, monster: MonsterDto) => Promise<void>;
   removeMonster: (id: string) => Promise<void>;
+  togglePinnedMonster: (id: string) => Promise<void>;
+  clearPinnedMonsters: () => Promise<void>;
 }
 
 const STORAGE_KEY = 'monsters';
+const PINS_STORAGE_KEY = 'monster-pins';
 
 const useMonsterStore = create<MonsterStore>((set, get) => ({
   monsters: [],
+  pinnedMonsterIds: [],
 
   loadMonsters: async () => {
     try {
       const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
       const parsed: MonsterDto[] = JSON.parse(jsonValue || '[]');
       const filtered = Array.isArray(parsed) ? parsed.filter(Boolean) : [];
-      set({ monsters: filtered });
+      const rawPins = await AsyncStorage.getItem(PINS_STORAGE_KEY);
+      const parsedPins = JSON.parse(rawPins || '[]');
+      const validPins = Array.isArray(parsedPins) ? (parsedPins as string[]) : [];
+      const nextPins = validPins.filter((id) => filtered.some((monster) => monster.id === id));
+      set({ monsters: filtered, pinnedMonsterIds: nextPins });
     } catch {}
   },
 
   saveMonsters: async (newMonsters: MonsterDto[]) => {
     try {
+      const existingPins = get().pinnedMonsterIds;
+      const validPins = existingPins.filter((id) => newMonsters.some((monster) => monster.id === id));
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newMonsters));
-      set({ monsters: newMonsters });
+      await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(validPins));
+      set({ monsters: newMonsters, pinnedMonsterIds: validPins });
     } catch {}
   },
 
@@ -61,6 +73,22 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
     const { monsters, saveMonsters } = get();
     const updated = monsters.filter((m) => m.id !== id);
     await saveMonsters(updated);
+  },
+
+  togglePinnedMonster: async (id: string) => {
+    const currentPins = get().pinnedMonsterIds;
+    const nextPins = currentPins.includes(id) ? currentPins.filter((itemId) => itemId !== id) : [...currentPins, id];
+    try {
+      await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(nextPins));
+      set({ pinnedMonsterIds: nextPins });
+    } catch {}
+  },
+
+  clearPinnedMonsters: async () => {
+    try {
+      await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify([]));
+      set({ pinnedMonsterIds: [] });
+    } catch {}
   },
 }));
 

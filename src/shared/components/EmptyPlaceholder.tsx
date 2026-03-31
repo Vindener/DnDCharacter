@@ -23,7 +23,7 @@ StyleSheet.create({
 );
 return (
   <View style={styles.container}>
-    <Text style={styles.text}>Coming soon...</Text>
+    <Text style={styles.text}>Скоро буде...</Text>
   </View>
 );
 };

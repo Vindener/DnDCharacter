@@ -1,0 +1,295 @@
+import { StyleSheet } from 'react-native';
+import type { ThemeColors } from '@/shared/styles/theme';
+
+export const getStyles = (c: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: c.background,
+      paddingHorizontal: 14,
+      paddingTop: 14,
+      gap: 10,
+    },
+    headerRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      gap: 10,
+    },
+    headerMeta: {
+      flex: 1,
+      gap: 4,
+    },
+    headerAction: {
+      borderRadius: 10,
+      backgroundColor: '#1d4ed8',
+      paddingHorizontal: 12,
+      paddingVertical: 9,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 5,
+      marginTop: 2,
+    },
+    headerActionText: {
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: '700',
+    },
+    title: {
+      color: c.text,
+      fontSize: 21,
+      fontWeight: '700',
+    },
+    hint: {
+      color: c.textSecondary,
+      fontSize: 13,
+      lineHeight: 18,
+    },
+    offlineBanner: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: '#1e3a8a',
+      backgroundColor: '#1e40af',
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    offlineBannerText: {
+      color: '#f8fafc',
+      fontSize: 12,
+      lineHeight: 17,
+      flex: 1,
+    },
+    search: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      color: c.text,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+    },
+    filtersBlock: {
+      gap: 6,
+    },
+    chipsRow: {
+      gap: 8,
+      paddingVertical: 2,
+    },
+    chip: {
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      paddingHorizontal: 10,
+      paddingVertical: 7,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+    },
+    chipActive: {
+      backgroundColor: '#2563eb',
+      borderColor: '#2563eb',
+    },
+    chipText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    chipTextActive: {
+      color: '#fff',
+    },
+    characterPickerBlock: {
+      gap: 6,
+    },
+    sectionLabel: {
+      color: c.textSecondary,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    listContent: {
+      paddingBottom: 24,
+      gap: 8,
+    },
+    card: {
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      padding: 10,
+      gap: 8,
+    },
+    cardHeader: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+      gap: 8,
+    },
+    cardHeaderMain: {
+      flex: 1,
+      gap: 2,
+    },
+    favoriteButton: {
+      borderRadius: 14,
+      padding: 4,
+    },
+    spellName: {
+      color: c.text,
+      fontSize: 15,
+      fontWeight: '700',
+    },
+    meta: {
+      color: c.textSecondary,
+      fontSize: 12,
+    },
+    description: {
+      color: c.text,
+      fontSize: 13,
+      lineHeight: 18,
+    },
+    damageBlock: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: 8,
+      paddingVertical: 7,
+      gap: 2,
+    },
+    damageLine: {
+      color: c.text,
+      fontSize: 12,
+      lineHeight: 17,
+    },
+    statusLine: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    statusText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    statusButtonsRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 6,
+    },
+    statusButton: {
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: 8,
+      paddingVertical: 6,
+    },
+    statusButtonActive: {
+      backgroundColor: '#059669',
+      borderColor: '#059669',
+    },
+    statusButtonText: {
+      color: c.text,
+      fontSize: 11,
+      fontWeight: '700',
+    },
+    statusButtonTextActive: {
+      color: '#fff',
+    },
+    metaMuted: {
+      color: c.textSecondary,
+      fontSize: 12,
+    },
+    preparedInfo: {
+      color: c.textSecondary,
+      fontSize: 12,
+      marginTop: 4,
+    },
+    preparedWarning: {
+      color: '#b45309',
+      fontSize: 12,
+      marginTop: 4,
+      fontWeight: '600',
+    },
+    cardActionRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginTop: 2,
+    },
+    cardActionButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: 10,
+      paddingVertical: 7,
+      flex: 1,
+    },
+    cardActionText: {
+      color: c.text,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+    deleteCustomButton: {
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#7f1d1d',
+      backgroundColor: '#7f1d1d',
+      paddingVertical: 7,
+      paddingHorizontal: 12,
+      alignItems: 'center',
+    },
+    deleteCustomButtonText: {
+      color: '#fff',
+      fontSize: 12,
+      fontWeight: '700',
+    },
+    empty: {
+      color: c.textSecondary,
+      fontSize: 13,
+      marginTop: 6,
+      marginBottom: 14,
+    },
+    modalScroll: {
+      flex: 1,
+      minHeight: 0,
+    },
+    modalScrollContent: {
+      paddingBottom: 12,
+      gap: 6,
+    },
+    modalLabel: {
+      color: c.textSecondary,
+      fontSize: 12,
+      marginTop: 4,
+    },
+    modalInput: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      color: c.text,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      fontSize: 14,
+    },
+    modalInputMultiline: {
+      minHeight: 80,
+      textAlignVertical: 'top',
+    },
+    modalInputLarge: {
+      minHeight: 120,
+      textAlignVertical: 'top',
+    },
+    modalHint: {
+      color: c.textSecondary,
+      fontSize: 11,
+      lineHeight: 16,
+    },
+  });
+

@@ -14,7 +14,7 @@ const Stack = createStackNavigator<BestiaryStackParamList>();
 
 export default function BestiaryNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator id={undefined}>
       <Stack.Screen name='List' component={Bestiary} options={{ header: () => <Header /> }} />
       <Stack.Screen name='Monster' component={Monster} options={{ title: 'Монстр' }} />
     </Stack.Navigator>

@@ -57,7 +57,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
       {/*/>*/}
       <View style={styles.info}>
         <Text style={styles.name}>
-          {character.name} {isShared ? '· Shared' : ''}
+          {character.name} {isShared ? '· Спільний' : ''}
         </Text>
         <Text style={styles.meta}>
           Рівень {character.level || 1} <Text style={styles.separator}>|</Text> {character.race || 'Людина'}
@@ -70,4 +70,5 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
+
 

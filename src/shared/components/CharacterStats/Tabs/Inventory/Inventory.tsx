@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { WEAPONS_DB } from '@/shared/const/WeaponsDb';

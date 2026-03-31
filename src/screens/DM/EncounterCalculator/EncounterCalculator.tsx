@@ -101,7 +101,7 @@ const EncounterCalculator: React.FC = () => {
     const mult = getMonsterMultiplier(totalCount, thresholds.partySize);
     const adjustedXP = Math.round(baseXP * mult);
 
-    let difficulty: 'Немає даних' | 'Легко' | 'Середньо' | 'Складно' | 'Смертельно' = 'Немає даних';
+    let difficulty: 'Немає даних' | 'Дуже легко' | 'Легко' | 'Середньо' | 'Складно' | 'Смертельно' = 'Немає даних';
     if (adjustedXP > 0) {
       if (adjustedXP < thresholds.easy) difficulty = 'Дуже легко';
       else if (adjustedXP < thresholds.medium) difficulty = 'Легко';

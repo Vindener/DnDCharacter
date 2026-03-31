@@ -1,4 +1,5 @@
 import { CharacterDto } from '@/types/Character';
+import { normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
 
 const HIT_DICE_MAP: Record<string, number> = {
   barbarian: 12,
@@ -23,7 +24,7 @@ function getHitDiceSides(className: string): number {
 
 
 export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): CharacterDto {
-  return {
+  const base: CharacterDto = {
     id: overrides.id ?? '',
     name: overrides.name ?? '',
     class: overrides.class ?? '',
@@ -36,7 +37,10 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     initiative: overrides.initiative ?? 0,
     speed: overrides.speed ?? 0,
     ac: overrides.ac ?? 0,
+    proficiencyBonus: overrides.proficiencyBonus ?? 2,
+    alignment: overrides.alignment,
     currency: overrides.currency,
+    characterTemplateId: overrides.characterTemplateId ?? 'standard-5e',
     stats: {
       strength: 10,
       dexterity: 10,
@@ -115,6 +119,34 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
     alliesAndOrganizations: overrides.alliesAndOrganizations,
     backstory: overrides.backstory,
     campaign: overrides.campaign,
+    campaignId: overrides.campaignId,
     photoUri: overrides.photoUri,
+    sessionMode: overrides.sessionMode ?? false,
+    conditions: overrides.conditions ?? [],
+    customFields: overrides.customFields ?? [],
+    customTrackers: overrides.customTrackers ?? [],
+    customSections: overrides.customSections ?? [],
+    customResources: overrides.customResources ?? [],
+    customResetRules: overrides.customResetRules ?? [],
+    customFeatureBlocks: overrides.customFeatureBlocks ?? [],
+    customSpellLists: overrides.customSpellLists ?? [],
+    customNotesGroups: overrides.customNotesGroups ?? [],
+    homebrewEntries: overrides.homebrewEntries ?? [],
+    notesBlocks: {
+      session: '',
+      campaign: '',
+      goals: '',
+      relationships: '',
+      quests: '',
+      ...(overrides.notesBlocks || {}),
+    },
+    combatTemplates: {
+      actions: [],
+      bonusActions: [],
+      reactions: [],
+      ...(overrides.combatTemplates || {}),
+    },
   };
+
+  return normalizeHomebrewV3(base);
 }

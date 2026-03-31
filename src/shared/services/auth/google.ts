@@ -12,34 +12,34 @@ export function configureGoogleSignIn(webClientId: string) {
     profileImageSize: 150,
   });
   configured = true;
-  toast.info('Google Sign-In', 'Configured with webClientId');
+  toast.info('Google вхід', 'Налаштовано webClientId');
 }
 
 export async function onGoogleButtonPress() {
   try {
-    toast.info('Google Sign-In', 'Checking Play Services…');
+    toast.info('Google вхід', 'Перевірка Play Services…');
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    toast.info('Google Sign-In', 'Opening Google auth…');
+    toast.info('Google вхід', 'Відкриття Google-авторизації…');
 
     const res = await GoogleSignin.signIn();
 
     // Підтримуємо новий і старий формат результату:
     let idToken = (res as any)?.data?.idToken || (res as any)?.idToken;
     if (!idToken) {
-      toast.error('Google Sign-In', 'No ID token returned');
-      throw new Error('No ID token found');
+      toast.error('Google вхід', 'Не отримано ID-токен');
+      throw new Error('ID-токен не знайдено');
     }
-    toast.info('Google Sign-In', 'ID token received');
+    toast.info('Google вхід', 'ID-токен отримано');
 
     const credential = GoogleAuthProvider.credential(idToken);
 
-    toast.info('Firebase Auth', 'Signing in with credential…');
+    toast.info('Firebase авторизація', 'Вхід за обліковими даними…');
     const r = await auth().signInWithCredential(credential);
-    toast.success('Firebase Auth', 'Signed in successfully');
+    toast.success('Firebase авторизація', 'Успішний вхід');
     return r;
   } catch (err: any) {
     const code = err?.code || err?.message || String(err);
-    toast.error('Auth error', typeof code === 'string' ? code : JSON.stringify(code));
+    toast.error('Помилка авторизації', typeof code === 'string' ? code : JSON.stringify(code));
     throw err;
   }
 }
@@ -47,9 +47,10 @@ export async function onGoogleButtonPress() {
 export async function logout() {
   try {
     await auth().signOut();
-    toast.success('Signed out', 'You have been signed out');
+    toast.success('Вихід виконано', 'Ви вийшли з акаунта');
   } catch (err: any) {
-    toast.error('Sign out failed', err?.message || String(err));
+    toast.error('Не вдалося вийти', err?.message || String(err));
     throw err;
   }
 }
+

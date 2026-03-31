@@ -29,7 +29,7 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, children, isVisible 
             {children}
             {onSubmit && (
               <Pressable onPress={onSubmit} style={styles.submit}>
-                <Text style={styles.submitText}>Submit</Text>
+                <Text style={styles.submitText}>Зберегти</Text>
               </Pressable>
             )}
           </View>

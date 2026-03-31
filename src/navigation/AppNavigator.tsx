@@ -1,25 +1,25 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import type { NavigatorScreenParams } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import EmptyPlaceholder from '@/shared/components/EmptyPlaceholder';
 import TabNavigator from '@/navigation/TabNavigator';
-import { CharacterDto } from '@/types/Character';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useThemeStore from '@/context/Theme-store';
 import Header from '@/modules/Header/Header';
 import Initiative from '@/screens/Initiative/Initiative';
 import DMNavigator from '@/navigation/DMNavigator';
+import type { DMStackParamList } from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
+import type { InitiativeSeed } from '@/types/DM';
 
 export type AppStackParamList = {
-  Library: undefined;
-  Heroes: { onCreateCharacter: (newChar: CharacterDto) => void };
-  Guide: { character: CharacterDto; onUpdateCharacter: (updated: CharacterDto) => void };
-  Settings: undefined;
-  Initiative: undefined;
-  DM: undefined;
+  Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
+  Initiative: { seed?: InitiativeSeed } | undefined;
+  DM: NavigatorScreenParams<DMStackParamList> | undefined;
   Bestiary: undefined;
+  Support: undefined;
 };
 
 const Stack = createBottomTabNavigator<AppStackParamList>();
@@ -39,8 +39,6 @@ export default function AppNavigator() {
         return 'book-outline';
       case 'Heroes':
         return 'person-outline';
-      case 'Guide':
-        return 'flag-outline';
       case 'Initiative':
         return 'bonfire-outline';
       case 'DM':
@@ -57,6 +55,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
+        id={undefined}
         screenOptions={({ route }) => ({
           header: () => <Header />,
           tabBarActiveTintColor: '#ff2d55',

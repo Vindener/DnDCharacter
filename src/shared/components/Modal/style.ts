@@ -41,7 +41,8 @@ StyleSheet.create({
   },
   content: {
     paddingTop: 16,
-    flexGrow: 1,
+    flex: 1,
+    minHeight: 0,
   },
   submit: {
     marginTop: 16,
@@ -55,3 +56,5 @@ StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+

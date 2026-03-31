@@ -38,9 +38,13 @@ const Header = () => {
     }
   };
 
+  const openSettings = () => {
+    (navigation as any).navigate('Heroes', { screen: 'Settings' });
+  };
+
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.navigate('Heroes', { screen: 'Settings' })}>
+      <TouchableOpacity onPress={openSettings}>
         <View style={styles.logoCircle}>
           {providerPhoto ? (
             <Image source={{ uri: providerPhoto }} style={styles.logoAvatar} resizeMode='cover' />

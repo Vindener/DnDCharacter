@@ -5,6 +5,9 @@ export interface MonsterDto {
   type?: string;
   alignment?: string;
   challenge?: string;
+  environment?: string;
+  source?: string;
+  tags?: string[];
   armorClass?: number;
   hitPoints?: number;
   speed?: string;

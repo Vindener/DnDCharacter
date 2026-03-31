@@ -3,6 +3,16 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
+def rootGoogleServices = new File(projectRoot, "google-services.json")
+def appGoogleServices = new File(projectDir, "google-services.json")
+
+if (!appGoogleServices.exists() && rootGoogleServices.exists()) {
+    copy {
+        from(rootGoogleServices)
+        into(projectDir)
+        rename { "google-services.json" }
+    }
+}
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -93,7 +103,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.70.01"
+        versionName "0.83.04"
     }
     signingConfigs {
         debug {

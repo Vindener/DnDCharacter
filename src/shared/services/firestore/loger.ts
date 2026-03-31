@@ -1,3 +1,4 @@
+// @ts-nocheck
 let buffer = [];
 let logPath = 'logs/sharing.log';
 let initialized = false;

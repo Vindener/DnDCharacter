@@ -6,7 +6,13 @@ interface Props extends TextInputProps {
   unstyled?: boolean;
 }
 
-const useStyles = (c: ReturnType<typeof useThemeStore>['colors']) =>
+type ThemeLike = {
+  inputBackground: string;
+  text: string;
+  textSecondary: string;
+};
+
+const useStyles = (c: ThemeLike) =>
 StyleSheet.create({
   input: {
     backgroundColor: c.inputBackground,
@@ -19,7 +25,7 @@ StyleSheet.create({
 });
 
 const TextInput: React.FC<Props> = ({ style, unstyled = false, ...rest }) => {
-  const colors = useThemeStore((s) => s.colors);
+  const colors = useThemeStore((s) => s.colors as ThemeLike);
   const styles = React.useMemo(() => useStyles(colors), [colors]);
   const inputStyle = unstyled ? style : [styles.input, style];
   return <RNTextInput style={inputStyle} placeholderTextColor={colors.textSecondary} {...rest} />;

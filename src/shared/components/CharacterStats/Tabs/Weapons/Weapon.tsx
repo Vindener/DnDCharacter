@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import React, { useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, ScrollView } from 'react-native';
@@ -127,7 +128,7 @@ const Weapons: React.FC = () => {
 
             <View style={{ flexDirection: 'row', gap: 12 }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: '#bbb', marginTop: 8 }}>Урон (XdY)</Text>
+                <Text style={{ color: '#bbb', marginTop: 8 }}>Шкода (XdY)</Text>
                 <TextInput
                   style={{ backgroundColor: '#1c1c1e', color: 'white', borderRadius: 8, padding: 8, marginTop: 4 }}
                   value={w.damage}

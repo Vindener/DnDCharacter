@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Personal Docs API (request-based sharing, no Cloud Functions) — FIXED LOGGING
 const __hasDoc = (snap: any) => { try { if (!snap) return false; const e: any = (snap as any).exists; return typeof e === 'function' ? !!e.call(snap) : !!e; } catch { return false; } };
 

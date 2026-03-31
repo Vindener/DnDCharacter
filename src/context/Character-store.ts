@@ -6,14 +6,18 @@ import { Spells } from '@/types/Spells';
 import { Traits } from '@/types/Traits';
 import { Weapon } from '@/types/Weapon';
 import { uuid } from 'expo-modules-core';
+import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
+import useSyncStore from '@/context/Sync-store';
 
-const MAX_CHARACTERS = 15;
+const MAX_CHARACTERS = 10;
 
 interface CharacterStore {
   characters: CharacterDto[];
   maxCharacters: number;
   currentCharacterId: string | null;
+  lastSessionCharacterId: string | null;
   setCurrentCharacterId: (id: string) => void;
+  setLastSessionCharacterId: (id: string | null) => Promise<void>;
   loadCharacters: () => Promise<void>;
   saveCharacters: (newCharacters: CharacterDto[]) => Promise<void>;
   addCharacter: (character: CharacterDto) => Promise<void>;
@@ -28,26 +32,54 @@ interface CharacterStore {
   updateCharacterAlliesAndOrganizations: (id: string, campaign: string) => void;
   updateCharacterTraits: (id: string, traits: Traits) => void;
   updateCharacterSpells: (id: string, spells: Spells) => void;
-  updateCharacterSkills: (id: string, skills: { [key: string]: number }) => void;
+  updateCharacterSkills: (id: string, skills: CharacterDto['skills']) => void;
   updateCharacterCoins: (id: string, coins: { gold: number; silver: number; copper: number }) => void;
   updateCharacterCustomCoins: (id: string, customCoins: { [id: string]: number }) => void;
   removeCharacter: (id: string) => Promise<void>;
 }
 
 const STORAGE_KEY = 'characters';
+const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
+
+function normalizeCharacter(character: CharacterDto): CharacterDto {
+  const normalized = createEmptyCharacter(character);
+  return {
+    ...normalized,
+    id: character.id || normalized.id || uuid.v4(),
+  };
+}
 
 const useCharacterStore = create<CharacterStore>((set, get) => ({
   characters: [],
   maxCharacters: MAX_CHARACTERS,
   currentCharacterId: null,
+  lastSessionCharacterId: null,
   setCurrentCharacterId: (id) => set({ currentCharacterId: id }),
+  setLastSessionCharacterId: async (id) => {
+    try {
+      if (id) {
+        await AsyncStorage.setItem(LAST_SESSION_CHARACTER_ID_KEY, id);
+      } else {
+        await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+      }
+      set({ lastSessionCharacterId: id || null });
+    } catch {}
+  },
 
   loadCharacters: async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+      const [jsonValue, storedLastSessionId] = await Promise.all([
+        AsyncStorage.getItem(STORAGE_KEY),
+        AsyncStorage.getItem(LAST_SESSION_CHARACTER_ID_KEY),
+      ]);
       const parsed: CharacterDto[] = JSON.parse(jsonValue || '[]');
-      const filtered = Array.isArray(parsed) ? parsed.filter(Boolean) : [];
-      set({ characters: filtered });
+      const filtered = Array.isArray(parsed) ? parsed.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
+      const existingIds = new Set(filtered.map((character) => character.id));
+      const safeLastSessionId = storedLastSessionId && existingIds.has(storedLastSessionId) ? storedLastSessionId : null;
+      set({ characters: filtered, lastSessionCharacterId: safeLastSessionId });
+      if (!safeLastSessionId && storedLastSessionId) {
+        await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+      }
     } catch {}
   },
 
@@ -61,7 +93,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   addCharacter: async (character: CharacterDto) => {
     const { characters, saveCharacters } = get();
     if (characters.length >= MAX_CHARACTERS) return;
-    const characterWithId = { ...character, id: character.id || uuid.v4() };
+    const characterWithId = normalizeCharacter({ ...character, id: character.id || uuid.v4() });
     const updated = [...characters, characterWithId];
     await saveCharacters(updated);
     console.log(updated);
@@ -69,7 +101,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
 
   updateCharacter: async (id: string, updatedCharacter: CharacterDto) => {
     const { characters, saveCharacters } = get();
-    const updated = characters.map((char) => (char.id === id ? updatedCharacter : char));
+    const updated = characters.map((char) => (char.id === id ? normalizeCharacter(updatedCharacter) : char));
     await saveCharacters(updated);
   },
 
@@ -146,7 +178,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     set({ characters: updated });
     saveCharacters(updated);
   },
-  updateCharacterSkills: (id: string, skills: { [key: string]: number }) => {
+  updateCharacterSkills: (id: string, skills: CharacterDto['skills']) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? { ...char, skills } : char));
     set({ characters: updated });
@@ -168,9 +200,13 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     saveCharacters(updated);
   },
   removeCharacter: async (id: string) => {
-    const { characters, saveCharacters } = get();
+    const { characters, saveCharacters, lastSessionCharacterId, setLastSessionCharacterId } = get();
     const updated = characters.filter((char) => char.id !== id);
     await saveCharacters(updated);
+    if (lastSessionCharacterId === id) {
+      await setLastSessionCharacterId(null);
+    }
+    await useSyncStore.getState().removeCharacterSync(id);
   },
 }));
 
