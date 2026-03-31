@@ -3,11 +3,11 @@ import { View, Text } from 'react-native';
 import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 
 interface BackStoryProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
@@ -60,3 +60,4 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
 };
 
 export default BackStory;
+

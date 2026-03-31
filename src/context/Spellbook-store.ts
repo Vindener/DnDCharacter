@@ -33,6 +33,11 @@ const DAMAGE_TYPES: Dnd5DamageType[] = [
   'thunder',
 ];
 
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
 function clampSpellLevel(value: number | undefined): number {
   if (!Number.isFinite(value)) return 1;
   return Math.min(9, Math.max(0, Number(value)));
@@ -48,15 +53,16 @@ function normalizeDamageProfiles(value: unknown): SpellDamageProfile[] {
   if (!Array.isArray(value)) return [];
   return value
     .map((entry, index): SpellDamageProfile | null => {
-      const label = String((entry as any)?.label || '').trim();
-      const formula = String((entry as any)?.formula || '').trim();
+      const cast = asRecord(entry);
+      const label = String(cast?.label || '').trim();
+      const formula = String(cast?.formula || '').trim();
       if (!label || !formula) return null;
-      const condition = String((entry as any)?.condition || '').trim();
+      const condition = String(cast?.condition || '').trim();
       return {
-        id: String((entry as any)?.id || `damage-${index}-${Date.now()}`),
+        id: String(cast?.id || `damage-${index}-${Date.now()}`),
         label,
         formula,
-        damageType: normalizeDamageType((entry as any)?.damageType),
+        damageType: normalizeDamageType(cast?.damageType),
         condition: condition || undefined,
       };
     })
@@ -90,24 +96,25 @@ function mergeStoredWithSeed(stored: SpellbookSpell[], seed: SpellbookSpell[]): 
   return [...stored, ...missingSeed].sort((a, b) => (a.level !== b.level ? a.level - b.level : a.name.localeCompare(b.name, 'uk')));
 }
 
-function normalizeStoredSpell(raw: any, fallbackIndex: number): SpellbookSpell | null {
-  const name = String(raw?.name || '').trim();
+function normalizeStoredSpell(raw: unknown, fallbackIndex: number): SpellbookSpell | null {
+  const cast = asRecord(raw);
+  const name = String(cast?.name || '').trim();
   if (!name) return null;
 
-  const source = raw?.source === 'custom' || raw?.source === 'imported' ? raw.source : 'system';
+  const source = cast?.source === 'custom' || cast?.source === 'imported' ? cast.source : 'system';
   const now = Date.now();
 
   return {
-    id: String(raw?.id || `spell-${fallbackIndex}-${normalizeSpellName(name) || 'unnamed'}`),
+    id: String(cast?.id || `spell-${fallbackIndex}-${normalizeSpellName(name) || 'unnamed'}`),
     name,
-    level: clampSpellLevel(raw?.level),
-    school: String(raw?.school || 'Універсальна').trim() || 'Універсальна',
-    description: String(raw?.description || '').trim(),
-    tags: Array.isArray(raw?.tags) ? raw.tags.map((tag: unknown) => String(tag || '').trim()).filter(Boolean) : [],
-    damageProfiles: normalizeDamageProfiles(raw?.damageProfiles),
+    level: clampSpellLevel(Number(cast?.level)),
+    school: String(cast?.school || 'Універсальна').trim() || 'Універсальна',
+    description: String(cast?.description || '').trim(),
+    tags: Array.isArray(cast?.tags) ? cast.tags.map((tag) => String(tag || '').trim()).filter(Boolean) : [],
+    damageProfiles: normalizeDamageProfiles(cast?.damageProfiles),
     source,
-    createdAt: Number(raw?.createdAt) || now,
-    updatedAt: Number(raw?.updatedAt) || now,
+    createdAt: Number(cast?.createdAt) || now,
+    updatedAt: Number(cast?.updatedAt) || now,
   };
 }
 

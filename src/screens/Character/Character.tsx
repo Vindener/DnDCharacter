@@ -8,7 +8,7 @@ import type {
   CharacterCustomField,
   CharacterCustomNotesGroup,
   CharacterCustomResource,
-  CharacterDto,
+  CharacterViewModel,
   CharacterHomebrewEntry,
   CustomFieldType,
   TrackerResetRule,
@@ -45,7 +45,7 @@ import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 interface CharacterProps {
   route: {
     params: {
-      character: CharacterDto;
+      character: CharacterViewModel;
     };
   };
 }
@@ -84,7 +84,7 @@ const TAB_DEFAULT_PATH: Record<CharacterTab, string> = {
 const TRACKER_RULES: TrackerResetRule[] = ['none', 'short-rest', 'long-rest', 'session'];
 const FIELD_TYPES: CustomFieldType[] = ['text', 'number', 'boolean', 'select'];
 
-const STAT_LABELS: Array<{ key: keyof CharacterDto['stats']; label: string }> = [
+const STAT_LABELS: Array<{ key: keyof CharacterViewModel['stats']; label: string }> = [
   { key: 'strength', label: 'STR' },
   { key: 'dexterity', label: 'DEX' },
   { key: 'constitution', label: 'CON' },
@@ -194,8 +194,8 @@ function getResourceResetValue(resource: CharacterCustomResource): number {
   return 0;
 }
 
-function ensureCharacterDefaults(character: CharacterDto): CharacterDto {
-  const withDefaults: CharacterDto = {
+function ensureCharacterDefaults(character: CharacterViewModel): CharacterViewModel {
+  const withDefaults: CharacterViewModel = {
     ...character,
     hp: {
       max: character.hp?.max ?? 10,
@@ -276,7 +276,7 @@ function getPendingSections(paths: string[]): Set<string> {
   return sections;
 }
 
-function mergeBySections(local: CharacterDto, remote: CharacterDto, pendingPaths: string[]): CharacterDto {
+function mergeBySections(local: CharacterViewModel, remote: CharacterViewModel, pendingPaths: string[]): CharacterViewModel {
   const pendingSections = getPendingSections(pendingPaths);
   const next = { ...local };
 
@@ -369,8 +369,8 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     );
   }
 
-  const [characterData, setCharacterData] = useState<CharacterDto>(ensureCharacterDefaults(baseCharacter));
-  const characterDataRef = useRef<CharacterDto>(ensureCharacterDefaults(baseCharacter));
+  const [characterData, setCharacterData] = useState<CharacterViewModel>(ensureCharacterDefaults(baseCharacter));
+  const characterDataRef = useRef<CharacterViewModel>(ensureCharacterDefaults(baseCharacter));
   useEffect(() => {
     characterDataRef.current = characterData;
   }, [characterData]);
@@ -724,7 +724,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setSyncTransport,
   ]);
 
-  const patchCharacter = useCallback((patcher: (prev: CharacterDto) => CharacterDto, changedPaths?: string[]) => {
+  const patchCharacter = useCallback((patcher: (prev: CharacterViewModel) => CharacterViewModel, changedPaths?: string[]) => {
     setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
     const paths = changedPaths && changedPaths.length ? changedPaths : [TAB_DEFAULT_PATH[selectedTab]];
     markLocalDraftPaths(baseCharacter.id, paths).catch(() => {});
@@ -922,7 +922,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setIsRestModalVisible(false);
   }, [characterData.hitDice, characterData.stats.constitution, patchCharacter, rollResults]);
 
-  const rollWeaponAttack = useCallback((weapon: NonNullable<CharacterDto['weapons']>[number]) => {
+  const rollWeaponAttack = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
     const roll = Math.floor(Math.random() * 20) + 1;
     const bonus = Number.isFinite(Number(weapon.attackBonus)) ? Number(weapon.attackBonus) : 0;
     const total = roll + bonus;
@@ -941,7 +941,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setSpellRollResult(null);
   }, []);
 
-  const rollWeaponDamage = useCallback((weapon: NonNullable<CharacterDto['weapons']>[number]) => {
+  const rollWeaponDamage = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
     const parsed = parseWeaponDamage(weapon.damage || '1d6');
     const rolls = rollDiceValues(parsed.count, parsed.sides);
     const diceTotal = rolls.reduce((sum, value) => sum + value, 0);
@@ -1061,7 +1061,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
   }, [patchCharacter]);
 
   const updateWeaponAt = useCallback(
-    (index: number, patch: Partial<NonNullable<CharacterDto['weapons']>[number]>) => {
+    (index: number, patch: Partial<NonNullable<CharacterViewModel['weapons']>[number]>) => {
       patchCharacter(
         (prev) => {
           const nextWeapons = [...(prev.weapons || [])];
@@ -1288,7 +1288,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     }), ['homebrew.sections']);
   }, [patchCharacter]);
 
-  const updateCustomSection = useCallback((sectionId: string, patch: Partial<NonNullable<CharacterDto['customSections']>[number]>) => {
+  const updateCustomSection = useCallback((sectionId: string, patch: Partial<NonNullable<CharacterViewModel['customSections']>[number]>) => {
     patchCharacter((prev) => ({
       ...prev,
       customSections: (prev.customSections || []).map((section) => {
@@ -3141,3 +3141,4 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
+

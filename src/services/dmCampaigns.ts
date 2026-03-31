@@ -225,7 +225,7 @@ export async function subscribeAccessibleCampaigns(cb: (campaigns: DMCampaign[])
     .onSnapshot(
       (snap) => {
         const list: DMCampaign[] = [];
-        snap?.forEach?.((doc: any) => {
+        snap?.forEach?.((doc) => {
           const mapped = mapCloudCampaign({ id: doc.id, ...(doc.data?.() || doc.data()) });
           if (mapped) list.push(mapped);
         });
@@ -241,7 +241,7 @@ export async function subscribeAccessibleCampaigns(cb: (campaigns: DMCampaign[])
     .onSnapshot(
       (snap) => {
         const list: DMCampaign[] = [];
-        snap?.forEach?.((doc: any) => {
+        snap?.forEach?.((doc) => {
           const mapped = mapCloudCampaign({ id: doc.id, ...(doc.data?.() || doc.data()) });
           if (mapped) list.push(mapped);
         });

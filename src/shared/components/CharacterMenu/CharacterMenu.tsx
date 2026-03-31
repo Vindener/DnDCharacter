@@ -6,7 +6,7 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { uuid } from 'expo-modules-core';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
@@ -19,8 +19,8 @@ import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 
 interface CharacterMenuProps {
-  character: CharacterDto;
-  onChange?: (character: CharacterDto) => void;
+  character: CharacterViewModel;
+  onChange?: (character: CharacterViewModel) => void;
   isCloudDoc?: boolean;
   isSharedSheet?: boolean;
   onSyncNow?: () => void;
@@ -39,7 +39,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [characterData, setCharacterData] = useState<CharacterDto>(character);
+  const [characterData, setCharacterData] = useState<CharacterViewModel>(character);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
   const [newName, setNewName] = useState(character.name);
   const [isExpModalVisible, setIsExpModalVisible] = useState(false);
@@ -164,7 +164,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
   const createDetachedCopy = async (mode: 'local-copy' | 'duplicate-shared') => {
     const suffix = mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат';
-    const copy: CharacterDto = {
+    const copy: CharacterViewModel = {
       ...characterData,
       id: String(uuid.v4()),
       name: `${characterData.name || 'Персонаж'} (${suffix})`,
@@ -496,3 +496,4 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
 
 export default CharacterMenu;
+

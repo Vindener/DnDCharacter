@@ -16,7 +16,7 @@ import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
 import { BACKGROUNDS } from '@/shared/const/Backgrounds';
 import { SUBCLASS_DETAILS } from '@/shared/const/SubclassDetails';
 import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
-import type { CharacterDto, CharacterTemplateId } from '@/types/Character';
+import type { CharacterViewModel, CharacterTemplateId } from '@/types/Character';
 import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { fbAuth } from '@/services/firebase';
@@ -76,8 +76,8 @@ function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
 }
 
-function autoFillSkills(stats: CharacterDto['stats']): CharacterDto['skills'] {
-  const base: CharacterDto['skills'] = {
+function autoFillSkills(stats: CharacterViewModel['stats']): CharacterViewModel['skills'] {
+  const base: CharacterViewModel['skills'] = {
     acrobatics: 0,
     animalHandling: 0,
     arcana: 0,
@@ -1055,3 +1055,4 @@ const CreateCharacter = (): JSX.Element => {
 };
 
 export default CreateCharacter;
+

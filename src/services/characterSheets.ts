@@ -1,11 +1,11 @@
-
 import { db, fbAuth, now, hasDoc } from './firebase';
 import { ensureConnection } from './connections';
 import { findUserByEmail } from './users';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterDto } from '@/domain/types';
 
 export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
 export type CharacterActorRole = 'DM' | 'Player';
+
 export type CharacterChangeHistoryEntry = {
   id: string;
   uid: string;
@@ -16,13 +16,8 @@ export type CharacterChangeHistoryEntry = {
   atMs: number;
 };
 
-function uid() {
-  const u = fbAuth.currentUser;
-  if (!u) throw new Error('Not signed in');
-  return u.uid;
-}
-
 export type CharacterSheet = {
+  id: string;
   ownerUid: string;
   owners: string[];
   editors: string[];
@@ -38,20 +33,28 @@ export type CharacterSheet = {
 
   stats: CharacterDto['stats'];
   hp: CharacterDto['hp'];
+  hitDice: CharacterDto['hitDice'];
   ac: number;
+  armorClassDetails?: CharacterDto['armorClassDetails'];
   initiative?: number;
   speed?: number;
   proficiencyBonus?: number;
+  alignment?: CharacterDto['alignment'];
+  currency?: CharacterDto['currency'];
 
   weapons: CharacterDto['weapons'];
+  tools?: CharacterDto['tools'];
+  proficiencies: CharacterDto['proficiencies'];
   inventory: CharacterDto['inventory'];
   skills: CharacterDto['skills'];
   savingThrows: CharacterDto['savingThrows'];
   deathSaves: CharacterDto['deathSaves'];
   traits: CharacterDto['traits'];
+  featuresAndTraits?: CharacterDto['featuresAndTraits'];
   spells: CharacterDto['spells'];
 
   notes?: string;
+  background?: CharacterDto['background'];
   alliesAndOrganizations?: string;
   backstory?: string;
   campaign?: string;
@@ -77,15 +80,169 @@ export type CharacterSheet = {
 
   photoUri?: string;
 
-  createdAt: any;
-  updatedAt: any;
+  createdAt: unknown;
+  updatedAt: unknown;
 };
 
-function dtoToSheet(dto: CharacterDto): CharacterSheet {
-  const u = uid();
+type CharacterSheetPatch = Partial<CharacterSheet>;
+type CharacterCloudDto = CharacterDto & { acDetails?: string };
+
+const DEFAULT_STATS: CharacterDto['stats'] = {
+  strength: 10,
+  dexterity: 10,
+  constitution: 10,
+  intelligence: 10,
+  wisdom: 10,
+  charisma: 10,
+};
+
+const DEFAULT_HP: CharacterDto['hp'] = {
+  current: 10,
+  max: 10,
+  temp: 0,
+};
+
+const DEFAULT_SKILLS: CharacterDto['skills'] = {
+  acrobatics: 0,
+  animalHandling: 0,
+  arcana: 0,
+  athletics: 0,
+  deception: 0,
+  history: 0,
+  insight: 0,
+  intimidation: 0,
+  investigation: 0,
+  medicine: 0,
+  nature: 0,
+  perception: 0,
+  performance: 0,
+  persuasion: 0,
+  religion: 0,
+  sleightOfHand: 0,
+  stealth: 0,
+  survival: 0,
+};
+
+const DEFAULT_SAVING_THROWS: CharacterDto['savingThrows'] = {
+  strength: false,
+  dexterity: false,
+  constitution: false,
+  intelligence: false,
+  wisdom: false,
+  charisma: false,
+};
+
+const DEFAULT_TRAITS: CharacterDto['traits'] = {
+  personality: '',
+  ideals: '',
+  bonds: '',
+  flaws: '',
+};
+
+const DEFAULT_SPELLS: CharacterDto['spells'] = {
+  spellcastingAbility: '',
+  spellSaveDC: 0,
+  spellAttackBonus: 0,
+  spellSlots: {},
+  knownSpells: [],
+  preparedSpells: [],
+  cantrips: [],
+};
+
+function uid(): string {
+  const user = fbAuth.currentUser;
+  if (!user) throw new Error('Not signed in');
+  return user.uid;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => String(item)).filter(Boolean);
+}
+
+function toSheetSnapshotDoc(id: string, raw: unknown): CharacterSheet {
+  const doc = isRecord(raw) ? raw : {};
   return {
-    ownerUid: u,
-    owners: [u],
+    id,
+    ownerUid: typeof doc.ownerUid === 'string' ? doc.ownerUid : '',
+    owners: toStringArray(doc.owners),
+    editors: toStringArray(doc.editors),
+
+    name: typeof doc.name === 'string' ? doc.name : '',
+    class: typeof doc.class === 'string' ? doc.class : '',
+    subclass: typeof doc.subclass === 'string' ? doc.subclass : undefined,
+    race: typeof doc.race === 'string' ? doc.race : '',
+    subrace: typeof doc.subrace === 'string' ? doc.subrace : undefined,
+
+    level: Number(doc.level) || 1,
+    experience: Number(doc.experience) || 0,
+
+    stats: (doc.stats as CharacterDto['stats']) || DEFAULT_STATS,
+    hp: (doc.hp as CharacterDto['hp']) || DEFAULT_HP,
+    hitDice: typeof doc.hitDice === 'string' ? doc.hitDice : '1d6',
+    ac: Number(doc.ac) || 10,
+    armorClassDetails: typeof doc.armorClassDetails === 'string' ? doc.armorClassDetails : undefined,
+    initiative: typeof doc.initiative === 'number' ? doc.initiative : undefined,
+    speed: typeof doc.speed === 'number' ? doc.speed : undefined,
+    proficiencyBonus: typeof doc.proficiencyBonus === 'number' ? doc.proficiencyBonus : undefined,
+    alignment: typeof doc.alignment === 'string' ? doc.alignment : undefined,
+    currency: typeof doc.currency === 'string' ? doc.currency : undefined,
+
+    weapons: Array.isArray(doc.weapons) ? (doc.weapons as CharacterDto['weapons']) : [],
+    tools: Array.isArray(doc.tools) ? (doc.tools as CharacterDto['tools']) : [],
+    proficiencies: Array.isArray(doc.proficiencies) ? (doc.proficiencies as CharacterDto['proficiencies']) : [],
+    inventory: Array.isArray(doc.inventory) ? (doc.inventory as CharacterDto['inventory']) : [],
+    skills: (doc.skills as CharacterDto['skills']) || DEFAULT_SKILLS,
+    savingThrows: (doc.savingThrows as CharacterDto['savingThrows']) || DEFAULT_SAVING_THROWS,
+    deathSaves: (doc.deathSaves as CharacterDto['deathSaves']) || { successes: 0, failures: 0 },
+    traits: (doc.traits as CharacterDto['traits']) || DEFAULT_TRAITS,
+    featuresAndTraits: Array.isArray(doc.featuresAndTraits) ? (doc.featuresAndTraits as CharacterDto['featuresAndTraits']) : [],
+    spells: (doc.spells as CharacterDto['spells']) || DEFAULT_SPELLS,
+
+    notes: typeof doc.notes === 'string' ? doc.notes : undefined,
+    background: typeof doc.background === 'string' ? doc.background : undefined,
+    alliesAndOrganizations: typeof doc.alliesAndOrganizations === 'string' ? doc.alliesAndOrganizations : undefined,
+    backstory: typeof doc.backstory === 'string' ? doc.backstory : undefined,
+    campaign: typeof doc.campaign === 'string' ? doc.campaign : undefined,
+    campaignId: typeof doc.campaignId === 'string' ? doc.campaignId : undefined,
+
+    coins: (doc.coins as CharacterDto['coins']) || undefined,
+    customCoins: (doc.customCoins as CharacterDto['customCoins']) || undefined,
+    sessionMode: typeof doc.sessionMode === 'boolean' ? doc.sessionMode : undefined,
+    conditions: Array.isArray(doc.conditions) ? (doc.conditions as CharacterDto['conditions']) : undefined,
+    characterTemplateId: doc.characterTemplateId as CharacterDto['characterTemplateId'],
+    customFields: Array.isArray(doc.customFields) ? (doc.customFields as CharacterDto['customFields']) : undefined,
+    customTrackers: Array.isArray(doc.customTrackers) ? (doc.customTrackers as CharacterDto['customTrackers']) : undefined,
+    customSections: Array.isArray(doc.customSections) ? (doc.customSections as CharacterDto['customSections']) : undefined,
+    customResources: Array.isArray(doc.customResources) ? (doc.customResources as CharacterDto['customResources']) : undefined,
+    customNotesGroups: Array.isArray(doc.customNotesGroups) ? (doc.customNotesGroups as CharacterDto['customNotesGroups']) : undefined,
+    homebrewEntries: Array.isArray(doc.homebrewEntries) ? (doc.homebrewEntries as CharacterDto['homebrewEntries']) : undefined,
+    customResetRules: Array.isArray(doc.customResetRules) ? (doc.customResetRules as CharacterDto['customResetRules']) : undefined,
+    customFeatureBlocks: Array.isArray(doc.customFeatureBlocks) ? (doc.customFeatureBlocks as CharacterDto['customFeatureBlocks']) : undefined,
+    customSpellLists: Array.isArray(doc.customSpellLists) ? (doc.customSpellLists as CharacterDto['customSpellLists']) : undefined,
+    notesBlocks: (doc.notesBlocks as CharacterDto['notesBlocks']) || undefined,
+    combatTemplates: (doc.combatTemplates as CharacterDto['combatTemplates']) || undefined,
+    changeHistory: Array.isArray(doc.changeHistory)
+      ? (doc.changeHistory as CharacterChangeHistoryEntry[])
+      : undefined,
+
+    photoUri: typeof doc.photoUri === 'string' ? doc.photoUri : undefined,
+
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
+  };
+}
+
+function dtoToSheet(dto: CharacterCloudDto): CharacterSheet {
+  const me = uid();
+  return {
+    id: dto.id,
+    ownerUid: me,
+    owners: [me],
     editors: [],
 
     name: dto.name ?? '',
@@ -95,32 +252,39 @@ function dtoToSheet(dto: CharacterDto): CharacterSheet {
     subrace: dto.subrace,
 
     level: dto.level ?? 1,
-    // ВАЖЛИВО: раніше тут стояло dto.race — це ламало дані
     experience: dto.experience ?? 0,
 
-    stats: dto.stats ?? { strength: 10, dexterity: 10, constitution: 10, intelligence: 10, wisdom: 10, charisma: 10 },
-    hp: dto.hp ?? { current: 10, max: 10, temp: 0 },
+    stats: dto.stats ?? DEFAULT_STATS,
+    hp: dto.hp ?? DEFAULT_HP,
+    hitDice: dto.hitDice ?? '1d6',
     ac: dto.ac ?? 10,
+    armorClassDetails: dto.armorClassDetails,
     initiative: dto.initiative,
     speed: dto.speed,
     proficiencyBonus: dto.proficiencyBonus,
+    alignment: dto.alignment,
+    currency: dto.currency,
 
     weapons: dto.weapons ?? [],
+    tools: dto.tools ?? [],
+    proficiencies: dto.proficiencies ?? [],
     inventory: dto.inventory ?? [],
-    skills: dto.skills ?? ({} as any),
-    savingThrows: dto.savingThrows ?? ({} as any),
+    skills: dto.skills ?? DEFAULT_SKILLS,
+    savingThrows: dto.savingThrows ?? DEFAULT_SAVING_THROWS,
     deathSaves: dto.deathSaves ?? { successes: 0, failures: 0 },
-    traits: dto.traits ?? ({} as any),
-    spells: dto.spells ?? ({} as any),
+    traits: dto.traits ?? DEFAULT_TRAITS,
+    featuresAndTraits: dto.featuresAndTraits ?? [],
+    spells: dto.spells ?? DEFAULT_SPELLS,
 
     notes: dto.notes ?? '',
+    background: dto.background,
     alliesAndOrganizations: dto.alliesAndOrganizations,
     backstory: dto.backstory,
     campaign: dto.campaign,
     campaignId: dto.campaignId,
 
     coins: dto.coins ?? { gold: 0, silver: 0, copper: 0 },
-    customCoins: dto.customCoins, // якщо порожньо — просто не відправляємо undefined
+    customCoins: dto.customCoins,
     sessionMode: dto.sessionMode ?? false,
     conditions: dto.conditions ?? [],
     characterTemplateId: dto.characterTemplateId ?? 'standard-5e',
@@ -154,7 +318,7 @@ function mapPathToTab(path: string): CharacterTabKey {
 }
 
 function summarizePaths(paths: string[]): string {
-  const clean = (paths || []).map((path) => String(path || '').trim()).filter(Boolean);
+  const clean = paths.map((path) => String(path || '').trim()).filter(Boolean);
   if (!clean.length) return 'No path details';
   if (clean.length <= 2) return clean.join(', ');
   return `${clean.slice(0, 2).join(', ')} +${clean.length - 2}`;
@@ -203,7 +367,7 @@ function mergeBoundedHistory(existing: unknown, additions: CharacterChangeHistor
 }
 
 export async function upsertCharacterSheetFromLocal(
-  dto: CharacterDto,
+  dto: CharacterCloudDto,
   options?: { historyPaths?: string[]; actorRole?: CharacterActorRole },
 ) {
   const me = fbAuth.currentUser?.uid;
@@ -212,12 +376,12 @@ export async function upsertCharacterSheetFromLocal(
   const ref = db.collection('characterSheets').doc(dto.id);
 
   try {
-    let existingMeta: any = null;
+    let existingMeta: CharacterSheet | null = null;
     try {
       const snap = await ref.get();
-      const e: any = (snap as any)?.exists;
-      const exists = typeof e === 'function' ? !!e.call(snap) : !!e;
-      if (exists) existingMeta = snap.data();
+      if (hasDoc(snap)) {
+        existingMeta = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
+      }
     } catch {}
 
     const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
@@ -240,29 +404,31 @@ export async function upsertCharacterSheetFromLocal(
 
     if (existingMeta) {
       return { id: dto.id, updated: true };
-    } else {
-      return { id: dto.id, created: true };
     }
-  } catch (e) {
+
+    return { id: dto.id, created: true };
+  } catch {
     const newId = await saveCharacterSheetAsNew(dto);
     return { id: newId, created: true };
   }
 }
 
 export async function bulkUpsertFromLocal(list: CharacterDto[]) {
-  for (const c of list) {
-    try { await upsertCharacterSheetFromLocal(c); } catch {}
+  for (const character of list) {
+    try {
+      await upsertCharacterSheetFromLocal(character);
+    } catch {}
   }
 }
 
-export function subscribeCharacterSheet(id: string, cb: (doc: any | null) => void) {
-  return db.collection('characterSheets').doc(id).onSnapshot(snap => {
+export function subscribeCharacterSheet(id: string, cb: (doc: CharacterSheet | null) => void) {
+  return db.collection('characterSheets').doc(id).onSnapshot((snap) => {
     if (!hasDoc(snap)) return cb(null);
-    cb({ id: snap.id, ...(snap.data() as any) });
+    cb(toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data()));
   });
 }
 
-export async function updateCharacterSheet(id: string, patch: Partial<CharacterSheet>) {
+export async function updateCharacterSheet(id: string, patch: CharacterSheetPatch) {
   await db.collection('characterSheets').doc(id).update({ ...patch, updatedAt: now() });
 }
 
@@ -275,10 +441,10 @@ export async function addEditorByEmail(sheetId: string, email: string) {
   if (!toUid) throw new Error('User not found by email');
   await ensureConnection(toUid);
   const ref = db.collection('characterSheets').doc(sheetId);
-  await db.runTransaction(async tx => {
+  await db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
     if (!hasDoc(snap)) throw new Error('Sheet not found');
-    const data = snap.data() as any;
+    const data = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
     const next = Array.from(new Set([...(data.editors || []), toUid]));
     tx.update(ref, { editors: next, updatedAt: now() });
   });
@@ -287,187 +453,129 @@ export async function addEditorByEmail(sheetId: string, email: string) {
 
 export async function removeEditor(sheetId: string, editorUid: string) {
   const ref = db.collection('characterSheets').doc(sheetId);
-  await db.runTransaction(async tx => {
+  await db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
     if (!hasDoc(snap)) return;
-    const data = snap.data() as any;
-    const next = (data.editors || []).filter((x: string) => x !== editorUid);
+    const data = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
+    const next = (data.editors || []).filter((entry) => entry !== editorUid);
     tx.update(ref, { editors: next, updatedAt: now() });
   });
 }
 
-
-export async function saveCharacterSheetAsNew(dto: CharacterDto) {
+export async function saveCharacterSheetAsNew(dto: CharacterCloudDto) {
   try {
     const ref = db.collection('characterSheets').doc();
     const content = stripUndefinedDeep(dtoToSheet(dto));
     await ref.set(content);
     console.log('LOG  [save] create ok for id', ref.id);
     return ref.id;
-  } catch (err: any) {
-    console.warn('WARN [save] save-as-new failed', err?.message ?? err);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn('WARN [save] save-as-new failed', message);
     return null;
   }
 }
 
 export function stripUndefinedDeep<T>(value: T): T {
   if (Array.isArray(value)) {
-    return value.filter((v) => v !== undefined).map((v) => stripUndefinedDeep(v)) as unknown as T;
+    return value
+      .filter((entry) => entry !== undefined)
+      .map((entry) => stripUndefinedDeep(entry)) as unknown as T;
   }
+
   if (value && typeof value === 'object') {
-    const out: any = {};
-    for (const [k, v] of Object.entries(value as any)) {
-      if (v === undefined) continue;
-      out[k] = stripUndefinedDeep(v);
+    const out: Record<string, unknown> = {};
+    for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
+      if (nested === undefined) continue;
+      out[key] = stripUndefinedDeep(nested);
     }
-    return out;
+    return out as T;
   }
+
   return value;
 }
 
-export function subscribeMySheets(cb: (list: any[]) => void) {
+export function subscribeMySheets(cb: (list: CharacterSheet[]) => void) {
   try {
     const me = uid();
-    return db.collection('characterSheets')
+    return db
+      .collection('characterSheets')
       .where('owners', 'array-contains', me)
-      .onSnapshot((snap) => {
-        const out: any[] = [];
-        snap?.forEach?.((d: any) => out.push({ id: d.id, ...(d.data?.() || d.data()) }));
-        cb(out);
-      }, () => cb([]));
+      .onSnapshot(
+        (snap) => {
+          const out: CharacterSheet[] = [];
+          snap?.forEach?.((doc) => {
+            out.push(toSheetSnapshotDoc(doc.id, doc.data?.() || doc.data()));
+          });
+          cb(out);
+        },
+        () => cb([]),
+      );
   } catch {
     cb([]);
     return () => {};
   }
 }
 
-export function subscribeSharedWithMe(cb: (list: any[]) => void) {
+export function subscribeSharedWithMe(cb: (list: CharacterSheet[]) => void) {
   try {
     const me = uid();
-    return db.collection('characterSheets')
+    return db
+      .collection('characterSheets')
       .where('editors', 'array-contains', me)
-      .onSnapshot((snap) => {
-        const out: any[] = [];
-        snap?.forEach?.((d: any) => out.push({ id: d.id, ...(d.data?.() || d.data()) }));
-        cb(out);
-      }, () => cb([]));
+      .onSnapshot(
+        (snap) => {
+          const out: CharacterSheet[] = [];
+          snap?.forEach?.((doc) => {
+            out.push(toSheetSnapshotDoc(doc.id, doc.data?.() || doc.data()));
+          });
+          cb(out);
+        },
+        () => cb([]),
+      );
   } catch {
     cb([]);
     return () => {};
   }
 }
 
-
-export async function fetchCharacterSheet(id: string) {
+export async function fetchCharacterSheet(id: string): Promise<CharacterSheet | null> {
   try {
     const ref = db.collection('characterSheets').doc(id);
     const snap = await ref.get();
-    const e = (snap as any)?.exists;
-    const exists = typeof e === 'function' ? !!e.call(snap) : !!e;
-    if (!exists) return null;
-    return { id: snap.id, ...(snap.data() as any) };
-  } catch (e) {
+    if (!hasDoc(snap)) return null;
+    return toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
+  } catch {
     return null;
   }
 }
 
+function buildCloudDocFromLocal(dto: CharacterCloudDto, ownerUid: string, existing?: CharacterSheet) {
+  const baseMeta = existing
+    ? {
+        ownerUid: existing.ownerUid || ownerUid,
+        owners: Array.isArray(existing.owners) && existing.owners.length ? existing.owners : [ownerUid],
+        editors: Array.isArray(existing.editors) ? existing.editors : [],
+        createdAt: existing.createdAt || now(),
+      }
+    : {
+        ownerUid,
+        owners: [ownerUid],
+        editors: [] as string[],
+        createdAt: now(),
+      };
 
-
-function __cleanUndefined(obj: any): any {
-  if (obj == null) return obj;
-  if (Array.isArray(obj)) return obj.map(__cleanUndefined);
-  if (typeof obj === 'object') {
-    const out: any = {};
-    for (const k of Object.keys(obj)) {
-      const v = (obj as any)[k];
-      if (v === undefined) continue; // Firestore не приймає undefined
-      out[k] = __cleanUndefined(v);
-    }
-    return out;
-  }
-  return obj;
-}
-
-
-function buildCloudDocFromLocal(dto: CharacterDto, ownerUid: string, existing?: any) {
-  const baseMeta = existing ? {
-    ownerUid: existing.ownerUid || ownerUid,
-    owners: Array.isArray(existing.owners) && existing.owners.length ? existing.owners : [ownerUid],
-    editors: Array.isArray(existing.editors) ? existing.editors : [],
-    createdAt: existing.createdAt || now(),
-  } : {
-    ownerUid,
-    owners: [ownerUid],
-    createdAt: now(),
-  };
-
-  const full: any = {
+  const full: CharacterSheet = {
+    ...dtoToSheet(dto),
     ...baseMeta,
     updatedAt: now(),
-
-    id: dto.id,
-    name: dto.name,
-    class: (dto as any).class,
-    race: dto.race,
-    level: dto.level,
-    experience: (dto as any).experience,
-    stats: dto.stats,
-    hp: dto.hp,
-    ac: (dto as any).ac,
-    acDetails: (dto as any).armorClassDetails ?? (dto as any).acDetails,
-    initiative: (dto as any).initiative,
-    speed: (dto as any).speed,
-    hitDice: (dto as any).hitDice,
-    deathSaves: (dto as any).deathSaves,
-    coins: (dto as any).coins,
-    currency: (dto as any).currency,
-    inventory: (dto as any).inventory,
-    weapons: (dto as any).weapons,
-    tools: (dto as any).tools,
-    proficiencies: (dto as any).proficiencies,
-    savingThrows: (dto as any).savingThrows,
-    skills: (dto as any).skills,
-    traits: (dto as any).traits,
-    featuresAndTraits: (dto as any).featuresAndTraits,
-    spells: (dto as any).spells,
-    notes: (dto as any).notes,
-    background: (dto as any).background,
-    backstory: (dto as any).backstory,
-    subclass: (dto as any).subclass,
-    subrace: (dto as any).subrace,
-    campaign: (dto as any).campaign,
-    campaignId: (dto as any).campaignId,
-    alliesAndOrganizations: (dto as any).alliesAndOrganizations,
-    photoUri: (dto as any).photoUri,
-    sessionMode: (dto as any).sessionMode,
-    conditions: (dto as any).conditions,
-    characterTemplateId: (dto as any).characterTemplateId,
-    customFields: (dto as any).customFields,
-    customTrackers: (dto as any).customTrackers,
-    customSections: (dto as any).customSections,
-    customResources: (dto as any).customResources,
-    customNotesGroups: (dto as any).customNotesGroups,
-    homebrewEntries: (dto as any).homebrewEntries,
-    customResetRules: (dto as any).customResetRules,
-    customFeatureBlocks: (dto as any).customFeatureBlocks,
-    customSpellLists: (dto as any).customSpellLists,
-    notesBlocks: (dto as any).notesBlocks,
-    combatTemplates: (dto as any).combatTemplates,
+    ac: dto.ac ?? 10,
+    armorClassDetails: dto.armorClassDetails ?? dto.acDetails,
   };
 
-  return __cleanUndefined(full);
+  return stripUndefinedDeep(full);
 }
 
-
-export async function autosaveCharacter(dto: CharacterDto) {
+export async function autosaveCharacter(dto: CharacterCloudDto) {
   return upsertCharacterSheetFromLocal(dto);
-
-
-
-
-
-
-
-
-
 }

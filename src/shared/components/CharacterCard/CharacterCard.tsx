@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useCharacterStore from '@/context/Character-store';
@@ -14,7 +14,7 @@ import { subscribeCharacterSheet, deleteCharacterSheet } from '@/services/charac
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
 
 interface CharacterCardProps {
-  character: CharacterDto;
+  character: CharacterViewModel;
 }
 
 // TODO fix any
@@ -70,5 +70,6 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
+
 
 

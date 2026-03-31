@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import useCustomCoinsStore from '@/context/CustomCoins-store';
 
 interface CoinsProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const clampToNonNegativeInt = (value: string | number) => {
@@ -158,3 +158,4 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
 };
 
 export default Coins;
+

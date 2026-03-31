@@ -5,13 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import { HitPoints } from '@/types/HitPoints';
 import { DeathSaves } from '@/types/DeathSaves';
 import RollResultModal from '@/shared/components/RollResultModal/RollResultModal';
 
 interface CombatProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const EMPTY_HP: HitPoints = { max: 1, current: 1, temp: 0 };
@@ -48,7 +48,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
     setDeathSaves(character.deathSaves || EMPTY_DEATH);
   }, [character?.id]);
 
-  const updateField = (field: keyof CharacterDto, value: any) => {
+  const updateField = <K extends keyof CharacterViewModel>(field: K, value: CharacterViewModel[K]) => {
     if (!character) return;
     updateCharacter(character.id, { ...character, [field]: value });
   };

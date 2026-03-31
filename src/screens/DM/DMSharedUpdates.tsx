@@ -12,7 +12,7 @@ import { getStyles } from './DMSharedUpdates.style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useCharacterStore from '@/context/Character-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import useAppRoleStore from '@/context/AppRole-store';
 import {
@@ -193,7 +193,7 @@ const DMSharedUpdates = () => {
     await persistReviewed(next);
   };
 
-  const ensureLocalCharacter = async (doc: Record<string, unknown>): Promise<CharacterDto> => {
+  const ensureLocalCharacter = async (doc: Record<string, unknown>): Promise<CharacterViewModel> => {
     const mapped = mapCloudCharacterToLocalDto(doc);
     const existing = characters.find((character) => character.id === mapped.id);
     if (existing) {
@@ -214,7 +214,7 @@ const DMSharedUpdates = () => {
 
   const createDetachedCopy = async (doc: Record<string, unknown>, mode: 'local-copy' | 'duplicate-shared') => {
     const mapped = mapCloudCharacterToLocalDto(doc);
-    const copy: CharacterDto = {
+    const copy: CharacterViewModel = {
       ...mapped,
       id: String(uuid.v4()),
       name: `${mapped.name || 'Персонаж'} (${mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат'})`,
@@ -382,3 +382,4 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
+

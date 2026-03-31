@@ -31,19 +31,23 @@ const useTrackerTemplateStore = create<TrackerTemplateStore>((set, get) => ({
         return;
       }
       const normalized: ResourceTemplate[] = parsed
-        .map((entry: any, index: number) => ({
-          id: String(entry?.id || `user-template-${index}`),
-          name: String(entry?.name || `Шаблон ${index + 1}`),
+        .map((entry: unknown, index: number) => {
+          const cast = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
+          const resource = cast.resource && typeof cast.resource === 'object' ? (cast.resource as Record<string, unknown>) : {};
+          return {
+          id: String(cast.id || `user-template-${index}`),
+          name: String(cast.name || `Шаблон ${index + 1}`),
           source: 'user' as const,
           resource: {
-            label: String(entry?.resource?.label || 'Ресурс'),
-            current: Math.max(0, Number(entry?.resource?.current) || 0),
-            max: typeof entry?.resource?.max === 'number' ? Math.max(0, entry.resource.max) : undefined,
-            resetRule: entry?.resource?.resetRule || 'none',
-            visibility: entry?.resource?.visibility,
-            color: entry?.resource?.color,
+            label: String(resource.label || 'Ресурс'),
+            current: Math.max(0, Number(resource.current) || 0),
+            max: typeof resource.max === 'number' ? Math.max(0, resource.max) : undefined,
+            resetRule: String(resource.resetRule || 'none') as CharacterCustomResource['resetRule'],
+            visibility: resource.visibility as CharacterCustomResource['visibility'],
+            color: typeof resource.color === 'string' ? resource.color : undefined,
           },
-        }))
+        };
+      })
         .slice(0, 50);
       set({ userTemplates: normalized });
     } catch {

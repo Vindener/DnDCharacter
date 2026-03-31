@@ -5,7 +5,7 @@ import type {
   DMCampaignNoteConflictRemote,
   DMNoteSyncDisplayStatus,
 } from '@/types/DM';
-import { db, fbAuth, now } from '@/services/firebase';
+import { db, fbAuth, hasDoc, now } from '@/services/firebase';
 
 const LOCAL_NOTES_KEY = 'DM_CAMPAIGN_NOTES_V1';
 const LOCAL_QUEUE_KEY = 'DM_CAMPAIGN_NOTES_QUEUE_V1';
@@ -209,8 +209,7 @@ function buildCloudPayload(note: DMCampaignNote, existing?: Record<string, unkno
 async function syncUpsert(note: DMCampaignNote): Promise<DMCampaignNote> {
   const ref = db.collection('dmCampaignNotes').doc(note.id);
   const snap = await ref.get();
-  const existsRaw = (snap as any)?.exists;
-  const exists = typeof existsRaw === 'function' ? Boolean(existsRaw.call(snap)) : Boolean(existsRaw);
+  const exists = hasDoc(snap);
   const remote = exists ? ({ id: snap.id, ...(snap.data?.() || snap.data()) } as Record<string, unknown>) : null;
   const remoteNote = remote ? mapCloudNote(remote) : null;
 
@@ -300,7 +299,7 @@ export async function subscribeCampaignNotes(campaignId: string, cb: (notes: DMC
     .onSnapshot(
       async (snap) => {
         const remote: DMCampaignNote[] = [];
-        snap?.forEach?.((doc: any) => {
+        snap?.forEach?.((doc) => {
           const mapped = mapCloudNote({ id: doc.id, ...(doc.data?.() || doc.data()) });
           if (mapped && canAccessByRole(mapped, me)) remote.push(mapped);
         });

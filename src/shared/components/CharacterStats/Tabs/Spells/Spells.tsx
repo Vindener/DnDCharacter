@@ -4,12 +4,12 @@ import { TextInput, MultiTextInput } from '@/shared/components/TextInput/index';
 import { Ionicons } from '@expo/vector-icons';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import { Spells as SpellsType } from '@/types/Spells';
 import useCharacterStore from '@/context/Character-store';
 
 interface SpellsProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const EMPTY_SPELLS: SpellsType = {
@@ -166,3 +166,4 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
 };
 
 export default Spells;
+

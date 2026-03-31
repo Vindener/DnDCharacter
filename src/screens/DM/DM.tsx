@@ -18,13 +18,13 @@ import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter'
 import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
 import { loadLocalCampaignNotes } from '@/services/dmCampaignNotes';
 import type { DMCampaign } from '@/types/DM';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
 
 type DashboardCharacter = {
   id: string;
-  payload: CharacterDto;
+  payload: CharacterViewModel;
   source: 'local' | 'mine' | 'shared';
 };
 
@@ -169,7 +169,7 @@ const DM: React.FC = () => {
     parent.navigate('Heroes', { screen, params });
   };
 
-  const ensureLocalCharacter = async (character: CharacterDto) => {
+  const ensureLocalCharacter = async (character: CharacterViewModel) => {
     const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
     if (existing) {
       await updateCharacter(existing.id, character);
@@ -179,7 +179,7 @@ const DM: React.FC = () => {
     return character;
   };
 
-  const openFullSheet = async (character: CharacterDto) => {
+  const openFullSheet = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     setCurrentCharacterId(local.id);
     const parent = navigation.getParent() as any;
@@ -187,7 +187,7 @@ const DM: React.FC = () => {
     parent.navigate('Heroes', { screen: 'Character', params: { character: local } });
   };
 
-  const openQuickEdit = async (character: CharacterDto) => {
+  const openQuickEdit = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     navigation.navigate('DMQuickEdit', { characterId: local.id });
   };
@@ -375,3 +375,4 @@ const DM: React.FC = () => {
 };
 
 export default DM;
+

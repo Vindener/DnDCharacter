@@ -10,9 +10,10 @@ import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import type { CharacterSheet } from '@/services/characterSheets';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress } from '@/shared/services/auth/index';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
@@ -32,10 +33,11 @@ type CharacterPreview = {
   shareStatus: string | null;
   statuses: string[];
   source: 'local' | 'mine' | 'shared';
-  payload: CharacterDto;
+  payload: CharacterViewModel;
 };
 
-const mapRemoteToLocalDto = (doc: Record<string, unknown>): CharacterDto => mapCloudCharacterToLocalDto(doc);
+const mapRemoteToLocalDto = (doc: CharacterSheet): CharacterViewModel =>
+  mapCloudCharacterToLocalDto(doc as unknown as Record<string, unknown>);
 
 const toMillis = (value: unknown): number => {
   if (!value || typeof value !== 'object') return 0;
@@ -93,8 +95,8 @@ const Home = () => {
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
 
   const [search, setSearch] = useState('');
-  const [myCloud, setMyCloud] = useState<Record<string, unknown>[]>([]);
-  const [sharedCloud, setSharedCloud] = useState<Record<string, unknown>[]>([]);
+  const [myCloud, setMyCloud] = useState<CharacterSheet[]>([]);
+  const [sharedCloud, setSharedCloud] = useState<CharacterSheet[]>([]);
   const [cloudPulseAt, setCloudPulseAt] = useState<number | null>(null);
   const netInfo = useNetInfo();
 
@@ -129,17 +131,17 @@ const Home = () => {
     }
 
     const unsubMine = subscribeMySheets((list) => {
-      setMyCloud((list || []) as Record<string, unknown>[]);
+      setMyCloud(list || []);
       setCloudPulseAt(Date.now());
-      (list || []).forEach((doc: any) => {
+      (list || []).forEach((doc) => {
         if (doc?.id) void setCloudAvailability(String(doc.id), true);
       });
     });
 
     const unsubShared = subscribeSharedWithMe((list) => {
-      setSharedCloud((list || []) as Record<string, unknown>[]);
+      setSharedCloud(list || []);
       setCloudPulseAt(Date.now());
-      (list || []).forEach((doc: any) => {
+      (list || []).forEach((doc) => {
         if (doc?.id) void setCloudAvailability(String(doc.id), true);
       });
     });
@@ -160,9 +162,9 @@ const Home = () => {
     const byId = new Map<string, CharacterPreview>();
 
     const pushPreview = (
-      payload: CharacterDto,
+      payload: CharacterViewModel,
       source: 'local' | 'mine' | 'shared',
-      rawDoc?: Record<string, unknown> | null,
+      rawDoc?: CharacterSheet | null,
     ) => {
       const existing = byId.get(payload.id);
       const syncState = syncByCharacter[payload.id];
@@ -519,3 +521,4 @@ const Home = () => {
 };
 
 export default Home;
+

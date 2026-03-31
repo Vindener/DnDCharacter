@@ -5,13 +5,13 @@ import { WEAPONS_DB } from '@/shared/const/WeaponsDb';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { Ionicons } from '@expo/vector-icons';
 import Weapon from '../Weapons/Weapon';
 
 interface InventoryProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const Inventory: React.FC<InventoryProps> = ({ data }) => {
@@ -100,3 +100,4 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
 };
 
 export default Inventory;
+

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, ScrollView } from 'react-native';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { SKILL_NAMES } from '@/shared/const/SkillsTab';
 import { SkillItem } from './SkillItem/SkillItem';
@@ -30,7 +30,7 @@ const SKILLS_LIST = [
 ];
 
 interface SkillsProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const Skills: React.FC<SkillsProps> = ({ data }) => {
@@ -64,3 +64,4 @@ const Skills: React.FC<SkillsProps> = ({ data }) => {
 };
 
 export default Skills;
+

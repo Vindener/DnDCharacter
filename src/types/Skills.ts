@@ -1,5 +1,4 @@
 export interface Skills {
-  [key: string]: number;
   acrobatics: number;
   animalHandling: number;
   arcana: number;

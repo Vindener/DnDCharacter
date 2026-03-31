@@ -8,7 +8,7 @@ import { getStyles } from '@/screens/DM/style';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
 import { appendQuickSessionNote } from '@/shared/helpers/homebrew';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import { Modal } from '@/shared/components/Modal/Modal';
@@ -44,7 +44,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
   const [tempMaxHp, setTempMaxHp] = useState('');
   const [tempTempHp, setTempTempHp] = useState('');
 
-  const commitPatch = async (buildNext: (prev: CharacterDto) => CharacterDto, paths: string[]) => {
+  const commitPatch = async (buildNext: (prev: CharacterViewModel) => CharacterViewModel, paths: string[]) => {
     const current = useCharacterStore.getState().characters.find((item) => item.id === characterId);
     if (!current) return;
 
@@ -506,3 +506,4 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMQuickEdit;
+

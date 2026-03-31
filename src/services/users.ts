@@ -23,6 +23,7 @@ export async function findUserByEmail(email: string) {
   const emailLower = email.trim().toLowerCase();
   const idx = await db.collection('emailIndex').doc(emailLower).get();
   if (!idx.exists) return null;
-  const { uid } = idx.data() as any;
+  const payload = idx.data() as { uid?: unknown } | undefined;
+  const uid = typeof payload?.uid === 'string' ? payload.uid : null;
   return uid || null;
 }

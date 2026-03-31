@@ -14,14 +14,14 @@ import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSh
 import { fbAuth } from '@/services/firebase';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { getShareDisplayStatus, getSyncDisplayStatus } from '@/shared/helpers/collaboration/status';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 import { ensureCampaignForName, getCampaignForCharacter, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
 import type { DMCampaign } from '@/types/DM';
 
 type PartyItem = {
   id: string;
   source: 'local' | 'mine' | 'shared';
-  payload: CharacterDto;
+  payload: CharacterViewModel;
   syncStatus: string;
   shareStatus: string | null;
   campaignId: string;
@@ -97,7 +97,7 @@ const DMPartyOverview = () => {
   const party = useMemo<PartyItem[]>(() => {
     const byId = new Map<string, PartyItem>();
 
-    const pushItem = (payload: CharacterDto, source: 'local' | 'mine' | 'shared', rawDoc?: Record<string, unknown>) => {
+    const pushItem = (payload: CharacterViewModel, source: 'local' | 'mine' | 'shared', rawDoc?: Record<string, unknown>) => {
       const syncStatus = getSyncDisplayStatus(syncByCharacter[payload.id], netInfo.isConnected);
       const shareStatus = getShareDisplayStatus({
         isSharedSheet: source === 'shared' || Boolean(rawDoc && Array.isArray(rawDoc.editors) && rawDoc.editors.length > 0),
@@ -145,7 +145,7 @@ const DMPartyOverview = () => {
     return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
   }, [party]);
 
-  const ensureLocalCharacter = async (character: CharacterDto) => {
+  const ensureLocalCharacter = async (character: CharacterViewModel) => {
     const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
     if (existing) {
       await updateCharacter(existing.id, character);
@@ -155,7 +155,7 @@ const DMPartyOverview = () => {
     return character;
   };
 
-  const openCharacter = async (character: CharacterDto) => {
+  const openCharacter = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     setCurrentCharacterId(local.id);
     const root = navigation.getParent() as any;
@@ -163,7 +163,7 @@ const DMPartyOverview = () => {
     root.navigate('Heroes', { screen: 'Character', params: { character: local } });
   };
 
-  const openQuickEdit = async (character: CharacterDto) => {
+  const openQuickEdit = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     navigation.navigate('DMQuickEdit', { characterId: local.id });
   };
@@ -225,3 +225,4 @@ const DMPartyOverview = () => {
 };
 
 export default DMPartyOverview;
+
