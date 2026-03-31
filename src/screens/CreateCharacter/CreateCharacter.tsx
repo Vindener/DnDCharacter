@@ -23,6 +23,7 @@ import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import { addEditorByEmail, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
+import { characterMapper } from '@/domain/mappers';
 
 type StartMethod = 'guided' | 'quick';
 type StatMethod = 'array' | 'pointbuy';
@@ -444,7 +445,7 @@ const CreateCharacter = (): JSX.Element => {
 
       if (cloudRequested) {
         try {
-          const result = await upsertCharacterSheetFromLocal(character);
+          const result = await upsertCharacterSheetFromLocal(characterMapper.entityToDto(character));
           if (result?.id && result.id !== character.id) {
             const remappedCharacter = { ...character, id: result.id };
             await updateCharacter(character.id, remappedCharacter);

@@ -41,6 +41,7 @@ import { collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/c
 import useSpellbookStore from '@/context/Spellbook-store';
 import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
+import { characterMapper } from '@/domain/mappers';
 
 interface CharacterProps {
   route: {
@@ -693,7 +694,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setSyncFeedback('Вивантаження локальних змін...');
     setSyncTransport(characterData.id, 'uploading', 'Вивантаження локальних змін...').catch(() => {});
     const timeout = setTimeout(() => {
-      upsertCharacterSheetFromLocal(characterData, { historyPaths: pendingPathsForUpload, actorRole })
+      upsertCharacterSheetFromLocal(characterMapper.entityToDto(characterData), { historyPaths: pendingPathsForUpload, actorRole })
         .then(() => {
           setSyncFeedback('Щойно автосинхронізовано');
           setSyncTransport(characterData.id, 'synced', 'Щойно автосинхронізовано').catch(() => {});
@@ -1344,7 +1345,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     setSyncFeedback('Застосування локальної версії до хмари...');
     setSyncTransport(characterData.id, 'uploading', 'Застосування локальної версії до хмари...').catch(() => {});
     const historyPaths = Array.from(new Set(currentSync?.pendingPaths || []));
-    upsertCharacterSheetFromLocal(characterData, { historyPaths, actorRole: mapRoleToHistoryActor(roleMode) })
+    upsertCharacterSheetFromLocal(characterMapper.entityToDto(characterData), { historyPaths, actorRole: mapRoleToHistoryActor(roleMode) })
       .then(() => {
         setSyncFeedback('Конфлікт вирішено локальною версією');
         setSyncTransport(characterData.id, 'synced', 'Конфлікт вирішено локальною версією').catch(() => {});
@@ -1397,7 +1398,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
     setSyncFeedback('Синхронізація...');
     setSyncTransport(characterData.id, 'syncing', 'Синхронізація...').catch(() => {});
-    upsertCharacterSheetFromLocal(characterData, { historyPaths, actorRole })
+    upsertCharacterSheetFromLocal(characterMapper.entityToDto(characterData), { historyPaths, actorRole })
       .then(() => {
         setIsCloudDoc(true);
         setCloudAvailability(characterData.id, true).catch(() => {});

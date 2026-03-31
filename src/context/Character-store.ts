@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CharacterDto } from '@/types/Character';
+import type { CharacterEntity } from '@/domain/types';
 import { StatKey } from '@/shared/const/attributes';
 import { Spells } from '@/types/Spells';
 import { Traits } from '@/types/Traits';
@@ -12,17 +12,17 @@ import useSyncStore from '@/context/Sync-store';
 const MAX_CHARACTERS = 10;
 
 interface CharacterStore {
-  characters: CharacterDto[];
+  characters: CharacterEntity[];
   maxCharacters: number;
   currentCharacterId: string | null;
   lastSessionCharacterId: string | null;
   setCurrentCharacterId: (id: string) => void;
   setLastSessionCharacterId: (id: string | null) => Promise<void>;
   loadCharacters: () => Promise<void>;
-  saveCharacters: (newCharacters: CharacterDto[]) => Promise<void>;
-  addCharacter: (character: CharacterDto) => Promise<void>;
-  updateCharacter: (id: string, updatedCharacter: CharacterDto) => Promise<void>;
-  updateCharacterAttribute: (id: string, key: StatKey, value: number) => CharacterDto;
+  saveCharacters: (newCharacters: CharacterEntity[]) => Promise<void>;
+  addCharacter: (character: CharacterEntity) => Promise<void>;
+  updateCharacter: (id: string, updatedCharacter: CharacterEntity) => Promise<void>;
+  updateCharacterAttribute: (id: string, key: StatKey, value: number) => CharacterEntity;
   updateCharacterInventory: (id: string, inventory: string[]) => void;
   updateCharacterProficiencies: (id: string, proficiencies: string[]) => void;
   updateCharacterWeapons: (id: string, weapons: Weapon[]) => void;
@@ -32,7 +32,7 @@ interface CharacterStore {
   updateCharacterAlliesAndOrganizations: (id: string, campaign: string) => void;
   updateCharacterTraits: (id: string, traits: Traits) => void;
   updateCharacterSpells: (id: string, spells: Spells) => void;
-  updateCharacterSkills: (id: string, skills: CharacterDto['skills']) => void;
+  updateCharacterSkills: (id: string, skills: CharacterEntity['skills']) => void;
   updateCharacterCoins: (id: string, coins: { gold: number; silver: number; copper: number }) => void;
   updateCharacterCustomCoins: (id: string, customCoins: { [id: string]: number }) => void;
   removeCharacter: (id: string) => Promise<void>;
@@ -41,7 +41,7 @@ interface CharacterStore {
 const STORAGE_KEY = 'characters';
 const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
 
-function normalizeCharacter(character: CharacterDto): CharacterDto {
+function normalizeCharacter(character: CharacterEntity): CharacterEntity {
   const normalized = createEmptyCharacter(character);
   return {
     ...normalized,
@@ -72,7 +72,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
         AsyncStorage.getItem(STORAGE_KEY),
         AsyncStorage.getItem(LAST_SESSION_CHARACTER_ID_KEY),
       ]);
-      const parsed: CharacterDto[] = JSON.parse(jsonValue || '[]');
+      const parsed: CharacterEntity[] = JSON.parse(jsonValue || '[]');
       const filtered = Array.isArray(parsed) ? parsed.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
       const existingIds = new Set(filtered.map((character) => character.id));
       const safeLastSessionId = storedLastSessionId && existingIds.has(storedLastSessionId) ? storedLastSessionId : null;
@@ -83,14 +83,14 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     } catch {}
   },
 
-  saveCharacters: async (newCharacters: CharacterDto[]) => {
+  saveCharacters: async (newCharacters: CharacterEntity[]) => {
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCharacters));
       set({ characters: newCharacters });
     } catch {}
   },
 
-  addCharacter: async (character: CharacterDto) => {
+  addCharacter: async (character: CharacterEntity) => {
     const { characters, saveCharacters } = get();
     if (characters.length >= MAX_CHARACTERS) return;
     const characterWithId = normalizeCharacter({ ...character, id: character.id || uuid.v4() });
@@ -99,14 +99,14 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     console.log(updated);
   },
 
-  updateCharacter: async (id: string, updatedCharacter: CharacterDto) => {
+  updateCharacter: async (id: string, updatedCharacter: CharacterEntity) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? normalizeCharacter(updatedCharacter) : char));
     await saveCharacters(updated);
   },
 
-  updateCharacterAttribute: (id: string, key: StatKey, value: number): CharacterDto => {
-    let updatedCharacter: CharacterDto;
+  updateCharacterAttribute: (id: string, key: StatKey, value: number): CharacterEntity => {
+    let updatedCharacter: CharacterEntity;
     set((state) => {
       const updated = state.characters.map((char) => {
         if (char.id !== id) return char;
@@ -178,7 +178,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
     set({ characters: updated });
     saveCharacters(updated);
   },
-  updateCharacterSkills: (id: string, skills: CharacterDto['skills']) => {
+  updateCharacterSkills: (id: string, skills: CharacterEntity['skills']) => {
     const { characters, saveCharacters } = get();
     const updated = characters.map((char) => (char.id === id ? { ...char, skills } : char));
     set({ characters: updated });
@@ -211,3 +211,4 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
 }));
 
 export default useCharacterStore;
+

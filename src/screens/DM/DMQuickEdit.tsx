@@ -12,6 +12,7 @@ import type { CharacterViewModel } from '@/types/Character';
 import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import { Modal } from '@/shared/components/Modal/Modal';
+import { characterMapper } from '@/domain/mappers';
 
 type Props = StackScreenProps<DMStackParamList, 'DMQuickEdit'>;
 
@@ -62,7 +63,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 
     try {
       await setSyncTransport(current.id, 'syncing', 'Синхронізація швидкого редагування DM...');
-      await upsertCharacterSheetFromLocal(next, {
+      await upsertCharacterSheetFromLocal(characterMapper.entityToDto(next), {
         historyPaths: paths,
         actorRole: 'DM',
       });

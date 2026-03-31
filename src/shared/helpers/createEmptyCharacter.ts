@@ -1,4 +1,4 @@
-import { CharacterDto } from '@/types/Character';
+import type { CharacterDraft, CharacterEntity } from '@/domain/types';
 import { normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
 
 const HIT_DICE_MAP: Record<string, number> = {
@@ -23,8 +23,8 @@ function getHitDiceSides(className: string): number {
 }
 
 
-export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): CharacterDto {
-  const base: CharacterDto = {
+export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterEntity {
+  const base: CharacterEntity = {
     id: overrides.id ?? '',
     name: overrides.name ?? '',
     class: overrides.class ?? '',
@@ -150,3 +150,4 @@ export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): Cha
 
   return normalizeHomebrewV3(base);
 }
+

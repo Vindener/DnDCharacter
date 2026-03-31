@@ -1,6 +1,6 @@
-import type { CharacterDto } from '@/domain/types';
-import { mapCloudCharacterDocToDto } from '@/domain/mappers';
+import type { CharacterEntity } from '@/domain/types';
+import { characterMapper } from '@/domain/mappers';
 
-export function mapCloudCharacterToLocalDto(doc: Record<string, unknown>): CharacterDto {
-  return mapCloudCharacterDocToDto(doc);
+export function mapCloudCharacterToLocalDto(doc: Record<string, unknown>): CharacterEntity {
+  return characterMapper.cloudDocToEntity(doc);
 }

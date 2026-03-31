@@ -1,8 +1,9 @@
-import type { CharacterDto } from '@/types/Character';
-import type { CharacterSpellStatus } from '@/types/Spellbook';
+import type { CharacterEntity } from '@/domain/types';
+import type { CharacterSpellStatus } from '@/domain/types';
 import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
 import { CLASS_TRANSLATIONS } from '@/shared/const/CharacterClass';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
+import { spellMapper } from '@/domain/mappers';
 
 export function normalizeSpellName(value: string): string {
   return String(value || '')
@@ -10,7 +11,7 @@ export function normalizeSpellName(value: string): string {
     .toLowerCase();
 }
 
-type AbilityKey = keyof CharacterDto['stats'];
+type AbilityKey = keyof CharacterEntity['stats'];
 
 const PREPARED_FULL_CASTER_CLASSES = new Set(['cleric', 'druid', 'wizard']);
 const PREPARED_HALF_CASTER_CLASSES = new Set(['paladin', 'artificer']);
@@ -51,7 +52,7 @@ function normalizeAbilityKey(value: string): AbilityKey | null {
   return aliases[raw] || null;
 }
 
-function resolveSpellcastingAbility(character: CharacterDto): AbilityKey | null {
+function resolveSpellcastingAbility(character: CharacterEntity): AbilityKey | null {
   const fromSpells = normalizeAbilityKey(character.spells?.spellcastingAbility || '');
   if (fromSpells) return fromSpells;
 
@@ -60,7 +61,7 @@ function resolveSpellcastingAbility(character: CharacterDto): AbilityKey | null 
   return normalizeAbilityKey(presetAbility || '');
 }
 
-export function getPreparedSpellsLimit(character: CharacterDto | null | undefined): number | null {
+export function getPreparedSpellsLimit(character: CharacterEntity | null | undefined): number | null {
   if (!character) return null;
   const classKey = normalizeClassKey(character.class);
   const abilityKey = resolveSpellcastingAbility(character);
@@ -98,7 +99,7 @@ function removeSpell(list: string[], spellName: string): string[] {
   return list.filter((entry) => normalizeSpellName(entry) !== key);
 }
 
-export function collectCharacterSpellNames(character: CharacterDto | null | undefined): string[] {
+export function collectCharacterSpellNames(character: CharacterEntity | null | undefined): string[] {
   if (!character) return [];
   const names = new Map<string, string>();
   [...(character.spells?.knownSpells || []), ...(character.spells?.preparedSpells || []), ...(character.spells?.cantrips || [])].forEach((name) => {
@@ -110,7 +111,7 @@ export function collectCharacterSpellNames(character: CharacterDto | null | unde
   return Array.from(names.values());
 }
 
-export function getCharacterSpellStatus(character: CharacterDto | null | undefined, spellName: string): CharacterSpellStatus {
+export function getCharacterSpellStatus(character: CharacterEntity | null | undefined, spellName: string): CharacterSpellStatus {
   if (!character) return 'available';
   if (hasSpell(character.spells?.preparedSpells || [], spellName)) return 'prepared';
   if (hasSpell(character.spells?.cantrips || [], spellName)) return 'cantrip';
@@ -119,11 +120,11 @@ export function getCharacterSpellStatus(character: CharacterDto | null | undefin
 }
 
 export function applySpellStatus(
-  character: CharacterDto,
+  character: CharacterEntity,
   spellName: string,
   status: CharacterSpellStatus,
   options?: { preparedLimit?: number | null },
-): CharacterDto {
+): CharacterEntity {
   const name = String(spellName || '').trim();
   if (!name) return character;
 
@@ -144,8 +145,10 @@ export function applySpellStatus(
     return {
       ...character,
       spells: {
-        ...character.spells,
-        ...cleaned,
+        ...spellMapper.draftToEntity({
+          ...character.spells,
+          ...cleaned,
+        }),
       },
     };
   }
@@ -155,10 +158,12 @@ export function applySpellStatus(
     return {
       ...character,
       spells: {
-        ...character.spells,
-        knownSpells: addUniqueSpell(cleaned.knownSpells, name),
-        preparedSpells: cleaned.preparedSpells,
-        cantrips: cleaned.cantrips,
+        ...spellMapper.draftToEntity({
+          ...character.spells,
+          knownSpells: addUniqueSpell(cleaned.knownSpells, name),
+          preparedSpells: cleaned.preparedSpells,
+          cantrips: cleaned.cantrips,
+        }),
       },
     };
   }
@@ -171,10 +176,12 @@ export function applySpellStatus(
     return {
       ...character,
       spells: {
-        ...character.spells,
-        knownSpells: addUniqueSpell(cleaned.knownSpells, name),
-        preparedSpells: addUniqueSpell(cleaned.preparedSpells, name),
-        cantrips: cleaned.cantrips,
+        ...spellMapper.draftToEntity({
+          ...character.spells,
+          knownSpells: addUniqueSpell(cleaned.knownSpells, name),
+          preparedSpells: addUniqueSpell(cleaned.preparedSpells, name),
+          cantrips: cleaned.cantrips,
+        }),
       },
     };
   }
@@ -183,10 +190,13 @@ export function applySpellStatus(
   return {
     ...character,
     spells: {
-      ...character.spells,
-      knownSpells: cleaned.knownSpells,
-      preparedSpells: cleaned.preparedSpells,
-      cantrips: addUniqueSpell(cleaned.cantrips, name),
+      ...spellMapper.draftToEntity({
+        ...character.spells,
+        knownSpells: cleaned.knownSpells,
+        preparedSpells: cleaned.preparedSpells,
+        cantrips: addUniqueSpell(cleaned.cantrips, name),
+      }),
     },
   };
 }
+

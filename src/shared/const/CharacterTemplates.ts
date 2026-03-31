@@ -1,11 +1,11 @@
-import type { CharacterCustomResource, CharacterDto, CharacterHomebrewEntry, CharacterTemplateId } from '@/types/Character';
+import type { CharacterCustomResource, CharacterEntity, CharacterHomebrewEntry, CharacterTemplateId } from '@/domain/types';
 
 type HomebrewTemplatePreset = {
   id: CharacterTemplateId;
   title: string;
   description: string;
   resources: CharacterCustomResource[];
-  sections: CharacterDto['customSections'];
+  sections: CharacterEntity['customSections'];
   entries: CharacterHomebrewEntry[];
 };
 
@@ -99,7 +99,7 @@ function cloneResource(resource: CharacterCustomResource, index: number): Charac
   };
 }
 
-function cloneSection(section: NonNullable<CharacterDto['customSections']>[number], index: number): NonNullable<CharacterDto['customSections']>[number] {
+function cloneSection(section: NonNullable<CharacterEntity['customSections']>[number], index: number): NonNullable<CharacterEntity['customSections']>[number] {
   return {
     ...section,
     id: `${section.id}-${Date.now()}-${index}`,
@@ -114,7 +114,7 @@ function cloneEntry(entry: CharacterHomebrewEntry, index: number): CharacterHome
   };
 }
 
-export function buildTemplatePatch(templateId: CharacterTemplateId): Pick<CharacterDto, 'characterTemplateId' | 'customResources' | 'customSections' | 'homebrewEntries'> {
+export function buildTemplatePatch(templateId: CharacterTemplateId): Pick<CharacterEntity, 'characterTemplateId' | 'customResources' | 'customSections' | 'homebrewEntries'> {
   const preset = CHARACTER_TEMPLATE_PRESETS.find((item) => item.id === templateId) || CHARACTER_TEMPLATE_PRESETS[0];
   return {
     characterTemplateId: preset.id,
@@ -123,3 +123,4 @@ export function buildTemplatePatch(templateId: CharacterTemplateId): Pick<Charac
     homebrewEntries: preset.entries.map(cloneEntry),
   };
 }
+

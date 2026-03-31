@@ -1,5 +1,7 @@
-import type { CharacterDto, CharacterEntity, CharacterViewModel } from '@/domain/types';
+import type { CharacterDraft, CharacterDto, CharacterEntity, CharacterViewModel } from '@/domain/types';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
+import * as homebrewMapper from '@/domain/mappers/homebrew.mapper';
+import * as spellMapper from '@/domain/mappers/spell.mapper';
 
 function asRecord(value: unknown): Record<string, unknown> | null {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -16,23 +18,45 @@ function toStringArray(value: unknown): string[] {
   return value.map((item) => String(item || '').trim()).filter(Boolean);
 }
 
-export function mapCharacterDtoToEntity(dto: CharacterDto): CharacterEntity {
-  return createEmptyCharacter(dto);
+function normalizeCharacter(character: CharacterEntity): CharacterEntity {
+  const homebrew = homebrewMapper.dtoToEntity(character);
+  return {
+    ...character,
+    ...homebrew,
+    spells: spellMapper.dtoToEntity(character.spells),
+  };
 }
 
-export function mapCharacterEntityToViewModel(entity: CharacterEntity): CharacterViewModel {
+export function dtoToEntity(dto: CharacterDto): CharacterEntity {
+  return normalizeCharacter(createEmptyCharacter(dto));
+}
+
+export function entityToDto(entity: CharacterEntity): CharacterDto {
+  const normalized = normalizeCharacter(createEmptyCharacter(entity));
+  return {
+    ...normalized,
+    ...homebrewMapper.entityToDto(normalized),
+    spells: spellMapper.entityToDto(normalized.spells),
+  };
+}
+
+export function draftToEntity(draft: CharacterDraft): CharacterEntity {
+  return normalizeCharacter(createEmptyCharacter(draft));
+}
+
+export function entityToViewModel(entity: CharacterEntity): CharacterViewModel {
   return { ...entity };
 }
 
-export function mapCharacterViewModelToDto(viewModel: CharacterViewModel): CharacterDto {
-  return { ...viewModel };
+export function viewModelToEntity(viewModel: CharacterViewModel): CharacterEntity {
+  return draftToEntity(viewModel);
 }
 
-export function mapCloudCharacterDocToDto(doc: Record<string, unknown>): CharacterDto {
+export function cloudDocToDraft(doc: Record<string, unknown>): CharacterDraft {
   const deathSavesDoc = asRecord(doc.deathSaves);
   const hpDoc = asRecord(doc.hp);
 
-  return createEmptyCharacter({
+  return {
     id: String(doc.id || Date.now().toString()),
     name: String(doc.name || 'Character'),
     class: String(doc.class || ''),
@@ -65,7 +89,8 @@ export function mapCloudCharacterDocToDto(doc: Record<string, unknown>): Charact
     weapons: Array.isArray(doc.weapons) ? (doc.weapons as CharacterDto['weapons']) : [],
     proficiencies: toStringArray(doc.proficiencies),
     notes: typeof doc.notes === 'string' ? doc.notes : '',
-    characterTemplateId: typeof doc.characterTemplateId === 'string' ? (doc.characterTemplateId as CharacterDto['characterTemplateId']) : undefined,
+    characterTemplateId:
+      typeof doc.characterTemplateId === 'string' ? (doc.characterTemplateId as CharacterDto['characterTemplateId']) : undefined,
     notesBlocks: (asRecord(doc.notesBlocks) as CharacterDto['notesBlocks']) || undefined,
     customNotesGroups: Array.isArray(doc.customNotesGroups) ? (doc.customNotesGroups as CharacterDto['customNotesGroups']) : [],
     homebrewEntries: Array.isArray(doc.homebrewEntries) ? (doc.homebrewEntries as CharacterDto['homebrewEntries']) : [],
@@ -86,6 +111,15 @@ export function mapCloudCharacterDocToDto(doc: Record<string, unknown>): Charact
     campaign: typeof doc.campaign === 'string' ? doc.campaign : undefined,
     campaignId: typeof doc.campaignId === 'string' ? doc.campaignId : undefined,
     photoUri: typeof doc.photoUri === 'string' ? doc.photoUri : undefined,
-  });
+  };
 }
 
+export function cloudDocToEntity(doc: Record<string, unknown>): CharacterEntity {
+  return draftToEntity(cloudDocToDraft(doc));
+}
+
+// Backward-compatible aliases while call sites migrate to unified API.
+export const mapCharacterDtoToEntity = dtoToEntity;
+export const mapCharacterEntityToViewModel = entityToViewModel;
+export const mapCharacterViewModelToDto = entityToDto;
+export const mapCloudCharacterDocToDto = (doc: Record<string, unknown>): CharacterDto => entityToDto(cloudDocToEntity(doc));

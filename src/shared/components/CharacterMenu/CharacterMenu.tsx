@@ -17,6 +17,7 @@ import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experienc
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
 import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
+import { characterMapper } from '@/domain/mappers';
 
 interface CharacterMenuProps {
   character: CharacterViewModel;
@@ -112,7 +113,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       const sourceCharacter = { ...characterData };
       if (!sourceCharacter.id) throw new Error('Character has no id');
 
-      const res = await upsertCharacterSheetFromLocal(sourceCharacter as any);
+      const res = await upsertCharacterSheetFromLocal(characterMapper.entityToDto(sourceCharacter));
       let syncedCharacter = sourceCharacter;
       let targetSheetId = sourceCharacter.id;
 

@@ -22,6 +22,7 @@ import {
   isNetworkOnline,
   mapRoleToHistoryActor,
 } from '@/shared/helpers/collaboration/status';
+import { characterMapper } from '@/domain/mappers';
 
 type FilterKey = 'all' | 'mine' | 'shared' | 'needs-review';
 const FILTER_LABELS: Record<FilterKey, string> = {
@@ -244,7 +245,7 @@ const DMSharedUpdates = () => {
     try {
       await ensureCharacterSync(normalized.id, true);
       await setSyncTransport(normalized.id, 'syncing', 'Синхронізація...');
-      await upsertCharacterSheetFromLocal(normalized, {
+      await upsertCharacterSheetFromLocal(characterMapper.entityToDto(normalized), {
         historyPaths: ['overview.identity'],
         actorRole: mapRoleToHistoryActor(roleMode),
       });
