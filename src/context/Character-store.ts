@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CharacterEntity } from '@/domain/types';
 import { StatKey } from '@/shared/const/attributes';
 import { Spells } from '@/types/Spells';
@@ -8,6 +7,7 @@ import { Weapon } from '@/types/Weapon';
 import { uuid } from 'expo-modules-core';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import useSyncStore from '@/context/Sync-store';
+import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 
 const MAX_CHARACTERS = 10;
 
@@ -38,9 +38,6 @@ interface CharacterStore {
   removeCharacter: (id: string) => Promise<void>;
 }
 
-const STORAGE_KEY = 'characters';
-const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
-
 function normalizeCharacter(character: CharacterEntity): CharacterEntity {
   const normalized = createEmptyCharacter(character);
   return {
@@ -58,9 +55,9 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
   setLastSessionCharacterId: async (id) => {
     try {
       if (id) {
-        await AsyncStorage.setItem(LAST_SESSION_CHARACTER_ID_KEY, id);
+        await characterLocalRepository.saveLastSessionCharacterId(id);
       } else {
-        await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+        await characterLocalRepository.clearLastSessionCharacterId();
       }
       set({ lastSessionCharacterId: id || null });
     } catch {}
@@ -68,24 +65,23 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
 
   loadCharacters: async () => {
     try {
-      const [jsonValue, storedLastSessionId] = await Promise.all([
-        AsyncStorage.getItem(STORAGE_KEY),
-        AsyncStorage.getItem(LAST_SESSION_CHARACTER_ID_KEY),
+      const [storedCharacters, storedLastSessionId] = await Promise.all([
+        characterLocalRepository.loadCharacters(),
+        characterLocalRepository.loadLastSessionCharacterId(),
       ]);
-      const parsed: CharacterEntity[] = JSON.parse(jsonValue || '[]');
-      const filtered = Array.isArray(parsed) ? parsed.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
+      const filtered = Array.isArray(storedCharacters) ? storedCharacters.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
       const existingIds = new Set(filtered.map((character) => character.id));
       const safeLastSessionId = storedLastSessionId && existingIds.has(storedLastSessionId) ? storedLastSessionId : null;
       set({ characters: filtered, lastSessionCharacterId: safeLastSessionId });
       if (!safeLastSessionId && storedLastSessionId) {
-        await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+        await characterLocalRepository.clearLastSessionCharacterId();
       }
     } catch {}
   },
 
   saveCharacters: async (newCharacters: CharacterEntity[]) => {
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newCharacters));
+      await characterLocalRepository.saveCharacters(newCharacters);
       set({ characters: newCharacters });
     } catch {}
   },
@@ -211,4 +207,3 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
 }));
 
 export default useCharacterStore;
-

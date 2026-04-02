@@ -1,0 +1,88 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { CharacterEntity } from '@/domain/types';
+
+const CHARACTERS_STORAGE_KEY = 'characters';
+const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
+const SHARED_UPDATES_REVIEWED_STORAGE_KEY = 'DM_SHARED_REVIEWED_V1';
+
+export interface CharacterLocalRepository {
+  loadCharacters: () => Promise<CharacterEntity[]>;
+  saveCharacters: (characters: CharacterEntity[]) => Promise<void>;
+  loadLastSessionCharacterId: () => Promise<string | null>;
+  saveLastSessionCharacterId: (id: string) => Promise<void>;
+  clearLastSessionCharacterId: () => Promise<void>;
+  loadSharedUpdatesReviewedMap: () => Promise<Record<string, number>>;
+  saveSharedUpdatesReviewedMap: (map: Record<string, number>) => Promise<void>;
+}
+
+async function loadCharacters(): Promise<CharacterEntity[]> {
+  try {
+    const raw = await AsyncStorage.getItem(CHARACTERS_STORAGE_KEY);
+    const parsed = JSON.parse(raw || '[]');
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(Boolean) as CharacterEntity[];
+  } catch {
+    return [];
+  }
+}
+
+async function saveCharacters(characters: CharacterEntity[]): Promise<void> {
+  try {
+    await AsyncStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(characters));
+  } catch {}
+}
+
+async function loadLastSessionCharacterId(): Promise<string | null> {
+  try {
+    return await AsyncStorage.getItem(LAST_SESSION_CHARACTER_ID_KEY);
+  } catch {
+    return null;
+  }
+}
+
+async function saveLastSessionCharacterId(id: string): Promise<void> {
+  try {
+    await AsyncStorage.setItem(LAST_SESSION_CHARACTER_ID_KEY, id);
+  } catch {}
+}
+
+async function clearLastSessionCharacterId(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
+  } catch {}
+}
+
+async function loadSharedUpdatesReviewedMap(): Promise<Record<string, number>> {
+  try {
+    const raw = await AsyncStorage.getItem(SHARED_UPDATES_REVIEWED_STORAGE_KEY);
+    const parsed = JSON.parse(raw || '{}');
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+
+    const out: Record<string, number> = {};
+    Object.entries(parsed as Record<string, unknown>).forEach(([id, value]) => {
+      const numeric = Number(value);
+      if (!id || !Number.isFinite(numeric)) return;
+      out[id] = numeric;
+    });
+
+    return out;
+  } catch {
+    return {};
+  }
+}
+
+async function saveSharedUpdatesReviewedMap(map: Record<string, number>): Promise<void> {
+  try {
+    await AsyncStorage.setItem(SHARED_UPDATES_REVIEWED_STORAGE_KEY, JSON.stringify(map || {}));
+  } catch {}
+}
+
+export const characterLocalRepository: CharacterLocalRepository = {
+  loadCharacters,
+  saveCharacters,
+  loadLastSessionCharacterId,
+  saveLastSessionCharacterId,
+  clearLastSessionCharacterId,
+  loadSharedUpdatesReviewedMap,
+  saveSharedUpdatesReviewedMap,
+};

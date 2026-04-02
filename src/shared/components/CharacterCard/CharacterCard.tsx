@@ -9,7 +9,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useCharacterStore from '@/context/Character-store';
 import { CLASS_TRANSLATIONS, CLASS_OPTIONS } from '@/shared/const/CharacterClass';
-import { subscribeCharacterSheet, deleteCharacterSheet } from '@/services/characterSheets';
+import { subscribeCharacterSheet, deleteCharacterSheet } from '@/repositories/characterCloudRepository';
 
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
 
@@ -70,6 +70,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
+
 
 
 

@@ -9,8 +9,8 @@ import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
-import type { CharacterSheet } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import type { CharacterSheet } from '@/repositories/characterCloudRepository';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress } from '@/shared/services/auth/index';
 import type { CharacterViewModel } from '@/types/Character';
@@ -521,4 +521,5 @@ const Home = () => {
 };
 
 export default Home;
+
 

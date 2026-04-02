@@ -9,7 +9,7 @@ import { getStyles } from './style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import useAppRoleStore from '@/context/AppRole-store';
@@ -375,4 +375,5 @@ const DM: React.FC = () => {
 };
 
 export default DM;
+
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View, Pressable } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { uuid } from 'expo-modules-core';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 import { fbAuth } from '@/services/firebase';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './DMSharedUpdates.style';
@@ -46,8 +46,6 @@ type SharedRecord = {
     atMs: number;
   }>;
 };
-
-const REVIEWED_STORAGE_KEY = 'DM_SHARED_REVIEWED_V1';
 
 const toMillis = (value: unknown): number => {
   if (!value || typeof value !== 'object') return 0;
@@ -101,12 +99,10 @@ const DMSharedUpdates = () => {
   const isOnline = isNetworkOnline(netInfo.isConnected);
 
   useEffect(() => {
-    AsyncStorage.getItem(REVIEWED_STORAGE_KEY)
-      .then((raw) => {
-        const parsed = JSON.parse(raw || '{}');
-        if (parsed && typeof parsed === 'object') {
-          setReviewedMap(parsed as Record<string, number>);
-        }
+    characterLocalRepository
+      .loadSharedUpdatesReviewedMap()
+      .then((parsed) => {
+        setReviewedMap(parsed);
       })
       .catch(() => {});
   }, []);
@@ -187,7 +183,7 @@ const DMSharedUpdates = () => {
   const persistReviewed = async (next: Record<string, number>) => {
     setReviewedMap(next);
     try {
-      await AsyncStorage.setItem(REVIEWED_STORAGE_KEY, JSON.stringify(next));
+      await characterLocalRepository.saveSharedUpdatesReviewedMap(next);
     } catch {}
   };
 
@@ -390,4 +386,5 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
+
 

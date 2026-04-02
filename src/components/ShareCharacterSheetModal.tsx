@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
-import { addEditorByEmail, removeEditor, subscribeCharacterSheet } from '@/services/characterSheets';
-import { db } from '@/services/firebase';
+import {
+  addEditorByEmail,
+  characterCloudRepository,
+  removeEditor,
+  subscribeCharacterSheet,
+} from '@/repositories/characterCloudRepository';
 
 type Props = {
   visible: boolean;
@@ -27,17 +31,10 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
       }
 
       try {
-        const snapshot = await db.collection('users').where('uid', 'in', uids).get();
-
-        const list = snapshot.docs.map((d) => ({
-          uid: d.data().uid,
-          email: d.data().email || d.data().emailLower,
-        }));
-
+        const list = await characterCloudRepository.getEditorsForSheet(uids);
         setEditors(list);
-      } catch (e) {
-        console.error('Failed to fetch users', e);
-        setEditors(uids.map((uid) => ({ uid, email: uid }))); // fallback
+      } catch {
+        setEditors(uids.map((uid) => ({ uid, email: uid })));
       }
     });
 
@@ -118,6 +115,7 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
     </Modal>
   );
 }
+
 
 
 

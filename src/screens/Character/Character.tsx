@@ -20,8 +20,8 @@ import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 import Dice from '@/screens/Dice/Dice';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
-import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/services/characterSheets';
-import { fetchCharacterSheet, subscribeCharacterSheet } from '@/services/characterSheets';
+import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
+import { fetchCharacterSheet, subscribeCharacterSheet } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
@@ -3172,4 +3172,5 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
+
 

@@ -21,7 +21,7 @@ import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
-import { addEditorByEmail } from '@/services/characterSheets';
+import { addEditorByEmail } from '@/repositories/characterCloudRepository';
 import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 
@@ -1078,4 +1078,5 @@ const CreateCharacter = (): JSX.Element => {
 };
 
 export default CreateCharacter;
+
 

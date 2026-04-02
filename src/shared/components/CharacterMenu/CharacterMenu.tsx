@@ -3,7 +3,6 @@ import { Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { uuid } from 'expo-modules-core';
 import { CharacterViewModel } from '@/types/Character';
@@ -56,25 +55,16 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
   const isCharacterInCloud = isCloudDoc || Boolean(characterData.id && syncByCharacter[characterData.id]?.hasCloud);
 
   useEffect(() => {
-    if (character.id) {
-      AsyncStorage.getItem(`characterData_${character.id}`)
-        .then((stored) => {
-          if (stored) {
-            const parsed = JSON.parse(stored);
-            setCharacterData(parsed);
-            const xp = Number(parsed.experience);
-            setTempExp(Number.isFinite(xp) ? xp : 0);
-            const sp = Number(parsed.speed);
-            setTempSpeed(Number.isFinite(sp) ? sp : 0);
-            const ac = Number(parsed.ac);
-            setTempAc(Number.isFinite(ac) ? ac : 0);
-            const init = Number(parsed.initiative);
-            setTempInit(Number.isFinite(init) ? init : 0);
-          }
-        })
-        .catch(() => {});
-    }
-  }, [character.id]);
+    setCharacterData(character);
+    const xp = Number(character.experience);
+    setTempExp(Number.isFinite(xp) ? xp : 0);
+    const sp = Number(character.speed);
+    setTempSpeed(Number.isFinite(sp) ? sp : 0);
+    const ac = Number(character.ac);
+    setTempAc(Number.isFinite(ac) ? ac : 0);
+    const init = Number(character.initiative);
+    setTempInit(Number.isFinite(init) ? init : 0);
+  }, [character]);
 
   useEffect(() => {
     if (isExpModalVisible) {

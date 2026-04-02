@@ -1,7 +1,7 @@
 import type { CharacterSyncMap, CharacterSyncState, SyncTransportState } from '@/types/Sync';
 import type { CharacterViewModel } from '@/types/Character';
-import type { CharacterActorRole } from '@/services/characterSheets';
-import { fetchCharacterSheet, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import type { CharacterActorRole } from '@/repositories/characterCloudRepository';
+import { characterCloudRepository } from '@/repositories/characterCloudRepository';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { resolveSyncStatus, collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
 import { characterMapper } from '@/domain/mappers';
@@ -560,7 +560,7 @@ export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudRes
   );
 
   try {
-    const result = await upsertCharacterSheetFromLocal(characterMapper.entityToDto(args.character), {
+    const result = await characterCloudRepository.upsertFromLocal(characterMapper.entityToDto(args.character), {
       historyPaths: plan.historyPaths,
       actorRole: args.actorRole,
     });
@@ -632,7 +632,7 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
   }
 
   try {
-    const doc = await fetchCharacterSheet(args.character.id);
+    const doc = await characterCloudRepository.fetchById(args.character.id);
     if (!doc) {
       return { status: 'error', message: 'Не вдалося отримати хмарну версію персонажа' };
     }
@@ -655,3 +655,4 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
     };
   }
 }
+

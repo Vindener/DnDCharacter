@@ -10,7 +10,7 @@ import { getStyles } from '@/screens/DM/style';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
 import useAppRoleStore from '@/context/AppRole-store';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { getShareDisplayStatus, getSyncDisplayStatus } from '@/shared/helpers/collaboration/status';
@@ -225,4 +225,5 @@ const DMPartyOverview = () => {
 };
 
 export default DMPartyOverview;
+
 
