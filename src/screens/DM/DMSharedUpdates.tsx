@@ -5,7 +5,7 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { uuid } from 'expo-modules-core';
-import { subscribeMySheets, subscribeSharedWithMe, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './DMSharedUpdates.style';
@@ -22,7 +22,7 @@ import {
   isNetworkOnline,
   mapRoleToHistoryActor,
 } from '@/shared/helpers/collaboration/status';
-import { characterMapper } from '@/domain/mappers';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 type FilterKey = 'all' | 'mine' | 'shared' | 'needs-review';
 const FILTER_LABELS: Record<FilterKey, string> = {
@@ -86,8 +86,10 @@ const DMSharedUpdates = () => {
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
   const roleMode = useAppRoleStore((s) => s.role);
   const netInfo = useNetInfo();
 
@@ -230,11 +232,6 @@ const DMSharedUpdates = () => {
   };
 
   const syncNow = async (item: SharedRecord) => {
-    if (!isOnline) {
-      await setSyncTransport(item.id, 'idle', 'Офлайн-черга');
-      return;
-    }
-
     const normalized = mapCloudCharacterToLocalDto(item.payload);
     const existing = characters.find((character) => character.id === normalized.id);
     if (existing) {
@@ -242,18 +239,28 @@ const DMSharedUpdates = () => {
     } else {
       await addCharacter(normalized);
     }
-    try {
-      await ensureCharacterSync(normalized.id, true);
-      await setSyncTransport(normalized.id, 'syncing', 'Синхронізація...');
-      await upsertCharacterSheetFromLocal(characterMapper.entityToDto(normalized), {
-        historyPaths: ['overview.identity'],
-        actorRole: mapRoleToHistoryActor(roleMode),
-      });
-      await markCloudUploaded(normalized.id);
-      await setSyncTransport(normalized.id, 'synced', 'Синхронізовано');
-    } catch (error) {
-      const message = String((error as Error)?.message || 'Помилка синхронізації');
-      await setSyncTransport(normalized.id, 'error', message);
+
+    const result = await syncToCloud({
+      character: normalized,
+      syncState: syncByCharacter[normalized.id],
+      actorRole: mapRoleToHistoryActor(roleMode),
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        setSyncTransport,
+        markSyncError,
+      },
+      isOnline,
+      historyPaths: ['overview.identity'],
+      offlineMessage: 'Офлайн-черга',
+      syncingMessage: 'Синхронізація...',
+      syncedMessage: 'Синхронізовано',
+      conflictFallbackPath: 'overview.identity',
+    });
+
+    if (result.status === 'error') {
+      await setSyncTransport(normalized.id, 'error', result.message || 'Помилка синхронізації');
     }
   };
 

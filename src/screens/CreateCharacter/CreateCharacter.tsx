@@ -21,9 +21,9 @@ import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
-import { addEditorByEmail, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import { addEditorByEmail } from '@/services/characterSheets';
 import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
-import { characterMapper } from '@/domain/mappers';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 type StartMethod = 'guided' | 'quick';
 type StatMethod = 'array' | 'pointbuy';
@@ -119,6 +119,8 @@ const CreateCharacter = (): JSX.Element => {
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const removeCharacterSync = useSyncStore((s) => s.removeCharacterSync);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
+  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
 
   const [step, setStep] = useState<number>(1);
   const [startMethod, setStartMethod] = useState<StartMethod>('guided');
@@ -445,9 +447,30 @@ const CreateCharacter = (): JSX.Element => {
 
       if (cloudRequested) {
         try {
-          const result = await upsertCharacterSheetFromLocal(characterMapper.entityToDto(character));
-          if (result?.id && result.id !== character.id) {
-            const remappedCharacter = { ...character, id: result.id };
+          const syncResult = await syncToCloud({
+            character,
+            syncState: useSyncStore.getState().syncByCharacter[character.id],
+            actorRole: 'Player',
+            syncPort: {
+              ensureCharacterSync,
+              setCloudAvailability,
+              markCloudUploaded,
+              setSyncTransport,
+              markSyncError,
+            },
+            isOnline: true,
+            fallbackPath: 'overview.identity',
+            syncingMessage: 'Синхронізація...',
+            syncedMessage: 'Синхронізовано',
+            conflictFallbackPath: 'overview.identity',
+          });
+
+          if (syncResult.status !== 'synced') {
+            throw new Error(syncResult.message || 'Cloud sync failed');
+          }
+
+          if (syncResult.targetCharacter.id !== character.id) {
+            const remappedCharacter = syncResult.targetCharacter;
             await updateCharacter(character.id, remappedCharacter);
             await removeCharacterSync(character.id);
             await ensureCharacterSync(remappedCharacter.id, true);
@@ -455,7 +478,6 @@ const CreateCharacter = (): JSX.Element => {
             targetSheetId = remappedCharacter.id;
           }
 
-          await markCloudUploaded(targetSheetId);
           cloudSaved = true;
 
           const email = inviteEmail.trim().toLowerCase();

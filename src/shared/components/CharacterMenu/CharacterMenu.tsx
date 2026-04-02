@@ -15,9 +15,8 @@ import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
-import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
-import { characterMapper } from '@/domain/mappers';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 interface CharacterMenuProps {
   character: CharacterViewModel;
@@ -37,6 +36,8 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const removeCharacterSync = useSyncStore((s) => s.removeCharacterSync);
+  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
@@ -113,27 +114,44 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       const sourceCharacter = { ...characterData };
       if (!sourceCharacter.id) throw new Error('Character has no id');
 
-      const res = await upsertCharacterSheetFromLocal(characterMapper.entityToDto(sourceCharacter));
-      let syncedCharacter = sourceCharacter;
+      const result = await syncToCloud({
+        character: sourceCharacter,
+        syncState: useSyncStore.getState().syncByCharacter[sourceCharacter.id],
+        actorRole: 'Player',
+        syncPort: {
+          ensureCharacterSync,
+          setCloudAvailability,
+          markCloudUploaded,
+          setSyncTransport,
+          markSyncError,
+        },
+        isOnline: true,
+        fallbackPath: 'overview.identity',
+        syncingMessage: 'Синхронізація...',
+        syncedMessage: 'Синхронізовано',
+        conflictFallbackPath: 'overview.identity',
+      });
+
+      if (result.status !== 'synced') {
+        throw new Error(result.message || 'Не вдалося синхронізувати');
+      }
+
+      let syncedCharacter = result.targetCharacter;
       let targetSheetId = sourceCharacter.id;
 
-      if (res?.id && res.id !== sourceCharacter.id) {
-        syncedCharacter = { ...sourceCharacter, id: res.id };
+      if (syncedCharacter.id !== sourceCharacter.id) {
         await updateCharacter(sourceCharacter.id, syncedCharacter);
         await removeCharacterSync(sourceCharacter.id);
         await ensureCharacterSync(syncedCharacter.id, true);
         targetSheetId = syncedCharacter.id;
-      } else {
-        await ensureCharacterSync(targetSheetId, true);
       }
 
-      await setCloudAvailability(targetSheetId, true);
-      await markCloudUploaded(targetSheetId);
+      await ensureCharacterSync(targetSheetId, true);
       setCurrentCharacterId(targetSheetId);
       setCharacterData(syncedCharacter);
       onChange?.(syncedCharacter);
 
-      const successMessage = res?.created
+      const successMessage = result.created
         ? 'Персонажа збережено у хмарі.'
         : 'Зміни персонажа успішно оновлені у хмарі.';
 

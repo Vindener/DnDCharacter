@@ -21,7 +21,7 @@ import Dice from '@/screens/Dice/Dice';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
 import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/services/characterSheets';
-import { fetchCharacterSheet, subscribeCharacterSheet, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import { fetchCharacterSheet, subscribeCharacterSheet } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
@@ -37,11 +37,10 @@ import {
   isNetworkOnline,
   mapRoleToHistoryActor,
 } from '@/shared/helpers/collaboration/status';
-import { collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
+import { buildUploadPlan, reconcileRemoteSnapshot, resolveConflict, syncToCloud } from '@/services/characterSyncCoordinator';
 import useSpellbookStore from '@/context/Spellbook-store';
 import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
-import { characterMapper } from '@/domain/mappers';
 
 interface CharacterProps {
   route: {
@@ -266,86 +265,6 @@ function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
       };
     })
     .filter((entry): entry is CharacterChangeHistoryEntry => Boolean(entry && entry.id && entry.uid && entry.tab));
-}
-
-function getPendingSections(paths: string[]): Set<string> {
-  const sections = new Set<string>();
-  (paths || []).forEach((path) => {
-    const section = pathToSyncSection(path);
-    if (section !== 'unknown') sections.add(section);
-  });
-  return sections;
-}
-
-function mergeBySections(local: CharacterViewModel, remote: CharacterViewModel, pendingPaths: string[]): CharacterViewModel {
-  const pendingSections = getPendingSections(pendingPaths);
-  const next = { ...local };
-
-  if (!pendingSections.has('overview')) {
-    next.name = remote.name;
-    next.class = remote.class;
-    next.subclass = remote.subclass;
-    next.race = remote.race;
-    next.subrace = remote.subrace;
-    next.background = remote.background;
-    next.level = remote.level;
-    next.experience = remote.experience;
-    next.stats = remote.stats;
-    next.skills = remote.skills;
-    next.savingThrows = remote.savingThrows;
-    next.traits = remote.traits;
-    next.featuresAndTraits = remote.featuresAndTraits;
-    next.proficiencyBonus = remote.proficiencyBonus;
-  }
-
-  if (!pendingSections.has('combat')) {
-    next.hp = remote.hp;
-    next.ac = remote.ac;
-    next.initiative = remote.initiative;
-    next.speed = remote.speed;
-    next.hitDice = remote.hitDice;
-    next.deathSaves = remote.deathSaves;
-    next.weapons = remote.weapons;
-    next.conditions = remote.conditions;
-    next.combatTemplates = remote.combatTemplates;
-    next.sessionMode = remote.sessionMode;
-  }
-
-  if (!pendingSections.has('magic')) {
-    next.spells = remote.spells;
-  }
-
-  if (!pendingSections.has('inventory')) {
-    next.inventory = remote.inventory;
-    next.coins = remote.coins;
-    next.customCoins = remote.customCoins;
-    next.tools = remote.tools;
-    next.proficiencies = remote.proficiencies;
-  }
-
-  if (!pendingSections.has('notes')) {
-    next.notes = remote.notes;
-    next.backstory = remote.backstory;
-    next.campaign = remote.campaign;
-    next.campaignId = remote.campaignId;
-    next.alliesAndOrganizations = remote.alliesAndOrganizations;
-    next.notesBlocks = remote.notesBlocks;
-    next.customNotesGroups = remote.customNotesGroups;
-  }
-
-  if (!pendingSections.has('homebrew')) {
-    next.characterTemplateId = remote.characterTemplateId;
-    next.customFields = remote.customFields;
-    next.customTrackers = remote.customTrackers;
-    next.customSections = remote.customSections;
-    next.customResources = remote.customResources;
-    next.customResetRules = remote.customResetRules;
-    next.customFeatureBlocks = remote.customFeatureBlocks;
-    next.customSpellLists = remote.customSpellLists;
-    next.homebrewEntries = remote.homebrewEntries;
-  }
-
-  return ensureCharacterDefaults(next);
 }
 
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
@@ -623,7 +542,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       setCloudAvailability(baseCharacter.id, exists).catch(() => {});
 
       const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
-      const pendingPaths = syncState?.pendingPaths || [];
       if (!exists) return;
 
       const remoteDto = ensureCharacterDefaults(mapCloudCharacterToLocalDto(doc as Record<string, unknown>));
@@ -632,28 +550,34 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         .filter((entry) => (syncState?.lastSyncAt || 0) === 0 || entry.atMs > (syncState?.lastSyncAt || 0))
         .flatMap((entry) => entry.paths || []);
 
-      if (pendingPaths.length) {
-        const conflictForPending = collectConflictPaths(pendingPaths, remotePathsSinceLastSync);
-        if (conflictForPending.length) {
-          markConflict(baseCharacter.id, conflictForPending).catch(() => {});
-          setSyncFeedback('Виявлено конфлікт. Потрібна перевірка.');
-          return;
-        }
+      const reconciled = reconcileRemoteSnapshot({
+        syncState,
+        localCharacter: characterDataRef.current,
+        remoteCharacter: remoteDto,
+        remotePathsSinceLastSync,
+        normalizeCharacter: ensureCharacterDefaults,
+      });
 
-        if (remotePathsSinceLastSync.length) {
-          const merged = mergeBySections(characterDataRef.current, remoteDto, pendingPaths);
-          setCharacterData(merged);
-          setSyncFeedback('Злиття секції з хмари застосовано');
-        }
+      if (reconciled.action === 'conflict') {
+        markConflict(baseCharacter.id, reconciled.conflictPaths).catch(() => {});
+        setSyncFeedback('Виявлено конфлікт. Потрібна перевірка.');
         return;
       }
 
-      setCharacterData(remoteDto);
-      void updateCharacter(remoteDto.id, remoteDto);
-      markCloudDownloaded(remoteDto.id).catch(() => {});
-      setSyncFeedback('Завантажено останню хмарну ревізію');
-      if (!pendingPaths.length && remotePathsSinceLastSync.length) {
-        setSyncTransport(remoteDto.id, 'downloading', 'Завантажено останню хмарну ревізію').catch(() => {});
+      if (reconciled.action === 'merge') {
+        setCharacterData(reconciled.character);
+        setSyncFeedback('Злиття секції з хмари застосовано');
+        return;
+      }
+
+      if (reconciled.action === 'replace') {
+        setCharacterData(reconciled.character);
+        void updateCharacter(reconciled.character.id, reconciled.character);
+        markCloudDownloaded(reconciled.character.id).catch(() => {});
+        setSyncFeedback('Завантажено останню хмарну ревізію');
+        if (reconciled.remotePathsSinceLastSync.length) {
+          setSyncTransport(reconciled.character.id, 'downloading', 'Завантажено останню хмарну ревізію').catch(() => {});
+        }
       }
     });
 
@@ -681,47 +605,63 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     if (!fbAuth.currentUser) return;
     if (!isCloudDoc) return;
 
-    const pendingPathsForUpload = Array.from(new Set(currentSync?.pendingPaths || []));
-    if (!pendingPathsForUpload.length) return;
+    const uploadPlan = buildUploadPlan({ syncState: currentSync });
+    if (!uploadPlan.pendingCount) return;
 
     if (!isOnline) {
-      setSyncFeedback(`Офлайн-черга: ${pendingPathsForUpload.length} шлях(ів) очікує`);
-      setSyncTransport(characterData.id, 'idle', `Офлайн-черга: ${pendingPathsForUpload.length} шлях(ів) очікує`).catch(() => {});
+      const offlineMessage = `Офлайн-черга: ${uploadPlan.pendingCount} шлях(ів) очікує`;
+      setSyncFeedback(offlineMessage);
+      setSyncTransport(characterData.id, 'idle', offlineMessage).catch(() => {});
       return;
     }
 
     const actorRole: CharacterActorRole = mapRoleToHistoryActor(roleMode);
     setSyncFeedback('Вивантаження локальних змін...');
-    setSyncTransport(characterData.id, 'uploading', 'Вивантаження локальних змін...').catch(() => {});
     const timeout = setTimeout(() => {
-      upsertCharacterSheetFromLocal(characterMapper.entityToDto(characterData), { historyPaths: pendingPathsForUpload, actorRole })
-        .then(() => {
+      void syncToCloud({
+        character: characterData,
+        syncState: currentSync,
+        actorRole,
+        syncPort: {
+          ensureCharacterSync,
+          setCloudAvailability,
+          markCloudUploaded,
+          setSyncTransport,
+          markSyncError,
+          markConflict,
+        },
+        isOnline,
+        startTransportState: 'uploading',
+        syncingMessage: 'Вивантаження локальних змін...',
+        syncedMessage: 'Щойно автосинхронізовано',
+        conflictFallbackPath: 'overview.identity',
+      }).then((result) => {
+        if (result.status === 'synced') {
           setSyncFeedback('Щойно автосинхронізовано');
-          setSyncTransport(characterData.id, 'synced', 'Щойно автосинхронізовано').catch(() => {});
-          markCloudUploaded(characterData.id).catch(() => {});
-        })
-        .catch((error) => {
-          const message = String(error?.message || '').toLowerCase();
-          setSyncFeedback(message.includes('network') ? 'Повтор після мережевої помилки...' : 'Помилка синхронізації. Повторіть через "Синхронізувати зараз".');
-          markSyncError(characterData.id, message || 'Помилка синхронізації').catch(() => {});
-          if (message.includes('conflict')) {
-            markConflict(characterData.id, pendingPathsForUpload.length ? pendingPathsForUpload : ['overview.identity']).catch(
-              () => {},
-            );
-          }
-        });
+          return;
+        }
+
+        const loweredMessage = String(result.message || '').toLowerCase();
+        setSyncFeedback(
+          loweredMessage.includes('network')
+            ? 'Повтор після мережевої помилки...'
+            : 'Помилка синхронізації. Повторіть через "Синхронізувати зараз".',
+        );
+      });
     }, 1200);
 
     return () => clearTimeout(timeout);
   }, [
     characterData,
     currentSync?.pendingPaths,
+    ensureCharacterSync,
     isCloudDoc,
     isOnline,
     markCloudUploaded,
     markConflict,
     markSyncError,
     roleMode,
+    setCloudAvailability,
     setSyncTransport,
   ]);
 
@@ -1342,44 +1282,121 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
   const resolveConflictWithLocal = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
-    setSyncFeedback('Застосування локальної версії до хмари...');
-    setSyncTransport(characterData.id, 'uploading', 'Застосування локальної версії до хмари...').catch(() => {});
-    const historyPaths = Array.from(new Set(currentSync?.pendingPaths || []));
-    upsertCharacterSheetFromLocal(characterMapper.entityToDto(characterData), { historyPaths, actorRole: mapRoleToHistoryActor(roleMode) })
-      .then(() => {
+    void resolveConflict({
+      strategy: 'keep-local',
+      character: characterData,
+      syncState: currentSync,
+      actorRole: mapRoleToHistoryActor(roleMode),
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        markCloudDownloaded,
+        clearConflicts,
+        setSyncTransport,
+        markSyncError,
+        markConflict,
+      },
+      isOnline,
+      normalizeCharacter: ensureCharacterDefaults,
+    }).then((result) => {
+      if (result.status === 'resolved-local') {
         setSyncFeedback('Конфлікт вирішено локальною версією');
-        setSyncTransport(characterData.id, 'synced', 'Конфлікт вирішено локальною версією').catch(() => {});
-        markCloudUploaded(characterData.id).catch(() => {});
-        clearConflicts(characterData.id).catch(() => {});
-      })
-      .catch(() => {
+        return;
+      }
+      if (result.status === 'error') {
         setSyncFeedback('Не вдалося вирішити конфлікт локальною версією');
-        markSyncError(characterData.id, 'Не вдалося вирішити конфлікт локальною версією').catch(() => {});
-      });
-  }, [characterData, clearConflicts, currentSync?.pendingPaths, markCloudUploaded, markSyncError, roleMode, setSyncTransport]);
+      }
+    });
+  }, [
+    characterData,
+    clearConflicts,
+    currentSync,
+    ensureCharacterSync,
+    isOnline,
+    markCloudDownloaded,
+    markCloudUploaded,
+    markConflict,
+    markSyncError,
+    roleMode,
+    setCloudAvailability,
+    setSyncTransport,
+  ]);
 
   const resolveConflictWithCloud = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_cloud', { characterId: characterData.id });
-    fetchCharacterSheet(characterData.id)
-      .then((doc) => {
-        if (!doc) return;
-        const mapped = mapCloudCharacterToLocalDto(doc as Record<string, unknown>);
-        const normalized = ensureCharacterDefaults(mapped);
-        setCharacterData(normalized);
-        void updateCharacter(normalized.id, normalized);
-        markCloudDownloaded(normalized.id).catch(() => {});
-        clearConflicts(normalized.id).catch(() => {});
-        setSyncTransport(normalized.id, 'downloading', 'Конфлікт вирішено хмарною версією').catch(() => {});
+    void resolveConflict({
+      strategy: 'keep-cloud',
+      character: characterData,
+      syncState: currentSync,
+      actorRole: mapRoleToHistoryActor(roleMode),
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        markCloudDownloaded,
+        clearConflicts,
+        setSyncTransport,
+        markSyncError,
+      },
+      isOnline,
+      normalizeCharacter: ensureCharacterDefaults,
+    }).then((result) => {
+      if (result.status === 'resolved-cloud') {
+        setCharacterData(result.targetCharacter);
+        void updateCharacter(result.targetCharacter.id, result.targetCharacter);
         setSyncFeedback('Конфлікт вирішено хмарною версією');
-      })
-      .catch(() => {});
-  }, [characterData.id, clearConflicts, markCloudDownloaded, setSyncTransport, updateCharacter]);
+      }
+    });
+  }, [
+    characterData,
+    clearConflicts,
+    currentSync,
+    ensureCharacterSync,
+    isOnline,
+    markCloudDownloaded,
+    markCloudUploaded,
+    markSyncError,
+    roleMode,
+    setCloudAvailability,
+    setSyncTransport,
+    updateCharacter,
+  ]);
 
   const resolveConflictManual = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_later', { characterId: characterData.id });
-    clearConflicts(characterData.id).catch(() => {});
-    setSyncFeedback('Конфлікт знято. Ручну перевірку відкладено.');
-  }, [characterData.id, clearConflicts]);
+    void resolveConflict({
+      strategy: 'later',
+      character: characterData,
+      syncState: currentSync,
+      actorRole: mapRoleToHistoryActor(roleMode),
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        markCloudDownloaded,
+        clearConflicts,
+        setSyncTransport,
+        markSyncError,
+      },
+      isOnline,
+      normalizeCharacter: ensureCharacterDefaults,
+    }).then(() => {
+      setSyncFeedback('Конфлікт знято. Ручну перевірку відкладено.');
+    });
+  }, [
+    characterData,
+    clearConflicts,
+    currentSync,
+    ensureCharacterSync,
+    isOnline,
+    markCloudDownloaded,
+    markCloudUploaded,
+    markSyncError,
+    roleMode,
+    setCloudAvailability,
+    setSyncTransport,
+  ]);
 
   const syncNow = useCallback(() => {
     if (!fbAuth.currentUser) {
@@ -1391,29 +1408,42 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
       return;
     }
 
-    const pendingPaths = Array.from(new Set(currentSync?.pendingPaths || []));
-    const fallbackPath = TAB_DEFAULT_PATH[selectedTab];
-    const historyPaths = pendingPaths.length ? pendingPaths : [fallbackPath];
-    const actorRole: CharacterActorRole = mapRoleToHistoryActor(roleMode);
+    const uploadPlan = buildUploadPlan({
+      syncState: currentSync,
+      fallbackPath: TAB_DEFAULT_PATH[selectedTab],
+    });
 
     setSyncFeedback('Синхронізація...');
-    setSyncTransport(characterData.id, 'syncing', 'Синхронізація...').catch(() => {});
-    upsertCharacterSheetFromLocal(characterMapper.entityToDto(characterData), { historyPaths, actorRole })
-      .then(() => {
+    void syncToCloud({
+      character: characterData,
+      syncState: currentSync,
+      actorRole: mapRoleToHistoryActor(roleMode),
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        setSyncTransport,
+        markSyncError,
+      },
+      isOnline,
+      historyPaths: uploadPlan.historyPaths,
+      syncingMessage: 'Синхронізація...',
+      syncedMessage: 'Синхронізовано',
+      conflictFallbackPath: TAB_DEFAULT_PATH[selectedTab],
+    }).then((result) => {
+      if (result.status === 'synced') {
         setIsCloudDoc(true);
-        setCloudAvailability(characterData.id, true).catch(() => {});
-        markCloudUploaded(characterData.id).catch(() => {});
-        setSyncTransport(characterData.id, 'synced', 'Синхронізовано').catch(() => {});
         setSyncFeedback('Синхронізовано');
-      })
-      .catch((error) => {
-        const message = String(error?.message || 'Помилка синхронізації');
-        markSyncError(characterData.id, message).catch(() => {});
-        setSyncFeedback(`Помилка синхронізації: ${message}`);
-      });
+        return;
+      }
+      if (result.status === 'error') {
+        setSyncFeedback(`Помилка синхронізації: ${result.message}`);
+      }
+    });
   }, [
     characterData,
-    currentSync?.pendingPaths,
+    currentSync,
+    ensureCharacterSync,
     isOnline,
     markCloudUploaded,
     markSyncError,

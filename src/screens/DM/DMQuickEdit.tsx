@@ -9,10 +9,9 @@ import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
 import { appendQuickSessionNote } from '@/shared/helpers/homebrew';
 import type { CharacterViewModel } from '@/types/Character';
-import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import { Modal } from '@/shared/components/Modal/Modal';
-import { characterMapper } from '@/domain/mappers';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 type Props = StackScreenProps<DMStackParamList, 'DMQuickEdit'>;
 
@@ -32,6 +31,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
   const markSyncError = useSyncStore((s) => s.markSyncError);
@@ -61,20 +61,35 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
       return;
     }
 
-    try {
-      await setSyncTransport(current.id, 'syncing', 'Синхронізація швидкого редагування DM...');
-      await upsertCharacterSheetFromLocal(characterMapper.entityToDto(next), {
-        historyPaths: paths,
-        actorRole: 'DM',
-      });
-      await markCloudUploaded(current.id);
-      await setSyncTransport(current.id, 'synced', 'Синхронізовано');
+    const result = await syncToCloud({
+      character: next,
+      syncState: useSyncStore.getState().syncByCharacter[current.id],
+      actorRole: 'DM',
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        setSyncTransport,
+        markSyncError,
+      },
+      isOnline: true,
+      historyPaths: paths,
+      syncingMessage: 'Синхронізація швидкого редагування DM...',
+      syncedMessage: 'Синхронізовано',
+      conflictFallbackPath: paths[0] || 'overview.identity',
+    });
+
+    if (result.status === 'synced') {
       setSyncFeedback('Синхронізовано');
-    } catch (error) {
-      const message = String((error as Error)?.message || 'Помилка синхронізації');
-      await markSyncError(current.id, message);
-      setSyncFeedback(message);
+      return;
     }
+
+    if (result.status === 'error') {
+      setSyncFeedback(result.message || 'Помилка синхронізації');
+      return;
+    }
+
+    setSyncFeedback('Офлайн-черга');
   };
 
   const spellSlotEntries = useMemo(() => {
