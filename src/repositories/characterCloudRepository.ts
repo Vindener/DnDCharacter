@@ -401,7 +401,7 @@ export async function upsertCharacterSheetFromLocal(
       if (hasDoc(snap)) {
         existingMeta = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
 
     const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
     const historyPaths = options?.historyPaths || [];
@@ -436,7 +436,7 @@ export async function bulkUpsertFromLocal(list: CharacterDto[]) {
   for (const character of list) {
     try {
       await upsertCharacterSheetFromLocal(character);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   }
 }
 
@@ -679,3 +679,4 @@ export const characterCloudRepository: CharacterCloudRepository = {
   removeEditor,
   getEditorsForSheet,
 };
+

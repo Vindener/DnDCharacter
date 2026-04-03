@@ -3,68 +3,70 @@ import { Text, Pressable, TextInput as RNTextInput, TouchableOpacity, View } fro
 import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 import Dice from '@/screens/Dice/Dice';
 import { Modal } from '@/shared/components/Modal/Modal';
+import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
-type CharacterModalsProps = {
-  styles: any;
-  colors: any;
-  characterData: any;
-  isHpModalVisible: boolean;
-  setIsHpModalVisible: (value: boolean) => void;
-  saveHpModal: () => void;
-  tempCurrentHp: string;
-  setTempCurrentHp: (value: string) => void;
-  tempMaxHp: string;
-  setTempMaxHp: (value: string) => void;
-  isTempHpModalVisible: boolean;
-  setIsTempHpModalVisible: (value: boolean) => void;
-  saveTempHp: () => void;
-  tempShieldInput: string;
-  setTempShieldInput: (value: string) => void;
-  isDiceModalVisible: boolean;
-  setIsDiceModalVisible: (value: boolean) => void;
-  isConditionModalVisible: boolean;
-  setIsConditionModalVisible: (value: boolean) => void;
-  addCondition: () => void;
-  conditionInput: string;
-  setConditionInput: (value: string) => void;
-  isQuickNoteModalVisible: boolean;
-  setIsQuickNoteModalVisible: (value: boolean) => void;
-  addQuickSessionNote: () => void;
-  quickNoteInput: string;
-  setQuickNoteInput: (value: string) => void;
-  isSpellQuickModalVisible: boolean;
-  closeSpellQuickModal: () => void;
-  quickSpellSearch: string;
-  setQuickSpellSearch: (value: string) => void;
-  quickSpellCandidates: any[];
-  pickExistingSpellForQuickAdd: (spell: any) => void;
-  quickSpellName: string;
-  setQuickSpellName: (value: string) => void;
-  quickSpellLevel: string;
-  setQuickSpellLevel: (value: string) => void;
-  selectedQuickSpell: any;
-  rollSpellAttack: (spellName: string) => void;
-  rollSpellDamage: (spellName: string, profile: any) => void;
-  spellRollResult: { title: string; details: string[] } | null;
-  preparedSpellsLimit: number | null;
-  preparedSpellsCount: number;
-  canAddPreparedFromQuickModal: boolean;
-  isQuickSpellAlreadyPrepared: boolean;
-  addSpellFromCharacter: (status: 'known' | 'prepared' | 'cantrip') => void;
-  isRestModalVisible: boolean;
-  setIsRestModalVisible: (value: boolean) => void;
-  restStep: 'choose' | 'short' | 'roll';
-  setRestStep: (value: 'choose' | 'short' | 'roll') => void;
-  shortRestDice: string;
-  setShortRestDice: (value: string) => void;
-  startShortRestRoll: () => void;
-  applyLongRest: () => void;
-  rollsNeeded: number;
-  rollResults: number[];
-  setRollResults: (updater: (prev: number[]) => number[]) => void;
-  diceSides: number;
-  applyShortRestRolls: () => void;
-};
+type CharacterModalsProps = Pick<
+  CharacterActionsReadyState,
+  | 'styles'
+  | 'colors'
+  | 'characterData'
+  | 'isHpModalVisible'
+  | 'setIsHpModalVisible'
+  | 'saveHpModal'
+  | 'tempCurrentHp'
+  | 'setTempCurrentHp'
+  | 'tempMaxHp'
+  | 'setTempMaxHp'
+  | 'isTempHpModalVisible'
+  | 'setIsTempHpModalVisible'
+  | 'saveTempHp'
+  | 'tempShieldInput'
+  | 'setTempShieldInput'
+  | 'isDiceModalVisible'
+  | 'setIsDiceModalVisible'
+  | 'isConditionModalVisible'
+  | 'setIsConditionModalVisible'
+  | 'addCondition'
+  | 'conditionInput'
+  | 'setConditionInput'
+  | 'isQuickNoteModalVisible'
+  | 'setIsQuickNoteModalVisible'
+  | 'addQuickSessionNote'
+  | 'quickNoteInput'
+  | 'setQuickNoteInput'
+  | 'isSpellQuickModalVisible'
+  | 'closeSpellQuickModal'
+  | 'quickSpellSearch'
+  | 'setQuickSpellSearch'
+  | 'quickSpellCandidates'
+  | 'pickExistingSpellForQuickAdd'
+  | 'quickSpellName'
+  | 'setQuickSpellName'
+  | 'quickSpellLevel'
+  | 'setQuickSpellLevel'
+  | 'selectedQuickSpell'
+  | 'rollSpellAttack'
+  | 'rollSpellDamage'
+  | 'spellRollResult'
+  | 'preparedSpellsLimit'
+  | 'preparedSpellsCount'
+  | 'canAddPreparedFromQuickModal'
+  | 'isQuickSpellAlreadyPrepared'
+  | 'addSpellFromCharacter'
+  | 'isRestModalVisible'
+  | 'setIsRestModalVisible'
+  | 'restStep'
+  | 'setRestStep'
+  | 'shortRestDice'
+  | 'setShortRestDice'
+  | 'startShortRestRoll'
+  | 'applyLongRest'
+  | 'rollsNeeded'
+  | 'rollResults'
+  | 'setRollResults'
+  | 'diceSides'
+  | 'applyShortRestRolls'
+>;
 
 export function CharacterModals({
   styles,

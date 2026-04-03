@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
@@ -39,7 +39,12 @@ const Header = () => {
   };
 
   const openSettings = () => {
-    (navigation as any).navigate('Heroes', { screen: 'Settings' });
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Settings' },
+      }),
+    );
   };
 
   return (

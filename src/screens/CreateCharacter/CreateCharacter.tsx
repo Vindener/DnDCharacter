@@ -374,7 +374,7 @@ const CreateCharacter = (): JSX.Element => {
       setIsSigningIn(true);
       await onGoogleButtonPress();
       setAuthVersion((prev) => prev + 1);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
     setIsSigningIn(false);
   };
 
@@ -1078,5 +1078,6 @@ const CreateCharacter = (): JSX.Element => {
 };
 
 export default CreateCharacter;
+
 
 

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import type { CharacterViewModel } from '@/types/Character';
 import { useCharacterActions } from './hooks/useCharacterActions';
+import type { CharacterActionsReadyState } from './hooks/useCharacterActions';
+import type { CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
 import { CharacterHeader } from './components/CharacterHeader';
 import { CombatSummaryCard } from './components/CombatSummaryCard';
 import { QuickActionBar } from './components/QuickActionBar';
@@ -28,7 +30,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     );
   }
 
-  const viewState: any = state;
+  const viewState = state as CharacterActionsReadyState;
   const {
     styles,
     colors,
@@ -123,7 +125,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               <Text style={styles.blockTextMuted}>Маркер останньої зміни: {latestTabChangeLabel} о {new Date(latestTabChange.atMs).toLocaleString()}</Text>
             ) : null}
             {!tabHistory.length && <Text style={styles.blockTextMuted}>Для цієї вкладки ще немає спільної історії.</Text>}
-            {tabHistory.map((entry: any) => (
+            {tabHistory.map((entry: CharacterChangeHistoryEntry) => (
               <View key={entry.id} style={styles.historyRow}>
                 <Text style={styles.historyAuthor}>{getHistoryAuthorLabel(entry)}</Text>
                 <Text style={styles.historyMeta}>{new Date(entry.atMs).toLocaleString()}</Text>

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { WEAPONS_DB } from '@/shared/const/WeaponsDb';
@@ -60,7 +59,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
 
   return (
     <View style={styles.container}>
-      <Weapon data={data} />
+      <Weapon />
 
       <Text style={styles.label}>Інвентар персонажа:</Text>
 
@@ -100,4 +99,5 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
 };
 
 export default Inventory;
+
 

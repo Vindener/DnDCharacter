@@ -159,10 +159,11 @@ export interface CharacterModelBase {
   combatTemplates?: CharacterCombatTemplates;
 }
 
-export interface CharacterEntity extends CharacterModelBase {}
+export type CharacterEntity = CharacterModelBase;
 
-export interface CharacterDto extends CharacterModelBase {}
+export type CharacterDto = CharacterModelBase;
 
 export type CharacterDraft = Partial<Omit<CharacterEntity, 'id'>> & { id?: string };
 
 export type CharacterViewModel = CharacterEntity;
+

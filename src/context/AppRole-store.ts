@@ -17,7 +17,7 @@ const useAppRoleStore = create<AppRoleState>((set) => ({
     set({ role });
     try {
       await AsyncStorage.setItem(STORAGE_KEY, role);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   loadRole: async () => {
@@ -26,8 +26,9 @@ const useAppRoleStore = create<AppRoleState>((set) => ({
       if (value === 'Player' || value === 'DM' || value === 'Hybrid') {
         set({ role: value });
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 }));
 
 export default useAppRoleStore;
+

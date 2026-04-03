@@ -3,7 +3,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
-import FileService from '@/shared/services/fileSerice';
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
 import TextInput from '@/shared/components/TextInput/TextInput';

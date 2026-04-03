@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { View, Text } from 'react-native';
 import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
@@ -28,15 +27,14 @@ const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
         value={character?.notes || ''}
         onChangeText={handleChange}
         placeholder='Введіть ваші нотатки'
-        resizable
         initialHeight={160}
         minHeight={100}
         maxHeight={560}
-        resizeBoth 
       />
     </View>
   );
 };
 
 export default Notes;
+
 

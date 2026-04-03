@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { Ionicons } from '@expo/vector-icons';
@@ -158,9 +158,14 @@ const DMPartyOverview = () => {
   const openCharacter = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     setCurrentCharacterId(local.id);
-    const root = navigation.getParent() as any;
+    const root = navigation.getParent();
     if (!root) return;
-    root.navigate('Heroes', { screen: 'Character', params: { character: local } });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character: local } },
+      }),
+    );
   };
 
   const openQuickEdit = async (character: CharacterViewModel) => {

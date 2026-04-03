@@ -1,15 +1,12 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
-type CharacterTabsProps = {
-  styles: any;
-  tabOrder: string[];
-  tabLabels: Record<string, string>;
-  selectedTab: string;
-  hasConflictForTab: (tab: any) => boolean;
-  openTab: (tab: any) => void;
-};
+type CharacterTabsProps = Pick<
+  CharacterActionsReadyState,
+  'styles' | 'tabOrder' | 'tabLabels' | 'selectedTab' | 'hasConflictForTab' | 'openTab'
+>;
 
 export function CharacterTabs({ styles, tabOrder, tabLabels, selectedTab, hasConflictForTab, openTab }: CharacterTabsProps) {
   return (

@@ -293,7 +293,7 @@ const Home = () => {
   const onLogin = async () => {
     try {
       await onGoogleButtonPress();
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
 
@@ -521,5 +521,6 @@ const Home = () => {
 };
 
 export default Home;
+
 
 

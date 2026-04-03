@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, Pressable, TextInput as RNTextInput } from 'react-native';
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { getStyles } from '../style';
@@ -17,6 +18,7 @@ import useCharacterStore from '@/context/Character-store';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
 import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
+import type { CharacterSheet } from '@/repositories/characterCloudRepository';
 import { fetchCharacterSheet, subscribeCharacterSheet } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
@@ -38,6 +40,7 @@ import useSpellbookStore from '@/context/Spellbook-store';
 import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { useQuickActions } from './useQuickActions';
+import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 
 interface CharacterProps {
   route: {
@@ -273,17 +276,11 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
   const routeCharacter = route?.params?.character;
   const fallbackFromStore = storeCharacters.find((c) => c.id === currentCharacterId) || storeCharacters[0];
-  const baseCharacter = routeCharacter || fallbackFromStore;
+  const isCharacterMissing = !routeCharacter && !fallbackFromStore;
+  const baseCharacter = routeCharacter || fallbackFromStore || createEmptyCharacter({ id: 'missing-character' });
 
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
-
-  if (!baseCharacter) {
-    return {
-      isCharacterMissing: true as const,
-      styles,
-    };
-  }
 
   const [characterData, setCharacterData] = useState<CharacterViewModel>(ensureCharacterDefaults(baseCharacter));
   const characterDataRef = useRef<CharacterViewModel>(ensureCharacterDefaults(baseCharacter));
@@ -453,13 +450,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   );
 
   useEffect(() => {
+    if (isCharacterMissing) return;
     if (currentSync?.status === 'conflict') {
       trackProductEvent('sync_conflict_detected', {
         characterId: baseCharacter.id,
         paths: currentSync.conflictPaths,
       });
     }
-  }, [baseCharacter.id, currentSync?.conflictPaths, currentSync?.status]);
+  }, [baseCharacter.id, currentSync?.conflictPaths, currentSync?.status, isCharacterMissing]);
 
   useEffect(() => {
     setCharacterData(ensureCharacterDefaults(baseCharacter));
@@ -481,61 +479,75 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   }, [characterData.spells.cantrips, isCantripsDraftFocused]);
 
   useEffect(() => {
-    loadSyncMeta().catch(() => {});
+    loadSyncMeta().catch((_error) => {
+      /* ignore sync metadata load failure */
+    });
   }, [loadSyncMeta]);
 
   useEffect(() => {
-    loadUserTemplates().catch(() => {});
+    loadUserTemplates().catch((_error) => {
+      /* ignore tracker templates load failure */
+    });
   }, [loadUserTemplates]);
 
   useEffect(() => {
-    loadSpellbook().catch(() => {});
+    loadSpellbook().catch((_error) => {
+      /* ignore spellbook load failure */
+    });
   }, [loadSpellbook]);
 
   useEffect(() => {
-    ensureCharacterSync(baseCharacter.id, false).catch(() => {});
-  }, [baseCharacter.id, ensureCharacterSync]);
+    if (isCharacterMissing) return;
+    ensureCharacterSync(baseCharacter.id, false).catch((_error) => {
+      /* ignore sync bootstrap failure */
+    });
+  }, [baseCharacter.id, ensureCharacterSync, isCharacterMissing]);
 
   useEffect(() => {
+    if (isCharacterMissing) return;
     let alive = true;
     fetchCharacterSheet(baseCharacter.id)
       .then((doc) => {
         if (!alive) return;
         const exists = Boolean(doc);
-        const owners = Array.isArray((doc as any)?.owners) ? ((doc as any).owners as string[]) : [];
-        const ownerUid = typeof (doc as any)?.ownerUid === 'string' ? (doc as any).ownerUid : '';
+        const { owners, ownerUid, editors } = getSheetOwners(doc);
         const me = fbAuth.currentUser?.uid || '';
         const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
         setIsCloudDoc(exists);
         setIsOwnedByMe(owned);
-        setIsSharedSheet(Boolean(doc && Array.isArray((doc as any).editors) && (doc as any).editors.length > 0));
+        setIsSharedSheet(Boolean(doc && editors.length > 0));
         setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
         setSyncFeedback(exists ? 'Підключено хмарний документ' : 'Лише локальний персонаж');
-        setCloudAvailability(baseCharacter.id, exists).catch(() => {});
+        setCloudAvailability(baseCharacter.id, exists).catch((_error) => {
+          /* ignore cloud availability update failure */
+        });
       })
-      .catch(() => {
+      .catch((_error) => {
         if (!alive) return;
         setIsCloudDoc(false);
         setIsOwnedByMe(true);
         setIsSharedSheet(false);
         setSharedHistory([]);
         setSyncFeedback('Лише локальний персонаж');
-        setCloudAvailability(baseCharacter.id, false).catch(() => {});
+        setCloudAvailability(baseCharacter.id, false).catch((_nestedError) => {
+          /* ignore cloud availability rollback failure */
+        });
       });
 
     const unsubscribe = subscribeCharacterSheet(baseCharacter.id, (doc) => {
       const exists = Boolean(doc);
-      const owners = Array.isArray((doc as any)?.owners) ? ((doc as any).owners as string[]) : [];
-      const ownerUid = typeof (doc as any)?.ownerUid === 'string' ? (doc as any).ownerUid : '';
+      const { owners, ownerUid, editors } = getSheetOwners(doc);
       const me = fbAuth.currentUser?.uid || '';
       const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
       setIsCloudDoc(exists);
       setIsOwnedByMe(owned);
-      setIsSharedSheet(Boolean(doc && Array.isArray((doc as any).editors) && (doc as any).editors.length > 0));
+      setIsSharedSheet(Boolean(doc && editors.length > 0));
       const history = sanitizeChangeHistory(doc?.changeHistory);
       setSharedHistory(history);
       setSyncFeedback(exists ? 'Підключено хмарний документ' : 'Лише локальний персонаж');
-      setCloudAvailability(baseCharacter.id, exists).catch(() => {});
+      setCloudAvailability(baseCharacter.id, exists).catch((_error) => {
+        /* ignore cloud availability update failure */
+      });
 
       const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
       if (!exists) return;
@@ -555,7 +567,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       });
 
       if (reconciled.action === 'conflict') {
-        markConflict(baseCharacter.id, reconciled.conflictPaths).catch(() => {});
+        markConflict(baseCharacter.id, reconciled.conflictPaths).catch((_error) => {
+          /* ignore conflict mark failure */
+        });
         setSyncFeedback('Виявлено конфлікт. Потрібна перевірка.');
         return;
       }
@@ -569,10 +583,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       if (reconciled.action === 'replace') {
         setCharacterData(reconciled.character);
         void updateCharacter(reconciled.character.id, reconciled.character);
-        markCloudDownloaded(reconciled.character.id).catch(() => {});
+        markCloudDownloaded(reconciled.character.id).catch((_error) => {
+          /* ignore cloud download marker failure */
+        });
         setSyncFeedback('Завантажено останню хмарну ревізію');
         if (reconciled.remotePathsSinceLastSync.length) {
-          setSyncTransport(reconciled.character.id, 'downloading', 'Завантажено останню хмарну ревізію').catch(() => {});
+          setSyncTransport(reconciled.character.id, 'downloading', 'Завантажено останню хмарну ревізію').catch((_error) => {
+            /* ignore sync transport update failure */
+          });
         }
       }
     });
@@ -581,7 +599,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       alive = false;
       if (typeof unsubscribe === 'function') unsubscribe();
     };
-  }, [baseCharacter.id, markCloudDownloaded, markConflict, setCloudAvailability, setSyncTransport, updateCharacter]);
+  }, [baseCharacter.id, isCharacterMissing, markCloudDownloaded, markConflict, setCloudAvailability, setSyncTransport, updateCharacter]);
 
   useEffect(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -662,10 +680,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   ]);
 
   const patchCharacter = useCallback((patcher: (prev: CharacterViewModel) => CharacterViewModel, changedPaths?: string[]) => {
+    if (isCharacterMissing) return;
     setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
     const paths = changedPaths && changedPaths.length ? changedPaths : [TAB_DEFAULT_PATH[selectedTab]];
-    markLocalDraftPaths(baseCharacter.id, paths).catch(() => {});
-  }, [baseCharacter.id, markLocalDraftPaths, selectedTab]);
+    markLocalDraftPaths(baseCharacter.id, paths).catch((_error) => {
+      /* ignore local draft mark failure */
+    });
+  }, [baseCharacter.id, isCharacterMissing, markLocalDraftPaths, selectedTab]);
 
   const toggleSessionMode = useCallback(() => {
     const nextSessionMode = !characterData.sessionMode;
@@ -1539,8 +1560,8 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
   const renderBadge = useCallback((badge: SyncBadge) => {
     const { id, label, kind } = badge;
-    const badgeStyle: Array<any> = [styles.badge];
-    const badgeText: Array<any> = [styles.badgeText];
+    const badgeStyle: Array<StyleProp<ViewStyle>> = [styles.badge];
+    const badgeText: Array<StyleProp<TextStyle>> = [styles.badgeText];
 
     if (kind === 'success') badgeStyle.push(styles.badgeSuccess);
     if (kind === 'warning') badgeStyle.push(styles.badgeWarning);
@@ -2004,15 +2025,6 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       )}
     </View>
   );
-
-  const renderTabContentPlay = () => {
-    if (selectedTab === 'Overview') return renderOverviewPlay();
-    if (selectedTab === 'Combat') return renderCombatPlay();
-    if (selectedTab === 'Magic') return renderMagicPlay();
-    if (selectedTab === 'Inventory') return renderInventoryPlay();
-    if (selectedTab === 'Notes') return renderNotesPlay();
-    return renderHomebrewPlay();
-  };
 
   const renderTextInput = (
     value: string,
@@ -2525,10 +2537,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             {field.type === 'boolean' ? (
               <Pressable
                 style={styles.booleanField}
-                onPress={() => updateCustomField(field.id, { value: !Boolean(field.value) })}
+                onPress={() => updateCustomField(field.id, { value: !field.value })}
                 android_ripple={{ color: '#999' }}
               >
-                <Text style={styles.blockText}>{Boolean(field.value) ? 'Так' : 'Ні'}</Text>
+                <Text style={styles.blockText}>{field.value ? 'Так' : 'Ні'}</Text>
               </Pressable>
             ) : field.type === 'select' ? (
               <>
@@ -2712,16 +2724,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     </View>
   );
 
-  const renderTabContentEdit = () => {
-    if (selectedTab === 'Overview') return renderOverviewEdit();
-    if (selectedTab === 'Combat') return renderCombatEdit();
-    if (selectedTab === 'Magic') return renderMagicEdit();
-    if (selectedTab === 'Inventory') return renderInventoryEdit();
-    if (selectedTab === 'Notes') return renderNotesEdit();
-    return renderHomebrewEdit();
-  };
-
-    const onQuickActionPress = useCallback(
+  const onQuickActionPress = useCallback(
     (action: { id: string; onPress: () => void }) => {
       trackProductEvent('quick_action_used', {
         characterId: characterData.id,
@@ -2731,6 +2734,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     },
     [characterData.id],
   );
+
+  if (isCharacterMissing) {
+    return {
+      isCharacterMissing: true as const,
+      styles,
+    };
+  }
 
   return {
     isCharacterMissing: false as const,
@@ -2835,5 +2845,17 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setRollResults,
     diceSides,
     applyShortRestRolls,
+  };
+}
+
+export type CharacterActionsState = ReturnType<typeof useCharacterActions>;
+export type CharacterActionsReadyState = Extract<CharacterActionsState, { isCharacterMissing: false }>;
+export type CharacterActionsMissingState = Extract<CharacterActionsState, { isCharacterMissing: true }>;
+
+function getSheetOwners(doc: CharacterSheet | null): { ownerUid: string; owners: string[]; editors: string[] } {
+  return {
+    ownerUid: typeof doc?.ownerUid === 'string' ? doc.ownerUid : '',
+    owners: Array.isArray(doc?.owners) ? doc.owners.filter(Boolean) : [],
+    editors: Array.isArray(doc?.editors) ? doc.editors.filter(Boolean) : [],
   };
 }

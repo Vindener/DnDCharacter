@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import useCharacterStore from '@/context/Character-store';
@@ -26,9 +24,8 @@ const rollDice = (expr: string) => {
 // ---------- Empty weapon template ----------
 const EMPTY_WEAPON: WeaponType = {
   name: '',
+  attackBonus: 0,
   damage: '1d6',
-  damageType: '',
-  properties: [],
 };
 
 // ---------- Component ----------
@@ -126,46 +123,20 @@ const Weapons: React.FC = () => {
               placeholderTextColor="#888"
             />
 
-            <View style={{ flexDirection: 'row', gap: 12 }}>
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: '#bbb', marginTop: 8 }}>Шкода (XdY)</Text>
-                <TextInput
-                  style={{ backgroundColor: '#1c1c1e', color: 'white', borderRadius: 8, padding: 8, marginTop: 4 }}
-                  value={w.damage}
-                  onChangeText={(t) => patchWeapon(i, { damage: t })}
-                  placeholder="1d8"
-                  placeholderTextColor="#888"
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: '#bbb', marginTop: 8 }}>Тип шкоди</Text>
-                <TextInput
-                  style={{ backgroundColor: '#1c1c1e', color: 'white', borderRadius: 8, padding: 8, marginTop: 4 }}
-                  value={w.damageType || ''}
-                  onChangeText={(t) => patchWeapon(i, { damageType: t })}
-                  placeholder="колюча / ріжуча / дробляча"
-                  placeholderTextColor="#888"
-                />
-              </View>
-            </View>
-
-            <Text style={{ color: '#bbb', marginTop: 8 }}>Властивості (через кому)</Text>
+            <Text style={{ color: '#bbb', marginTop: 8 }}>Шкода (XdY)</Text>
             <TextInput
               style={{ backgroundColor: '#1c1c1e', color: 'white', borderRadius: 8, padding: 8, marginTop: 4 }}
-              value={(w.properties || []).join(', ')}
-              onChangeText={(t) => {
-                const arr = t.split(',').map((s) => s.trim()).filter(Boolean);
-                patchWeapon(i, { properties: arr });
-              }}
-              placeholder="фехтувальна, легка, двуручна"
+              value={w.damage}
+              onChangeText={(t) => patchWeapon(i, { damage: t })}
+              placeholder="1d8"
               placeholderTextColor="#888"
             />
 
             <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
-              <TouchableOpacity onPress={() => setModalOpen({ kind: 'attack', index: i })} style={{ flex: 1, backgroundColor: '#3a7afe', padding: 10, borderRadius: 10, alignItems: 'center' }}>
+              <TouchableOpacity onPress={() => openAttackModal(i)} style={{ flex: 1, backgroundColor: '#3a7afe', padding: 10, borderRadius: 10, alignItems: 'center' }}>
                 <Text style={{ color: 'white', fontWeight: '600' }}>Кидок на влучання</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => setModalOpen({ kind: 'damage', index: i })} style={{ flex: 1, backgroundColor: '#7a3afe', padding: 10, borderRadius: 10, alignItems: 'center' }}>
+              <TouchableOpacity onPress={() => openDamageModal(i)} style={{ flex: 1, backgroundColor: '#7a3afe', padding: 10, borderRadius: 10, alignItems: 'center' }}>
                 <Text style={{ color: 'white', fontWeight: '600' }}>Кидок на урон</Text>
               </TouchableOpacity>
             </View>
@@ -178,14 +149,14 @@ const Weapons: React.FC = () => {
       </ScrollView>
 
       {/* Modal for rolls */}
-      <Modal visible={!!modalOpen} transparent animationType="fade" onRequestClose={() => setModalOpen(null)}>
+      <Modal visible={!!modalOpen} transparent animationType="fade" onRequestClose={closeModal}>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', alignItems: 'center', padding: 16 }}>
           <View style={{ width: '100%', maxWidth: 480, borderRadius: 16, backgroundColor: '#2c2c2e', padding: 16 }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Text style={{ color: 'white', fontSize: 18, fontWeight: '700' }}>
                 {modalOpen?.kind === 'attack' ? 'Кидок на влучання' : 'Кидок на урон'}
               </Text>
-              <TouchableOpacity onPress={() => setModalOpen(null)}><Text style={{ color: '#bbb' }}>✕</Text></TouchableOpacity>
+              <TouchableOpacity onPress={closeModal}><Text style={{ color: '#bbb' }}>✕</Text></TouchableOpacity>
             </View>
 
             {modalOpen?.kind === 'attack' ? (
@@ -209,17 +180,7 @@ const Weapons: React.FC = () => {
                   placeholderTextColor="#888"
                 />
 
-                <TouchableOpacity onPress={() => {
-                  const d = randInt(1, 20);
-                  const bonus = Number(attackBonus || '0');
-                  const ac = Number(targetAC || '0');
-                  const total = d + bonus;
-                  let text = `🎯 Кидок d20: ${d}  |  Бонус: ${bonus}  →  Разом: ${total}\n`;
-                  if (d === 20) text += 'Критичне влучання!\n';
-                  if (d === 1) text += 'Автопромах!\n';
-                  text += total >= ac ? `✅ Влучив проти AC ${ac}` : `❌ Промах проти AC ${ac}`;
-                  setRollResult(text);
-                }} style={{ marginTop: 12, backgroundColor: '#3a7afe', padding: 12, borderRadius: 10, alignItems: 'center' }}>
+                <TouchableOpacity onPress={doAttackRoll} style={{ marginTop: 12, backgroundColor: '#3a7afe', padding: 12, borderRadius: 10, alignItems: 'center' }}>
                   <Text style={{ color: 'white', fontWeight: '700' }}>Кинути d20</Text>
                 </TouchableOpacity>
               </View>
@@ -238,14 +199,7 @@ const Weapons: React.FC = () => {
                 <TouchableOpacity
                   onPress={() => {
                     if (modalOpen) {
-                      const idx = modalOpen.index;
-                      const w = safeWeapons[idx];
-                      const expr = w?.damage || '1d6';
-                      const { rolls, total } = rollDice(expr);
-                      const mod = Number(damageMod || '0');
-                      const sum = total + mod;
-                      const text = `💥 Кидок ${expr}: [${rolls.join(', ')}]  (${total})  + мод ${mod}  →  Разом: ${sum}`;
-                      setRollResult(text);
+                      doDamageRoll(modalOpen.index);
                     }
                   }}
                   style={{ marginTop: 12, backgroundColor: '#7a3afe', padding: 12, borderRadius: 10, alignItems: 'center' }}
@@ -268,3 +222,4 @@ const Weapons: React.FC = () => {
 };
 
 export default Weapons;
+

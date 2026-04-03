@@ -17,6 +17,17 @@ import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 
+type CharacterStoreState = ReturnType<typeof useCharacterStore.getState>;
+
+function errorCodeOrMessage(error: unknown): string {
+  if (!error || typeof error !== 'object') return String(error);
+  const maybeCode = (error as { code?: unknown }).code;
+  if (typeof maybeCode === 'string' && maybeCode) return maybeCode;
+  const maybeMessage = (error as { message?: unknown }).message;
+  if (typeof maybeMessage === 'string' && maybeMessage) return maybeMessage;
+  return String(error);
+}
+
 interface CharacterMenuProps {
   character: CharacterViewModel;
   onChange?: (character: CharacterViewModel) => void;
@@ -27,9 +38,9 @@ interface CharacterMenuProps {
 
 const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, onSyncNow }) => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
-  const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
-  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
-  const setCurrentCharacterId = useCharacterStore((s: any) => s.setCurrentCharacterId);
+  const updateCharacter = useCharacterStore((s: CharacterStoreState) => s.updateCharacter);
+  const addCharacter = useCharacterStore((s: CharacterStoreState) => s.addCharacter);
+  const setCurrentCharacterId = useCharacterStore((s: CharacterStoreState) => s.setCurrentCharacterId);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
@@ -126,7 +137,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         throw new Error(result.message || 'Не вдалося синхронізувати');
       }
 
-      let syncedCharacter = result.targetCharacter;
+      const syncedCharacter = result.targetCharacter;
       let targetSheetId = sourceCharacter.id;
 
       if (syncedCharacter.id !== sourceCharacter.id) {
@@ -160,9 +171,10 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           },
         ],
       );
-    } catch (e: any) {
-      console.warn('[save] failed', e?.code || e?.message || e);
-      if (e?.message === 'Not signed in') {
+    } catch (error: unknown) {
+      const message = errorCodeOrMessage(error);
+      console.warn('[save] failed', message);
+      if (message === 'Not signed in') {
         Alert.alert('Помилка авторизації', 'Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару.');
       } else {
         Alert.alert('Помилка', 'Не вдалося зберегти у хмару. Спробуйте ще раз.');
@@ -211,7 +223,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         if (characterData.id) updateCharacter(characterData.id, updated);
         onChange?.(updated);
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
   const removePhoto = () => {
@@ -505,4 +517,5 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
 
 export default CharacterMenu;
+
 

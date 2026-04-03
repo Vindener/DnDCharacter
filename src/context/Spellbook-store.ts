@@ -52,13 +52,13 @@ function mergeStoredWithSeed(stored: SpellbookSpell[], seed: SpellbookSpell[]): 
 async function persistSpells(spells: SpellbookSpell[]): Promise<void> {
   try {
     await AsyncStorage.setItem(SPELLBOOK_STORAGE_KEY, JSON.stringify(spells));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 async function persistFavorites(favoriteSpellIds: string[]): Promise<void> {
   try {
     await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favoriteSpellIds));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 const useSpellbookStore = create<SpellbookStore>((set, get) => ({
@@ -201,3 +201,4 @@ const useSpellbookStore = create<SpellbookStore>((set, get) => ({
 }));
 
 export default useSpellbookStore;
+

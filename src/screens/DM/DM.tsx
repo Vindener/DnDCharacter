@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './style';
@@ -158,15 +158,15 @@ const DM: React.FC = () => {
   }, [mySheets, sharedSheets]);
 
   const openRootTab = (routeName: string, params?: Record<string, unknown>) => {
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate(routeName, params);
+    parent.dispatch(CommonActions.navigate({ name: routeName, params }));
   };
 
   const openHeroesNested = (screen: 'Spellbook' | 'Home', params?: Record<string, unknown>) => {
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate('Heroes', { screen, params });
+    parent.dispatch(CommonActions.navigate({ name: 'Heroes', params: { screen, params } }));
   };
 
   const ensureLocalCharacter = async (character: CharacterViewModel) => {
@@ -182,9 +182,14 @@ const DM: React.FC = () => {
   const openFullSheet = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     setCurrentCharacterId(local.id);
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate('Heroes', { screen: 'Character', params: { character: local } });
+    parent.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character: local } },
+      }),
+    );
   };
 
   const openQuickEdit = async (character: CharacterViewModel) => {
@@ -197,7 +202,7 @@ const DM: React.FC = () => {
       setIsSigningIn(true);
       await onGoogleButtonPress();
       setAuthVersion((prev) => prev + 1);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
     setIsSigningIn(false);
   };
 
@@ -375,5 +380,6 @@ const DM: React.FC = () => {
 };
 
 export default DM;
+
 
 

@@ -33,7 +33,7 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
       const validPins = Array.isArray(parsedPins) ? (parsedPins as string[]) : [];
       const nextPins = validPins.filter((id) => filtered.some((monster) => monster.id === id));
       set({ monsters: filtered, pinnedMonsterIds: nextPins });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   saveMonsters: async (newMonsters: MonsterDto[]) => {
@@ -43,7 +43,7 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newMonsters));
       await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(validPins));
       set({ monsters: newMonsters, pinnedMonsterIds: validPins });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   addMonster: async (monster: MonsterDto) => {
@@ -81,15 +81,16 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
     try {
       await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(nextPins));
       set({ pinnedMonsterIds: nextPins });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   clearPinnedMonsters: async () => {
     try {
       await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify([]));
       set({ pinnedMonsterIds: [] });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 }));
 
 export default useMonsterStore;
+

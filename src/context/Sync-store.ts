@@ -24,7 +24,7 @@ const STORAGE_KEY = 'CHARACTER_SYNC_META_V1';
 async function persistSyncMap(map: CharacterSyncMap): Promise<void> {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(map));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 const useSyncStore = create<SyncStore>((set, get) => {
@@ -45,7 +45,7 @@ const useSyncStore = create<SyncStore>((set, get) => {
         const raw = await AsyncStorage.getItem(STORAGE_KEY);
         const parsed = JSON.parse(raw || '{}');
         set({ syncByCharacter: normalizeSyncMap(parsed) });
-      } catch {}
+      } catch (_error) { /* intentionally ignored */ }
     },
 
     ensureCharacterSync: async (characterId, hasCloud = false) => {
@@ -95,3 +95,4 @@ const useSyncStore = create<SyncStore>((set, get) => {
 });
 
 export default useSyncStore;
+

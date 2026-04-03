@@ -1,14 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
-type CombatSummaryCardProps = {
-  styles: any;
-  characterData: any;
-  hpPercent: number;
-  proficiency: number;
-  passivePerception: number;
-  sectionConflictLabel: (prefixes: string[]) => React.ReactNode;
-};
+type CombatSummaryCardProps = Pick<
+  CharacterActionsReadyState,
+  'styles' | 'characterData' | 'hpPercent' | 'proficiency' | 'passivePerception' | 'sectionConflictLabel'
+>;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);

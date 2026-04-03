@@ -2,24 +2,26 @@ import React from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
+import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
-type CharacterHeaderProps = {
-  styles: any;
-  colors: any;
-  characterData: any;
-  isCloudDoc: boolean;
-  isSharedSheet: boolean;
-  onCharacterMenuChange: (next: any) => void;
-  syncBadges: any[];
-  renderBadge: (badge: any) => React.ReactNode;
-  syncStatusLabel: string;
-  syncFeedback: string;
-  currentSync: any;
-  syncNow: () => void;
-  mode: 'play' | 'edit';
-  setMode: (mode: 'play' | 'edit') => void;
-  toggleSessionMode: () => void;
-};
+type CharacterHeaderProps = Pick<
+  CharacterActionsReadyState,
+  | 'styles'
+  | 'colors'
+  | 'characterData'
+  | 'isCloudDoc'
+  | 'isSharedSheet'
+  | 'onCharacterMenuChange'
+  | 'syncBadges'
+  | 'renderBadge'
+  | 'syncStatusLabel'
+  | 'syncFeedback'
+  | 'currentSync'
+  | 'syncNow'
+  | 'mode'
+  | 'setMode'
+  | 'toggleSessionMode'
+>;
 
 export function CharacterHeader({
   styles,

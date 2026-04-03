@@ -1,17 +1,23 @@
-// @ts-nocheck
 // Personal Docs API (request-based sharing, no Cloud Functions) — FIXED LOGGING
-const __hasDoc = (snap: any) => { try { if (!snap) return false; const e: any = (snap as any).exists; return typeof e === 'function' ? !!e.call(snap) : !!e; } catch { return false; } };
+function hasDoc(snap: unknown): boolean {
+  try {
+    if (!snap || typeof snap !== 'object') return false;
+    const exists = (snap as { exists?: unknown }).exists;
+    return typeof exists === 'function' ? Boolean((exists as () => unknown).call(snap)) : Boolean(exists);
+  } catch (_error) {
+    return false;
+  }
+}
 
 import { getApp } from '@react-native-firebase/app';
 import { getAuth } from '@react-native-firebase/auth';
 import {
+  default as firestoreNS,
   getFirestore,
   serverTimestamp,
   doc,
-  setDoc,
   updateDoc,
   getDoc,
-  getDocs,
   collection,
   addDoc,
   query,
@@ -67,7 +73,8 @@ export function subscribeMyPersonalDocs(onChange, onError = console.error) {
       emit();
     },
     (e) => {
-      error('subscribeMyPersonalDocs/owners', { code: e?.code, msg: e?.message });
+      const err = e as Error & { code?: string };
+      error('subscribeMyPersonalDocs/owners', { code: err.code, msg: err.message });
       onError(e);
     },
   );
@@ -78,17 +85,18 @@ export function subscribeMyPersonalDocs(onChange, onError = console.error) {
       emit();
     },
     (e) => {
-      error('subscribeMyPersonalDocs/editors', { code: e?.code, msg: e?.message });
+      const err = e as Error & { code?: string };
+      error('subscribeMyPersonalDocs/editors', { code: err.code, msg: err.message });
       onError(e);
     },
   );
   return () => {
     try {
-      u1 && u1();
-    } catch {}
+      if (u1) u1();
+    } catch (_error) { /* intentionally ignored */ }
     try {
-      u2 && u2();
-    } catch {}
+      if (u2) u2();
+    } catch (_error) { /* intentionally ignored */ }
   };
 }
 
@@ -96,7 +104,7 @@ export function subscribePersonalDoc(docId, onChange, onError = console.error) {
   return onSnapshot(
     doc(db, 'docs', String(docId)),
     (snap) => {
-      if (!__hasDoc(snap)) {
+      if (!hasDoc(snap)) {
         onChange(null);
         return;
       }
@@ -111,7 +119,7 @@ export async function updatePersonalDoc(docId, text) {
   if (!me) throw new Error('Not signed in');
   const ref = doc(db, 'docs', String(docId));
   const snap = await getDoc(ref);
-  if (!__hasDoc(snap)) throw new Error('Doc not found');
+  if (!hasDoc(snap)) throw new Error('Doc not found');
   const ver = Number(snap.data()?.version || 0);
   await updateDoc(ref, { text: String(text || ''), version: ver + 1, lastEditedBy: me, updatedAt: now() });
 }
@@ -125,7 +133,7 @@ export async function createDocShareRequest(docId, email) {
   // 1) Перевіряємо, що я власник документа
   const docRef = doc(db, 'docs', String(docId));
   const snap = await getDoc(docRef);
-  if (!__hasDoc(snap)) throw new Error('Doc not found');
+  if (!hasDoc(snap)) throw new Error('Doc not found');
   const data = snap.data() || {};
   if (!Array.isArray(data.owners) || !data.owners.includes(me)) {
     throw new Error('Only owner can share');
@@ -183,7 +191,7 @@ export async function respondDocShareById(shareId, action /* 'accept' | 'decline
   if (!me) throw new Error('Not signed in');
   const ref = doc(db, 'docShares', String(shareId));
   const snap = await getDoc(ref);
-  if (!__hasDoc(snap)) throw new Error('Share request not found');
+  if (!hasDoc(snap)) throw new Error('Share request not found');
   const d = snap.data() || {};
   const isRecipient = d.toUid === me;
   const isOwner = d.fromUid === me;
@@ -264,3 +272,5 @@ export async function deletePersonalDoc(docId) {
     .doc(`docs/${String(docId)}`)
     .delete();
 }
+
+

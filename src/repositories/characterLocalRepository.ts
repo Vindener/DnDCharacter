@@ -29,7 +29,7 @@ async function loadCharacters(): Promise<CharacterEntity[]> {
 async function saveCharacters(characters: CharacterEntity[]): Promise<void> {
   try {
     await AsyncStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(characters));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 async function loadLastSessionCharacterId(): Promise<string | null> {
@@ -43,13 +43,13 @@ async function loadLastSessionCharacterId(): Promise<string | null> {
 async function saveLastSessionCharacterId(id: string): Promise<void> {
   try {
     await AsyncStorage.setItem(LAST_SESSION_CHARACTER_ID_KEY, id);
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 async function clearLastSessionCharacterId(): Promise<void> {
   try {
     await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 async function loadSharedUpdatesReviewedMap(): Promise<Record<string, number>> {
@@ -74,7 +74,7 @@ async function loadSharedUpdatesReviewedMap(): Promise<Record<string, number>> {
 async function saveSharedUpdatesReviewedMap(map: Record<string, number>): Promise<void> {
   try {
     await AsyncStorage.setItem(SHARED_UPDATES_REVIEWED_STORAGE_KEY, JSON.stringify(map || {}));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 export const characterLocalRepository: CharacterLocalRepository = {
@@ -86,3 +86,4 @@ export const characterLocalRepository: CharacterLocalRepository = {
   loadSharedUpdatesReviewedMap,
   saveSharedUpdatesReviewedMap,
 };
+

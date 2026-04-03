@@ -16,7 +16,7 @@ const STORAGE_KEY = 'RESOURCE_USER_TEMPLATES_V1';
 async function persistUserTemplates(templates: ResourceTemplate[]): Promise<void> {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(templates));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 const useTrackerTemplateStore = create<TrackerTemplateStore>((set, get) => ({
@@ -84,3 +84,4 @@ const useTrackerTemplateStore = create<TrackerTemplateStore>((set, get) => ({
 
 export { SYSTEM_RESOURCE_TEMPLATES };
 export default useTrackerTemplateStore;
+

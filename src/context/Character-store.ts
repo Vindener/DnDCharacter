@@ -60,7 +60,7 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
         await characterLocalRepository.clearLastSessionCharacterId();
       }
       set({ lastSessionCharacterId: id || null });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   loadCharacters: async () => {
@@ -76,14 +76,14 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
       if (!safeLastSessionId && storedLastSessionId) {
         await characterLocalRepository.clearLastSessionCharacterId();
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   saveCharacters: async (newCharacters: CharacterEntity[]) => {
     try {
       await characterLocalRepository.saveCharacters(newCharacters);
       set({ characters: newCharacters });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   addCharacter: async (character: CharacterEntity) => {
@@ -207,3 +207,4 @@ const useCharacterStore = create<CharacterStore>((set, get) => ({
 }));
 
 export default useCharacterStore;
+

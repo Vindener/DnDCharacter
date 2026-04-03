@@ -1,10 +1,9 @@
-// @ts-nocheck
 import * as DocumentPicker from 'expo-document-picker';
 import type { CharacterEntity } from '@/domain/types';
 import { MonsterDto } from '@/types/Monster';
 import useCharacterStore from '@/context/Character-store';
 import { characterMapper } from '@/domain/mappers';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 
 class FileService {
@@ -135,8 +134,7 @@ class FileService {
 
   static async exportCharacter(character: CharacterEntity) {
     try {
-      const { id, ...characterWithoutId } = character;
-      const jsonString = JSON.stringify(characterWithoutId, null, 2);
+      const jsonString = JSON.stringify(character, null, 2);
       if (typeof window !== 'undefined' && window.document) {
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -148,7 +146,9 @@ class FileService {
         return;
       }
       const fileName = `${character.name.replace(/\s+/g, '_') || 'character'}.json`;
-      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+      const cacheDirectory = FileSystem.cacheDirectory || FileSystem.documentDirectory;
+      if (!cacheDirectory) throw new Error('No writable directory available');
+      const fileUri = `${cacheDirectory}${fileName}`;
       await FileSystem.writeAsStringAsync(fileUri, jsonString, { encoding: FileSystem.EncodingType.UTF8 });
       await Sharing.shareAsync(fileUri);
     } catch (error) {
@@ -158,8 +158,7 @@ class FileService {
 
   static async exportMonster(monster: MonsterDto) {
     try {
-      const { id, ...monsterWithoutId } = monster;
-      const jsonString = JSON.stringify(monsterWithoutId, null, 2);
+      const jsonString = JSON.stringify(monster, null, 2);
       if (typeof window !== 'undefined' && window.document) {
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -171,7 +170,9 @@ class FileService {
         return;
       }
       const fileName = `${monster.name.replace(/\s+/g, '_') || 'monster'}.json`;
-      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+      const cacheDirectory = FileSystem.cacheDirectory || FileSystem.documentDirectory;
+      if (!cacheDirectory) throw new Error('No writable directory available');
+      const fileUri = `${cacheDirectory}${fileName}`;
       await FileSystem.writeAsStringAsync(fileUri, jsonString, {
         encoding: FileSystem.EncodingType.UTF8,
       });
@@ -183,4 +184,5 @@ class FileService {
 }
 
 export default FileService;
+
 

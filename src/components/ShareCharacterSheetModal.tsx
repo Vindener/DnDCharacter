@@ -43,21 +43,26 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
     };
   }, [visible, sheetId]);
 
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error && error.message) return error.message;
+    return String(error);
+  };
+
   async function onShare() {
     setError(null);
     try {
       await addEditorByEmail(sheetId, email);
       setEmail('');
-    } catch (e: any) {
-      setError(e?.message || String(e));
+    } catch (error: unknown) {
+      setError(getErrorMessage(error));
     }
   }
 
   async function onRemove(uid: string) {
     try {
       await removeEditor(sheetId, uid);
-    } catch (e: any) {
-      setError(e?.message || String(e));
+    } catch (error: unknown) {
+      setError(getErrorMessage(error));
     }
   }
 

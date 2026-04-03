@@ -1,6 +1,5 @@
-// @ts-nocheck
 import React, { useMemo, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Linking, Alert, ScrollView } from 'react-native';
 import useThemeStore from '@/context/Theme-store';
 
 const donateLinks = [
@@ -17,9 +16,9 @@ export default function Support() {
       screen: { flex: 1, backgroundColor: colors.background },
       container: { padding: 16, gap: 16 },
       card: { backgroundColor: colors.card, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: colors.border },
-      title: { fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: 8 },
+      title: { fontSize: 18, fontWeight: '600' as const, color: colors.text, marginBottom: 8 },
       text: { color: colors.textSecondary, lineHeight: 20 },
-      row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
+      row: { flexDirection: 'row' as const, flexWrap: 'wrap' as const, gap: 8, marginTop: 12 },
       pill: {
         paddingVertical: 10,
         paddingHorizontal: 14,
@@ -46,9 +45,9 @@ export default function Support() {
         borderWidth: 1,
         borderColor: colors.border,
         backgroundColor: colors.inputBackground,
-        alignItems: 'center',
+        alignItems: 'center' as const,
       },
-      btnText: { color: colors.text, fontWeight: '600' },
+      btnText: { color: colors.text, fontWeight: '600' as const },
     }),
     [colors],
   );
@@ -77,7 +76,7 @@ export default function Support() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>Підтримати проєкт</Text>
-          <Text style={{ color: 'rgba(249, 136, 118, 1)', fontWeight: '600' }}>Зараз збираємо гроші для публікації в Google Play.</Text>
+          <Text style={{ color: 'rgba(249, 136, 118, 1)', fontWeight: '600' as const }}>Зараз збираємо гроші для публікації в Google Play.</Text>
           <Text style={styles.text}>Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:</Text>
           <View style={styles.row}>
             {donateLinks.map((d) => (
@@ -127,3 +126,4 @@ export default function Support() {
     </View>
   );
 }
+

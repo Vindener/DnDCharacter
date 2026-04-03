@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
@@ -208,9 +208,14 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       entries,
     };
 
-    const root = navigation.getParent() as any;
+    const root = navigation.getParent();
     if (!root) return;
-    root.navigate('Initiative', { seed });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Initiative',
+        params: { seed },
+      }),
+    );
   };
 
   return (

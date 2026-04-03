@@ -26,7 +26,7 @@ const useThemeStore = create<ThemeState>((set, get) => ({
     set({ isDark: newIsDark, theme: newTheme, colors: newColors });
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ isDark: newIsDark }));
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 
   loadTheme: async () => {
@@ -41,8 +41,9 @@ const useThemeStore = create<ThemeState>((set, get) => ({
           colors: isDark ? darkColors : lightColors,
         });
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 }));
 
 export default useThemeStore;
+

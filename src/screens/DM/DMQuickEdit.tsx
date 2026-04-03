@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
@@ -100,9 +101,14 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
   const openFullEdit = () => {
     if (!character) return;
     setCurrentCharacterId(character.id);
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate('Heroes', { screen: 'Character', params: { character } });
+    parent.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character } },
+      }),
+    );
   };
 
   const openHpModal = () => {

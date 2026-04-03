@@ -5,7 +5,7 @@ type ToastType = 'success' | 'error' | 'info';
 export function showToast(type: ToastType, text1: string, text2?: string) {
   try {
     Toast.show({ type, text1, text2, position: 'top' });
-  } catch (e) {
+  } catch (_error) {
     // Silently ignore if Toast is not mounted
   }
 }

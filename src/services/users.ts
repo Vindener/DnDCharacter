@@ -1,5 +1,5 @@
 
-import { fbAuth, db, now, hasDoc } from './firebase';
+import { fbAuth, db, now } from './firebase';
 
 export async function ensureUserIndexOnLogin() {
   const u = fbAuth.currentUser;

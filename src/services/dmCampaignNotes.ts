@@ -122,7 +122,7 @@ async function loadQueue(): Promise<DMCampaignNoteQueueItem[]> {
 async function persistQueue(queue: DMCampaignNoteQueueItem[]): Promise<void> {
   try {
     await AsyncStorage.setItem(LOCAL_QUEUE_KEY, JSON.stringify(queue));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 async function enqueue(type: 'upsert' | 'delete', noteId: string, campaignId: string): Promise<void> {
@@ -155,7 +155,7 @@ export async function loadLocalCampaignNotes(): Promise<DMCampaignNote[]> {
 async function persistLocalCampaignNotes(notes: DMCampaignNote[]): Promise<void> {
   try {
     await AsyncStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(notes));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 function canSyncCloud(): boolean {
@@ -405,7 +405,7 @@ export async function flushCampaignNotesQueue(): Promise<void> {
         await syncUpsert(note);
       }
       remaining = remaining.filter((entry) => entry.id !== item.id);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   }
 
   await persistQueue(remaining);
@@ -461,3 +461,4 @@ export async function resolveCampaignNoteConflict(
 
   return resolved;
 }
+

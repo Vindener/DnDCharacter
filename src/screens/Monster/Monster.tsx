@@ -76,7 +76,7 @@ export default function Monster({ route }: Props) {
         const uri = result.assets[0].uri;
         setData((prev) => ({ ...prev, photoUri: uri }));
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
   const removePhoto = () => {
@@ -245,3 +245,4 @@ export default function Monster({ route }: Props) {
     </ScrollView>
   );
 }
+

@@ -79,7 +79,7 @@ function mapCloudCampaign(doc: Record<string, unknown>): DMCampaign | null {
 async function persistLocalCampaigns(campaigns: DMCampaign[]): Promise<void> {
   try {
     await AsyncStorage.setItem(LOCAL_CAMPAIGNS_KEY, JSON.stringify(campaigns));
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 }
 
 export async function loadLocalCampaigns(): Promise<DMCampaign[]> {
@@ -162,7 +162,7 @@ export async function upsertCampaign(campaign: DMCampaign): Promise<DMCampaign> 
   if (canCloudSync()) {
     try {
       await db.collection('dmCampaigns').doc(normalized.id).set(buildCloudPayload(normalized), { merge: true });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   }
 
   return normalized;
@@ -256,3 +256,4 @@ export async function subscribeAccessibleCampaigns(cb: (campaigns: DMCampaign[])
     if (typeof unsubEditors === 'function') unsubEditors();
   };
 }
+

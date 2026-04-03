@@ -20,7 +20,7 @@ const useCustomCoinsStore = create<CustomCoinsState>((set, get) => ({
       const raw = await AsyncStorage.getItem(STORAGE_KEY);
       const parsed: CustomCoin[] = JSON.parse(raw || '[]');
       set({ coins: Array.isArray(parsed) ? parsed : [] });
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
   add: async (data) => {
     const next: CustomCoin = { id: uuid.v4() as string, ...data };
@@ -28,21 +28,22 @@ const useCustomCoinsStore = create<CustomCoinsState>((set, get) => ({
     set({ coins: updated });
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
   remove: async (id) => {
     const updated = get().coins.filter((c) => c.id !== id);
     set({ coins: updated });
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
   clearAll: async () => {
     set({ coins: [] });
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   },
 }));
 
 export default useCustomCoinsStore;
+

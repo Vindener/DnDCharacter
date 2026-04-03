@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View, Pressable } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { uuid } from 'expo-modules-core';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
@@ -184,7 +184,7 @@ const DMSharedUpdates = () => {
     setReviewedMap(next);
     try {
       await characterLocalRepository.saveSharedUpdatesReviewedMap(next);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
   const markReviewed = async (id: string, updatedAtMs: number) => {
@@ -206,9 +206,14 @@ const DMSharedUpdates = () => {
   const openInHeroes = async (doc: Record<string, unknown>) => {
     const character = await ensureLocalCharacter(doc);
     setCurrentCharacterId(character.id);
-    const root = navigation.getParent() as any;
+    const root = navigation.getParent();
     if (!root) return;
-    root.navigate('Heroes', { screen: 'Character', params: { character } });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character } },
+      }),
+    );
   };
 
   const createDetachedCopy = async (doc: Record<string, unknown>, mode: 'local-copy' | 'duplicate-shared') => {
@@ -222,9 +227,14 @@ const DMSharedUpdates = () => {
     await addCharacter(copy);
     await ensureCharacterSync(copy.id, false);
     setCurrentCharacterId(copy.id);
-    const root = navigation.getParent() as any;
+    const root = navigation.getParent();
     if (!root) return;
-    root.navigate('Heroes', { screen: 'Character', params: { character: copy } });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character: copy } },
+      }),
+    );
   };
 
   const syncNow = async (item: SharedRecord) => {
@@ -386,5 +396,6 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
+
 
 
