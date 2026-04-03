@@ -41,6 +41,7 @@ import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { useQuickActions } from './useQuickActions';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
+import { getStatusToneColors } from '@/shared/styles/statusTones';
 
 interface CharacterProps {
   route: {
@@ -1560,14 +1561,12 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
   const renderBadge = useCallback((badge: SyncBadge) => {
     const { id, label, kind } = badge;
-    const badgeStyle: Array<StyleProp<ViewStyle>> = [styles.badge];
-    const badgeText: Array<StyleProp<TextStyle>> = [styles.badgeText];
-
-    if (kind === 'success') badgeStyle.push(styles.badgeSuccess);
-    if (kind === 'warning') badgeStyle.push(styles.badgeWarning);
-    if (kind === 'accent') badgeStyle.push(styles.badgeAccent);
-    if (kind === 'danger') badgeStyle.push(styles.badgeDanger);
-    if (kind !== 'neutral') badgeText.push(styles.badgeTextInverted);
+    const tone = getStatusToneColors(colors, kind);
+    const badgeStyle: Array<StyleProp<ViewStyle>> = [
+      styles.badge,
+      { backgroundColor: tone.background, borderColor: tone.border, borderWidth: kind === 'neutral' ? 0 : 1 },
+    ];
+    const badgeText: Array<StyleProp<TextStyle>> = [styles.badgeText, { color: tone.text }];
 
     return (
       <View key={id} style={badgeStyle}>
@@ -1575,13 +1574,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       </View>
     );
   }, [
+    colors,
     styles.badge,
-    styles.badgeAccent,
-    styles.badgeDanger,
-    styles.badgeSuccess,
     styles.badgeText,
-    styles.badgeTextInverted,
-    styles.badgeWarning,
   ]);
 
   const renderOverviewPlay = () => (
@@ -1612,7 +1607,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             <Text style={styles.sectionTitle}>Ключові навички</Text>
             {sectionConflictLabel(['overview.conditions'])}
           </View>
-          <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Overview')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Overview')} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.collapseButtonText}>{collapsedSecondary.Overview ? 'Розгорнути' : 'Згорнути'}</Text>
           </Pressable>
         </View>
@@ -1635,7 +1630,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
               characterData.conditions.map((condition, idx) => (
                 <View key={`${condition}-${idx}`} style={styles.conditionRow}>
                   <Text style={styles.conditionText}>• {condition}</Text>
-                  <Pressable onPress={() => removeCondition(idx)} android_ripple={{ color: '#999' }}>
+                  <Pressable onPress={() => removeCondition(idx)} android_ripple={{ color: colors.ripple }}>
                     <MaterialCommunityIcons name='close-circle-outline' size={18} color={colors.textSecondary} />
                   </Pressable>
                 </View>
@@ -1656,7 +1651,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.sectionTitle}>Бойові інструменти</Text>
           {sectionConflictLabel(['combat.core', 'combat.hp', 'combat.rest'])}
         </View>
-        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Combat')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Combat')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Combat ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
       </View>
@@ -1693,14 +1688,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                 <Pressable
                   style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
                   onPress={() => rollWeaponAttack(weapon)}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Text style={styles.weaponActionText}>Влучення (d20)</Text>
                 </Pressable>
                 <Pressable
                   style={[styles.weaponActionButton, styles.weaponActionButtonSecondary]}
                   onPress={() => rollWeaponDamage(weapon)}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Text style={styles.weaponActionText}>Шкода ({damageFormula})</Text>
                 </Pressable>
@@ -1749,7 +1744,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             <Text style={styles.sectionTitle}>Огляд магії</Text>
             {sectionConflictLabel(['magic.'])}
           </View>
-          <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Magic')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Magic')} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.collapseButtonText}>{collapsedSecondary.Magic ? 'Розгорнути' : 'Згорнути'}</Text>
           </Pressable>
         </View>
@@ -1806,7 +1801,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                   <Pressable
                     style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
                     onPress={() => rollSpellAttack(spell.name)}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={styles.weaponActionText}>Атака (d20)</Text>
                   </Pressable>
@@ -1817,7 +1812,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                       !defaultProfile ? { opacity: 0.45 } : null,
                     ]}
                     onPress={() => defaultProfile && rollSpellDamage(spell.name, defaultProfile)}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                     disabled={!defaultProfile}
                   >
                     <Text style={styles.weaponActionText}>
@@ -1831,7 +1826,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                       key={`${spell.key}-${profile.id}`}
                       style={styles.secondaryAction}
                       onPress={() => rollSpellDamage(spell.name, profile)}
-                      android_ripple={{ color: '#999' }}
+                      android_ripple={{ color: colors.ripple }}
                     >
                       <Text style={styles.secondaryActionText}>
                         Шкода: {profile.label} ({profile.formula} {profile.damageType})
@@ -1884,7 +1879,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.sectionTitle}>Інвентар</Text>
           {sectionConflictLabel(['inventory.'])}
         </View>
-        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Inventory')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Inventory')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Inventory ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
       </View>
@@ -1915,7 +1910,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.sectionTitle}>Нотатки</Text>
           {sectionConflictLabel(['homebrew.notes-groups'])}
         </View>
-        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Notes')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Notes')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Notes ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
       </View>
@@ -1939,7 +1934,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.sectionTitle}>Власне</Text>
           {sectionConflictLabel(['homebrew.'])}
         </View>
-        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Homebrew')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.collapseButton} onPress={() => toggleSecondary('Homebrew')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.collapseButtonText}>{collapsedSecondary.Homebrew ? 'Розгорнути' : 'Згорнути'}</Text>
         </Pressable>
       </View>
@@ -1969,7 +1964,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                 <View style={styles.trackerControls}>
                   <Pressable
                     style={styles.quickCircle}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                     onPress={() => updateResource(resource.id, { current: Math.max(0, resource.current - 1) })}
                   >
                     <Text style={styles.quickCircleText}>-</Text>
@@ -1980,7 +1975,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                   </Text>
                   <Pressable
                     style={styles.quickCircle}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                     onPress={() => {
                       const max = typeof resource.max === 'number' ? resource.max : Number.POSITIVE_INFINITY;
                       updateResource(resource.id, { current: Math.min(resource.current + 1, max) });
@@ -2264,7 +2259,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
               Підготовлено: {preparedSpellsCount}/{preparedSpellsLimit}
             </Text>
           )}
-          <Pressable style={styles.secondaryAction} onPress={openSpellQuickModal} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.secondaryAction} onPress={openSpellQuickModal} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.secondaryActionText}>Відкрити додавання закляття</Text>
           </Pressable>
         </View>
@@ -2528,7 +2523,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
               <Pressable
                 style={styles.collapseButton}
                 onPress={() => updateCustomField(field.id, { type: nextType })}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.collapseButtonText}>Змінити тип</Text>
               </Pressable>
@@ -2538,7 +2533,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
               <Pressable
                 style={styles.booleanField}
                 onPress={() => updateCustomField(field.id, { value: !field.value })}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.blockText}>{field.value ? 'Так' : 'Ні'}</Text>
               </Pressable>
@@ -2578,7 +2573,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           key={template.id}
           style={styles.secondaryAction}
           onPress={() => applyResourceTemplate(template.resource)}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
         >
           <Text style={styles.secondaryActionText}>Застосувати: {template.name}</Text>
         </Pressable>
@@ -2593,7 +2588,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Pressable
             style={styles.secondaryAction}
             onPress={() => applyResourceTemplate(template.resource)}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.secondaryActionText}>Застосувати шаблон користувача</Text>
           </Pressable>
@@ -2633,7 +2628,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
               <Pressable
                 style={styles.collapseButton}
                 onPress={() => updateResource(resource.id, { resetRule: nextRule })}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.collapseButtonText}>Змінити відновлення</Text>
               </Pressable>
@@ -2641,7 +2636,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             <Pressable
               style={styles.secondaryAction}
               onPress={() => saveUserTemplateFromResource(resource)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.secondaryActionText}>Зберегти як шаблон користувача</Text>
             </Pressable>
@@ -2679,13 +2674,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         {sectionConflictLabel(['homebrew.entries'])}
       </View>
       <View style={styles.slotEditRow}>
-        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('spell')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('spell')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.secondaryActionText}>+ Закляття</Text>
         </Pressable>
-        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('ability')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('ability')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.secondaryActionText}>+ Здібність</Text>
         </Pressable>
-        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('feat')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.secondaryAction} onPress={() => addHomebrewEntry('feat')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.secondaryActionText}>+ Риса</Text>
         </Pressable>
       </View>
@@ -2710,7 +2705,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
               <Pressable
                 style={styles.collapseButton}
                 onPress={() => updateHomebrewEntry(entry.id, { kind: nextKind })}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.collapseButtonText}>Змінити тип</Text>
               </Pressable>
@@ -2859,3 +2854,4 @@ function getSheetOwners(doc: CharacterSheet | null): { ownerUid: string; owners:
     editors: Array.isArray(doc?.editors) ? doc.editors.filter(Boolean) : [],
   };
 }
+

@@ -229,7 +229,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               key={campaign.id}
               style={[styles.statChip, selectedCampaignId === campaign.id ? { borderColor: colors.text } : null]}
               onPress={() => setSelectedCampaignId(campaign.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.statChipText}>{campaign.name}</Text>
             </Pressable>
@@ -247,7 +247,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               key={player.id}
               style={styles.updateRow}
               onPress={() => setSelectedPlayers((prev) => ({ ...prev, [player.id]: !prev[player.id] }))}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.updateTitle}>{player.name || 'Персонаж'} {selected ? '• Обрано' : ''}</Text>
               <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • HP {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
@@ -271,7 +271,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             key={monster.id}
             style={styles.updateRow}
             onPress={() => addMonster(monster.name || 'Монстр', monster.challenge || '0')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.updateTitle}>{monster.name || 'Монстр'}</Text>
             <Text style={styles.updateMeta}>CR {monster.challenge || '0'} • {monster.type || 'Невідомий тип'}</Text>
@@ -296,7 +296,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                     ),
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>К-сть -1</Text>
               </Pressable>
@@ -307,11 +307,11 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                     prev.map((item) => (item.id === monster.id ? { ...item, count: item.count + 1 } : item)),
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>К-сть +1</Text>
               </Pressable>
-              <Pressable style={styles.laneButton} onPress={() => removeMonster(monster.id)} android_ripple={{ color: '#999' }}>
+              <Pressable style={styles.laneButton} onPress={() => removeMonster(monster.id)} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.laneButtonText}>Видалити</Text>
               </Pressable>
             </View>
@@ -326,7 +326,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.updateMeta}>Скоригований XP: {result.adjustedXP}</Text>
         <Text style={styles.updateMeta}>XP на гравця: {result.xpPerPlayer}</Text>
 
-        <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Почати ініціативу</Text>
         </Pressable>
       </View>
@@ -335,3 +335,4 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMEncounterPrep;
+

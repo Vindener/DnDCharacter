@@ -77,7 +77,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
               placeholder='Назва предмета'
             />
             <TouchableOpacity onPress={() => handleDeleteItem(index)} style={{ marginLeft: 8 }}>
-              <Ionicons name='trash-outline' size={24} color='#d00' />
+              <Ionicons name='trash-outline' size={24} color={colors.danger} />
             </TouchableOpacity>
           </View>
         )}
@@ -91,13 +91,14 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
           alignItems: 'center',
         }}
       >
-        <Ionicons name='add-circle-outline' size={28} color='#28a745' />
-        <Text style={{ marginLeft: 8, color: '#28a745', fontSize: 16 }}>Додати предмет</Text>
+        <Ionicons name='add-circle-outline' size={28} color={colors.success} />
+        <Text style={{ marginLeft: 8, color: colors.success, fontSize: 16 }}>Додати предмет</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Inventory;
+
 
 

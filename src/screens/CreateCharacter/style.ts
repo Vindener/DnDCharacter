@@ -158,7 +158,7 @@ export const getStyles = (c: ThemeColors) =>
       marginTop: 6,
     },
     warningText: {
-      color: '#d35454',
+      color: c.danger,
       fontSize: 12,
       marginTop: 6,
     },
@@ -240,3 +240,4 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
     },
   });
+

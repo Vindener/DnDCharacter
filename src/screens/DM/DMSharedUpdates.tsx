@@ -284,7 +284,7 @@ const DMSharedUpdates = () => {
                 key={item}
                 style={[styles.filterChip, active ? styles.filterChipActive : null]}
                 onPress={() => setFilter(item)}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={[styles.filterChipText, active ? styles.filterChipTextActive : null]}>{FILTER_LABELS[item]}</Text>
               </Pressable>
@@ -347,7 +347,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void openInHeroes(item.payload);
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Спільна жива копія</Text>
               </Pressable>
@@ -356,7 +356,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void markReviewed(item.id, item.updatedAtMs);
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Позначити перевіреним</Text>
               </Pressable>
@@ -365,7 +365,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void syncNow(item);
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Синхронізувати зараз</Text>
               </Pressable>
@@ -374,7 +374,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void createDetachedCopy(item.payload, 'local-copy');
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Локальна копія</Text>
               </Pressable>
@@ -383,7 +383,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void createDetachedCopy(item.payload, 'duplicate-shared');
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Дублювати зі спільного</Text>
               </Pressable>
@@ -396,6 +396,7 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
+
 
 
 

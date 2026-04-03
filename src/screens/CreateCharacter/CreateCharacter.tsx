@@ -108,8 +108,8 @@ function autoFillSkills(stats: CharacterViewModel['stats']): CharacterViewModel[
 
 const CreateCharacter = (): JSX.Element => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'CreateCharacter'>>();
-  const c = useThemeStore((s) => s.colors);
-  const styles = getStyles(c);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = getStyles(colors);
 
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
@@ -530,7 +530,7 @@ const CreateCharacter = (): JSX.Element => {
   }) => (
     <View style={styles.navRow}>
       {showBack ? (
-        <Pressable style={styles.navButton} onPress={() => setStep((prev) => Math.max(prev - 1, 1))} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.navButton} onPress={() => setStep((prev) => Math.max(prev - 1, 1))} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.navButtonText}>Назад</Text>
         </Pressable>
       ) : (
@@ -540,7 +540,7 @@ const CreateCharacter = (): JSX.Element => {
         style={[styles.navButton, styles.navButtonPrimary, nextDisabled ? styles.navButtonDisabled : null]}
         onPress={onNext}
         disabled={nextDisabled}
-        android_ripple={{ color: '#777' }}
+        android_ripple={{ color: colors.ripple }}
       >
         <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{nextLabel}</Text>
       </Pressable>
@@ -779,7 +779,7 @@ const CreateCharacter = (): JSX.Element => {
               style={[styles.statControl, !canDecrease ? styles.navButtonDisabled : null]}
               onPress={() => canDecrease && setPbStats((prev) => ({ ...prev, [ability]: prev[ability] - 1 }))}
               disabled={!canDecrease}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.statControlText}>-</Text>
             </Pressable>
@@ -788,7 +788,7 @@ const CreateCharacter = (): JSX.Element => {
               style={[styles.statControl, !canIncrease ? styles.navButtonDisabled : null]}
               onPress={() => canIncrease && setPbStats((prev) => ({ ...prev, [ability]: prev[ability] + 1 }))}
               disabled={!canIncrease}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.statControlText}>+</Text>
             </Pressable>
@@ -837,7 +837,7 @@ const CreateCharacter = (): JSX.Element => {
           <Pressable
             style={[styles.methodCard, startMethod === 'guided' ? styles.methodCardActive : null]}
             onPress={() => setStartMethod('guided')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.methodTitle}>Покроково (повний контроль)</Text>
             <Text style={styles.methodMeta}>Повні підказки на кожному кроці, з ручним контролем параметрів.</Text>
@@ -846,7 +846,7 @@ const CreateCharacter = (): JSX.Element => {
           <Pressable
             style={[styles.methodCard, startMethod === 'quick' ? styles.methodCardActive : null]}
             onPress={() => setStartMethod('quick')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.methodTitle}>Швидко (швидкий старт)</Text>
             <Text style={styles.methodMeta}>Рекомендовані дефолти для швидкого проходження кроків.</Text>
@@ -859,7 +859,7 @@ const CreateCharacter = (): JSX.Element => {
               key={template.id}
               style={[styles.methodCard, characterTemplateId === template.id ? styles.methodCardActive : null]}
               onPress={() => setCharacterTemplateId(template.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.methodTitle}>{template.title}</Text>
               <Text style={styles.methodMeta}>{template.description}</Text>
@@ -906,14 +906,14 @@ const CreateCharacter = (): JSX.Element => {
             <Pressable
               style={[styles.toggleButton, statMethod === 'array' ? styles.toggleButtonActive : null]}
               onPress={() => setStatMethod('array')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, statMethod === 'array' ? styles.toggleButtonTextActive : null]}>Стандартний масив</Text>
             </Pressable>
             <Pressable
               style={[styles.toggleButton, statMethod === 'pointbuy' ? styles.toggleButtonActive : null]}
               onPress={() => setStatMethod('pointbuy')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, statMethod === 'pointbuy' ? styles.toggleButtonTextActive : null]}>Розподіл балів (27)</Text>
             </Pressable>
@@ -957,14 +957,14 @@ const CreateCharacter = (): JSX.Element => {
             <Pressable
               style={[styles.toggleButton, storageMode === 'local-only' ? styles.toggleButtonActive : null]}
               onPress={() => setStorageMode('local-only')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>Локально</Text>
             </Pressable>
             <Pressable
               style={[styles.toggleButton, storageMode === 'local-cloud' ? styles.toggleButtonActive : null]}
               onPress={() => setStorageMode('local-cloud')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>Локально + Хмара</Text>
             </Pressable>
@@ -978,10 +978,10 @@ const CreateCharacter = (): JSX.Element => {
                 style={[styles.navButton, styles.navButtonPrimary, isSigningIn ? styles.navButtonDisabled : null]}
                 onPress={onLogin}
                 disabled={isSigningIn}
-                android_ripple={{ color: '#777' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 {isSigningIn ? (
-                  <ActivityIndicator color={c.background} />
+                  <ActivityIndicator color={colors.background} />
                 ) : (
                   <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>Увійти через Google</Text>
                 )}
@@ -997,7 +997,7 @@ const CreateCharacter = (): JSX.Element => {
             autoCapitalize='none'
             keyboardType='email-address'
             placeholder='name@example.com'
-            placeholderTextColor={c.textSecondary}
+            placeholderTextColor={colors.textSecondary}
             editable={storageMode === 'local-cloud'}
           />
           {storageMode === 'local-only' && <Text style={styles.helperText}>Шерінг доступний лише в режимі "Локально + Хмара".</Text>}
@@ -1078,6 +1078,8 @@ const CreateCharacter = (): JSX.Element => {
 };
 
 export default CreateCharacter;
+
+
 
 
 

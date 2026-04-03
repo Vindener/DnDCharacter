@@ -24,4 +24,8 @@ StyleSheet.create({
     minWidth: 48,
   },
   adjustText: { color: c.text, fontSize: 20 },
+  modalInfoText: { color: c.text, marginBottom: 8 },
+  tableRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  tableCell: { color: c.text },
+  tableCellActive: { color: c.highlight },
 });

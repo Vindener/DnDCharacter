@@ -428,7 +428,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         </MenuItem>
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
-        <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
+        <TextInput value={newName} onChangeText={setNewName} style={styles.tableCell} />
       </Modal>
       <Modal isVisible={isSpeedModalVisible} onClose={() => setIsSpeedModalVisible(false)} onSubmit={handleSaveSpeed} title='Швидкість'>
         <TextInput
@@ -461,8 +461,8 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         />
       </Modal>
       <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title='Досвід'>
-        <Text style={{ color: 'white', marginBottom: 8 }}>Рівень: {getLevelByExperience(tempExp)}</Text>
-        <Text style={{ color: 'white', marginBottom: 8 }}>Досвід: {tempExp}</Text>
+        <Text style={styles.modalInfoText}>Рівень: {getLevelByExperience(tempExp)}</Text>
+        <Text style={styles.modalInfoText}>Досвід: {tempExp}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
           <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: 8 }} />
           <TouchableOpacity onPress={() => applyInputDelta(1)} style={styles.adjustButton}>
@@ -482,17 +482,17 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         </View>
         <ScrollView style={{ maxHeight: 150 }}>
           {EXPERIENCE_TABLE.map((row) => (
-            <View key={row.level} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View key={row.level} style={styles.tableRow}>
               <Text
                 style={{
-                  color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
+                  color: getLevelByExperience(tempExp) === row.level ? colors.highlight : colors.text,
                 }}
               >
                 {row.level} рів.
               </Text>
               <Text
                 style={{
-                  color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
+                  color: getLevelByExperience(tempExp) === row.level ? colors.highlight : colors.text,
                 }}
               >
                 {row.exp}

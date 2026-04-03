@@ -102,7 +102,7 @@ export const getStyles = (c: ThemeColors) =>
     },
     modalBackdrop: {
       flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.5)',
+      backgroundColor: c.overlaySoft,
       justifyContent: 'center',
       padding: 20,
     },
@@ -193,3 +193,4 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
     },
   });
+

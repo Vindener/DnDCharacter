@@ -11,7 +11,7 @@ export function QuickActionBar({ styles, colors, quickActions, onQuickActionPres
       <Text style={styles.sectionTitle}>Панель швидких дій</Text>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.quickActionsRow}>
         {quickActions.map((action) => (
-          <Pressable key={action.id} style={styles.quickActionButton} onPress={() => onQuickActionPress(action)} android_ripple={{ color: '#999' }}>
+          <Pressable key={action.id} style={styles.quickActionButton} onPress={() => onQuickActionPress(action)} android_ripple={{ color: colors.ripple }}>
             <MaterialCommunityIcons name={action.icon as never} size={18} color={colors.text} />
             <Text style={styles.quickActionText}>{action.label}</Text>
           </Pressable>
@@ -20,3 +20,4 @@ export function QuickActionBar({ styles, colors, quickActions, onQuickActionPres
     </View>
   );
 }
+

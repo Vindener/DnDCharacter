@@ -42,7 +42,7 @@ export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterC
                 onTogglePin(monster.id);
               }}
               style={styles.pinButton}
-              android_ripple={{ color: '#888' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={16} color={colors.text} />
               <Text style={styles.pinText}>{isPinned ? 'Закріплено' : 'Закріпити'}</Text>
@@ -71,3 +71,4 @@ export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterC
     </TouchableOpacity>
   );
 };
+

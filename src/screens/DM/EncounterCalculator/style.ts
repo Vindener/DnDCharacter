@@ -17,8 +17,9 @@ inputSmall: {
 },
 inputName: { flex: 1, backgroundColor: c.inputBackground, color: c.text, padding: 8, borderRadius: 5, marginRight: 8 },
 addButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-addText: { marginLeft: 8, color: '#28a745', fontSize: 16 },
+addText: { marginLeft: 8, color: c.success, fontSize: 16 },
 deleteBtn: { marginLeft: 4 },
 result: { marginTop: 16 },
 resultText: { color: c.text, fontSize: 16, marginBottom: 4 },
 });
+

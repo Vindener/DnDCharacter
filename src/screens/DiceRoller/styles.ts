@@ -8,10 +8,11 @@ StyleSheet.create({
   diceButton: {
     padding: 16,
     marginVertical: 4,
-    backgroundColor: '#2f95dc',
+    backgroundColor: c.primary,
     borderRadius: 8,
     alignItems: 'center',
   },
   diceText: { fontSize: 18, color: c.text },
   result: { fontSize: 22, textAlign: 'center', marginTop: 16, color: c.text },
 });
+

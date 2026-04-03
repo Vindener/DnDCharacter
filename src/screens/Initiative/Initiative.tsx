@@ -91,7 +91,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
       const currentIndex = typeof getIndex === 'function' ? getIndex() : undefined;
       const safeIndex = currentIndex != null ? currentIndex : items.findIndex((it) => it.id === item.id);
 
-      const draggingStyle = isActive ? { shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 5, transform: [{ scale: 1.01 }] } : null;
+      const draggingStyle = isActive ? { shadowColor: colors.overlayStrong, shadowOpacity: 0.2, shadowRadius: 5, transform: [{ scale: 1.01 }] } : null;
 
       return (
         <View style={[styles.row, draggingStyle]}>
@@ -149,15 +149,18 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
             disabled={isActive}
             accessibilityLabel='Видалити рядок'
           >
-            <Ionicons name='trash-outline' size={22} color='#dc3545' />
+            <Ionicons name='trash-outline' size={22} color={colors.danger} />
           </TouchableOpacity>
         </View>
       );
     },
     [
+      colors.danger,
+      colors.overlayStrong,
       colors.textSecondary,
       editingId,
       handleChangeById,
+      handleRemove,
       items,
       styles.row,
       styles.rowContent,
@@ -185,7 +188,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
       <View style={styles.bottomBar}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-            <Ionicons name='add-circle-outline' size={28} color='#28a745' />
+            <Ionicons name='add-circle-outline' size={28} color={colors.success} />
             <Text style={styles.addText}>Додати ще</Text>
           </TouchableOpacity>
 

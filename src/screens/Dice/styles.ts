@@ -9,7 +9,7 @@ StyleSheet.create({
   rollButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#6200EE',
+    backgroundColor: c.magic,
     borderRadius: 5,
   },
   rollButtonText: { color: c.text, fontSize: 16 },
@@ -17,7 +17,7 @@ StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: '#6200EE',
+    backgroundColor: c.magic,
     padding: 15,
     borderRadius: 50,
   },
@@ -51,7 +51,7 @@ StyleSheet.create({
   diceClose: {
     width: '30%',
     margin: 5,
-    backgroundColor: '#6200EE',
+    backgroundColor: c.magic,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -64,7 +64,7 @@ StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: c.overlayStrong,
   },
   modalContent: {
     backgroundColor: c.card,
@@ -78,14 +78,14 @@ StyleSheet.create({
     marginBottom: 10,
   },
   modalResult: {
-    color: '#B39DDB',
+    color: c.highlight,
     fontSize: 20,
     fontWeight: 'bold',
   },
   modalButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#6200EE',
+    backgroundColor: c.magic,
     borderRadius: 5,
   },
   modalButtonText: {
@@ -102,3 +102,4 @@ StyleSheet.create({
     marginBottom: 10,
   },
 });
+

@@ -36,6 +36,7 @@ StyleSheet.create({
     fontSize: 13,
   },
   separator: {
-    color: '#ff2d55',
+    color: c.brand,
   },
 });
+

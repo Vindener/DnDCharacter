@@ -5,10 +5,10 @@ import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
 type CharacterTabsProps = Pick<
   CharacterActionsReadyState,
-  'styles' | 'tabOrder' | 'tabLabels' | 'selectedTab' | 'hasConflictForTab' | 'openTab'
+  'styles' | 'colors' | 'tabOrder' | 'tabLabels' | 'selectedTab' | 'hasConflictForTab' | 'openTab'
 >;
 
-export function CharacterTabs({ styles, tabOrder, tabLabels, selectedTab, hasConflictForTab, openTab }: CharacterTabsProps) {
+export function CharacterTabs({ styles, colors, tabOrder, tabLabels, selectedTab, hasConflictForTab, openTab }: CharacterTabsProps) {
   return (
     <View style={styles.tabsWrap}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsRow}>
@@ -17,11 +17,11 @@ export function CharacterTabs({ styles, tabOrder, tabLabels, selectedTab, hasCon
             key={tab}
             style={[styles.tabChip, selectedTab === tab ? styles.tabChipActive : null, hasConflictForTab(tab) ? styles.tabChipConflict : null]}
             onPress={() => openTab(tab)}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <View style={styles.tabChipInner}>
               <Text style={[styles.tabChipText, selectedTab === tab ? styles.tabChipTextActive : null]}>{tabLabels[tab]}</Text>
-              {hasConflictForTab(tab) && <MaterialCommunityIcons name='alert-circle' size={14} color='#f59e0b' />}
+              {hasConflictForTab(tab) && <MaterialCommunityIcons name='alert-circle' size={14} color={colors.warning} />}
             </View>
           </Pressable>
         ))}
@@ -29,3 +29,4 @@ export function CharacterTabs({ styles, tabOrder, tabLabels, selectedTab, hasCon
     </View>
   );
 }
+

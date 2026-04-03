@@ -138,8 +138,8 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
         ))}
       {!Object.keys(spells.spellSlots).includes('9') && (
         <TouchableOpacity onPress={handleAddSlot} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
-          <Ionicons name='add-circle-outline' size={24} color='#28a745' />
-          <Text style={{ marginLeft: 8, color: '#28a745' }}>Додати рівень</Text>
+          <Ionicons name='add-circle-outline' size={24} color={colors.success} />
+          <Text style={{ marginLeft: 8, color: colors.success }}>Додати рівень</Text>
         </TouchableOpacity>
       )}
 
@@ -166,4 +166,5 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
 };
 
 export default Spells;
+
 

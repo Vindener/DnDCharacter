@@ -17,7 +17,7 @@ StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#ff2d55',
+    backgroundColor: c.brand,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -37,3 +37,4 @@ StyleSheet.create({
     fontWeight: '600',
   },
 });
+

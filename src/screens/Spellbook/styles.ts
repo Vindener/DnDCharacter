@@ -22,7 +22,7 @@ export const getStyles = (c: ThemeColors) =>
     },
     headerAction: {
       borderRadius: 10,
-      backgroundColor: '#1d4ed8',
+      backgroundColor: c.primary,
       paddingHorizontal: 12,
       paddingVertical: 9,
       flexDirection: 'row',
@@ -31,7 +31,7 @@ export const getStyles = (c: ThemeColors) =>
       marginTop: 2,
     },
     headerActionText: {
-      color: '#fff',
+      color: c.onPrimary,
       fontSize: 12,
       fontWeight: '700',
     },
@@ -48,8 +48,8 @@ export const getStyles = (c: ThemeColors) =>
     offlineBanner: {
       borderRadius: 10,
       borderWidth: 1,
-      borderColor: '#1e3a8a',
-      backgroundColor: '#1e40af',
+      borderColor: c.info,
+      backgroundColor: c.info,
       paddingHorizontal: 10,
       paddingVertical: 8,
       flexDirection: 'row',
@@ -57,7 +57,7 @@ export const getStyles = (c: ThemeColors) =>
       gap: 8,
     },
     offlineBannerText: {
-      color: '#f8fafc',
+      color: c.onInfo,
       fontSize: 12,
       lineHeight: 17,
       flex: 1,
@@ -90,8 +90,8 @@ export const getStyles = (c: ThemeColors) =>
       gap: 6,
     },
     chipActive: {
-      backgroundColor: '#2563eb',
-      borderColor: '#2563eb',
+      backgroundColor: c.primary,
+      borderColor: c.primary,
     },
     chipText: {
       color: c.text,
@@ -99,7 +99,7 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
     },
     chipTextActive: {
-      color: '#fff',
+      color: c.onPrimary,
     },
     characterPickerBlock: {
       gap: 6,
@@ -186,8 +186,8 @@ export const getStyles = (c: ThemeColors) =>
       paddingVertical: 6,
     },
     statusButtonActive: {
-      backgroundColor: '#059669',
-      borderColor: '#059669',
+      backgroundColor: c.success,
+      borderColor: c.success,
     },
     statusButtonText: {
       color: c.text,
@@ -195,7 +195,7 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '700',
     },
     statusButtonTextActive: {
-      color: '#fff',
+      color: c.onPrimary,
     },
     metaMuted: {
       color: c.textSecondary,
@@ -207,7 +207,7 @@ export const getStyles = (c: ThemeColors) =>
       marginTop: 4,
     },
     preparedWarning: {
-      color: '#b45309',
+      color: c.warning,
       fontSize: 12,
       marginTop: 4,
       fontWeight: '600',
@@ -238,14 +238,14 @@ export const getStyles = (c: ThemeColors) =>
     deleteCustomButton: {
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#7f1d1d',
-      backgroundColor: '#7f1d1d',
+      borderColor: c.danger,
+      backgroundColor: c.danger,
       paddingVertical: 7,
       paddingHorizontal: 12,
       alignItems: 'center',
     },
     deleteCustomButtonText: {
-      color: '#fff',
+      color: c.onPrimary,
       fontSize: 12,
       fontWeight: '700',
     },
@@ -292,4 +292,5 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: 16,
     },
   });
+
 

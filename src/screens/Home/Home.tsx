@@ -391,19 +391,19 @@ const Home = () => {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Швидкі дії</Text>
         <View style={styles.quickGrid}>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('CreateCharacter')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('CreateCharacter')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='person-add-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Створити персонажа</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='download-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Імпортувати</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('Spellbook')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('Spellbook')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='book-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Відкрити заклинання</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='play-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Почати сесію</Text>
           </Pressable>
@@ -442,7 +442,7 @@ const Home = () => {
             onPress={() => {
               void openCharacter(item);
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <View style={styles.characterHeader}>
               <Text style={styles.characterName}>{item.name}</Text>
@@ -521,6 +521,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 

@@ -162,7 +162,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.title}>Швидке редагування DM • {character.name || 'Персонаж'}</Text>
         <Text style={styles.hint}>Розширене швидке редагування з атрибуцією DM та маркерами історії спільних змін.</Text>
         <Text style={styles.hint}>Статус: {syncFeedback}</Text>
-        <Pressable style={styles.topActionButton} onPress={openFullEdit} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.topActionButton} onPress={openFullEdit} android_ripple={{ color: colors.ripple }}>
           <Ionicons name='document-text-outline' size={18} color={colors.text} />
           <Text style={styles.topActionButtonText}>Відкрити повне редагування</Text>
         </Pressable>
@@ -179,7 +179,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                 ['combat.hp'],
               );
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='heart-dislike-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>HP -1</Text>
@@ -192,7 +192,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                 ['combat.hp'],
               );
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='heart-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>HP +1</Text>
@@ -205,12 +205,12 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                 ['combat.hp'],
               );
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='shield-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Тимчасове HP +1</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={openHpModal} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={openHpModal} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='create-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Змінити HP</Text>
           </Pressable>
@@ -225,7 +225,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               void commitPatch((prev) => ({ ...prev, ac: (prev.ac || 0) + 1 }), ['combat.core']);
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='add-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>AC +1</Text>
@@ -235,7 +235,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               void commitPatch((prev) => ({ ...prev, initiative: (prev.initiative || 0) + 1 }), ['combat.core']);
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='flash-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Ініціатива +1</Text>
@@ -267,7 +267,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
               );
               setConditionInput('');
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='add-circle-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Додати стан</Text>
@@ -277,7 +277,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               void commitPatch((prev) => ({ ...prev, conditions: [] }), ['combat.conditions']);
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='close-circle-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Очистити стани</Text>
@@ -314,7 +314,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['magic.slots'],
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>Використано -1</Text>
               </Pressable>
@@ -341,7 +341,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['magic.slots'],
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>Використано +1</Text>
               </Pressable>
@@ -366,7 +366,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['magic.slots'],
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>Макс. +1</Text>
               </Pressable>
@@ -396,7 +396,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['homebrew.resources'],
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>-1</Text>
               </Pressable>
@@ -418,7 +418,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['homebrew.resources'],
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>+1</Text>
               </Pressable>
@@ -447,7 +447,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             );
             setInventoryInput('');
           }}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
         >
           <Text style={styles.laneButtonText}>Додати предмет</Text>
         </Pressable>
@@ -462,7 +462,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                   ['inventory.items'],
                 );
               }}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.laneButtonText}>Видалити</Text>
             </Pressable>
@@ -488,7 +488,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             void commitPatch((prev) => appendQuickSessionNote(prev, note), ['homebrew.notes-groups']);
             setShortNoteInput('');
           }}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
         >
           <Text style={styles.laneButtonText}>Додати нотатку</Text>
         </Pressable>
@@ -528,4 +528,5 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMQuickEdit;
+
 

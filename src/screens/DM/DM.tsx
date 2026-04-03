@@ -231,7 +231,7 @@ const DM: React.FC = () => {
             <Text style={styles.statChipText}>Роль: {roleMode}</Text>
           </View>
         </View>
-        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMPartyOverview')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMPartyOverview')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Відкрити повний огляд групи</Text>
         </Pressable>
       </View>
@@ -243,20 +243,20 @@ const DM: React.FC = () => {
           <Pressable
             style={styles.laneButton}
             onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='rocket-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Почати підготовку сутички</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='flame-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Відкрити ініціативу</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до бестіарію</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='book-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до книги заклять</Text>
           </Pressable>
@@ -286,7 +286,7 @@ const DM: React.FC = () => {
                   onPress={() => {
                     void openFullSheet(item.payload);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='link-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
@@ -296,7 +296,7 @@ const DM: React.FC = () => {
                   onPress={() => {
                     void openQuickEdit(item.payload);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Швидке редагування</Text>
@@ -306,7 +306,7 @@ const DM: React.FC = () => {
                   onPress={() => {
                     void openFullSheet(item.payload);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='document-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
@@ -331,7 +331,7 @@ const DM: React.FC = () => {
         <Pressable
           style={styles.authButton}
           onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
         >
           <Text style={styles.authButtonText}>Відкрити нотатки кампанії</Text>
         </Pressable>
@@ -365,12 +365,12 @@ const DM: React.FC = () => {
           })
         )}
 
-        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Відкрити чергу спільних оновлень</Text>
         </Pressable>
 
         {!isSignedIn && (
-          <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Увійти через Google для спільної синхронізації'}</Text>
           </Pressable>
         )}
@@ -380,6 +380,7 @@ const DM: React.FC = () => {
 };
 
 export default DM;
+
 
 
 

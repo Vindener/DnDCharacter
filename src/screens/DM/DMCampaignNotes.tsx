@@ -254,7 +254,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
                   setSelectedCampaignId(campaign.id);
                   resetEditor();
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.statChipText}>{campaign.name}</Text>
               </Pressable>
@@ -262,7 +262,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           })}
         </View>
 
-        <Pressable style={styles.authButton} onPress={() => { void syncNow(); }} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.authButton} onPress={() => { void syncNow(); }} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Синхронізувати зараз</Text>
         </Pressable>
       </View>
@@ -286,12 +286,12 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
         />
 
         <View style={styles.laneGrid}>
-          <Pressable style={styles.laneButton} onPress={() => { void saveNote(); }} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => { void saveNote(); }} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='save-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Зберегти нотатку</Text>
           </Pressable>
           {activeNoteId && (
-            <Pressable style={styles.laneButton} onPress={resetEditor} android_ripple={{ color: '#999' }}>
+            <Pressable style={styles.laneButton} onPress={resetEditor} android_ripple={{ color: colors.ripple }}>
               <Ionicons name='close-outline' size={18} color={colors.text} />
               <Text style={styles.laneButtonText}>Скасувати редагування</Text>
             </Pressable>
@@ -324,20 +324,20 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
               {note.syncStatus === 'Conflict detected' && note.conflictRemote && (
                 <View style={styles.laneGrid}>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-local'); }} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-local'); }} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.laneButtonText}>Залишити локальну</Text>
                   </Pressable>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-cloud'); }} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-cloud'); }} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.laneButtonText}>Залишити хмарну</Text>
                   </Pressable>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'merge-manual'); }} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'merge-manual'); }} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.laneButtonText}>Об’єднати вручну</Text>
                   </Pressable>
                 </View>
               )}
 
               <View style={styles.laneGrid}>
-                <Pressable style={styles.laneButton} onPress={() => openNote(note)} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.laneButton} onPress={() => openNote(note)} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Редагувати</Text>
                 </Pressable>
@@ -348,7 +348,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
                     void deleteCampaignNote(note.id, note.campaignId);
                     if (activeNoteId === note.id) resetEditor();
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='trash-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Видалити</Text>
@@ -363,3 +363,4 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 };
 
 export default DMCampaignNotes;
+

@@ -76,7 +76,7 @@ export default function Support() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>Підтримати проєкт</Text>
-          <Text style={{ color: 'rgba(249, 136, 118, 1)', fontWeight: '600' as const }}>Зараз збираємо гроші для публікації в Google Play.</Text>
+          <Text style={{ color: colors.warning, fontWeight: '600' as const }}>Зараз збираємо гроші для публікації в Google Play.</Text>
           <Text style={styles.text}>Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:</Text>
           <View style={styles.row}>
             {donateLinks.map((d) => (

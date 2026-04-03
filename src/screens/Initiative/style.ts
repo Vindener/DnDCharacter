@@ -55,14 +55,14 @@ export const getStyles = (c: ThemeColors) =>
       borderRadius: 12,
       paddingHorizontal: 12,
       paddingVertical: 8,
-      shadowColor: '#000',
+      shadowColor: c.overlayStrong,
       shadowOpacity: 0.08,
       shadowOffset: { width: 0, height: 2 },
       shadowRadius: 8,
       elevation: 2,
     },
     addButton: { flexDirection: 'row', alignItems: 'center' },
-    addText: { marginLeft: 8, color: '#28a745', fontSize: 16 },
+    addText: { marginLeft: 8, color: c.success, fontSize: 16 },
     checkboxRow: { flexDirection: 'row', alignItems: 'center' },
     checkboxLabel: { marginLeft: 8, color: c.text },
     addHeroButton: {
@@ -87,3 +87,4 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: 16,
     },
   });
+

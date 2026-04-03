@@ -75,7 +75,7 @@ export function CharacterHeader({
             <Text style={styles.syncIndicatorText}>Статус: {syncFeedback}</Text>
             {currentSync?.transportMessage ? <Text style={styles.syncIndicatorText}>{currentSync.transportMessage}</Text> : null}
           </View>
-          <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: colors.ripple }}>
             <MaterialCommunityIcons name='sync' size={16} color={colors.text} />
             <Text style={styles.syncNowButtonText}>Синхронізувати зараз</Text>
           </Pressable>
@@ -87,7 +87,7 @@ export function CharacterHeader({
           <Pressable
             style={[styles.modeButton, mode === 'play' ? styles.modeButtonActive : null]}
             onPress={() => setMode('play')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
             accessibilityRole='button'
             accessibilityState={{ selected: mode === 'play' }}
           >
@@ -98,7 +98,7 @@ export function CharacterHeader({
           <Pressable
             style={[styles.modeButton, mode === 'edit' ? styles.modeButtonActive : null]}
             onPress={() => setMode('edit')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
             accessibilityRole='button'
             accessibilityState={{ selected: mode === 'edit' }}
           >
@@ -111,7 +111,7 @@ export function CharacterHeader({
         <Pressable
           style={[styles.sessionToggle, characterData.sessionMode ? styles.sessionToggleActive : null]}
           onPress={toggleSessionMode}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
         >
           <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Режим сесії</Text>
         </Pressable>
@@ -119,3 +119,4 @@ export function CharacterHeader({
     </View>
   );
 }
+

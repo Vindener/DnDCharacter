@@ -52,7 +52,7 @@ const Settings = () => {
               value={isDark}
               onValueChange={toggleTheme}
               trackColor={{ false: colors.border, true: colors.inputBackground }}
-              thumbColor={isDark ? '#ffffff' : '#f4f3f4'}
+              thumbColor={isDark ? colors.onPrimary : colors.card}
             />
           </View>
         </View>

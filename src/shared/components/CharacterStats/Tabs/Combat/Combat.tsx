@@ -146,7 +146,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <Text style={[styles.label, { width: 90 }]}>Успіхи:</Text>
         {[0, 1, 2].map((i) => (
           <TouchableOpacity key={i} onPress={() => handleSuccessPress(i)} style={{ marginHorizontal: 4 }}>
-            <Ionicons name={i < deathSaves.successes ? 'ellipse' : 'ellipse-outline'} size={24} color='#28a745' />
+            <Ionicons name={i < deathSaves.successes ? 'ellipse' : 'ellipse-outline'} size={24} color={colors.success} />
           </TouchableOpacity>
         ))}
       </View>
@@ -159,7 +159,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <Text style={[styles.label, { width: 90 }]}>Провали:</Text>
         {[0, 1, 2].map((i) => (
           <TouchableOpacity key={i} onPress={() => handleFailurePress(i)} style={{ marginHorizontal: 4 }}>
-            <Ionicons name={i < deathSaves.failures ? 'ellipse' : 'ellipse-outline'} size={24} color='#d00' />
+            <Ionicons name={i < deathSaves.failures ? 'ellipse' : 'ellipse-outline'} size={24} color={colors.danger} />
           </TouchableOpacity>
         ))}
       </View>
@@ -169,3 +169,4 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
 };
 
 export default Combat;
+

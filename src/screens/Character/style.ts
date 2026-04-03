@@ -85,16 +85,16 @@ export const getStyles = (c: ThemeColors) =>
       backgroundColor: c.inputBackground,
     },
     badgeSuccess: {
-      backgroundColor: '#2f8f46',
+      backgroundColor: c.success,
     },
     badgeWarning: {
-      backgroundColor: '#b2751a',
+      backgroundColor: c.warning,
     },
     badgeAccent: {
-      backgroundColor: '#2f95dc',
+      backgroundColor: c.primary,
     },
     badgeDanger: {
-      backgroundColor: '#8b1e1e',
+      backgroundColor: c.danger,
     },
     badgeText: {
       color: c.text,
@@ -102,7 +102,7 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
     },
     badgeTextInverted: {
-      color: '#fff',
+      color: c.onPrimary,
     },
     syncIndicatorRow: {
       marginTop: 4,
@@ -182,8 +182,8 @@ export const getStyles = (c: ThemeColors) =>
       paddingHorizontal: 10,
     },
     sessionToggleActive: {
-      backgroundColor: '#2f95dc',
-      borderColor: '#2f95dc',
+      backgroundColor: c.primary,
+      borderColor: c.primary,
     },
     sessionToggleText: {
       color: c.text,
@@ -191,7 +191,7 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '700',
     },
     sessionToggleTextActive: {
-      color: '#fff',
+      color: c.onPrimary,
     },
     sessionModeNote: {
       marginTop: 8,
@@ -206,8 +206,8 @@ export const getStyles = (c: ThemeColors) =>
       gap: 8,
     },
     sessionModeNoteActive: {
-      backgroundColor: '#d1e7dd',
-      borderColor: '#198754',
+      backgroundColor: c.success,
+      borderColor: c.success,
     },
     sessionModeNoteText: {
       color: c.textSecondary,
@@ -215,7 +215,7 @@ export const getStyles = (c: ThemeColors) =>
       flex: 1,
     },
     sessionModeNoteTextActive: {
-      color: '#0f5132',
+      color: c.onSuccess,
       fontWeight: '600',
     },
 
@@ -223,7 +223,7 @@ export const getStyles = (c: ThemeColors) =>
       backgroundColor: c.card,
       borderRadius: 14,
       borderWidth: 1,
-      borderColor: '#f59e0b',
+      borderColor: c.warning,
       padding: 12,
       elevation: 2,
       gap: 8,
@@ -330,7 +330,7 @@ export const getStyles = (c: ThemeColors) =>
     },
     hpBarFill: {
       height: '100%',
-      backgroundColor: '#e63946',
+      backgroundColor: c.danger,
       borderRadius: 999,
     },
 
@@ -396,7 +396,7 @@ export const getStyles = (c: ThemeColors) =>
       borderColor: c.text,
     },
     tabChipConflict: {
-      borderColor: '#f59e0b',
+      borderColor: c.warning,
     },
     tabChipText: {
       color: c.text,
@@ -470,13 +470,13 @@ export const getStyles = (c: ThemeColors) =>
     sectionConflictBadge: {
       borderRadius: 99,
       borderWidth: 1,
-      borderColor: '#f59e0b',
-      backgroundColor: '#3f2f0f',
+      borderColor: c.warning,
+      backgroundColor: c.warning,
       paddingVertical: 2,
       paddingHorizontal: 8,
     },
     sectionConflictBadgeText: {
-      color: '#fbbf24',
+      color: c.highlight,
       fontSize: 10,
       fontWeight: '700',
     },
@@ -578,15 +578,15 @@ export const getStyles = (c: ThemeColors) =>
       justifyContent: 'center',
     },
     weaponActionButtonPrimary: {
-      backgroundColor: '#255ddf',
-      borderColor: '#255ddf',
+      backgroundColor: c.info,
+      borderColor: c.info,
     },
     weaponActionButtonSecondary: {
-      backgroundColor: '#7a3e16',
-      borderColor: '#7a3e16',
+      backgroundColor: c.warning,
+      borderColor: c.warning,
     },
     weaponActionText: {
-      color: '#fff',
+      color: c.onPrimary,
       fontSize: 12,
       fontWeight: '700',
       textAlign: 'center',
@@ -738,13 +738,13 @@ export const getStyles = (c: ThemeColors) =>
     },
     removeButton: {
       borderRadius: 10,
-      backgroundColor: '#7f1d1d',
+      backgroundColor: c.danger,
       paddingVertical: 8,
       alignItems: 'center',
       marginTop: 8,
     },
     removeButtonText: {
-      color: '#fff',
+      color: c.onPrimary,
       fontSize: 12,
       fontWeight: '700',
     },
@@ -781,4 +781,49 @@ export const getStyles = (c: ThemeColors) =>
       color: c.text,
       fontWeight: '700',
     },
+    diceQuickGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+      marginBottom: 8,
+    },
+    diceQuickChip: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      minWidth: 58,
+      alignItems: 'center',
+    },
+    diceQuickChipActive: {
+      backgroundColor: c.primary,
+      borderColor: c.primary,
+    },
+    diceQuickChipText: {
+      color: c.text,
+      fontSize: 13,
+      fontWeight: '700',
+    },
+    diceQuickChipTextActive: {
+      color: c.onPrimary,
+    },
+    diceQuickResultCard: {
+      marginTop: 8,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      alignItems: 'center',
+      gap: 4,
+    },
+    diceQuickResultValue: {
+      color: c.text,
+      fontSize: 28,
+      fontWeight: '800',
+    },
   });
+

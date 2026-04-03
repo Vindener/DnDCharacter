@@ -35,13 +35,13 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '800',
     },
     characterLimitTextSafe: {
-      color: '#166534',
+      color: c.success,
     },
     characterLimitTextWarn: {
-      color: '#92400e',
+      color: c.warning,
     },
     characterLimitTextDanger: {
-      color: '#b91c1c',
+      color: c.danger,
     },
 
     greetingTitle: {
@@ -83,13 +83,13 @@ export const getStyles = (c: ThemeColors) =>
 
     resumeButton: {
       borderRadius: 12,
-      backgroundColor: '#2f95dc',
+      backgroundColor: c.primary,
       paddingVertical: 12,
       alignItems: 'center',
       marginTop: 4,
     },
     resumeButtonText: {
-      color: '#fff',
+      color: c.onPrimary,
       fontSize: 14,
       fontWeight: '700',
     },
@@ -160,12 +160,12 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
     },
     conflictBadge: {
-      backgroundColor: '#7f1d1d',
+      backgroundColor: c.danger,
       borderWidth: 1,
-      borderColor: '#dc2626',
+      borderColor: c.danger,
     },
     conflictBadgeText: {
-      color: '#fff',
+      color: c.onPrimary,
     },
 
     timelineRow: {
@@ -340,3 +340,4 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '700',
     },
   });
+

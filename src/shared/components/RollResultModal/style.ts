@@ -8,12 +8,12 @@ export const getStyles = (c: ThemeColors) =>
       textAlign: 'center',
     },
     criticalSuccess: {
-      color: 'green',
+      color: c.success,
       textAlign: 'center',
       fontWeight: 'bold',
     },
     criticalFailure: {
-      color: 'red',
+      color: c.danger,
       textAlign: 'center',
       fontWeight: 'bold',
     },
@@ -33,9 +33,10 @@ export const getStyles = (c: ThemeColors) =>
     rerollButton: {
       marginTop: 10,
       padding: 10,
-      backgroundColor: '#6200EE',
+      backgroundColor: c.magic,
       borderRadius: 5,
       alignSelf: 'center',
     },
-    rerollButtonText: { color: c.text, fontSize: 16 },
+    rerollButtonText: { color: c.onMagic, fontSize: 16 },
   });
+

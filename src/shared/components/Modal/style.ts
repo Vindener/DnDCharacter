@@ -8,7 +8,7 @@ StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: c.overlayStrong,
   },
   container: {
     flex: 1,
@@ -46,15 +46,16 @@ StyleSheet.create({
   },
   submit: {
     marginTop: 16,
-    backgroundColor: '#95acda',
+    backgroundColor: c.primary,
     paddingVertical: 10,
     borderRadius: 4,
     alignItems: 'center',
   },
   submitText: {
-    color: '#1f2633',
+    color: c.onPrimary,
     fontWeight: 'bold',
   },
 });
+
 
 

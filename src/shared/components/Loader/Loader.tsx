@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Animated, Easing, StyleSheet } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import useThemeStore from "@/context/Theme-store";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 const Loader = () => {
+  const colors = useThemeStore((s) => s.colors);
   const animation = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
@@ -36,7 +38,7 @@ const Loader = () => {
       <Svg width={250} height={250} viewBox="0 0 512 512">
         <AnimatedPath
           fill="none"
-          stroke="#000"
+          stroke={colors.text}
           strokeWidth={3}
           strokeDasharray="200"
           strokeDashoffset={strokeDashoffset}

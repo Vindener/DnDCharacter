@@ -83,13 +83,13 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
             <Text style={styles.conflictText}>Локальні та cloud зміни перетнулися в одній секції. Обери стратегію злиття.</Text>
             {currentSync.conflictPaths.length > 0 && <Text style={styles.conflictPaths}>Шляхи: {currentSync.conflictPaths.join(', ')}</Text>}
             <View style={styles.conflictActionsRow}>
-              <Pressable style={styles.conflictAction} onPress={resolveConflictWithLocal} android_ripple={{ color: '#999' }}>
+              <Pressable style={styles.conflictAction} onPress={resolveConflictWithLocal} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.conflictActionText}>Залишити локальне</Text>
               </Pressable>
-              <Pressable style={styles.conflictAction} onPress={resolveConflictWithCloud} android_ripple={{ color: '#999' }}>
+              <Pressable style={styles.conflictAction} onPress={resolveConflictWithCloud} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.conflictActionText}>Використати хмару</Text>
               </Pressable>
-              <Pressable style={styles.conflictAction} onPress={resolveConflictManual} android_ripple={{ color: '#999' }}>
+              <Pressable style={styles.conflictAction} onPress={resolveConflictManual} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.conflictActionText}>Вирішити пізніше</Text>
               </Pressable>
             </View>
@@ -109,6 +109,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
         <CharacterTabs
           styles={styles}
+          colors={colors}
           tabOrder={tabOrder}
           tabLabels={tabLabels}
           selectedTab={selectedTab}
@@ -159,3 +160,4 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
+

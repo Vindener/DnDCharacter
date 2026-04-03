@@ -202,15 +202,15 @@ const DMPartyOverview = () => {
               <Text style={styles.updateMeta}>Клас/раса: {item.payload.class || 'Клас'} / {item.payload.race || 'Раса'}</Text>
 
               <View style={styles.laneGrid}>
-                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='link-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Швидке редагування</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='document-text-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
                 </Pressable>
@@ -230,5 +230,6 @@ const DMPartyOverview = () => {
 };
 
 export default DMPartyOverview;
+
 
 

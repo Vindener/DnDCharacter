@@ -11,8 +11,9 @@
     "web": "expo start --web",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
+    "lint:theme": "node scripts/lint-theme.mjs",
     "lint": "eslint --ext .ts,.tsx,.js src App.tsx App.js index.js",
-    "validate": "npm run typecheck && npm run lint",
+    "validate": "npm run typecheck && npm run lint && npm run lint:theme",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest"
   },

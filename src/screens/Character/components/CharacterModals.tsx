@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, Pressable, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
-import DiceRoller from '@/screens/DiceRoller/DiceRoller';
 import Dice from '@/screens/Dice/Dice';
 import { Modal } from '@/shared/components/Modal/Modal';
 import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
@@ -68,6 +67,8 @@ type CharacterModalsProps = Pick<
   | 'applyShortRestRolls'
 >;
 
+const QUICK_DICE_OPTIONS = [4, 6, 8, 10, 12, 20] as const;
+
 export function CharacterModals({
   styles,
   colors,
@@ -129,6 +130,21 @@ export function CharacterModals({
   diceSides,
   applyShortRestRolls,
 }: CharacterModalsProps) {
+  const [quickDiceSides, setQuickDiceSides] = React.useState<number>(20);
+  const [quickDiceResult, setQuickDiceResult] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (!isDiceModalVisible) {
+      setQuickDiceResult(null);
+      setQuickDiceSides(20);
+    }
+  }, [isDiceModalVisible]);
+
+  const rollQuickDice = React.useCallback(() => {
+    const value = Math.floor(Math.random() * quickDiceSides) + 1;
+    setQuickDiceResult(value);
+  }, [quickDiceSides]);
+
   return (
     <>
       <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={saveHpModal} title='HP'>
@@ -165,7 +181,30 @@ export function CharacterModals({
       </Modal>
 
       <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} title='Кидок'>
-        <DiceRoller />
+        <Text style={styles.modalLabel}>Оберіть кубик</Text>
+        <View style={styles.diceQuickGrid}>
+          {QUICK_DICE_OPTIONS.map((sides) => (
+            <Pressable
+              key={`quick-dice-${sides}`}
+              style={[styles.diceQuickChip, quickDiceSides === sides ? styles.diceQuickChipActive : null]}
+              onPress={() => setQuickDiceSides(sides)}
+              android_ripple={{ color: colors.ripple }}
+            >
+              <Text style={[styles.diceQuickChipText, quickDiceSides === sides ? styles.diceQuickChipTextActive : null]}>К{sides}</Text>
+            </Pressable>
+          ))}
+        </View>
+
+        <Pressable style={styles.restButton} onPress={rollQuickDice} android_ripple={{ color: colors.ripple }}>
+          <Text style={styles.restButtonText}>Кинути К{quickDiceSides}</Text>
+        </Pressable>
+
+        {quickDiceResult !== null && (
+          <View style={styles.diceQuickResultCard}>
+            <Text style={styles.blockTextMuted}>Результат кидка</Text>
+            <Text style={styles.diceQuickResultValue}>{quickDiceResult}</Text>
+          </View>
+        )}
       </Modal>
 
       <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title='Додати стан'>
@@ -206,7 +245,7 @@ export function CharacterModals({
               key={`quick-spell-candidate-${spell.id}`}
               style={styles.secondaryAction}
               onPress={() => pickExistingSpellForQuickAdd(spell)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.secondaryActionText}>
                 {spell.name} • {spell.level === 0 ? 'каніпс' : `рівень ${spell.level}`}
@@ -241,7 +280,7 @@ export function CharacterModals({
               <Pressable
                 style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
                 onPress={() => rollSpellAttack(selectedQuickSpell.name)}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.weaponActionText}>Атака (d20)</Text>
               </Pressable>
@@ -252,7 +291,7 @@ export function CharacterModals({
                   !selectedQuickSpell.damageProfiles?.[0] ? { opacity: 0.45 } : null,
                 ]}
                 onPress={() => selectedQuickSpell.damageProfiles?.[0] && rollSpellDamage(selectedQuickSpell.name, selectedQuickSpell.damageProfiles[0])}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
                 disabled={!selectedQuickSpell.damageProfiles?.[0]}
               >
                 <Text style={styles.weaponActionText}>
@@ -267,7 +306,7 @@ export function CharacterModals({
                 key={`quick-spell-profile-${selectedQuickSpell.id}-${profile.id}`}
                 style={styles.secondaryAction}
                 onPress={() => rollSpellDamage(selectedQuickSpell.name, profile)}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.secondaryActionText}>
                   Шкода: {profile.label} ({profile.formula} {profile.damageType})
@@ -290,18 +329,18 @@ export function CharacterModals({
         {preparedSpellsLimit !== null && !canAddPreparedFromQuickModal && !isQuickSpellAlreadyPrepared && (
           <Text style={styles.blockTextMuted}>Ліміт підготовлених заклять досягнуто для цього персонажа.</Text>
         )}
-        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('known')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('known')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.secondaryActionText}>+ Додати у відомі</Text>
         </Pressable>
         <Pressable
           style={[styles.secondaryAction, !canAddPreparedFromQuickModal ? { opacity: 0.45 } : null]}
           onPress={() => addSpellFromCharacter('prepared')}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
           disabled={!canAddPreparedFromQuickModal}
         >
           <Text style={styles.secondaryActionText}>+ Додати у підготовлені</Text>
         </Pressable>
-        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('cantrip')} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('cantrip')} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.secondaryActionText}>+ Додати як каніпс</Text>
         </Pressable>
       </Modal>
@@ -350,3 +389,4 @@ export function CharacterModals({
     </>
   );
 }
+

@@ -317,14 +317,14 @@ const Spellbook = () => {
           <Text style={styles.title}>Книга заклять</Text>
           <Text style={styles.hint}>Локальна система заклять: пошук, фільтри, улюблені, статуси персонажа і детальний урон.</Text>
         </View>
-        <Pressable style={styles.headerAction} onPress={openCreateSpellModal} android_ripple={{ color: '#999' }}>
-          <MaterialCommunityIcons name='plus' size={16} color='#fff' />
+        <Pressable style={styles.headerAction} onPress={openCreateSpellModal} android_ripple={{ color: colors.ripple }}>
+          <MaterialCommunityIcons name='plus' size={16} color={colors.onPrimary} />
           <Text style={styles.headerActionText}>Додати</Text>
         </Pressable>
       </View>
 
       <View style={styles.offlineBanner}>
-        <MaterialCommunityIcons name='cloud-off-outline' size={16} color='#f8fafc' />
+        <MaterialCommunityIcons name='cloud-off-outline' size={16} color={colors.onInfo} />
         <Text style={styles.offlineBannerText}>Поки працює тільки в офлайн режимі. Синхронізація буде додана пізніше.</Text>
       </View>
 
@@ -342,9 +342,9 @@ const Spellbook = () => {
           <Pressable
             style={[styles.chip, onlyFavorites ? styles.chipActive : null]}
             onPress={() => setOnlyFavorites((prev) => !prev)}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
-            <MaterialCommunityIcons name={onlyFavorites ? 'star' : 'star-outline'} size={14} color={onlyFavorites ? '#fff' : colors.text} />
+            <MaterialCommunityIcons name={onlyFavorites ? 'star' : 'star-outline'} size={14} color={onlyFavorites ? colors.onPrimary : colors.text} />
             <Text style={[styles.chipText, onlyFavorites ? styles.chipTextActive : null]}>Улюблені</Text>
           </Pressable>
           {STATUS_FILTERS.map((item) => (
@@ -352,7 +352,7 @@ const Spellbook = () => {
               key={`status-${item.id}`}
               style={[styles.chip, statusFilter === item.id ? styles.chipActive : null]}
               onPress={() => setStatusFilter(item.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, statusFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
             </Pressable>
@@ -362,7 +362,7 @@ const Spellbook = () => {
               key={`level-${String(item.id)}`}
               style={[styles.chip, levelFilter === item.id ? styles.chipActive : null]}
               onPress={() => setLevelFilter(item.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, levelFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
             </Pressable>
@@ -372,7 +372,7 @@ const Spellbook = () => {
               key={`source-${item.id}`}
               style={[styles.chip, sourceFilter === item.id ? styles.chipActive : null]}
               onPress={() => setSourceFilter(item.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, sourceFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
             </Pressable>
@@ -386,7 +386,7 @@ const Spellbook = () => {
           <Pressable
             style={[styles.chip, !selectedCharacter ? styles.chipActive : null]}
             onPress={() => setSelectedCharacterId('')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>Без прив’язки</Text>
           </Pressable>
@@ -395,7 +395,7 @@ const Spellbook = () => {
               key={`char-${character.id}`}
               style={[styles.chip, selectedCharacter?.id === character.id ? styles.chipActive : null]}
               onPress={() => setSelectedCharacterId(character.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, selectedCharacter?.id === character.id ? styles.chipTextActive : null]}>
                 {character.name || 'Персонаж'}
@@ -436,14 +436,14 @@ const Spellbook = () => {
                     if (!canFavorite) return;
                     void toggleFavorite(item.id);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                   style={styles.favoriteButton}
                   disabled={!canFavorite}
                 >
                   <MaterialCommunityIcons
                     name={isFavorite ? 'star' : 'star-outline'}
                     size={20}
-                    color={isFavorite ? '#fbbf24' : canFavorite ? colors.textSecondary : '#666'}
+                    color={isFavorite ? colors.highlight : canFavorite ? colors.textSecondary : colors.muted}
                   />
                 </Pressable>
               </View>
@@ -470,21 +470,21 @@ const Spellbook = () => {
                   <Pressable
                     style={[styles.statusButton, status === 'available' ? styles.statusButtonActive : null]}
                     onPress={() => assignSpellStatus(item.name, 'available')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={[styles.statusButtonText, status === 'available' ? styles.statusButtonTextActive : null]}>Доступне</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.statusButton, status === 'known' ? styles.statusButtonActive : null]}
                     onPress={() => assignSpellStatus(item.name, 'known')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={[styles.statusButtonText, status === 'known' ? styles.statusButtonTextActive : null]}>Відоме</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.statusButton, status === 'prepared' ? styles.statusButtonActive : null, !canSetPrepared ? { opacity: 0.45 } : null]}
                     onPress={() => assignSpellStatus(item.name, 'prepared')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                     disabled={!canSetPrepared}
                   >
                     <Text style={[styles.statusButtonText, status === 'prepared' ? styles.statusButtonTextActive : null]}>Підготовлене</Text>
@@ -492,7 +492,7 @@ const Spellbook = () => {
                   <Pressable
                     style={[styles.statusButton, status === 'cantrip' ? styles.statusButtonActive : null]}
                     onPress={() => assignSpellStatus(item.name, 'cantrip')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={[styles.statusButtonText, status === 'cantrip' ? styles.statusButtonTextActive : null]}>Каніпс</Text>
                   </Pressable>
@@ -502,12 +502,12 @@ const Spellbook = () => {
               )}
 
               <View style={styles.cardActionRow}>
-                <Pressable style={styles.cardActionButton} onPress={() => openEditSpellModal(item)} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.cardActionButton} onPress={() => openEditSpellModal(item)} android_ripple={{ color: colors.ripple }}>
                   <MaterialCommunityIcons name='pencil-outline' size={14} color={colors.text} />
                   <Text style={styles.cardActionText}>{item.source === 'custom' ? 'Редагувати' : 'Створити свою копію'}</Text>
                 </Pressable>
                 {item.source === 'custom' && (
-                  <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.deleteCustomButtonText}>Видалити</Text>
                   </Pressable>
                 )}
@@ -595,4 +595,5 @@ const Spellbook = () => {
 };
 
 export default Spellbook;
+
 
