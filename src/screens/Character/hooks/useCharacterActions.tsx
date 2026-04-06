@@ -42,6 +42,12 @@ import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { useQuickActions } from './useQuickActions';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { getStatusToneColors } from '@/shared/styles/statusTones';
+import {
+  applyLevelChange,
+  MAX_CHARACTER_LEVEL,
+  MIN_CHARACTER_LEVEL,
+  type LevelChangeDraftValues,
+} from './levelChange';
 
 interface CharacterProps {
   route: {
@@ -56,6 +62,14 @@ type CharacterTab = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'H
 type BadgeKind = 'neutral' | 'success' | 'warning' | 'accent' | 'danger';
 type SyncBadge = { id: string; label: string; kind: BadgeKind };
 type WeaponRollResult = { title: string; details: string[] };
+type LevelChangeDraftText = {
+  stats: Record<keyof CharacterViewModel['stats'], string>;
+  hpCurrent: string;
+  hpMax: string;
+  ac: string;
+  initiative: string;
+  proficiencyBonus: string;
+};
 
 const TAB_ORDER: CharacterTab[] = ['Overview', 'Combat', 'Magic', 'Inventory', 'Notes', 'Homebrew'];
 const TAB_LABELS: Record<CharacterTab, string> = {
@@ -130,11 +144,34 @@ function parseNumber(value: string, fallback = 0): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function parseModalNumber(value: string, fallback = 0): number {
+  if (String(value || '').trim() === '') return fallback;
+  return parseNumber(value, fallback);
+}
+
 function parseLines(value: string): string[] {
   return value
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
+}
+
+function buildLevelChangeDraftText(character: CharacterViewModel, fallbackProficiency: number): LevelChangeDraftText {
+  return {
+    stats: {
+      strength: String(character.stats.strength ?? 10),
+      dexterity: String(character.stats.dexterity ?? 10),
+      constitution: String(character.stats.constitution ?? 10),
+      intelligence: String(character.stats.intelligence ?? 10),
+      wisdom: String(character.stats.wisdom ?? 10),
+      charisma: String(character.stats.charisma ?? 10),
+    },
+    hpCurrent: String(character.hp.current ?? 0),
+    hpMax: String(character.hp.max ?? 1),
+    ac: String(character.ac ?? 0),
+    initiative: String(character.initiative ?? 0),
+    proficiencyBonus: String(character.proficiencyBonus ?? fallbackProficiency),
+  };
 }
 
 function parseWeaponDamage(value: string): { count: number; sides: number; modifier: number; normalized: string } {
@@ -327,6 +364,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
   const [weaponRollResult, setWeaponRollResult] = useState<WeaponRollResult | null>(null);
   const [spellRollResult, setSpellRollResult] = useState<WeaponRollResult | null>(null);
+  const [isLevelChangeModalVisible, setIsLevelChangeModalVisible] = useState(false);
+  const [levelChangeTarget, setLevelChangeTarget] = useState<number>(
+    clamp(Number(baseCharacter.level) || MIN_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL),
+  );
+  const [levelChangeDraftText, setLevelChangeDraftText] = useState<LevelChangeDraftText>(
+    buildLevelChangeDraftText(ensureCharacterDefaults(baseCharacter), buildProficiencyByLevel(baseCharacter.level)),
+  );
   const [isRestModalVisible, setIsRestModalVisible] = useState(false);
   const [restStep, setRestStep] = useState<'choose' | 'short' | 'roll'>('choose');
   const [shortRestDice, setShortRestDice] = useState('1');
@@ -364,6 +408,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     return Math.round((characterData.hp.current / characterData.hp.max) * 100);
   }, [characterData.hp.current, characterData.hp.max]);
 
+  const currentLevel = clamp(Number(characterData.level) || MIN_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
+  const canIncreaseLevel = currentLevel < MAX_CHARACTER_LEVEL;
+  const canDecreaseLevel = currentLevel > MIN_CHARACTER_LEVEL;
   const proficiency = characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level);
   const passivePerception = 10 + (characterData.skills?.perception ?? calculateModifier(characterData.stats.wisdom || 10));
   const hasHomebrew = isHomebrewCharacter(characterData);
@@ -688,6 +735,87 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       /* ignore local draft mark failure */
     });
   }, [baseCharacter.id, isCharacterMissing, markLocalDraftPaths, selectedTab]);
+
+  const openLevelChangeModal = useCallback((delta: number) => {
+    const safeCurrentLevel = clamp(Number(characterData.level) || MIN_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
+    const safeTargetLevel = clamp(safeCurrentLevel + delta, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
+    if (safeTargetLevel === safeCurrentLevel) return;
+
+    setLevelChangeTarget(safeTargetLevel);
+    setLevelChangeDraftText(
+      buildLevelChangeDraftText(characterData, characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level)),
+    );
+    setIsLevelChangeModalVisible(true);
+  }, [characterData]);
+
+  const cancelLevelChange = useCallback(() => {
+    setIsLevelChangeModalVisible(false);
+  }, []);
+
+  const setLevelDraftField = useCallback((field: keyof Omit<LevelChangeDraftText, 'stats'>, value: string) => {
+    setLevelChangeDraftText((prev) => ({ ...prev, [field]: String(value || '') }));
+  }, []);
+
+  const setLevelDraftStat = useCallback((stat: keyof CharacterViewModel['stats'], value: string) => {
+    setLevelChangeDraftText((prev) => ({
+      ...prev,
+      stats: {
+        ...prev.stats,
+        [stat]: String(value || ''),
+      },
+    }));
+  }, []);
+
+  const confirmLevelChange = useCallback(() => {
+    const numericDraft: LevelChangeDraftValues = {
+      stats: {
+        strength: parseModalNumber(levelChangeDraftText.stats.strength, characterData.stats.strength),
+        dexterity: parseModalNumber(levelChangeDraftText.stats.dexterity, characterData.stats.dexterity),
+        constitution: parseModalNumber(levelChangeDraftText.stats.constitution, characterData.stats.constitution),
+        intelligence: parseModalNumber(levelChangeDraftText.stats.intelligence, characterData.stats.intelligence),
+        wisdom: parseModalNumber(levelChangeDraftText.stats.wisdom, characterData.stats.wisdom),
+        charisma: parseModalNumber(levelChangeDraftText.stats.charisma, characterData.stats.charisma),
+      },
+      hp: {
+        current: parseModalNumber(levelChangeDraftText.hpCurrent, characterData.hp.current),
+        max: parseModalNumber(levelChangeDraftText.hpMax, characterData.hp.max),
+      },
+      ac: parseModalNumber(levelChangeDraftText.ac, characterData.ac),
+      initiative: parseModalNumber(levelChangeDraftText.initiative, characterData.initiative),
+      proficiencyBonus: parseModalNumber(
+        levelChangeDraftText.proficiencyBonus,
+        characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level),
+      ),
+    };
+
+    const next = applyLevelChange(
+      {
+        level: characterData.level,
+        experience: characterData.experience,
+        hitDice: characterData.hitDice,
+        hpTemp: characterData.hp.temp,
+      },
+      levelChangeTarget,
+      numericDraft,
+    );
+
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        level: next.level,
+        experience: next.experience,
+        hitDice: next.hitDice,
+        stats: next.stats,
+        hp: next.hp,
+        ac: next.ac,
+        initiative: next.initiative,
+        proficiencyBonus: next.proficiencyBonus,
+      }),
+      ['overview.identity', 'combat.core', 'combat.hp'],
+    );
+
+    setIsLevelChangeModalVisible(false);
+  }, [characterData, levelChangeDraftText, levelChangeTarget, patchCharacter]);
 
   const toggleSessionMode = useCallback(() => {
     const nextSessionMode = !characterData.sessionMode;
@@ -2065,12 +2193,38 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         'Назва кампанії',
       )}
       <Text style={styles.editLabel}>Рівень</Text>
-      {renderTextInput(
-        String(characterData.level),
-        (next) => patchCharacter((prev) => ({ ...prev, level: clamp(parseNumber(next, prev.level), 1, 20) })),
-        '1-20',
-        { keyboardType: 'number-pad' },
-      )}
+      <View style={styles.numberStepperRow}>
+        <RNTextInput
+          value={String(currentLevel)}
+          placeholder='1-20'
+          placeholderTextColor={colors.textSecondary}
+          style={[styles.editInput, styles.numberStepperInput, styles.numberStepperReadOnlyInput]}
+          keyboardType='number-pad'
+          editable={false}
+        />
+        <View style={styles.numberStepperControls}>
+          <Pressable
+            style={[
+              styles.numberStepperButton,
+              styles.numberStepperButtonTop,
+              !canIncreaseLevel ? styles.numberStepperButtonDisabled : null,
+            ]}
+            onPress={() => openLevelChangeModal(1)}
+            android_ripple={{ color: colors.ripple }}
+            disabled={!canIncreaseLevel}
+          >
+            <Text style={styles.numberStepperButtonText}>+</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.numberStepperButton, !canDecreaseLevel ? styles.numberStepperButtonDisabled : null]}
+            onPress={() => openLevelChangeModal(-1)}
+            android_ripple={{ color: colors.ripple }}
+            disabled={!canDecreaseLevel}
+          >
+            <Text style={styles.numberStepperButtonText}>-</Text>
+          </Pressable>
+        </View>
+      </View>
       <Text style={styles.editLabel}>Досвід</Text>
       {renderTextInput(
         String(characterData.experience),
@@ -2796,6 +2950,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     tempShieldInput,
     setTempShieldInput,
     saveTempHp,
+    isLevelChangeModalVisible,
+    levelChangeTarget,
+    levelChangeDraftText,
+    setLevelDraftField,
+    setLevelDraftStat,
+    cancelLevelChange,
+    confirmLevelChange,
     isDiceModalVisible,
     setIsDiceModalVisible,
     isConditionModalVisible,

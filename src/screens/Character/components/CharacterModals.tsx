@@ -21,6 +21,13 @@ type CharacterModalsProps = Pick<
   | 'saveTempHp'
   | 'tempShieldInput'
   | 'setTempShieldInput'
+  | 'isLevelChangeModalVisible'
+  | 'levelChangeTarget'
+  | 'levelChangeDraftText'
+  | 'setLevelDraftField'
+  | 'setLevelDraftStat'
+  | 'cancelLevelChange'
+  | 'confirmLevelChange'
   | 'isDiceModalVisible'
   | 'setIsDiceModalVisible'
   | 'isConditionModalVisible'
@@ -68,6 +75,14 @@ type CharacterModalsProps = Pick<
 >;
 
 const QUICK_DICE_OPTIONS = [4, 6, 8, 10, 12, 20] as const;
+const LEVEL_STAT_FIELDS: Array<{ key: keyof CharacterActionsReadyState['characterData']['stats']; label: string }> = [
+  { key: 'strength', label: 'STR' },
+  { key: 'dexterity', label: 'DEX' },
+  { key: 'constitution', label: 'CON' },
+  { key: 'intelligence', label: 'INT' },
+  { key: 'wisdom', label: 'WIS' },
+  { key: 'charisma', label: 'CHA' },
+];
 
 export function CharacterModals({
   styles,
@@ -85,6 +100,13 @@ export function CharacterModals({
   saveTempHp,
   tempShieldInput,
   setTempShieldInput,
+  isLevelChangeModalVisible,
+  levelChangeTarget,
+  levelChangeDraftText,
+  setLevelDraftField,
+  setLevelDraftStat,
+  cancelLevelChange,
+  confirmLevelChange,
   isDiceModalVisible,
   setIsDiceModalVisible,
   isConditionModalVisible,
@@ -178,6 +200,86 @@ export function CharacterModals({
           placeholder='0'
           placeholderTextColor={colors.textSecondary}
         />
+      </Modal>
+
+      <Modal
+        isVisible={isLevelChangeModalVisible}
+        onClose={cancelLevelChange}
+        title={`Підтвердити рівень ${levelChangeTarget}`}
+        subtitle='Редагування основних характеристик перед застосуванням'
+      >
+        <Text style={styles.modalLabel}>Новий рівень: {levelChangeTarget}</Text>
+
+        <Text style={styles.modalLabel}>Характеристики</Text>
+        <View style={styles.levelModalStatsGrid}>
+          {LEVEL_STAT_FIELDS.map((field) => (
+            <View key={`level-modal-${field.key}`} style={styles.levelModalStatCell}>
+              <Text style={styles.blockTextMuted}>{field.label}</Text>
+              <RNTextInput
+                value={levelChangeDraftText.stats[field.key]}
+                onChangeText={(value) => setLevelDraftStat(field.key, value)}
+                keyboardType='number-pad'
+                style={styles.modalInput}
+                placeholder='10'
+                placeholderTextColor={colors.textSecondary}
+              />
+            </View>
+          ))}
+        </View>
+
+        <Text style={styles.modalLabel}>HP</Text>
+        <View style={styles.slotEditRow}>
+          <RNTextInput
+            value={levelChangeDraftText.hpCurrent}
+            onChangeText={(value) => setLevelDraftField('hpCurrent', value)}
+            keyboardType='number-pad'
+            style={[styles.modalInput, styles.levelModalInlineInput]}
+            placeholder='Current'
+            placeholderTextColor={colors.textSecondary}
+          />
+          <RNTextInput
+            value={levelChangeDraftText.hpMax}
+            onChangeText={(value) => setLevelDraftField('hpMax', value)}
+            keyboardType='number-pad'
+            style={[styles.modalInput, styles.levelModalInlineInput]}
+            placeholder='Max'
+            placeholderTextColor={colors.textSecondary}
+          />
+        </View>
+
+        <Text style={styles.modalLabel}>AC</Text>
+        <RNTextInput
+          value={levelChangeDraftText.ac}
+          onChangeText={(value) => setLevelDraftField('ac', value)}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='10'
+          placeholderTextColor={colors.textSecondary}
+        />
+
+        <Text style={styles.modalLabel}>Ініціатива</Text>
+        <RNTextInput
+          value={levelChangeDraftText.initiative}
+          onChangeText={(value) => setLevelDraftField('initiative', value)}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='0'
+          placeholderTextColor={colors.textSecondary}
+        />
+
+        <Text style={styles.modalLabel}>Бонус майстерності</Text>
+        <RNTextInput
+          value={levelChangeDraftText.proficiencyBonus}
+          onChangeText={(value) => setLevelDraftField('proficiencyBonus', value)}
+          keyboardType='number-pad'
+          style={styles.modalInput}
+          placeholder='2'
+          placeholderTextColor={colors.textSecondary}
+        />
+
+        <Pressable style={[styles.secondaryAction, styles.levelModalSubmit]} onPress={confirmLevelChange} android_ripple={{ color: colors.ripple }}>
+          <Text style={styles.secondaryActionText}>Зберегти</Text>
+        </Pressable>
       </Modal>
 
       <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} title='Кидок'>

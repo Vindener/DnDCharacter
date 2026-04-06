@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Modal as RNModal, View, Text, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
+import { Modal as RNModal, View, Text, TouchableOpacity, Pressable, StyleSheet, ScrollView } from 'react-native';
 import { getStyles } from '@/shared/components/Modal/style';
 import useThemeStore from '@/context/Theme-store';
 
@@ -26,12 +26,19 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, children, isVisible 
           {title && <Text style={styles.title}>{title}</Text>}
           {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
           <View style={styles.content}>
-            {children}
-            {onSubmit && (
-              <Pressable onPress={onSubmit} style={styles.submit}>
-                <Text style={styles.submitText}>Зберегти</Text>
-              </Pressable>
-            )}
+            <ScrollView
+              style={styles.scrollArea}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps='handled'
+            >
+              {children}
+              {onSubmit && (
+                <Pressable onPress={onSubmit} style={styles.submit}>
+                  <Text style={styles.submitText}>Зберегти</Text>
+                </Pressable>
+              )}
+            </ScrollView>
           </View>
         </View>
       </View>

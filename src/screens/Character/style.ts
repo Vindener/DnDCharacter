@@ -688,6 +688,44 @@ export const getStyles = (c: ThemeColors) =>
       minHeight: 92,
       textAlignVertical: 'top',
     },
+    numberStepperRow: {
+      flexDirection: 'row',
+      alignItems: 'stretch',
+      gap: 8,
+    },
+    numberStepperInput: {
+      flex: 1,
+    },
+    numberStepperReadOnlyInput: {
+      opacity: 0.9,
+    },
+    numberStepperControls: {
+      width: 44,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      overflow: 'hidden',
+      backgroundColor: c.background,
+    },
+    numberStepperButton: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: c.background,
+    },
+    numberStepperButtonDisabled: {
+      opacity: 0.45,
+    },
+    numberStepperButtonText: {
+      color: c.text,
+      fontSize: 20,
+      fontWeight: '700',
+      lineHeight: 22,
+    },
+    numberStepperButtonTop: {
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+    },
     slotEditRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -767,6 +805,23 @@ export const getStyles = (c: ThemeColors) =>
     modalInputMultiline: {
       minHeight: 88,
       textAlignVertical: 'top',
+    },
+    levelModalStatsGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+    },
+    levelModalStatCell: {
+      width: '31%',
+      minWidth: 90,
+    },
+    levelModalInlineInput: {
+      flex: 1,
+      marginBottom: 0,
+    },
+    levelModalSubmit: {
+      marginTop: 10,
+      marginBottom: 18,
     },
     restButton: {
       borderRadius: 10,

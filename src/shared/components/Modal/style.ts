@@ -11,13 +11,15 @@ StyleSheet.create({
     backgroundColor: c.overlayStrong,
   },
   container: {
-    flex: 1,
     backgroundColor: c.card,
     borderRadius: 13,
-    padding: 24,
+    paddingTop: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 20,
     width: '100%',
     maxWidth: 480,
-    maxHeight: '80%',
+    maxHeight: '88%',
+    overflow: 'hidden',
   },
   close: {
     position: 'absolute',
@@ -40,15 +42,21 @@ StyleSheet.create({
     marginBottom: 16,
   },
   content: {
+    minHeight: 0,
     paddingTop: 16,
-    flex: 1,
+  },
+  scrollArea: {
+    maxHeight: '100%',
     minHeight: 0,
   },
+  scrollContent: {
+    paddingBottom: 18,
+  },
   submit: {
-    marginTop: 16,
+    marginTop: 12,
     backgroundColor: c.primary,
-    paddingVertical: 10,
-    borderRadius: 4,
+    paddingVertical: 12,
+    borderRadius: 8,
     alignItems: 'center',
   },
   submitText: {
