@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { rd, sp } from '@/shared/styles/tokens';
 import {
   View,
   StyleProp,
@@ -45,7 +46,7 @@ export default function MultiTextInput({
           minHeight,
           borderWidth: 1,
           borderColor: colors.border,
-          borderRadius: 10,
+          borderRadius: rd(10),
           backgroundColor: colors.inputBackground,
           overflow: 'hidden',
         },
@@ -58,8 +59,8 @@ export default function MultiTextInput({
         style={[
           {
             height,
-            paddingHorizontal: 12,
-            paddingVertical: 10,
+            paddingHorizontal: sp(12),
+            paddingVertical: sp(10),
             color: colors.text,
             textAlignVertical: 'top',
           },
@@ -70,3 +71,6 @@ export default function MultiTextInput({
     </View>
   );
 }
+
+
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Pressable, Image } from 'react-native';
 import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { getStyles } from './style';
@@ -7,6 +7,7 @@ import useThemeStore from '@/context/Theme-store';
 import type { AppStackParamList } from '@/navigation/AppNavigator';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { useAuth } from '@/shared/services/auth/auth';
+import { Text } from '@/shared/ui';
 
 type Navigation = StackNavigationProp<AppStackParamList & TabStackParamList>;
 
@@ -49,7 +50,7 @@ const Header = () => {
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={openSettings}>
+      <Pressable onPress={openSettings} android_ripple={{ color: colors.ripple }}>
         <View style={styles.logoCircle}>
           {providerPhoto ? (
             <Image source={{ uri: providerPhoto }} style={styles.logoAvatar} resizeMode='cover' />
@@ -57,7 +58,7 @@ const Header = () => {
             <Text style={styles.logoText}>D</Text>
           )}
         </View>
-      </TouchableOpacity>
+      </Pressable>
       <Text style={styles.title}>{getTitle()}</Text>
       <View style={{ width: 36 }} />
     </View>

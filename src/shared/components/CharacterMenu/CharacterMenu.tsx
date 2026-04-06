@@ -16,6 +16,7 @@ import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experienc
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { sp } from '@/shared/styles/tokens';
 
 type CharacterStoreState = ReturnType<typeof useCharacterStore.getState>;
 
@@ -463,8 +464,8 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title='Досвід'>
         <Text style={styles.modalInfoText}>Рівень: {getLevelByExperience(tempExp)}</Text>
         <Text style={styles.modalInfoText}>Досвід: {tempExp}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-          <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: 8 }} />
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp(12) }}>
+          <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: sp(8) }} />
           <TouchableOpacity onPress={() => applyInputDelta(1)} style={styles.adjustButton}>
             <Text style={styles.adjustText}>+</Text>
           </TouchableOpacity>
@@ -472,7 +473,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             <Text style={styles.adjustText}>-</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 12 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: sp(12) }}>
           <TouchableOpacity onPress={() => adjustExp(10)} style={styles.adjustButton}>
             <Text style={styles.adjustText}>+10</Text>
           </TouchableOpacity>
@@ -517,5 +518,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
 
 export default CharacterMenu;
+
+
 
 

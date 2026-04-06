@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
@@ -7,14 +8,14 @@ StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    padding: sp(16),
     backgroundColor: c.overlayStrong,
   },
   container: {
     backgroundColor: c.card,
-    borderRadius: 13,
+    borderRadius: rd(13),
     paddingTop: 24,
-    paddingHorizontal: 24,
+    paddingHorizontal: sp(24),
     paddingBottom: 20,
     width: '100%',
     maxWidth: 480,
@@ -25,21 +26,21 @@ StyleSheet.create({
     position: 'absolute',
     top: 16,
     right: 16,
-    padding: 4,
+    padding: sp(4),
   },
   closeText: {
-    fontSize: 20,
+    fontSize: fs(20),
     color: c.text,
   },
   title: {
-    fontSize: 18,
+    fontSize: fs(18),
     color: c.text,
-    marginBottom: 4,
+    marginBottom: sp(4),
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: fs(14),
     color: c.text,
-    marginBottom: 16,
+    marginBottom: sp(16),
   },
   content: {
     minHeight: 0,
@@ -53,10 +54,10 @@ StyleSheet.create({
     paddingBottom: 18,
   },
   submit: {
-    marginTop: 12,
+    marginTop: sp(12),
     backgroundColor: c.primary,
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingVertical: sp(12),
+    borderRadius: rd(8),
     alignItems: 'center',
   },
   submitText: {
@@ -64,6 +65,8 @@ StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+
 
 
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import useThemeStore from '@/context/Theme-store';
+import { fs } from '@/shared/styles/tokens';
 
 const EmptyPlaceholder: React.FC = () => {
 const colors = useThemeStore((s) => s.colors);
@@ -15,7 +16,7 @@ StyleSheet.create({
   },
   text: {
     color: colors.textSecondary,
-    fontSize: 20,
+    fontSize: fs(20),
     fontStyle: 'italic',
   },
 }),
@@ -29,3 +30,5 @@ return (
 };
 
 export default EmptyPlaceholder;
+
+

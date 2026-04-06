@@ -9,6 +9,7 @@ import TextInput from '@/shared/components/TextInput/TextInput';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
 import { getStyles } from './style';
+import { fs, sp } from '@/shared/styles/tokens';
 
 interface PlayerGroup {
   id: string;
@@ -109,14 +110,14 @@ const EncounterCalculator: React.FC = () => {
             keyboardType='numeric'
             onChangeText={(t) => updatePlayer(p.id, { level: t })}
             placeholder='Рівень'
-            style={{ width: 70, marginRight: 8 }}
+            style={{ width: 70, marginRight: sp(8) }}
           />
           <TextInput
             value={p.count}
             keyboardType='numeric'
             onChangeText={(t) => updatePlayer(p.id, { count: t })}
             placeholder='К-сть'
-            style={{ width: 70, marginRight: 8 }}
+            style={{ width: 70, marginRight: sp(8) }}
           />
           <TouchableOpacity onPress={() => removePlayer(p.id)} style={styles.deleteBtn}>
             <Ionicons name='trash-outline' size={20} color={colors.text} />
@@ -138,7 +139,7 @@ const EncounterCalculator: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={[styles.section, { marginTop: 12 }]}>Монстри</Text>
+      <Text style={[styles.section, { marginTop: sp(12) }]}>Монстри</Text>
 
       {monsters.map((m) => (
         <View key={m.id} style={styles.row}>
@@ -146,20 +147,20 @@ const EncounterCalculator: React.FC = () => {
             value={m.name}
             onChangeText={(t) => updateMonster(m.id, { name: t })}
             placeholder='Назва'
-            style={{ flex: 1, marginRight: 8 }}
+            style={{ flex: 1, marginRight: sp(8) }}
           />
           <TextInput
             value={m.cr}
             onChangeText={(t) => updateMonster(m.id, { cr: t })}
             placeholder='CR'
-            style={{ width: 70, marginRight: 8 }}
+            style={{ width: 70, marginRight: sp(8) }}
           />
           <TextInput
             value={m.count}
             keyboardType='numeric'
             onChangeText={(t) => updateMonster(m.id, { count: t })}
             placeholder='К-сть'
-            style={{ width: 70, marginRight: 8 }}
+            style={{ width: 70, marginRight: sp(8) }}
           />
           <TouchableOpacity onPress={() => removeMonster(m.id)} style={styles.deleteBtn}>
             <Ionicons name='trash-outline' size={20} color={colors.text} />
@@ -197,11 +198,11 @@ const EncounterCalculator: React.FC = () => {
               <TouchableOpacity
                 key={hero.id}
                 onPress={() => pickHero(hero.id)}
-                style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}
+                style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: sp(10) }}
               >
                 <Ionicons name='person-outline' size={18} color={colors.textSecondary} />
-                <Text style={{ marginLeft: 8, color: colors.text, fontSize: 16 }}>{hero.name || 'Без імені'}</Text>
-                <Text style={{ marginLeft: 8, color: colors.textSecondary, fontSize: 14 }}>
+                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{hero.name || 'Без імені'}</Text>
+                <Text style={{ marginLeft: sp(8), color: colors.textSecondary, fontSize: fs(14) }}>
                   {hero.class || '???'} · {hero.level || '?'} рівень
                 </Text>
               </TouchableOpacity>
@@ -219,12 +220,12 @@ const EncounterCalculator: React.FC = () => {
               <TouchableOpacity
                 key={mon.id}
                 onPress={() => pickMonster(mon.id)}
-                style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 10 }}
+                style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: sp(10) }}
               >
                 <Ionicons name='skull-outline' size={18} color={colors.textSecondary} />
-                <Text style={{ marginLeft: 8, color: colors.text, fontSize: 16 }}>{mon.name || 'Без назви'}</Text>
+                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{mon.name || 'Без назви'}</Text>
                 {!!mon.challenge && (
-                  <Text style={{ marginLeft: 8, color: colors.textSecondary, fontSize: 14 }}>CR {mon.challenge}</Text>
+                  <Text style={{ marginLeft: sp(8), color: colors.textSecondary, fontSize: fs(14) }}>CR {mon.challenge}</Text>
                 )}
               </TouchableOpacity>
             ))
@@ -236,6 +237,8 @@ const EncounterCalculator: React.FC = () => {
 };
 
 export default EncounterCalculator;
+
+
 
 
 

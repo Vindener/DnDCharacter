@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
@@ -8,7 +9,9 @@ StyleSheet.create({
     height: 50,
     color: c.text,
     backgroundColor: c.inputBackground,
-    marginBottom: 10,
-    borderRadius: 5,
+    marginBottom: sp(10),
+    borderRadius: rd(5),
   },
 });
+
+

@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Modal, ScrollView, StyleSheet 
 import useCharacterStore from '@/context/Character-store';
 import useThemeStore from '@/context/Theme-store';
 import { Weapon as WeaponType } from '@/types/Weapon';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 const randInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -33,12 +34,12 @@ const Weapons: React.FC = () => {
     () =>
       StyleSheet.create({
         container: {
-          gap: 10,
+          gap: sp(10),
         },
         weaponCard: {
-          marginBottom: 16,
-          borderRadius: 12,
-          padding: 12,
+          marginBottom: sp(16),
+          borderRadius: rd(12),
+          padding: sp(12),
           backgroundColor: colors.card,
           borderWidth: 1,
           borderColor: colors.border,
@@ -51,41 +52,41 @@ const Weapons: React.FC = () => {
         weaponTitle: {
           color: colors.text,
           fontWeight: '600',
-          fontSize: 16,
+          fontSize: fs(16),
         },
         removeText: {
           color: colors.danger,
         },
         fieldLabel: {
           color: colors.textSecondary,
-          marginTop: 8,
+          marginTop: sp(8),
         },
         input: {
           backgroundColor: colors.inputBackground,
           color: colors.text,
-          borderRadius: 8,
+          borderRadius: rd(8),
           borderWidth: 1,
           borderColor: colors.border,
-          padding: 8,
-          marginTop: 4,
+          padding: sp(8),
+          marginTop: sp(4),
         },
         actionRow: {
           flexDirection: 'row',
-          gap: 12,
-          marginTop: 12,
+          gap: sp(12),
+          marginTop: sp(12),
         },
         primaryButton: {
           flex: 1,
           backgroundColor: colors.primary,
-          padding: 10,
-          borderRadius: 10,
+          padding: sp(10),
+          borderRadius: rd(10),
           alignItems: 'center',
         },
         magicButton: {
           flex: 1,
           backgroundColor: colors.magic,
-          padding: 10,
-          borderRadius: 10,
+          padding: sp(10),
+          borderRadius: rd(10),
           alignItems: 'center',
         },
         buttonText: {
@@ -93,14 +94,14 @@ const Weapons: React.FC = () => {
           fontWeight: '600',
         },
         addWeaponButton: {
-          marginTop: 8,
+          marginTop: sp(8),
           alignSelf: 'flex-start',
           backgroundColor: colors.card,
           borderWidth: 1,
           borderColor: colors.border,
-          paddingVertical: 10,
-          paddingHorizontal: 14,
-          borderRadius: 10,
+          paddingVertical: sp(10),
+          paddingHorizontal: sp(14),
+          borderRadius: rd(10),
         },
         addWeaponText: {
           color: colors.text,
@@ -111,16 +112,16 @@ const Weapons: React.FC = () => {
           backgroundColor: colors.overlayStrong,
           justifyContent: 'center',
           alignItems: 'center',
-          padding: 16,
+          padding: sp(16),
         },
         modalCard: {
           width: '100%',
           maxWidth: 480,
-          borderRadius: 16,
+          borderRadius: rd(16),
           backgroundColor: colors.card,
           borderWidth: 1,
           borderColor: colors.border,
-          padding: 16,
+          padding: sp(16),
         },
         modalHeader: {
           flexDirection: 'row',
@@ -129,17 +130,17 @@ const Weapons: React.FC = () => {
         },
         modalTitle: {
           color: colors.text,
-          fontSize: 18,
+          fontSize: fs(18),
           fontWeight: '700',
         },
         modalCloseText: {
           color: colors.textSecondary,
         },
         rollResultBox: {
-          marginTop: 12,
+          marginTop: sp(12),
           backgroundColor: colors.inputBackground,
-          borderRadius: 10,
-          padding: 12,
+          borderRadius: rd(10),
+          padding: sp(12),
         },
         rollResultText: {
           color: colors.text,
@@ -272,7 +273,7 @@ const Weapons: React.FC = () => {
             </View>
 
             {modalOpen?.kind === 'attack' ? (
-              <View style={{ marginTop: 12 }}>
+              <View style={{ marginTop: sp(12) }}>
                 <Text style={styles.fieldLabel}>КД цілі</Text>
                 <TextInput
                   style={styles.input}
@@ -292,12 +293,12 @@ const Weapons: React.FC = () => {
                   placeholderTextColor={colors.textSecondary}
                 />
 
-                <TouchableOpacity onPress={doAttackRoll} style={[styles.primaryButton, { marginTop: 12 }]}>
+                <TouchableOpacity onPress={doAttackRoll} style={[styles.primaryButton, { marginTop: sp(12) }]}>
                   <Text style={styles.buttonText}>Кинути d20</Text>
                 </TouchableOpacity>
               </View>
             ) : (
-              <View style={{ marginTop: 12 }}>
+              <View style={{ marginTop: sp(12) }}>
                 <Text style={styles.fieldLabel}>Модифікатор урону</Text>
                 <TextInput
                   style={styles.input}
@@ -312,7 +313,7 @@ const Weapons: React.FC = () => {
                   onPress={() => {
                     if (modalOpen) doDamageRoll(modalOpen.index);
                   }}
-                  style={[styles.magicButton, { marginTop: 12 }]}
+                  style={[styles.magicButton, { marginTop: sp(12) }]}
                 >
                   <Text style={styles.buttonText}>Кинути куби</Text>
                 </TouchableOpacity>
@@ -332,3 +333,5 @@ const Weapons: React.FC = () => {
 };
 
 export default Weapons;
+
+

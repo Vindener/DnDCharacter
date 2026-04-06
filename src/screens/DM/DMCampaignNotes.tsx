@@ -9,6 +9,7 @@ import type { DMStackParamList } from '@/navigation/DMNavigator';
 import type { DMCampaign, DMCampaignNote } from '@/dm/domain/types';
 import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import { formatSchemaErrors, safeParseCampaignNoteFormInput } from '@/domain/schemas';
+import { rd, sp } from '@/shared/styles/tokens';
 import {
   deleteCampaignNote,
   flushCampaignNotesQueue,
@@ -212,7 +213,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           onChangeText={setTitleInput}
           placeholder='Заголовок нотатки'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text, marginBottom: 10 }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, marginBottom: sp(10) }}
         />
         <TextInput
           value={contentInput}
@@ -220,7 +221,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           placeholder='Вміст нотатки'
           placeholderTextColor={colors.textSecondary}
           multiline
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text, minHeight: 120, textAlignVertical: 'top' }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, minHeight: 120, textAlignVertical: 'top' }}
         />
 
         <View style={styles.laneGrid}>
@@ -301,6 +302,9 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 };
 
 export default DMCampaignNotes;
+
+
+
 
 
 

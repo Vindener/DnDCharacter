@@ -9,6 +9,7 @@ import { CharacterViewModel } from '@/types/Character';
 import { HitPoints } from '@/types/HitPoints';
 import { DeathSaves } from '@/types/DeathSaves';
 import RollResultModal from '@/shared/components/RollResultModal/RollResultModal';
+import { sp } from '@/shared/styles/tokens';
 
 interface CombatProps {
   data: CharacterViewModel;
@@ -129,20 +130,20 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         <TextInput style={{ flex: 1 }} value={hitDice} onChangeText={handleHitDiceChange} />
       </View>
       <Text style={styles.label}>Хіти:</Text>
-      <View style={[styles.row, { marginLeft: 10 }]}>
+      <View style={[styles.row, { marginLeft: sp(10) }]}>
         <Text style={[styles.label, { width: 70 }]}>Максимальні:</Text>
         <TextInput value={`${hp.max}`} onChangeText={(t) => handleHpChange('max', t)} />
       </View>
-      <View style={[styles.row, { marginLeft: 10 }]}>
+      <View style={[styles.row, { marginLeft: sp(10) }]}>
         <Text style={[styles.label, { width: 70 }]}>Поточні хіти:</Text>
         <TextInput value={`${hp.current}`} onChangeText={(t) => handleHpChange('current', t)} />
       </View>
-      <View style={[styles.row, { marginLeft: 10 }]}>
+      <View style={[styles.row, { marginLeft: sp(10) }]}>
         <Text style={[styles.label, { width: 70 }]}>Тимчасові хіти:</Text>
         <TextInput value={`${hp.temp}`} onChangeText={(t) => handleHpChange('temp', t)} />
       </View>
       <Text style={styles.label}>Рятівні кидки:</Text>
-      <View style={[styles.row, { marginLeft: 10 }]}>
+      <View style={[styles.row, { marginLeft: sp(10) }]}>
         <Text style={[styles.label, { width: 90 }]}>Успіхи:</Text>
         {[0, 1, 2].map((i) => (
           <TouchableOpacity key={i} onPress={() => handleSuccessPress(i)} style={{ marginHorizontal: 4 }}>
@@ -155,7 +156,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
           <Text style={styles.rollButtonText}>🎲</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.row, { marginLeft: 10 }]}>
+      <View style={[styles.row, { marginLeft: sp(10) }]}>
         <Text style={[styles.label, { width: 90 }]}>Провали:</Text>
         {[0, 1, 2].map((i) => (
           <TouchableOpacity key={i} onPress={() => handleFailurePress(i)} style={{ marginHorizontal: 4 }}>
@@ -169,4 +170,6 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
 };
 
 export default Combat;
+
+
 

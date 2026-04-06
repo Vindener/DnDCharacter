@@ -13,6 +13,7 @@ import type { CharacterViewModel } from '@/types/Character';
 import { fbAuth } from '@/services/firebase';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { rd, sp } from '@/shared/styles/tokens';
 
 type Props = StackScreenProps<DMStackParamList, 'DMQuickEdit'>;
 
@@ -250,7 +251,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setConditionInput}
           placeholder='Назва стану'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
         />
         <View style={styles.laneGrid}>
           <Pressable
@@ -434,7 +435,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setInventoryInput}
           placeholder='Додати предмет в інвентар'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
         />
         <Pressable
           style={styles.laneButton}
@@ -477,7 +478,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setShortNoteInput}
           placeholder='Введіть коротку нотатку'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
           multiline
         />
         <Pressable
@@ -528,5 +529,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMQuickEdit;
+
+
 
 

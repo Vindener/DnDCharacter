@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
   StyleSheet.create({
@@ -18,25 +19,27 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: 'bold',
     },
     previousBlock: {
-      marginTop: 12,
+      marginTop: sp(12),
       alignItems: 'center',
     },
     previousTitle: {
-      fontSize: 14,
+      fontSize: fs(14),
       color: c.textSecondary,
     },
     previousText: {
-      fontSize: 16,
+      fontSize: fs(16),
       fontWeight: '500',
       color: c.text,
     },
     rerollButton: {
-      marginTop: 10,
-      padding: 10,
+      marginTop: sp(10),
+      padding: sp(10),
       backgroundColor: c.magic,
-      borderRadius: 5,
+      borderRadius: rd(5),
       alignSelf: 'center',
     },
-    rerollButtonText: { color: c.onMagic, fontSize: 16 },
+    rerollButtonText: { color: c.onMagic, fontSize: fs(16) },
   });
+
+
 

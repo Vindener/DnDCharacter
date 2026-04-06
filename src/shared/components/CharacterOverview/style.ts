@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
@@ -7,9 +8,11 @@ StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 12,
+    paddingVertical: sp(12),
   },
   attributes: {
     color: c.text,
   },
 });
+
+

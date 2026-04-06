@@ -10,6 +10,7 @@ import useMonsterStore from '@/context/Monster-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import FileService from '@/shared/services/fileSerice';
 import type { BestiaryStackParamList } from '@/navigation/BestiaryNavigator';
+import { sp } from '@/shared/styles/tokens';
 
 type MonsterRouteProp = RouteProp<BestiaryStackParamList, 'Monster'>;
 
@@ -243,12 +244,14 @@ export default function Monster({ route }: Props) {
         </>
       )}
 
-      <View style={{ marginTop: 12 }}>
+      <View style={{ marginTop: sp(12) }}>
         <Button title='Експорт JSON' onPress={exportCurrent} />
       </View>
     </ScrollView>
   );
 }
+
+
 
 
 

@@ -11,6 +11,7 @@ import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignReposito
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
 import { getCharacterCampaignLabel, isCharacterInCampaign } from '@/screens/DM/adapters';
+import { rd, sp } from '@/shared/styles/tokens';
 
 type Props = StackScreenProps<DMStackParamList, 'DMEncounterPrep'>;
 
@@ -262,7 +263,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setMonsterSearch}
           placeholder={pinnedMonsters.length ? 'Пошук у закріпленому бестіарії' : 'Пошук у бестіарії'}
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
         />
 
         {filteredMonsters.map((monster) => (
@@ -334,4 +335,6 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMEncounterPrep;
+
+
 

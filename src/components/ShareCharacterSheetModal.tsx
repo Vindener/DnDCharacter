@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 import {
   addEditorByEmail,
   characterCloudRepository,
@@ -23,40 +24,40 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
           flex: 1,
           backgroundColor: colors.overlaySoft,
           justifyContent: 'center',
-          padding: 20,
+          padding: sp(20),
         },
         card: {
           backgroundColor: colors.card,
-          borderRadius: 16,
-          padding: 16,
+          borderRadius: rd(16),
+          padding: sp(16),
           borderWidth: 1,
           borderColor: colors.border,
         },
         title: {
           color: colors.text,
-          fontSize: 18,
+          fontSize: fs(18),
           fontWeight: '600',
-          marginBottom: 8,
+          marginBottom: sp(8),
         },
         sectionLabel: {
           color: colors.textSecondary,
-          marginBottom: 8,
+          marginBottom: sp(8),
         },
         input: {
           backgroundColor: colors.inputBackground,
           color: colors.text,
-          padding: 12,
-          borderRadius: 10,
-          marginBottom: 8,
+          padding: sp(12),
+          borderRadius: rd(10),
+          marginBottom: sp(8),
           borderWidth: 1,
           borderColor: colors.border,
         },
         shareButton: {
           backgroundColor: colors.primary,
-          padding: 12,
-          borderRadius: 10,
+          padding: sp(12),
+          borderRadius: rd(10),
           alignItems: 'center',
-          marginBottom: 16,
+          marginBottom: sp(16),
         },
         shareButtonText: {
           color: colors.onPrimary,
@@ -65,13 +66,13 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
         editorsTitle: {
           color: colors.text,
           fontWeight: '600',
-          marginBottom: 8,
+          marginBottom: sp(8),
         },
         editorRow: {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingVertical: 6,
+          paddingVertical: sp(6),
         },
         editorEmail: {
           color: colors.text,
@@ -83,7 +84,7 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
           color: colors.textSecondary,
         },
         closeButton: {
-          marginTop: 16,
+          marginTop: sp(16),
           alignItems: 'center',
         },
         closeText: {
@@ -91,7 +92,7 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
         },
         errorText: {
           color: colors.danger,
-          marginBottom: 8,
+          marginBottom: sp(8),
         },
       }),
     [colors],
@@ -194,6 +195,9 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
     </Modal>
   );
 }
+
+
+
 
 
 

@@ -7,6 +7,7 @@ import useThemeStore from '@/context/Theme-store';
 import { CharacterViewModel } from '@/types/Character';
 import { Spells as SpellsType } from '@/types/Spells';
 import useCharacterStore from '@/context/Character-store';
+import { sp } from '@/shared/styles/tokens';
 
 interface SpellsProps {
   data: CharacterViewModel;
@@ -120,7 +121,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
       {Object.keys(spells.spellSlots)
         .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
         .map((level) => (
-          <View key={level} style={[styles.row, { marginLeft: 10 }]}>
+          <View key={level} style={[styles.row, { marginLeft: sp(10) }]}>
             <Text style={[styles.label, { width: 50 }]}>Lvl {level}</Text>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
               <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>Макс:</Text>
@@ -139,7 +140,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
       {!Object.keys(spells.spellSlots).includes('9') && (
         <TouchableOpacity onPress={handleAddSlot} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
           <Ionicons name='add-circle-outline' size={24} color={colors.success} />
-          <Text style={{ marginLeft: 8, color: colors.success }}>Додати рівень</Text>
+          <Text style={{ marginLeft: sp(8), color: colors.success }}>Додати рівень</Text>
         </TouchableOpacity>
       )}
 
@@ -166,5 +167,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
 };
 
 export default Spells;
+
+
 
 
