@@ -12,6 +12,7 @@ describe('character.schema', () => {
     });
 
     expect(parsed.id).toBe('char-1');
+    expect(parsed.schemaVersion).toBe(3);
     expect(parsed.deathSaves).toEqual({ successes: 2, failures: 1 });
     expect(parsed.hp).toEqual({ current: 7, max: 12, temp: 0 });
     expect(parsed.speed).toBe(30);
@@ -33,3 +34,4 @@ describe('character.schema', () => {
     expect(parsed.homebrewEntries.some((entry) => entry.id === 'legacy-spell-list-1-0')).toBe(true);
   });
 });
+

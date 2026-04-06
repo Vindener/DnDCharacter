@@ -6,9 +6,28 @@ import type {
 } from '@/types/DM';
 import { parseCampaignNote, parseCampaignNoteQueueItem } from '@/domain/schemas';
 import { db, fbAuth, hasDoc, now } from '@/services/firebase';
+import { ensureCampaignForName } from '@/services/dmCampaigns';
+import {
+  LATEST_SCHEMA_VERSION,
+  createStorageEnvelope,
+  migratePayloadToLatest,
+  normalizeStorageEnvelope,
+} from '@/domain/migrations';
 
 const LOCAL_NOTES_KEY = 'DM_CAMPAIGN_NOTES_V1';
 const LOCAL_QUEUE_KEY = 'DM_CAMPAIGN_NOTES_QUEUE_V1';
+const LEGACY_NOTES_KEY = 'DM_NOTES_V2';
+const LEGACY_NOTES_MIGRATION_FLAG = 'DM_NOTES_V2_MIGRATED_TO_CAMPAIGN_V1';
+
+type LegacyDMNote = {
+  id: string;
+  title?: string;
+  content?: string;
+  campaign?: string;
+  lastEdited?: number;
+};
+
+let legacyNotesMigrationPromise: Promise<void> | null = null;
 
 function toMillis(value: unknown): number {
   if (!value || typeof value !== 'object') return 0;
@@ -19,30 +38,37 @@ function toMillis(value: unknown): number {
 }
 
 function sanitizeNote(raw: unknown): DMCampaignNote | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const cast = raw as Record<string, unknown>;
+  const migrated = migratePayloadToLatest<Record<string, unknown>>('dmCampaignNotes', raw).data;
+  if (!migrated || typeof migrated !== 'object' || Array.isArray(migrated)) return null;
+  const cast = migrated as Record<string, unknown>;
   const id = String(cast.id || '');
   const campaignId = String(cast.campaignId || '');
   if (!id || !campaignId) return null;
-  return parseCampaignNote(cast);
+  const parsed = parseCampaignNote(cast);
+  return {
+    ...parsed,
+    schemaVersion: LATEST_SCHEMA_VERSION,
+  };
 }
 
 function mapCloudNote(doc: Record<string, unknown>): DMCampaignNote | null {
-  const id = String(doc.id || '');
-  const campaignId = String(doc.campaignId || '');
+  const migrated = migratePayloadToLatest<Record<string, unknown>>('dmCampaignNotes', doc).data;
+  const id = String(migrated.id || '');
+  const campaignId = String(migrated.campaignId || '');
   if (!id || !campaignId) return null;
 
-  const owners = Array.isArray(doc.owners) ? doc.owners.map((item) => String(item)).filter(Boolean) : [];
-  const editors = Array.isArray(doc.editors) ? doc.editors.map((item) => String(item)).filter(Boolean) : [];
-  const updatedAtMs = toMillis(doc.updatedAt) || Date.now();
-  const createdAtMs = toMillis(doc.createdAt) || updatedAtMs;
+  const owners = Array.isArray(migrated.owners) ? migrated.owners.map((item) => String(item)).filter(Boolean) : [];
+  const editors = Array.isArray(migrated.editors) ? migrated.editors.map((item) => String(item)).filter(Boolean) : [];
+  const updatedAtMs = toMillis(migrated.updatedAt) || Date.now();
+  const createdAtMs = toMillis(migrated.createdAt) || updatedAtMs;
 
   return parseCampaignNote({
+    schemaVersion: LATEST_SCHEMA_VERSION,
     id,
     campaignId,
-    title: String(doc.title || ''),
-    content: String(doc.content || ''),
-    ownerUid: String(doc.ownerUid || owners[0] || 'local'),
+    title: String(migrated.title || ''),
+    content: String(migrated.content || ''),
+    ownerUid: String(migrated.ownerUid || owners[0] || 'local'),
     owners,
     editors,
     createdAtMs,
@@ -55,9 +81,10 @@ function mapCloudNote(doc: Record<string, unknown>): DMCampaignNote | null {
 async function loadQueue(): Promise<DMCampaignNoteQueueItem[]> {
   try {
     const raw = await AsyncStorage.getItem(LOCAL_QUEUE_KEY);
-    const parsed = JSON.parse(raw || '[]');
-    if (!Array.isArray(parsed)) return [];
-    return parsed
+    const parsed = raw ? JSON.parse(raw) : null;
+    const migrated = normalizeStorageEnvelope<DMCampaignNoteQueueItem[]>('dmNotesQueue', parsed, []);
+    if (!Array.isArray(migrated.data)) return [];
+    return migrated.data
       .map((item) => parseCampaignNoteQueueItem(item))
       .filter((item): item is DMCampaignNoteQueueItem => Boolean(item));
   } catch {
@@ -67,7 +94,8 @@ async function loadQueue(): Promise<DMCampaignNoteQueueItem[]> {
 
 async function persistQueue(queue: DMCampaignNoteQueueItem[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(LOCAL_QUEUE_KEY, JSON.stringify(queue));
+    const envelope = createStorageEnvelope('dmNotesQueue', queue || []);
+    await AsyncStorage.setItem(LOCAL_QUEUE_KEY, JSON.stringify(envelope));
   } catch (_error) { /* intentionally ignored */ }
 }
 
@@ -84,12 +112,13 @@ async function enqueue(type: 'upsert' | 'delete', noteId: string, campaignId: st
   await persistQueue(next);
 }
 
-export async function loadLocalCampaignNotes(): Promise<DMCampaignNote[]> {
+async function readLocalCampaignNotesFromStorage(): Promise<DMCampaignNote[]> {
   try {
     const raw = await AsyncStorage.getItem(LOCAL_NOTES_KEY);
-    const parsed = JSON.parse(raw || '[]');
-    if (!Array.isArray(parsed)) return [];
-    return parsed
+    const parsed = raw ? JSON.parse(raw) : null;
+    const migrated = normalizeStorageEnvelope<DMCampaignNote[]>('dmCampaignNotes', parsed, []);
+    if (!Array.isArray(migrated.data)) return [];
+    return migrated.data
       .map((item) => sanitizeNote(item))
       .filter((item): item is DMCampaignNote => Boolean(item))
       .sort((a, b) => b.updatedAtMs - a.updatedAtMs);
@@ -98,9 +127,79 @@ export async function loadLocalCampaignNotes(): Promise<DMCampaignNote[]> {
   }
 }
 
+async function ensureLegacyNotesMigrated(): Promise<void> {
+  if (legacyNotesMigrationPromise) {
+    await legacyNotesMigrationPromise;
+    return;
+  }
+
+  legacyNotesMigrationPromise = (async () => {
+    try {
+      const migrationDone = await AsyncStorage.getItem(LEGACY_NOTES_MIGRATION_FLAG);
+      if (migrationDone === '1') return;
+
+      const rawLegacy = await AsyncStorage.getItem(LEGACY_NOTES_KEY);
+      const parsedLegacy = JSON.parse(rawLegacy || '[]');
+      if (!Array.isArray(parsedLegacy) || !parsedLegacy.length) {
+        await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
+        return;
+      }
+
+      const existing = await readLocalCampaignNotesFromStorage();
+      const byId = new Map(existing.map((note) => [note.id, note]));
+      const me = fbAuth.currentUser?.uid || 'local';
+
+      for (const entry of parsedLegacy as LegacyDMNote[]) {
+        if (!entry || typeof entry !== 'object') continue;
+        const rawId = String(entry.id || '').trim();
+        if (!rawId) continue;
+
+        const campaignName = String(entry.campaign || '').trim() || 'Базова кампанія';
+        const campaign = await ensureCampaignForName(campaignName);
+        if (!campaign) continue;
+
+        const timestamp = Number(entry.lastEdited || 0) || Date.now();
+        const migratedNote = parseCampaignNote({
+          schemaVersion: LATEST_SCHEMA_VERSION,
+          id: `legacy-${rawId}`,
+          campaignId: campaign.id,
+          title: String(entry.title || '').trim(),
+          content: String(entry.content || ''),
+          ownerUid: me,
+          owners: me ? [me] : [],
+          editors: [],
+          createdAtMs: timestamp,
+          updatedAtMs: timestamp,
+          baseUpdatedAtMs: timestamp,
+          syncStatus: fbAuth.currentUser ? 'Pending sync' : 'Local only',
+        });
+        byId.set(migratedNote.id, migratedNote);
+      }
+
+      await persistLocalCampaignNotes(Array.from(byId.values()).sort((a, b) => b.updatedAtMs - a.updatedAtMs));
+      await AsyncStorage.removeItem(LEGACY_NOTES_KEY);
+      await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
+    } catch {
+      await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
+    }
+  })();
+
+  await legacyNotesMigrationPromise;
+}
+
+export async function loadLocalCampaignNotes(): Promise<DMCampaignNote[]> {
+  await ensureLegacyNotesMigrated();
+  return readLocalCampaignNotesFromStorage();
+}
+
 async function persistLocalCampaignNotes(notes: DMCampaignNote[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(notes));
+    const canonical = (notes || []).map((note) => ({
+      ...note,
+      schemaVersion: LATEST_SCHEMA_VERSION,
+    }));
+    const envelope = createStorageEnvelope('dmCampaignNotes', canonical);
+    await AsyncStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(envelope));
   } catch (_error) { /* intentionally ignored */ }
 }
 
@@ -110,7 +209,8 @@ function canSyncCloud(): boolean {
 
 async function replaceLocalNote(note: DMCampaignNote): Promise<DMCampaignNote[]> {
   const local = await loadLocalCampaignNotes();
-  const next = [...local.filter((item) => item.id !== note.id), note].sort((a, b) => b.updatedAtMs - a.updatedAtMs);
+  const next = [...local.filter((item) => item.id !== note.id), { ...note, schemaVersion: LATEST_SCHEMA_VERSION }]
+    .sort((a, b) => b.updatedAtMs - a.updatedAtMs);
   await persistLocalCampaignNotes(next);
   return next;
 }
@@ -140,6 +240,7 @@ function buildCloudPayload(note: DMCampaignNote, existing?: Record<string, unkno
   const editors = Array.isArray(existing?.editors) ? (existing?.editors as string[]) : note.editors || [];
 
   return {
+    schemaVersion: LATEST_SCHEMA_VERSION,
     id: note.id,
     campaignId: note.campaignId,
     title: note.title,
@@ -162,6 +263,7 @@ async function syncUpsert(note: DMCampaignNote): Promise<DMCampaignNote> {
   if (remoteNote && remoteNote.updatedAtMs > (note.baseUpdatedAtMs || 0) && note.syncStatus !== 'Conflict detected') {
     const conflictNote: DMCampaignNote = {
       ...note,
+      schemaVersion: LATEST_SCHEMA_VERSION,
       syncStatus: 'Conflict detected',
       conflictRemote: {
         title: remoteNote.title,
@@ -178,6 +280,7 @@ async function syncUpsert(note: DMCampaignNote): Promise<DMCampaignNote> {
   const syncedAt = Date.now();
   const synced: DMCampaignNote = {
     ...note,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     updatedAtMs: syncedAt,
     baseUpdatedAtMs: syncedAt,
     syncStatus: 'Synced',
@@ -212,6 +315,7 @@ function mergeRemoteIntoLocal(local: DMCampaignNote[], remote: DMCampaignNote[])
     ) {
       byId.set(remoteNote.id, {
         ...localNote,
+        schemaVersion: LATEST_SCHEMA_VERSION,
         syncStatus: 'Conflict detected',
         conflictRemote: {
           title: remoteNote.title,
@@ -277,6 +381,7 @@ export async function upsertCampaignNote(note: DMCampaignNote): Promise<DMCampai
   const me = fbAuth.currentUser?.uid || note.ownerUid || 'local';
   const normalized: DMCampaignNote = parseCampaignNote({
     ...note,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     title: note.title,
     content: note.content,
     ownerUid: note.ownerUid || me,
@@ -293,6 +398,7 @@ export async function upsertCampaignNote(note: DMCampaignNote): Promise<DMCampai
   if (!canSyncCloud()) {
     return {
       ...normalized,
+      schemaVersion: LATEST_SCHEMA_VERSION,
       syncStatus: 'Local only',
     };
   }
@@ -307,6 +413,7 @@ export async function upsertCampaignNote(note: DMCampaignNote): Promise<DMCampai
     await enqueue('upsert', normalized.id, normalized.campaignId);
     const queued: DMCampaignNote = {
       ...normalized,
+      schemaVersion: LATEST_SCHEMA_VERSION,
       syncStatus: 'Pending sync',
     };
     await replaceLocalNote(queued);
@@ -370,6 +477,7 @@ export async function resolveCampaignNoteConflict(
   if (strategy === 'keep-cloud') {
     const resolved: DMCampaignNote = {
       ...note,
+      schemaVersion: LATEST_SCHEMA_VERSION,
       title: note.conflictRemote.title,
       content: note.conflictRemote.content,
       updatedAtMs: note.conflictRemote.updatedAtMs,
@@ -384,6 +492,7 @@ export async function resolveCampaignNoteConflict(
   const localContent = strategy === 'merge-manual' ? String(mergedContent || note.content) : note.content;
   const resolved: DMCampaignNote = {
     ...note,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     content: localContent,
     baseUpdatedAtMs: note.conflictRemote.updatedAtMs,
     updatedAtMs: Date.now(),
@@ -407,4 +516,3 @@ export async function resolveCampaignNoteConflict(
 
   return resolved;
 }
-

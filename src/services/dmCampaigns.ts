@@ -2,6 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CharacterDto } from '@/types/Character';
 import type { DMCampaign } from '@/types/DM';
 import { db, fbAuth, now } from '@/services/firebase';
+import {
+  LATEST_SCHEMA_VERSION,
+  createStorageEnvelope,
+  migratePayloadToLatest,
+  normalizeStorageEnvelope,
+} from '@/domain/migrations';
 
 const LOCAL_CAMPAIGNS_KEY = 'DM_CAMPAIGNS_V1';
 
@@ -32,8 +38,9 @@ function buildCampaignId(name: string): string {
 }
 
 function sanitizeCampaign(raw: unknown): DMCampaign | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const cast = raw as Record<string, unknown>;
+  const migrated = migratePayloadToLatest<Record<string, unknown>>('dmCampaigns', raw).data;
+  if (!migrated || typeof migrated !== 'object' || Array.isArray(migrated)) return null;
+  const cast = migrated as Record<string, unknown>;
   const id = String(cast.id || '');
   const name = String(cast.name || '').trim();
   const nameNormalized = normalizeCampaignName(String(cast.nameNormalized || name));
@@ -44,6 +51,7 @@ function sanitizeCampaign(raw: unknown): DMCampaign | null {
   const ownerUid = String(cast.ownerUid || owners[0] || 'local');
 
   return {
+    schemaVersion: LATEST_SCHEMA_VERSION,
     id,
     name,
     nameNormalized,
@@ -56,38 +64,46 @@ function sanitizeCampaign(raw: unknown): DMCampaign | null {
 }
 
 function mapCloudCampaign(doc: Record<string, unknown>): DMCampaign | null {
-  const id = String(doc.id || '');
-  const name = String(doc.name || '').trim();
-  const nameNormalized = normalizeCampaignName(String(doc.nameNormalized || name));
+  const migrated = migratePayloadToLatest<Record<string, unknown>>('dmCampaigns', doc).data;
+  const id = String(migrated.id || '');
+  const name = String(migrated.name || '').trim();
+  const nameNormalized = normalizeCampaignName(String(migrated.nameNormalized || name));
   if (!id || !name || !nameNormalized) return null;
 
-  const owners = Array.isArray(doc.owners) ? doc.owners.map((item) => String(item)).filter(Boolean) : [];
-  const editors = Array.isArray(doc.editors) ? doc.editors.map((item) => String(item)).filter(Boolean) : [];
+  const owners = Array.isArray(migrated.owners) ? migrated.owners.map((item) => String(item)).filter(Boolean) : [];
+  const editors = Array.isArray(migrated.editors) ? migrated.editors.map((item) => String(item)).filter(Boolean) : [];
 
   return {
+    schemaVersion: LATEST_SCHEMA_VERSION,
     id,
     name,
     nameNormalized,
-    ownerUid: String(doc.ownerUid || owners[0] || 'local'),
+    ownerUid: String(migrated.ownerUid || owners[0] || 'local'),
     owners,
     editors,
-    createdAtMs: toMillis(doc.createdAt),
-    updatedAtMs: toMillis(doc.updatedAt),
+    createdAtMs: toMillis(migrated.createdAt),
+    updatedAtMs: toMillis(migrated.updatedAt),
   };
 }
 
 async function persistLocalCampaigns(campaigns: DMCampaign[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(LOCAL_CAMPAIGNS_KEY, JSON.stringify(campaigns));
+    const canonical = campaigns.map((campaign) => ({
+      ...campaign,
+      schemaVersion: LATEST_SCHEMA_VERSION,
+    }));
+    const envelope = createStorageEnvelope('dmCampaigns', canonical);
+    await AsyncStorage.setItem(LOCAL_CAMPAIGNS_KEY, JSON.stringify(envelope));
   } catch (_error) { /* intentionally ignored */ }
 }
 
 export async function loadLocalCampaigns(): Promise<DMCampaign[]> {
   try {
     const raw = await AsyncStorage.getItem(LOCAL_CAMPAIGNS_KEY);
-    const parsed = JSON.parse(raw || '[]');
-    if (!Array.isArray(parsed)) return [];
-    return parsed.map((item) => sanitizeCampaign(item)).filter((item): item is DMCampaign => Boolean(item));
+    const parsed = raw ? JSON.parse(raw) : null;
+    const migrated = normalizeStorageEnvelope<DMCampaign[]>('dmCampaigns', parsed, []);
+    if (!Array.isArray(migrated.data)) return [];
+    return migrated.data.map((item) => sanitizeCampaign(item)).filter((item): item is DMCampaign => Boolean(item));
   } catch {
     return [];
   }
@@ -115,6 +131,7 @@ function buildLocalCampaign(name: string): DMCampaign {
   const nowMs = Date.now();
 
   return {
+    schemaVersion: LATEST_SCHEMA_VERSION,
     id: buildCampaignId(cleanName),
     name: cleanName,
     nameNormalized: normalized,
@@ -134,6 +151,7 @@ function buildCloudPayload(campaign: DMCampaign): Record<string, unknown> {
   const me = fbAuth.currentUser?.uid || campaign.ownerUid;
   const owners = campaign.owners.length ? campaign.owners : [me];
   return {
+    schemaVersion: LATEST_SCHEMA_VERSION,
     id: campaign.id,
     name: campaign.name,
     nameNormalized: campaign.nameNormalized,
@@ -150,6 +168,7 @@ export async function upsertCampaign(campaign: DMCampaign): Promise<DMCampaign> 
   const nextUpdated = campaign.updatedAtMs || Date.now();
   const normalized: DMCampaign = {
     ...campaign,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     name: String(campaign.name || '').trim(),
     nameNormalized: normalizeCampaignName(campaign.nameNormalized || campaign.name),
     updatedAtMs: nextUpdated,
@@ -177,7 +196,7 @@ export async function ensureCampaignForName(name: string): Promise<DMCampaign | 
   const existing = local.find((campaign) => campaign.nameNormalized === normalized || campaign.id === buildCampaignId(cleanName));
   if (existing) {
     if (existing.name !== cleanName) {
-      const next: DMCampaign = { ...existing, name: cleanName, updatedAtMs: Date.now() };
+      const next: DMCampaign = { ...existing, name: cleanName, updatedAtMs: Date.now(), schemaVersion: LATEST_SCHEMA_VERSION };
       await upsertCampaign(next);
       return next;
     }
@@ -256,4 +275,3 @@ export async function subscribeAccessibleCampaigns(cb: (campaigns: DMCampaign[])
     if (typeof unsubEditors === 'function') unsubEditors();
   };
 }
-

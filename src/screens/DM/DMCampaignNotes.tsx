@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,11 +22,6 @@ import useAppRoleStore from '@/context/AppRole-store';
 import { getShareDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 
 type Props = StackScreenProps<DMStackParamList, 'DMCampaignNotes'>;
-type LegacyDMNote = { id: string; title?: string; content?: string; campaign?: string; lastEdited?: number };
-
-const LEGACY_NOTES_KEY = 'DM_NOTES_V2';
-const LEGACY_NOTES_MIGRATION_FLAG = 'DM_NOTES_V2_MIGRATED_TO_CAMPAIGN_V1';
-
 const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
@@ -42,75 +36,9 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   const [statusText, setStatusText] = useState('Готово');
 
-  useEffect(() => {
-    let cancelled = false;
 
-    const migrateLegacyNotes = async () => {
-      try {
-        const migrationDone = await AsyncStorage.getItem(LEGACY_NOTES_MIGRATION_FLAG);
-        if (migrationDone === '1') return;
 
-        const raw = await AsyncStorage.getItem(LEGACY_NOTES_KEY);
-        const parsed = JSON.parse(raw || '[]');
-        if (!Array.isArray(parsed) || !parsed.length) {
-          await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
-          return;
-        }
 
-        const me = fbAuth.currentUser?.uid || 'local';
-        let migratedCount = 0;
-
-        for (const entry of parsed as LegacyDMNote[]) {
-          if (!entry || typeof entry !== 'object') continue;
-          const rawId = String(entry.id || '').trim();
-          if (!rawId) continue;
-
-          const campaignName = String(entry.campaign || '').trim() || 'Базова кампанія';
-          const campaign = await ensureCampaignForName(campaignName);
-          if (!campaign) continue;
-
-          const timestamp = Number(entry.lastEdited || 0) || Date.now();
-          await upsertCampaignNote({
-            id: `legacy-${rawId}`,
-            campaignId: campaign.id,
-            title: String(entry.title || '').trim(),
-            content: String(entry.content || ''),
-            ownerUid: me,
-            owners: me ? [me] : [],
-            editors: [],
-            createdAtMs: timestamp,
-            updatedAtMs: timestamp,
-            baseUpdatedAtMs: timestamp,
-            syncStatus: fbAuth.currentUser ? 'Pending sync' : 'Local only',
-          });
-          migratedCount += 1;
-        }
-
-        await AsyncStorage.removeItem(LEGACY_NOTES_KEY);
-        await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
-
-        if (!cancelled && migratedCount > 0) {
-          const localNotes = await loadLocalCampaignNotes();
-          if (!cancelled && selectedCampaignId) {
-            setNotes(localNotes.filter((note) => note.campaignId === selectedCampaignId));
-          }
-          if (!cancelled) {
-            setStatusText(`Міграцію завершено • Перенесено нотаток: ${migratedCount}`);
-          }
-        }
-      } catch {
-        if (!cancelled) {
-          setStatusText('Міграцію старих нотаток пропущено');
-        }
-      }
-    };
-
-    void migrateLegacyNotes();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedCampaignId]);
 
   useEffect(() => {
     let unsub = () => {};
@@ -151,6 +79,9 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
     let cancelled = false;
 
     const run = async () => {
+      const local = await loadLocalCampaignNotes();
+      if (!cancelled) setNotes(local.filter((note) => note.campaignId === selectedCampaignId));
+
       unsub = await subscribeCampaignNotes(selectedCampaignId, (next) => {
         if (!cancelled) setNotes(next);
       });
@@ -163,7 +94,6 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
       if (typeof unsub === 'function') unsub();
     };
   }, [selectedCampaignId]);
-
   const selectedCampaign = useMemo(
     () => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null,
     [campaigns, selectedCampaignId],
@@ -371,4 +301,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 };
 
 export default DMCampaignNotes;
+
+
+
 

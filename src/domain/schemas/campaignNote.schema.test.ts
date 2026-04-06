@@ -19,6 +19,7 @@ describe('campaignNote.schema', () => {
     });
 
     expect(parsed.id).toBe('note-1');
+    expect(parsed.schemaVersion).toBe(3);
     expect(parsed.campaignId).toBe('campaign-1');
     expect(parsed.title).toBe('Session');
     expect(parsed.syncStatus).toBe('Local only');
@@ -49,3 +50,4 @@ describe('campaignNote.schema', () => {
     expect(result.ok).toBe(false);
   });
 });
+

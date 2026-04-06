@@ -3,6 +3,7 @@ import { uuid } from 'expo-modules-core';
 import type { CharacterCustomResource } from '@/types/Character';
 import type { ResourceTemplate } from '@/shared/const/TrackerTemplates';
 import type { DmStore } from '@/stores/dmStore';
+import { createStorageEnvelope, normalizeStorageEnvelope } from '@/domain/migrations';
 
 type SetDmStore = (
   partial:
@@ -39,17 +40,32 @@ const USER_TEMPLATES_STORAGE_KEY = 'RESOURCE_USER_TEMPLATES_V1';
 
 async function persistUserTemplates(templates: ResourceTemplate[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(USER_TEMPLATES_STORAGE_KEY, JSON.stringify(templates));
+    const envelope = createStorageEnvelope('dmUserTemplates', templates || []);
+    await AsyncStorage.setItem(USER_TEMPLATES_STORAGE_KEY, JSON.stringify(envelope));
   } catch (_error) { /* intentionally ignored */ }
 }
 
+function normalizeRole(raw: unknown): 'Player' | 'DM' | 'Hybrid' {
+  if (raw === 'Player' || raw === 'DM' || raw === 'Hybrid') return raw;
+  return 'Hybrid';
+}
+
+
+function parseStoredValue(raw: string | null): unknown {
+  if (raw === null || raw === undefined) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return raw;
+  }
+}
 export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffects {
   const saveMonsters: DmStore['saveMonsters'] = async (newMonsters) => {
     try {
       const existingPins = get().pinnedMonsterIds;
       const validPins = existingPins.filter((id) => newMonsters.some((monster) => monster.id === id));
-      await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(newMonsters));
-      await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(validPins));
+      await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsters', newMonsters)));
+      await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', validPins)));
       set({ monsters: newMonsters, pinnedMonsterIds: validPins });
     } catch (_error) { /* intentionally ignored */ }
   };
@@ -58,13 +74,16 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
     loadMonsters: async () => {
       try {
         const jsonValue = await AsyncStorage.getItem(MONSTERS_STORAGE_KEY);
-        const parsed = JSON.parse(jsonValue || '[]');
-        const filtered = Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+        const monstersParsed = parseStoredValue(jsonValue);
+        const monstersMigrated = normalizeStorageEnvelope<unknown[]>('dmMonsters', monstersParsed, []);
+        const filtered = Array.isArray(monstersMigrated.data) ? monstersMigrated.data.filter(Boolean) : [];
+
         const rawPins = await AsyncStorage.getItem(PINS_STORAGE_KEY);
-        const parsedPins = JSON.parse(rawPins || '[]');
-        const validPins = Array.isArray(parsedPins) ? (parsedPins as string[]) : [];
-        const nextPins = validPins.filter((id) => filtered.some((monster) => monster.id === id));
-        set({ monsters: filtered, pinnedMonsterIds: nextPins });
+        const pinsParsed = parseStoredValue(rawPins);
+        const pinsMigrated = normalizeStorageEnvelope<string[]>('dmPins', pinsParsed, []);
+        const validPins = Array.isArray(pinsMigrated.data) ? pinsMigrated.data.filter(Boolean) : [];
+        const nextPins = validPins.filter((id) => filtered.some((monster) => (monster as { id?: string }).id === id));
+        set({ monsters: filtered as DmStore['monsters'], pinnedMonsterIds: nextPins });
       } catch (_error) { /* intentionally ignored */ }
     },
 
@@ -101,14 +120,14 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
       const currentPins = get().pinnedMonsterIds;
       const nextPins = currentPins.includes(id) ? currentPins.filter((itemId) => itemId !== id) : [...currentPins, id];
       try {
-        await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(nextPins));
+        await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', nextPins)));
         set({ pinnedMonsterIds: nextPins });
       } catch (_error) { /* intentionally ignored */ }
     },
 
     clearPinnedMonsters: async () => {
       try {
-        await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify([]));
+        await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', [])));
         set({ pinnedMonsterIds: [] });
       } catch (_error) { /* intentionally ignored */ }
     },
@@ -116,29 +135,30 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
     setRole: async (role) => {
       set({ role });
       try {
-        await AsyncStorage.setItem(ROLE_STORAGE_KEY, role);
+        await AsyncStorage.setItem(ROLE_STORAGE_KEY, JSON.stringify(createStorageEnvelope('appRole', role)));
       } catch (_error) { /* intentionally ignored */ }
     },
 
     loadRole: async () => {
       try {
-        const value = await AsyncStorage.getItem(ROLE_STORAGE_KEY);
-        if (value === 'Player' || value === 'DM' || value === 'Hybrid') {
-          set({ role: value });
-        }
+        const raw = await AsyncStorage.getItem(ROLE_STORAGE_KEY);
+        const parsed = parseStoredValue(raw);
+        const migrated = normalizeStorageEnvelope<string>('appRole', parsed, 'Hybrid');
+        set({ role: normalizeRole(migrated.data) });
       } catch (_error) { /* intentionally ignored */ }
     },
 
     loadUserTemplates: async () => {
       try {
         const raw = await AsyncStorage.getItem(USER_TEMPLATES_STORAGE_KEY);
-        const parsed = JSON.parse(raw || '[]');
-        if (!Array.isArray(parsed)) {
+        const parsed = parseStoredValue(raw);
+        const migrated = normalizeStorageEnvelope<unknown[]>('dmUserTemplates', parsed, []);
+        if (!Array.isArray(migrated.data)) {
           set({ userTemplates: [] });
           return;
         }
 
-        const normalized: ResourceTemplate[] = parsed
+        const normalized: ResourceTemplate[] = migrated.data
           .map((entry: unknown, index: number) => {
             const cast = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
             const resource = cast.resource && typeof cast.resource === 'object' ? (cast.resource as Record<string, unknown>) : {};
@@ -192,3 +212,4 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
     },
   };
 }
+

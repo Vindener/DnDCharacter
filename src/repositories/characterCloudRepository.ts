@@ -3,6 +3,7 @@ import { ensureConnection } from '@/services/connections';
 import { findUserByEmail } from '@/services/users';
 import type { CharacterDto } from '@/domain/types';
 import { characterMapper } from '@/domain/mappers';
+import { LATEST_SCHEMA_VERSION, migratePayloadToLatest } from '@/domain/migrations';
 
 export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
 export type CharacterActorRole = 'DM' | 'Player';
@@ -19,6 +20,7 @@ export type CharacterChangeHistoryEntry = {
 
 export type CharacterSheet = {
   id: string;
+  schemaVersion?: number;
   ownerUid: string;
   owners: string[];
   editors: string[];
@@ -182,11 +184,14 @@ function toStringArray(value: unknown): string[] {
 }
 
 function toSheetSnapshotDoc(id: string, raw: unknown): CharacterSheet {
-  const doc = isRecord(raw) ? raw : {};
+  const source = isRecord(raw) ? raw : {};
+  const migratedDoc = migratePayloadToLatest<Record<string, unknown>>('character', { id, ...source }).data;
+  const doc = isRecord(migratedDoc) ? migratedDoc : { id };
   const normalizedDto = characterMapper.entityToDto(characterMapper.cloudDocToEntity(doc));
 
   return {
     id,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     ownerUid: typeof doc.ownerUid === 'string' ? doc.ownerUid : '',
     owners: toStringArray(doc.owners),
     editors: toStringArray(doc.editors),
@@ -260,6 +265,7 @@ function dtoToSheet(dto: CharacterCloudDto): CharacterSheet {
   const me = uid();
   return {
     id: normalizedDto.id,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     ownerUid: me,
     owners: [me],
     editors: [],
@@ -587,6 +593,7 @@ function buildCloudDocFromLocal(dto: CharacterCloudDto, ownerUid: string, existi
   const full: CharacterSheet = {
     ...dtoToSheet(dto),
     ...baseMeta,
+    schemaVersion: LATEST_SCHEMA_VERSION,
     updatedAt: now(),
     ac: dto.ac ?? 10,
     armorClassDetails: dto.armorClassDetails ?? dto.acDetails,
@@ -679,4 +686,12 @@ export const characterCloudRepository: CharacterCloudRepository = {
   removeEditor,
   getEditorsForSheet,
 };
+
+
+
+
+
+
+
+
 

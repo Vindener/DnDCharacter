@@ -3,6 +3,7 @@ import type { CharacterEntity, CharacterDraft } from '@/domain/types';
 import { parseHomebrew } from './homebrew.schema';
 import { normalizeCharacterSpells } from './spell.schema';
 import { asRecord, safeParseWithIssues, toBoolean, toFiniteStringRecord, toNumber, toString, toStringArray, toTrimmedString } from './utils';
+import { migratePayloadToLatest } from '@/domain/migrations';
 
 function parseStats(raw: unknown): CharacterEntity['stats'] {
   const cast = asRecord(raw);
@@ -102,11 +103,13 @@ function parseCoins(raw: unknown): CharacterEntity['coins'] {
 }
 
 function parseCharacterEntity(raw: unknown): CharacterEntity {
-  const cast = asRecord(raw);
+  const migrated = migratePayloadToLatest<Record<string, unknown>>('character', raw).data;
+  const cast = asRecord(migrated);
   const homebrew = parseHomebrew(cast);
   const customCoins = toFiniteStringRecord(cast.customCoins);
 
   return {
+    schemaVersion: Number.isFinite(Number(cast.schemaVersion)) ? Math.max(1, Math.floor(Number(cast.schemaVersion))) : undefined,
     id: toTrimmedString(cast.id),
     name: toString(cast.name, ''),
     class: toString(cast.class, ''),
@@ -184,5 +187,7 @@ export function safeParseCharacter(input: unknown) {
 export function normalizeCharacter(input: unknown): CharacterEntity {
   return parseCharacter(input);
 }
+
+
 
 

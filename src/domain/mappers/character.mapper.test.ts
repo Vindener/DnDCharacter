@@ -12,6 +12,7 @@ describe('character.mapper', () => {
     });
 
     expect(draft.id).toBe('c-1');
+    expect(draft.schemaVersion).toBe(3);
     expect(draft.deathSaves).toEqual({ successes: 2, failures: 1 });
     expect(draft.hp).toEqual({ current: 7, max: 12, temp: 0 });
     expect(draft.speed).toBe(30);
@@ -47,9 +48,11 @@ describe('character.mapper', () => {
     });
 
     expect(entity.id).toBe('c-3');
+    expect(entity.schemaVersion).toBe(3);
     expect(entity.name).toBe('Cloud Hero');
     expect(entity.deathSaves).toEqual({ successes: 1, failures: 0 });
     expect(entity.spells.knownSpells).toEqual([]);
     expect(entity.characterTemplateId).toBe('standard-5e');
   });
 });
+

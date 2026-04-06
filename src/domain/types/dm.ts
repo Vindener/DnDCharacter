@@ -6,6 +6,7 @@ export type DMNoteSyncDisplayStatus =
   | 'Conflict detected';
 
 export interface DMCampaign {
+  schemaVersion?: number;
   id: string;
   name: string;
   nameNormalized: string;
@@ -23,6 +24,7 @@ export interface DMCampaignNoteConflictRemote {
 }
 
 export interface DMCampaignNote {
+  schemaVersion?: number;
   id: string;
   campaignId: string;
   title: string;
@@ -93,3 +95,4 @@ export interface InitiativeSeed {
   campaignId: string;
   entries: InitiativeSeedItem[];
 }
+

@@ -102,6 +102,7 @@ export interface CharacterCombatTemplates {
 }
 
 export interface CharacterModelBase {
+  schemaVersion?: number;
   id: string;
   name: string;
   class: string;
@@ -166,4 +167,5 @@ export type CharacterDto = CharacterModelBase;
 export type CharacterDraft = Partial<Omit<CharacterEntity, 'id'>> & { id?: string };
 
 export type CharacterViewModel = CharacterEntity;
+
 

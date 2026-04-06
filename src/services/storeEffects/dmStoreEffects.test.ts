@@ -1,0 +1,117 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createDmStoreEffects } from '@/services/storeEffects/dmStoreEffects';
+import type { DmStore } from '@/stores/dmStore';
+
+const { storage, asyncStorageMock } = vi.hoisted(() => {
+  const storage = new Map<string, string>();
+  return {
+    storage,
+    asyncStorageMock: {
+      getItem: vi.fn(async (key: string) => (storage.has(key) ? storage.get(key)! : null)),
+      setItem: vi.fn(async (key: string, value: string) => {
+        storage.set(key, value);
+      }),
+      removeItem: vi.fn(async (key: string) => {
+        storage.delete(key);
+      }),
+    },
+  };
+});
+
+vi.mock('@react-native-async-storage/async-storage', () => ({
+  default: asyncStorageMock,
+}));
+
+const ROLE_STORAGE_KEY = 'APP_ROLE_MODE_V1';
+const MONSTERS_STORAGE_KEY = 'monsters';
+const PINS_STORAGE_KEY = 'monster-pins';
+const USER_TEMPLATES_STORAGE_KEY = 'RESOURCE_USER_TEMPLATES_V1';
+
+function createHarness() {
+  let state: DmStore = {
+    monsters: [],
+    pinnedMonsterIds: [],
+    role: 'Hybrid',
+    userTemplates: [],
+    loadMonsters: async () => {},
+    saveMonsters: async () => {},
+    addMonster: async () => {},
+    addMonsters: async () => {},
+    updateMonster: async () => {},
+    removeMonster: async () => {},
+    togglePinnedMonster: async () => {},
+    clearPinnedMonsters: async () => {},
+    setRole: async () => {},
+    loadRole: async () => {},
+    loadUserTemplates: async () => {},
+    addUserTemplateFromResource: async () => {},
+    removeUserTemplate: async () => {},
+  };
+
+  const set: Parameters<typeof createDmStoreEffects>[0]['set'] = (partial) => {
+    const next = typeof partial === 'function' ? partial(state) : partial;
+    state = { ...state, ...next };
+  };
+  const get = () => state;
+
+  const effects = createDmStoreEffects({ set, get });
+  return {
+    effects,
+    getState: () => state,
+  };
+}
+
+beforeEach(() => {
+  storage.clear();
+  vi.clearAllMocks();
+});
+
+describe('dmStoreEffects migration pipeline', () => {
+  it('loads legacy plain-string role and normalizes it', async () => {
+    storage.set(ROLE_STORAGE_KEY, 'DM');
+    const harness = createHarness();
+
+    await harness.effects.loadRole();
+
+    expect(harness.getState().role).toBe('DM');
+  });
+
+  it('loads legacy monsters and pins payloads', async () => {
+    storage.set(
+      MONSTERS_STORAGE_KEY,
+      JSON.stringify([
+        {
+          id: 'monster-1',
+          name: 'Goblin',
+          stats: { strength: 8, dexterity: 14, constitution: 10, intelligence: 8, wisdom: 8, charisma: 8 },
+        },
+      ]),
+    );
+    storage.set(PINS_STORAGE_KEY, JSON.stringify(['monster-1', 'missing']));
+
+    const harness = createHarness();
+    await harness.effects.loadMonsters();
+
+    expect(harness.getState().monsters).toHaveLength(1);
+    expect(harness.getState().pinnedMonsterIds).toEqual(['monster-1']);
+  });
+
+  it('loads legacy user templates payload', async () => {
+    storage.set(
+      USER_TEMPLATES_STORAGE_KEY,
+      JSON.stringify([
+        {
+          id: 'tpl-1',
+          name: 'Template',
+          resource: { label: 'Mana', current: 2, max: 5, resetRule: 'none' },
+        },
+      ]),
+    );
+
+    const harness = createHarness();
+    await harness.effects.loadUserTemplates();
+
+    expect(harness.getState().userTemplates).toHaveLength(1);
+    expect(harness.getState().userTemplates[0].resource.label).toBe('Mana');
+  });
+});

@@ -6,6 +6,7 @@ import type {
   DMNoteSyncDisplayStatus,
 } from '@/domain/types';
 import { asRecord, safeParseWithIssues, toNumber, toString, toStringArray, toTrimmedString } from './utils';
+import { migratePayloadToLatest } from '@/domain/migrations';
 
 export const NOTE_SYNC_STATUS: DMNoteSyncDisplayStatus[] = [
   'Local only',
@@ -35,12 +36,14 @@ function parseConflictRemote(raw: unknown): DMCampaignNoteConflictRemote | undef
 }
 
 function normalizeCampaignNotePayload(raw: unknown): DMCampaignNote {
-  const cast = asRecord(raw);
+  const migrated = migratePayloadToLatest<Record<string, unknown>>('dmCampaignNotes', raw).data;
+  const cast = asRecord(migrated);
   const now = Date.now();
   const owners = toStringArray(cast.owners, { dedupe: true });
   const me = toTrimmedString(cast.ownerUid) || owners[0] || 'local';
 
   return {
+    schemaVersion: Number.isFinite(Number(cast.schemaVersion)) ? Math.max(1, Math.floor(Number(cast.schemaVersion))) : undefined,
     id: toTrimmedString(cast.id) || `note-${now}`,
     campaignId: toTrimmedString(cast.campaignId),
     title: toString(cast.title, '').trim(),
@@ -132,4 +135,3 @@ export function safeParseCampaignNoteFormInput(value: unknown) {
 export function normalizeCampaignNote(value: unknown): DMCampaignNote {
   return parseCampaignNote(value);
 }
-

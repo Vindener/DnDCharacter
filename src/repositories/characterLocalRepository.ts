@@ -1,5 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CharacterEntity } from '@/domain/types';
+import { characterMapper } from '@/domain/mappers';
+import {
+  LATEST_SCHEMA_VERSION,
+  createStorageEnvelope,
+  normalizeStorageEnvelope,
+} from '@/domain/migrations';
 
 const CHARACTERS_STORAGE_KEY = 'characters';
 const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
@@ -18,9 +24,10 @@ export interface CharacterLocalRepository {
 async function loadCharacters(): Promise<CharacterEntity[]> {
   try {
     const raw = await AsyncStorage.getItem(CHARACTERS_STORAGE_KEY);
-    const parsed = JSON.parse(raw || '[]');
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(Boolean) as CharacterEntity[];
+    const parsed = raw ? JSON.parse(raw) : null;
+    const migrated = normalizeStorageEnvelope<CharacterEntity[]>('character', parsed, []);
+    const list = Array.isArray(migrated.data) ? migrated.data : [];
+    return list.filter(Boolean).map((entry) => characterMapper.draftToEntity(entry));
   } catch {
     return [];
   }
@@ -28,7 +35,14 @@ async function loadCharacters(): Promise<CharacterEntity[]> {
 
 async function saveCharacters(characters: CharacterEntity[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(characters));
+    const canonical = (Array.isArray(characters) ? characters : [])
+      .filter(Boolean)
+      .map((entry) => ({
+        ...characterMapper.entityToDto(entry),
+        schemaVersion: LATEST_SCHEMA_VERSION,
+      }));
+    const envelope = createStorageEnvelope('character', canonical);
+    await AsyncStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(envelope));
   } catch (_error) { /* intentionally ignored */ }
 }
 
@@ -86,4 +100,3 @@ export const characterLocalRepository: CharacterLocalRepository = {
   loadSharedUpdatesReviewedMap,
   saveSharedUpdatesReviewedMap,
 };
-
