@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
+import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/domain/spellbook';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { formatSchemaErrors, safeParseSpellFormInput, SPELL_DAMAGE_TYPES } from '@/domain/schemas';
 import type { CharacterSpellStatus, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';

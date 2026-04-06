@@ -18,6 +18,8 @@ const KINDS: MigrationKind[] = [
   'dmPins',
   'dmUserTemplates',
   'appRole',
+  'spellbookSpells',
+  'spellbookFavorites',
 ];
 
 function legacyPayload(kind: MigrationKind): unknown {
@@ -46,6 +48,23 @@ function legacyPayload(kind: MigrationKind): unknown {
       return [{ id: 't1', name: 'Template', source: 'user', resource: { label: 'R', current: 1, resetRule: 'none' } }];
     case 'appRole':
       return 'invalid-role';
+    case 'spellbookSpells':
+      return [
+        {
+          id: 'spell-1',
+          name: 'Arcane Bolt',
+          level: 1,
+          school: 'Evocation',
+          description: 'Bolt',
+          tags: ['damage'],
+          damageProfiles: [],
+          source: 'custom',
+          createdAt: 1,
+          updatedAt: 1,
+        },
+      ];
+    case 'spellbookFavorites':
+      return ['spell-1'];
     default:
       return null;
   }
@@ -109,3 +128,4 @@ describe('domain/migrations', () => {
     expect((envelope.data[0] as Record<string, unknown>).schemaVersion).toBe(LATEST_SCHEMA_VERSION);
   });
 });
+

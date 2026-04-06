@@ -38,7 +38,7 @@ import {
 } from '@/shared/helpers/collaboration/status';
 import { buildUploadPlan, reconcileRemoteSnapshot, resolveConflict, syncToCloud } from '@/services/characterSyncCoordinator';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
+import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/domain/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { useQuickActions } from './useQuickActions';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';

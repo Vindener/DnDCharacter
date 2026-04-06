@@ -10,7 +10,9 @@ export type MigrationKind =
   | 'dmMonsters'
   | 'dmPins'
   | 'dmUserTemplates'
-  | 'appRole';
+  | 'appRole'
+  | 'spellbookSpells'
+  | 'spellbookFavorites';
 
 export type VersionedStorageEnvelope<T> = {
   schemaVersion: number;
@@ -223,7 +225,7 @@ function ensureStringArray(payload: unknown): string[] {
 }
 
 function stampPersistedSchemaVersion(kind: MigrationKind, payload: unknown): unknown {
-  if (kind === 'appRole' || kind === 'dmPins' || kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmNotesQueue') {
+  if (kind === 'appRole' || kind === 'dmPins' || kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites') {
     return payload;
   }
 
@@ -242,7 +244,7 @@ function migrateKindV1toV2(kind: MigrationKind, payload: unknown): unknown {
   if (kind === 'character') return migrateCharacterV1toV2(payload);
   if (kind === 'dmPins') return ensureStringArray(payload);
   if (kind === 'appRole') return normalizeAppRole(payload);
-  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue') {
+  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites') {
     return payload;
   }
   return payload;
@@ -252,7 +254,7 @@ function migrateKindV2toV3(kind: MigrationKind, payload: unknown): unknown {
   if (kind === 'character') return migrateCharacterV2toV3(payload);
   if (kind === 'dmPins') return ensureStringArray(payload);
   if (kind === 'appRole') return normalizeAppRole(payload);
-  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue') {
+  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites') {
     return payload;
   }
   return payload;
@@ -329,3 +331,4 @@ export function createStorageEnvelope<T>(kind: MigrationKind, payload: T): Versi
     data: migrateToLatest(kind, payload, LATEST_SCHEMA_VERSION) as T,
   };
 }
+
