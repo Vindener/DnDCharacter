@@ -24,7 +24,8 @@ import { fbAuth } from '@/services/firebase';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
-import { appendQuickSessionNote, isHomebrewCharacter, normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
+import { appendQuickSessionNote, isHomebrewCharacter } from '@/shared/helpers/homebrew';
+import { parseCharacter } from '@/domain/schemas';
 import useTrackerTemplateStore, { SYSTEM_RESOURCE_TEMPLATES } from '@/context/TrackerTemplates-store';
 import useAppRoleStore from '@/context/AppRole-store';
 import {
@@ -78,7 +79,7 @@ const TAB_LABELS: Record<CharacterTab, string> = {
   Magic: 'Магія',
   Inventory: 'Інвентар',
   Notes: 'Нотатки',
-  Homebrew: 'Власне',
+  Homebrew: 'Homebrew',
 };
 const TAB_PATH_PREFIX: Record<CharacterTab, string> = {
   Overview: 'overview.',
@@ -233,53 +234,11 @@ function getResourceResetValue(resource: CharacterCustomResource): number {
 }
 
 function ensureCharacterDefaults(character: CharacterViewModel): CharacterViewModel {
-  const withDefaults: CharacterViewModel = {
-    ...character,
-    hp: {
-      max: character.hp?.max ?? 10,
-      current: character.hp?.current ?? 10,
-      temp: character.hp?.temp ?? 0,
-    },
-    proficiencyBonus: character.proficiencyBonus ?? buildProficiencyByLevel(character.level),
-    inventory: character.inventory ?? [],
-    proficiencies: character.proficiencies ?? [],
-    weapons: character.weapons ?? [],
-    featuresAndTraits: character.featuresAndTraits ?? [],
-    notes: character.notes ?? '',
-    conditions: character.conditions ?? [],
-    characterTemplateId: character.characterTemplateId ?? 'standard-5e',
-    customFields: character.customFields ?? [],
-    customTrackers: character.customTrackers ?? [],
-    customSections: character.customSections ?? [],
-    customResources: character.customResources ?? [],
-    customNotesGroups: character.customNotesGroups ?? [],
-    homebrewEntries: character.homebrewEntries ?? [],
-    customResetRules: character.customResetRules ?? [],
-    customFeatureBlocks: character.customFeatureBlocks ?? [],
-    customSpellLists: character.customSpellLists ?? [],
-    notesBlocks: {
-      session: character.notesBlocks?.session ?? '',
-      campaign: character.notesBlocks?.campaign ?? '',
-      goals: character.notesBlocks?.goals ?? '',
-      relationships: character.notesBlocks?.relationships ?? '',
-      quests: character.notesBlocks?.quests ?? '',
-    },
-    combatTemplates: {
-      actions: character.combatTemplates?.actions ?? [],
-      bonusActions: character.combatTemplates?.bonusActions ?? [],
-      reactions: character.combatTemplates?.reactions ?? [],
-    },
-    spells: {
-      spellcastingAbility: character.spells?.spellcastingAbility ?? '',
-      spellSaveDC: character.spells?.spellSaveDC ?? 0,
-      spellAttackBonus: character.spells?.spellAttackBonus ?? 0,
-      spellSlots: character.spells?.spellSlots ?? {},
-      knownSpells: character.spells?.knownSpells ?? [],
-      preparedSpells: character.spells?.preparedSpells ?? [],
-      cantrips: character.spells?.cantrips ?? [],
-    },
-  };
-  return normalizeHomebrewV3(withDefaults);
+  const normalized = parseCharacter(character);
+  if (normalized.proficiencyBonus === undefined || normalized.proficiencyBonus === null) {
+    return { ...normalized, proficiencyBonus: buildProficiencyByLevel(normalized.level) };
+  }
+  return normalized;
 }
 
 function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {

@@ -2,9 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type {
   DMCampaignNote,
   DMCampaignNoteQueueItem,
-  DMCampaignNoteConflictRemote,
   DMNoteSyncDisplayStatus,
 } from '@/types/DM';
+import { parseCampaignNote, parseCampaignNoteQueueItem } from '@/domain/schemas';
 import { db, fbAuth, hasDoc, now } from '@/services/firebase';
 
 const LOCAL_NOTES_KEY = 'DM_CAMPAIGN_NOTES_V1';
@@ -18,57 +18,13 @@ function toMillis(value: unknown): number {
   return 0;
 }
 
-function sanitizeSyncStatus(value: unknown): DMNoteSyncDisplayStatus {
-  if (
-    value === 'Local only' ||
-    value === 'Synced' ||
-    value === 'Pending sync' ||
-    value === 'Offline changes pending' ||
-    value === 'Conflict detected'
-  ) {
-    return value;
-  }
-  return 'Local only';
-}
-
-function sanitizeConflictRemote(value: unknown): DMCampaignNoteConflictRemote | undefined {
-  if (!value || typeof value !== 'object') return undefined;
-  const cast = value as Record<string, unknown>;
-  const title = String(cast.title || '');
-  const content = String(cast.content || '');
-  const updatedAtMs = Number(cast.updatedAtMs || 0);
-  if (!title && !content) return undefined;
-  return {
-    title,
-    content,
-    updatedAtMs: updatedAtMs || Date.now(),
-  };
-}
-
 function sanitizeNote(raw: unknown): DMCampaignNote | null {
   if (!raw || typeof raw !== 'object') return null;
   const cast = raw as Record<string, unknown>;
   const id = String(cast.id || '');
   const campaignId = String(cast.campaignId || '');
   if (!id || !campaignId) return null;
-
-  const owners = Array.isArray(cast.owners) ? cast.owners.map((item) => String(item)).filter(Boolean) : [];
-  const editors = Array.isArray(cast.editors) ? cast.editors.map((item) => String(item)).filter(Boolean) : [];
-
-  return {
-    id,
-    campaignId,
-    title: String(cast.title || ''),
-    content: String(cast.content || ''),
-    ownerUid: String(cast.ownerUid || owners[0] || 'local'),
-    owners,
-    editors,
-    createdAtMs: Number(cast.createdAtMs || 0),
-    updatedAtMs: Number(cast.updatedAtMs || 0),
-    baseUpdatedAtMs: Number(cast.baseUpdatedAtMs || 0),
-    syncStatus: sanitizeSyncStatus(cast.syncStatus),
-    conflictRemote: sanitizeConflictRemote(cast.conflictRemote),
-  };
+  return parseCampaignNote(cast);
 }
 
 function mapCloudNote(doc: Record<string, unknown>): DMCampaignNote | null {
@@ -81,7 +37,7 @@ function mapCloudNote(doc: Record<string, unknown>): DMCampaignNote | null {
   const updatedAtMs = toMillis(doc.updatedAt) || Date.now();
   const createdAtMs = toMillis(doc.createdAt) || updatedAtMs;
 
-  return {
+  return parseCampaignNote({
     id,
     campaignId,
     title: String(doc.title || ''),
@@ -93,7 +49,7 @@ function mapCloudNote(doc: Record<string, unknown>): DMCampaignNote | null {
     updatedAtMs,
     baseUpdatedAtMs: updatedAtMs,
     syncStatus: 'Synced',
-  };
+  });
 }
 
 async function loadQueue(): Promise<DMCampaignNoteQueueItem[]> {
@@ -102,17 +58,7 @@ async function loadQueue(): Promise<DMCampaignNoteQueueItem[]> {
     const parsed = JSON.parse(raw || '[]');
     if (!Array.isArray(parsed)) return [];
     return parsed
-      .map((item) => {
-        if (!item || typeof item !== 'object') return null;
-        const cast = item as Record<string, unknown>;
-        const id = String(cast.id || '');
-        const type = cast.type === 'delete' ? 'delete' : cast.type === 'upsert' ? 'upsert' : null;
-        const noteId = String(cast.noteId || '');
-        const campaignId = String(cast.campaignId || '');
-        const atMs = Number(cast.atMs || 0) || Date.now();
-        if (!id || !type || !noteId || !campaignId) return null;
-        return { id, type, noteId, campaignId, atMs };
-      })
+      .map((item) => parseCampaignNoteQueueItem(item))
       .filter((item): item is DMCampaignNoteQueueItem => Boolean(item));
   } catch {
     return [];
@@ -329,10 +275,10 @@ function defaultSyncStatusForNote(): DMNoteSyncDisplayStatus {
 export async function upsertCampaignNote(note: DMCampaignNote): Promise<DMCampaignNote> {
   const timestamp = Date.now();
   const me = fbAuth.currentUser?.uid || note.ownerUid || 'local';
-  const normalized: DMCampaignNote = {
+  const normalized: DMCampaignNote = parseCampaignNote({
     ...note,
-    title: String(note.title || '').trim(),
-    content: String(note.content || ''),
+    title: note.title,
+    content: note.content,
     ownerUid: note.ownerUid || me,
     owners: note.owners?.length ? note.owners : [me],
     editors: note.editors || [],
@@ -340,7 +286,7 @@ export async function upsertCampaignNote(note: DMCampaignNote): Promise<DMCampai
     updatedAtMs: timestamp,
     baseUpdatedAtMs: note.baseUpdatedAtMs || timestamp,
     syncStatus: note.syncStatus === 'Conflict detected' ? 'Conflict detected' : defaultSyncStatusForNote(),
-  };
+  });
 
   await replaceLocalNote(normalized);
 

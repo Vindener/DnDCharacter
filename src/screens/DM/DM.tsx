@@ -238,7 +238,7 @@ const DM: React.FC = () => {
 
       <View style={styles.card}>
         <Text style={styles.title}>Підготовка сутички</Text>
-        <Text style={styles.hint}>Зберіть склад сутички з групи кампанії та бестіарію і передайте в Ініціативу одним потоком.</Text>
+        <Text style={styles.hint}>Зберіть склад сутички з персонажів та бестіарію і передайте в Ініціативу одним потоком.</Text>
         <View style={styles.laneGrid}>
           <Pressable
             style={styles.laneButton}

@@ -20,6 +20,8 @@ type EncounterMonster = {
   count: number;
 };
 
+type PlayerSourceMode = 'campaign' | 'all';
+
 const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
@@ -32,6 +34,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState(route.params?.campaignId || '');
+  const [playerSourceMode, setPlayerSourceMode] = useState<PlayerSourceMode>('campaign');
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, boolean>>({});
   const [monsterSearch, setMonsterSearch] = useState('');
   const [encounterMonsters, setEncounterMonsters] = useState<EncounterMonster[]>([]);
@@ -65,7 +68,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 
   const selectedCampaign = useMemo(() => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null, [campaigns, selectedCampaignId]);
 
-  const party = useMemo(() => {
+  const campaignParty = useMemo(() => {
     return characters.filter((character) => {
       if (!selectedCampaign) return false;
       if (character.campaignId && character.campaignId === selectedCampaign.id) return true;
@@ -74,15 +77,27 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     });
   }, [characters, selectedCampaign]);
 
+  const party = useMemo(() => {
+    return playerSourceMode === 'campaign' ? campaignParty : characters;
+  }, [campaignParty, characters, playerSourceMode]);
+
+  const campaignNamesById = useMemo(() => {
+    return new Map(campaigns.map((campaign) => [campaign.id, campaign.name]));
+  }, [campaigns]);
+
+  const selectedParty = useMemo(() => {
+    return party.filter((player) => selectedPlayers[player.id]);
+  }, [party, selectedPlayers]);
+
   useEffect(() => {
     setSelectedPlayers((prev) => {
-      const next: Record<string, boolean> = {};
+      const next: Record<string, boolean> = { ...prev };
       for (const player of party) {
-        next[player.id] = prev[player.id] ?? true;
+        next[player.id] = prev[player.id] ?? (playerSourceMode === 'campaign');
       }
       return next;
     });
-  }, [party]);
+  }, [party, playerSourceMode]);
 
   const pinnedMonsters = useMemo(() => monsters.filter((monster) => pinnedMonsterIds.includes(monster.id)), [monsters, pinnedMonsterIds]);
 
@@ -130,8 +145,6 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   };
 
   const result = useMemo(() => {
-    const selectedParty = party.filter((player) => selectedPlayers[player.id]);
-
     const thresholds = selectedParty.reduce(
       (acc, player) => {
         const level = Math.max(1, Math.min(20, Number(player.level) || 1));
@@ -175,11 +188,9 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       xpPerPlayer,
       difficulty,
     };
-  }, [encounterMonsters, party, selectedPlayers]);
+  }, [encounterMonsters, selectedParty]);
 
   const startInitiative = () => {
-    if (!selectedCampaignId) return;
-
     const entries: InitiativeSeed['entries'] = [];
 
     result.selectedParty.forEach((player) => {
@@ -195,21 +206,30 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       for (let index = 0; index < Math.max(1, monster.count); index += 1) {
         entries.push({
           id: `monster-${monster.id}-${index}`,
-          name: monster.count > 1 ? `${monster.name} #${index + 1}` : monster.name,
+          name: monster.name || 'Монстр',
           roll: '',
           hits: '',
         });
       }
     });
 
+    const root = navigation.getParent();
+    if (!root) return;
+    if (!entries.length) {
+      root.dispatch(
+        CommonActions.navigate({
+          name: 'Initiative',
+        }),
+      );
+      return;
+    }
+
     const seed: InitiativeSeed = {
       source: 'dm-encounter-prep',
-      campaignId: selectedCampaignId,
+      campaignId: selectedCampaignId || 'no-campaign',
       entries,
     };
 
-    const root = navigation.getParent();
-    if (!root) return;
     root.dispatch(
       CommonActions.navigate({
         name: 'Initiative',
@@ -222,7 +242,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
         <Text style={styles.title}>Підготовка сутички</Text>
-        <Text style={styles.hint}>Оберіть кампанію, групу та монстрів, потім запустіть Ініціативу з підготовленими записами.</Text>
+        <Text style={styles.hint}>Оберіть кампанію, персонажів та монстрів, потім запустіть Ініціативу з підготовленими записами.</Text>
         <View style={styles.statsRow}>
           {campaigns.map((campaign) => (
             <Pressable
@@ -238,10 +258,32 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Група ({result.selectedParty.length})</Text>
-        {!party.length && <Text style={styles.hint}>До вибраної кампанії не прив’язано учасників групи.</Text>}
+        <Text style={styles.title}>Персонажі ({result.selectedParty.length})</Text>
+        <View style={styles.statsRow}>
+          <Pressable
+            style={[styles.statChip, playerSourceMode === 'campaign' ? { borderColor: colors.text } : null]}
+            onPress={() => setPlayerSourceMode('campaign')}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={styles.statChipText}>Група кампанії</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.statChip, playerSourceMode === 'all' ? { borderColor: colors.text } : null]}
+            onPress={() => setPlayerSourceMode('all')}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={styles.statChipText}>Усі персонажі</Text>
+          </Pressable>
+        </View>
+        {!party.length && playerSourceMode === 'campaign' && <Text style={styles.hint}>До вибраної кампанії не прив’язано учасників групи.</Text>}
+        {!party.length && playerSourceMode === 'all' && <Text style={styles.hint}>У списку персонажів поки порожньо.</Text>}
         {party.map((player) => {
           const selected = selectedPlayers[player.id];
+          const legacyCampaign = String(player.campaign || '').trim();
+          const campaignLabel =
+            (player.campaignId ? campaignNamesById.get(player.campaignId) : null) ||
+            legacyCampaign ||
+            'Без кампанії';
           return (
             <Pressable
               key={player.id}
@@ -250,6 +292,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.updateTitle}>{player.name || 'Персонаж'} {selected ? '• Обрано' : ''}</Text>
+              <Text style={styles.updateMeta}>Кампанія: {campaignLabel}</Text>
               <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • HP {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
             </Pressable>
           );

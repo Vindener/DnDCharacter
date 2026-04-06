@@ -6,7 +6,8 @@ import useCharacterStore from '@/context/Character-store';
 import useSpellbookStore from '@/context/Spellbook-store';
 import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
 import { Modal } from '@/shared/components/Modal/Modal';
-import type { CharacterSpellStatus, Dnd5DamageType, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
+import { formatSchemaErrors, safeParseSpellFormInput, SPELL_DAMAGE_TYPES } from '@/domain/schemas';
+import type { CharacterSpellStatus, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { getStyles } from './styles';
 
 type StatusFilter = 'all' | CharacterSpellStatus;
@@ -49,39 +50,10 @@ const SPELL_STATUS_LABEL: Record<CharacterSpellStatus, string> = {
   cantrip: 'Каніпс',
 };
 
-const DAMAGE_TYPES: Dnd5DamageType[] = [
-  'acid',
-  'bludgeoning',
-  'cold',
-  'fire',
-  'force',
-  'lightning',
-  'necrotic',
-  'piercing',
-  'poison',
-  'psychic',
-  'radiant',
-  'slashing',
-  'thunder',
-];
-
-function clampLevel(value: string): number {
-  const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 1;
-  return Math.max(0, Math.min(9, Math.floor(parsed)));
-}
-
 function sourceLabel(source: SpellbookSpell['source']): string {
   if (source === 'custom') return 'власне';
   if (source === 'imported') return 'імпортоване';
   return 'системне';
-}
-
-function parseTags(value: string): string[] {
-  return value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
 }
 
 function damageProfilesToText(profiles: SpellDamageProfile[]): string {
@@ -94,26 +66,6 @@ function damageProfilesToText(profiles: SpellDamageProfile[]): string {
     .join('\n');
 }
 
-function parseDamageProfiles(value: string): Array<Omit<SpellDamageProfile, 'id'>> {
-  return value
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [labelRaw, formulaRaw, damageTypeRaw, conditionRaw] = line.split('|').map((part) => part.trim());
-      const label = labelRaw || 'Шкода';
-      const formula = formulaRaw || '1d6';
-      const normalizedDamageType = DAMAGE_TYPES.includes((damageTypeRaw || '').toLowerCase() as Dnd5DamageType)
-        ? ((damageTypeRaw || '').toLowerCase() as Dnd5DamageType)
-        : 'force';
-      return {
-        label,
-        formula,
-        damageType: normalizedDamageType,
-        condition: conditionRaw || undefined,
-      };
-    });
-}
 
 const Spellbook = () => {
   const colors = useThemeStore((s) => s.colors);
@@ -287,19 +239,23 @@ const Spellbook = () => {
   };
 
   const submitSpellModal = async () => {
-    const name = modalName.trim();
-    if (!name) return;
-
-    const level = clampLevel(modalLevel);
-    const saved = await upsertCustomSpell({
+    const validation = safeParseSpellFormInput({
       spellId: editingSpell?.id,
-      name,
-      level,
-      school: modalSchool.trim() || 'Власне',
-      description: modalDescription.trim(),
-      tags: parseTags(modalTags),
-      damageProfiles: parseDamageProfiles(modalDamageProfiles),
+      name: modalName,
+      level: modalLevel,
+      school: modalSchool,
+      description: modalDescription,
+      tags: modalTags,
+      damageProfiles: modalDamageProfiles,
     });
+    if (!validation.ok) {
+      const firstError = formatSchemaErrors(validation.issues)[0] || 'Невалідні дані закляття.';
+      setPreparedLimitNotice(firstError);
+      return;
+    }
+
+    const saved = await upsertCustomSpell(validation.data);
+    const level = validation.data.level ?? 1;
 
     if (saved && selectedCharacter) {
       const nextStatus: CharacterSpellStatus = level === 0 ? 'cantrip' : 'known';
@@ -307,6 +263,7 @@ const Spellbook = () => {
       void updateCharacter(selectedCharacter.id, updated);
     }
 
+    setPreparedLimitNotice('');
     setIsSpellModalVisible(false);
   };
 
@@ -587,7 +544,7 @@ const Spellbook = () => {
             multiline
           />
           <Text style={styles.modalHint}>Формат рядка: Назва | Формула | Тип | Умова(опційно)</Text>
-          <Text style={styles.modalHint}>Типи 5e: {DAMAGE_TYPES.join(', ')}</Text>
+          <Text style={styles.modalHint}>Типи 5e: {SPELL_DAMAGE_TYPES.join(', ')}</Text>
         </ScrollView>
       </Modal>
     </View>

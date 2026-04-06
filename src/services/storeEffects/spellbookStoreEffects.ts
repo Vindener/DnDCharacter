@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { uuid } from 'expo-modules-core';
 import { SPELLBOOK_SEED } from '@/shared/const/SpellbookSeed';
 import { normalizeSpellName } from '@/shared/helpers/spellbook';
+import { parseSpellUpsertInput } from '@/domain/schemas';
 import { spellMapper } from '@/domain/mappers';
 import type { SpellbookSpell, SpellDamageProfile } from '@/domain/types';
 import type { SpellbookStore } from '@/stores/spellbookStore';
@@ -113,12 +114,13 @@ export function createSpellbookStoreEffects({ set, get }: SpellbookStoreContext)
         await get().loadSpellbook();
       }
 
-      const name = String(input?.name || '').trim();
+      const normalizedInput = parseSpellUpsertInput(input);
+      const name = String(normalizedInput.name || '').trim();
       if (!name) return null;
 
       const normalizedName = normalizeSpellName(name);
       const current = get().spells;
-      const byId = input.spellId ? current.find((spell) => spell.id === input.spellId) : null;
+      const byId = normalizedInput.spellId ? current.find((spell) => spell.id === normalizedInput.spellId) : null;
       const existingCustomByName = current.find(
         (spell) => spell.source === 'custom' && normalizeSpellName(spell.name) === normalizedName,
       );
@@ -132,13 +134,13 @@ export function createSpellbookStoreEffects({ set, get }: SpellbookStoreContext)
             id: `spell-custom-${uuid.v4()}`,
             source: 'custom',
             name,
-            level: input.level ?? existing.level,
-            school: String(input.school || existing.school || 'Власне').trim() || 'Власне',
-            description: String(input.description || existing.description || '').trim(),
-            tags: Array.isArray(input.tags)
-              ? input.tags.map((tag) => String(tag || '').trim()).filter(Boolean)
+            level: normalizedInput.level ?? existing.level,
+            school: String(normalizedInput.school || existing.school || 'Власне').trim() || 'Власне',
+            description: String(normalizedInput.description || existing.description || '').trim(),
+            tags: Array.isArray(normalizedInput.tags)
+              ? normalizedInput.tags.map((tag) => String(tag || '').trim()).filter(Boolean)
               : existing.tags,
-            damageProfiles: toDamageProfiles(input.damageProfiles ?? existing.damageProfiles),
+            damageProfiles: toDamageProfiles(normalizedInput.damageProfiles ?? existing.damageProfiles),
             createdAt: now,
             updatedAt: now,
           });
@@ -152,13 +154,13 @@ export function createSpellbookStoreEffects({ set, get }: SpellbookStoreContext)
         const updated = spellMapper.spellbookMapper.draftToEntity({
           ...existing,
           name,
-          level: input.level ?? existing.level,
-          school: String(input.school || existing.school || 'Універсальна').trim() || 'Універсальна',
-          description: String(input.description || existing.description || '').trim(),
-          tags: Array.isArray(input.tags)
-            ? input.tags.map((tag) => String(tag || '').trim()).filter(Boolean)
+          level: normalizedInput.level ?? existing.level,
+          school: String(normalizedInput.school || existing.school || 'Універсальна').trim() || 'Універсальна',
+          description: String(normalizedInput.description || existing.description || '').trim(),
+          tags: Array.isArray(normalizedInput.tags)
+            ? normalizedInput.tags.map((tag) => String(tag || '').trim()).filter(Boolean)
             : existing.tags,
-          damageProfiles: toDamageProfiles(input.damageProfiles ?? existing.damageProfiles),
+          damageProfiles: toDamageProfiles(normalizedInput.damageProfiles ?? existing.damageProfiles),
           updatedAt: Date.now(),
         });
 
@@ -169,9 +171,9 @@ export function createSpellbookStoreEffects({ set, get }: SpellbookStoreContext)
       }
 
       const created = spellMapper.spellbookInputToEntity({
-        ...input,
+        ...normalizedInput,
         name,
-        spellId: input.spellId || `spell-custom-${uuid.v4()}`,
+        spellId: normalizedInput.spellId || `spell-custom-${uuid.v4()}`,
       });
 
       const merged = [created, ...current];

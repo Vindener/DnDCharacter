@@ -24,6 +24,7 @@ import { onGoogleButtonPress } from '@/shared/services/auth';
 import { addEditorByEmail } from '@/repositories/characterCloudRepository';
 import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { formatSchemaErrors, safeParseCreateCharacterWizardStep } from '@/domain/schemas';
 
 type StartMethod = 'guided' | 'quick';
 type StatMethod = 'array' | 'pointbuy';
@@ -70,8 +71,6 @@ const BG_COINS: Record<string, number> = {
   sailor: 10,
   urchin: 10,
 };
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
@@ -266,54 +265,29 @@ const CreateCharacter = (): JSX.Element => {
   const resolvedSubclass = selectedClass === 'custom' ? customSubclass.trim() || undefined : subclass || undefined;
   const resolvedClassName = selectedClass === 'custom' ? customClassName.trim() : selectedClass;
 
-  const validateStep2 = (showAlert: boolean = true): boolean => {
-    if (!name.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Введіть ім’я персонажа.');
-      return false;
-    }
+  const buildWizardValidationInput = () => ({
+    name,
+    level,
+    isCustomRace,
+    customRace,
+    selectedClass,
+    customClassName,
+    backgroundKey,
+    customBackground,
+    storageMode,
+    inviteEmail,
+    statMethod,
+    pointBuyValid,
+  });
 
-    const lvl = Number(level);
-    if (!Number.isFinite(lvl) || lvl < 1 || lvl > 20) {
-      if (showAlert) Alert.alert('Помилка', 'Рівень має бути від 1 до 20.');
-      return false;
+  const validateWizardStep = (targetStep: number, showAlert: boolean = true): boolean => {
+    const result = safeParseCreateCharacterWizardStep(buildWizardValidationInput(), targetStep);
+    if (result.ok) return true;
+    if (showAlert) {
+      const message = formatSchemaErrors(result.issues)[0] || 'Невалідні дані форми.';
+      Alert.alert('Помилка', message);
     }
-
-    if (isCustomRace && !customRace.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Для власної раси вкажіть назву.');
-      return false;
-    }
-
-    return true;
-  };
-
-  const validateStep3 = (showAlert: boolean = true): boolean => {
-    if (selectedClass === 'custom' && !customClassName.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Для власного класу введіть назву.');
-      return false;
-    }
-    return true;
-  };
-
-  const validateStep5 = (showAlert: boolean = true): boolean => {
-    if (backgroundKey === 'custom' && !customBackground.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Для власної предісторії введіть назву.');
-      return false;
-    }
-    return true;
-  };
-
-  const validateStep6 = (showAlert: boolean = true): boolean => {
-    const email = inviteEmail.trim();
-    if (!email) return true;
-    if (!EMAIL_REGEX.test(email)) {
-      if (showAlert) Alert.alert('Помилка', 'Електронна пошта для шерінгу має некоректний формат.');
-      return false;
-    }
-    if (storageMode === 'local-only') {
-      if (showAlert) Alert.alert('Помилка', 'Шерінг доступний тільки у режимі "Локально + Хмара".');
-      return false;
-    }
-    return true;
+    return false;
   };
 
   const stepTitle = useMemo(() => {
@@ -358,14 +332,7 @@ const CreateCharacter = (): JSX.Element => {
   }, [storageMode, isSignedIn, inviteEmail]);
 
   const goNextFromStep = (): void => {
-    if (step === 2 && !validateStep2(true)) return;
-    if (step === 3 && !validateStep3(true)) return;
-    if (step === 4 && statMethod === 'pointbuy' && !pointBuyValid) {
-      Alert.alert('Помилка', 'Розподіл балів перевищує ліміт 27.');
-      return;
-    }
-    if (step === 5 && !validateStep5(true)) return;
-    if (step === 6 && !validateStep6(true)) return;
+    if (step >= 2 && step <= 6 && !validateWizardStep(step, true)) return;
     if (step < TOTAL_STEPS) setStep((prev) => prev + 1);
   };
 
@@ -381,24 +348,23 @@ const CreateCharacter = (): JSX.Element => {
   const onCreate = async () => {
     if (isCreating) return;
 
-    if (!validateStep2(true)) {
+    if (!validateWizardStep(2, true)) {
       setStep(2);
       return;
     }
-    if (!validateStep3(true)) {
+    if (!validateWizardStep(3, true)) {
       setStep(3);
       return;
     }
-    if (statMethod === 'pointbuy' && !pointBuyValid) {
+    if (!validateWizardStep(4, true)) {
       setStep(4);
-      Alert.alert('Помилка', 'Розподіл балів перевищує ліміт 27.');
       return;
     }
-    if (!validateStep5(true)) {
+    if (!validateWizardStep(5, true)) {
       setStep(5);
       return;
     }
-    if (!validateStep6(true)) {
+    if (!validateWizardStep(6, true)) {
       setStep(6);
       return;
     }
@@ -881,7 +847,7 @@ const CreateCharacter = (): JSX.Element => {
 
           <RacePicker />
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До класу' nextDisabled={!validateStep2(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До класу' nextDisabled={!validateWizardStep(2, false)} />
         </View>
       )}
 
@@ -889,7 +855,7 @@ const CreateCharacter = (): JSX.Element => {
         <View style={styles.card}>
           <Header title='Клас і підклас' />
           <ClassPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До характеристик' nextDisabled={!validateStep3(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До характеристик' nextDisabled={!validateWizardStep(3, false)} />
         </View>
       )}
 
@@ -930,7 +896,7 @@ const CreateCharacter = (): JSX.Element => {
             ))}
           </View>
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До передісторії' nextDisabled={statMethod === 'pointbuy' && !pointBuyValid} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До передісторії' nextDisabled={!validateWizardStep(4, false)} />
         </View>
       )}
 
@@ -939,7 +905,7 @@ const CreateCharacter = (): JSX.Element => {
           <Header title='Предісторія та стартовий інвентар' />
           <BackgroundPicker />
           <GearPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До збереження' nextDisabled={!validateStep5(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До збереження' nextDisabled={!validateWizardStep(5, false)} />
         </View>
       )}
 
@@ -1002,7 +968,7 @@ const CreateCharacter = (): JSX.Element => {
           />
           {storageMode === 'local-only' && <Text style={styles.helperText}>Шерінг доступний лише в режимі "Локально + Хмара".</Text>}
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До перевірки' nextDisabled={!validateStep6(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До перевірки' nextDisabled={!validateWizardStep(6, false)} />
         </View>
       )}
 

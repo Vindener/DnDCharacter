@@ -9,6 +9,7 @@ import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import type { DMCampaign, DMCampaignNote } from '@/types/DM';
 import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import { formatSchemaErrors, safeParseCampaignNoteFormInput } from '@/domain/schemas';
 import {
   deleteCampaignNote,
   flushCampaignNotesQueue,
@@ -189,9 +190,16 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
   const saveNote = async () => {
     if (!selectedCampaignId) return;
-    const title = titleInput.trim();
-    const content = contentInput.trim();
-    if (!title && !content) return;
+    const formValidation = safeParseCampaignNoteFormInput({
+      title: titleInput,
+      content: contentInput,
+    });
+    if (!formValidation.ok) {
+      const firstError = formatSchemaErrors(formValidation.issues)[0] || 'Заповніть заголовок або вміст нотатки.';
+      setStatusText(firstError);
+      return;
+    }
+    const { title, content } = formValidation.data;
 
     const current = activeNoteId ? notes.find((item) => item.id === activeNoteId) : null;
     const me = fbAuth.currentUser?.uid || 'local';

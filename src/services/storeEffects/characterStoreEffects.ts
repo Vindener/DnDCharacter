@@ -1,6 +1,6 @@
 import { uuid } from 'expo-modules-core';
 import type { CharacterEntity } from '@/domain/types';
-import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
+import { parseCharacter } from '@/domain/schemas';
 import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 import useSyncStore from '@/stores/syncStore';
 import type { CharacterStore } from '@/stores/characterStore';
@@ -40,7 +40,7 @@ type CharacterStoreEffects = Pick<
 >;
 
 function normalizeCharacter(character: CharacterEntity): CharacterEntity {
-  const normalized = createEmptyCharacter(character);
+  const normalized = parseCharacter(character);
   return {
     ...normalized,
     id: character.id || normalized.id || uuid.v4(),

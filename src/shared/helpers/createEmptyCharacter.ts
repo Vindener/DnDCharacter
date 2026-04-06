@@ -1,5 +1,5 @@
 import type { CharacterDraft, CharacterEntity } from '@/domain/types';
-import { normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
+import { parseCharacter } from '@/domain/schemas';
 
 const HIT_DICE_MAP: Record<string, number> = {
   barbarian: 12,
@@ -148,6 +148,6 @@ export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterE
     },
   };
 
-  return normalizeHomebrewV3(base);
+  return parseCharacter(base);
 }
 
