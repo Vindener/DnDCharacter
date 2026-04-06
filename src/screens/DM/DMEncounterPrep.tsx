@@ -5,11 +5,12 @@ import type { StackScreenProps } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, InitiativeSeed } from '@/types/DM';
-import { subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import type { DMCampaign, InitiativeSeed } from '@/dm/domain/types';
+import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
+import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
-import { CHALLENGE_XP, DIFFICULTY_THRESHOLDS, getMonsterMultiplier } from '@/shared/const/encounter';
+import { getCharacterCampaignLabel, isCharacterInCampaign } from '@/screens/DM/adapters';
 
 type Props = StackScreenProps<DMStackParamList, 'DMEncounterPrep'>;
 
@@ -69,12 +70,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   const selectedCampaign = useMemo(() => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null, [campaigns, selectedCampaignId]);
 
   const campaignParty = useMemo(() => {
-    return characters.filter((character) => {
-      if (!selectedCampaign) return false;
-      if (character.campaignId && character.campaignId === selectedCampaign.id) return true;
-      const legacy = String(character.campaign || '').trim().toLowerCase();
-      return legacy && legacy === selectedCampaign.name.trim().toLowerCase();
-    });
+    return characters.filter((character) => isCharacterInCampaign(character, selectedCampaign));
   }, [characters, selectedCampaign]);
 
   const party = useMemo(() => {
@@ -144,56 +140,20 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     setEncounterMonsters((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const result = useMemo(() => {
-    const thresholds = selectedParty.reduce(
-      (acc, player) => {
-        const level = Math.max(1, Math.min(20, Number(player.level) || 1));
-        const table = DIFFICULTY_THRESHOLDS[level];
-        if (!table) return acc;
-        acc.easy += table.easy;
-        acc.medium += table.medium;
-        acc.hard += table.hard;
-        acc.deadly += table.deadly;
-        acc.partySize += 1;
-        return acc;
-      },
-      { easy: 0, medium: 0, hard: 0, deadly: 0, partySize: 0 },
+  const encounterResult = useMemo(() => {
+    return evaluateEncounterDifficulty(
+      selectedParty.map((player) => ({ level: Number(player.level) || 1 })),
+      encounterMonsters.map((monster) => ({
+        challenge: String(monster.challenge || ''),
+        count: Math.max(1, Number(monster.count) || 1),
+      })),
     );
-
-    let baseXP = 0;
-    let monstersCount = 0;
-    for (const monster of encounterMonsters) {
-      const xp = CHALLENGE_XP[monster.challenge as keyof typeof CHALLENGE_XP] ?? 0;
-      baseXP += xp * Math.max(1, monster.count);
-      monstersCount += Math.max(1, monster.count);
-    }
-
-    const multiplier = getMonsterMultiplier(monstersCount, thresholds.partySize || 1);
-    const adjustedXP = Math.round(baseXP * multiplier);
-    let difficulty: 'Немає даних' | 'Дуже легко' | 'Легко' | 'Середньо' | 'Складно' | 'Смертельно' = 'Немає даних';
-
-    if (adjustedXP > 0) {
-      if (adjustedXP < thresholds.easy) difficulty = 'Дуже легко';
-      else if (adjustedXP < thresholds.medium) difficulty = 'Легко';
-      else if (adjustedXP < thresholds.hard) difficulty = 'Середньо';
-      else if (adjustedXP < thresholds.deadly) difficulty = 'Складно';
-      else difficulty = 'Смертельно';
-    }
-
-    const xpPerPlayer = thresholds.partySize > 0 ? Math.round(adjustedXP / thresholds.partySize) : 0;
-
-    return {
-      selectedParty,
-      adjustedXP,
-      xpPerPlayer,
-      difficulty,
-    };
   }, [encounterMonsters, selectedParty]);
 
   const startInitiative = () => {
     const entries: InitiativeSeed['entries'] = [];
 
-    result.selectedParty.forEach((player) => {
+    selectedParty.forEach((player) => {
       entries.push({
         id: `player-${player.id}`,
         name: player.name || 'Гравець',
@@ -258,7 +218,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Персонажі ({result.selectedParty.length})</Text>
+        <Text style={styles.title}>Персонажі ({selectedParty.length})</Text>
         <View style={styles.statsRow}>
           <Pressable
             style={[styles.statChip, playerSourceMode === 'campaign' ? { borderColor: colors.text } : null]}
@@ -279,11 +239,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         {!party.length && playerSourceMode === 'all' && <Text style={styles.hint}>У списку персонажів поки порожньо.</Text>}
         {party.map((player) => {
           const selected = selectedPlayers[player.id];
-          const legacyCampaign = String(player.campaign || '').trim();
-          const campaignLabel =
-            (player.campaignId ? campaignNamesById.get(player.campaignId) : null) ||
-            legacyCampaign ||
-            'Без кампанії';
+          const campaignLabel = getCharacterCampaignLabel(player, campaignNamesById);
           return (
             <Pressable
               key={player.id}
@@ -365,9 +321,9 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       <View style={styles.card}>
         <Text style={styles.title}>Оцінка складності</Text>
         <Text style={styles.updateMeta}>Кампанія: {selectedCampaign?.name || '—'}</Text>
-        <Text style={styles.updateMeta}>Складність: {result.difficulty}</Text>
-        <Text style={styles.updateMeta}>Скоригований XP: {result.adjustedXP}</Text>
-        <Text style={styles.updateMeta}>XP на гравця: {result.xpPerPlayer}</Text>
+        <Text style={styles.updateMeta}>Складність: {encounterResult.difficulty}</Text>
+        <Text style={styles.updateMeta}>Скоригований XP: {encounterResult.adjustedXP}</Text>
+        <Text style={styles.updateMeta}>XP на гравця: {encounterResult.xpPerPlayer}</Text>
 
         <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Почати ініціативу</Text>

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { uuid } from 'expo-modules-core';
 import type { CharacterCustomResource } from '@/types/Character';
-import type { ResourceTemplate } from '@/shared/const/TrackerTemplates';
+import type { ResourceTemplate } from '@/dm/domain/types';
 import type { DmStore } from '@/stores/dmStore';
 import { createStorageEnvelope, normalizeStorageEnvelope } from '@/domain/migrations';
 
@@ -212,4 +212,5 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
     },
   };
 }
+
 

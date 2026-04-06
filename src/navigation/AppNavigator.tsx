@@ -12,7 +12,7 @@ import DMNavigator from '@/navigation/DMNavigator';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
-import type { InitiativeSeed } from '@/types/DM';
+import type { InitiativeSeed } from '@/dm/domain/types';
 
 export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
@@ -77,6 +77,7 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
+
 
 
 

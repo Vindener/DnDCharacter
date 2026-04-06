@@ -15,8 +15,9 @@ import { fbAuth } from '@/services/firebase';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { getShareDisplayStatus, getSyncDisplayStatus } from '@/shared/helpers/collaboration/status';
 import type { CharacterViewModel } from '@/types/Character';
-import { ensureCampaignForName, getCampaignForCharacter, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
-import type { DMCampaign } from '@/types/DM';
+import { ensureCampaignForName, getCampaignForLink, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import type { DMCampaign } from '@/dm/domain/types';
+import { buildCampaignFallbackIdForCharacter, toCampaignLinkInput } from '@/screens/DM/adapters';
 
 type PartyItem = {
   id: string;
@@ -105,8 +106,8 @@ const DMPartyOverview = () => {
         source,
       });
 
-      const campaign = getCampaignForCharacter(payload, campaigns);
-      const campaignId = campaign?.id || payload.campaignId || `legacy-${String(payload.campaign || 'uncategorized').trim().toLowerCase()}`;
+      const campaign = getCampaignForLink(toCampaignLinkInput(payload), campaigns);
+      const campaignId = campaign?.id || payload.campaignId || buildCampaignFallbackIdForCharacter(payload);
       const campaignName = campaign?.name || String(payload.campaign || 'Кампанія не призначена');
 
       byId.set(payload.id, {

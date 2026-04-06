@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './style';
@@ -15,9 +15,9 @@ import { onGoogleButtonPress } from '@/shared/services/auth';
 import useAppRoleStore from '@/context/AppRole-store';
 import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
-import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
-import { loadLocalCampaignNotes } from '@/services/dmCampaignNotes';
-import type { DMCampaign } from '@/types/DM';
+import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import { loadLocalCampaignNotes } from '@/dm/repositories/campaignNotesRepository';
+import type { DMCampaign } from '@/dm/domain/types';
 import type { CharacterViewModel } from '@/types/Character';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
@@ -56,6 +56,11 @@ const DM: React.FC = () => {
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [notesCount, setNotesCount] = useState(0);
 
+  const refreshNotesCount = React.useCallback(async () => {
+    const notes = await loadLocalCampaignNotes();
+    setNotesCount(notes.length);
+  }, []);
+
   const isSignedIn = useMemo(() => Boolean(fbAuth.currentUser), [authVersion]);
   const isOnline = isNetworkOnline(netInfo.isConnected);
 
@@ -79,6 +84,12 @@ const DM: React.FC = () => {
       if (typeof unsubCampaigns === 'function') unsubCampaigns();
     };
   }, [authVersion]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      void refreshNotesCount();
+    }, [refreshNotesCount]),
+  );
 
   useEffect(() => {
     if (!fbAuth.currentUser) {

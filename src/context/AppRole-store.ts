@@ -1,1 +1,1 @@
-export { default } from '@/stores/dmStore';
+export { default } from '@/stores/appRoleStore';

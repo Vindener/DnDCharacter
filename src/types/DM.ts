@@ -1,13 +1,19 @@
 export type {
+  CampaignLinkInput,
   DMCampaign,
   DMCampaignNote,
   DMCampaignNoteConflictRemote,
   DMCampaignNoteQueueItem,
   DMCampaignNoteSyncState,
   DMNoteSyncDisplayStatus,
+  EncounterDifficultyResult,
+  EncounterMonsterInput,
+  EncounterPlayerInput,
   EncounterPrepDraft,
   EncounterPrepMonster,
   EncounterPrepPlayer,
   InitiativeSeed,
   InitiativeSeedItem,
-} from '@/domain/types/dm';
+  ResourceTemplate,
+  TrackerTemplateResource,
+} from '@/dm/domain/types';

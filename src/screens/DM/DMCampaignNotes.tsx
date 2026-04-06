@@ -6,8 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, DMCampaignNote } from '@/types/DM';
-import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import type { DMCampaign, DMCampaignNote } from '@/dm/domain/types';
+import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import { formatSchemaErrors, safeParseCampaignNoteFormInput } from '@/domain/schemas';
 import {
   deleteCampaignNote,
@@ -16,7 +16,7 @@ import {
   resolveCampaignNoteConflict,
   subscribeCampaignNotes,
   upsertCampaignNote,
-} from '@/services/dmCampaignNotes';
+} from '@/dm/repositories/campaignNotesRepository';
 import { fbAuth } from '@/services/firebase';
 import useAppRoleStore from '@/context/AppRole-store';
 import { getShareDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';

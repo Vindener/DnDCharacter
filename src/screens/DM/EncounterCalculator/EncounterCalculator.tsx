@@ -7,7 +7,7 @@ import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { Modal } from '@/shared/components/Modal/Modal';
-import { DIFFICULTY_THRESHOLDS, CHALLENGE_XP, getMonsterMultiplier } from '@/shared/const/encounter';
+import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
 import { getStyles } from './style';
 
 interface PlayerGroup {
@@ -73,50 +73,28 @@ const EncounterCalculator: React.FC = () => {
   };
 
   const result = useMemo(() => {
-    const thresholds = players.reduce(
-      (acc, pg) => {
-        const level = Math.max(1, Math.min(20, Number(pg.level) || 1));
-        const count = Math.max(0, Number(pg.count) || 0);
-        const th = DIFFICULTY_THRESHOLDS[level];
-        if (!th) return acc;
-        acc.easy += th.easy * count;
-        acc.medium += th.medium * count;
-        acc.hard += th.hard * count;
-        acc.deadly += th.deadly * count;
-        acc.partySize += count;
-        return acc;
-      },
-      { easy: 0, medium: 0, hard: 0, deadly: 0, partySize: 0 }
-    );
-
-    let baseXP = 0;
-    let totalCount = 0;
-    for (const mg of monsters) {
-      const count = Math.max(0, Number(mg.count) || 0);
-      totalCount += count;
-      const xp = CHALLENGE_XP[mg.cr as keyof typeof CHALLENGE_XP] ?? 0;
-      baseXP += xp * count;
-    }
-    const mult = getMonsterMultiplier(totalCount, thresholds.partySize);
-    const adjustedXP = Math.round(baseXP * mult);
-
-    let difficulty: 'Немає даних' | 'Дуже легко' | 'Легко' | 'Середньо' | 'Складно' | 'Смертельно' = 'Немає даних';
-    if (adjustedXP > 0) {
-      if (adjustedXP < thresholds.easy) difficulty = 'Дуже легко';
-      else if (adjustedXP < thresholds.medium) difficulty = 'Легко';
-      else if (adjustedXP < thresholds.hard) difficulty = 'Середньо';
-      else if (adjustedXP < thresholds.deadly) difficulty = 'Складно';
-      else difficulty = 'Смертельно';
+    const playerInputs: Array<{ level: number }> = [];
+    for (const playerGroup of players) {
+      const level = Math.max(1, Math.min(20, Number(playerGroup.level) || 1));
+      const count = Math.max(0, Number(playerGroup.count) || 0);
+      for (let index = 0; index < count; index += 1) {
+        playerInputs.push({ level });
+      }
     }
 
-    const xpPerPlayer = thresholds.partySize > 0 ? Math.round(adjustedXP / thresholds.partySize) : 0;
+    const monsterInputs = monsters.map((monsterGroup) => ({
+      challenge: String(monsterGroup.cr || ''),
+      count: Math.max(0, Number(monsterGroup.count) || 0),
+    }));
+
+    const evaluated = evaluateEncounterDifficulty(playerInputs, monsterInputs);
 
     return {
-      adjustedXP,
-      difficulty,
-      xpPerPlayer,
-      partySize: thresholds.partySize,
-      totalXP: adjustedXP,
+      adjustedXP: evaluated.adjustedXP,
+      difficulty: evaluated.difficulty,
+      xpPerPlayer: evaluated.xpPerPlayer,
+      partySize: evaluated.thresholds.partySize,
+      totalXP: evaluated.adjustedXP,
     };
   }, [players, monsters]);
 

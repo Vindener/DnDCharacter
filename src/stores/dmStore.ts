@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { AppRole } from '@/types/Product';
 import type { MonsterDto } from '@/types/Monster';
 import type { CharacterCustomResource } from '@/types/Character';
-import type { ResourceTemplate } from '@/shared/const/TrackerTemplates';
+import type { ResourceTemplate } from '@/dm/domain/types';
 import { createDmStoreEffects } from '@/services/storeEffects/dmStoreEffects';
 
 export interface DmStore {
@@ -50,3 +50,4 @@ const useDmStore = create<DmStore>((set, get) => {
 });
 
 export default useDmStore;
+
