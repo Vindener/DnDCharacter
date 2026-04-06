@@ -23,7 +23,7 @@ type CharacterHeaderProps = Pick<
   | 'toggleSessionMode'
 >;
 
-export function CharacterHeader({
+function CharacterHeaderBase({
   styles,
   colors,
   characterData,
@@ -120,3 +120,4 @@ export function CharacterHeader({
   );
 }
 
+export const CharacterHeader = React.memo(CharacterHeaderBase);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Pressable, TextInput as RNTextInput, TouchableOpacity, View } from 'react-native';
+import { Text, Pressable, TextInput as RNTextInput, TouchableOpacity, View, FlatList } from 'react-native';
 import Dice from '@/screens/Dice/Dice';
 import { Modal } from '@/shared/components/Modal/Modal';
 import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
@@ -75,7 +75,7 @@ type CharacterModalsProps = Pick<
 >;
 
 const QUICK_DICE_OPTIONS = [4, 6, 8, 10, 12, 20] as const;
-const LEVEL_STAT_FIELDS: Array<{ key: keyof CharacterActionsReadyState['characterData']['stats']; label: string }> = [
+const LEVEL_STAT_FIELDS: Array<{ key: keyof CharacterActionsReadyState['characterData']['stats'] & string; label: string }> = [
   { key: 'strength', label: 'STR' },
   { key: 'dexterity', label: 'DEX' },
   { key: 'constitution', label: 'CON' },
@@ -84,7 +84,7 @@ const LEVEL_STAT_FIELDS: Array<{ key: keyof CharacterActionsReadyState['characte
   { key: 'charisma', label: 'CHA' },
 ];
 
-export function CharacterModals({
+function CharacterModalsBase({
   styles,
   colors,
   characterData,
@@ -166,6 +166,25 @@ export function CharacterModals({
     const value = Math.floor(Math.random() * quickDiceSides) + 1;
     setQuickDiceResult(value);
   }, [quickDiceSides]);
+  const quickSpellCandidateKeyExtractor = React.useCallback(
+    (spell: CharacterActionsReadyState['quickSpellCandidates'][number]) => `quick-spell-candidate-${spell.id}`,
+    [],
+  );
+
+  const renderQuickSpellCandidate = React.useCallback(
+    ({ item }: { item: CharacterActionsReadyState['quickSpellCandidates'][number] }) => (
+      <Pressable
+        style={styles.secondaryAction}
+        onPress={() => pickExistingSpellForQuickAdd(item)}
+        android_ripple={{ color: colors.ripple }}
+      >
+        <Text style={styles.secondaryActionText}>
+          {item.name} • {item.level === 0 ? 'каніпс' : `рівень ${item.level}`}
+        </Text>
+      </Pressable>
+    ),
+    [colors.ripple, pickExistingSpellForQuickAdd, styles.secondaryAction, styles.secondaryActionText],
+  );
 
   return (
     <>
@@ -217,7 +236,7 @@ export function CharacterModals({
               <Text style={styles.blockTextMuted}>{field.label}</Text>
               <RNTextInput
                 value={levelChangeDraftText.stats[field.key]}
-                onChangeText={(value) => setLevelDraftStat(field.key, value)}
+                onChangeText={(value) => setLevelDraftStat(field.key as keyof CharacterActionsReadyState['characterData']['stats'], value)}
                 keyboardType='number-pad'
                 style={styles.modalInput}
                 placeholder='10'
@@ -341,19 +360,16 @@ export function CharacterModals({
           placeholder='Введи назву або школу'
           placeholderTextColor={colors.textSecondary}
         />
-        {quickSpellCandidates.length ? (
-          quickSpellCandidates.map((spell) => (
-            <Pressable
-              key={`quick-spell-candidate-${spell.id}`}
-              style={styles.secondaryAction}
-              onPress={() => pickExistingSpellForQuickAdd(spell)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={styles.secondaryActionText}>
-                {spell.name} • {spell.level === 0 ? 'каніпс' : `рівень ${spell.level}`}
-              </Text>
-            </Pressable>
-          ))
+                {quickSpellCandidates.length ? (
+          <FlatList
+            data={quickSpellCandidates}
+            renderItem={renderQuickSpellCandidate}
+            keyExtractor={quickSpellCandidateKeyExtractor}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            windowSize={3}
+            scrollEnabled={false}
+          />
         ) : (
           <Text style={styles.blockTextMuted}>Нічого не знайдено у spellbook.</Text>
         )}
@@ -491,4 +507,8 @@ export function CharacterModals({
     </>
   );
 }
+
+export const CharacterModals = React.memo(CharacterModalsBase);
+
+
 

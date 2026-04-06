@@ -23,7 +23,7 @@ type CharacterTabContentProps = {
   renderHomebrewEdit: () => React.ReactNode;
 };
 
-export function CharacterTabContent(props: CharacterTabContentProps) {
+function CharacterTabContentBase(props: CharacterTabContentProps) {
   const {
     selectedTab,
     mode,
@@ -58,3 +58,5 @@ export function CharacterTabContent(props: CharacterTabContentProps) {
   }
   return <HomebrewTab mode={mode} renderPlay={renderHomebrewPlay} renderEdit={renderHomebrewEdit} />;
 }
+
+export const CharacterTabContent = React.memo(CharacterTabContentBase);

@@ -18,6 +18,8 @@ export interface SyncStore {
   removeCharacterSync: (characterId: string) => Promise<void>;
 }
 
+export { selectSyncByCharacterId, selectSyncStoreActions } from '@/stores/selectors/syncStoreSelectors';
+
 const useSyncStore = create<SyncStore>((set, get) => {
   const effects = createSyncStoreEffects({ set, get });
 

@@ -35,6 +35,12 @@ export interface CharacterStore {
   removeCharacter: (id: string) => Promise<void>;
 }
 
+export {
+  selectActiveCharacter,
+  selectCharacterStoreActions,
+  selectCharacterStoreBasics,
+} from '@/stores/selectors/characterStoreSelectors';
+
 const useCharacterStore = create<CharacterStore>((set, get) => {
   const effects = createCharacterStoreEffects({ set, get });
 

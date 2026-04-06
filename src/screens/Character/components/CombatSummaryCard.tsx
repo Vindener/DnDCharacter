@@ -11,7 +11,7 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-export function CombatSummaryCard({
+function CombatSummaryCardBase({
   styles,
   characterData,
   hpPercent,
@@ -64,3 +64,22 @@ export function CombatSummaryCard({
     </View>
   );
 }
+
+function areEqual(prev: CombatSummaryCardProps, next: CombatSummaryCardProps): boolean {
+  return (
+    prev.styles === next.styles
+    && prev.sectionConflictLabel === next.sectionConflictLabel
+    && prev.hpPercent === next.hpPercent
+    && prev.proficiency === next.proficiency
+    && prev.passivePerception === next.passivePerception
+    && prev.characterData.hp.current === next.characterData.hp.current
+    && prev.characterData.hp.max === next.characterData.hp.max
+    && prev.characterData.hp.temp === next.characterData.hp.temp
+    && prev.characterData.ac === next.characterData.ac
+    && prev.characterData.speed === next.characterData.speed
+    && prev.characterData.initiative === next.characterData.initiative
+    && prev.characterData.spells.spellSaveDC === next.characterData.spells.spellSaveDC
+  );
+}
+
+export const CombatSummaryCard = React.memo(CombatSummaryCardBase, areEqual);

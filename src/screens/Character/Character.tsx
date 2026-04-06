@@ -53,7 +53,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     tabHistory,
     getHistoryAuthorLabel,
   } = viewState;
-
   return (
     <View style={styles.screen}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -160,4 +159,5 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
+
 

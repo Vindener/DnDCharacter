@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { View, Text, TouchableOpacity, Pressable, TextInput as RNTextInput } from 'react-native';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -14,14 +15,18 @@ import type {
   CustomFieldType,
   TrackerResetRule,
 } from '@/types/Character';
-import useCharacterStore from '@/context/Character-store';
+import useCharacterStore, {
+  selectActiveCharacter,
+  selectCharacterStoreActions,
+  selectCharacterStoreBasics,
+} from '@/context/Character-store';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
 import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
 import type { CharacterSheet } from '@/repositories/characterCloudRepository';
 import { fetchCharacterSheet, subscribeCharacterSheet } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
-import useSyncStore from '@/context/Sync-store';
+import useSyncStore, { selectSyncByCharacterId, selectSyncStoreActions } from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 import { appendQuickSessionNote, isHomebrewCharacter } from '@/shared/helpers/homebrew';
@@ -265,16 +270,14 @@ function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
 }
 
 export function useCharacterActions({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
-  const storeCharacters = useCharacterStore((s) => s.characters);
-  const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
-  const lastSessionCharacterId = useCharacterStore((s) => s.lastSessionCharacterId);
-  const setLastSessionCharacterId = useCharacterStore((s) => s.setLastSessionCharacterId);
-  const updateCharacter = useCharacterStore((s) => s.updateCharacter);
+  const fallbackFromStore = useCharacterStore(selectActiveCharacter);
+  const { lastSessionCharacterId } = useCharacterStore(useShallow(selectCharacterStoreBasics));
+  const { setLastSessionCharacterId, updateCharacter } = useCharacterStore(useShallow(selectCharacterStoreActions));
 
   const routeCharacter = route?.params?.character;
-  const fallbackFromStore = storeCharacters.find((c) => c.id === currentCharacterId) || storeCharacters[0];
   const isCharacterMissing = !routeCharacter && !fallbackFromStore;
   const baseCharacter = routeCharacter || fallbackFromStore || createEmptyCharacter({ id: 'missing-character' });
+  const syncCharacterId = routeCharacter?.id || fallbackFromStore?.id || null;
 
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -290,17 +293,19 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const [isSharedSheet, setIsSharedSheet] = useState<boolean>(false);
   const [isOwnedByMe, setIsOwnedByMe] = useState<boolean>(true);
   const [syncFeedback, setSyncFeedback] = useState<string>('Очікування локальних змін');
-  const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
-  const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
-  const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
-  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
-  const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
-  const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
-  const markCloudDownloaded = useSyncStore((s) => s.markCloudDownloaded);
-  const markConflict = useSyncStore((s) => s.markConflict);
-  const clearConflicts = useSyncStore((s) => s.clearConflicts);
-  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
-  const markSyncError = useSyncStore((s) => s.markSyncError);
+  const currentSync = useSyncStore(selectSyncByCharacterId(syncCharacterId));
+  const {
+    loadSyncMeta,
+    ensureCharacterSync,
+    setCloudAvailability,
+    markLocalDraftPaths,
+    markCloudUploaded,
+    markCloudDownloaded,
+    markConflict,
+    clearConflicts,
+    setSyncTransport,
+    markSyncError,
+  } = useSyncStore(useShallow(selectSyncStoreActions));
   const roleMode = useAppRoleStore((s) => s.role);
   const userTemplates = useTrackerTemplateStore((s) => s.userTemplates);
   const loadUserTemplates = useTrackerTemplateStore((s) => s.loadUserTemplates);
@@ -448,7 +453,6 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const isQuickSpellAlreadyPrepared = Boolean(selectedQuickSpellKey && preparedSpellNameSet.has(selectedQuickSpellKey));
   const canAddPreparedFromQuickModal =
     preparedSpellsLimit === null || isQuickSpellAlreadyPrepared || preparedSpellsCount < preparedSpellsLimit;
-  const currentSync = syncByCharacter[baseCharacter.id];
   const conflictPaths = currentSync?.conflictPaths || [];
   const syncStatusLabel = useMemo(() => getSyncDisplayStatus(currentSync, netInfo.isConnected), [currentSync, netInfo.isConnected]);
   const shareStatusLabel = useMemo(
@@ -2974,4 +2978,7 @@ function getSheetOwners(doc: CharacterSheet | null): { ownerUid: string; owners:
     editors: Array.isArray(doc?.editors) ? doc.editors.filter(Boolean) : [],
   };
 }
+
+
+
 
