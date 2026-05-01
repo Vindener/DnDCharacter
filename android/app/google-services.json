@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "608733335623",
+    "firebase_url": "https://mythgatednd-default-rtdb.firebaseio.com",
+    "project_id": "mythgatednd",
+    "storage_bucket": "mythgatednd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608733335623:android:0aa051156d27c6094be162",
+        "android_client_info": {
+          "package_name": "com.vind.MythgateDND"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608733335623-6bgmajrgrfg65emmv8fldqh30dgq7ukc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "1610458e0707cc8b26c506d844c6679579a66a56"
+          }
+        },
+        {
+          "client_id": "608733335623-7c1448c3tjlhqoippdusvm4re1ptur5d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "4e85c6ca38364343afa1109e8508854aca6d0e51"
+          }
+        },
+        {
+          "client_id": "608733335623-qfl5mpc39o1k4jhl5umjcq5t4o7f5c3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "274c3c528551689d4654c7db08679c30048f672b"
+          }
+        },
+        {
+          "client_id": "608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBF45tfsVZ_2r2miNnRTZTnvwmhYWBEnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "608733335623-abe658otofdkfk922oqhfaj00jhc4sp3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vindener.firebaseexpoproject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

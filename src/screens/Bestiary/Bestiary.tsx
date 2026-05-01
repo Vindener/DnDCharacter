@@ -94,7 +94,7 @@ const Bestiary = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID='bestiary.screen'>
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Швидкий огляд DM</Text>
         <Text style={styles.sectionHint}>Фільтри для швидкого пошуку монстрів у сесії та список закріплень для сутички.</Text>
@@ -104,6 +104,7 @@ const Bestiary = () => {
           style={styles.search}
           value={search}
           onChangeText={setSearch}
+          testID='bestiary.searchInput'
         />
 
         <View style={styles.laneRow}>
@@ -189,6 +190,7 @@ const Bestiary = () => {
               key={`pin-${monster.id}`}
               monster={monster}
               isPinned={true}
+              cardTestID='bestiary.monsterCard'
               onTogglePin={(monsterId) => {
                 void togglePinnedMonster(monsterId);
               }}
@@ -210,6 +212,7 @@ const Bestiary = () => {
             <MonsterCard
               monster={item}
               isPinned={pinnedMonsterIds.includes(item.id)}
+              cardTestID='bestiary.monsterCard'
               onTogglePin={(monsterId) => {
                 void togglePinnedMonster(monsterId);
               }}

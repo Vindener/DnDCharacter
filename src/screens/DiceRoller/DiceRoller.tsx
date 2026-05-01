@@ -20,7 +20,7 @@ const DiceRoller: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID='diceRoller.screen'>
       <Text style={styles.title}>Вибери кубик:</Text>
       <FlatList data={diceTypes} keyExtractor={(item) => item.toString()} renderItem={renderItem} />
     </View>
