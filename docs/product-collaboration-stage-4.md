@@ -1,9 +1,5 @@
 # Stage 4: Cloud Collaboration as Flagship
 
-> Historical planning document.
-> Do not use this as the current sprint plan.
-> Current roadmap: `docs/ux-ui-roadmap.md`.
-
 Date: 2026-03-29
 Project: DnD Character (mobile)
 
@@ -65,9 +61,9 @@ Move cloud/shared from a background technical feature to a visible product advan
   - `summary?: string`
 - `upsertCharacterSheetFromLocal` now supports `actorRole` in options for history attribution.
 
-## Historical Acceptance Signals
+## Acceptance Signals
 
-In the old stage plan, Stage 4 was considered complete when:
+Stage 4 is complete when:
 
 1. User can see sync/share state from all primary collaboration surfaces.
 2. Offline edits are explicitly represented as pending sync.

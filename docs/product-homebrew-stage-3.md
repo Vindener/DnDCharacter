@@ -1,9 +1,5 @@
 # Stage 3: Homebrew-first System
 
-> Historical planning document.
-> Do not use this as the current sprint plan.
-> Current roadmap: `docs/ux-ui-roadmap.md`.
-
 Date: 2026-03-29  
 Project: DnD Character (mobile)
 
@@ -23,7 +19,7 @@ Make character sheets usable for non-standard systems and campaign rules without
 
 - Stage 3 is officially Homebrew-first.
 - Collaboration/sync quality focus is moved to Stage 4.
-- Historically, Stage 1 (`product-foundation-stage-1.md`) was used for role model and sync policy.
+- Stage 1 (`product-foundation-stage-1.md`) remains source-of-truth for role model and sync policy.
 
 ## Scope Delivered In This Iteration
 
@@ -86,9 +82,9 @@ Make character sheets usable for non-standard systems and campaign rules without
   - `homebrew.entries`
 - Homebrew conflict labels are surfaced in Character tab sections.
 
-## Historical Definition Of Done For Stage 3
+## Definition Of Done For Stage 3
 
-In the old stage plan, Stage 3 was considered complete when:
+Stage 3 is complete when:
 
 1. All 6 character templates can be selected at creation and prefill correctly.
 2. Character Homebrew status is derived by a single helper, not ad hoc checks.

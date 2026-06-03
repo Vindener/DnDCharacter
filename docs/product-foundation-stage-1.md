@@ -1,9 +1,5 @@
 # Stage 1: Product Foundation / UX Foundation
 
-> Historical planning document.
-> Do not use this as the current sprint plan.
-> Current roadmap: `docs/ux-ui-roadmap.md`.
-
 Date: 2026-03-29
 Project: DnD Character (mobile)
 
@@ -241,9 +237,9 @@ DM workspace must include:
 - initiative board;
 - shared change workflow (recent updates + conflicts).
 
-## 9. Historical Stage 1 Deliverables (Definition of Done)
+## 9. Stage 1 Deliverables (Definition of Done)
 
-In the old stage plan, Stage 1 was considered complete when:
+Stage 1 is complete when:
 
 1. Positioning and product pillars are fixed.
 2. Role model (`Player`, `DM`, `Hybrid`) is explicit.
@@ -283,6 +279,6 @@ Stage 1 file scope is now fully implemented in product foundation layer:
 ## 12. Cross-stage Note (2026-03-29)
 
 - Stage 3 is defined as Homebrew-first system and is documented in `docs/product-homebrew-stage-3.md`.
-- Historically, Stage 1 was used for role/capability model and baseline sync/conflict policy.
+- Stage 1 remains source-of-truth for role/capability model and baseline sync/conflict policy.
 
 

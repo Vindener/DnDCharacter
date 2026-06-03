@@ -1,42 +1,9 @@
-import type { Stats } from '@/types/Stats';
-import type { Skills } from '@/types/Skills';
+
+import { Skills } from '@/types/Skills';
 
 export const abilityMod = (score: number): number => Math.floor((score - 10) / 2);
 
-type AbilityKey = keyof Stats;
-type SkillKey = keyof Skills;
-
-const DEFAULT_STATS: Stats = {
-  strength: 10,
-  dexterity: 10,
-  constitution: 10,
-  intelligence: 10,
-  wisdom: 10,
-  charisma: 10,
-};
-
-const SKILL_KEYS: SkillKey[] = [
-  'acrobatics',
-  'animalHandling',
-  'arcana',
-  'athletics',
-  'deception',
-  'history',
-  'insight',
-  'intimidation',
-  'investigation',
-  'medicine',
-  'nature',
-  'perception',
-  'performance',
-  'persuasion',
-  'religion',
-  'sleightOfHand',
-  'stealth',
-  'survival',
-];
-
-export const skillAbilityMap: Record<SkillKey, AbilityKey> = {
+export const skillAbilityMap: Record<keyof Skills, keyof any> = {
   acrobatics: 'dexterity',
   animalHandling: 'wisdom',
   arcana: 'intelligence',
@@ -55,41 +22,29 @@ export const skillAbilityMap: Record<SkillKey, AbilityKey> = {
   sleightOfHand: 'dexterity',
   stealth: 'dexterity',
   survival: 'wisdom',
-};
+} as any;
 
-function normalizeStats(stats?: Partial<Stats>): Stats {
-  return {
-    ...DEFAULT_STATS,
-    ...(stats || {}),
-  };
+export function computeSkills(stats: any): Skills {
+  const skills: any = {};
+  (Object.keys(skillAbilityMap) as (keyof Skills)[]).forEach((sk) => {
+    const abil = skillAbilityMap[sk] as any;
+    skills[sk] = abilityMod(stats?.[abil] ?? 10);
+  });
+  return skills as Skills;
 }
 
-export function computeSkills(stats?: Partial<Stats>): Skills {
-  const safeStats = normalizeStats(stats);
-  const skills = {} as Skills;
-  for (const skillKey of SKILL_KEYS) {
-    const abilityKey = skillAbilityMap[skillKey];
-    skills[skillKey] = abilityMod(safeStats[abilityKey]);
-  }
-  return skills;
-}
-
-export function computeAC(stats: Partial<Stats> | undefined, cls: string): number {
-  const safeStats = normalizeStats(stats);
-  const dex = abilityMod(safeStats.dexterity);
+export function computeAC(stats: any, cls: string): number {
+  const dex = abilityMod(stats?.dexterity ?? 10);
   const base = 10 + dex;
-  const classKey = (cls || '').toLowerCase();
-
-  if (classKey === 'barbarian') {
-    const con = abilityMod(safeStats.constitution);
+  const c = (cls || '').toLowerCase();
+  if (c === 'barbarian') {
+    const con = abilityMod(stats?.constitution ?? 10);
     return Math.max(base, 10 + dex + con);
   }
-
-  if (classKey === 'monk') {
-    const wis = abilityMod(safeStats.wisdom);
+  if (c === 'monk') {
+    const wis = abilityMod(stats?.wisdom ?? 10);
     return Math.max(base, 10 + dex + wis);
   }
-
   return base;
 }
 
@@ -116,7 +71,7 @@ export function getHitDieForClass(cls: string): number {
 export function computeHP(level: number, cls: string, conScore: number): { max: number, current: number, temp: number, hitDice: string } {
   const hitDie = getHitDieForClass(cls);
   const conMod = abilityMod(conScore ?? 10);
-  let max = hitDie + conMod;
+  let max = hitDie + conMod; // level 1
   if (level > 1) {
     const perLevel = Math.floor(hitDie / 2) + 1 + conMod;
     max += perLevel * (level - 1);

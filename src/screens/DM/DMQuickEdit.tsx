@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
@@ -9,11 +8,10 @@ import { getStyles } from '@/screens/DM/style';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
 import { appendQuickSessionNote } from '@/shared/helpers/homebrew';
-import type { CharacterViewModel } from '@/types/Character';
+import type { CharacterDto } from '@/types/Character';
+import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import { Modal } from '@/shared/components/Modal/Modal';
-import { syncToCloud } from '@/services/characterSyncCoordinator';
-import { rd, sp } from '@/shared/styles/tokens';
 
 type Props = StackScreenProps<DMStackParamList, 'DMQuickEdit'>;
 
@@ -33,7 +31,6 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
-  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
   const markSyncError = useSyncStore((s) => s.markSyncError);
@@ -47,7 +44,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
   const [tempMaxHp, setTempMaxHp] = useState('');
   const [tempTempHp, setTempTempHp] = useState('');
 
-  const commitPatch = async (buildNext: (prev: CharacterViewModel) => CharacterViewModel, paths: string[]) => {
+  const commitPatch = async (buildNext: (prev: CharacterDto) => CharacterDto, paths: string[]) => {
     const current = useCharacterStore.getState().characters.find((item) => item.id === characterId);
     if (!current) return;
 
@@ -63,35 +60,20 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
       return;
     }
 
-    const result = await syncToCloud({
-      character: next,
-      syncState: useSyncStore.getState().syncByCharacter[current.id],
-      actorRole: 'DM',
-      syncPort: {
-        ensureCharacterSync,
-        setCloudAvailability,
-        markCloudUploaded,
-        setSyncTransport,
-        markSyncError,
-      },
-      isOnline: true,
-      historyPaths: paths,
-      syncingMessage: 'Синхронізація швидкого редагування DM...',
-      syncedMessage: 'Синхронізовано',
-      conflictFallbackPath: paths[0] || 'overview.identity',
-    });
-
-    if (result.status === 'synced') {
+    try {
+      await setSyncTransport(current.id, 'syncing', 'Синхронізація швидкого редагування DM...');
+      await upsertCharacterSheetFromLocal(next, {
+        historyPaths: paths,
+        actorRole: 'DM',
+      });
+      await markCloudUploaded(current.id);
+      await setSyncTransport(current.id, 'synced', 'Синхронізовано');
       setSyncFeedback('Синхронізовано');
-      return;
+    } catch (error) {
+      const message = String((error as Error)?.message || 'Помилка синхронізації');
+      await markSyncError(current.id, message);
+      setSyncFeedback(message);
     }
-
-    if (result.status === 'error') {
-      setSyncFeedback(result.message || 'Помилка синхронізації');
-      return;
-    }
-
-    setSyncFeedback('Офлайн-черга');
   };
 
   const spellSlotEntries = useMemo(() => {
@@ -102,14 +84,9 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
   const openFullEdit = () => {
     if (!character) return;
     setCurrentCharacterId(character.id);
-    const parent = navigation.getParent();
+    const parent = navigation.getParent() as any;
     if (!parent) return;
-    parent.dispatch(
-      CommonActions.navigate({
-        name: 'Heroes',
-        params: { screen: 'Character', params: { character } },
-      }),
-    );
+    parent.navigate('Heroes', { screen: 'Character', params: { character } });
   };
 
   const openHpModal = () => {
@@ -163,7 +140,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.title}>Швидке редагування DM • {character.name || 'Персонаж'}</Text>
         <Text style={styles.hint}>Розширене швидке редагування з атрибуцією DM та маркерами історії спільних змін.</Text>
         <Text style={styles.hint}>Статус: {syncFeedback}</Text>
-        <Pressable style={styles.topActionButton} onPress={openFullEdit} android_ripple={{ color: colors.ripple }}>
+        <Pressable style={styles.topActionButton} onPress={openFullEdit} android_ripple={{ color: '#999' }}>
           <Ionicons name='document-text-outline' size={18} color={colors.text} />
           <Text style={styles.topActionButtonText}>Відкрити повне редагування</Text>
         </Pressable>
@@ -180,7 +157,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                 ['combat.hp'],
               );
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='heart-dislike-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>HP -1</Text>
@@ -193,7 +170,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                 ['combat.hp'],
               );
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='heart-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>HP +1</Text>
@@ -206,12 +183,12 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                 ['combat.hp'],
               );
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='shield-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Тимчасове HP +1</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={openHpModal} android_ripple={{ color: colors.ripple }}>
+          <Pressable style={styles.laneButton} onPress={openHpModal} android_ripple={{ color: '#999' }}>
             <Ionicons name='create-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Змінити HP</Text>
           </Pressable>
@@ -226,7 +203,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               void commitPatch((prev) => ({ ...prev, ac: (prev.ac || 0) + 1 }), ['combat.core']);
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='add-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>AC +1</Text>
@@ -236,7 +213,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               void commitPatch((prev) => ({ ...prev, initiative: (prev.initiative || 0) + 1 }), ['combat.core']);
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='flash-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Ініціатива +1</Text>
@@ -251,7 +228,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setConditionInput}
           placeholder='Назва стану'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
         />
         <View style={styles.laneGrid}>
           <Pressable
@@ -268,7 +245,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
               );
               setConditionInput('');
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='add-circle-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Додати стан</Text>
@@ -278,7 +255,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             onPress={() => {
               void commitPatch((prev) => ({ ...prev, conditions: [] }), ['combat.conditions']);
             }}
-            android_ripple={{ color: colors.ripple }}
+            android_ripple={{ color: '#999' }}
           >
             <Ionicons name='close-circle-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Очистити стани</Text>
@@ -315,7 +292,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['magic.slots'],
                   );
                 }}
-                android_ripple={{ color: colors.ripple }}
+                android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.laneButtonText}>Використано -1</Text>
               </Pressable>
@@ -342,7 +319,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['magic.slots'],
                   );
                 }}
-                android_ripple={{ color: colors.ripple }}
+                android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.laneButtonText}>Використано +1</Text>
               </Pressable>
@@ -367,7 +344,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['magic.slots'],
                   );
                 }}
-                android_ripple={{ color: colors.ripple }}
+                android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.laneButtonText}>Макс. +1</Text>
               </Pressable>
@@ -397,7 +374,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['homebrew.resources'],
                   );
                 }}
-                android_ripple={{ color: colors.ripple }}
+                android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.laneButtonText}>-1</Text>
               </Pressable>
@@ -419,7 +396,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                     ['homebrew.resources'],
                   );
                 }}
-                android_ripple={{ color: colors.ripple }}
+                android_ripple={{ color: '#999' }}
               >
                 <Text style={styles.laneButtonText}>+1</Text>
               </Pressable>
@@ -435,7 +412,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setInventoryInput}
           placeholder='Додати предмет в інвентар'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
         />
         <Pressable
           style={styles.laneButton}
@@ -448,7 +425,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             );
             setInventoryInput('');
           }}
-          android_ripple={{ color: colors.ripple }}
+          android_ripple={{ color: '#999' }}
         >
           <Text style={styles.laneButtonText}>Додати предмет</Text>
         </Pressable>
@@ -463,7 +440,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
                   ['inventory.items'],
                 );
               }}
-              android_ripple={{ color: colors.ripple }}
+              android_ripple={{ color: '#999' }}
             >
               <Text style={styles.laneButtonText}>Видалити</Text>
             </Pressable>
@@ -478,7 +455,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setShortNoteInput}
           placeholder='Введіть коротку нотатку'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
           multiline
         />
         <Pressable
@@ -489,7 +466,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             void commitPatch((prev) => appendQuickSessionNote(prev, note), ['homebrew.notes-groups']);
             setShortNoteInput('');
           }}
-          android_ripple={{ color: colors.ripple }}
+          android_ripple={{ color: '#999' }}
         >
           <Text style={styles.laneButtonText}>Додати нотатку</Text>
         </Pressable>
@@ -529,7 +506,3 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMQuickEdit;
-
-
-
-

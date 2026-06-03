@@ -1,7 +1,7 @@
+// @ts-nocheck
 import React, { useMemo, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Linking, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Linking, Alert, Platform, ScrollView } from 'react-native';
 import useThemeStore from '@/context/Theme-store';
-import { fs, rd, sp } from '@/shared/styles/tokens';
 
 const donateLinks = [
   { label: 'ПриватБанк', url: 'http://www.privat24.ua/send/3bi8n' },
@@ -15,15 +15,15 @@ export default function Support() {
   const styles = useMemo(
     () => ({
       screen: { flex: 1, backgroundColor: colors.background },
-      container: { padding: sp(16), gap: sp(16) },
-      card: { backgroundColor: colors.card, borderRadius: rd(12), padding: sp(16), borderWidth: 1, borderColor: colors.border },
-      title: { fontSize: fs(18), fontWeight: '600' as const, color: colors.text, marginBottom: sp(8) },
+      container: { padding: 16, gap: 16 },
+      card: { backgroundColor: colors.card, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: colors.border },
+      title: { fontSize: 18, fontWeight: '600', color: colors.text, marginBottom: 8 },
       text: { color: colors.textSecondary, lineHeight: 20 },
-      row: { flexDirection: 'row' as const, flexWrap: 'wrap' as const, gap: sp(8), marginTop: sp(12) },
+      row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 12 },
       pill: {
-        paddingVertical: sp(10),
-        paddingHorizontal: sp(14),
-        borderRadius: rd(999),
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 999,
         borderWidth: 1,
         borderColor: colors.border,
         backgroundColor: colors.inputBackground,
@@ -34,21 +34,21 @@ export default function Support() {
         borderColor: colors.border,
         backgroundColor: colors.inputBackground,
         color: colors.text,
-        borderRadius: rd(10),
-        paddingHorizontal: sp(12),
-        paddingVertical: sp(10),
-        marginTop: sp(8),
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        marginTop: 8,
       },
       btn: {
-        marginTop: sp(12),
-        paddingVertical: sp(12),
-        borderRadius: rd(10),
+        marginTop: 12,
+        paddingVertical: 12,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: colors.border,
         backgroundColor: colors.inputBackground,
-        alignItems: 'center' as const,
+        alignItems: 'center',
       },
-      btnText: { color: colors.text, fontWeight: '600' as const },
+      btnText: { color: colors.text, fontWeight: '600' },
     }),
     [colors],
   );
@@ -77,7 +77,7 @@ export default function Support() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.card}>
           <Text style={styles.title}>Підтримати проєкт</Text>
-          <Text style={{ color: colors.warning, fontWeight: '600' as const }}>Зараз збираємо гроші для публікації в Google Play.</Text>
+          <Text style={{ color: 'rgba(249, 136, 118, 1)', fontWeight: '600' }}>Зараз збираємо гроші для публікації в Google Play.</Text>
           <Text style={styles.text}>Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:</Text>
           <View style={styles.row}>
             {donateLinks.map((d) => (
@@ -91,8 +91,8 @@ export default function Support() {
         <View style={styles.card}>
           <Text style={styles.title}>Криптогаманці</Text>
           {cryptoWallets.map((w) => (
-            <View key={w.label} style={{ marginTop: sp(10) }}>
-              <Text style={[styles.text, { marginBottom: sp(6) }]}>{w.label}</Text>
+            <View key={w.label} style={{ marginTop: 10 }}>
+              <Text style={[styles.text, { marginBottom: 6 }]}>{w.label}</Text>
               <TextInput value={w.value} editable={true} selectTextOnFocus style={styles.input} />
             </View>
           ))}
@@ -127,6 +127,3 @@ export default function Support() {
     </View>
   );
 }
-
-
-

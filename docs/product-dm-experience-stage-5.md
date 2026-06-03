@@ -1,9 +1,5 @@
 # Stage 5: DM Experience Redesign (DM-first Mode)
 
-> Historical planning document.
-> Do not use this as the current sprint plan.
-> Current roadmap: `docs/ux-ui-roadmap.md`.
-
 Date: 2026-03-29
 Project: DnD Character (mobile)
 
@@ -18,10 +14,10 @@ Make DM workflow a first-class mode, not a player sheet extension.
 - encounter prep handoff into initiative.
 
 Cross-stage alignment:
-- Historically, Stage 1 was used for role model and sync conflict baseline.
-- Historically, Stage 2 was used for play/edit separation.
-- Historically, Stage 3 was used for homebrew canonical model.
-- Historically, Stage 4 was used for sync/share/attribution terminology.
+- Stage 1 remains source-of-truth for role model and sync conflict baseline.
+- Stage 2 remains source-of-truth for play/edit separation.
+- Stage 3 remains source-of-truth for homebrew canonical model.
+- Stage 4 remains source-of-truth for sync/share/attribution terminology.
 
 ## Scope Delivered
 
@@ -92,9 +88,9 @@ Rules mirror `characterSheets` semantics:
 - owner has full update rights;
 - editor can update content fields but cannot mutate ownership arrays.
 
-## Historical Acceptance Signals
+## Acceptance Signals
 
-In the old stage plan, Stage 5 was considered complete when:
+Stage 5 is complete when:
 
 1. DM has a dedicated dashboard with DM-native IA and workflows.
 2. Party overview is campaign-aware and not limited to local characters.

@@ -9,7 +9,7 @@ import Home from '../screens/Home/Home';
 import Settings from '@/screens/Settings/Settings';
 import Header from '@/modules/Header/Header';
 import CreateCharacter from '@/screens/CreateCharacter/CreateCharacter';
-import { CharacterViewModel } from '@/types/Character';
+import { CharacterDto } from '@/types/Character';
 import Spellbook from '@/screens/Spellbook/Spellbook';
 
 export type TabStackParamList = {
@@ -19,7 +19,7 @@ export type TabStackParamList = {
   // TODO - temporary fix, add proper typing
   // CharacterSheet: { character: CharacterData; onUpdateCharacter?: (updated: any) => void };
   Character: {
-    character: CharacterViewModel;
+    character: CharacterDto;
   };
   CreateCharacter: undefined;
   Spellbook: undefined;
@@ -51,4 +51,3 @@ export default function TabNavigator(): JSX.Element {
     </Stack.Navigator>
   );
 }
-

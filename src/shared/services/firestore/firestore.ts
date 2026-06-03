@@ -1,5 +1,5 @@
 import { getApp } from '@react-native-firebase/app';
-import { getAuth } from '@react-native-firebase/auth';
+import { getAuth, onAuthStateChanged, getIdToken } from '@react-native-firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, serverTimestamp } from '@react-native-firebase/firestore';
 
 const app = getApp();

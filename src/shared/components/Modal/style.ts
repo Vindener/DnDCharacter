@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
-import { fs, rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
@@ -8,65 +7,54 @@ StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: sp(16),
-    backgroundColor: c.overlayStrong,
+    padding: 16,
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   container: {
+    flex: 1,
     backgroundColor: c.card,
-    borderRadius: rd(13),
-    paddingTop: 24,
-    paddingHorizontal: sp(24),
-    paddingBottom: 20,
+    borderRadius: 13,
+    padding: 24,
     width: '100%',
     maxWidth: 480,
-    maxHeight: '88%',
-    overflow: 'hidden',
+    maxHeight: '80%',
   },
   close: {
     position: 'absolute',
     top: 16,
     right: 16,
-    padding: sp(4),
+    padding: 4,
   },
   closeText: {
-    fontSize: fs(20),
+    fontSize: 20,
     color: c.text,
   },
   title: {
-    fontSize: fs(18),
+    fontSize: 18,
     color: c.text,
-    marginBottom: sp(4),
+    marginBottom: 4,
   },
   subtitle: {
-    fontSize: fs(14),
+    fontSize: 14,
     color: c.text,
-    marginBottom: sp(16),
+    marginBottom: 16,
   },
   content: {
-    minHeight: 0,
     paddingTop: 16,
-  },
-  scrollArea: {
-    maxHeight: '100%',
+    flex: 1,
     minHeight: 0,
-  },
-  scrollContent: {
-    paddingBottom: 18,
   },
   submit: {
-    marginTop: sp(12),
-    backgroundColor: c.primary,
-    paddingVertical: sp(12),
-    borderRadius: rd(8),
+    marginTop: 16,
+    backgroundColor: '#95acda',
+    paddingVertical: 10,
+    borderRadius: 4,
     alignItems: 'center',
   },
   submitText: {
-    color: c.onPrimary,
+    color: '#1f2633',
     fontWeight: 'bold',
   },
 });
-
-
-
 
 
