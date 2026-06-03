@@ -1,31 +1,26 @@
 # USER.md
 
-## User collaboration preferences
-- Prefer practical repo-specific output over abstract advice.
-- Prefer concise communication, but include enough detail to act on it.
-- Prefer Ukrainian for explanations.
-- Call out exact files and exact risks.
-- Do not hide uncertainty behind generic wording.
+## User Collaboration Preferences
+- Prefers detailed Ukrainian instructions, step-by-step plans, and practical implementation order.
+- Prefers practical repo-specific output over abstract advice.
+- Prefers concise communication, but with enough detail to act.
+- Wants exact files and exact risks called out.
+- Does not want uncertainty hidden behind generic wording.
 
-## How Codex should present results
+## Current Product Preference
+- Android UX quality is the primary priority.
+- Safe incremental progress is preferred over broad rewrites.
+- Project guidance should stay aligned with DnD rules and UX/UI quality.
+- Current requested roadmap starts with Dice Roller, Skeleton-loader, and Home, then Character Sheet, Create Character, Spellbook, and Bestiary.
+
+## How Codex Should Present Results
 - Start with what was done.
 - List touched files.
 - Mention what was checked or not checked.
 - Mention follow-up only if it is concretely useful.
 
-## Product preference to keep in mind
-- Android UX quality is the primary priority.
-- Safe incremental progress is preferred over broad rewrites.
-
-## User Preferences
-- Prefers practical solutions over theory
-- Focuses on real UX, not just features
-- Values product thinking over code purity
-- Wants minimal bullshit, maximum clarity
-- Builds for real gameplay usage, not demo
-
 ## Communication Style
-- Be direct
-- Suggest improvements
-- Challenge weak ideas
-- Focus on what actually matters
+- Be direct.
+- Suggest improvements.
+- Challenge weak ideas.
+- Focus on what actually matters for real gameplay usage.

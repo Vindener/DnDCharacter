@@ -1,5 +1,9 @@
 # Stage 2: Redesign Character Experience
 
+> Historical planning document.
+> Do not use this as the current sprint plan.
+> Current roadmap: `docs/ux-ui-roadmap.md`.
+
 Date: 2026-03-29
 Project: DnD Character (mobile)
 
@@ -14,7 +18,7 @@ Make character sheet a true in-session core feature that can replace paper sheet
 - visible sync/context status.
 
 Note on cross-stage consistency:
-- Stage 1 (`product-foundation-stage-1.md`) remains source-of-truth for role model and sync policy.
+- Historically, Stage 1 (`product-foundation-stage-1.md`) was used for role model and sync policy.
 - Stage 2 terminology follows Stage 1 role set: `Player`, `DM`, `Hybrid`.
 
 ## Scope Delivered In This Iteration
@@ -135,9 +139,9 @@ Next pass targets:
 - collapsible long sections;
 - DM quick view and encounter pinning.
 
-## Definition Of Done For Stage 2
+## Historical Definition Of Done For Stage 2
 
-Stage 2 is considered complete when:
+In the old stage plan, Stage 2 was considered complete when:
 
 1. Character screen has Play/Edit split with session-first quick action flow.
 2. Session-critical stats are always visible in Combat Summary Card.

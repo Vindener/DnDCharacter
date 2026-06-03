@@ -1,47 +1,48 @@
 # TOOLS.md
 
-## Tooling policy for Codex
+## Tooling Policy For Codex
 Use the repository as it is.
 Prefer inspection before mutation.
 Do not claim validation steps that were not actually run.
 
-## Package and dependency rules
+## Package And Dependency Rules
 - Use `npm` only.
 - Do not use `yarn` or `pnpm`.
 - For Expo-compatible packages, prefer `npx expo install <package>`.
 - For generic packages, use `npm install <package>`.
 - Avoid dependency upgrades unless the task explicitly requires them.
 
-## Reliable project commands
+## Reliable Project Commands
 - install dependencies: `npm install`
 - run Expo dev server: `npm start`
-- open Android flow: `npx expo start --android`
+- run Expo Go server: `npm run start:go`
+- run Android native target: `npm run android`
 - run web target: `npm run web`
 - format repository: `npm run format`
-- type-check: `npx tsc --noEmit`
+- type-check: `npm run typecheck`
+- lint source: `npm run lint`
+- lint theme tokens: `npm run lint:theme`
+- lint UI tokens: `npm run lint:ui`
+- run unit tests: `npm run test:unit`
 
-## Commands that are NOT currently backed by package.json
-- `npm run test`
-- `npm run lint`
+## Validation Strategy
+Prefer the narrowest useful validation for the task:
+1. `npm run typecheck`
+2. `npm run lint:ui`, if UI token changes were made
+3. `npm run lint`, if source files were edited
+4. `npm run test:unit`, if logic/tests were edited
+5. `npm run format`, when broad formatting is appropriate
 
-If you add such scripts later, only then may you report them as available.
+Only claim a validation command passed if it was actually run.
 
-## Useful repo inspection commands
+## Useful Repo Inspection Commands
 Use these when exploring before edits:
-- `find . -maxdepth 3 -type f`
+- `rg --files`
 - `rg "text" src`
-- `sed -n '1,220p' <file>`
-- `cat package.json`
-- `cat tsconfig.json`
+- `Get-Content -LiteralPath <file>`
+- `Get-ChildItem -Recurse -Filter <pattern>`
 
-## Validation strategy
-When possible after edits:
-1. run `npx tsc --noEmit`
-2. run `npm run format`
-
-If type-checking fails due to pre-existing issues, say so clearly and separate baseline failures from your own changes.
-
-## Editing strategy with tools
+## Editing Strategy With Tools
 Before changing code, inspect:
 1. target file;
 2. related types;
@@ -54,16 +55,14 @@ For Firebase-related tasks, inspect at least:
 - `src/services/users.ts`
 - `src/services/connections.ts`
 
-## Native caution
+## Native Caution
 This repo includes a committed `android/` project and React Native Firebase.
 Be conservative with native/plugin/version changes because Expo compatibility matters.
 
 ## Implementation Priorities
-
 When writing code:
-
-1. Prefer simplicity over abstraction
-2. Avoid overengineering
-3. Keep UI responsive for session usage
-4. Avoid heavy re-renders on critical screens (Character Sheet)
-5. Ensure offline functionality is not broken
+1. Prefer simplicity over abstraction.
+2. Avoid overengineering.
+3. Keep UI responsive for session usage.
+4. Avoid heavy re-renders on critical screens.
+5. Ensure offline functionality is not broken.

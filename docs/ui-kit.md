@@ -70,6 +70,16 @@ npm run lint:ui
 
 `lint:ui` is a soft report. It lists raw spacing/typography/radius literals and exits successfully.
 
+## Skeleton UI
+
+New loading components should follow the same token system:
+- `sp()` for spacing
+- `fs()` for typography
+- `rd()` for radius
+- shared UI primitives where possible
+
+Skeletons should match the shape of the real content and avoid layout jumps.
+
 ## Allowed and Disallowed
 
 Allowed:
