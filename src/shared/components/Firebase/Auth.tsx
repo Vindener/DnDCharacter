@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { configureGoogleSignIn, onGoogleButtonPress, logout } from '@/shared/services/auth/index';
+import { useAuth, configureGoogleSignIn, onGoogleButtonPress, logout } from '@/shared/services/auth/index';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/Settings/styles';
@@ -15,53 +15,62 @@ export default function Auth() {
     }
   }, [user]);
 
-  const colors = useThemeStore((s) => s.colors);
-  const styles = React.useMemo(() => getStyles(colors), [colors]);
+    const colors = useThemeStore((s) => s.colors);
+    const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
 
   // Handle user state changes
-  const handleAuthStateChanged = React.useCallback((nextUser: FirebaseAuthTypes.User | null) => {
+  function handleAuthStateChanged(nextUser: FirebaseAuthTypes.User | null) {
     setUser(nextUser);
-    setInitializing((prev) => (prev ? false : prev));
-  }, []);
+    if (initializing) setInitializing(false);
+  }
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
     return subscriber; // unsubscribe on unmount
-  }, [handleAuthStateChanged]);
+  }, []);
 
   if (initializing) return null;
 
   if (!user) {
     return (
-      <View style={styles.authContainer}>
-        <TouchableOpacity onPress={() => onGoogleButtonPress()} style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Увійти за допомогою Google</Text>
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => onGoogleButtonPress()}
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 14,
+            backgroundColor: colors.inputBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: colors.text }}>Увійти за допомогою Google</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  const fallbackInitial = user.email?.trim().charAt(0).toUpperCase() || '?';
-
   return (
-    <View style={styles.authContainer}>
-      <View style={styles.authUserRow}>
-        {user.photoURL ? (
-          <Image source={{ uri: user.photoURL }} style={styles.authAvatar} />
-        ) : (
-          <View style={[styles.authAvatar, styles.authAvatarFallback]}>
-            <Text style={styles.authAvatarFallbackText}>{fallbackInitial}</Text>
-          </View>
-        )}
-        <View style={styles.authUserTextWrap}>
-          <Text style={styles.authWelcome}>Ви авторизовані як</Text>
-          <Text style={styles.authUserEmail}>{user.email}</Text>
-        </View>
-      </View>
-      <TouchableOpacity onPress={() => logout()} style={styles.actionButton}>
-        <Text style={styles.actionButtonText}>Вийти</Text>
+    <View style={styles.container}>
+      <Image source={{ uri: user.photoURL }} style={{ height: 130, width: 130, borderRadius: 150, marginLeft: 10 }} />
+      <Text>Вітаємо, {user.email}!</Text>
+      <TouchableOpacity
+        onPress={() => logout()}
+        style={{
+          paddingVertical: 10,
+          paddingHorizontal: 14,
+          backgroundColor: colors.inputBackground,
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: colors.border,
+          marginTop: 10,
+        }}
+      >
+        <Text style={{ color: colors.text }}>Вийти</Text>
       </TouchableOpacity>
     </View>
   );

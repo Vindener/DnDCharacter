@@ -3,11 +3,11 @@ import { View, Text } from 'react-native';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterViewModel } from '@/types/Character';
+import { CharacterDto } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 
 interface ProficienciesProps {
-  data: CharacterViewModel;
+  data: CharacterDto;
 }
 
 const Proficiencies: React.FC<ProficienciesProps> = ({ data }: ProficienciesProps) => {
@@ -38,4 +38,3 @@ const Proficiencies: React.FC<ProficienciesProps> = ({ data }: ProficienciesProp
 };
 
 export default Proficiencies;
-

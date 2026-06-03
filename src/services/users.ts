@@ -1,5 +1,5 @@
 
-import { fbAuth, db, now } from './firebase';
+import { fbAuth, db, now, hasDoc } from './firebase';
 
 export async function ensureUserIndexOnLogin() {
   const u = fbAuth.currentUser;
@@ -23,7 +23,6 @@ export async function findUserByEmail(email: string) {
   const emailLower = email.trim().toLowerCase();
   const idx = await db.collection('emailIndex').doc(emailLower).get();
   if (!idx.exists) return null;
-  const payload = idx.data() as { uid?: unknown } | undefined;
-  const uid = typeof payload?.uid === 'string' ? payload.uid : null;
+  const { uid } = idx.data() as any;
   return uid || null;
 }

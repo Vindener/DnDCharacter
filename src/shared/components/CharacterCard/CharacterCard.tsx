@@ -4,21 +4,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterViewModel } from '@/types/Character';
+import { CharacterDto } from '@/types/Character';
 import { NativeStackNavigationProp } from 'react-native-screens/native-stack';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useCharacterStore from '@/context/Character-store';
-import { subscribeCharacterSheet, deleteCharacterSheet } from '@/repositories/characterCloudRepository';
+import { CLASS_TRANSLATIONS, CLASS_OPTIONS } from '@/shared/const/CharacterClass';
+import { subscribeCharacterSheet, deleteCharacterSheet } from '@/services/characterSheets';
 
 type NavigationProp = NativeStackNavigationProp<TabStackParamList, 'Character'>;
 
 interface CharacterCardProps {
-  character: CharacterViewModel;
+  character: CharacterDto;
 }
 
+// TODO fix any
 export const CharacterCard = ({ character }: CharacterCardProps) => {
   const navigation = useNavigation<NavigationProp>();
-  const removeCharacter = useCharacterStore((s) => s.removeCharacter);
+  const removeCharacter = useCharacterStore((s: any) => s.removeCharacter);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
@@ -42,9 +44,7 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
   const handleDelete = async () => {
     try {
       await deleteCharacterSheet(character.id);
-    } catch (_error) {
-      /* intentionally ignored */
-    }
+    } catch (e) {}
     removeCharacter(character.id);
   };
 
@@ -70,7 +70,5 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
-
-
 
 

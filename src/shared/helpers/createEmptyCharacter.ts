@@ -1,5 +1,5 @@
-import type { CharacterDraft, CharacterEntity } from '@/domain/types';
-import { parseCharacter } from '@/domain/schemas';
+import { CharacterDto } from '@/types/Character';
+import { normalizeHomebrewV3 } from '@/shared/helpers/homebrew';
 
 const HIT_DICE_MAP: Record<string, number> = {
   barbarian: 12,
@@ -23,8 +23,8 @@ function getHitDiceSides(className: string): number {
 }
 
 
-export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterEntity {
-  const base: CharacterEntity = {
+export function createEmptyCharacter(overrides: Partial<CharacterDto> = {}): CharacterDto {
+  const base: CharacterDto = {
     id: overrides.id ?? '',
     name: overrides.name ?? '',
     class: overrides.class ?? '',
@@ -148,6 +148,5 @@ export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterE
     },
   };
 
-  return parseCharacter(base);
+  return normalizeHomebrewV3(base);
 }
-

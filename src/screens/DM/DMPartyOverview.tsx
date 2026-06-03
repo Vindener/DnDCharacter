@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable } from 'react-native';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,19 +10,18 @@ import { getStyles } from '@/screens/DM/style';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
 import useAppRoleStore from '@/context/AppRole-store';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
 import { fbAuth } from '@/services/firebase';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { getShareDisplayStatus, getSyncDisplayStatus } from '@/shared/helpers/collaboration/status';
-import type { CharacterViewModel } from '@/types/Character';
-import { ensureCampaignForName, getCampaignForLink, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
-import type { DMCampaign } from '@/dm/domain/types';
-import { buildCampaignFallbackIdForCharacter, toCampaignLinkInput } from '@/screens/DM/adapters';
+import type { CharacterDto } from '@/types/Character';
+import { ensureCampaignForName, getCampaignForCharacter, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import type { DMCampaign } from '@/types/DM';
 
 type PartyItem = {
   id: string;
   source: 'local' | 'mine' | 'shared';
-  payload: CharacterViewModel;
+  payload: CharacterDto;
   syncStatus: string;
   shareStatus: string | null;
   campaignId: string;
@@ -98,7 +97,7 @@ const DMPartyOverview = () => {
   const party = useMemo<PartyItem[]>(() => {
     const byId = new Map<string, PartyItem>();
 
-    const pushItem = (payload: CharacterViewModel, source: 'local' | 'mine' | 'shared', rawDoc?: Record<string, unknown>) => {
+    const pushItem = (payload: CharacterDto, source: 'local' | 'mine' | 'shared', rawDoc?: Record<string, unknown>) => {
       const syncStatus = getSyncDisplayStatus(syncByCharacter[payload.id], netInfo.isConnected);
       const shareStatus = getShareDisplayStatus({
         isSharedSheet: source === 'shared' || Boolean(rawDoc && Array.isArray(rawDoc.editors) && rawDoc.editors.length > 0),
@@ -106,8 +105,8 @@ const DMPartyOverview = () => {
         source,
       });
 
-      const campaign = getCampaignForLink(toCampaignLinkInput(payload), campaigns);
-      const campaignId = campaign?.id || payload.campaignId || buildCampaignFallbackIdForCharacter(payload);
+      const campaign = getCampaignForCharacter(payload, campaigns);
+      const campaignId = campaign?.id || payload.campaignId || `legacy-${String(payload.campaign || 'uncategorized').trim().toLowerCase()}`;
       const campaignName = campaign?.name || String(payload.campaign || 'Кампанія не призначена');
 
       byId.set(payload.id, {
@@ -146,7 +145,7 @@ const DMPartyOverview = () => {
     return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
   }, [party]);
 
-  const ensureLocalCharacter = async (character: CharacterViewModel) => {
+  const ensureLocalCharacter = async (character: CharacterDto) => {
     const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
     if (existing) {
       await updateCharacter(existing.id, character);
@@ -156,20 +155,15 @@ const DMPartyOverview = () => {
     return character;
   };
 
-  const openCharacter = async (character: CharacterViewModel) => {
+  const openCharacter = async (character: CharacterDto) => {
     const local = await ensureLocalCharacter(character);
     setCurrentCharacterId(local.id);
-    const root = navigation.getParent();
+    const root = navigation.getParent() as any;
     if (!root) return;
-    root.dispatch(
-      CommonActions.navigate({
-        name: 'Heroes',
-        params: { screen: 'Character', params: { character: local } },
-      }),
-    );
+    root.navigate('Heroes', { screen: 'Character', params: { character: local } });
   };
 
-  const openQuickEdit = async (character: CharacterViewModel) => {
+  const openQuickEdit = async (character: CharacterDto) => {
     const local = await ensureLocalCharacter(character);
     navigation.navigate('DMQuickEdit', { characterId: local.id });
   };
@@ -203,15 +197,15 @@ const DMPartyOverview = () => {
               <Text style={styles.updateMeta}>Клас/раса: {item.payload.class || 'Клас'} / {item.payload.race || 'Раса'}</Text>
 
               <View style={styles.laneGrid}>
-                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
+                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: '#999' }}>
                   <Ionicons name='link-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: colors.ripple }}>
+                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: '#999' }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Швидке редагування</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
+                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: '#999' }}>
                   <Ionicons name='document-text-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
                 </Pressable>
@@ -231,6 +225,3 @@ const DMPartyOverview = () => {
 };
 
 export default DMPartyOverview;
-
-
-

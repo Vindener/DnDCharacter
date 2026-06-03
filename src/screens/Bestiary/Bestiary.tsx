@@ -94,7 +94,7 @@ const Bestiary = () => {
   };
 
   return (
-    <View style={styles.container} testID='bestiary.screen'>
+    <View style={styles.container}>
       <View style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Швидкий огляд DM</Text>
         <Text style={styles.sectionHint}>Фільтри для швидкого пошуку монстрів у сесії та список закріплень для сутички.</Text>
@@ -104,7 +104,6 @@ const Bestiary = () => {
           style={styles.search}
           value={search}
           onChangeText={setSearch}
-          testID='bestiary.searchInput'
         />
 
         <View style={styles.laneRow}>
@@ -161,7 +160,7 @@ const Bestiary = () => {
                     key={tag}
                     style={[styles.tagChip, active ? styles.tagChipActive : null]}
                     onPress={() => toggleTag(tag)}
-                    android_ripple={{ color: colors.ripple }}
+                    android_ripple={{ color: '#999' }}
                   >
                     <Text style={[styles.tagChipText, active ? styles.tagChipTextActive : null]}>{tag}</Text>
                   </Pressable>
@@ -176,7 +175,7 @@ const Bestiary = () => {
         <View style={styles.pinnedRow}>
           <Text style={styles.sectionTitle}>Закріплені для сутички ({pinnedMonsters.length})</Text>
           {!!pinnedMonsters.length && (
-            <Pressable style={styles.clearPinsButton} onPress={() => clearPinnedMonsters()} android_ripple={{ color: colors.ripple }}>
+            <Pressable style={styles.clearPinsButton} onPress={() => clearPinnedMonsters()} android_ripple={{ color: '#999' }}>
               <Text style={styles.clearPinsText}>Очистити</Text>
             </Pressable>
           )}
@@ -190,7 +189,6 @@ const Bestiary = () => {
               key={`pin-${monster.id}`}
               monster={monster}
               isPinned={true}
-              cardTestID='bestiary.monsterCard'
               onTogglePin={(monsterId) => {
                 void togglePinnedMonster(monsterId);
               }}
@@ -212,7 +210,6 @@ const Bestiary = () => {
             <MonsterCard
               monster={item}
               isPinned={pinnedMonsterIds.includes(item.id)}
-              cardTestID='bestiary.monsterCard'
               onTogglePin={(monsterId) => {
                 void togglePinnedMonster(monsterId);
               }}
@@ -229,7 +226,7 @@ const Bestiary = () => {
             if (monster) await addMonster(monster);
           }}
           style={styles.utilityButton}
-          android_ripple={{ color: colors.ripple }}
+          android_ripple={{ color: '#999' }}
         >
           <Text style={styles.utilityButtonText}>Імпортувати монстра</Text>
         </Pressable>
@@ -252,7 +249,7 @@ const Bestiary = () => {
             });
           }}
           style={styles.utilityButton}
-          android_ripple={{ color: colors.ripple }}
+          android_ripple={{ color: '#999' }}
         >
           <Text style={styles.utilityButtonText}>Додати монстра</Text>
         </Pressable>
@@ -262,4 +259,3 @@ const Bestiary = () => {
 };
 
 export default Bestiary;
-

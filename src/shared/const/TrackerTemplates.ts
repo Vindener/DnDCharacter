@@ -1,4 +1,11 @@
-import type { ResourceTemplate } from '@/dm/domain/types';
+import type { CharacterCustomResource } from '@/types/Character';
+
+export type ResourceTemplate = {
+  id: string;
+  name: string;
+  resource: Omit<CharacterCustomResource, 'id'>;
+  source: 'system' | 'user';
+};
 
 export const SYSTEM_RESOURCE_TEMPLATES: ResourceTemplate[] = [
   {

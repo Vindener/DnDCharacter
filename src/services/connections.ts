@@ -3,17 +3,6 @@ import { db, now, fbAuth } from './firebase';
 
 function uid() { const u = fbAuth.currentUser; if (!u) throw new Error('Not signed in'); return u.uid; }
 
-function errorMeta(error: unknown): { code: string; message: string } {
-  if (!error || typeof error !== 'object') {
-    return { code: '', message: String(error) };
-  }
-  const cast = error as { code?: unknown; message?: unknown };
-  return {
-    code: typeof cast.code === 'string' ? cast.code : '',
-    message: typeof cast.message === 'string' ? cast.message : String(error),
-  };
-}
-
 export async function ensureConnection(toUid: string) {
   const me = uid();
   if (toUid === me) return null;
@@ -30,9 +19,8 @@ export async function ensureConnection(toUid: string) {
       .where('toUid', '==', toUid)
       .get();
     if (!q1.empty) existingId = q1.docs[0].id;
-  } catch (error: unknown) {
-    const meta = errorMeta(error);
-    console.warn('[share] connections q1 failed', meta.code, meta.message);
+  } catch (e: any) {
+    console.warn('[share] connections q1 failed', e?.code, e?.message);
   }
 
   if (!existingId) {
@@ -42,9 +30,8 @@ export async function ensureConnection(toUid: string) {
         .where('toUid', '==', me)
         .get();
       if (!q2.empty) existingId = q2.docs[0].id;
-    } catch (error: unknown) {
-      const meta = errorMeta(error);
-      console.warn('[share] connections q2 failed', meta.code, meta.message);
+    } catch (e: any) {
+      console.warn('[share] connections q2 failed', e?.code, e?.message);
     }
   }
 
@@ -63,10 +50,9 @@ export async function ensureConnection(toUid: string) {
 
   try {
     await ref.set(doc);
-  } catch (error: unknown) {
-    const meta = errorMeta(error);
-    console.warn('[share] ensureConnection set failed', meta.code, meta.message);
-    if (meta.code !== 'permission-denied') throw error;
+  } catch (e: any) {
+    console.warn('[share] ensureConnection set failed', e?.code, e?.message);
+    if (e?.code !== 'permission-denied') throw e;
   }
 
   return ref.id;

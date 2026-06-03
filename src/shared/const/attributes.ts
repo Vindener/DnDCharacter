@@ -1,6 +1,6 @@
-import type { CharacterEntity } from '@/domain/types';
+import { CharacterDto } from '@/types/Character';
 
-export type StatKey = keyof CharacterEntity['stats'];
+export type StatKey = keyof CharacterDto['stats'];
 
 interface Attribute {
   key: StatKey;
@@ -15,4 +15,3 @@ export const attributes: Attribute[] = [
   { key: 'wisdom', label: 'Мудрість' },
   { key: 'charisma', label: 'Харизма' },
 ];
-

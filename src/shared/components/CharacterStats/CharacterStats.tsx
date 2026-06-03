@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import Attributes from './Tabs/Attributes/Attributes';
@@ -14,12 +14,12 @@ import Skills from './Tabs/Skills/Skills';
 import Coins from './Tabs/Coins/Coins';
 import { getStyles } from '@/shared/components/CharacterStats/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterViewModel } from '@/types/Character';
+import { CharacterDto } from '@/types/Character';
 import { CharacterTabs } from '@/shared/const/CharacterTabs';
 import CharacterOverview from '../CharacterOverview/CharacterOverview';
 
 interface CharacterStatsProps {
-  character: CharacterViewModel;
+  character: CharacterDto;
 }
 
 const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterStatsProps) => {
@@ -62,4 +62,3 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
 };
 
 export default CharacterStats;
-

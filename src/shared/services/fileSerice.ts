@@ -1,13 +1,13 @@
+// @ts-nocheck
 import * as DocumentPicker from 'expo-document-picker';
-import type { CharacterEntity } from '@/domain/types';
+import { CharacterDto } from '@/types/Character';
 import { MonsterDto } from '@/types/Monster';
 import useCharacterStore from '@/context/Character-store';
-import { characterMapper } from '@/domain/mappers';
-import * as FileSystem from 'expo-file-system/legacy';
+import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 class FileService {
-  static async importCharacterFromFile(): Promise<CharacterEntity | null> {
+  static async importCharacterFromFile(): Promise<CharacterDto | null> {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'application/json',
@@ -35,7 +35,7 @@ class FileService {
 
       if (!jsonData.id) jsonData.id = Date.now().toString();
 
-      return characterMapper.draftToEntity(jsonData);
+      return jsonData;
     } catch (error) {
       console.error('Error importing character:', error);
       return null;
@@ -114,7 +114,7 @@ class FileService {
     }
   }
 
-  static async importCurrentCharacter(id: string): Promise<CharacterEntity | null> {
+  static async importCurrentCharacter(id: string): Promise<CharacterDto | null> {
     try {
       const character = await this.importCharacterFromFile();
       if (!character) return null;
@@ -124,7 +124,7 @@ class FileService {
       if (index === -1) return null;
 
       const updatedCharacters = [...characters];
-      updatedCharacters[index] = characterMapper.draftToEntity(character);
+      updatedCharacters[index] = character;
       await saveCharacters(updatedCharacters);
       return character;
     } catch {
@@ -132,9 +132,10 @@ class FileService {
     }
   }
 
-  static async exportCharacter(character: CharacterEntity) {
+  static async exportCharacter(character: CharacterDto) {
     try {
-      const jsonString = JSON.stringify(character, null, 2);
+      const { id, ...characterWithoutId } = character;
+      const jsonString = JSON.stringify(characterWithoutId, null, 2);
       if (typeof window !== 'undefined' && window.document) {
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -146,9 +147,7 @@ class FileService {
         return;
       }
       const fileName = `${character.name.replace(/\s+/g, '_') || 'character'}.json`;
-      const cacheDirectory = FileSystem.cacheDirectory || FileSystem.documentDirectory;
-      if (!cacheDirectory) throw new Error('No writable directory available');
-      const fileUri = `${cacheDirectory}${fileName}`;
+      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
       await FileSystem.writeAsStringAsync(fileUri, jsonString, { encoding: FileSystem.EncodingType.UTF8 });
       await Sharing.shareAsync(fileUri);
     } catch (error) {
@@ -158,7 +157,8 @@ class FileService {
 
   static async exportMonster(monster: MonsterDto) {
     try {
-      const jsonString = JSON.stringify(monster, null, 2);
+      const { id, ...monsterWithoutId } = monster;
+      const jsonString = JSON.stringify(monsterWithoutId, null, 2);
       if (typeof window !== 'undefined' && window.document) {
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -170,9 +170,7 @@ class FileService {
         return;
       }
       const fileName = `${monster.name.replace(/\s+/g, '_') || 'monster'}.json`;
-      const cacheDirectory = FileSystem.cacheDirectory || FileSystem.documentDirectory;
-      if (!cacheDirectory) throw new Error('No writable directory available');
-      const fileUri = `${cacheDirectory}${fileName}`;
+      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
       await FileSystem.writeAsStringAsync(fileUri, jsonString, {
         encoding: FileSystem.EncodingType.UTF8,
       });
@@ -184,5 +182,3 @@ class FileService {
 }
 
 export default FileService;
-
-

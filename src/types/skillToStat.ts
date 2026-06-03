@@ -1,7 +1,7 @@
-import type { CharacterEntity } from '@/domain/types';
+import type { CharacterDto } from '@/types/Character';
 
-export type AbilityStatsKey = keyof CharacterEntity['stats'];
-export type SkillKey = keyof CharacterEntity['skills'];
+export type AbilityStatsKey = keyof CharacterDto['stats'];
+export type SkillKey = keyof CharacterDto['skills'];
 
 const skillToStat: Record<SkillKey, AbilityStatsKey> = {
   // Strength
@@ -34,4 +34,3 @@ const skillToStat: Record<SkillKey, AbilityStatsKey> = {
 };
 
 export default skillToStat;
-

@@ -1,54 +1,69 @@
-import * as FileSystem from 'expo-file-system/legacy';
-
-let buffer: string[] = [];
-const logPath = 'logs/sharing.log';
+// @ts-nocheck
+let buffer = [];
+let logPath = 'logs/sharing.log';
 let initialized = false;
 
-function getLogFileUriUnsafe(): string | null {
-  if (!FileSystem.documentDirectory) return null;
-  return `${FileSystem.documentDirectory}${logPath}`;
-}
-
-async function appendLine(line: string): Promise<void> {
+async function getFS() {
   try {
-    if (!initialized && FileSystem.documentDirectory) {
-      const dir = `${FileSystem.documentDirectory}logs/`;
-      await FileSystem.makeDirectoryAsync(dir, { intermediates: true });
-      initialized = true;
-    }
-
-    const uri = getLogFileUriUnsafe();
-    if (!uri) return;
-
-    let previous = '';
-    try {
-      previous = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.UTF8 });
-    } catch (_error) {
-      previous = '';
-    }
-
-    await FileSystem.writeAsStringAsync(uri, `${previous}${line}\n`, { encoding: FileSystem.EncodingType.UTF8 });
-  } catch (error) {
-    console.warn('log write failed', (error as { message?: unknown })?.message || error);
+    // dynamic import so build doesn't fail if expo-file-system missing
+    const mod = await import('expo-file-system');
+    return mod?.default || mod;
+  } catch (e) {
+    return null;
   }
 }
 
-export async function log(...args: unknown[]) {
+async function ensureInit() {
+  if (initialized) return;
+  const FS = await getFS();
+  if (FS) {
+    try {
+      const dir = FS.documentDirectory + 'logs/';
+      await FS.makeDirectoryAsync(dir, { intermediates: true });
+      initialized = true;
+    } catch (e) {
+      /* ignore */
+    }
+  }
+  initialized = true;
+}
+
+export async function log(...args) {
   const line = `[INFO] ${new Date().toISOString()} ${args.map((a) => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ')}`;
   console.log(line);
   buffer.push(line);
-  await appendLine(line);
+  try {
+    await ensureInit();
+    const FS = await getFS();
+    if (FS?.writeAsStringAsync) {
+      const uri = FS.documentDirectory + logPath;
+      await FS.writeAsStringAsync(uri, line + '\n', { encoding: FS.EncodingType.UTF8, append: true });
+    }
+  } catch (e) {
+    console.warn('log write failed', e?.message || e);
+  }
 }
 
-export async function error(...args: unknown[]) {
+export async function error(...args) {
   const line = `[ERROR] ${new Date().toISOString()} ${args.map((a) => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ')}`;
   console.error(line);
   buffer.push(line);
-  await appendLine(line);
+  try {
+    await ensureInit();
+    const FS = await getFS();
+    if (FS?.writeAsStringAsync) {
+      const uri = FS.documentDirectory + logPath;
+      await FS.writeAsStringAsync(uri, line + '\n', { encoding: FS.EncodingType.UTF8, append: true });
+    }
+  } catch (e) {
+    console.warn('log write failed', e?.message || e);
+  }
 }
 
 export async function getLogFileUri() {
-  return getLogFileUriUnsafe();
+  const FS = await getFS();
+  if (!FS) return null;
+  return FS.documentDirectory + logPath;
 }
 
 export function getBuffer() {
@@ -57,11 +72,10 @@ export function getBuffer() {
 
 export async function clearLogs() {
   buffer = [];
-  const uri = getLogFileUriUnsafe();
-  if (!uri) return;
-  try {
-    await FileSystem.deleteAsync(uri, { idempotent: true });
-  } catch (_error) { /* intentionally ignored */ }
+  const FS = await getFS();
+  if (FS?.deleteAsync) {
+    try {
+      await FS.deleteAsync(FS.documentDirectory + logPath, { idempotent: true });
+    } catch {}
+  }
 }
-
-

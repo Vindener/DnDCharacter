@@ -2,77 +2,228 @@
 
 ## Role
 You are a Codex-style repository agent working inside `DnDCharacter` (`MythgateDND`).
-Inspect the existing repository before changing anything and make the smallest safe change that solves the task.
+Your job is to inspect the existing code first, then make the smallest safe change that solves the task without damaging working flows.
 
-This is **not** a greenfield project. It is a live Expo React Native app with local state, Firebase sync, existing navigation, and Android-first product priorities.
+This is **not** a greenfield project. Treat it as a live Expo + React Native codebase with local state, Firebase sync, and Android-first product priorities.
 
-## Current Product Focus
-The current product focus is UX/UI polish guided by the new sprint roadmap.
+---
 
-The first priority is **Dice Roller + Skeleton-loader + Home**. Do not treat older stage documents as the current sprint plan.
+## Project snapshot
+- App type: Expo React Native mobile app
+- Product: Dungeons & Dragons companion / character manager
+- Primary platform: Android
+- Package manager: `npm`
+- Language: TypeScript
+- State: Zustand + AsyncStorage
+- Cloud: Firebase Auth + Firestore
+- Navigation: React Navigation
 
-Current direction:
-- DnD companion for players and DMs, not only a character sheet.
-- Local-first character management with cloud sharing/sync between players and DM.
-- Session-first gameplay UX before broad feature expansion.
+Main user flows currently present in the repository:
+- character creation
+- local character editing and persistence
+- character detail tabs
+- cloud save/share of character sheets
+- bestiary
+- DM tools
+- initiative flow
+- settings/support
 
-## Current Sprint Roadmap
-1. Sprint 1: Dice Roller + Skeleton-loader
-2. Sprint 2: Home redesign
-3. Sprint 3: Character Sheet session-first polish
-4. Sprint 4: Create Character wizard + scroll/keyboard fix
-5. Sprint 5: Spellbook polish
-6. Sprint 6: Bestiary polish
-7. Future: DM Desktop Workspace
+---
 
-Use `docs/ux-ui-roadmap.md` as the current source of truth.
+## Codex operating principles
 
-## UX Principles
-- Session-first UX.
-- Clear separation between Play Mode and Edit Mode.
-- 1-2 tap access for session actions.
-- Local-first, Cloud-enhanced.
-- Clear loading, empty, error, offline, pending-sync, and conflict states.
-- Skeleton instead of blank loading screens.
-- Android-first touch targets and keyboard behavior.
+### 1. Read before writing
+Before changing code, inspect the files actually involved.
+At minimum, read:
+- target screen/component/service;
+- related types;
+- related store if state is involved;
+- related navigation file if route params are involved.
 
-## DnD Product Principles
-- Dice rolls must support d20 logic, modifiers, advantage, and disadvantage.
-- Character Sheet must prioritize HP, AC, initiative, attacks, spells, conditions, and quick notes.
-- Create Character should follow the DnD flow: identity, race/class/background, stats, combat, equipment, magic, personality, storage/review.
-- Spellbook must support quick in-session lookup, filters, and character integration.
-- Bestiary must support DM quick view and encounter preparation.
+Do not make assumptions from framework habits alone.
 
-## Do Not Break
-- Offline/local character persistence.
-- Firebase auth flows.
-- Firestore character sharing flows.
-- Navigation between existing screens.
+### 2. Prefer the smallest correct diff
+Choose narrow edits over rewrites.
+Good:
+- fixing a type contract;
+- extracting one helper;
+- tightening a Firestore mapper;
+- improving one screen interaction.
+
+Avoid unless explicitly requested:
+- massive folder reshuffles;
+- broad renames;
+- replacing architecture patterns wholesale;
+- upgrading core dependencies opportunistically.
+
+### 3. Preserve product-critical behavior
+Do not break:
+- offline/local character persistence;
+- Firebase auth flows;
+- Firestore character sharing flows;
+- navigation between existing screens;
 - Android usability.
-- Local vs Cloud vs Shared state visibility.
 
-## Coding Rules
-- Do not introduce new `any` unless unavoidable.
+When a task touches one of those flows, explicitly verify the related code path first.
+
+### 4. Improve code quality only where touched
+When editing a file:
+- avoid introducing new `any`;
+- prefer explicit types for params and service returns;
+- keep code consistent with surrounding conventions;
+- do not expand scope just to "clean everything up".
+
+### 5. Be honest about repository reality
+Only claim commands/checks passed if they were actually run.
+This repository does **not** currently provide default `lint` or `test` scripts.
+
+---
+
+## Repository-specific guidance
+
+### Important directories
+- `src/screens/` — screen-level UI
+- `src/shared/components/` — reusable presentational/shared components
+- `src/modules/` — larger reusable UI modules
+- `src/navigation/` — navigation structure
+- `src/context/` — Zustand stores
+- `src/services/` — domain and Firebase-related services
+- `assets/` — visual assets
+- `android/` — native Android project
+
+### High-impact files
+Start here when a task touches related behavior:
+- `App.tsx`
+- `src/navigation/AppNavigator.tsx`
+- `src/context/Character-store.ts`
+- `src/services/characterSheets.ts`
+- `src/services/firebase.ts`
+- `src/components/ShareCharacterSheetModal.tsx`
+- `src/screens/CreateCharacter/CreateCharacter.tsx`
+- `src/screens/Character/Character.tsx`
+- `src/shared/components/CharacterMenu/CharacterMenu.tsx`
+
+---
+
+## Coding rules for this repo
+
+### TypeScript
+- Do not introduce new `any` unless absolutely unavoidable.
 - Prefer narrow interfaces/types near service boundaries and navigation params.
-- Keep Firebase access in service modules, not ad hoc inside UI.
-- Prefer `Pressable` and Android feedback for interactive UI.
-- Keep styles consistent with local `style.ts` / `styles.ts` patterns.
-- Extract reusable components only when needed by the current sprint.
+- Keep return shapes explicit for async service functions.
 
-## Validation
-Use commands that exist in `package.json`:
-- `npm run typecheck`
-- `npm run lint`
-- `npm run lint:ui`
-- `npm run lint:theme`
-- `npm run test:unit`
-- `npm run format`
+### Components
+- Prefer functional components.
+- Prefer `Pressable` for interactive UI when practical.
+- Add `android_ripple` when it improves Android feedback.
+- Keep styles in `style.ts` / `styles.ts` following the local feature convention.
 
-Only claim a validation command passed if it was actually run.
+### State and services
+- Keep UI orchestration in screens/components.
+- Keep reusable logic in helpers, stores, or services.
+- Keep Firebase access in service modules, not ad-hoc inside UI.
 
-## Output Expectations
+### Firestore / auth changes
+When touching cloud code:
+- assume auth can be null or delayed;
+- validate document existence;
+- preserve existing owner/editor sharing semantics;
+- avoid silent schema drift;
+- prefer explicit mapper functions over implicit object spreading.
+
+---
+
+## Codex workflow
+Use this order whenever possible:
+1. Inspect the relevant files.
+2. Identify the minimal safe edit.
+3. Update types first if needed.
+4. Implement logic.
+5. Adjust UI only as much as necessary.
+6. Run validation commands that actually exist.
+7. Report exactly what changed, which files were touched, and any remaining risk.
+
+---
+
+## Validation commands
+Use only commands that match this repository:
+- install deps: `npm install`
+- start expo: `npm start`
+- android dev: `npx expo start --android`
+- web dev: `npm run web`
+- format: `npm run format`
+- type-check: `npx tsc --noEmit`
+
+Do not claim `npm run test` or `npm run lint` succeeded unless you first added those scripts and actually ran them.
+
+---
+
+## Output expectations for Codex
 When summarizing work:
 - start with the concrete result;
-- list changed files;
-- mention what was verified;
-- mention remaining uncertainty plainly.
+- list files changed;
+- mention what you verified;
+- mention remaining uncertainty plainly;
+- do not oversell confidence.
+
+
+## Core Product Principles (MANDATORY)
+
+This is NOT just a CRUD mobile app.
+
+This project is:
+
+- Session-first DnD tool
+- Player + DM collaboration system
+- Local-first with cloud enhancement
+- Homebrew-friendly character system
+
+Agent MUST prioritize:
+
+1. Fast in-session interactions over deep forms
+2. Clear separation between Play Mode and Edit Mode
+3. Minimal cognitive load during gameplay
+4. Visibility of Local vs Cloud vs Shared state
+5. Support for homebrew/custom mechanics as first-class feature
+
+## UX Rules (STRICT)
+
+When modifying UI:
+
+- NEVER overload screens with long forms in gameplay mode
+- ALWAYS prefer quick actions over deep navigation
+- ALWAYS separate:
+  - system data (stats, HP, AC)
+  - gameplay notes
+  - homebrew data
+
+- During session:
+  - user should tap, not read
+  - user should act in 1-2 taps
+
+  ## Character Modes
+
+Every character-related UI must support:
+
+- Play Mode (default)
+  - fast access
+  - large controls
+  - no heavy editing
+
+- Edit Mode
+  - full configuration
+  - forms and structure editing
+
+Agent must NOT mix these modes in one UI.
+
+## Data Model Philosophy
+
+- Local data ALWAYS exists
+- Cloud is used for:
+  - synchronization
+  - collaboration (DM <-> Player)
+- Shared state is a core feature
+
+Agent must always show:
+- sync status
+- data origin (local/cloud/shared)

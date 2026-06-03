@@ -34,7 +34,7 @@ async function readEvents(): Promise<ProductEvent[]> {
 async function saveEvents(events: ProductEvent[]): Promise<void> {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(events.slice(-MAX_EVENTS)));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch {}
 }
 
 export function trackProductEvent(name: ProductEventName, payload?: Record<string, unknown>): void {
@@ -48,4 +48,3 @@ export function trackProductEvent(name: ProductEventName, payload?: Record<strin
 export async function getProductEvents(): Promise<ProductEvent[]> {
   return readEvents();
 }
-

@@ -1,4 +1,4 @@
-import { isWeaponName } from '@/shared/const/WeaponsDb';
+import { findWeapon, isWeaponName } from '@/shared/const/WeaponsDb';
 
 export const splitGearIntoWeaponsAndItems = (gear: string[]) => {
   const weapons: string[] = [];
