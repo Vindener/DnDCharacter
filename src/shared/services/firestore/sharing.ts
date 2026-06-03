@@ -1,5 +1,12 @@
-// @ts-nocheck
-const __hasDoc = (snap: any) => { try { if (!snap) return false; const e: any = (snap as any).exists; return typeof e === 'function' ? !!e.call(snap) : !!e; } catch { return false; } };
+function hasDoc(snap: unknown): boolean {
+  try {
+    if (!snap || typeof snap !== 'object') return false;
+    const exists = (snap as { exists?: unknown }).exists;
+    return typeof exists === 'function' ? Boolean((exists as () => unknown).call(snap)) : Boolean(exists);
+  } catch (_error) {
+    return false;
+  }
+}
 
 import { getApp } from '@react-native-firebase/app';
 import { getAuth, getIdToken } from '@react-native-firebase/auth';
@@ -41,7 +48,7 @@ export async function ensureUserInUsers() {
   if (!user) throw new Error('Not signed in');
   try {
     await getIdToken(user, true);
-  } catch {}
+  } catch (_error) { /* intentionally ignored */ }
 
   const uid = user.uid;
   const emailLower = pickEmailLower(user);
@@ -111,11 +118,12 @@ export async function createConnection(toUid) {
     );
   } catch (e) {
     // Most likely permission-denied if a reverse pending already exists
-    const code = e?.code || '';
-    await error('createConnection:error', { code, message: e?.message || String(e) });
+    const caught = e as Error & { code?: string };
+    const code = caught.code || '';
+    await error('createConnection:error', { code, message: caught.message || String(caught) });
     if (code === 'permission-denied') {
       const friendly = 'Запит уже існує або очікує вашого підтвердження на іншому боці.';
-      const err = new Error(friendly);
+      const err = new Error(friendly) as Error & { code?: string };
       err.code = code;
       throw err;
     }
@@ -162,13 +170,14 @@ export async function respondToConnectionById(connectionIdOrUid, action /* 'acce
   await log('respondToConnectionById:start', { connectionId, action });
   const ref = doc(db, 'connections', String(connectionId));
   const snap = await getDoc(ref);
-  if (!__hasDoc(snap)) {
+  if (!hasDoc(snap)) {
     await error('respondToConnectionById:not-found', { connectionId });
-    const err = new Error('Connection not found');
+    const err = new Error('Connection not found') as Error & { code?: string };
     err.code = 'not-found';
     throw err;
   }
-  const { fromUid, toUid, status } = snap.data();
+  const data = (snap.data() || {}) as { fromUid?: string; toUid?: string; status?: string };
+  const { fromUid, toUid, status } = data;
   if (toUid !== me) throw new Error('Not the recipient');
   if (status !== 'pending') throw new Error('Not pending');
   const newStatus = action === 'accept' ? 'accepted' : 'declined';
@@ -183,10 +192,13 @@ export async function respondToConnectionById(connectionIdOrUid, action /* 'acce
 }
 
 // Ensure shared doc exists for a connection (id = connectionId)
-export async function ensureSharedDoc(connectionId, participants /* { fromUid, toUid } */) {
+export async function ensureSharedDoc(
+  connectionId: string,
+  participants?: { fromUid?: string; toUid?: string },
+) {
   const ref = doc(db, 'sharedDocs', String(connectionId));
   const snap = await getDoc(ref);
-  if (!__hasDoc(snap)) {
+  if (!hasDoc(snap)) {
     await log('ensureSharedDoc:create', { connectionId });
     await setDoc(
       ref,
@@ -203,8 +215,8 @@ export async function ensureSharedDoc(connectionId, participants /* { fromUid, t
     );
   } else {
     // ensure participants are set
-    const data = snap.data() || {};
-    const patch = {};
+    const data = (snap.data() || {}) as { fromUid?: string; toUid?: string };
+    const patch: Record<string, unknown> = {};
     if (!data.fromUid && participants?.fromUid) patch.fromUid = participants.fromUid;
     if (!data.toUid && participants?.toUid) patch.toUid = participants.toUid;
     if (Object.keys(patch).length) {
@@ -223,7 +235,7 @@ export function subscribeSharedText(connectionId, onChange, onError = console.er
   return onSnapshot(
     ref,
     (snap) => {
-      if (!__hasDoc(snap)) {
+      if (!hasDoc(snap)) {
         onChange(null);
         return;
       }
@@ -239,7 +251,7 @@ export async function updateSharedText(connectionId, nextText) {
   if (!me) throw new Error('Not signed in');
   const ref = doc(db, 'sharedDocs', String(connectionId));
   const snap = await getDoc(ref);
-  if (!__hasDoc(snap)) throw new Error('Shared doc missing');
+  if (!hasDoc(snap)) throw new Error('Shared doc missing');
   const ver = Number(snap.data()?.version || 0);
   await updateDoc(ref, {
     text: String(nextText ?? ''),
@@ -272,7 +284,8 @@ export function subscribeMySharedDocs(onChange, onError = console.error) {
       emit();
     },
     (e) => {
-      error('subscribeMySharedDocs/from', { code: e?.code, msg: e?.message });
+      const err = e as Error & { code?: string };
+      error('subscribeMySharedDocs/from', { code: err.code, msg: err.message });
       onError(e);
     },
   );
@@ -283,19 +296,22 @@ export function subscribeMySharedDocs(onChange, onError = console.error) {
       emit();
     },
     (e) => {
-      error('subscribeMySharedDocs/to', { code: e?.code, msg: e?.message });
+      const err = e as Error & { code?: string };
+      error('subscribeMySharedDocs/to', { code: err.code, msg: err.message });
       onError(e);
     },
   );
   return () => {
     try {
-      u1 && u1();
-    } catch {}
+      if (u1) u1();
+    } catch (_error) { /* intentionally ignored */ }
     try {
-      u2 && u2();
-    } catch {}
+      if (u2) u2();
+    } catch (_error) { /* intentionally ignored */ }
   };
 }
 
 // Back-compat aliases if your code expects these names
 export { ensureSharedDoc as ensureSharedDocForConnection };
+
+

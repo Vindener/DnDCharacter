@@ -2,12 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import useCustomCoinsStore from '@/context/CustomCoins-store';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 interface CoinsProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const clampToNonNegativeInt = (value: string | number) => {
@@ -21,12 +22,12 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
   const local = useMemo(
     () =>
       StyleSheet.create({
-        row: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-        rowLabel: { flex: 1, fontSize: 16, color: colors.text },
+        row: { flexDirection: 'row', alignItems: 'center', marginBottom: sp(12) },
+        rowLabel: { flex: 1, fontSize: fs(16), color: colors.text },
         btn: {
-          paddingHorizontal: 14,
-          paddingVertical: 8,
-          borderRadius: 10,
+          paddingHorizontal: sp(14),
+          paddingVertical: sp(8),
+          borderRadius: rd(10),
           borderWidth: 1,
           borderColor: colors.border,
           backgroundColor: colors.inputBackground,
@@ -34,21 +35,21 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
           alignItems: 'center',
           justifyContent: 'center',
         },
-        btnText: { fontSize: 18, color: colors.text },
+        btnText: { fontSize: fs(18), color: colors.text },
         input: {
           width: 90,
           marginHorizontal: 10,
-          paddingHorizontal: 12,
-          paddingVertical: 8,
-          borderRadius: 10,
+          paddingHorizontal: sp(12),
+          paddingVertical: sp(8),
+          borderRadius: rd(10),
           borderWidth: 1,
           borderColor: colors.border,
           backgroundColor: colors.inputBackground,
           color: colors.text,
           textAlign: 'center',
         },
-        sectionTitle: { ...sharedStyles.label, marginBottom: 8 },
-        subTitle: { ...sharedStyles.label, marginTop: 12, marginBottom: 6, fontSize: 15, opacity: 0.9 },
+        sectionTitle: { ...sharedStyles.label, marginBottom: sp(8) },
+        subTitle: { ...sharedStyles.label, marginTop: sp(12), marginBottom: sp(6), fontSize: fs(15), opacity: 0.9 },
         divider: { height: 1, backgroundColor: colors.border, opacity: 0.5, marginVertical: 12 },
       }),
     [colors, sharedStyles.label]
@@ -158,3 +159,6 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
 };
 
 export default Coins;
+
+
+

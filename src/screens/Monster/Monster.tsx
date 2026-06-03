@@ -10,6 +10,7 @@ import useMonsterStore from '@/context/Monster-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import FileService from '@/shared/services/fileSerice';
 import type { BestiaryStackParamList } from '@/navigation/BestiaryNavigator';
+import { sp } from '@/shared/styles/tokens';
 
 type MonsterRouteProp = RouteProp<BestiaryStackParamList, 'Monster'>;
 
@@ -31,12 +32,14 @@ const CollapsibleTextBlock = ({
   expanded,
   onToggle,
   style,
+  rippleColor,
 }: {
   title: string;
   value?: string;
   expanded: boolean;
   onToggle: () => void;
   style: ReturnType<typeof getStyles>;
+  rippleColor: string;
 }) => {
   const text = expanded ? value || '—' : previewText(value);
   const canToggle = (value || '').length > COLLAPSE_LIMIT;
@@ -46,7 +49,7 @@ const CollapsibleTextBlock = ({
       <Text style={style.label}>{title}</Text>
       <Text style={style.value}>{text}</Text>
       {canToggle && (
-        <Pressable style={style.collapseButton} onPress={onToggle} android_ripple={{ color: '#999' }}>
+        <Pressable style={style.collapseButton} onPress={onToggle} android_ripple={{ color: rippleColor }}>
           <Text style={style.collapseButtonText}>{expanded ? 'Згорнути' : 'Показати більше'}</Text>
         </Pressable>
       )}
@@ -76,7 +79,7 @@ export default function Monster({ route }: Props) {
         const uri = result.assets[0].uri;
         setData((prev) => ({ ...prev, photoUri: uri }));
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
   const removePhoto = () => {
@@ -228,6 +231,7 @@ export default function Monster({ route }: Props) {
             expanded={actionsExpanded}
             onToggle={() => setActionsExpanded((prev) => !prev)}
             style={styles}
+            rippleColor={colors.ripple}
           />
           <CollapsibleTextBlock
             title='Нотатки'
@@ -235,13 +239,19 @@ export default function Monster({ route }: Props) {
             expanded={notesExpanded}
             onToggle={() => setNotesExpanded((prev) => !prev)}
             style={styles}
+            rippleColor={colors.ripple}
           />
         </>
       )}
 
-      <View style={{ marginTop: 12 }}>
+      <View style={{ marginTop: sp(12) }}>
         <Button title='Експорт JSON' onPress={exportCurrent} />
       </View>
     </ScrollView>
   );
 }
+
+
+
+
+

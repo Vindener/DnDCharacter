@@ -1,14 +1,15 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
   StyleSheet.create({
     card: {
       flexDirection: 'row',
       backgroundColor: c.card,
-      padding: 12,
-      borderRadius: 12,
-      marginBottom: 12,
+      padding: sp(12),
+      borderRadius: rd(12),
+      marginBottom: sp(12),
       alignItems: 'flex-start',
       borderWidth: 1,
       borderColor: c.border,
@@ -17,8 +18,8 @@ export const getStyles = (c: ThemeColors) =>
     avatar: {
       width: 48,
       height: 48,
-      borderRadius: 6,
-      marginRight: 12,
+      borderRadius: rd(6),
+      marginRight: sp(12),
       backgroundColor: c.inputBackground,
     },
     info: {
@@ -28,49 +29,51 @@ export const getStyles = (c: ThemeColors) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      gap: 8,
+      gap: sp(8),
     },
     name: {
       color: c.text,
-      fontSize: 16,
+      fontSize: fs(16),
       fontWeight: '600',
       flex: 1,
     },
     meta: {
       color: c.textSecondary,
-      fontSize: 13,
-      marginTop: 2,
+      fontSize: fs(13),
+      marginTop: sp(2),
     },
     quickRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 8,
-      marginTop: 6,
+      gap: sp(8),
+      marginTop: sp(6),
     },
     quickMeta: {
       color: c.text,
-      fontSize: 12,
+      fontSize: fs(12),
       fontWeight: '600',
     },
     pinButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
-      borderRadius: 99,
+      gap: sp(4),
+      borderRadius: rd(99),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.inputBackground,
-      paddingVertical: 4,
-      paddingHorizontal: 8,
+      paddingVertical: sp(4),
+      paddingHorizontal: sp(8),
     },
     pinText: {
       color: c.text,
-      fontSize: 11,
+      fontSize: fs(11),
       fontWeight: '700',
     },
     deleteButton: {
-      marginLeft: 8,
-      marginTop: 4,
-      padding: 4,
+      marginLeft: sp(8),
+      marginTop: sp(4),
+      padding: sp(4),
     },
   });
+
+

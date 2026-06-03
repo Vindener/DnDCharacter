@@ -1,17 +1,17 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { WEAPONS_DB } from '@/shared/const/WeaponsDb';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { Ionicons } from '@expo/vector-icons';
 import Weapon from '../Weapons/Weapon';
+import { fs, sp } from '@/shared/styles/tokens';
 
 interface InventoryProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const Inventory: React.FC<InventoryProps> = ({ data }) => {
@@ -60,7 +60,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
 
   return (
     <View style={styles.container}>
-      <Weapon data={data} />
+      <Weapon />
 
       <Text style={styles.label}>Інвентар персонажа:</Text>
 
@@ -68,7 +68,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
         data={items}
         keyExtractor={(_, idx) => idx.toString()}
         renderItem={({ item, index }) => (
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp(8) }}>
             <MultiTextInput
               multiline={false}
               numberOfLines={8}
@@ -77,8 +77,8 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
               onChangeText={(text) => handleChangeItem(text, index)}
               placeholder='Назва предмета'
             />
-            <TouchableOpacity onPress={() => handleDeleteItem(index)} style={{ marginLeft: 8 }}>
-              <Ionicons name='trash-outline' size={24} color='#d00' />
+            <TouchableOpacity onPress={() => handleDeleteItem(index)} style={{ marginLeft: sp(8) }}>
+              <Ionicons name='trash-outline' size={24} color={colors.danger} />
             </TouchableOpacity>
           </View>
         )}
@@ -87,16 +87,21 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
       <TouchableOpacity
         onPress={handleAddItem}
         style={{
-          marginTop: 12,
+          marginTop: sp(12),
           flexDirection: 'row',
           alignItems: 'center',
         }}
       >
-        <Ionicons name='add-circle-outline' size={28} color='#28a745' />
-        <Text style={{ marginLeft: 8, color: '#28a745', fontSize: 16 }}>Додати предмет</Text>
+        <Ionicons name='add-circle-outline' size={28} color={colors.success} />
+        <Text style={{ marginLeft: sp(8), color: colors.success, fontSize: fs(16) }}>Додати предмет</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Inventory;
+
+
+
+
+

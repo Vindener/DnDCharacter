@@ -16,13 +16,15 @@ import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
 import { BACKGROUNDS } from '@/shared/const/Backgrounds';
 import { SUBCLASS_DETAILS } from '@/shared/const/SubclassDetails';
 import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
-import type { CharacterDto, CharacterTemplateId } from '@/types/Character';
+import type { CharacterViewModel, CharacterTemplateId } from '@/types/Character';
 import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
-import { addEditorByEmail, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import { addEditorByEmail } from '@/repositories/characterCloudRepository';
 import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { formatSchemaErrors, safeParseCreateCharacterWizardStep } from '@/domain/schemas';
 
 type StartMethod = 'guided' | 'quick';
 type StatMethod = 'array' | 'pointbuy';
@@ -70,14 +72,12 @@ const BG_COINS: Record<string, number> = {
   urchin: 10,
 };
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
 }
 
-function autoFillSkills(stats: CharacterDto['stats']): CharacterDto['skills'] {
-  const base: CharacterDto['skills'] = {
+function autoFillSkills(stats: CharacterViewModel['stats']): CharacterViewModel['skills'] {
+  const base: CharacterViewModel['skills'] = {
     acrobatics: 0,
     animalHandling: 0,
     arcana: 0,
@@ -107,8 +107,8 @@ function autoFillSkills(stats: CharacterDto['stats']): CharacterDto['skills'] {
 
 const CreateCharacter = (): JSX.Element => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'CreateCharacter'>>();
-  const c = useThemeStore((s) => s.colors);
-  const styles = getStyles(c);
+  const colors = useThemeStore((s) => s.colors);
+  const styles = getStyles(colors);
 
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
@@ -118,6 +118,8 @@ const CreateCharacter = (): JSX.Element => {
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const removeCharacterSync = useSyncStore((s) => s.removeCharacterSync);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
+  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
 
   const [step, setStep] = useState<number>(1);
   const [startMethod, setStartMethod] = useState<StartMethod>('guided');
@@ -263,54 +265,29 @@ const CreateCharacter = (): JSX.Element => {
   const resolvedSubclass = selectedClass === 'custom' ? customSubclass.trim() || undefined : subclass || undefined;
   const resolvedClassName = selectedClass === 'custom' ? customClassName.trim() : selectedClass;
 
-  const validateStep2 = (showAlert: boolean = true): boolean => {
-    if (!name.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Введіть ім’я персонажа.');
-      return false;
-    }
+  const buildWizardValidationInput = () => ({
+    name,
+    level,
+    isCustomRace,
+    customRace,
+    selectedClass,
+    customClassName,
+    backgroundKey,
+    customBackground,
+    storageMode,
+    inviteEmail,
+    statMethod,
+    pointBuyValid,
+  });
 
-    const lvl = Number(level);
-    if (!Number.isFinite(lvl) || lvl < 1 || lvl > 20) {
-      if (showAlert) Alert.alert('Помилка', 'Рівень має бути від 1 до 20.');
-      return false;
+  const validateWizardStep = (targetStep: number, showAlert: boolean = true): boolean => {
+    const result = safeParseCreateCharacterWizardStep(buildWizardValidationInput(), targetStep);
+    if (result.ok) return true;
+    if (showAlert) {
+      const message = formatSchemaErrors(result.issues)[0] || 'Невалідні дані форми.';
+      Alert.alert('Помилка', message);
     }
-
-    if (isCustomRace && !customRace.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Для власної раси вкажіть назву.');
-      return false;
-    }
-
-    return true;
-  };
-
-  const validateStep3 = (showAlert: boolean = true): boolean => {
-    if (selectedClass === 'custom' && !customClassName.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Для власного класу введіть назву.');
-      return false;
-    }
-    return true;
-  };
-
-  const validateStep5 = (showAlert: boolean = true): boolean => {
-    if (backgroundKey === 'custom' && !customBackground.trim()) {
-      if (showAlert) Alert.alert('Помилка', 'Для власної предісторії введіть назву.');
-      return false;
-    }
-    return true;
-  };
-
-  const validateStep6 = (showAlert: boolean = true): boolean => {
-    const email = inviteEmail.trim();
-    if (!email) return true;
-    if (!EMAIL_REGEX.test(email)) {
-      if (showAlert) Alert.alert('Помилка', 'Електронна пошта для шерінгу має некоректний формат.');
-      return false;
-    }
-    if (storageMode === 'local-only') {
-      if (showAlert) Alert.alert('Помилка', 'Шерінг доступний тільки у режимі "Локально + Хмара".');
-      return false;
-    }
-    return true;
+    return false;
   };
 
   const stepTitle = useMemo(() => {
@@ -355,14 +332,7 @@ const CreateCharacter = (): JSX.Element => {
   }, [storageMode, isSignedIn, inviteEmail]);
 
   const goNextFromStep = (): void => {
-    if (step === 2 && !validateStep2(true)) return;
-    if (step === 3 && !validateStep3(true)) return;
-    if (step === 4 && statMethod === 'pointbuy' && !pointBuyValid) {
-      Alert.alert('Помилка', 'Розподіл балів перевищує ліміт 27.');
-      return;
-    }
-    if (step === 5 && !validateStep5(true)) return;
-    if (step === 6 && !validateStep6(true)) return;
+    if (step >= 2 && step <= 6 && !validateWizardStep(step, true)) return;
     if (step < TOTAL_STEPS) setStep((prev) => prev + 1);
   };
 
@@ -371,31 +341,30 @@ const CreateCharacter = (): JSX.Element => {
       setIsSigningIn(true);
       await onGoogleButtonPress();
       setAuthVersion((prev) => prev + 1);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
     setIsSigningIn(false);
   };
 
   const onCreate = async () => {
     if (isCreating) return;
 
-    if (!validateStep2(true)) {
+    if (!validateWizardStep(2, true)) {
       setStep(2);
       return;
     }
-    if (!validateStep3(true)) {
+    if (!validateWizardStep(3, true)) {
       setStep(3);
       return;
     }
-    if (statMethod === 'pointbuy' && !pointBuyValid) {
+    if (!validateWizardStep(4, true)) {
       setStep(4);
-      Alert.alert('Помилка', 'Розподіл балів перевищує ліміт 27.');
       return;
     }
-    if (!validateStep5(true)) {
+    if (!validateWizardStep(5, true)) {
       setStep(5);
       return;
     }
-    if (!validateStep6(true)) {
+    if (!validateWizardStep(6, true)) {
       setStep(6);
       return;
     }
@@ -444,9 +413,30 @@ const CreateCharacter = (): JSX.Element => {
 
       if (cloudRequested) {
         try {
-          const result = await upsertCharacterSheetFromLocal(character);
-          if (result?.id && result.id !== character.id) {
-            const remappedCharacter = { ...character, id: result.id };
+          const syncResult = await syncToCloud({
+            character,
+            syncState: useSyncStore.getState().syncByCharacter[character.id],
+            actorRole: 'Player',
+            syncPort: {
+              ensureCharacterSync,
+              setCloudAvailability,
+              markCloudUploaded,
+              setSyncTransport,
+              markSyncError,
+            },
+            isOnline: true,
+            fallbackPath: 'overview.identity',
+            syncingMessage: 'Синхронізація...',
+            syncedMessage: 'Синхронізовано',
+            conflictFallbackPath: 'overview.identity',
+          });
+
+          if (syncResult.status !== 'synced') {
+            throw new Error(syncResult.message || 'Cloud sync failed');
+          }
+
+          if (syncResult.targetCharacter.id !== character.id) {
+            const remappedCharacter = syncResult.targetCharacter;
             await updateCharacter(character.id, remappedCharacter);
             await removeCharacterSync(character.id);
             await ensureCharacterSync(remappedCharacter.id, true);
@@ -454,7 +444,6 @@ const CreateCharacter = (): JSX.Element => {
             targetSheetId = remappedCharacter.id;
           }
 
-          await markCloudUploaded(targetSheetId);
           cloudSaved = true;
 
           const email = inviteEmail.trim().toLowerCase();
@@ -507,7 +496,12 @@ const CreateCharacter = (): JSX.Element => {
   }) => (
     <View style={styles.navRow}>
       {showBack ? (
-        <Pressable style={styles.navButton} onPress={() => setStep((prev) => Math.max(prev - 1, 1))} android_ripple={{ color: '#999' }}>
+        <Pressable
+          style={styles.navButton}
+          onPress={() => setStep((prev) => Math.max(prev - 1, 1))}
+          android_ripple={{ color: colors.ripple }}
+          testID='createCharacter.backButton'
+        >
           <Text style={styles.navButtonText}>Назад</Text>
         </Pressable>
       ) : (
@@ -517,7 +511,8 @@ const CreateCharacter = (): JSX.Element => {
         style={[styles.navButton, styles.navButtonPrimary, nextDisabled ? styles.navButtonDisabled : null]}
         onPress={onNext}
         disabled={nextDisabled}
-        android_ripple={{ color: '#777' }}
+        android_ripple={{ color: colors.ripple }}
+        testID={nextLabel.includes('Створити персонажа') ? 'createCharacter.submitButton' : 'createCharacter.nextButton'}
       >
         <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{nextLabel}</Text>
       </Pressable>
@@ -756,7 +751,7 @@ const CreateCharacter = (): JSX.Element => {
               style={[styles.statControl, !canDecrease ? styles.navButtonDisabled : null]}
               onPress={() => canDecrease && setPbStats((prev) => ({ ...prev, [ability]: prev[ability] - 1 }))}
               disabled={!canDecrease}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.statControlText}>-</Text>
             </Pressable>
@@ -765,7 +760,7 @@ const CreateCharacter = (): JSX.Element => {
               style={[styles.statControl, !canIncrease ? styles.navButtonDisabled : null]}
               onPress={() => canIncrease && setPbStats((prev) => ({ ...prev, [ability]: prev[ability] + 1 }))}
               disabled={!canIncrease}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.statControlText}>+</Text>
             </Pressable>
@@ -797,7 +792,7 @@ const CreateCharacter = (): JSX.Element => {
     </View>
   );
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps='handled'>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps='handled' testID='createCharacter.screen'>
       <View style={styles.progressRow}>
         <Text style={styles.progressText}>
           Крок {step}/{TOTAL_STEPS}
@@ -814,7 +809,7 @@ const CreateCharacter = (): JSX.Element => {
           <Pressable
             style={[styles.methodCard, startMethod === 'guided' ? styles.methodCardActive : null]}
             onPress={() => setStartMethod('guided')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.methodTitle}>Покроково (повний контроль)</Text>
             <Text style={styles.methodMeta}>Повні підказки на кожному кроці, з ручним контролем параметрів.</Text>
@@ -823,7 +818,7 @@ const CreateCharacter = (): JSX.Element => {
           <Pressable
             style={[styles.methodCard, startMethod === 'quick' ? styles.methodCardActive : null]}
             onPress={() => setStartMethod('quick')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.methodTitle}>Швидко (швидкий старт)</Text>
             <Text style={styles.methodMeta}>Рекомендовані дефолти для швидкого проходження кроків.</Text>
@@ -836,7 +831,7 @@ const CreateCharacter = (): JSX.Element => {
               key={template.id}
               style={[styles.methodCard, characterTemplateId === template.id ? styles.methodCardActive : null]}
               onPress={() => setCharacterTemplateId(template.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.methodTitle}>{template.title}</Text>
               <Text style={styles.methodMeta}>{template.description}</Text>
@@ -851,14 +846,14 @@ const CreateCharacter = (): JSX.Element => {
         <View style={styles.card}>
           <Header title='Ім’я, рівень, раса' />
           <Text style={styles.label}>Ім’я персонажа</Text>
-          <TextInput style={styles.input} value={name} onChangeText={setName} />
+          <TextInput style={styles.input} value={name} onChangeText={setName} testID='createCharacter.nameInput' />
 
           <Text style={styles.label}>Рівень</Text>
           <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType='numeric' />
 
           <RacePicker />
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До класу' nextDisabled={!validateStep2(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До класу' nextDisabled={!validateWizardStep(2, false)} />
         </View>
       )}
 
@@ -866,7 +861,7 @@ const CreateCharacter = (): JSX.Element => {
         <View style={styles.card}>
           <Header title='Клас і підклас' />
           <ClassPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До характеристик' nextDisabled={!validateStep3(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До характеристик' nextDisabled={!validateWizardStep(3, false)} />
         </View>
       )}
 
@@ -883,14 +878,14 @@ const CreateCharacter = (): JSX.Element => {
             <Pressable
               style={[styles.toggleButton, statMethod === 'array' ? styles.toggleButtonActive : null]}
               onPress={() => setStatMethod('array')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, statMethod === 'array' ? styles.toggleButtonTextActive : null]}>Стандартний масив</Text>
             </Pressable>
             <Pressable
               style={[styles.toggleButton, statMethod === 'pointbuy' ? styles.toggleButtonActive : null]}
               onPress={() => setStatMethod('pointbuy')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, statMethod === 'pointbuy' ? styles.toggleButtonTextActive : null]}>Розподіл балів (27)</Text>
             </Pressable>
@@ -907,7 +902,7 @@ const CreateCharacter = (): JSX.Element => {
             ))}
           </View>
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До передісторії' nextDisabled={statMethod === 'pointbuy' && !pointBuyValid} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До передісторії' nextDisabled={!validateWizardStep(4, false)} />
         </View>
       )}
 
@@ -916,7 +911,7 @@ const CreateCharacter = (): JSX.Element => {
           <Header title='Предісторія та стартовий інвентар' />
           <BackgroundPicker />
           <GearPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До збереження' nextDisabled={!validateStep5(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До збереження' nextDisabled={!validateWizardStep(5, false)} />
         </View>
       )}
 
@@ -934,14 +929,14 @@ const CreateCharacter = (): JSX.Element => {
             <Pressable
               style={[styles.toggleButton, storageMode === 'local-only' ? styles.toggleButtonActive : null]}
               onPress={() => setStorageMode('local-only')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>Локально</Text>
             </Pressable>
             <Pressable
               style={[styles.toggleButton, storageMode === 'local-cloud' ? styles.toggleButtonActive : null]}
               onPress={() => setStorageMode('local-cloud')}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.toggleButtonText, storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>Локально + Хмара</Text>
             </Pressable>
@@ -955,10 +950,10 @@ const CreateCharacter = (): JSX.Element => {
                 style={[styles.navButton, styles.navButtonPrimary, isSigningIn ? styles.navButtonDisabled : null]}
                 onPress={onLogin}
                 disabled={isSigningIn}
-                android_ripple={{ color: '#777' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 {isSigningIn ? (
-                  <ActivityIndicator color={c.background} />
+                  <ActivityIndicator color={colors.background} />
                 ) : (
                   <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>Увійти через Google</Text>
                 )}
@@ -974,12 +969,12 @@ const CreateCharacter = (): JSX.Element => {
             autoCapitalize='none'
             keyboardType='email-address'
             placeholder='name@example.com'
-            placeholderTextColor={c.textSecondary}
+            placeholderTextColor={colors.textSecondary}
             editable={storageMode === 'local-cloud'}
           />
           {storageMode === 'local-only' && <Text style={styles.helperText}>Шерінг доступний лише в режимі "Локально + Хмара".</Text>}
 
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До перевірки' nextDisabled={!validateStep6(false)} />
+          <StepNav showBack onNext={goNextFromStep} nextLabel='До перевірки' nextDisabled={!validateWizardStep(6, false)} />
         </View>
       )}
 
@@ -1055,3 +1050,8 @@ const CreateCharacter = (): JSX.Element => {
 };
 
 export default CreateCharacter;
+
+
+
+
+

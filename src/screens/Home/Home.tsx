@@ -2,17 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import FileService from '@/shared/services/fileSerice';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import type { CharacterSheet } from '@/repositories/characterCloudRepository';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress } from '@/shared/services/auth/index';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
@@ -32,10 +33,11 @@ type CharacterPreview = {
   shareStatus: string | null;
   statuses: string[];
   source: 'local' | 'mine' | 'shared';
-  payload: CharacterDto;
+  payload: CharacterViewModel;
 };
 
-const mapRemoteToLocalDto = (doc: Record<string, unknown>): CharacterDto => mapCloudCharacterToLocalDto(doc);
+const mapRemoteToLocalDto = (doc: CharacterSheet): CharacterViewModel =>
+  mapCloudCharacterToLocalDto(doc as unknown as Record<string, unknown>);
 
 const toMillis = (value: unknown): number => {
   if (!value || typeof value !== 'object') return 0;
@@ -93,8 +95,8 @@ const Home = () => {
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
 
   const [search, setSearch] = useState('');
-  const [myCloud, setMyCloud] = useState<Record<string, unknown>[]>([]);
-  const [sharedCloud, setSharedCloud] = useState<Record<string, unknown>[]>([]);
+  const [myCloud, setMyCloud] = useState<CharacterSheet[]>([]);
+  const [sharedCloud, setSharedCloud] = useState<CharacterSheet[]>([]);
   const [cloudPulseAt, setCloudPulseAt] = useState<number | null>(null);
   const netInfo = useNetInfo();
 
@@ -129,17 +131,17 @@ const Home = () => {
     }
 
     const unsubMine = subscribeMySheets((list) => {
-      setMyCloud((list || []) as Record<string, unknown>[]);
+      setMyCloud(list || []);
       setCloudPulseAt(Date.now());
-      (list || []).forEach((doc: any) => {
+      (list || []).forEach((doc) => {
         if (doc?.id) void setCloudAvailability(String(doc.id), true);
       });
     });
 
     const unsubShared = subscribeSharedWithMe((list) => {
-      setSharedCloud((list || []) as Record<string, unknown>[]);
+      setSharedCloud(list || []);
       setCloudPulseAt(Date.now());
-      (list || []).forEach((doc: any) => {
+      (list || []).forEach((doc) => {
         if (doc?.id) void setCloudAvailability(String(doc.id), true);
       });
     });
@@ -160,9 +162,9 @@ const Home = () => {
     const byId = new Map<string, CharacterPreview>();
 
     const pushPreview = (
-      payload: CharacterDto,
+      payload: CharacterViewModel,
       source: 'local' | 'mine' | 'shared',
-      rawDoc?: Record<string, unknown> | null,
+      rawDoc?: CharacterSheet | null,
     ) => {
       const existing = byId.get(payload.id);
       const syncState = syncByCharacter[payload.id];
@@ -248,6 +250,12 @@ const Home = () => {
     return 'safe';
   }, [maxCharacters, userCharacterCount]);
 
+  const openRootTab = (routeName: 'DM' | 'Bestiary') => {
+    const parent = navigation.getParent();
+    if (!parent) return;
+    parent.dispatch(CommonActions.navigate({ name: routeName }));
+  };
+
   const openCharacter = async (character: CharacterPreview) => {
     const existsLocal = characters.find((c) => c.id === character.id);
 
@@ -291,7 +299,7 @@ const Home = () => {
   const onLogin = async () => {
     try {
       await onGoogleButtonPress();
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
 
@@ -354,7 +362,7 @@ const Home = () => {
   }, [previewList, sharedCloud, syncByCharacter]);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='home.screen'>
 
 
       <View style={styles.card}>
@@ -389,21 +397,58 @@ const Home = () => {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Швидкі дії</Text>
         <View style={styles.quickGrid}>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('CreateCharacter')} android_ripple={{ color: '#999' }}>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => navigation.navigate('CreateCharacter')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.createCharacterButton'
+          >
             <Ionicons name='person-add-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Створити персонажа</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='download-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Імпортувати</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('Spellbook')} android_ripple={{ color: '#999' }}>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => navigation.navigate('Spellbook')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openSpellbookButton'
+          >
             <Ionicons name='book-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Відкрити заклинання</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='play-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Почати сесію</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => openRootTab('DM')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openDMButton'
+          >
+            <Ionicons name='people-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити DM</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => openRootTab('Bestiary')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openBestiaryButton'
+          >
+            <Ionicons name='skull-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити бестіарій</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => navigation.navigate('DiceRoller')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openDiceButton'
+          >
+            <Ionicons name='dice-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити кубики</Text>
           </Pressable>
         </View>
       </View>
@@ -440,7 +485,7 @@ const Home = () => {
             onPress={() => {
               void openCharacter(item);
             }}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <View style={styles.characterHeader}>
               <Text style={styles.characterName}>{item.name}</Text>
@@ -519,3 +564,7 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+

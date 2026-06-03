@@ -2,29 +2,29 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import useAppRoleStore from '@/context/AppRole-store';
 import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
-import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
-import { loadLocalCampaignNotes } from '@/services/dmCampaignNotes';
-import type { DMCampaign } from '@/types/DM';
-import type { CharacterDto } from '@/types/Character';
+import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import { loadLocalCampaignNotes } from '@/dm/repositories/campaignNotesRepository';
+import type { DMCampaign } from '@/dm/domain/types';
+import type { CharacterViewModel } from '@/types/Character';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
 
 type DashboardCharacter = {
   id: string;
-  payload: CharacterDto;
+  payload: CharacterViewModel;
   source: 'local' | 'mine' | 'shared';
 };
 
@@ -56,6 +56,11 @@ const DM: React.FC = () => {
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [notesCount, setNotesCount] = useState(0);
 
+  const refreshNotesCount = React.useCallback(async () => {
+    const notes = await loadLocalCampaignNotes();
+    setNotesCount(notes.length);
+  }, []);
+
   const isSignedIn = useMemo(() => Boolean(fbAuth.currentUser), [authVersion]);
   const isOnline = isNetworkOnline(netInfo.isConnected);
 
@@ -79,6 +84,12 @@ const DM: React.FC = () => {
       if (typeof unsubCampaigns === 'function') unsubCampaigns();
     };
   }, [authVersion]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      void refreshNotesCount();
+    }, [refreshNotesCount]),
+  );
 
   useEffect(() => {
     if (!fbAuth.currentUser) {
@@ -158,18 +169,18 @@ const DM: React.FC = () => {
   }, [mySheets, sharedSheets]);
 
   const openRootTab = (routeName: string, params?: Record<string, unknown>) => {
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate(routeName, params);
+    parent.dispatch(CommonActions.navigate({ name: routeName, params }));
   };
 
   const openHeroesNested = (screen: 'Spellbook' | 'Home', params?: Record<string, unknown>) => {
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate('Heroes', { screen, params });
+    parent.dispatch(CommonActions.navigate({ name: 'Heroes', params: { screen, params } }));
   };
 
-  const ensureLocalCharacter = async (character: CharacterDto) => {
+  const ensureLocalCharacter = async (character: CharacterViewModel) => {
     const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
     if (existing) {
       await updateCharacter(existing.id, character);
@@ -179,15 +190,20 @@ const DM: React.FC = () => {
     return character;
   };
 
-  const openFullSheet = async (character: CharacterDto) => {
+  const openFullSheet = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     setCurrentCharacterId(local.id);
-    const parent = navigation.getParent() as any;
+    const parent = navigation.getParent();
     if (!parent) return;
-    parent.navigate('Heroes', { screen: 'Character', params: { character: local } });
+    parent.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character: local } },
+      }),
+    );
   };
 
-  const openQuickEdit = async (character: CharacterDto) => {
+  const openQuickEdit = async (character: CharacterViewModel) => {
     const local = await ensureLocalCharacter(character);
     navigation.navigate('DMQuickEdit', { characterId: local.id });
   };
@@ -197,12 +213,12 @@ const DM: React.FC = () => {
       setIsSigningIn(true);
       await onGoogleButtonPress();
       setAuthVersion((prev) => prev + 1);
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
     setIsSigningIn(false);
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='dm.screen'>
       <View style={styles.card}>
         <Text style={styles.title}>Огляд групи</Text>
         <Text style={styles.hint}>DM-орієнтований дашборд стану групи, спільного доступу та ризиків синхронізації.</Text>
@@ -226,32 +242,38 @@ const DM: React.FC = () => {
             <Text style={styles.statChipText}>Роль: {roleMode}</Text>
           </View>
         </View>
-        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMPartyOverview')} android_ripple={{ color: '#999' }}>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => navigation.navigate('DMPartyOverview')}
+          android_ripple={{ color: colors.ripple }}
+          testID='dm.partyOverviewButton'
+        >
           <Text style={styles.authButtonText}>Відкрити повний огляд групи</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
         <Text style={styles.title}>Підготовка сутички</Text>
-        <Text style={styles.hint}>Зберіть склад сутички з групи кампанії та бестіарію і передайте в Ініціативу одним потоком.</Text>
+        <Text style={styles.hint}>Зберіть склад сутички з персонажів та бестіарію і передайте в Ініціативу одним потоком.</Text>
         <View style={styles.laneGrid}>
           <Pressable
             style={styles.laneButton}
             onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
+            testID='dm.encounterPrepButton'
           >
             <Ionicons name='rocket-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Почати підготовку сутички</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='flame-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Відкрити ініціативу</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до бестіарію</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='book-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до книги заклять</Text>
           </Pressable>
@@ -281,7 +303,7 @@ const DM: React.FC = () => {
                   onPress={() => {
                     void openFullSheet(item.payload);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='link-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
@@ -291,7 +313,7 @@ const DM: React.FC = () => {
                   onPress={() => {
                     void openQuickEdit(item.payload);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Швидке редагування</Text>
@@ -301,7 +323,7 @@ const DM: React.FC = () => {
                   onPress={() => {
                     void openFullSheet(item.payload);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='document-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
@@ -326,7 +348,8 @@ const DM: React.FC = () => {
         <Pressable
           style={styles.authButton}
           onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
-          android_ripple={{ color: '#999' }}
+          android_ripple={{ color: colors.ripple }}
+          testID='dm.campaignNotesButton'
         >
           <Text style={styles.authButtonText}>Відкрити нотатки кампанії</Text>
         </Pressable>
@@ -360,12 +383,17 @@ const DM: React.FC = () => {
           })
         )}
 
-        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: '#999' }}>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => navigation.navigate('DMSharedUpdates')}
+          android_ripple={{ color: colors.ripple }}
+          testID='dm.sharedUpdatesButton'
+        >
           <Text style={styles.authButtonText}>Відкрити чергу спільних оновлень</Text>
         </Pressable>
 
         {!isSignedIn && (
-          <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Увійти через Google для спільної синхронізації'}</Text>
           </Pressable>
         )}
@@ -375,3 +403,7 @@ const DM: React.FC = () => {
 };
 
 export default DM;
+
+
+
+

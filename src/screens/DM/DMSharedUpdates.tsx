@@ -1,18 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, Text, View, Pressable } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { uuid } from 'expo-modules-core';
-import { subscribeMySheets, subscribeSharedWithMe, upsertCharacterSheetFromLocal } from '@/services/characterSheets';
+import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 import { fbAuth } from '@/services/firebase';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './DMSharedUpdates.style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useCharacterStore from '@/context/Character-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
-import type { CharacterDto } from '@/types/Character';
+import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import useAppRoleStore from '@/context/AppRole-store';
 import {
@@ -22,6 +22,7 @@ import {
   isNetworkOnline,
   mapRoleToHistoryActor,
 } from '@/shared/helpers/collaboration/status';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 type FilterKey = 'all' | 'mine' | 'shared' | 'needs-review';
 const FILTER_LABELS: Record<FilterKey, string> = {
@@ -45,8 +46,6 @@ type SharedRecord = {
     atMs: number;
   }>;
 };
-
-const REVIEWED_STORAGE_KEY = 'DM_SHARED_REVIEWED_V1';
 
 const toMillis = (value: unknown): number => {
   if (!value || typeof value !== 'object') return 0;
@@ -85,8 +84,10 @@ const DMSharedUpdates = () => {
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
+  const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
   const roleMode = useAppRoleStore((s) => s.role);
   const netInfo = useNetInfo();
 
@@ -98,12 +99,10 @@ const DMSharedUpdates = () => {
   const isOnline = isNetworkOnline(netInfo.isConnected);
 
   useEffect(() => {
-    AsyncStorage.getItem(REVIEWED_STORAGE_KEY)
-      .then((raw) => {
-        const parsed = JSON.parse(raw || '{}');
-        if (parsed && typeof parsed === 'object') {
-          setReviewedMap(parsed as Record<string, number>);
-        }
+    characterLocalRepository
+      .loadSharedUpdatesReviewedMap()
+      .then((parsed) => {
+        setReviewedMap(parsed);
       })
       .catch(() => {});
   }, []);
@@ -184,8 +183,8 @@ const DMSharedUpdates = () => {
   const persistReviewed = async (next: Record<string, number>) => {
     setReviewedMap(next);
     try {
-      await AsyncStorage.setItem(REVIEWED_STORAGE_KEY, JSON.stringify(next));
-    } catch {}
+      await characterLocalRepository.saveSharedUpdatesReviewedMap(next);
+    } catch (_error) { /* intentionally ignored */ }
   };
 
   const markReviewed = async (id: string, updatedAtMs: number) => {
@@ -193,7 +192,7 @@ const DMSharedUpdates = () => {
     await persistReviewed(next);
   };
 
-  const ensureLocalCharacter = async (doc: Record<string, unknown>): Promise<CharacterDto> => {
+  const ensureLocalCharacter = async (doc: Record<string, unknown>): Promise<CharacterViewModel> => {
     const mapped = mapCloudCharacterToLocalDto(doc);
     const existing = characters.find((character) => character.id === mapped.id);
     if (existing) {
@@ -207,14 +206,19 @@ const DMSharedUpdates = () => {
   const openInHeroes = async (doc: Record<string, unknown>) => {
     const character = await ensureLocalCharacter(doc);
     setCurrentCharacterId(character.id);
-    const root = navigation.getParent() as any;
+    const root = navigation.getParent();
     if (!root) return;
-    root.navigate('Heroes', { screen: 'Character', params: { character } });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character } },
+      }),
+    );
   };
 
   const createDetachedCopy = async (doc: Record<string, unknown>, mode: 'local-copy' | 'duplicate-shared') => {
     const mapped = mapCloudCharacterToLocalDto(doc);
-    const copy: CharacterDto = {
+    const copy: CharacterViewModel = {
       ...mapped,
       id: String(uuid.v4()),
       name: `${mapped.name || 'Персонаж'} (${mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат'})`,
@@ -223,17 +227,17 @@ const DMSharedUpdates = () => {
     await addCharacter(copy);
     await ensureCharacterSync(copy.id, false);
     setCurrentCharacterId(copy.id);
-    const root = navigation.getParent() as any;
+    const root = navigation.getParent();
     if (!root) return;
-    root.navigate('Heroes', { screen: 'Character', params: { character: copy } });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character: copy } },
+      }),
+    );
   };
 
   const syncNow = async (item: SharedRecord) => {
-    if (!isOnline) {
-      await setSyncTransport(item.id, 'idle', 'Офлайн-черга');
-      return;
-    }
-
     const normalized = mapCloudCharacterToLocalDto(item.payload);
     const existing = characters.find((character) => character.id === normalized.id);
     if (existing) {
@@ -241,18 +245,28 @@ const DMSharedUpdates = () => {
     } else {
       await addCharacter(normalized);
     }
-    try {
-      await ensureCharacterSync(normalized.id, true);
-      await setSyncTransport(normalized.id, 'syncing', 'Синхронізація...');
-      await upsertCharacterSheetFromLocal(normalized, {
-        historyPaths: ['overview.identity'],
-        actorRole: mapRoleToHistoryActor(roleMode),
-      });
-      await markCloudUploaded(normalized.id);
-      await setSyncTransport(normalized.id, 'synced', 'Синхронізовано');
-    } catch (error) {
-      const message = String((error as Error)?.message || 'Помилка синхронізації');
-      await setSyncTransport(normalized.id, 'error', message);
+
+    const result = await syncToCloud({
+      character: normalized,
+      syncState: syncByCharacter[normalized.id],
+      actorRole: mapRoleToHistoryActor(roleMode),
+      syncPort: {
+        ensureCharacterSync,
+        setCloudAvailability,
+        markCloudUploaded,
+        setSyncTransport,
+        markSyncError,
+      },
+      isOnline,
+      historyPaths: ['overview.identity'],
+      offlineMessage: 'Офлайн-черга',
+      syncingMessage: 'Синхронізація...',
+      syncedMessage: 'Синхронізовано',
+      conflictFallbackPath: 'overview.identity',
+    });
+
+    if (result.status === 'error') {
+      await setSyncTransport(normalized.id, 'error', result.message || 'Помилка синхронізації');
     }
   };
 
@@ -270,7 +284,7 @@ const DMSharedUpdates = () => {
                 key={item}
                 style={[styles.filterChip, active ? styles.filterChipActive : null]}
                 onPress={() => setFilter(item)}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={[styles.filterChipText, active ? styles.filterChipTextActive : null]}>{FILTER_LABELS[item]}</Text>
               </Pressable>
@@ -333,7 +347,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void openInHeroes(item.payload);
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Спільна жива копія</Text>
               </Pressable>
@@ -342,7 +356,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void markReviewed(item.id, item.updatedAtMs);
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Позначити перевіреним</Text>
               </Pressable>
@@ -351,7 +365,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void syncNow(item);
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Синхронізувати зараз</Text>
               </Pressable>
@@ -360,7 +374,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void createDetachedCopy(item.payload, 'local-copy');
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Локальна копія</Text>
               </Pressable>
@@ -369,7 +383,7 @@ const DMSharedUpdates = () => {
                 onPress={() => {
                   void createDetachedCopy(item.payload, 'duplicate-shared');
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>Дублювати зі спільного</Text>
               </Pressable>
@@ -382,3 +396,7 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
+
+
+
+

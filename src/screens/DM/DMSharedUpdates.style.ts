@@ -1,44 +1,45 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: c.background,
-      padding: 14,
-      gap: 10,
+      padding: sp(14),
+      gap: sp(10),
     },
     card: {
-      borderRadius: 14,
+      borderRadius: rd(14),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.card,
-      padding: 12,
-      gap: 8,
+      padding: sp(12),
+      gap: sp(8),
       elevation: 1,
     },
     title: {
       color: c.text,
-      fontSize: 17,
+      fontSize: fs(17),
       fontWeight: '700',
     },
     hint: {
       color: c.textSecondary,
-      fontSize: 12,
+      fontSize: fs(12),
     },
     filterRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 6,
+      gap: sp(6),
     },
     filterChip: {
-      borderRadius: 99,
+      borderRadius: rd(99),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.background,
-      paddingVertical: 5,
-      paddingHorizontal: 10,
+      paddingVertical: sp(5),
+      paddingHorizontal: sp(10),
     },
     filterChipActive: {
       borderColor: c.text,
@@ -46,82 +47,84 @@ export const getStyles = (c: ThemeColors) =>
     },
     filterChipText: {
       color: c.text,
-      fontSize: 11,
+      fontSize: fs(11),
       fontWeight: '700',
     },
     filterChipTextActive: {
       color: c.background,
     },
     itemCard: {
-      borderRadius: 12,
+      borderRadius: rd(12),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.background,
-      padding: 10,
-      gap: 6,
-      marginBottom: 10,
+      padding: sp(10),
+      gap: sp(6),
+      marginBottom: sp(10),
     },
     itemTitle: {
       color: c.text,
-      fontSize: 14,
+      fontSize: fs(14),
       fontWeight: '700',
     },
     itemMeta: {
       color: c.textSecondary,
-      fontSize: 12,
+      fontSize: fs(12),
     },
     statusRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 6,
+      gap: sp(6),
     },
     statusChip: {
-      borderRadius: 99,
+      borderRadius: rd(99),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.card,
-      paddingVertical: 3,
-      paddingHorizontal: 8,
+      paddingVertical: sp(3),
+      paddingHorizontal: sp(8),
     },
     statusChipText: {
       color: c.text,
-      fontSize: 11,
+      fontSize: fs(11),
       fontWeight: '700',
     },
     actionsRow: {
       flexDirection: 'row',
-      gap: 6,
+      gap: sp(6),
       flexWrap: 'wrap',
     },
     historyBox: {
-      borderRadius: 10,
+      borderRadius: rd(10),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.card,
-      padding: 8,
-      gap: 4,
+      padding: sp(8),
+      gap: sp(4),
     },
     historyText: {
       color: c.textSecondary,
-      fontSize: 11,
+      fontSize: fs(11),
       lineHeight: 15,
     },
     actionButton: {
-      borderRadius: 10,
+      borderRadius: rd(10),
       borderWidth: 1,
       borderColor: c.border,
       backgroundColor: c.card,
-      paddingVertical: 8,
-      paddingHorizontal: 10,
+      paddingVertical: sp(8),
+      paddingHorizontal: sp(10),
     },
     actionButtonText: {
       color: c.text,
-      fontSize: 12,
+      fontSize: fs(12),
       fontWeight: '700',
     },
     emptyText: {
       color: c.textSecondary,
       textAlign: 'center',
-      marginTop: 20,
+      marginTop: sp(20),
     },
   });
+
+

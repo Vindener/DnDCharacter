@@ -1,0 +1,68 @@
+import { useMemo } from 'react';
+
+type UseQuickActionsParams = {
+  tempHp: number;
+  applyHpDelta: (delta: number) => void;
+  openHpModal: () => void;
+  startShortRestFlow: () => void;
+  applyLongRest: () => void;
+  setTempShieldInput: (value: string) => void;
+  setIsTempHpModalVisible: (value: boolean) => void;
+  setIsDiceModalVisible: (value: boolean) => void;
+  setIsConditionModalVisible: (value: boolean) => void;
+  setIsQuickNoteModalVisible: (value: boolean) => void;
+};
+
+export type QuickActionItem = {
+  id: string;
+  label: string;
+  icon: string;
+  onPress: () => void;
+};
+
+export function useQuickActions({
+  tempHp,
+  applyHpDelta,
+  openHpModal,
+  startShortRestFlow,
+  applyLongRest,
+  setTempShieldInput,
+  setIsTempHpModalVisible,
+  setIsDiceModalVisible,
+  setIsConditionModalVisible,
+  setIsQuickNoteModalVisible,
+}: UseQuickActionsParams): QuickActionItem[] {
+  return useMemo(
+    () => [
+      { id: 'minus-hp', label: '-HP', icon: 'heart-minus-outline', onPress: () => applyHpDelta(-1) },
+      { id: 'plus-hp', label: '+HP', icon: 'heart-plus-outline', onPress: () => applyHpDelta(1) },
+      { id: 'edit-hp', label: 'Редактор HP', icon: 'heart-cog-outline', onPress: openHpModal },
+      {
+        id: 'temp-hp',
+        label: 'Тимчасове HP',
+        icon: 'shield-half-full',
+        onPress: () => {
+          setTempShieldInput(String(tempHp));
+          setIsTempHpModalVisible(true);
+        },
+      },
+      { id: 'roll', label: 'Кинути', icon: 'dice-multiple-outline', onPress: () => setIsDiceModalVisible(true) },
+      { id: 'short-rest', label: 'Короткий відпочинок', icon: 'coffee-outline', onPress: startShortRestFlow },
+      { id: 'long-rest', label: 'Довгий відпочинок', icon: 'weather-night', onPress: applyLongRest },
+      { id: 'condition', label: 'Стан', icon: 'alert-circle-outline', onPress: () => setIsConditionModalVisible(true) },
+      { id: 'note', label: 'Нотатка', icon: 'notebook-outline', onPress: () => setIsQuickNoteModalVisible(true) },
+    ],
+    [
+      applyHpDelta,
+      openHpModal,
+      startShortRestFlow,
+      applyLongRest,
+      setTempShieldInput,
+      tempHp,
+      setIsTempHpModalVisible,
+      setIsDiceModalVisible,
+      setIsConditionModalVisible,
+      setIsQuickNoteModalVisible,
+    ],
+  );
+}

@@ -1,15 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
-import { Ionicons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, InitiativeSeed } from '@/types/DM';
-import { subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import type { DMCampaign, InitiativeSeed } from '@/dm/domain/types';
+import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
+import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
-import { CHALLENGE_XP, DIFFICULTY_THRESHOLDS, getMonsterMultiplier } from '@/shared/const/encounter';
+import { getCharacterCampaignLabel, isCharacterInCampaign } from '@/screens/DM/adapters';
+import { rd, sp } from '@/shared/styles/tokens';
 
 type Props = StackScreenProps<DMStackParamList, 'DMEncounterPrep'>;
 
@@ -19,6 +21,8 @@ type EncounterMonster = {
   challenge: string;
   count: number;
 };
+
+type PlayerSourceMode = 'campaign' | 'all';
 
 const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   const colors = useThemeStore((s) => s.colors);
@@ -32,6 +36,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState(route.params?.campaignId || '');
+  const [playerSourceMode, setPlayerSourceMode] = useState<PlayerSourceMode>('campaign');
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, boolean>>({});
   const [monsterSearch, setMonsterSearch] = useState('');
   const [encounterMonsters, setEncounterMonsters] = useState<EncounterMonster[]>([]);
@@ -65,24 +70,31 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 
   const selectedCampaign = useMemo(() => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null, [campaigns, selectedCampaignId]);
 
-  const party = useMemo(() => {
-    return characters.filter((character) => {
-      if (!selectedCampaign) return false;
-      if (character.campaignId && character.campaignId === selectedCampaign.id) return true;
-      const legacy = String(character.campaign || '').trim().toLowerCase();
-      return legacy && legacy === selectedCampaign.name.trim().toLowerCase();
-    });
+  const campaignParty = useMemo(() => {
+    return characters.filter((character) => isCharacterInCampaign(character, selectedCampaign));
   }, [characters, selectedCampaign]);
+
+  const party = useMemo(() => {
+    return playerSourceMode === 'campaign' ? campaignParty : characters;
+  }, [campaignParty, characters, playerSourceMode]);
+
+  const campaignNamesById = useMemo(() => {
+    return new Map(campaigns.map((campaign) => [campaign.id, campaign.name]));
+  }, [campaigns]);
+
+  const selectedParty = useMemo(() => {
+    return party.filter((player) => selectedPlayers[player.id]);
+  }, [party, selectedPlayers]);
 
   useEffect(() => {
     setSelectedPlayers((prev) => {
-      const next: Record<string, boolean> = {};
+      const next: Record<string, boolean> = { ...prev };
       for (const player of party) {
-        next[player.id] = prev[player.id] ?? true;
+        next[player.id] = prev[player.id] ?? (playerSourceMode === 'campaign');
       }
       return next;
     });
-  }, [party]);
+  }, [party, playerSourceMode]);
 
   const pinnedMonsters = useMemo(() => monsters.filter((monster) => pinnedMonsterIds.includes(monster.id)), [monsters, pinnedMonsterIds]);
 
@@ -129,60 +141,20 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     setEncounterMonsters((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const result = useMemo(() => {
-    const selectedParty = party.filter((player) => selectedPlayers[player.id]);
-
-    const thresholds = selectedParty.reduce(
-      (acc, player) => {
-        const level = Math.max(1, Math.min(20, Number(player.level) || 1));
-        const table = DIFFICULTY_THRESHOLDS[level];
-        if (!table) return acc;
-        acc.easy += table.easy;
-        acc.medium += table.medium;
-        acc.hard += table.hard;
-        acc.deadly += table.deadly;
-        acc.partySize += 1;
-        return acc;
-      },
-      { easy: 0, medium: 0, hard: 0, deadly: 0, partySize: 0 },
+  const encounterResult = useMemo(() => {
+    return evaluateEncounterDifficulty(
+      selectedParty.map((player) => ({ level: Number(player.level) || 1 })),
+      encounterMonsters.map((monster) => ({
+        challenge: String(monster.challenge || ''),
+        count: Math.max(1, Number(monster.count) || 1),
+      })),
     );
-
-    let baseXP = 0;
-    let monstersCount = 0;
-    for (const monster of encounterMonsters) {
-      const xp = CHALLENGE_XP[monster.challenge as keyof typeof CHALLENGE_XP] ?? 0;
-      baseXP += xp * Math.max(1, monster.count);
-      monstersCount += Math.max(1, monster.count);
-    }
-
-    const multiplier = getMonsterMultiplier(monstersCount, thresholds.partySize || 1);
-    const adjustedXP = Math.round(baseXP * multiplier);
-    let difficulty: 'Немає даних' | 'Дуже легко' | 'Легко' | 'Середньо' | 'Складно' | 'Смертельно' = 'Немає даних';
-
-    if (adjustedXP > 0) {
-      if (adjustedXP < thresholds.easy) difficulty = 'Дуже легко';
-      else if (adjustedXP < thresholds.medium) difficulty = 'Легко';
-      else if (adjustedXP < thresholds.hard) difficulty = 'Середньо';
-      else if (adjustedXP < thresholds.deadly) difficulty = 'Складно';
-      else difficulty = 'Смертельно';
-    }
-
-    const xpPerPlayer = thresholds.partySize > 0 ? Math.round(adjustedXP / thresholds.partySize) : 0;
-
-    return {
-      selectedParty,
-      adjustedXP,
-      xpPerPlayer,
-      difficulty,
-    };
-  }, [encounterMonsters, party, selectedPlayers]);
+  }, [encounterMonsters, selectedParty]);
 
   const startInitiative = () => {
-    if (!selectedCampaignId) return;
-
     const entries: InitiativeSeed['entries'] = [];
 
-    result.selectedParty.forEach((player) => {
+    selectedParty.forEach((player) => {
       entries.push({
         id: `player-${player.id}`,
         name: player.name || 'Гравець',
@@ -195,36 +167,50 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       for (let index = 0; index < Math.max(1, monster.count); index += 1) {
         entries.push({
           id: `monster-${monster.id}-${index}`,
-          name: monster.count > 1 ? `${monster.name} #${index + 1}` : monster.name,
+          name: monster.name || 'Монстр',
           roll: '',
           hits: '',
         });
       }
     });
 
+    const root = navigation.getParent();
+    if (!root) return;
+    if (!entries.length) {
+      root.dispatch(
+        CommonActions.navigate({
+          name: 'Initiative',
+        }),
+      );
+      return;
+    }
+
     const seed: InitiativeSeed = {
       source: 'dm-encounter-prep',
-      campaignId: selectedCampaignId,
+      campaignId: selectedCampaignId || 'no-campaign',
       entries,
     };
 
-    const root = navigation.getParent() as any;
-    if (!root) return;
-    root.navigate('Initiative', { seed });
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Initiative',
+        params: { seed },
+      }),
+    );
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
         <Text style={styles.title}>Підготовка сутички</Text>
-        <Text style={styles.hint}>Оберіть кампанію, групу та монстрів, потім запустіть Ініціативу з підготовленими записами.</Text>
+        <Text style={styles.hint}>Оберіть кампанію, персонажів та монстрів, потім запустіть Ініціативу з підготовленими записами.</Text>
         <View style={styles.statsRow}>
           {campaigns.map((campaign) => (
             <Pressable
               key={campaign.id}
               style={[styles.statChip, selectedCampaignId === campaign.id ? { borderColor: colors.text } : null]}
               onPress={() => setSelectedCampaignId(campaign.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.statChipText}>{campaign.name}</Text>
             </Pressable>
@@ -233,18 +219,37 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Група ({result.selectedParty.length})</Text>
-        {!party.length && <Text style={styles.hint}>До вибраної кампанії не прив’язано учасників групи.</Text>}
+        <Text style={styles.title}>Персонажі ({selectedParty.length})</Text>
+        <View style={styles.statsRow}>
+          <Pressable
+            style={[styles.statChip, playerSourceMode === 'campaign' ? { borderColor: colors.text } : null]}
+            onPress={() => setPlayerSourceMode('campaign')}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={styles.statChipText}>Група кампанії</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.statChip, playerSourceMode === 'all' ? { borderColor: colors.text } : null]}
+            onPress={() => setPlayerSourceMode('all')}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={styles.statChipText}>Усі персонажі</Text>
+          </Pressable>
+        </View>
+        {!party.length && playerSourceMode === 'campaign' && <Text style={styles.hint}>До вибраної кампанії не прив’язано учасників групи.</Text>}
+        {!party.length && playerSourceMode === 'all' && <Text style={styles.hint}>У списку персонажів поки порожньо.</Text>}
         {party.map((player) => {
           const selected = selectedPlayers[player.id];
+          const campaignLabel = getCharacterCampaignLabel(player, campaignNamesById);
           return (
             <Pressable
               key={player.id}
               style={styles.updateRow}
               onPress={() => setSelectedPlayers((prev) => ({ ...prev, [player.id]: !prev[player.id] }))}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.updateTitle}>{player.name || 'Персонаж'} {selected ? '• Обрано' : ''}</Text>
+              <Text style={styles.updateMeta}>Кампанія: {campaignLabel}</Text>
               <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • HP {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
             </Pressable>
           );
@@ -258,7 +263,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
           onChangeText={setMonsterSearch}
           placeholder={pinnedMonsters.length ? 'Пошук у закріпленому бестіарії' : 'Пошук у бестіарії'}
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
         />
 
         {filteredMonsters.map((monster) => (
@@ -266,7 +271,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             key={monster.id}
             style={styles.updateRow}
             onPress={() => addMonster(monster.name || 'Монстр', monster.challenge || '0')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.updateTitle}>{monster.name || 'Монстр'}</Text>
             <Text style={styles.updateMeta}>CR {monster.challenge || '0'} • {monster.type || 'Невідомий тип'}</Text>
@@ -291,7 +296,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                     ),
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>К-сть -1</Text>
               </Pressable>
@@ -302,11 +307,11 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                     prev.map((item) => (item.id === monster.id ? { ...item, count: item.count + 1 } : item)),
                   );
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.laneButtonText}>К-сть +1</Text>
               </Pressable>
-              <Pressable style={styles.laneButton} onPress={() => removeMonster(monster.id)} android_ripple={{ color: '#999' }}>
+              <Pressable style={styles.laneButton} onPress={() => removeMonster(monster.id)} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.laneButtonText}>Видалити</Text>
               </Pressable>
             </View>
@@ -317,11 +322,11 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       <View style={styles.card}>
         <Text style={styles.title}>Оцінка складності</Text>
         <Text style={styles.updateMeta}>Кампанія: {selectedCampaign?.name || '—'}</Text>
-        <Text style={styles.updateMeta}>Складність: {result.difficulty}</Text>
-        <Text style={styles.updateMeta}>Скоригований XP: {result.adjustedXP}</Text>
-        <Text style={styles.updateMeta}>XP на гравця: {result.xpPerPlayer}</Text>
+        <Text style={styles.updateMeta}>Складність: {encounterResult.difficulty}</Text>
+        <Text style={styles.updateMeta}>Скоригований XP: {encounterResult.adjustedXP}</Text>
+        <Text style={styles.updateMeta}>XP на гравця: {encounterResult.xpPerPlayer}</Text>
 
-        <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Почати ініціативу</Text>
         </Pressable>
       </View>
@@ -330,3 +335,6 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMEncounterPrep;
+
+
+

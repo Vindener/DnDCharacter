@@ -1,8 +1,8 @@
-import 'react-native-gesture-handler'; 
-import React, { useEffect, useState} from 'react';
+import 'react-native-gesture-handler';
+import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AppNavigator from './src/navigation/AppNavigator';
-import 'expo-dev-client'
+import 'expo-dev-client';
 import { AuthProvider } from '@/shared/services/auth/auth';
 import Toast from 'react-native-toast-message';
 

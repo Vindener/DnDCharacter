@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import { attributes } from '@/shared/const/attributes';
 import { AttributesItem } from '@/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem';
 import useCharacterStore from '@/context/Character-store';
 import { StatKey } from '@/shared/const/attributes';
 
 interface AttributesProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const Attributes: React.FC<AttributesProps> = ({ data }) => {
@@ -33,3 +33,4 @@ const Attributes: React.FC<AttributesProps> = ({ data }) => {
 };
 
 export default Attributes;
+

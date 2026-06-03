@@ -3,12 +3,12 @@ import { View, Text } from 'react-native';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import useCharacterStore from '@/context/Character-store';
 import { Traits as TraitsType } from '@/types/Traits';
 
 interface TraitsProps {
-  data: CharacterDto;
+  data: CharacterViewModel;
 }
 
 const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
@@ -62,3 +62,4 @@ const Traits: React.FC<TraitsProps> = ({ data }: TraitsProps) => {
 };
 
 export default Traits;
+

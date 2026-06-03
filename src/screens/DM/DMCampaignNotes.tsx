@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNetInfo } from '@react-native-community/netinfo';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, DMCampaignNote } from '@/types/DM';
-import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/services/dmCampaigns';
+import type { DMCampaign, DMCampaignNote } from '@/dm/domain/types';
+import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import { formatSchemaErrors, safeParseCampaignNoteFormInput } from '@/domain/schemas';
+import { rd, sp } from '@/shared/styles/tokens';
 import {
   deleteCampaignNote,
   flushCampaignNotesQueue,
@@ -16,17 +17,12 @@ import {
   resolveCampaignNoteConflict,
   subscribeCampaignNotes,
   upsertCampaignNote,
-} from '@/services/dmCampaignNotes';
+} from '@/dm/repositories/campaignNotesRepository';
 import { fbAuth } from '@/services/firebase';
 import useAppRoleStore from '@/context/AppRole-store';
 import { getShareDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 
 type Props = StackScreenProps<DMStackParamList, 'DMCampaignNotes'>;
-type LegacyDMNote = { id: string; title?: string; content?: string; campaign?: string; lastEdited?: number };
-
-const LEGACY_NOTES_KEY = 'DM_NOTES_V2';
-const LEGACY_NOTES_MIGRATION_FLAG = 'DM_NOTES_V2_MIGRATED_TO_CAMPAIGN_V1';
-
 const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
@@ -41,75 +37,9 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   const [statusText, setStatusText] = useState('Готово');
 
-  useEffect(() => {
-    let cancelled = false;
 
-    const migrateLegacyNotes = async () => {
-      try {
-        const migrationDone = await AsyncStorage.getItem(LEGACY_NOTES_MIGRATION_FLAG);
-        if (migrationDone === '1') return;
 
-        const raw = await AsyncStorage.getItem(LEGACY_NOTES_KEY);
-        const parsed = JSON.parse(raw || '[]');
-        if (!Array.isArray(parsed) || !parsed.length) {
-          await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
-          return;
-        }
 
-        const me = fbAuth.currentUser?.uid || 'local';
-        let migratedCount = 0;
-
-        for (const entry of parsed as LegacyDMNote[]) {
-          if (!entry || typeof entry !== 'object') continue;
-          const rawId = String(entry.id || '').trim();
-          if (!rawId) continue;
-
-          const campaignName = String(entry.campaign || '').trim() || 'Базова кампанія';
-          const campaign = await ensureCampaignForName(campaignName);
-          if (!campaign) continue;
-
-          const timestamp = Number(entry.lastEdited || 0) || Date.now();
-          await upsertCampaignNote({
-            id: `legacy-${rawId}`,
-            campaignId: campaign.id,
-            title: String(entry.title || '').trim(),
-            content: String(entry.content || ''),
-            ownerUid: me,
-            owners: me ? [me] : [],
-            editors: [],
-            createdAtMs: timestamp,
-            updatedAtMs: timestamp,
-            baseUpdatedAtMs: timestamp,
-            syncStatus: fbAuth.currentUser ? 'Pending sync' : 'Local only',
-          });
-          migratedCount += 1;
-        }
-
-        await AsyncStorage.removeItem(LEGACY_NOTES_KEY);
-        await AsyncStorage.setItem(LEGACY_NOTES_MIGRATION_FLAG, '1');
-
-        if (!cancelled && migratedCount > 0) {
-          const localNotes = await loadLocalCampaignNotes();
-          if (!cancelled && selectedCampaignId) {
-            setNotes(localNotes.filter((note) => note.campaignId === selectedCampaignId));
-          }
-          if (!cancelled) {
-            setStatusText(`Міграцію завершено • Перенесено нотаток: ${migratedCount}`);
-          }
-        }
-      } catch {
-        if (!cancelled) {
-          setStatusText('Міграцію старих нотаток пропущено');
-        }
-      }
-    };
-
-    void migrateLegacyNotes();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [selectedCampaignId]);
 
   useEffect(() => {
     let unsub = () => {};
@@ -150,6 +80,9 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
     let cancelled = false;
 
     const run = async () => {
+      const local = await loadLocalCampaignNotes();
+      if (!cancelled) setNotes(local.filter((note) => note.campaignId === selectedCampaignId));
+
       unsub = await subscribeCampaignNotes(selectedCampaignId, (next) => {
         if (!cancelled) setNotes(next);
       });
@@ -162,7 +95,6 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
       if (typeof unsub === 'function') unsub();
     };
   }, [selectedCampaignId]);
-
   const selectedCampaign = useMemo(
     () => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null,
     [campaigns, selectedCampaignId],
@@ -189,9 +121,16 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
   const saveNote = async () => {
     if (!selectedCampaignId) return;
-    const title = titleInput.trim();
-    const content = contentInput.trim();
-    if (!title && !content) return;
+    const formValidation = safeParseCampaignNoteFormInput({
+      title: titleInput,
+      content: contentInput,
+    });
+    if (!formValidation.ok) {
+      const firstError = formatSchemaErrors(formValidation.issues)[0] || 'Заповніть заголовок або вміст нотатки.';
+      setStatusText(firstError);
+      return;
+    }
+    const { title, content } = formValidation.data;
 
     const current = activeNoteId ? notes.find((item) => item.id === activeNoteId) : null;
     const me = fbAuth.currentUser?.uid || 'local';
@@ -254,7 +193,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
                   setSelectedCampaignId(campaign.id);
                   resetEditor();
                 }}
-                android_ripple={{ color: '#999' }}
+                android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.statChipText}>{campaign.name}</Text>
               </Pressable>
@@ -262,7 +201,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           })}
         </View>
 
-        <Pressable style={styles.authButton} onPress={() => { void syncNow(); }} android_ripple={{ color: '#999' }}>
+        <Pressable style={styles.authButton} onPress={() => { void syncNow(); }} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Синхронізувати зараз</Text>
         </Pressable>
       </View>
@@ -274,7 +213,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           onChangeText={setTitleInput}
           placeholder='Заголовок нотатки'
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text, marginBottom: 10 }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, marginBottom: sp(10) }}
         />
         <TextInput
           value={contentInput}
@@ -282,16 +221,16 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           placeholder='Вміст нотатки'
           placeholderTextColor={colors.textSecondary}
           multiline
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 8, padding: 10, color: colors.text, minHeight: 120, textAlignVertical: 'top' }}
+          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, minHeight: 120, textAlignVertical: 'top' }}
         />
 
         <View style={styles.laneGrid}>
-          <Pressable style={styles.laneButton} onPress={() => { void saveNote(); }} android_ripple={{ color: '#999' }}>
+          <Pressable style={styles.laneButton} onPress={() => { void saveNote(); }} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='save-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Зберегти нотатку</Text>
           </Pressable>
           {activeNoteId && (
-            <Pressable style={styles.laneButton} onPress={resetEditor} android_ripple={{ color: '#999' }}>
+            <Pressable style={styles.laneButton} onPress={resetEditor} android_ripple={{ color: colors.ripple }}>
               <Ionicons name='close-outline' size={18} color={colors.text} />
               <Text style={styles.laneButtonText}>Скасувати редагування</Text>
             </Pressable>
@@ -324,20 +263,20 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
               {note.syncStatus === 'Conflict detected' && note.conflictRemote && (
                 <View style={styles.laneGrid}>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-local'); }} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-local'); }} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.laneButtonText}>Залишити локальну</Text>
                   </Pressable>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-cloud'); }} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-cloud'); }} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.laneButtonText}>Залишити хмарну</Text>
                   </Pressable>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'merge-manual'); }} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'merge-manual'); }} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.laneButtonText}>Об’єднати вручну</Text>
                   </Pressable>
                 </View>
               )}
 
               <View style={styles.laneGrid}>
-                <Pressable style={styles.laneButton} onPress={() => openNote(note)} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.laneButton} onPress={() => openNote(note)} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Редагувати</Text>
                 </Pressable>
@@ -348,7 +287,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
                     void deleteCampaignNote(note.id, note.campaignId);
                     if (activeNoteId === note.id) resetEditor();
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='trash-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>Видалити</Text>
@@ -363,3 +302,10 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 };
 
 export default DMCampaignNotes;
+
+
+
+
+
+
+

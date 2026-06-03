@@ -12,7 +12,7 @@ import DMNavigator from '@/navigation/DMNavigator';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import BestiaryNavigator from '@/navigation/BestiaryNavigator';
 import Support from '@/screens/Support/Support';
-import type { InitiativeSeed } from '@/types/DM';
+import type { InitiativeSeed } from '@/dm/domain/types';
 
 export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
@@ -31,7 +31,7 @@ export default function AppNavigator() {
 
   useEffect(() => {
     loadTheme();
-  }, []);
+  }, [loadTheme]);
 
   function getIconName(routeName: string): keyof typeof Ionicons.glyphMap {
     switch (routeName) {
@@ -58,7 +58,7 @@ export default function AppNavigator() {
         id={undefined}
         screenOptions={({ route }) => ({
           header: () => <Header />,
-          tabBarActiveTintColor: '#ff2d55',
+          tabBarActiveTintColor: colors.brand,
           tabBarInactiveTintColor: colors.textSecondary,
           tabBarStyle: { backgroundColor: colors.card, borderTopWidth: 0 },
           tabBarIcon: ({ color, size }) => {
@@ -77,5 +77,7 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
+
+
 
 

@@ -13,9 +13,10 @@ interface MonsterCardProps {
   monster: MonsterDto;
   isPinned?: boolean;
   onTogglePin?: (monsterId: string) => void;
+  cardTestID?: string;
 }
 
-export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterCardProps) => {
+export const MonsterCard = ({ monster, isPinned = false, onTogglePin, cardTestID }: MonsterCardProps) => {
   const navigation = useNavigation<StackNavigationProp<BestiaryStackParamList, 'List'>>();
   const removeMonster = useMonsterStore((s) => s.removeMonster);
   const colors = useThemeStore((s) => s.colors);
@@ -30,7 +31,7 @@ export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterC
   };
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.88}>
+    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.88} testID={cardTestID}>
       {monster.photoUri ? <Image source={{ uri: monster.photoUri }} style={styles.avatar} /> : <View style={styles.avatar} />}
       <View style={styles.info}>
         <View style={styles.titleRow}>
@@ -42,7 +43,7 @@ export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterC
                 onTogglePin(monster.id);
               }}
               style={styles.pinButton}
-              android_ripple={{ color: '#888' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={16} color={colors.text} />
               <Text style={styles.pinText}>{isPinned ? 'Закріплено' : 'Закріпити'}</Text>
@@ -71,3 +72,4 @@ export const MonsterCard = ({ monster, isPinned = false, onTogglePin }: MonsterC
     </TouchableOpacity>
   );
 };
+

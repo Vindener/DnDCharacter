@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { ThemeColors } from '@/shared/styles/theme';
+import { fs, rd, sp } from '@/shared/styles/tokens';
 
 export const getStyles = (c: ThemeColors) =>
   StyleSheet.create({
@@ -8,34 +9,37 @@ export const getStyles = (c: ThemeColors) =>
       textAlign: 'center',
     },
     criticalSuccess: {
-      color: 'green',
+      color: c.success,
       textAlign: 'center',
       fontWeight: 'bold',
     },
     criticalFailure: {
-      color: 'red',
+      color: c.danger,
       textAlign: 'center',
       fontWeight: 'bold',
     },
     previousBlock: {
-      marginTop: 12,
+      marginTop: sp(12),
       alignItems: 'center',
     },
     previousTitle: {
-      fontSize: 14,
+      fontSize: fs(14),
       color: c.textSecondary,
     },
     previousText: {
-      fontSize: 16,
+      fontSize: fs(16),
       fontWeight: '500',
       color: c.text,
     },
     rerollButton: {
-      marginTop: 10,
-      padding: 10,
-      backgroundColor: '#6200EE',
-      borderRadius: 5,
+      marginTop: sp(10),
+      padding: sp(10),
+      backgroundColor: c.magic,
+      borderRadius: rd(5),
       alignSelf: 'center',
     },
-    rerollButtonText: { color: c.text, fontSize: 16 },
+    rerollButtonText: { color: c.onMagic, fontSize: fs(16) },
   });
+
+
+

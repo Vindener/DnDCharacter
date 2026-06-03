@@ -4,9 +4,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/shared/helpers/spellbook';
+import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/domain/spellbook';
 import { Modal } from '@/shared/components/Modal/Modal';
-import type { CharacterSpellStatus, Dnd5DamageType, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
+import { formatSchemaErrors, safeParseSpellFormInput, SPELL_DAMAGE_TYPES } from '@/domain/schemas';
+import type { CharacterSpellStatus, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { getStyles } from './styles';
 
 type StatusFilter = 'all' | CharacterSpellStatus;
@@ -49,39 +50,10 @@ const SPELL_STATUS_LABEL: Record<CharacterSpellStatus, string> = {
   cantrip: 'Каніпс',
 };
 
-const DAMAGE_TYPES: Dnd5DamageType[] = [
-  'acid',
-  'bludgeoning',
-  'cold',
-  'fire',
-  'force',
-  'lightning',
-  'necrotic',
-  'piercing',
-  'poison',
-  'psychic',
-  'radiant',
-  'slashing',
-  'thunder',
-];
-
-function clampLevel(value: string): number {
-  const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 1;
-  return Math.max(0, Math.min(9, Math.floor(parsed)));
-}
-
 function sourceLabel(source: SpellbookSpell['source']): string {
   if (source === 'custom') return 'власне';
   if (source === 'imported') return 'імпортоване';
   return 'системне';
-}
-
-function parseTags(value: string): string[] {
-  return value
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
 }
 
 function damageProfilesToText(profiles: SpellDamageProfile[]): string {
@@ -94,26 +66,6 @@ function damageProfilesToText(profiles: SpellDamageProfile[]): string {
     .join('\n');
 }
 
-function parseDamageProfiles(value: string): Array<Omit<SpellDamageProfile, 'id'>> {
-  return value
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [labelRaw, formulaRaw, damageTypeRaw, conditionRaw] = line.split('|').map((part) => part.trim());
-      const label = labelRaw || 'Шкода';
-      const formula = formulaRaw || '1d6';
-      const normalizedDamageType = DAMAGE_TYPES.includes((damageTypeRaw || '').toLowerCase() as Dnd5DamageType)
-        ? ((damageTypeRaw || '').toLowerCase() as Dnd5DamageType)
-        : 'force';
-      return {
-        label,
-        formula,
-        damageType: normalizedDamageType,
-        condition: conditionRaw || undefined,
-      };
-    });
-}
 
 const Spellbook = () => {
   const colors = useThemeStore((s) => s.colors);
@@ -287,19 +239,23 @@ const Spellbook = () => {
   };
 
   const submitSpellModal = async () => {
-    const name = modalName.trim();
-    if (!name) return;
-
-    const level = clampLevel(modalLevel);
-    const saved = await upsertCustomSpell({
+    const validation = safeParseSpellFormInput({
       spellId: editingSpell?.id,
-      name,
-      level,
-      school: modalSchool.trim() || 'Власне',
-      description: modalDescription.trim(),
-      tags: parseTags(modalTags),
-      damageProfiles: parseDamageProfiles(modalDamageProfiles),
+      name: modalName,
+      level: modalLevel,
+      school: modalSchool,
+      description: modalDescription,
+      tags: modalTags,
+      damageProfiles: modalDamageProfiles,
     });
+    if (!validation.ok) {
+      const firstError = formatSchemaErrors(validation.issues)[0] || 'Невалідні дані закляття.';
+      setPreparedLimitNotice(firstError);
+      return;
+    }
+
+    const saved = await upsertCustomSpell(validation.data);
+    const level = validation.data.level ?? 1;
 
     if (saved && selectedCharacter) {
       const nextStatus: CharacterSpellStatus = level === 0 ? 'cantrip' : 'known';
@@ -307,24 +263,25 @@ const Spellbook = () => {
       void updateCharacter(selectedCharacter.id, updated);
     }
 
+    setPreparedLimitNotice('');
     setIsSpellModalVisible(false);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID='spellbook.screen'>
       <View style={styles.headerRow}>
         <View style={styles.headerMeta}>
           <Text style={styles.title}>Книга заклять</Text>
           <Text style={styles.hint}>Локальна система заклять: пошук, фільтри, улюблені, статуси персонажа і детальний урон.</Text>
         </View>
-        <Pressable style={styles.headerAction} onPress={openCreateSpellModal} android_ripple={{ color: '#999' }}>
-          <MaterialCommunityIcons name='plus' size={16} color='#fff' />
+        <Pressable style={styles.headerAction} onPress={openCreateSpellModal} android_ripple={{ color: colors.ripple }}>
+          <MaterialCommunityIcons name='plus' size={16} color={colors.onPrimary} />
           <Text style={styles.headerActionText}>Додати</Text>
         </Pressable>
       </View>
 
       <View style={styles.offlineBanner}>
-        <MaterialCommunityIcons name='cloud-off-outline' size={16} color='#f8fafc' />
+        <MaterialCommunityIcons name='cloud-off-outline' size={16} color={colors.onInfo} />
         <Text style={styles.offlineBannerText}>Поки працює тільки в офлайн режимі. Синхронізація буде додана пізніше.</Text>
       </View>
 
@@ -335,6 +292,7 @@ const Spellbook = () => {
         placeholder='Пошук за назвою, школою, тегом...'
         placeholderTextColor={colors.textSecondary}
         style={styles.search}
+        testID='spellbook.searchInput'
       />
 
       <View style={styles.filtersBlock}>
@@ -342,9 +300,9 @@ const Spellbook = () => {
           <Pressable
             style={[styles.chip, onlyFavorites ? styles.chipActive : null]}
             onPress={() => setOnlyFavorites((prev) => !prev)}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
-            <MaterialCommunityIcons name={onlyFavorites ? 'star' : 'star-outline'} size={14} color={onlyFavorites ? '#fff' : colors.text} />
+            <MaterialCommunityIcons name={onlyFavorites ? 'star' : 'star-outline'} size={14} color={onlyFavorites ? colors.onPrimary : colors.text} />
             <Text style={[styles.chipText, onlyFavorites ? styles.chipTextActive : null]}>Улюблені</Text>
           </Pressable>
           {STATUS_FILTERS.map((item) => (
@@ -352,7 +310,7 @@ const Spellbook = () => {
               key={`status-${item.id}`}
               style={[styles.chip, statusFilter === item.id ? styles.chipActive : null]}
               onPress={() => setStatusFilter(item.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, statusFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
             </Pressable>
@@ -362,7 +320,7 @@ const Spellbook = () => {
               key={`level-${String(item.id)}`}
               style={[styles.chip, levelFilter === item.id ? styles.chipActive : null]}
               onPress={() => setLevelFilter(item.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, levelFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
             </Pressable>
@@ -372,7 +330,7 @@ const Spellbook = () => {
               key={`source-${item.id}`}
               style={[styles.chip, sourceFilter === item.id ? styles.chipActive : null]}
               onPress={() => setSourceFilter(item.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, sourceFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
             </Pressable>
@@ -386,7 +344,7 @@ const Spellbook = () => {
           <Pressable
             style={[styles.chip, !selectedCharacter ? styles.chipActive : null]}
             onPress={() => setSelectedCharacterId('')}
-            android_ripple={{ color: '#999' }}
+            android_ripple={{ color: colors.ripple }}
           >
             <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>Без прив’язки</Text>
           </Pressable>
@@ -395,7 +353,7 @@ const Spellbook = () => {
               key={`char-${character.id}`}
               style={[styles.chip, selectedCharacter?.id === character.id ? styles.chipActive : null]}
               onPress={() => setSelectedCharacterId(character.id)}
-              android_ripple={{ color: '#999' }}
+              android_ripple={{ color: colors.ripple }}
             >
               <Text style={[styles.chipText, selectedCharacter?.id === character.id ? styles.chipTextActive : null]}>
                 {character.name || 'Персонаж'}
@@ -423,7 +381,7 @@ const Spellbook = () => {
             !selectedCharacter || selectedPreparedLimit === null || status === 'prepared' || selectedPreparedCount < selectedPreparedLimit;
 
           return (
-            <View style={styles.card}>
+            <View style={styles.card} testID='spellbook.spellCard'>
               <View style={styles.cardHeader}>
                 <View style={styles.cardHeaderMain}>
                   <Text style={styles.spellName}>{item.name}</Text>
@@ -436,14 +394,14 @@ const Spellbook = () => {
                     if (!canFavorite) return;
                     void toggleFavorite(item.id);
                   }}
-                  android_ripple={{ color: '#999' }}
+                  android_ripple={{ color: colors.ripple }}
                   style={styles.favoriteButton}
                   disabled={!canFavorite}
                 >
                   <MaterialCommunityIcons
                     name={isFavorite ? 'star' : 'star-outline'}
                     size={20}
-                    color={isFavorite ? '#fbbf24' : canFavorite ? colors.textSecondary : '#666'}
+                    color={isFavorite ? colors.highlight : canFavorite ? colors.textSecondary : colors.muted}
                   />
                 </Pressable>
               </View>
@@ -470,21 +428,21 @@ const Spellbook = () => {
                   <Pressable
                     style={[styles.statusButton, status === 'available' ? styles.statusButtonActive : null]}
                     onPress={() => assignSpellStatus(item.name, 'available')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={[styles.statusButtonText, status === 'available' ? styles.statusButtonTextActive : null]}>Доступне</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.statusButton, status === 'known' ? styles.statusButtonActive : null]}
                     onPress={() => assignSpellStatus(item.name, 'known')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={[styles.statusButtonText, status === 'known' ? styles.statusButtonTextActive : null]}>Відоме</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.statusButton, status === 'prepared' ? styles.statusButtonActive : null, !canSetPrepared ? { opacity: 0.45 } : null]}
                     onPress={() => assignSpellStatus(item.name, 'prepared')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                     disabled={!canSetPrepared}
                   >
                     <Text style={[styles.statusButtonText, status === 'prepared' ? styles.statusButtonTextActive : null]}>Підготовлене</Text>
@@ -492,7 +450,7 @@ const Spellbook = () => {
                   <Pressable
                     style={[styles.statusButton, status === 'cantrip' ? styles.statusButtonActive : null]}
                     onPress={() => assignSpellStatus(item.name, 'cantrip')}
-                    android_ripple={{ color: '#999' }}
+                    android_ripple={{ color: colors.ripple }}
                   >
                     <Text style={[styles.statusButtonText, status === 'cantrip' ? styles.statusButtonTextActive : null]}>Каніпс</Text>
                   </Pressable>
@@ -502,12 +460,12 @@ const Spellbook = () => {
               )}
 
               <View style={styles.cardActionRow}>
-                <Pressable style={styles.cardActionButton} onPress={() => openEditSpellModal(item)} android_ripple={{ color: '#999' }}>
+                <Pressable style={styles.cardActionButton} onPress={() => openEditSpellModal(item)} android_ripple={{ color: colors.ripple }}>
                   <MaterialCommunityIcons name='pencil-outline' size={14} color={colors.text} />
                   <Text style={styles.cardActionText}>{item.source === 'custom' ? 'Редагувати' : 'Створити свою копію'}</Text>
                 </Pressable>
                 {item.source === 'custom' && (
-                  <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: '#999' }}>
+                  <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: colors.ripple }}>
                     <Text style={styles.deleteCustomButtonText}>Видалити</Text>
                   </Pressable>
                 )}
@@ -587,7 +545,7 @@ const Spellbook = () => {
             multiline
           />
           <Text style={styles.modalHint}>Формат рядка: Назва | Формула | Тип | Умова(опційно)</Text>
-          <Text style={styles.modalHint}>Типи 5e: {DAMAGE_TYPES.join(', ')}</Text>
+          <Text style={styles.modalHint}>Типи 5e: {SPELL_DAMAGE_TYPES.join(', ')}</Text>
         </ScrollView>
       </Modal>
     </View>
@@ -595,4 +553,5 @@ const Spellbook = () => {
 };
 
 export default Spellbook;
+
 

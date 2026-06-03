@@ -3,10 +3,9 @@ import { Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { uuid } from 'expo-modules-core';
-import { CharacterDto } from '@/types/Character';
+import { CharacterViewModel } from '@/types/Character';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
@@ -15,12 +14,24 @@ import { Modal } from '@/shared/components/Modal/Modal';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experience';
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
-import { upsertCharacterSheetFromLocal } from '@/services/characterSheets';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
+import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { sp } from '@/shared/styles/tokens';
+
+type CharacterStoreState = ReturnType<typeof useCharacterStore.getState>;
+
+function errorCodeOrMessage(error: unknown): string {
+  if (!error || typeof error !== 'object') return String(error);
+  const maybeCode = (error as { code?: unknown }).code;
+  if (typeof maybeCode === 'string' && maybeCode) return maybeCode;
+  const maybeMessage = (error as { message?: unknown }).message;
+  if (typeof maybeMessage === 'string' && maybeMessage) return maybeMessage;
+  return String(error);
+}
 
 interface CharacterMenuProps {
-  character: CharacterDto;
-  onChange?: (character: CharacterDto) => void;
+  character: CharacterViewModel;
+  onChange?: (character: CharacterViewModel) => void;
   isCloudDoc?: boolean;
   isSharedSheet?: boolean;
   onSyncNow?: () => void;
@@ -28,18 +39,20 @@ interface CharacterMenuProps {
 
 const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, onSyncNow }) => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
-  const updateCharacter = useCharacterStore((s: any) => s.updateCharacter);
-  const addCharacter = useCharacterStore((s: any) => s.addCharacter);
-  const setCurrentCharacterId = useCharacterStore((s: any) => s.setCurrentCharacterId);
+  const updateCharacter = useCharacterStore((s: CharacterStoreState) => s.updateCharacter);
+  const addCharacter = useCharacterStore((s: CharacterStoreState) => s.addCharacter);
+  const setCurrentCharacterId = useCharacterStore((s: CharacterStoreState) => s.setCurrentCharacterId);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
   const removeCharacterSync = useSyncStore((s) => s.removeCharacterSync);
+  const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
+  const markSyncError = useSyncStore((s) => s.markSyncError);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [characterData, setCharacterData] = useState<CharacterDto>(character);
+  const [characterData, setCharacterData] = useState<CharacterViewModel>(character);
   const [isNameModalVisible, setIsNameModalVisible] = useState(false);
   const [newName, setNewName] = useState(character.name);
   const [isExpModalVisible, setIsExpModalVisible] = useState(false);
@@ -54,25 +67,16 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
   const isCharacterInCloud = isCloudDoc || Boolean(characterData.id && syncByCharacter[characterData.id]?.hasCloud);
 
   useEffect(() => {
-    if (character.id) {
-      AsyncStorage.getItem(`characterData_${character.id}`)
-        .then((stored) => {
-          if (stored) {
-            const parsed = JSON.parse(stored);
-            setCharacterData(parsed);
-            const xp = Number(parsed.experience);
-            setTempExp(Number.isFinite(xp) ? xp : 0);
-            const sp = Number(parsed.speed);
-            setTempSpeed(Number.isFinite(sp) ? sp : 0);
-            const ac = Number(parsed.ac);
-            setTempAc(Number.isFinite(ac) ? ac : 0);
-            const init = Number(parsed.initiative);
-            setTempInit(Number.isFinite(init) ? init : 0);
-          }
-        })
-        .catch(() => {});
-    }
-  }, [character.id]);
+    setCharacterData(character);
+    const xp = Number(character.experience);
+    setTempExp(Number.isFinite(xp) ? xp : 0);
+    const sp = Number(character.speed);
+    setTempSpeed(Number.isFinite(sp) ? sp : 0);
+    const ac = Number(character.ac);
+    setTempAc(Number.isFinite(ac) ? ac : 0);
+    const init = Number(character.initiative);
+    setTempInit(Number.isFinite(init) ? init : 0);
+  }, [character]);
 
   useEffect(() => {
     if (isExpModalVisible) {
@@ -112,27 +116,44 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       const sourceCharacter = { ...characterData };
       if (!sourceCharacter.id) throw new Error('Character has no id');
 
-      const res = await upsertCharacterSheetFromLocal(sourceCharacter as any);
-      let syncedCharacter = sourceCharacter;
+      const result = await syncToCloud({
+        character: sourceCharacter,
+        syncState: useSyncStore.getState().syncByCharacter[sourceCharacter.id],
+        actorRole: 'Player',
+        syncPort: {
+          ensureCharacterSync,
+          setCloudAvailability,
+          markCloudUploaded,
+          setSyncTransport,
+          markSyncError,
+        },
+        isOnline: true,
+        fallbackPath: 'overview.identity',
+        syncingMessage: 'Синхронізація...',
+        syncedMessage: 'Синхронізовано',
+        conflictFallbackPath: 'overview.identity',
+      });
+
+      if (result.status !== 'synced') {
+        throw new Error(result.message || 'Не вдалося синхронізувати');
+      }
+
+      const syncedCharacter = result.targetCharacter;
       let targetSheetId = sourceCharacter.id;
 
-      if (res?.id && res.id !== sourceCharacter.id) {
-        syncedCharacter = { ...sourceCharacter, id: res.id };
+      if (syncedCharacter.id !== sourceCharacter.id) {
         await updateCharacter(sourceCharacter.id, syncedCharacter);
         await removeCharacterSync(sourceCharacter.id);
         await ensureCharacterSync(syncedCharacter.id, true);
         targetSheetId = syncedCharacter.id;
-      } else {
-        await ensureCharacterSync(targetSheetId, true);
       }
 
-      await setCloudAvailability(targetSheetId, true);
-      await markCloudUploaded(targetSheetId);
+      await ensureCharacterSync(targetSheetId, true);
       setCurrentCharacterId(targetSheetId);
       setCharacterData(syncedCharacter);
       onChange?.(syncedCharacter);
 
-      const successMessage = res?.created
+      const successMessage = result.created
         ? 'Персонажа збережено у хмарі.'
         : 'Зміни персонажа успішно оновлені у хмарі.';
 
@@ -151,9 +172,10 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           },
         ],
       );
-    } catch (e: any) {
-      console.warn('[save] failed', e?.code || e?.message || e);
-      if (e?.message === 'Not signed in') {
+    } catch (error: unknown) {
+      const message = errorCodeOrMessage(error);
+      console.warn('[save] failed', message);
+      if (message === 'Not signed in') {
         Alert.alert('Помилка авторизації', 'Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару.');
       } else {
         Alert.alert('Помилка', 'Не вдалося зберегти у хмару. Спробуйте ще раз.');
@@ -164,7 +186,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
   const createDetachedCopy = async (mode: 'local-copy' | 'duplicate-shared') => {
     const suffix = mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат';
-    const copy: CharacterDto = {
+    const copy: CharacterViewModel = {
       ...characterData,
       id: String(uuid.v4()),
       name: `${characterData.name || 'Персонаж'} (${suffix})`,
@@ -202,7 +224,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         if (characterData.id) updateCharacter(characterData.id, updated);
         onChange?.(updated);
       }
-    } catch {}
+    } catch (_error) { /* intentionally ignored */ }
   };
 
   const removePhoto = () => {
@@ -407,7 +429,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         </MenuItem>
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
-        <TextInput value={newName} onChangeText={setNewName} style={{ color: 'white' }} />
+        <TextInput value={newName} onChangeText={setNewName} style={styles.tableCell} />
       </Modal>
       <Modal isVisible={isSpeedModalVisible} onClose={() => setIsSpeedModalVisible(false)} onSubmit={handleSaveSpeed} title='Швидкість'>
         <TextInput
@@ -440,10 +462,10 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         />
       </Modal>
       <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title='Досвід'>
-        <Text style={{ color: 'white', marginBottom: 8 }}>Рівень: {getLevelByExperience(tempExp)}</Text>
-        <Text style={{ color: 'white', marginBottom: 8 }}>Досвід: {tempExp}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-          <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: 8 }} />
+        <Text style={styles.modalInfoText}>Рівень: {getLevelByExperience(tempExp)}</Text>
+        <Text style={styles.modalInfoText}>Досвід: {tempExp}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp(12) }}>
+          <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: sp(8) }} />
           <TouchableOpacity onPress={() => applyInputDelta(1)} style={styles.adjustButton}>
             <Text style={styles.adjustText}>+</Text>
           </TouchableOpacity>
@@ -451,7 +473,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             <Text style={styles.adjustText}>-</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 12 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: sp(12) }}>
           <TouchableOpacity onPress={() => adjustExp(10)} style={styles.adjustButton}>
             <Text style={styles.adjustText}>+10</Text>
           </TouchableOpacity>
@@ -461,17 +483,17 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         </View>
         <ScrollView style={{ maxHeight: 150 }}>
           {EXPERIENCE_TABLE.map((row) => (
-            <View key={row.level} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View key={row.level} style={styles.tableRow}>
               <Text
                 style={{
-                  color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
+                  color: getLevelByExperience(tempExp) === row.level ? colors.highlight : colors.text,
                 }}
               >
                 {row.level} рів.
               </Text>
               <Text
                 style={{
-                  color: getLevelByExperience(tempExp) === row.level ? '#ffd700' : colors.text,
+                  color: getLevelByExperience(tempExp) === row.level ? colors.highlight : colors.text,
                 }}
               >
                 {row.exp}
@@ -496,3 +518,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
 
 export default CharacterMenu;
+
+
+
+
