@@ -41,7 +41,7 @@ function CharacterHeaderBase({
   toggleSessionMode,
 }: CharacterHeaderProps) {
   return (
-    <View style={styles.headerCard}>
+    <View style={styles.headerCard} testID='character.header'>
       <View style={styles.headerTop}>
         {characterData.photoUri ? (
           <Image source={{ uri: characterData.photoUri }} style={styles.characterPhoto} />
@@ -90,6 +90,7 @@ function CharacterHeaderBase({
             android_ripple={{ color: colors.ripple }}
             accessibilityRole='button'
             accessibilityState={{ selected: mode === 'play' }}
+            testID='character.mode.play'
           >
             <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>
               Режим гри
@@ -101,6 +102,7 @@ function CharacterHeaderBase({
             android_ripple={{ color: colors.ripple }}
             accessibilityRole='button'
             accessibilityState={{ selected: mode === 'edit' }}
+            testID='character.mode.edit'
           >
             <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>
               Режим редагування
@@ -112,6 +114,7 @@ function CharacterHeaderBase({
           style={[styles.sessionToggle, characterData.sessionMode ? styles.sessionToggleActive : null]}
           onPress={toggleSessionMode}
           android_ripple={{ color: colors.ripple }}
+          testID='character.sessionMode.toggle'
         >
           <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Режим сесії</Text>
         </Pressable>

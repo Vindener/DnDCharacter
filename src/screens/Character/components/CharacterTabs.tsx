@@ -14,6 +14,15 @@ type TabItem = {
   hasConflict: boolean;
 };
 
+const TAB_TEST_IDS: Record<TabItem['tab'], string> = {
+  Overview: 'character.tab.overview',
+  Combat: 'character.tab.combat',
+  Magic: 'character.tab.magic',
+  Inventory: 'character.tab.inventory',
+  Notes: 'character.tab.notes',
+  Homebrew: 'character.tab.homebrew',
+};
+
 function CharacterTabsBase({ styles, colors, tabOrder, tabLabels, selectedTab, hasConflictForTab, openTab }: CharacterTabsProps) {
   const tabItems = useMemo<TabItem[]>(
     () => tabOrder.map((tab) => ({ tab, label: tabLabels[tab], hasConflict: hasConflictForTab(tab) })),
@@ -32,6 +41,7 @@ function CharacterTabsBase({ styles, colors, tabOrder, tabLabels, selectedTab, h
         ]}
         onPress={() => openTab(item.tab)}
         android_ripple={{ color: colors.ripple }}
+        testID={TAB_TEST_IDS[item.tab]}
       >
         <View style={styles.tabChipInner}>
           <Text style={[styles.tabChipText, selectedTab === item.tab ? styles.tabChipTextActive : null]}>{item.label}</Text>
