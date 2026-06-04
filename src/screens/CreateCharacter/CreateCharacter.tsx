@@ -496,7 +496,12 @@ const CreateCharacter = (): JSX.Element => {
   }) => (
     <View style={styles.navRow}>
       {showBack ? (
-        <Pressable style={styles.navButton} onPress={() => setStep((prev) => Math.max(prev - 1, 1))} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.navButton}
+          onPress={() => setStep((prev) => Math.max(prev - 1, 1))}
+          android_ripple={{ color: colors.ripple }}
+          testID='createCharacter.backButton'
+        >
           <Text style={styles.navButtonText}>Назад</Text>
         </Pressable>
       ) : (
@@ -507,6 +512,7 @@ const CreateCharacter = (): JSX.Element => {
         onPress={onNext}
         disabled={nextDisabled}
         android_ripple={{ color: colors.ripple }}
+        testID={nextLabel.includes('Створити персонажа') ? 'createCharacter.submitButton' : 'createCharacter.nextButton'}
       >
         <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{nextLabel}</Text>
       </Pressable>
@@ -786,7 +792,7 @@ const CreateCharacter = (): JSX.Element => {
     </View>
   );
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps='handled'>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps='handled' testID='createCharacter.screen'>
       <View style={styles.progressRow}>
         <Text style={styles.progressText}>
           Крок {step}/{TOTAL_STEPS}
@@ -840,7 +846,7 @@ const CreateCharacter = (): JSX.Element => {
         <View style={styles.card}>
           <Header title='Ім’я, рівень, раса' />
           <Text style={styles.label}>Ім’я персонажа</Text>
-          <TextInput style={styles.input} value={name} onChangeText={setName} />
+          <TextInput style={styles.input} value={name} onChangeText={setName} testID='createCharacter.nameInput' />
 
           <Text style={styles.label}>Рівень</Text>
           <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType='numeric' />

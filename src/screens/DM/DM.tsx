@@ -218,7 +218,7 @@ const DM: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='dm.screen'>
       <View style={styles.card}>
         <Text style={styles.title}>Огляд групи</Text>
         <Text style={styles.hint}>DM-орієнтований дашборд стану групи, спільного доступу та ризиків синхронізації.</Text>
@@ -242,7 +242,12 @@ const DM: React.FC = () => {
             <Text style={styles.statChipText}>Роль: {roleMode}</Text>
           </View>
         </View>
-        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMPartyOverview')} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => navigation.navigate('DMPartyOverview')}
+          android_ripple={{ color: colors.ripple }}
+          testID='dm.partyOverviewButton'
+        >
           <Text style={styles.authButtonText}>Відкрити повний огляд групи</Text>
         </Pressable>
       </View>
@@ -255,6 +260,7 @@ const DM: React.FC = () => {
             style={styles.laneButton}
             onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })}
             android_ripple={{ color: colors.ripple }}
+            testID='dm.encounterPrepButton'
           >
             <Ionicons name='rocket-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Почати підготовку сутички</Text>
@@ -343,6 +349,7 @@ const DM: React.FC = () => {
           style={styles.authButton}
           onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
           android_ripple={{ color: colors.ripple }}
+          testID='dm.campaignNotesButton'
         >
           <Text style={styles.authButtonText}>Відкрити нотатки кампанії</Text>
         </Pressable>
@@ -376,7 +383,12 @@ const DM: React.FC = () => {
           })
         )}
 
-        <Pressable style={styles.authButton} onPress={() => navigation.navigate('DMSharedUpdates')} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => navigation.navigate('DMSharedUpdates')}
+          android_ripple={{ color: colors.ripple }}
+          testID='dm.sharedUpdatesButton'
+        >
           <Text style={styles.authButtonText}>Відкрити чергу спільних оновлень</Text>
         </Pressable>
 

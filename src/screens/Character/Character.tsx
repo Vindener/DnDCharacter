@@ -71,7 +71,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     getHistoryAuthorLabel,
   } = viewState;
   return (
-    <View style={styles.screen}>
+    <View style={styles.screen} testID='character.screen'>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <CharacterHeader
           styles={styles}

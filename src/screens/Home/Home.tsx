@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { getStyles } from './styles';
@@ -253,6 +253,12 @@ const Home = () => {
     return 'safe';
   }, [maxCharacters, userCharacterCount]);
 
+  const openRootTab = (routeName: 'DM' | 'Bestiary') => {
+    const parent = navigation.getParent();
+    if (!parent) return;
+    parent.dispatch(CommonActions.navigate({ name: routeName }));
+  };
+
   const openCharacter = async (character: CharacterPreview) => {
     const existsLocal = characters.find((c) => c.id === character.id);
 
@@ -363,7 +369,7 @@ const Home = () => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='home.screen'>
 
 
       {charactersLoadError ? (
@@ -405,7 +411,12 @@ const Home = () => {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Швидкі дії</Text>
         <View style={styles.quickGrid}>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('CreateCharacter')} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => navigation.navigate('CreateCharacter')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.createCharacterButton'
+          >
             <Ionicons name='person-add-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Створити персонажа</Text>
           </Pressable>
@@ -413,13 +424,45 @@ const Home = () => {
             <Ionicons name='download-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Імпортувати</Text>
           </Pressable>
-          <Pressable style={styles.quickButton} onPress={() => navigation.navigate('Spellbook')} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => navigation.navigate('Spellbook')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openSpellbookButton'
+          >
             <Ionicons name='book-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Відкрити заклинання</Text>
           </Pressable>
           <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='play-outline' size={18} color={colors.text} />
             <Text style={styles.quickButtonText}>Почати сесію</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => openRootTab('DM')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openDMButton'
+          >
+            <Ionicons name='people-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити DM</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => openRootTab('Bestiary')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openBestiaryButton'
+          >
+            <Ionicons name='skull-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити бестіарій</Text>
+          </Pressable>
+          <Pressable
+            style={styles.quickButton}
+            onPress={() => navigation.navigate('DiceRoller')}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.openDiceButton'
+          >
+            <Ionicons name='dice-outline' size={18} color={colors.text} />
+            <Text style={styles.quickButtonText}>Відкрити кубики</Text>
           </Pressable>
         </View>
       </View>

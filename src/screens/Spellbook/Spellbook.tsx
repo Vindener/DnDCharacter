@@ -270,7 +270,7 @@ const Spellbook = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID='spellbook.screen'>
       <View style={styles.headerRow}>
         <View style={styles.headerMeta}>
           <Text style={styles.title}>Книга заклять</Text>
@@ -294,6 +294,7 @@ const Spellbook = () => {
         placeholder='Пошук за назвою, школою, тегом...'
         placeholderTextColor={colors.textSecondary}
         style={styles.search}
+        testID='spellbook.searchInput'
       />
 
       <View style={styles.filtersBlock}>
@@ -384,7 +385,7 @@ const Spellbook = () => {
             !selectedCharacter || selectedPreparedLimit === null || status === 'prepared' || selectedPreparedCount < selectedPreparedLimit;
 
           return (
-            <View style={styles.card}>
+            <View style={styles.card} testID='spellbook.spellCard'>
               <View style={styles.cardHeader}>
                 <View style={styles.cardHeaderMain}>
                   <Text style={styles.spellName}>{item.name}</Text>
