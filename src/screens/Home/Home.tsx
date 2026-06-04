@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { CommonActions, useNavigation } from '@react-navigation/native';
@@ -8,71 +8,25 @@ import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
-import FileService from '@/shared/services/fileSerice';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import type { CharacterSheet } from '@/repositories/characterCloudRepository';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import { useAuth, configureGoogleSignIn, onGoogleButtonPress } from '@/shared/services/auth/index';
-import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
-import { isHomebrewCharacter } from '@/shared/helpers/homebrew';
-import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
+import { isNetworkOnline } from '@/shared/helpers/collaboration/status';
 import { SkeletonHome } from '@/shared/ui/skeleton';
+import {
+  buildHomeCharacterPreviews,
+  buildSyncStrip,
+  countConflicts,
+  countPendingSync,
+  formatInitiative,
+  selectContinueState,
+} from './homeViewModel';
 
-type CharacterPreview = {
-  id: string;
-  name: string;
-  className: string;
-  race: string;
-  level: number;
-  hpCurrent: number;
-  hpMax: number;
-  ac: number;
-  syncStatus: string;
-  shareStatus: string | null;
-  statuses: string[];
-  source: 'local' | 'mine' | 'shared';
-  payload: CharacterViewModel;
-};
-
-const mapRemoteToLocalDto = (doc: CharacterSheet): CharacterViewModel =>
-  mapCloudCharacterToLocalDto(doc as unknown as Record<string, unknown>);
-
-const toMillis = (value: unknown): number => {
-  if (!value || typeof value !== 'object') return 0;
-  const cast = value as { toMillis?: () => number; seconds?: number };
-  if (typeof cast.toMillis === 'function') return cast.toMillis();
-  if (typeof cast.seconds === 'number') return cast.seconds * 1000;
-  return 0;
-};
-
-type TimelineEvent = {
-  id: string;
-  atMs: number;
-  type: 'local-edit' | 'synced' | 'shared-update';
-  text: string;
-};
-
-const STATUS_TRANSLATIONS: Record<string, string> = {
-  'Local only': 'Лише локально',
-  Synced: 'Синхронізовано',
-  'Pending sync': 'Очікує синхронізації',
-  'Offline changes pending': 'Очікують офлайн-зміни',
-  'Conflict detected': 'Виявлено конфлікт',
-  'Shared with DM': 'Поділено з DM',
-  'Shared with Player': 'Поділено з гравцем',
-  Homebrew: 'Авторський',
-};
-
-const TIMELINE_BADGE_TRANSLATIONS: Record<TimelineEvent['type'], string> = {
-  'local-edit': 'Локально',
-  synced: 'Синк',
-  'shared-update': 'Спільне',
-};
-
-const translateLabel = (value: string, dictionary: Record<string, string>): string => dictionary[value] || value;
+const HOME_ROLE = 'Player' as const;
 
 const Home = () => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
@@ -90,14 +44,12 @@ const Home = () => {
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
   const lastSessionCharacterId = useCharacterStore((s) => s.lastSessionCharacterId);
   const setLastSessionCharacterId = useCharacterStore((s) => s.setLastSessionCharacterId);
-  const maxCharacters = useCharacterStore((s) => s.maxCharacters);
 
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const loadSyncMeta = useSyncStore((s) => s.loadSyncMeta);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
 
-  const [search, setSearch] = useState('');
   const [myCloud, setMyCloud] = useState<CharacterSheet[]>([]);
   const [sharedCloud, setSharedCloud] = useState<CharacterSheet[]>([]);
   const [cloudPulseAt, setCloudPulseAt] = useState<number | null>(null);
@@ -106,7 +58,7 @@ const Home = () => {
   const isSignedIn = Boolean(user);
   const isOnline = isNetworkOnline(netInfo.isConnected);
   const providerPhoto = user?.photoURL || user?.providerData?.find(Boolean)?.photoURL || null;
-  const userEmail = user?.email || user?.providerData?.find((item) => item?.email)?.email || 'Користувач Google';
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'Влад';
 
   useEffect(() => {
     configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
@@ -162,149 +114,35 @@ const Home = () => {
   }, [user]);
 
   const previewList = useMemo(() => {
-    const byId = new Map<string, CharacterPreview>();
+    const localInputs = characters.map((payload) => ({ payload, source: 'local' as const }));
+    const myCloudInputs = myCloud.map((doc) => ({
+      payload: mapCloudCharacterToLocalDto(doc as unknown as Record<string, unknown>),
+      source: 'mine' as const,
+      isSharedSheet: Array.isArray(doc.editors) && doc.editors.length > 0,
+    }));
+    const sharedInputs = sharedCloud.map((doc) => ({
+      payload: mapCloudCharacterToLocalDto(doc as unknown as Record<string, unknown>),
+      source: 'shared' as const,
+      isSharedSheet: true,
+    }));
 
-    const pushPreview = (
-      payload: CharacterViewModel,
-      source: 'local' | 'mine' | 'shared',
-      rawDoc?: CharacterSheet | null,
-    ) => {
-      const existing = byId.get(payload.id);
-      const syncState = syncByCharacter[payload.id];
-      const syncStatus = getSyncDisplayStatus(syncState, netInfo.isConnected);
-      const shareStatus = getShareDisplayStatus({
-        isSharedSheet:
-          source === 'shared' ||
-          Boolean(rawDoc && Array.isArray(rawDoc.editors) && rawDoc.editors.length > 0) ||
-          Boolean(existing?.shareStatus),
-        source,
-        isOwnedByMe: source !== 'shared',
-        role: 'Player',
-      });
-
-      const statuses = new Set<string>();
-      statuses.add(syncStatus);
-      if (shareStatus) statuses.add(shareStatus);
-      if (isHomebrewCharacter(payload)) statuses.add('Homebrew');
-
-      const next: CharacterPreview = {
-        id: payload.id,
-        name: payload.name || 'Персонаж',
-        className: payload.class || 'Клас',
-        race: payload.race || 'Раса',
-        level: payload.level || 1,
-        hpCurrent: payload.hp?.current || 0,
-        hpMax: payload.hp?.max || 0,
-        ac: payload.ac || 0,
-        syncStatus,
-        shareStatus,
-        statuses: Array.from(statuses),
-        source,
-        payload,
-      };
-
-      byId.set(payload.id, next);
-    };
-
-    characters.forEach((localChar) => pushPreview(localChar, 'local'));
-    myCloud.forEach((doc) => pushPreview(mapRemoteToLocalDto(doc), 'mine', doc));
-    sharedCloud.forEach((doc) => pushPreview(mapRemoteToLocalDto(doc), 'shared', doc));
-
-    const text = search.trim().toLowerCase();
-    return Array.from(byId.values())
-      .filter((item) => {
-        if (!text) return true;
-        return (
-          item.name.toLowerCase().includes(text) ||
-          item.className.toLowerCase().includes(text) ||
-          item.race.toLowerCase().includes(text)
-        );
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [characters, myCloud, netInfo.isConnected, sharedCloud, search, syncByCharacter]);
-
-  const pendingSyncCount = useMemo(() => {
-    return Object.values(syncByCharacter).filter((entry) => {
-      const status = getSyncDisplayStatus(entry, netInfo.isConnected);
-      return status === 'Pending sync' || status === 'Offline changes pending';
-    }).length;
-  }, [netInfo.isConnected, syncByCharacter]);
-
-  const conflictCount = useMemo(() => {
-    return Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length;
-  }, [netInfo.isConnected, syncByCharacter]);
-
-  const userCharacterCount = useMemo(() => {
-    const ids = new Set<string>();
-    characters.forEach((character) => {
-      if (character.id) ids.add(character.id);
+    return buildHomeCharacterPreviews({
+      characters: [...localInputs, ...myCloudInputs, ...sharedInputs],
+      syncByCharacter,
+      isConnected: netInfo.isConnected,
+      role: HOME_ROLE,
     });
-    myCloud.forEach((doc) => {
-      const id = String(doc.id || '').trim();
-      if (id) ids.add(id);
-    });
-    return ids.size;
-  }, [characters, myCloud]);
+  }, [characters, myCloud, netInfo.isConnected, sharedCloud, syncByCharacter]);
 
-  const characterLimitTone = useMemo<'safe' | 'warn' | 'danger'>(() => {
-    if (maxCharacters <= 0) return 'danger';
-    if (userCharacterCount >= maxCharacters) return 'danger';
-    if (userCharacterCount >= Math.ceil(maxCharacters * 0.8)) return 'warn';
-    return 'safe';
-  }, [maxCharacters, userCharacterCount]);
+  const pendingSyncCount = useMemo(
+    () => countPendingSync(syncByCharacter, netInfo.isConnected),
+    [netInfo.isConnected, syncByCharacter],
+  );
 
-  const openRootTab = (routeName: 'DM' | 'Bestiary') => {
-    const parent = navigation.getParent();
-    if (!parent) return;
-    parent.dispatch(CommonActions.navigate({ name: routeName }));
-  };
-
-  const openCharacter = async (character: CharacterPreview) => {
-    const existsLocal = characters.find((c) => c.id === character.id);
-
-    if (!existsLocal) {
-      await addCharacter(character.payload);
-    } else {
-      await updateCharacter(character.id, character.payload);
-    }
-
-    setCurrentCharacterId(character.id);
-    navigation.navigate('Character', { character: character.payload });
-    trackProductEvent('character_opened', {
-      characterId: character.id,
-      source: character.source,
-    });
-  };
-
-  const continueSession = () => {
-    const current =
-      previewList.find((item) => item.id === lastSessionCharacterId) ||
-      previewList.find((item) => item.id === currentCharacterId) ||
-      previewList.find((item) => item.payload.sessionMode) ||
-      previewList[0];
-    if (!current) {
-      navigation.navigate('CreateCharacter');
-      return;
-    }
-    void setLastSessionCharacterId(current.id);
-    trackProductEvent('session_continue', {
-      characterId: current.id,
-      role: 'Player',
-    });
-    void openCharacter(current);
-  };
-
-  const onImport = async () => {
-    const character = await FileService.importCharacterFromFile();
-    if (character) await addCharacter(character);
-  };
-
-  const onLogin = async () => {
-    try {
-      await onGoogleButtonPress();
-    } catch (_error) { /* intentionally ignored */ }
-  };
-
+  const conflictCount = useMemo(
+    () => countConflicts(syncByCharacter, netInfo.isConnected),
+    [netInfo.isConnected, syncByCharacter],
+  );
 
   const storeLastSyncAt = useMemo(() => {
     const values = Object.values(syncByCharacter)
@@ -314,55 +152,102 @@ const Home = () => {
     return Math.max(...values);
   }, [syncByCharacter]);
 
-  const effectiveLastSyncAt = storeLastSyncAt ?? cloudPulseAt;
-  const lastSyncLabel = effectiveLastSyncAt ? new Date(effectiveLastSyncAt).toLocaleTimeString() : '—';
+  const continueState = useMemo(
+    () =>
+      selectContinueState({
+        previews: previewList,
+        lastSessionCharacterId,
+        currentCharacterId,
+      }),
+    [currentCharacterId, lastSessionCharacterId, previewList],
+  );
 
-  const timeline = useMemo<TimelineEvent[]>(() => {
-    const characterNameById = new Map<string, string>();
-    previewList.forEach((item) => {
-      characterNameById.set(item.id, item.name);
+  const syncStrip = useMemo(
+    () =>
+      buildSyncStrip({
+        isOnline,
+        isSignedIn,
+        pendingCount: pendingSyncCount,
+        conflictCount,
+        lastSyncAt: storeLastSyncAt ?? cloudPulseAt,
+      }),
+    [cloudPulseAt, conflictCount, isOnline, isSignedIn, pendingSyncCount, storeLastSyncAt],
+  );
+
+  const openRootTab = React.useCallback((routeName: 'DM' | 'Bestiary') => {
+    const parent = navigation.getParent();
+    if (!parent) return;
+    parent.dispatch(CommonActions.navigate({ name: routeName }));
+  }, [navigation]);
+
+  const quickActions = useMemo(() => {
+    const createCharacter = {
+      id: 'createCharacter',
+      testID: 'home.createCharacterButton',
+      icon: 'person-add-outline' as const,
+      label: 'Створити персонажа',
+      onPress: () => navigation.navigate('CreateCharacter'),
+    };
+    const rollDice = {
+      id: 'rollDice',
+      testID: 'home.openDiceButton',
+      icon: 'dice-outline' as const,
+      label: 'Кинути кубики',
+      onPress: () => navigation.navigate('DiceRoller'),
+    };
+    const spellbook = {
+      id: 'spellbook',
+      testID: 'home.openSpellbookButton',
+      icon: 'book-outline' as const,
+      label: 'Заклинання',
+      onPress: () => navigation.navigate('Spellbook'),
+    };
+    const bestiary = {
+      id: 'bestiary',
+      testID: 'home.openBestiaryButton',
+      icon: 'skull-outline' as const,
+      label: 'Бестіарій',
+      onPress: () => openRootTab('Bestiary'),
+    };
+    return [createCharacter, rollDice, spellbook, bestiary];
+  }, [navigation, openRootTab]);
+
+  const openCharacter = async (character: (typeof previewList)[number]) => {
+    const existsLocal = characters.find((c) => c.id === character.id);
+
+    if (!existsLocal) {
+      await addCharacter(character.payload);
+    } else if (character.source !== 'local') {
+      await updateCharacter(character.id, character.payload);
+    }
+
+    await setLastSessionCharacterId(character.id);
+    setCurrentCharacterId(character.id);
+    navigation.navigate('Character', { character: character.payload });
+    trackProductEvent('character_opened', {
+      characterId: character.id,
+      source: character.source,
     });
+  };
 
-    const syncEvents = Object.values(syncByCharacter).flatMap((entry) => {
-      const name = characterNameById.get(entry.characterId) || entry.characterId;
-      const events: TimelineEvent[] = [];
-      if (entry.lastLocalChangeAt) {
-        events.push({
-          id: `${entry.characterId}-local-${entry.lastLocalChangeAt}`,
-          atMs: entry.lastLocalChangeAt,
-          type: 'local-edit',
-          text: `${name}: Локальна правка`,
-        });
-      }
-      if (entry.lastSyncAt) {
-        events.push({
-          id: `${entry.characterId}-sync-${entry.lastSyncAt}`,
-          atMs: entry.lastSyncAt,
-          type: 'synced',
-          text: `${name}: Синхронізовано`,
-        });
-      }
-      return events;
+  const continueSession = () => {
+    if (!continueState.character) {
+      navigation.navigate('CreateCharacter');
+      return;
+    }
+
+    trackProductEvent('session_continue', {
+      characterId: continueState.character.id,
+      role: HOME_ROLE,
     });
+    void openCharacter(continueState.character);
+  };
 
-    const sharedEvents: TimelineEvent[] = sharedCloud
-      .map((doc) => {
-        const atMs = toMillis(doc.updatedAt);
-        if (!atMs) return null;
-        const name = String(doc.name || 'Персонаж');
-        return {
-          id: `${String(doc.id || name)}-shared-${atMs}`,
-          atMs,
-          type: 'shared-update' as const,
-          text: `${name}: Оновлення спільного листа`,
-        };
-      })
-      .filter(Boolean) as TimelineEvent[];
-
-    return [...syncEvents, ...sharedEvents]
-      .sort((a, b) => b.atMs - a.atMs)
-      .slice(0, 12);
-  }, [previewList, sharedCloud, syncByCharacter]);
+  const onLogin = async () => {
+    try {
+      await onGoogleButtonPress();
+    } catch (_error) { /* intentionally ignored */ }
+  };
 
   if (!charactersLoaded && !charactersLoadError) {
     return <SkeletonHome />;
@@ -370,7 +255,15 @@ const Home = () => {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='home.screen'>
-
+      <View style={styles.heroCard} testID='home.header'>
+        <View style={styles.headerTopRow}>
+          <View style={styles.headerTextWrap}>
+            <Text style={styles.greetingTitle}>Продовжити гру</Text>
+            <Text style={styles.greetingMeta}>Режим: Гравець · {userName}</Text>
+          </View>
+          {providerPhoto ? <Image source={{ uri: providerPhoto }} style={styles.authAvatar} resizeMode='cover' /> : null}
+        </View>
+      </View>
 
       {charactersLoadError ? (
         <View style={styles.card}>
@@ -379,206 +272,167 @@ const Home = () => {
         </View>
       ) : null}
 
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Продовжити</Text>
-
-        {sharedCloud.slice(0, 2).map((doc) => (
-          <Text key={String(doc.id)} style={styles.lineText}>
-            • Активний спільний лист: {String(doc.name || 'Персонаж')}
-          </Text>
-        ))}
-
-        {!isSignedIn && (
-          <TouchableOpacity style={styles.authButton} onPress={onLogin} activeOpacity={0.85}>
-            <Text style={styles.authButtonText}>Увійти за допомогою Google</Text>
-          </TouchableOpacity>
-        )}
-        {isSignedIn && (
-          <View style={styles.authUserRow}>
-            {providerPhoto ? <Image source={{ uri: providerPhoto }} style={styles.authAvatar} resizeMode='cover' /> : null}
-            <View style={styles.authUserTextWrap}>
-              <Text style={styles.authUserEmail}>Вітаємо, {userEmail}!</Text>
-            </View>
-          </View>
-        )}
-
-        <Text style={styles.sectionHint}>Останні листи та швидкий старт поточної сесії.</Text>
-        <TouchableOpacity style={styles.resumeButton} onPress={continueSession} activeOpacity={0.85}>
-          <Text style={styles.resumeButtonText}>Продовжити сесію</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={styles.card}>
+      <View style={styles.card} testID='home.quickActions'>
         <Text style={styles.sectionTitle}>Швидкі дії</Text>
         <View style={styles.quickGrid}>
-          <Pressable
-            style={styles.quickButton}
-            onPress={() => navigation.navigate('CreateCharacter')}
-            android_ripple={{ color: colors.ripple }}
-            testID='home.createCharacterButton'
-          >
-            <Ionicons name='person-add-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Створити персонажа</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={onImport} android_ripple={{ color: colors.ripple }}>
-            <Ionicons name='download-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Імпортувати</Text>
-          </Pressable>
-          <Pressable
-            style={styles.quickButton}
-            onPress={() => navigation.navigate('Spellbook')}
-            android_ripple={{ color: colors.ripple }}
-            testID='home.openSpellbookButton'
-          >
-            <Ionicons name='book-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Відкрити заклинання</Text>
-          </Pressable>
-          <Pressable style={styles.quickButton} onPress={continueSession} android_ripple={{ color: colors.ripple }}>
-            <Ionicons name='play-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Почати сесію</Text>
-          </Pressable>
-          <Pressable
-            style={styles.quickButton}
-            onPress={() => openRootTab('DM')}
-            android_ripple={{ color: colors.ripple }}
-            testID='home.openDMButton'
-          >
-            <Ionicons name='people-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Відкрити DM</Text>
-          </Pressable>
-          <Pressable
-            style={styles.quickButton}
-            onPress={() => openRootTab('Bestiary')}
-            android_ripple={{ color: colors.ripple }}
-            testID='home.openBestiaryButton'
-          >
-            <Ionicons name='skull-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Відкрити бестіарій</Text>
-          </Pressable>
-          <Pressable
-            style={styles.quickButton}
-            onPress={() => navigation.navigate('DiceRoller')}
-            android_ripple={{ color: colors.ripple }}
-            testID='home.openDiceButton'
-          >
-            <Ionicons name='dice-outline' size={18} color={colors.text} />
-            <Text style={styles.quickButtonText}>Відкрити кубики</Text>
-          </Pressable>
+          {quickActions.map((action) => (
+            <Pressable
+              key={action.id}
+              style={styles.quickButton}
+              onPress={action.onPress}
+              android_ripple={{ color: colors.ripple }}
+              testID={action.testID}
+            >
+              <Ionicons name={action.icon} size={20} color={colors.text} />
+              <Text style={styles.quickButtonText}>{action.label}</Text>
+            </Pressable>
+          ))}
         </View>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Огляд персонажів</Text>
-        <Text style={styles.sectionHint}>
-          Персонажів користувача ({isSignedIn ? userEmail : 'локальний профіль'}):{' '}
-          <Text
-            style={[
-              styles.characterLimitText,
-              characterLimitTone === 'safe'
-                ? styles.characterLimitTextSafe
-                : characterLimitTone === 'warn'
-                  ? styles.characterLimitTextWarn
-                  : styles.characterLimitTextDanger,
-            ]}
-          >
-            {userCharacterCount}/{maxCharacters}
-          </Text>
-        </Text>
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          placeholder='Пошук персонажа'
-          placeholderTextColor={colors.textSecondary}
-          style={styles.searchInput}
-        />
-
-        {previewList.slice(0, 8).map((item) => (
-          <Pressable
-            key={item.id}
-            style={styles.characterCard}
-            onPress={() => {
-              void openCharacter(item);
-            }}
-            android_ripple={{ color: colors.ripple }}
-          >
-            <View style={styles.characterHeader}>
-              <Text style={styles.characterName}>{item.name}</Text>
-              <Text style={styles.characterMeta}>Рів. {item.level}</Text>
-            </View>
-            <Text style={styles.characterMeta}>
-              {item.className} / {item.race}
+      <View style={styles.card} testID='home.continueSession'>
+        {continueState.character ? (
+          <>
+            <Text style={styles.sectionEyebrow}>Продовжити сесію</Text>
+            <Text style={styles.continueName}>
+              {continueState.character.name} — {continueState.character.className} Рів. {continueState.character.level}
             </Text>
-            <View style={styles.characterStatsRow}>
-              <Text style={styles.characterStat}>
-                HP {item.hpCurrent}/{item.hpMax}
+            <Text style={styles.continueMeta}>
+              Здоров’я {continueState.character.hpCurrent}/{continueState.character.hpMax} · КЗ {continueState.character.ac} ·{' '}
+              {continueState.character.syncStatus === 'Synced' ? 'Синхронізовано' : continueState.character.badges.at(-1)?.label || 'Локально'}
+            </Text>
+            <Pressable
+              style={styles.primaryButton}
+              onPress={continueSession}
+              android_ripple={{ color: colors.ripple }}
+              testID='home.openSheetButton'
+            >
+              <Ionicons name='document-text-outline' size={18} color={colors.onPrimary} />
+              <Text style={styles.primaryButtonText}>Відкрити лист</Text>
+            </Pressable>
+          </>
+        ) : (
+          <>
+            <Text style={styles.sectionEyebrow}>Створи першого персонажа</Text>
+            <Text style={styles.sectionHint}>Почни з локального персонажа. Синхронізацію й шерінг можна підключити пізніше.</Text>
+            <Pressable
+              style={styles.primaryButton}
+              onPress={() => navigation.navigate('CreateCharacter')}
+              android_ripple={{ color: colors.ripple }}
+              testID='home.emptyCreateButton'
+            >
+              <Ionicons name='person-add-outline' size={18} color={colors.onPrimary} />
+              <Text style={styles.primaryButtonText}>Створити персонажа</Text>
+            </Pressable>
+          </>
+        )}
+      </View>
+
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>Персонажі</Text>
+        <Text style={styles.sectionHint}>{previewList.length ? `${previewList.length} готово до гри` : 'Немає персонажів'}</Text>
+      </View>
+
+      {previewList.map((item) => (
+        <Pressable
+          key={item.id}
+          style={styles.characterCard}
+          onPress={() => {
+            void openCharacter(item);
+          }}
+          android_ripple={{ color: colors.ripple }}
+          testID={`home.character.${item.id}`}
+        >
+          <View style={styles.characterHeader}>
+            <View style={styles.characterTitleWrap}>
+              <Text style={styles.characterName}>{item.name}</Text>
+              <Text style={styles.characterMeta}>
+                {item.race} {item.className} · Рівень {item.level}
               </Text>
-              <Text style={styles.characterStat}>AC {item.ac}</Text>
             </View>
-            <Text style={styles.characterMeta}>Стан синхронізації: {translateLabel(item.syncStatus, STATUS_TRANSLATIONS)}</Text>
-            {!!item.shareStatus && (
-              <Text style={styles.characterMeta}>Статус спільного доступу: {translateLabel(item.shareStatus, STATUS_TRANSLATIONS)}</Text>
-            )}
-            <View style={styles.badgeRow}>
-              {item.statuses.map((status) => (
-                <View key={`${item.id}-${status}`} style={[styles.badge, status === 'Conflict detected' ? styles.conflictBadge : null]}>
-                  <Text style={[styles.badgeText, status === 'Conflict detected' ? styles.conflictBadgeText : null]}>
-                    {translateLabel(status, STATUS_TRANSLATIONS)}
-                  </Text>
-                </View>
-              ))}
+            <Ionicons name='chevron-forward-outline' size={20} color={colors.textSecondary} />
+          </View>
+
+          <View style={styles.characterStatsRow}>
+            <View style={styles.characterStatBox}>
+              <Text style={styles.characterStatLabel}>Здоров’я</Text>
+              <Text style={styles.characterStatValue}>{item.hpCurrent}/{item.hpMax}</Text>
             </View>
-          </Pressable>
-        ))}
+            <View style={styles.characterStatBox}>
+              <Text style={styles.characterStatLabel}>КЗ</Text>
+              <Text style={styles.characterStatValue}>{item.ac}</Text>
+            </View>
+            <View style={styles.characterStatBox}>
+              <Text style={styles.characterStatLabel}>Ініціатива</Text>
+              <Text style={styles.characterStatValue}>{formatInitiative(item.initiative)}</Text>
+            </View>
+          </View>
 
-        {!previewList.length && <Text style={styles.sectionHint}>Поки немає персонажів. Створи або імпортуй лист.</Text>}
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Хронологія останньої сесії</Text>
-        <Text style={styles.sectionHint}>Останні локальні правки, синхронізація й оновлення спільних листів.</Text>
-        {!timeline.length && <Text style={styles.sectionHint}>Подій поки немає.</Text>}
-        {timeline.map((event) => {
-          const badge = translateLabel(event.type, TIMELINE_BADGE_TRANSLATIONS);
-          return (
-            <View key={event.id} style={styles.timelineRow}>
-              <View style={styles.timelineBadge}>
-                <Text style={styles.timelineBadgeText}>{badge}</Text>
+          <View style={styles.badgeRow}>
+            {item.badges.map((badge) => (
+              <View
+                key={`${item.id}-${badge.kind}`}
+                style={[
+                  styles.badge,
+                  badge.kind === 'synced' ? styles.successBadge : null,
+                  badge.kind === 'pending' || badge.kind === 'offline' ? styles.warningBadge : null,
+                  badge.kind === 'conflict' ? styles.conflictBadge : null,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.badgeText,
+                    badge.kind === 'synced' ? styles.successBadgeText : null,
+                    badge.kind === 'pending' || badge.kind === 'offline' ? styles.warningBadgeText : null,
+                    badge.kind === 'conflict' ? styles.conflictBadgeText : null,
+                  ]}
+                >
+                  {badge.label}
+                </Text>
               </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.timelineText}>{event.text}</Text>
-                <Text style={styles.timelineMeta}>{new Date(event.atMs).toLocaleString()}</Text>
-              </View>
-            </View>
-          );
-        })}
-      </View>
+            ))}
+          </View>
+        </Pressable>
+      ))}
 
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Стан синхронізації</Text>
-        <View style={styles.syncRow}>
-          <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>{isOnline ? 'Мережа: онлайн' : 'Мережа: офлайн'}</Text>
-          </View>
-          <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>{isSignedIn ? 'Хмара: підключено' : 'Хмара: потрібен вхід'}</Text>
-          </View>
-          <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>Очікує синхронізації: {pendingSyncCount}</Text>
-          </View>
-          <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>Конфлікти: {conflictCount}</Text>
-          </View>
-          <View style={styles.syncPill}>
-            <Text style={styles.syncPillText}>Остання синхронізація: {lastSyncLabel}</Text>
-          </View>
+      {!previewList.length ? (
+        <View style={styles.emptyInline} testID='home.emptyState'>
+          <Text style={styles.emptyTitle}>Ще немає персонажів</Text>
+          <Text style={styles.sectionHint}>Головна стане швидким стартом, щойно з’явиться перший лист.</Text>
         </View>
+      ) : null}
+
+      <View
+        style={[
+          styles.syncStrip,
+          syncStrip.hasConflict ? styles.syncStripDanger : null,
+          !syncStrip.hasConflict && syncStrip.hasPending ? styles.syncStripWarning : null,
+        ]}
+        testID='home.syncStrip'
+      >
+        <View style={styles.syncStripHeader}>
+          <Ionicons
+            name={syncStrip.hasConflict ? 'alert-circle-outline' : syncStrip.hasPending ? 'cloud-upload-outline' : 'checkmark-circle-outline'}
+            size={20}
+            color={syncStrip.hasConflict ? colors.danger : syncStrip.hasPending ? colors.warning : colors.success}
+          />
+          <Text style={styles.syncStripTitle}>{syncStrip.hasConflict ? 'Виявлено конфлікт' : syncStrip.hasPending ? 'Очікують офлайн-зміни' : 'Синхронізовано'}</Text>
+        </View>
+        <View style={styles.syncPillRow}>
+          <Text style={styles.syncPillText}>{syncStrip.networkLabel}</Text>
+          <Text style={styles.syncPillText}>{syncStrip.cloudLabel}</Text>
+          <Text style={styles.syncPillText}>{syncStrip.lastSyncLabel}</Text>
+          <Text style={styles.syncPillText}>{syncStrip.pendingLabel}</Text>
+          <Text style={styles.syncPillText}>{syncStrip.conflictLabel}</Text>
+        </View>
+        {!isSignedIn ? (
+          <Pressable style={styles.cloudLoginButton} onPress={onLogin} android_ripple={{ color: colors.ripple }} testID='home.cloudLoginButton'>
+            <Text style={styles.cloudLoginText}>Увійти для хмари</Text>
+          </Pressable>
+        ) : null}
       </View>
     </ScrollView>
   );
 };
 
 export default Home;
-
-
-
-
