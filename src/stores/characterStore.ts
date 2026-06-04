@@ -13,6 +13,8 @@ export interface CharacterStore {
   maxCharacters: number;
   currentCharacterId: string | null;
   lastSessionCharacterId: string | null;
+  isLoaded: boolean;
+  loadError: string | null;
   setCurrentCharacterId: (id: string) => void;
   setLastSessionCharacterId: (id: string | null) => Promise<void>;
   loadCharacters: () => Promise<void>;
@@ -49,6 +51,8 @@ const useCharacterStore = create<CharacterStore>((set, get) => {
     maxCharacters: MAX_CHARACTERS,
     currentCharacterId: null,
     lastSessionCharacterId: null,
+    isLoaded: false,
+    loadError: null,
     setCurrentCharacterId: (id) => set({ currentCharacterId: id }),
     setLastSessionCharacterId: effects.setLastSessionCharacterId,
     loadCharacters: effects.loadCharacters,

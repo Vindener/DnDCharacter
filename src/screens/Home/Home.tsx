@@ -19,6 +19,7 @@ import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter'
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 import { isHomebrewCharacter } from '@/shared/helpers/homebrew';
 import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
+import { SkeletonHome } from '@/shared/ui/skeleton';
 
 type CharacterPreview = {
   id: string;
@@ -80,6 +81,8 @@ const Home = () => {
   const { user } = useAuth();
 
   const characters = useCharacterStore((s) => s.characters);
+  const charactersLoaded = useCharacterStore((s) => s.isLoaded);
+  const charactersLoadError = useCharacterStore((s) => s.loadError);
   const loadCharacters = useCharacterStore((s) => s.loadCharacters);
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
@@ -355,9 +358,20 @@ const Home = () => {
       .slice(0, 12);
   }, [previewList, sharedCloud, syncByCharacter]);
 
+  if (!charactersLoaded && !charactersLoadError) {
+    return <SkeletonHome />;
+  }
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
+
+      {charactersLoadError ? (
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Помилка завантаження</Text>
+          <Text style={styles.sectionHint}>{charactersLoadError}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>Продовжити</Text>

@@ -4,9 +4,10 @@
     "slug": "DnDCharacter",
     "plugins": [
       "@react-native-firebase/app",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-font"
     ],
-    "version": "0.88.3",
+    "version": "0.89.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

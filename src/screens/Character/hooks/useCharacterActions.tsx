@@ -48,6 +48,7 @@ import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { useQuickActions } from './useQuickActions';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { getStatusToneColors } from '@/shared/styles/statusTones';
+import type { DiceRollResult } from '@/shared/services/diceRoller';
 import {
   applyLevelChange,
   MAX_CHARACTER_LEVEL,
@@ -67,7 +68,13 @@ type CharacterMode = 'play' | 'edit';
 type CharacterTab = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
 type BadgeKind = 'neutral' | 'success' | 'warning' | 'accent' | 'danger';
 type SyncBadge = { id: string; label: string; kind: BadgeKind };
-type WeaponRollResult = { title: string; details: string[] };
+type RollResult = { title: string; details: string[] };
+type ContextRollRequest =
+  | { kind: 'ability'; title: string; label: string; baseModifier: number }
+  | { kind: 'weapon-attack'; weapon: NonNullable<CharacterViewModel['weapons']>[number] }
+  | { kind: 'weapon-damage'; weapon: NonNullable<CharacterViewModel['weapons']>[number] }
+  | { kind: 'spell-attack'; spellName: string; baseModifier: number }
+  | { kind: 'spell-damage'; spellName: string; profile: SpellDamageProfile };
 type LevelChangeDraftText = {
   stats: Record<keyof CharacterViewModel['stats'], string>;
   hpCurrent: string;
@@ -155,6 +162,10 @@ function parseModalNumber(value: string, fallback = 0): number {
   return parseNumber(value, fallback);
 }
 
+function formatSignedModifier(value: number): string {
+  return value >= 0 ? `+${value}` : String(value);
+}
+
 function parseLines(value: string): string[] {
   return value
     .split('\n')
@@ -180,52 +191,20 @@ function buildLevelChangeDraftText(character: CharacterViewModel, fallbackProfic
   };
 }
 
-function parseWeaponDamage(value: string): { count: number; sides: number; modifier: number; normalized: string } {
-  const compact = String(value || '')
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '');
-  const match = compact.match(/^(\d+)d(\d+)([+-]\d+)?$/);
-  if (match) {
-    return {
-      count: Math.max(parseInt(match[1], 10) || 1, 1),
-      sides: Math.max(parseInt(match[2], 10) || 6, 2),
-      modifier: parseInt(match[3] || '0', 10) || 0,
-      normalized: `${Math.max(parseInt(match[1], 10) || 1, 1)}d${Math.max(parseInt(match[2], 10) || 6, 2)}`,
-    };
+function buildDiceRollResultDetails(result: DiceRollResult): string[] {
+  const details = [`Формула: ${result.formula}`];
+  if (result.mode === 'advantage' || result.mode === 'disadvantage') {
+    details.push(`Кидки: ${result.rolls.join(' / ')}`);
+    details.push(`Використано: ${result.usedRoll}`);
+  } else {
+    details.push(`Куби: [${result.rolls.join(', ')}]`);
   }
-
-  const fallback = parseDice(compact);
-  if (fallback.count > 0 && fallback.sides > 0) {
-    return {
-      count: fallback.count,
-      sides: fallback.sides,
-      modifier: 0,
-      normalized: `${fallback.count}d${fallback.sides}`,
-    };
-  }
-
-  return { count: 1, sides: 6, modifier: 0, normalized: '1d6' };
-}
-
-function parseRollableDamageFormula(value: string): { count: number; sides: number; modifier: number; normalized: string } | null {
-  const compact = String(value || '')
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '');
-  if (!compact) return null;
-  if (!/^(\d+)d(\d+)([+-]\d+)?$/.test(compact)) return null;
-  return parseWeaponDamage(compact);
-}
-
-function rollDiceValues(count: number, sides: number): number[] {
-  const safeCount = Math.max(1, count);
-  const safeSides = Math.max(2, sides);
-  const results: number[] = [];
-  for (let index = 0; index < safeCount; index += 1) {
-    results.push(Math.floor(Math.random() * safeSides) + 1);
-  }
-  return results;
+  details.push(`Модифікатор: ${formatSignedModifier(result.modifier)}`);
+  if (result.proficiencyBonus) details.push(`Майстерність: ${formatSignedModifier(result.proficiencyBonus)}`);
+  details.push(`Разом: ${result.total}`);
+  if (result.isCriticalSuccess) details.push('Критичний успіх');
+  if (result.isCriticalFailure) details.push('Критичний провал');
+  return details;
 }
 
 function buildProficiencyByLevel(level: number): number {
@@ -326,8 +305,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const [tempShieldInput, setTempShieldInput] = useState('0');
 
   const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
-  const [weaponRollResult, setWeaponRollResult] = useState<WeaponRollResult | null>(null);
-  const [spellRollResult, setSpellRollResult] = useState<WeaponRollResult | null>(null);
+  const [abilityRollResult, setAbilityRollResult] = useState<RollResult | null>(null);
+  const [weaponRollResult, setWeaponRollResult] = useState<RollResult | null>(null);
+  const [contextRollRequest, setContextRollRequest] = useState<ContextRollRequest | null>(null);
+  const [spellRollResult, setSpellRollResult] = useState<RollResult | null>(null);
   const [isLevelChangeModalVisible, setIsLevelChangeModalVisible] = useState(false);
   const [levelChangeTarget, setLevelChangeTarget] = useState<number>(
     clamp(Number(baseCharacter.level) || MIN_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL),
@@ -336,8 +317,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     buildLevelChangeDraftText(ensureCharacterDefaults(baseCharacter), buildProficiencyByLevel(baseCharacter.level)),
   );
   const [isRestModalVisible, setIsRestModalVisible] = useState(false);
-  const [restStep, setRestStep] = useState<'choose' | 'short' | 'roll'>('choose');
-  const [shortRestDice, setShortRestDice] = useState('1');
+  const [restStep, setRestStep] = useState<'choose' | 'roll'>('choose');
   const [rollsNeeded, setRollsNeeded] = useState(0);
   const [rollResults, setRollResults] = useState<number[]>([]);
   const [diceSides, setDiceSides] = useState(0);
@@ -922,27 +902,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   }, [characterData.hitDice, patchCharacter]);
 
   const startShortRestFlow = useCallback(() => {
-    setRestStep('short');
-    setShortRestDice('1');
-    setRollResults([]);
-    setRollsNeeded(0);
-    setDiceSides(0);
-    setIsRestModalVisible(true);
-  }, []);
-
-  const startShortRestRoll = useCallback(() => {
     const { count, sides } = parseDice(characterData.hitDice || '0d0');
-    if (count <= 0 || sides <= 0) return;
-
-    let amount = parseInt(shortRestDice, 10);
-    if (!Number.isFinite(amount) || amount <= 0) amount = 1;
-
-    const safeAmount = clamp(amount, 1, count);
-    setRollsNeeded(safeAmount);
     setRollResults([]);
-    setDiceSides(sides);
+    setRollsNeeded(Math.max(count, 0));
+    setDiceSides(Math.max(sides, 0));
     setRestStep('roll');
-  }, [characterData.hitDice, shortRestDice]);
+    setIsRestModalVisible(true);
+  }, [characterData.hitDice]);
 
   const applyShortRestRolls = useCallback(() => {
     const { count, sides } = parseDice(characterData.hitDice || '0d0');
@@ -972,102 +938,82 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setIsRestModalVisible(false);
   }, [characterData.hitDice, characterData.stats.constitution, patchCharacter, rollResults]);
 
-  const rollWeaponAttack = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
-    const roll = Math.floor(Math.random() * 20) + 1;
-    const bonus = Number.isFinite(Number(weapon.attackBonus)) ? Number(weapon.attackBonus) : 0;
-    const total = roll + bonus;
-    const details: string[] = [
-      `d20: ${roll}`,
-      `Бонус атаки: ${bonus >= 0 ? `+${bonus}` : bonus}`,
-      `Разом: ${total}`,
-    ];
-    if (roll === 20) details.push('Критичне влучання');
-    if (roll === 1) details.push('Автопромах');
-
-    setWeaponRollResult({
-      title: `Влучення: ${weapon.name || 'Зброя'}`,
-      details,
-    });
-    setSpellRollResult(null);
+  const openContextRoll = useCallback((request: ContextRollRequest) => {
+    setContextRollRequest(request);
   }, []);
+
+  const rollAbilityCheck = useCallback((label: string, baseModifier: number) => {
+    openContextRoll({
+      kind: 'ability',
+      title: `${label} Check`,
+      label,
+      baseModifier,
+    });
+  }, [openContextRoll]);
+
+  const rollWeaponAttack = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
+    openContextRoll({ kind: 'weapon-attack', weapon });
+  }, [openContextRoll]);
 
   const rollWeaponDamage = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
-    const parsed = parseWeaponDamage(weapon.damage || '1d6');
-    const rolls = rollDiceValues(parsed.count, parsed.sides);
-    const diceTotal = rolls.reduce((sum, value) => sum + value, 0);
-    const total = diceTotal + parsed.modifier;
-    const formula = `${parsed.normalized}${parsed.modifier > 0 ? `+${parsed.modifier}` : parsed.modifier < 0 ? parsed.modifier : ''}`;
+    openContextRoll({ kind: 'weapon-damage', weapon });
+  }, [openContextRoll]);
 
-    setWeaponRollResult({
-      title: `Шкода: ${weapon.name || 'Зброя'}`,
-      details: [
-        `Формула: ${formula}`,
-        `Куби: [${rolls.join(', ')}]`,
-        `Сума кубів: ${diceTotal}`,
-        `Модифікатор: ${parsed.modifier >= 0 ? `+${parsed.modifier}` : parsed.modifier}`,
-        `Разом шкода: ${total}`,
-      ],
-    });
-    setSpellRollResult(null);
+  const closeWeaponRollModal = useCallback(() => {
+    setContextRollRequest(null);
   }, []);
 
-  const rollSpellAttack = useCallback((spellName: string) => {
-    const roll = Math.floor(Math.random() * 20) + 1;
-    const bonus = Number.isFinite(Number(characterData.spells.spellAttackBonus)) ? Number(characterData.spells.spellAttackBonus) : 0;
-    const total = roll + bonus;
-    const details: string[] = [
-      `d20: ${roll}`,
-      `Бонус атаки закляттям: ${bonus >= 0 ? `+${bonus}` : bonus}`,
-      `Разом: ${total}`,
-    ];
-    if (roll === 20) details.push('Критичне влучання');
-    if (roll === 1) details.push('Автопромах');
+  const handleContextRollResult = useCallback((result: DiceRollResult) => {
+    if (!contextRollRequest) return;
+    const details = buildDiceRollResultDetails(result);
 
-    setSpellRollResult({
-      title: `Атака закляттям: ${spellName}`,
-      details,
-    });
-    setWeaponRollResult(null);
-  }, [characterData.spells.spellAttackBonus]);
-
-  const rollSpellDamage = useCallback((spellName: string, profile: SpellDamageProfile) => {
-    const parsed = parseRollableDamageFormula(profile.formula);
-
-    if (!parsed) {
+    if (contextRollRequest.kind === 'ability') {
+      setAbilityRollResult({
+        title: contextRollRequest.title,
+        details,
+      });
+    } else if (contextRollRequest.kind === 'weapon-attack') {
+      setWeaponRollResult({
+        title: `Влучення: ${contextRollRequest.weapon.name || 'Зброя'}`,
+        details,
+      });
+      setSpellRollResult(null);
+    } else if (contextRollRequest.kind === 'weapon-damage') {
+      setWeaponRollResult({
+        title: `Шкода: ${contextRollRequest.weapon.name || 'Зброя'}`,
+        details,
+      });
+      setSpellRollResult(null);
+    } else if (contextRollRequest.kind === 'spell-attack') {
       setSpellRollResult({
-        title: `Шкода закляттям: ${spellName}`,
+        title: `Атака закляттям: ${contextRollRequest.spellName}`,
+        details,
+      });
+      setWeaponRollResult(null);
+    } else if (contextRollRequest.kind === 'spell-damage') {
+      setSpellRollResult({
+        title: `Шкода закляттям: ${contextRollRequest.spellName}`,
         details: [
-          `Профіль: ${profile.label}`,
-          `Формула: ${profile.formula}`,
-          `Тип урону: ${profile.damageType}`,
-          profile.condition ? `Умова: ${profile.condition}` : '',
-          'Автокидок не підтримує цю формулу. Кинь вручну через Dice.',
+          `Профіль: ${contextRollRequest.profile.label}`,
+          `Тип урону: ${contextRollRequest.profile.damageType}`,
+          ...details,
+          contextRollRequest.profile.condition ? `Умова: ${contextRollRequest.profile.condition}` : '',
         ].filter(Boolean),
       });
       setWeaponRollResult(null);
-      return;
     }
+  }, [contextRollRequest]);
 
-    const rolls = rollDiceValues(parsed.count, parsed.sides);
-    const diceTotal = rolls.reduce((sum, value) => sum + value, 0);
-    const total = diceTotal + parsed.modifier;
-    const formula = `${parsed.normalized}${parsed.modifier > 0 ? `+${parsed.modifier}` : parsed.modifier < 0 ? parsed.modifier : ''}`;
+  const rollSpellAttack = useCallback((spellName: string) => {
+    const baseModifier = Number.isFinite(Number(characterData.spells.spellAttackBonus)) ? Number(characterData.spells.spellAttackBonus) : 0;
+    setIsSpellQuickModalVisible(false);
+    openContextRoll({ kind: 'spell-attack', spellName, baseModifier });
+  }, [characterData.spells.spellAttackBonus, openContextRoll]);
 
-    setSpellRollResult({
-      title: `Шкода закляттям: ${spellName}`,
-      details: [
-        `Профіль: ${profile.label}`,
-        `Тип урону: ${profile.damageType}`,
-        `Формула: ${formula}`,
-        `Куби: [${rolls.join(', ')}]`,
-        `Сума кубів: ${diceTotal}`,
-        `Модифікатор: ${parsed.modifier >= 0 ? `+${parsed.modifier}` : parsed.modifier}`,
-        `Разом шкода: ${total}`,
-        profile.condition ? `Умова: ${profile.condition}` : '',
-      ].filter(Boolean),
-    });
-    setWeaponRollResult(null);
-  }, []);
+  const rollSpellDamage = useCallback((spellName: string, profile: SpellDamageProfile) => {
+    setIsSpellQuickModalVisible(false);
+    openContextRoll({ kind: 'spell-damage', spellName, profile });
+  }, [openContextRoll]);
 
   const addCondition = useCallback(() => {
     const value = conditionInput.trim();
@@ -1682,14 +1628,29 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             const score = characterData.stats[stat.key] || 10;
             const mod = calculateModifier(score);
             return (
-              <View key={stat.key} style={styles.statTile}>
+              <Pressable
+                key={stat.key}
+                style={styles.statTile}
+                onPress={() => rollAbilityCheck(stat.label, mod)}
+                android_ripple={{ color: colors.ripple }}
+              >
                 <Text style={styles.statName}>{stat.label}</Text>
                 <Text style={styles.statScore}>{score}</Text>
                 <Text style={styles.statMod}>{mod >= 0 ? `+${mod}` : `${mod}`}</Text>
-              </View>
+              </Pressable>
             );
           })}
         </View>
+        {!!abilityRollResult && (
+          <View style={styles.editCardBlock}>
+            <Text style={styles.subSectionTitle}>{abilityRollResult.title}</Text>
+            {abilityRollResult.details.map((line, index) => (
+              <Text key={`${abilityRollResult.title}-${index}`} style={styles.weaponRollResultLine}>
+                {line}
+              </Text>
+            ))}
+          </View>
+        )}
       </View>
 
       <View style={styles.cardSecondary}>
@@ -2922,6 +2883,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     confirmLevelChange,
     isDiceModalVisible,
     setIsDiceModalVisible,
+    weaponRollRequest: contextRollRequest,
+    closeWeaponRollModal,
+    handleContextRollResult,
     isConditionModalVisible,
     setIsConditionModalVisible,
     conditionInput,
@@ -2943,6 +2907,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     quickSpellLevel,
     setQuickSpellLevel,
     selectedQuickSpell,
+    rollWeaponDamage,
     rollSpellAttack,
     rollSpellDamage,
     spellRollResult,
@@ -2954,10 +2919,6 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     isRestModalVisible,
     setIsRestModalVisible,
     restStep,
-    setRestStep,
-    shortRestDice,
-    setShortRestDice,
-    startShortRestRoll,
     applyLongRest,
     rollsNeeded,
     rollResults,

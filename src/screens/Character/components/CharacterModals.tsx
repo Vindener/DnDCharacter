@@ -1,7 +1,9 @@
 import React from 'react';
 import { Text, Pressable, TextInput as RNTextInput, TouchableOpacity, View, FlatList } from 'react-native';
-import Dice from '@/screens/Dice/Dice';
+import { DiceRollerPanel, type DiceRollerPreset } from '@/screens/DiceRoller/DiceRoller';
 import { Modal } from '@/shared/components/Modal/Modal';
+import { calculateModifier } from '@/shared/helpers/calculateModifier';
+import type { DiceRollResult } from '@/shared/services/diceRoller';
 import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
 type CharacterModalsProps = Pick<
@@ -30,6 +32,9 @@ type CharacterModalsProps = Pick<
   | 'confirmLevelChange'
   | 'isDiceModalVisible'
   | 'setIsDiceModalVisible'
+  | 'weaponRollRequest'
+  | 'closeWeaponRollModal'
+  | 'handleContextRollResult'
   | 'isConditionModalVisible'
   | 'setIsConditionModalVisible'
   | 'addCondition'
@@ -51,6 +56,7 @@ type CharacterModalsProps = Pick<
   | 'quickSpellLevel'
   | 'setQuickSpellLevel'
   | 'selectedQuickSpell'
+  | 'rollWeaponDamage'
   | 'rollSpellAttack'
   | 'rollSpellDamage'
   | 'spellRollResult'
@@ -62,10 +68,6 @@ type CharacterModalsProps = Pick<
   | 'isRestModalVisible'
   | 'setIsRestModalVisible'
   | 'restStep'
-  | 'setRestStep'
-  | 'shortRestDice'
-  | 'setShortRestDice'
-  | 'startShortRestRoll'
   | 'applyLongRest'
   | 'rollsNeeded'
   | 'rollResults'
@@ -74,7 +76,6 @@ type CharacterModalsProps = Pick<
   | 'applyShortRestRolls'
 >;
 
-const QUICK_DICE_OPTIONS = [4, 6, 8, 10, 12, 20] as const;
 const LEVEL_STAT_FIELDS: Array<{ key: keyof CharacterActionsReadyState['characterData']['stats'] & string; label: string }> = [
   { key: 'strength', label: 'STR' },
   { key: 'dexterity', label: 'DEX' },
@@ -83,6 +84,11 @@ const LEVEL_STAT_FIELDS: Array<{ key: keyof CharacterActionsReadyState['characte
   { key: 'wisdom', label: 'WIS' },
   { key: 'charisma', label: 'CHA' },
 ];
+
+function appendSignedModifier(formula: string, modifier: number): string {
+  if (modifier === 0) return formula;
+  return `${formula}${modifier > 0 ? `+${modifier}` : modifier}`;
+}
 
 function CharacterModalsBase({
   styles,
@@ -109,6 +115,9 @@ function CharacterModalsBase({
   confirmLevelChange,
   isDiceModalVisible,
   setIsDiceModalVisible,
+  weaponRollRequest,
+  closeWeaponRollModal,
+  handleContextRollResult,
   isConditionModalVisible,
   setIsConditionModalVisible,
   addCondition,
@@ -130,6 +139,7 @@ function CharacterModalsBase({
   quickSpellLevel,
   setQuickSpellLevel,
   selectedQuickSpell,
+  rollWeaponDamage,
   rollSpellAttack,
   rollSpellDamage,
   spellRollResult,
@@ -141,10 +151,6 @@ function CharacterModalsBase({
   isRestModalVisible,
   setIsRestModalVisible,
   restStep,
-  setRestStep,
-  shortRestDice,
-  setShortRestDice,
-  startShortRestRoll,
   applyLongRest,
   rollsNeeded,
   rollResults,
@@ -152,20 +158,22 @@ function CharacterModalsBase({
   diceSides,
   applyShortRestRolls,
 }: CharacterModalsProps) {
-  const [quickDiceSides, setQuickDiceSides] = React.useState<number>(20);
-  const [quickDiceResult, setQuickDiceResult] = React.useState<number | null>(null);
+  const [diceModalScrollSignal, setDiceModalScrollSignal] = React.useState(0);
+  const [contextRollScrollSignal, setContextRollScrollSignal] = React.useState(0);
+  const [restRollScrollSignal, setRestRollScrollSignal] = React.useState(0);
 
-  React.useEffect(() => {
-    if (!isDiceModalVisible) {
-      setQuickDiceResult(null);
-      setQuickDiceSides(20);
-    }
-  }, [isDiceModalVisible]);
+  const scrollDiceModalToTop = React.useCallback(() => {
+    setDiceModalScrollSignal((prev) => prev + 1);
+  }, []);
 
-  const rollQuickDice = React.useCallback(() => {
-    const value = Math.floor(Math.random() * quickDiceSides) + 1;
-    setQuickDiceResult(value);
-  }, [quickDiceSides]);
+  const scrollContextRollModalToTop = React.useCallback(() => {
+    setContextRollScrollSignal((prev) => prev + 1);
+  }, []);
+
+  const scrollRestRollModalToTop = React.useCallback(() => {
+    setRestRollScrollSignal((prev) => prev + 1);
+  }, []);
+
   const quickSpellCandidateKeyExtractor = React.useCallback(
     (spell: CharacterActionsReadyState['quickSpellCandidates'][number]) => `quick-spell-candidate-${spell.id}`,
     [],
@@ -185,6 +193,99 @@ function CharacterModalsBase({
     ),
     [colors.ripple, pickExistingSpellForQuickAdd, styles.secondaryAction, styles.secondaryActionText],
   );
+
+  const contextRollModalTitle = React.useMemo(() => {
+    if (!weaponRollRequest) return 'Кидок';
+    if (weaponRollRequest.kind === 'ability') return weaponRollRequest.title;
+    if (weaponRollRequest.kind === 'weapon-attack') return 'Кидок на влучення';
+    if (weaponRollRequest.kind === 'weapon-damage') return 'Кидок шкоди';
+    if (weaponRollRequest.kind === 'spell-attack') return 'Атака закляттям';
+    return 'Шкода закляттям';
+  }, [weaponRollRequest]);
+
+  const contextRollSubtitle = React.useMemo(() => {
+    if (!weaponRollRequest) return '';
+    if (weaponRollRequest.kind === 'ability') return weaponRollRequest.label;
+    if (weaponRollRequest.kind === 'weapon-attack' || weaponRollRequest.kind === 'weapon-damage') {
+      return weaponRollRequest.weapon.name || 'Зброя';
+    }
+    return weaponRollRequest.spellName;
+  }, [weaponRollRequest]);
+
+  const contextRollPreset = React.useMemo<DiceRollerPreset | undefined>(() => {
+    if (!weaponRollRequest) return undefined;
+    if (weaponRollRequest.kind === 'ability') {
+      return {
+        id: `ability-${weaponRollRequest.label}-${weaponRollRequest.baseModifier}`,
+        label: weaponRollRequest.title,
+        dice: 'd20',
+        modifier: weaponRollRequest.baseModifier,
+      };
+    }
+    if (weaponRollRequest.kind === 'weapon-attack') {
+      const attackBonus = Number(weaponRollRequest.weapon.attackBonus || 0);
+      const weaponName = weaponRollRequest.weapon.name || 'Зброя';
+      return {
+        id: `weapon-attack-${weaponName}-${attackBonus}`,
+        label: `Влучення: ${weaponName}`,
+        dice: 'd20',
+        modifier: attackBonus,
+      };
+    }
+    if (weaponRollRequest.kind === 'weapon-damage') {
+      const weaponName = weaponRollRequest.weapon.name || 'Зброя';
+      const formula = String(weaponRollRequest.weapon.damage || '1d6');
+      return {
+        id: `weapon-damage-${weaponName}-${formula}`,
+        label: `Шкода: ${weaponName}`,
+        formula,
+      };
+    }
+    if (weaponRollRequest.kind === 'spell-attack') {
+      return {
+        id: `spell-attack-${weaponRollRequest.spellName}-${weaponRollRequest.baseModifier}`,
+        label: `Атака закляттям: ${weaponRollRequest.spellName}`,
+        dice: 'd20',
+        modifier: weaponRollRequest.baseModifier,
+      };
+    }
+    return {
+      id: `spell-damage-${weaponRollRequest.spellName}-${weaponRollRequest.profile.id}-${weaponRollRequest.profile.formula}`,
+      label: `Шкода закляттям: ${weaponRollRequest.spellName}`,
+      formula: weaponRollRequest.profile.formula,
+    };
+  }, [weaponRollRequest]);
+
+  const contextRollAction = React.useMemo(() => {
+    if (!weaponRollRequest || weaponRollRequest.kind !== 'weapon-attack') return null;
+
+    const formula = String(weaponRollRequest.weapon.damage || '1d6');
+    return (
+      <Pressable
+        style={styles.secondaryAction}
+        onPress={() => rollWeaponDamage(weaponRollRequest.weapon)}
+        android_ripple={{ color: colors.ripple }}
+      >
+        <Text style={styles.secondaryActionText}>Кинути шкоду ({formula})</Text>
+      </Pressable>
+    );
+  }, [colors.ripple, rollWeaponDamage, styles.secondaryAction, styles.secondaryActionText, weaponRollRequest]);
+
+  const shortRestConModifier = calculateModifier(characterData.stats.constitution || 10);
+  const shortRestHealingModifier = shortRestConModifier * rollsNeeded;
+  const shortRestFormula = appendSignedModifier(`${rollsNeeded}d${diceSides || 6}`, shortRestHealingModifier);
+  const shortRestPreset = React.useMemo<DiceRollerPreset | undefined>(() => {
+    if (restStep !== 'roll' || rollsNeeded <= 0 || diceSides <= 0) return undefined;
+    return {
+      id: `short-rest-${rollsNeeded}-${diceSides}-${shortRestHealingModifier}`,
+      label: 'Короткий відпочинок',
+      formula: shortRestFormula,
+    };
+  }, [diceSides, restStep, rollsNeeded, shortRestFormula, shortRestHealingModifier]);
+
+  const handleShortRestRollResult = React.useCallback((result: DiceRollResult) => {
+    setRollResults(result.rolls.slice(0, rollsNeeded));
+  }, [rollsNeeded, setRollResults]);
 
   return (
     <>
@@ -301,31 +402,27 @@ function CharacterModalsBase({
         </Pressable>
       </Modal>
 
-      <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} title='Кидок'>
-        <Text style={styles.modalLabel}>Оберіть кубик</Text>
-        <View style={styles.diceQuickGrid}>
-          {QUICK_DICE_OPTIONS.map((sides) => (
-            <Pressable
-              key={`quick-dice-${sides}`}
-              style={[styles.diceQuickChip, quickDiceSides === sides ? styles.diceQuickChipActive : null]}
-              onPress={() => setQuickDiceSides(sides)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.diceQuickChipText, quickDiceSides === sides ? styles.diceQuickChipTextActive : null]}>К{sides}</Text>
-            </Pressable>
-          ))}
-        </View>
+      <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} scrollToTopSignal={diceModalScrollSignal}>
+        <DiceRollerPanel embedded onRollPress={scrollDiceModalToTop} />
+      </Modal>
 
-        <Pressable style={styles.restButton} onPress={rollQuickDice} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.restButtonText}>Кинути К{quickDiceSides}</Text>
-        </Pressable>
-
-        {quickDiceResult !== null && (
-          <View style={styles.diceQuickResultCard}>
-            <Text style={styles.blockTextMuted}>Результат кидка</Text>
-            <Text style={styles.diceQuickResultValue}>{quickDiceResult}</Text>
-          </View>
-        )}
+      <Modal
+        isVisible={Boolean(weaponRollRequest)}
+        onClose={closeWeaponRollModal}
+        title={contextRollModalTitle}
+        subtitle={contextRollSubtitle}
+        scrollToTopSignal={contextRollScrollSignal}
+      >
+        {contextRollPreset ? (
+          <DiceRollerPanel
+            embedded
+            autoRoll
+            preset={contextRollPreset}
+            onRollPress={scrollContextRollModalToTop}
+            onRollResult={handleContextRollResult}
+            resultAction={contextRollAction}
+          />
+        ) : null}
       </Modal>
 
       <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title='Додати стан'>
@@ -463,39 +560,37 @@ function CharacterModalsBase({
         </Pressable>
       </Modal>
 
-      <Modal isVisible={isRestModalVisible} onClose={() => setIsRestModalVisible(false)} title='Відпочинок'>
+      <Modal
+        isVisible={isRestModalVisible}
+        onClose={() => setIsRestModalVisible(false)}
+        title='Відпочинок'
+        scrollToTopSignal={restRollScrollSignal}
+      >
         {restStep === 'choose' && (
           <>
-            <TouchableOpacity onPress={() => setRestStep('short')} style={styles.restButton}>
-              <Text style={styles.restButtonText}>Короткий відпочинок</Text>
-            </TouchableOpacity>
+            <Text style={styles.blockTextMuted}>Короткий відпочинок відкриває DiceRoller напряму з панелі швидких дій.</Text>
             <TouchableOpacity onPress={applyLongRest} style={styles.restButton}>
               <Text style={styles.restButtonText}>Довгий відпочинок</Text>
-            </TouchableOpacity>
-          </>
-        )}
-        {restStep === 'short' && (
-          <>
-            <Text style={styles.modalLabel}>Доступні кості хітів: {characterData.hitDice}</Text>
-            <RNTextInput
-              value={shortRestDice}
-              onChangeText={setShortRestDice}
-              keyboardType='number-pad'
-              style={styles.modalInput}
-              placeholder='1'
-              placeholderTextColor={colors.textSecondary}
-            />
-            <TouchableOpacity onPress={startShortRestRoll} style={styles.restButton}>
-              <Text style={styles.restButtonText}>Кинути кості хітів</Text>
             </TouchableOpacity>
           </>
         )}
         {restStep === 'roll' && (
           <>
             <Text style={styles.modalLabel}>
-              Roll {rollResults.length + 1} of {rollsNeeded}
+              Кості хітів: {rollsNeeded}d{diceSides}
             </Text>
-            <Dice sides={diceSides} onRoll={(value: number) => setRollResults((prev) => (prev.length < rollsNeeded ? [...prev, value] : prev))} />
+            <Text style={styles.blockTextMuted}>
+              CON: {shortRestConModifier >= 0 ? `+${shortRestConModifier}` : shortRestConModifier} за кістку. Формула лікування: {shortRestFormula}
+            </Text>
+            {shortRestPreset ? (
+              <DiceRollerPanel
+                embedded
+                autoRoll
+                preset={shortRestPreset}
+                onRollPress={scrollRestRollModalToTop}
+                onRollResult={handleShortRestRollResult}
+              />
+            ) : null}
             {rollResults.length >= rollsNeeded && (
               <TouchableOpacity onPress={applyShortRestRolls} style={styles.restButton}>
                 <Text style={styles.restButtonText}>Застосувати відпочинок</Text>

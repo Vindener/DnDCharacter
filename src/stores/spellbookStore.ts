@@ -6,6 +6,7 @@ export interface SpellbookStore {
   spells: SpellbookSpell[];
   favoriteSpellIds: string[];
   isLoaded: boolean;
+  loadError: string | null;
   loadSpellbook: () => Promise<void>;
   upsertCustomSpell: (input: UpsertSpellbookSpellInput) => Promise<SpellbookSpell | null>;
   removeCustomSpell: (spellId: string) => Promise<void>;
@@ -19,6 +20,7 @@ const useSpellbookStore = create<SpellbookStore>((set, get) => {
     spells: [],
     favoriteSpellIds: [],
     isLoaded: false,
+    loadError: null,
     loadSpellbook: effects.loadSpellbook,
     upsertCustomSpell: effects.upsertCustomSpell,
     removeCustomSpell: effects.removeCustomSpell,

@@ -25,6 +25,14 @@ This file tells Codex how to behave in this repository.
 4. Run the narrowest relevant validation command.
 5. Summarize touched files and any remaining risk.
 
+## Dependency / EAS Builds
+- The EAS `development` profile uses Node `20.19.4`; keep `package-lock.json` compatible with Node 20 / npm 10.
+- Do not regenerate `package-lock.json` with Node 24 / npm 11 before EAS builds. It can drop Linux optional/peer lockfile entries and break `npm ci --include=dev` on EAS.
+- If refreshing the lockfile for EAS, use `npx -p node@20.19.4 -p npm@10 npm install --package-lock-only --include=dev --include=optional --include=peer`.
+- Verify the EAS install step with `npx -p node@20.19.4 -p npm@10 npm ci --include=dev`.
+- For Android development builds after dependency changes, use `npx eas-cli build --platform android --profile development --clear-cache`.
+- The Android `development` profile should produce an APK; keep `build.development.android.buildType` set to `"apk"` in `eas.json`.
+
 ## For UI Tasks
 - First ask whether the screen is used during a session.
 - If yes, optimize for speed and clarity.
