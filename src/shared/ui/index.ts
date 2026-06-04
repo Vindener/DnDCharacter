@@ -6,6 +6,20 @@ export { Chip } from '@/shared/ui/Chip';
 export { Section } from '@/shared/ui/Section';
 export { Screen } from '@/shared/ui/Screen';
 export {
+  SkeletonBestiary,
+  SkeletonBox,
+  SkeletonCard,
+  SkeletonCharacterCard,
+  SkeletonCharacterSheet,
+  SkeletonCircle,
+  SkeletonHome,
+  SkeletonList,
+  SkeletonMonsterCard,
+  SkeletonSpellbook,
+  SkeletonSpellCard,
+  SkeletonText,
+} from '@/shared/ui/skeleton';
+export {
   resolveButtonVariant,
   resolveCardVariant,
   resolveTextStyleVariant,

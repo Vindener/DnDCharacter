@@ -28,9 +28,11 @@ export function createSpellbookStoreEffects({ set, get }: SpellbookStoreContext)
           spells: state.spells,
           favoriteSpellIds: state.favoriteSpellIds,
           isLoaded: true,
+          loadError: null,
         });
-      } catch {
-        set({ spells: [], favoriteSpellIds: [], isLoaded: true });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Не вдалося завантажити книгу заклять.';
+        set({ spells: [], favoriteSpellIds: [], isLoaded: true, loadError: message });
       }
     },
 

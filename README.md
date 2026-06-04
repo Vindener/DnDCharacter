@@ -1,4 +1,4 @@
-DND Chararcter Page React Native Project
+DND Character Page React Native Project
 
 ## Product Docs
 
@@ -6,7 +6,7 @@ DND Chararcter Page React Native Project
 - [Stage 2: Redesign Character Experience](docs/product-redesign-stage-2.md)
 - [Stage 3: Collaboration & Sync Workflow](docs/product-collaboration-stage-3.md)
 
-## Run
+## Development
 
 ```bash
 npm install
@@ -21,63 +21,90 @@ Use a development build (Dev Client):
 2. `npm start` to start Metro in `--dev-client` mode.
 3. Open the installed app build (not Expo Go) and connect to Metro.
 
-## Testing
+## Build Commands
 
-### Static + Unit checks
+### Local dev build
 
-```bash
-npm run typecheck
-npm run lint
-npm run test:unit
-```
-
-### E2E (Detox, Android Emulator)
+Build and install the Android development client on a connected emulator/device:
 
 ```bash
-npm run e2e:build:android
-npm run e2e:test:android
+npm run android
 ```
 
-Or run both with one command:
-
-```bash
-npm run e2e:android
-```
-
-Recommended stable profile (visible emulator + build + install + run):
-
-```bash
-npm run profile:detox:e2e:android
-```
-
-If the emulator shows Dev Launcher ("Connect" screen), run:
+Start Metro for the installed development client:
 
 ```bash
 npm start
-adb reverse tcp:8081 tcp:8081
 ```
 
-Then on emulator:
-1. Open the dev build.
-2. Press `Connect` (or enter `http://localhost:8081` and connect).
-3. Re-run `npm run profile:detox:e2e:android`.
+### EAS development builds
 
-### E2E (Detox, Attached Android device)
+Android development build:
 
 ```bash
-npx detox test -c android.attached.debug
+npx eas-cli build --platform android --profile development
 ```
 
-### Manual dev-client profile (Android)
+This profile is configured to produce an Android APK via `android.buildType: "apk"` in `eas.json`.
 
-Use this when you want manual testing in a visible emulator with Expo dev-client:
+iOS development build:
 
 ```bash
-npm run profile:manual:dev-client:android
+npx eas-cli build --platform ios --profile development
 ```
 
-### Environment notes for E2E
+All platforms development build:
 
-- Ensure Android SDK is installed and available at `ANDROID_SDK_ROOT` (or `ANDROID_HOME`).
-- Ensure required NDK version is installed by Android Studio/SDK Manager (`27.1.12297006`).
-- Emulator configuration in `detox.config.js` uses `Pixel_7_API_35` by default.
+```bash
+npx eas-cli build --platform all --profile development
+```
+
+### EAS lockfile note
+
+The EAS `development` profile uses Node `20.19.4`. Keep `package-lock.json` compatible with Node 20 / npm 10 before running a cloud dev build.
+
+Do not regenerate `package-lock.json` with Node 24 / npm 11 before EAS builds. That can remove Linux optional/peer dependency entries and make EAS fail during:
+
+```bash
+npm ci --include=dev
+```
+
+If the lockfile needs to be refreshed for EAS, use:
+
+```bash
+npx -p node@20.19.4 -p npm@10 npm install --package-lock-only --include=dev --include=optional --include=peer
+```
+
+Then verify the EAS install step locally:
+
+```bash
+npx -p node@20.19.4 -p npm@10 npm ci --include=dev
+```
+
+For a clean Android dev build after dependency changes:
+
+```bash
+npx eas-cli build --platform android --profile development --clear-cache
+```
+
+Use the Android `development` profile when an installable APK is needed. It has `developmentClient: true`, `distribution: "internal"`, and `android.buildType: "apk"`.
+
+### EAS release builds
+
+Android preview/internal build:
+
+```bash
+npx eas-cli build --platform android --profile preview
+```
+
+Android production/internal build:
+
+```bash
+npx eas-cli build --platform android --profile production
+```
+
+All platforms production build:
+
+```bash
+npx eas-cli build --platform all --profile production
+```

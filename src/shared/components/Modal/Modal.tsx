@@ -9,13 +9,20 @@ interface ModalProps {
   subtitle?: string;
   onSubmit?: () => void;
   onClose?: () => void;
+  scrollToTopSignal?: number;
   children: ReactNode;
   isVisible: boolean;
 }
 
-export const Modal = ({ title, subtitle, onSubmit, onClose, children, isVisible }: ModalProps) => {
+export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 0, children, isVisible }: ModalProps) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
+  const scrollRef = React.useRef<ScrollView>(null);
+
+  React.useEffect(() => {
+    if (!isVisible || scrollToTopSignal === 0) return;
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
+  }, [isVisible, scrollToTopSignal]);
 
   return (
     <RNModal visible={isVisible} transparent animationType='fade' onRequestClose={onClose}>
@@ -29,6 +36,7 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, children, isVisible 
           {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
           <View style={styles.content}>
             <ScrollView
+              ref={scrollRef}
               style={styles.scrollArea}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}

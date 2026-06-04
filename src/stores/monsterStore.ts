@@ -10,6 +10,8 @@ import {
 export interface MonsterStore {
   monsters: MonsterDto[];
   pinnedMonsterIds: string[];
+  isLoaded: boolean;
+  loadError: string | null;
   loadMonsters: () => Promise<void>;
   saveMonsters: (newMonsters: MonsterDto[]) => Promise<void>;
   addMonster: (monster: MonsterDto) => Promise<void>;
@@ -23,12 +25,17 @@ export interface MonsterStore {
 const useMonsterStore = create<MonsterStore>((set, get) => ({
   monsters: [],
   pinnedMonsterIds: [],
+  isLoaded: false,
+  loadError: null,
 
   loadMonsters: async () => {
     try {
       const next = await loadMonstersState();
-      set({ monsters: next.monsters, pinnedMonsterIds: next.pinnedMonsterIds });
-    } catch (_error) { /* intentionally ignored */ }
+      set({ monsters: next.monsters, pinnedMonsterIds: next.pinnedMonsterIds, isLoaded: true, loadError: null });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Не вдалося завантажити монстрів.';
+      set({ isLoaded: true, loadError: message });
+    }
   },
 
   saveMonsters: async (newMonsters) => {

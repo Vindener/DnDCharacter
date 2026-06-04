@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
+import { parseDiceType, rollDice as rollDiceServiceCore } from '@/shared/services/diceRoller';
 
 interface DiceProps {
   route?: {
@@ -19,15 +20,15 @@ const Dice: React.FC<DiceProps> = ({ route, sides: propSides, onRoll }) => {
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
-  const rollDice = () => {
-    const value = Math.floor(Math.random() * sides) + 1;
+  const rollDice = useCallback(() => {
+    const value = rollSingleDie(sides);
     setResult(value);
     onRoll?.(value);
-  };
+  }, [onRoll, sides]);
 
   useEffect(() => {
     rollDice();
-  }, [sides]);
+  }, [rollDice]);
 
   return (
     <View style={styles.container}>
@@ -39,5 +40,10 @@ const Dice: React.FC<DiceProps> = ({ route, sides: propSides, onRoll }) => {
     </View>
   );
 };
+
+function rollSingleDie(sides: number): number {
+  const dice = parseDiceType(sides);
+  return rollDiceServiceCore({ dice, count: 1 }).total;
+}
 
 export default Dice;

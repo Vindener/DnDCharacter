@@ -9,6 +9,7 @@ import { Modal } from '@/shared/components/Modal/Modal';
 import { formatSchemaErrors, safeParseSpellFormInput, SPELL_DAMAGE_TYPES } from '@/domain/schemas';
 import type { CharacterSpellStatus, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import { getStyles } from './styles';
+import { SkeletonSpellbook } from '@/shared/ui/skeleton';
 
 type StatusFilter = 'all' | CharacterSpellStatus;
 type SourceFilter = 'all' | 'system' | 'custom' | 'imported';
@@ -78,6 +79,7 @@ const Spellbook = () => {
   const spells = useSpellbookStore((s) => s.spells);
   const favoriteSpellIds = useSpellbookStore((s) => s.favoriteSpellIds);
   const isLoaded = useSpellbookStore((s) => s.isLoaded);
+  const loadError = useSpellbookStore((s) => s.loadError);
   const loadSpellbook = useSpellbookStore((s) => s.loadSpellbook);
   const upsertCustomSpell = useSpellbookStore((s) => s.upsertCustomSpell);
   const removeCustomSpell = useSpellbookStore((s) => s.removeCustomSpell);
@@ -367,13 +369,15 @@ const Spellbook = () => {
         {selectedCharacter && preparedLimitNotice ? <Text style={styles.preparedWarning}>{preparedLimitNotice}</Text> : null}
       </View>
 
-      {!isLoaded ? <Text style={styles.empty}>Завантаження книги заклять...</Text> : null}
+      {loadError ? <Text style={styles.errorText}>{loadError}</Text> : null}
+      {!loadError && !isLoaded ? <SkeletonSpellbook /> : null}
 
-      <FlatList
-        data={filteredSpells}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => {
+      {!loadError && isLoaded ? (
+        <FlatList
+          data={filteredSpells}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContent}
+          renderItem={({ item }) => {
           const status = getCharacterSpellStatus(selectedCharacter, item.name);
           const isFavorite = favoriteSet.has(item.id);
           const canFavorite = item.source !== 'imported';
@@ -472,9 +476,10 @@ const Spellbook = () => {
               </View>
             </View>
           );
-        }}
-        ListEmptyComponent={<Text style={styles.empty}>Нічого не знайдено. Зміни фільтри або додай закляття.</Text>}
-      />
+          }}
+          ListEmptyComponent={<Text style={styles.empty}>Нічого не знайдено. Зміни фільтри або додай закляття.</Text>}
+        />
+      ) : null}
 
       <Modal
         isVisible={isSpellModalVisible}

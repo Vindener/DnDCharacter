@@ -121,6 +121,11 @@ export const getStyles = (c: ThemeColors) =>
       color: c.textSecondary,
       textAlign: 'center',
     },
+    errorText: {
+      color: c.danger,
+      fontSize: fs(13),
+      fontWeight: '700',
+    },
   });
 
 

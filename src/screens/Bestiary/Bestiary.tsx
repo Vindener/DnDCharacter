@@ -7,6 +7,7 @@ import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './style';
 import FileService from '@/shared/services/fileSerice';
 import type { MonsterDto } from '@/types/Monster';
+import { SkeletonBestiary } from '@/shared/ui/skeleton';
 
 type CRFilter = 'all' | '0-1' | '2-4' | '5-10' | '11+';
 
@@ -38,6 +39,8 @@ const collectUnique = (list: string[]): string[] => Array.from(new Set(list.filt
 const Bestiary = () => {
   const monsters = useMonsterStore((s) => s.monsters);
   const pinnedMonsterIds = useMonsterStore((s) => s.pinnedMonsterIds);
+  const isLoaded = useMonsterStore((s) => s.isLoaded);
+  const loadError = useMonsterStore((s) => s.loadError);
   const addMonster = useMonsterStore((s) => s.addMonster);
   const togglePinnedMonster = useMonsterStore((s) => s.togglePinnedMonster);
   const clearPinnedMonsters = useMonsterStore((s) => s.clearPinnedMonsters);
@@ -92,6 +95,25 @@ const Bestiary = () => {
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((item) => item !== tag) : [...prev, tag]));
   };
+
+  if (loadError) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.sectionCard}>
+          <Text style={styles.sectionTitle}>Помилка завантаження</Text>
+          <Text style={styles.errorText}>{loadError}</Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (!isLoaded) {
+    return (
+      <View style={styles.container}>
+        <SkeletonBestiary />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container} testID='bestiary.screen'>

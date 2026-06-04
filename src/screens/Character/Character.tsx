@@ -10,6 +10,8 @@ import { QuickActionBar } from './components/QuickActionBar';
 import { CharacterTabs } from './components/CharacterTabs';
 import { CharacterTabContent } from './tabs/CharacterTabContent';
 import { CharacterModals } from './components/CharacterModals';
+import useCharacterStore from '@/context/Character-store';
+import { SkeletonCharacterSheet } from '@/shared/ui/skeleton';
 
 interface CharacterProps {
   route: {
@@ -21,8 +23,23 @@ interface CharacterProps {
 
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
   const state = useCharacterActions({ route });
+  const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
+  const charactersLoaded = useCharacterStore((s) => s.isLoaded);
+  const charactersLoadError = useCharacterStore((s) => s.loadError);
 
   if (state.isCharacterMissing) {
+    if (charactersLoadError) {
+      return (
+        <View style={state.styles.emptyState}>
+          <Text style={state.styles.emptyText}>{charactersLoadError}</Text>
+        </View>
+      );
+    }
+
+    if (currentCharacterId && !charactersLoaded) {
+      return <SkeletonCharacterSheet />;
+    }
+
     return (
       <View style={state.styles.emptyState}>
         <Text style={state.styles.emptyText}>Персонаж не знайдений</Text>

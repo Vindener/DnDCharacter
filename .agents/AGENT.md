@@ -70,6 +70,20 @@ Use commands that exist in `package.json`:
 
 Only claim a validation command passed if it was actually run.
 
+## EAS Build / Lockfile Rule
+The EAS `development` build profile uses Node `20.19.4`, so `package-lock.json` must stay compatible with Node 20 / npm 10.
+
+Do not regenerate `package-lock.json` with Node 24 / npm 11 before EAS builds. npm 11 can remove Linux optional/peer dependency entries that EAS needs, causing `npm ci --include=dev` to fail with missing lockfile packages.
+
+When dependency or lockfile work is needed for EAS, refresh and verify with:
+- `npx -p node@20.19.4 -p npm@10 npm install --package-lock-only --include=dev --include=optional --include=peer`
+- `npx -p node@20.19.4 -p npm@10 npm ci --include=dev`
+
+For Android dev builds after dependency changes, prefer:
+- `npx eas-cli build --platform android --profile development --clear-cache`
+
+The Android `development` profile is intended to produce an installable APK. Keep `eas.json` configured with `build.development.developmentClient: true`, `build.development.distribution: "internal"`, and `build.development.android.buildType: "apk"`.
+
 ## Output Expectations
 When summarizing work:
 - start with the concrete result;

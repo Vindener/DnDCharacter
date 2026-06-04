@@ -81,11 +81,14 @@ export function createCharacterStoreEffects({ set, get }: CharacterStoreContext)
         const filtered = Array.isArray(storedCharacters) ? storedCharacters.filter(Boolean).map((item) => normalizeCharacter(item)) : [];
         const existingIds = new Set(filtered.map((character) => character.id));
         const safeLastSessionId = storedLastSessionId && existingIds.has(storedLastSessionId) ? storedLastSessionId : null;
-        set({ characters: filtered, lastSessionCharacterId: safeLastSessionId });
+        set({ characters: filtered, lastSessionCharacterId: safeLastSessionId, isLoaded: true, loadError: null });
         if (!safeLastSessionId && storedLastSessionId) {
           await characterLocalRepository.clearLastSessionCharacterId();
         }
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Не вдалося завантажити персонажів.';
+        set({ isLoaded: true, loadError: message });
+      }
     },
 
     saveCharacters,

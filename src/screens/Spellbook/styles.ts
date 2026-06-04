@@ -256,6 +256,13 @@ export const getStyles = (c: ThemeColors) =>
       marginTop: sp(6),
       marginBottom: sp(14),
     },
+    errorText: {
+      color: c.danger,
+      fontSize: fs(13),
+      fontWeight: '700',
+      marginTop: sp(6),
+      marginBottom: sp(14),
+    },
     modalScroll: {
       flex: 1,
       minHeight: 0,
