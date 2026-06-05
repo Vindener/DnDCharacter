@@ -9,6 +9,14 @@ import type { Weapon } from '@/types/Weapon';
 
 export type CustomFieldType = 'text' | 'number' | 'boolean' | 'select';
 export type CharacterTemplateId = 'standard-5e' | 'homebrew-light' | 'homebrew-heavy' | 'caster' | 'martial' | 'custom-blank';
+export type SkillProficiencyRank = 'none' | 'half' | 'proficient' | 'expertise';
+
+export interface CharacterEquipment {
+  armor?: string;
+  shield?: string;
+  attunedItems?: string[];
+  carryingCapacity?: number;
+}
 
 export interface CharacterCustomField {
   id: string;
@@ -121,12 +129,14 @@ export interface CharacterModelBase {
   stats: Stats;
   savingThrows: SavingThrows;
   skills: Skills;
+  skillProficiencies?: Partial<Record<keyof Skills, SkillProficiencyRank>>;
   proficiencies: string[];
   hp: HitPoints;
   hitDice: string;
   deathSaves: DeathSaves;
   inventory: string[];
   armorClassDetails?: string;
+  equipment?: CharacterEquipment;
   weapons?: Weapon[];
   tools?: string[];
   traits: Traits;

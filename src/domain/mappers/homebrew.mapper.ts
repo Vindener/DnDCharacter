@@ -1,4 +1,4 @@
-import type { CharacterDto, CharacterEntity } from '@/domain/types';
+import type { CharacterDto } from '@/domain/types';
 import { parseHomebrew, type HomebrewEntitySlice } from '@/domain/schemas';
 
 type HomebrewDraft = Partial<HomebrewEntitySlice>;

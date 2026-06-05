@@ -33,5 +33,34 @@ describe('character.schema', () => {
     expect(parsed.customResources.some((resource) => resource.id === 'trk-1')).toBe(true);
     expect(parsed.homebrewEntries.some((entry) => entry.id === 'legacy-spell-list-1-0')).toBe(true);
   });
+
+  it('keeps old numeric skills while accepting optional skill metadata and equipment', () => {
+    const parsed = parseCharacter({
+      id: 'char-3',
+      name: 'Nia',
+      skills: { stealth: 4, perception: 5 },
+      skillProficiencies: {
+        stealth: 'expertise',
+        perception: 'half',
+        arcana: 'invalid',
+      },
+      equipment: {
+        armor: 'Leather',
+        shield: 'Buckler',
+        attunedItems: ['Ring', '', 'Ring'],
+        carryingCapacity: 150,
+      },
+    });
+
+    expect(parsed.skills.stealth).toBe(4);
+    expect(parsed.skills.perception).toBe(5);
+    expect(parsed.skillProficiencies).toEqual({ stealth: 'expertise', perception: 'half' });
+    expect(parsed.equipment).toEqual({
+      armor: 'Leather',
+      shield: 'Buckler',
+      attunedItems: ['Ring'],
+      carryingCapacity: 150,
+    });
+  });
 });
 

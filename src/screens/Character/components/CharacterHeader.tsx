@@ -63,16 +63,11 @@ function CharacterHeaderBase({
             />
           </View>
           <Text style={styles.characterMeta}>
-            {characterData.class || 'Клас'} / {characterData.race || 'Раса'} / Рів.{characterData.level}
-          </Text>
-          <Text style={styles.characterMeta}>
-            Кампанія: {String(characterData.campaign || '').trim() || 'Не призначена'}
-            {characterData.campaignId ? ` • ID: ${characterData.campaignId}` : ''}
+            {characterData.race || 'Раса'} · {characterData.class || 'Клас'} · Рівень {characterData.level}
           </Text>
           <View style={styles.badgesRow}>{syncBadges.map(renderBadge)}</View>
           <View style={styles.syncIndicatorRow}>
-            <Text style={styles.syncIndicatorText}>Статус синхронізації: {syncStatusLabel}</Text>
-            <Text style={styles.syncIndicatorText}>Статус: {syncFeedback}</Text>
+            <Text style={styles.syncIndicatorText}>{syncStatusLabel} · {syncFeedback}</Text>
             {currentSync?.transportMessage ? <Text style={styles.syncIndicatorText}>{currentSync.transportMessage}</Text> : null}
           </View>
           <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: colors.ripple }}>
@@ -93,7 +88,7 @@ function CharacterHeaderBase({
             testID='character.mode.play'
           >
             <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>
-              Режим гри
+              Play
             </Text>
           </Pressable>
           <Pressable
@@ -105,7 +100,7 @@ function CharacterHeaderBase({
             testID='character.mode.edit'
           >
             <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>
-              Режим редагування
+              Edit
             </Text>
           </Pressable>
         </View>
@@ -116,7 +111,7 @@ function CharacterHeaderBase({
           android_ripple={{ color: colors.ripple }}
           testID='character.sessionMode.toggle'
         >
-          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Режим сесії</Text>
+          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Сесія</Text>
         </Pressable>
       </View>
     </View>

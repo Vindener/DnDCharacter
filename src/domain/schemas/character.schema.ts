@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { CharacterEntity, CharacterDraft } from '@/domain/types';
+import type { CharacterEntity, CharacterDraft, SkillProficiencyRank } from '@/domain/types';
 import { parseHomebrew } from './homebrew.schema';
 import { normalizeCharacterSpells } from './spell.schema';
 import { asRecord, safeParseWithIssues, toBoolean, toFiniteStringRecord, toNumber, toString, toStringArray, toTrimmedString } from './utils';
@@ -51,6 +51,39 @@ function parseSkills(raw: unknown): CharacterEntity['skills'] {
     stealth: toNumber(cast.stealth, 0),
     survival: toNumber(cast.survival, 0),
   };
+}
+
+function parseSkillProficiencies(raw: unknown): CharacterEntity['skillProficiencies'] {
+  const cast = asRecord(raw);
+  const result: CharacterEntity['skillProficiencies'] = {};
+  const ranks = new Set(['none', 'half', 'proficient', 'expertise']);
+
+  Object.entries(cast).forEach(([key, value]) => {
+    const rank = String(value || '').trim();
+    if (!ranks.has(rank)) return;
+    const skillKey = key as keyof CharacterEntity['skills'];
+    result[skillKey] = rank as SkillProficiencyRank;
+  });
+
+  return Object.keys(result).length ? result : undefined;
+}
+
+function parseEquipment(raw: unknown): CharacterEntity['equipment'] {
+  const cast = asRecord(raw);
+  const equipment: CharacterEntity['equipment'] = {
+    armor: toTrimmedString(cast.armor) || undefined,
+    shield: toTrimmedString(cast.shield) || undefined,
+    attunedItems: toStringArray(cast.attunedItems, { dedupe: true }),
+    carryingCapacity: Number.isFinite(Number(cast.carryingCapacity))
+      ? Math.max(0, toNumber(cast.carryingCapacity, 0))
+      : undefined,
+  };
+
+  if (!equipment.armor && !equipment.shield && !equipment.attunedItems?.length && equipment.carryingCapacity === undefined) {
+    return undefined;
+  }
+
+  return equipment;
 }
 
 function parseTraits(raw: unknown): CharacterEntity['traits'] {
@@ -128,12 +161,14 @@ function parseCharacterEntity(raw: unknown): CharacterEntity {
     stats: parseStats(cast.stats),
     savingThrows: parseSavingThrows(cast.savingThrows),
     skills: parseSkills(cast.skills),
+    skillProficiencies: parseSkillProficiencies(cast.skillProficiencies),
     proficiencies: toStringArray(cast.proficiencies, { dedupe: true }),
     hp: parseHitPoints(cast.hp),
     hitDice: toTrimmedString(cast.hitDice) || '1d6',
     deathSaves: parseDeathSaves(cast.deathSaves),
     inventory: toStringArray(cast.inventory),
     armorClassDetails: toTrimmedString(cast.armorClassDetails) || undefined,
+    equipment: parseEquipment(cast.equipment),
     weapons: parseWeapons(cast.weapons),
     tools: toStringArray(cast.tools),
     traits: parseTraits(cast.traits),

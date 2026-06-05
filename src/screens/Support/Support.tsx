@@ -70,7 +70,7 @@ export default function Support() {
     openUrl(mailto);
   };
 
-  const openTelegram = () => openUrl('https://t.me/Vindener_work');
+  const openTelegram = () => openUrl('https://t.me/mythgatednd?direct');
 
   return (
     <View style={styles.screen}>

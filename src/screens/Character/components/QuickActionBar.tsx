@@ -8,7 +8,13 @@ type QuickActionBarProps = Pick<CharacterActionsReadyState, 'styles' | 'colors' 
 const QUICK_ACTION_TEST_IDS: Record<string, string> = {
   'minus-hp': 'character.quickAction.hpMinus',
   'plus-hp': 'character.quickAction.hpPlus',
+  'edit-hp': 'character.quickAction.hpEdit',
+  'temp-hp': 'character.quickAction.tempHp',
   roll: 'character.quickAction.roll',
+  'short-rest': 'character.quickAction.shortRest',
+  'long-rest': 'character.quickAction.longRest',
+  condition: 'character.quickAction.condition',
+  note: 'character.quickAction.note',
 };
 
 function QuickActionBarBase({ styles, colors, quickActions, onQuickActionPress }: QuickActionBarProps) {
@@ -31,7 +37,6 @@ function QuickActionBarBase({ styles, colors, quickActions, onQuickActionPress }
 
   return (
     <View style={styles.quickActionsWrapper}>
-      <Text style={styles.sectionTitle}>Панель швидких дій</Text>
       <FlatList
         horizontal
         data={quickActions}

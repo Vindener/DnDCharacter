@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { CharacterViewModel } from '@/types/Character';
 import { useCharacterActions } from './hooks/useCharacterActions';
 import type { CharacterActionsReadyState } from './hooks/useCharacterActions';
@@ -23,6 +24,7 @@ interface CharacterProps {
 
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
   const state = useCharacterActions({ route });
+  const insets = useSafeAreaInsets();
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
   const charactersLoaded = useCharacterStore((s) => s.isLoaded);
   const charactersLoadError = useCharacterStore((s) => s.loadError);
@@ -70,9 +72,16 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     tabHistory,
     getHistoryAuthorLabel,
   } = viewState;
+  const hasStickyQuickActions = mode === 'play';
   return (
     <View style={styles.screen} testID='character.screen'>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={[
+          styles.contentContainer,
+          hasStickyQuickActions ? { paddingBottom: Math.max(insets.bottom, 8) + 104 } : null,
+        ]}
+      >
         <CharacterHeader
           styles={styles}
           colors={colors}
@@ -120,8 +129,6 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           passivePerception={viewState.passivePerception}
           sectionConflictLabel={viewState.sectionConflictLabel}
         />
-
-        {mode === 'play' && <QuickActionBar styles={styles} colors={colors} quickActions={quickActions} onQuickActionPress={onQuickActionPress} />}
 
         <CharacterTabs
           styles={styles}
@@ -171,6 +178,12 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           />
         </View>
       </ScrollView>
+
+      {hasStickyQuickActions && (
+        <View style={[styles.quickActionsDock, { paddingBottom: Math.max(insets.bottom, 8) }]}>
+          <QuickActionBar styles={styles} colors={colors} quickActions={quickActions} onQuickActionPress={onQuickActionPress} />
+        </View>
+      )}
 
       <CharacterModals {...viewState} />
     </View>

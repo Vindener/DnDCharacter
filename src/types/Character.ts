@@ -9,6 +9,7 @@ export type {
   CharacterCustomSpellList,
   CharacterDraft,
   CharacterDto,
+  CharacterEquipment,
   CharacterEntity,
   CharacterHomebrewEntry,
   CharacterNotesBlocks,
@@ -17,6 +18,7 @@ export type {
   CharacterViewModel,
   CustomFieldType,
   HomebrewEntryKind,
+  SkillProficiencyRank,
   TrackerResetRule,
   TrackerVisibility,
 } from '@/domain/types/character';

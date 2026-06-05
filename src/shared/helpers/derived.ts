@@ -1,5 +1,6 @@
 import type { Stats } from '@/types/Stats';
 import type { Skills } from '@/types/Skills';
+import type { SkillProficiencyRank } from '@/types/Character';
 
 export const abilityMod = (score: number): number => Math.floor((score - 10) / 2);
 
@@ -57,6 +58,8 @@ export const skillAbilityMap: Record<SkillKey, AbilityKey> = {
   survival: 'wisdom',
 };
 
+export const skillKeys: SkillKey[] = SKILL_KEYS;
+
 function normalizeStats(stats?: Partial<Stats>): Stats {
   return {
     ...DEFAULT_STATS,
@@ -72,6 +75,27 @@ export function computeSkills(stats?: Partial<Stats>): Skills {
     skills[skillKey] = abilityMod(safeStats[abilityKey]);
   }
   return skills;
+}
+
+export function getSkillProficiencyBonus(rank: SkillProficiencyRank | undefined, proficiencyBonus: number): number {
+  if (rank === 'expertise') return proficiencyBonus * 2;
+  if (rank === 'proficient') return proficiencyBonus;
+  if (rank === 'half') return Math.floor(proficiencyBonus / 2);
+  return 0;
+}
+
+export function computeSkillBonus(args: {
+  stats?: Partial<Stats>;
+  skill: SkillKey;
+  rank?: SkillProficiencyRank;
+  proficiencyBonus: number;
+  fallbackValue?: number;
+}): number {
+  if (!args.rank && typeof args.fallbackValue === 'number') return args.fallbackValue;
+
+  const safeStats = normalizeStats(args.stats);
+  const abilityKey = skillAbilityMap[args.skill];
+  return abilityMod(safeStats[abilityKey]) + getSkillProficiencyBonus(args.rank, args.proficiencyBonus);
 }
 
 export function computeAC(stats: Partial<Stats> | undefined, cls: string): number {

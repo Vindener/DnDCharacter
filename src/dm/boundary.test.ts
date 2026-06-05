@@ -22,8 +22,8 @@ function collectFiles(dir: string): string[] {
 
 function extractImports(code: string): string[] {
   const imports: string[] = [];
-  const fromRegex = /from\s+['\"]([^'\"]+)['\"]/g;
-  const sideEffectRegex = /import\s+['\"]([^'\"]+)['\"]/g;
+  const fromRegex = /from\s+['"]([^'"]+)['"]/g;
+  const sideEffectRegex = /import\s+['"]([^'"]+)['"]/g;
 
   for (const match of code.matchAll(fromRegex)) imports.push(match[1]);
   for (const match of code.matchAll(sideEffectRegex)) imports.push(match[1]);

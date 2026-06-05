@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Pressable, TextInput as RNTextInput, TouchableOpacity, View, FlatList } from 'react-native';
+import { Text, Pressable, TextInput as RNTextInput, View, FlatList } from 'react-native';
 import { DiceRollerPanel, type DiceRollerPreset } from '@/screens/DiceRoller/DiceRoller';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
@@ -196,7 +196,9 @@ function CharacterModalsBase({
 
   const contextRollModalTitle = React.useMemo(() => {
     if (!weaponRollRequest) return 'Кидок';
-    if (weaponRollRequest.kind === 'ability') return weaponRollRequest.title;
+    if (weaponRollRequest.kind === 'ability' || weaponRollRequest.kind === 'saving-throw' || weaponRollRequest.kind === 'skill') {
+      return weaponRollRequest.title;
+    }
     if (weaponRollRequest.kind === 'weapon-attack') return 'Кидок на влучення';
     if (weaponRollRequest.kind === 'weapon-damage') return 'Кидок шкоди';
     if (weaponRollRequest.kind === 'spell-attack') return 'Атака закляттям';
@@ -205,7 +207,9 @@ function CharacterModalsBase({
 
   const contextRollSubtitle = React.useMemo(() => {
     if (!weaponRollRequest) return '';
-    if (weaponRollRequest.kind === 'ability') return weaponRollRequest.label;
+    if (weaponRollRequest.kind === 'ability' || weaponRollRequest.kind === 'saving-throw' || weaponRollRequest.kind === 'skill') {
+      return weaponRollRequest.label;
+    }
     if (weaponRollRequest.kind === 'weapon-attack' || weaponRollRequest.kind === 'weapon-damage') {
       return weaponRollRequest.weapon.name || 'Зброя';
     }
@@ -214,12 +218,22 @@ function CharacterModalsBase({
 
   const contextRollPreset = React.useMemo<DiceRollerPreset | undefined>(() => {
     if (!weaponRollRequest) return undefined;
-    if (weaponRollRequest.kind === 'ability') {
+    if (weaponRollRequest.kind === 'ability' || weaponRollRequest.kind === 'skill') {
       return {
-        id: `ability-${weaponRollRequest.label}-${weaponRollRequest.baseModifier}`,
+        id: `${weaponRollRequest.kind}-${weaponRollRequest.label}-${weaponRollRequest.baseModifier}`,
         label: weaponRollRequest.title,
         dice: 'd20',
         modifier: weaponRollRequest.baseModifier,
+      };
+    }
+    if (weaponRollRequest.kind === 'saving-throw') {
+      return {
+        id: `saving-${weaponRollRequest.label}-${weaponRollRequest.baseModifier}-${weaponRollRequest.proficient ? 'prof' : 'raw'}`,
+        label: weaponRollRequest.title,
+        dice: 'd20',
+        modifier: weaponRollRequest.baseModifier,
+        proficiencyBonus: characterData.proficiencyBonus ?? 2,
+        includeProficiency: weaponRollRequest.proficient,
       };
     }
     if (weaponRollRequest.kind === 'weapon-attack') {
@@ -254,7 +268,7 @@ function CharacterModalsBase({
       label: `Шкода закляттям: ${weaponRollRequest.spellName}`,
       formula: weaponRollRequest.profile.formula,
     };
-  }, [weaponRollRequest]);
+  }, [characterData.proficiencyBonus, weaponRollRequest]);
 
   const contextRollAction = React.useMemo(() => {
     if (!weaponRollRequest || weaponRollRequest.kind !== 'weapon-attack') return null;
@@ -569,9 +583,9 @@ function CharacterModalsBase({
         {restStep === 'choose' && (
           <>
             <Text style={styles.blockTextMuted}>Короткий відпочинок відкриває DiceRoller напряму з панелі швидких дій.</Text>
-            <TouchableOpacity onPress={applyLongRest} style={styles.restButton}>
+            <Pressable onPress={applyLongRest} style={styles.restButton} android_ripple={{ color: colors.ripple }}>
               <Text style={styles.restButtonText}>Довгий відпочинок</Text>
-            </TouchableOpacity>
+            </Pressable>
           </>
         )}
         {restStep === 'roll' && (
@@ -592,9 +606,9 @@ function CharacterModalsBase({
               />
             ) : null}
             {rollResults.length >= rollsNeeded && (
-              <TouchableOpacity onPress={applyShortRestRolls} style={styles.restButton}>
+              <Pressable onPress={applyShortRestRolls} style={styles.restButton} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.restButtonText}>Застосувати відпочинок</Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
           </>
         )}

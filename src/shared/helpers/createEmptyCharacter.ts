@@ -80,6 +80,7 @@ export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterE
       survival: 0,
       ...(overrides.skills || {}),
     },
+    skillProficiencies: overrides.skillProficiencies,
     proficiencies: overrides.proficiencies ?? [],
     hp: {
       max: 8,
@@ -95,6 +96,7 @@ export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterE
     },
     inventory: overrides.inventory ?? [],
     armorClassDetails: overrides.armorClassDetails,
+    equipment: overrides.equipment,
     weapons: overrides.weapons ?? [],
     tools: overrides.tools ?? [],
     traits: {
