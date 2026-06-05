@@ -10,7 +10,8 @@ import Header from '@/modules/Header/Header';
 import Initiative from '@/screens/Initiative/Initiative';
 import DMNavigator from '@/navigation/DMNavigator';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import BestiaryNavigator from '@/navigation/BestiaryNavigator';
+import ReferencesNavigator from '@/navigation/ReferencesNavigator';
+import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import Support from '@/screens/Support/Support';
 import type { InitiativeSeed } from '@/dm/domain/types';
 
@@ -18,7 +19,7 @@ export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
   Initiative: { seed?: InitiativeSeed } | undefined;
   DM: NavigatorScreenParams<DMStackParamList> | undefined;
-  Bestiary: undefined;
+  References: NavigatorScreenParams<ReferencesStackParamList> | undefined;
   Support: undefined;
 };
 
@@ -43,8 +44,8 @@ export default function AppNavigator() {
         return 'bonfire-outline';
       case 'DM':
         return 'people-outline';
-      case 'Bestiary':
-        return 'skull-outline';
+      case 'References':
+        return 'book-outline';
       case 'Support':
         return 'heart-outline';
       default:
@@ -71,7 +72,7 @@ export default function AppNavigator() {
         <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false, title: 'Герої' }} />
         <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Інціатива' }} />
         <Stack.Screen name='DM' component={DMNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name='Bestiary' component={BestiaryNavigator} options={{ headerShown: false, title: 'Бестіарій' }} />
+        <Stack.Screen name='References' component={ReferencesNavigator} options={{ headerShown: false, title: 'Довідки' }} />
         <Stack.Screen name='Support' component={Support} options={{ title: 'Підтримка' }} />
       </Stack.Navigator>
     </NavigationContainer>

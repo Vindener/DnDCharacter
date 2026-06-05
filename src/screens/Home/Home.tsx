@@ -174,10 +174,10 @@ const Home = () => {
     [cloudPulseAt, conflictCount, isOnline, isSignedIn, pendingSyncCount, storeLastSyncAt],
   );
 
-  const openRootTab = React.useCallback((routeName: 'DM' | 'Bestiary') => {
+  const openRootTab = React.useCallback((routeName: 'DM' | 'References', params?: Record<string, unknown>) => {
     const parent = navigation.getParent();
     if (!parent) return;
-    parent.dispatch(CommonActions.navigate({ name: routeName }));
+    parent.dispatch(CommonActions.navigate({ name: routeName, params }));
   }, [navigation]);
 
   const quickActions = useMemo(() => {
@@ -207,7 +207,7 @@ const Home = () => {
       testID: 'home.openBestiaryButton',
       icon: 'skull-outline' as const,
       label: 'Бестіарій',
-      onPress: () => openRootTab('Bestiary'),
+      onPress: () => openRootTab('References', { screen: 'List' }),
     };
     return [createCharacter, rollDice, spellbook, bestiary];
   }, [navigation, openRootTab]);

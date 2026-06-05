@@ -61,7 +61,7 @@ const DM: React.FC = () => {
     setNotesCount(notes.length);
   }, []);
 
-  const isSignedIn = useMemo(() => Boolean(fbAuth.currentUser), [authVersion]);
+  const isSignedIn = Boolean(fbAuth.currentUser);
   const isOnline = isNetworkOnline(netInfo.isConnected);
 
   useEffect(() => {
@@ -174,12 +174,6 @@ const DM: React.FC = () => {
     parent.dispatch(CommonActions.navigate({ name: routeName, params }));
   };
 
-  const openHeroesNested = (screen: 'Spellbook' | 'Home', params?: Record<string, unknown>) => {
-    const parent = navigation.getParent();
-    if (!parent) return;
-    parent.dispatch(CommonActions.navigate({ name: 'Heroes', params: { screen, params } }));
-  };
-
   const ensureLocalCharacter = async (character: CharacterViewModel) => {
     const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
     if (existing) {
@@ -269,13 +263,13 @@ const DM: React.FC = () => {
             <Ionicons name='flame-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Відкрити ініціативу</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('Bestiary')} android_ripple={{ color: colors.ripple }}>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до бестіарію</Text>
           </Pressable>
           <Pressable
             style={styles.laneButton}
-            onPress={() => openHeroesNested('Spellbook', { mode: 'dm', quickView: true })}
+            onPress={() => openRootTab('References', { screen: 'Spellbook', params: { mode: 'dm', quickView: true } })}
             android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='book-outline' size={18} color={colors.text} />

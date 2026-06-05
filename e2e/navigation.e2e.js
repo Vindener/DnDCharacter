@@ -23,7 +23,24 @@ describe('Navigation', () => {
     await expect(element(by.id('bestiary.screen'))).toBeVisible();
   });
 
+  it('opens bestiary screen from references tab', async () => {
+    await element(by.text('Герої')).tap();
+    await element(by.text('Довідки')).tap();
+    await expect(element(by.id('references.screen'))).toBeVisible();
+    await element(by.id('references.openBestiaryButton')).tap();
+    await expect(element(by.id('bestiary.screen'))).toBeVisible();
+  });
+
+  it('opens spellbook screen from references tab', async () => {
+    await element(by.text('Герої')).tap();
+    await element(by.text('Довідки')).tap();
+    await expect(element(by.id('references.screen'))).toBeVisible();
+    await element(by.id('references.openSpellbookButton')).tap();
+    await expect(element(by.id('spellbook.screen'))).toBeVisible();
+  });
+
   it('opens dice roller screen from home', async () => {
+    await element(by.text('Герої')).tap();
     await element(by.id('home.openDiceButton')).tap();
     await expect(element(by.id('diceRoller.screen'))).toBeVisible();
   });

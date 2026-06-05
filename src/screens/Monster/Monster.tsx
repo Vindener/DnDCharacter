@@ -10,10 +10,10 @@ import { MonsterDto } from '@/types/Monster';
 import useMonsterStore from '@/context/Monster-store';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import FileService from '@/shared/services/fileSerice';
-import type { BestiaryStackParamList } from '@/navigation/BestiaryNavigator';
+import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import { sp } from '@/shared/styles/tokens';
 
-type MonsterRouteProp = RouteProp<BestiaryStackParamList, 'Monster'>;
+type MonsterRouteProp = RouteProp<ReferencesStackParamList, 'Monster'>;
 type MonsterTextField =
   | 'type'
   | 'size'
@@ -111,7 +111,7 @@ const CollapsibleTextBlock = ({
 
 export default function Monster({ route }: Props) {
   const { monster } = route.params;
-  const navigation = useNavigation<StackNavigationProp<BestiaryStackParamList, 'Monster'>>();
+  const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'Monster'>>();
   const updateMonster = useMonsterStore((s) => s.updateMonster);
   const addMonster = useMonsterStore((s) => s.addMonster);
   const pinnedMonsterIds = useMonsterStore((s) => s.pinnedMonsterIds);

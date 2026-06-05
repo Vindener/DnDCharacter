@@ -234,7 +234,10 @@ describe('Home screen', () => {
     act(() => {
       tree.root.findByProps({ testID: 'home.openBestiaryButton' }).props.onPress();
     });
-    expect(mocks.parent.dispatch).toHaveBeenCalledWith({ type: 'NAVIGATE', payload: { name: 'Bestiary' } });
+    expect(mocks.parent.dispatch).toHaveBeenCalledWith({
+      type: 'NAVIGATE',
+      payload: { name: 'References', params: { screen: 'List' } },
+    });
 
     expect(() => tree.root.findByProps({ testID: 'home.openDMButton' })).toThrow();
 

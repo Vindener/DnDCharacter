@@ -9,7 +9,7 @@ import { getStyles } from './style';
 import FileService from '@/shared/services/fileSerice';
 import type { MonsterDto } from '@/types/Monster';
 import { SkeletonBestiary } from '@/shared/ui/skeleton';
-import type { BestiaryStackParamList } from '@/navigation/BestiaryNavigator';
+import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import {
   collectUnique,
   DEFAULT_BESTIARY_FILTERS,
@@ -69,7 +69,7 @@ const createBlankMonster = (): MonsterDto => ({
 });
 
 const Bestiary = () => {
-  const navigation = useNavigation<StackNavigationProp<BestiaryStackParamList, 'List'>>();
+  const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const monsters = useMonsterStore((s) => s.monsters);
   const pinnedMonsterIds = useMonsterStore((s) => s.pinnedMonsterIds);
   const favoriteMonsterIds = useMonsterStore((s) => s.favoriteMonsterIds);

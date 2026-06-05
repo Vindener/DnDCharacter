@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, FlatList, Pressable, ScrollView } from 'react-native';
-import type { StackScreenProps } from '@react-navigation/stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
@@ -10,11 +9,15 @@ import { Modal } from '@/shared/components/Modal/Modal';
 import { formatSchemaErrors, safeParseSpellFormInput, SPELL_DAMAGE_TYPES } from '@/domain/schemas';
 import type { CharacterSpellStatus, SpellComponents, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
 import type { CharacterViewModel } from '@/types/Character';
-import type { TabStackParamList } from '@/navigation/TabNavigator';
+import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 import { SkeletonSpellbook } from '@/shared/ui/skeleton';
 import { getStyles } from './styles';
 
-type Props = StackScreenProps<TabStackParamList, 'Spellbook'>;
+type Props = {
+  route: {
+    params?: SpellbookRouteParams;
+  };
+};
 type SpellbookTab = 'all' | 'prepared' | 'known' | 'favorites' | 'custom';
 type LevelFilter = 'all' | number;
 type BooleanFilter = 'all' | 'yes' | 'no';

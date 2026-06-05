@@ -30,8 +30,12 @@ const Header = () => {
         return 'Інціатива';
       case 'DMHome':
         return 'ДМ головна';
+      case 'ReferencesHome':
+        return 'Довідки';
       case 'List':
         return 'Бестіарій';
+      case 'Spellbook':
+        return 'Книга заклять';
       case 'Support':
         return 'Підтримка проекту';
       default:

@@ -11,8 +11,7 @@ import Header from '@/modules/Header/Header';
 import CreateCharacter from '@/screens/CreateCharacter/CreateCharacter';
 import { CharacterViewModel } from '@/types/Character';
 import Spellbook from '@/screens/Spellbook/Spellbook';
-
-export type SpellbookTabParam = 'all' | 'prepared' | 'known' | 'favorites' | 'custom';
+import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 
 export type TabStackParamList = {
   Home: undefined;
@@ -24,13 +23,7 @@ export type TabStackParamList = {
     character: CharacterViewModel;
   };
   CreateCharacter: undefined;
-  Spellbook: {
-    characterId?: string;
-    initialTab?: SpellbookTabParam;
-    mode?: 'player' | 'dm';
-    initialSpellId?: string;
-    quickView?: boolean;
-  } | undefined;
+  Spellbook: SpellbookRouteParams;
   Settings: undefined;
 };
 
