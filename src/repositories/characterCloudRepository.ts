@@ -447,10 +447,24 @@ export async function bulkUpsertFromLocal(list: CharacterDto[]) {
 }
 
 export function subscribeCharacterSheet(id: string, cb: (doc: CharacterSheet | null) => void) {
-  return db.collection('characterSheets').doc(id).onSnapshot((snap) => {
-    if (!hasDoc(snap)) return cb(null);
-    cb(toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data()));
-  });
+  const cleanId = String(id || '').trim();
+  if (!cleanId) {
+    cb(null);
+    return () => {};
+  }
+
+  try {
+    return db.collection('characterSheets').doc(cleanId).onSnapshot(
+      (snap) => {
+        if (!hasDoc(snap)) return cb(null);
+        cb(toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data()));
+      },
+      () => cb(null),
+    );
+  } catch {
+    cb(null);
+    return () => {};
+  }
 }
 
 export async function updateCharacterSheet(id: string, patch: CharacterSheetPatch) {

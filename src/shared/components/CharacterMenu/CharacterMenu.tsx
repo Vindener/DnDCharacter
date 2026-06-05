@@ -196,8 +196,16 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
     await ensureCharacterSync(copy.id, false);
     setCurrentCharacterId(copy.id);
 
-    Alert.alert('Готово', mode === 'local-copy' ? 'Створено локальну копію без живої синхронізації.' : 'Створено незалежний дублікат зі спільного листа.');
-    navigation.navigate('Character', { character: copy });
+    Alert.alert(
+      'Готово',
+      mode === 'local-copy' ? 'Створено локальну копію без живої синхронізації.' : 'Створено незалежний дублікат зі спільного листа.',
+      [
+        {
+          text: 'Ок',
+          onPress: () => navigation.navigate('Character', { character: copy }),
+        },
+      ],
+    );
   };
 
   const openSharedLiveCopy = () => {
@@ -208,6 +216,15 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
     onSyncNow?.();
     Alert.alert('Спільна жива копія', 'Поточний лист відкрито в живому режимі з хмарною синхронізацією.');
+  };
+
+  const openShareModal = () => {
+    if (!isCharacterInCloud) {
+      Alert.alert('Потрібна хмарна версія', 'Щоб поділитися персонажем, спочатку збережіть його в хмарі.');
+      return;
+    }
+
+    setShareOpen(true);
   };
 
   const pickPhoto = async () => {
@@ -421,8 +438,8 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         <MenuItem
           textStyle={styles.menuItemText}
           onPress={() => {
-            setShareOpen(true);
             closeMenu();
+            openShareModal();
           }}
         >
           Поділитися
@@ -502,7 +519,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           ))}
         </ScrollView>
       </Modal>
-      <ShareCharacterSheetModal visible={shareOpen} onClose={() => setShareOpen(false)} sheetId={character.id} />
+      <ShareCharacterSheetModal visible={shareOpen} onClose={() => setShareOpen(false)} sheetId={characterData.id} />
     </>
   );
 };

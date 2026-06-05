@@ -1,118 +1,149 @@
 import React, { JSX, useEffect, useMemo, useState } from 'react';
-import { View, Text, TextInput, Alert, Pressable, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useNetInfo } from '@react-native-community/netinfo';
+import * as ImagePicker from 'expo-image-picker';
+import { uuid } from 'expo-modules-core';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { uuid } from 'expo-modules-core';
-import { getStyles } from '@/screens/CreateCharacter/style';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
-import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
-import { CLASS_OPTIONS, CLASS_TRANSLATIONS } from '@/shared/const/CharacterClass';
-import { SUBCLASSES } from '@/shared/const/Subclasses';
-import { RACES, RACE_OPTIONS, SUBRACE_OPTIONS, AbilityKey, RaceDefinition } from '@/shared/const/Races';
-import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
-import { BACKGROUNDS } from '@/shared/const/Backgrounds';
-import { SUBCLASS_DETAILS } from '@/shared/const/SubclassDetails';
-import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
-import type { CharacterViewModel, CharacterTemplateId } from '@/types/Character';
-import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
-import { fbAuth } from '@/services/firebase';
-import { onGoogleButtonPress } from '@/shared/services/auth';
 import { addEditorByEmail } from '@/repositories/characterCloudRepository';
-import { buildTemplatePatch, CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
+import { createCharacterDraftRepository } from '@/repositories/createCharacterDraftRepository';
+import { fbAuth } from '@/services/firebase';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { BACKGROUNDS } from '@/shared/const/Backgrounds';
+import { CLASS_OPTIONS, CLASS_TRANSLATIONS } from '@/shared/const/CharacterClass';
+import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
+import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
+import { CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
+import { RACES, RACE_OPTIONS, SUBRACE_OPTIONS, type AbilityKey } from '@/shared/const/Races';
+import { SUBCLASSES } from '@/shared/const/Subclasses';
+import { onGoogleButtonPress } from '@/shared/services/auth';
+import FileService from '@/shared/services/fileSerice';
 import { formatSchemaErrors, safeParseCreateCharacterWizardStep } from '@/domain/schemas';
+import { getStyles } from '@/screens/CreateCharacter/style';
+import {
+  ABILITY_KEYS,
+  ABILITY_NAMES_UA,
+  ABILITY_SHORT,
+  POINT_BUY_BUDGET,
+  POINT_BUY_MAX,
+  POINT_BUY_MIN,
+  STANDARD_ARRAY,
+  TOTAL_CREATE_CHARACTER_STEPS,
+  applyDerivedDefaults,
+  applyStartMethod,
+  buildCharacterFromDraft,
+  createInitialDraft,
+  createSavingThrowDefaults,
+  deriveDraftDefaults,
+  formatAbilityModifier,
+  mergeDraftWithDefaults,
+  rollAbilityScore,
+  rollAllAbilityScores,
+  shouldShowMagicStep,
+  type CreateCharacterDraft,
+  type StartMethod,
+} from '@/screens/CreateCharacter/createCharacterWizard';
 
-type StartMethod = 'guided' | 'quick';
-type StatMethod = 'array' | 'pointbuy';
-type StorageMode = 'local-only' | 'local-cloud';
+type DraftTextField =
+  | 'name'
+  | 'level'
+  | 'campaign'
+  | 'playerName'
+  | 'notes'
+  | 'customRace'
+  | 'customSubrace'
+  | 'customClassName'
+  | 'customSubclass'
+  | 'customBackground'
+  | 'hpMax'
+  | 'hpCurrent'
+  | 'hitDice'
+  | 'ac'
+  | 'speed'
+  | 'initiative'
+  | 'proficiencyBonus'
+  | 'weaponsText'
+  | 'armor'
+  | 'toolsText'
+  | 'currencyGold'
+  | 'currencySilver'
+  | 'currencyCopper'
+  | 'startingPack'
+  | 'spellSaveDC'
+  | 'spellAttackBonus'
+  | 'cantripsText'
+  | 'knownSpellsText'
+  | 'preparedSpellsText'
+  | 'spellSlotsText'
+  | 'alignment'
+  | 'ideals'
+  | 'bonds'
+  | 'flaws'
+  | 'backstory'
+  | 'customFieldsText'
+  | 'customResourcesText'
+  | 'customSectionsText'
+  | 'customTrackersText'
+  | 'customAbilitiesText'
+  | 'inviteEmail';
 
-const TOTAL_STEPS = 7;
-const ABILITY_KEYS: AbilityKey[] = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-
-const STANDARD_ARRAY: Record<AbilityKey, number> = {
-  strength: 15,
-  dexterity: 14,
-  constitution: 13,
-  intelligence: 12,
-  wisdom: 10,
-  charisma: 8,
+const STEP_TITLES: Record<number, string> = {
+  1: 'Старт',
+  2: 'Дані персонажа',
+  3: 'Раса / Клас / Передісторія',
+  4: 'Характеристики',
+  5: 'Бойова база',
+  6: 'Спорядження',
+  7: 'Магія',
+  8: 'Особистість',
+  9: 'Хоумбрю',
+  10: 'Збереження і доступ',
+  11: 'Перевірка',
 };
 
-const POINT_BUY_MIN = 8;
-const POINT_BUY_MAX = 15;
-const POINT_BUY_BUDGET = 27;
+const START_OPTIONS: Array<{ id: StartMethod; title: string; description: string }> = [
+  { id: 'standard-5e', title: 'Стандартний 5e', description: 'Повний покроковий персонаж за базовою логікою 5e.' },
+  { id: 'quick', title: 'Швидкий персонаж', description: 'Швидкі дефолти для старту, все можна відредагувати.' },
+  { id: 'homebrew-blank', title: 'Порожній хоумбрю', description: 'Порожні власні раса, клас, механіки і поля.' },
+  { id: 'import', title: 'Імпорт', description: 'Імпорт JSON персонажа з файлу.' },
+];
 
-const COST: Record<number, number> = { 8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9 };
-
-const ABILITY_NAMES_UA: Record<AbilityKey, string> = {
-  strength: 'Сила',
-  dexterity: 'Спритність',
-  constitution: 'Статура',
-  intelligence: 'Інтелект',
-  wisdom: 'Мудрість',
-  charisma: 'Харизма',
-};
-
-const BG_COINS: Record<string, number> = {
-  acolyte: 15,
-  criminal: 15,
-  soldier: 10,
-  entertainer: 15,
-  folkhero: 10,
-  guildartisan: 15,
-  hermit: 5,
-  noble: 25,
-  outlander: 10,
-  sage: 10,
-  sailor: 10,
-  urchin: 10,
-};
-
-function abilityModifier(score: number): number {
-  return Math.floor((score - 10) / 2);
-}
-
-function autoFillSkills(stats: CharacterViewModel['stats']): CharacterViewModel['skills'] {
-  const base: CharacterViewModel['skills'] = {
-    acrobatics: 0,
-    animalHandling: 0,
-    arcana: 0,
-    athletics: 0,
-    deception: 0,
-    history: 0,
-    insight: 0,
-    intimidation: 0,
-    investigation: 0,
-    medicine: 0,
-    nature: 0,
-    perception: 0,
-    performance: 0,
-    persuasion: 0,
-    religion: 0,
-    sleightOfHand: 0,
-    stealth: 0,
-    survival: 0,
-  };
-
-  (Object.entries(skillToStat) as [SkillKey, AbilityStatsKey][]).forEach(([skill, ability]) => {
-    base[skill] = abilityModifier(stats[ability]);
-  });
-
-  return base;
-}
+const STAT_METHOD_LABELS = {
+  array: 'Стандартний масив',
+  pointbuy: 'Купівля балів',
+  manual: 'Вручну',
+  roll: 'Куби',
+  random: 'Випадково',
+} as const;
 
 const CreateCharacter = (): JSX.Element => {
   const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'CreateCharacter'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = getStyles(colors);
+  const netInfo = useNetInfo();
+  const isOnline = netInfo.isConnected !== false && netInfo.isInternetReachable !== false;
 
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
+  const setLastSessionCharacterId = useCharacterStore((s) => s.setLastSessionCharacterId);
 
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const markCloudUploaded = useSyncStore((s) => s.markCloudUploaded);
@@ -121,222 +152,115 @@ const CreateCharacter = (): JSX.Element => {
   const setSyncTransport = useSyncStore((s) => s.setSyncTransport);
   const markSyncError = useSyncStore((s) => s.markSyncError);
 
-  const [step, setStep] = useState<number>(1);
-  const [startMethod, setStartMethod] = useState<StartMethod>('guided');
-  const [characterTemplateId, setCharacterTemplateId] = useState<CharacterTemplateId>('standard-5e');
-
-  const [name, setName] = useState('');
-  const [level, setLevel] = useState('1');
-
-  const [raceKey, setRaceKey] = useState<string>(RACE_OPTIONS[0]);
-  const [subraceKey, setSubraceKey] = useState<string>('');
-  const [customRace, setCustomRace] = useState<string>('');
-  const [customSubrace, setCustomSubrace] = useState<string>('');
-  const [useCustomRace, setUseCustomRace] = useState<boolean>(false);
-
-  const [selectedClass, setSelectedClass] = useState(CLASS_OPTIONS[0]);
-  const [customClassName, setCustomClassName] = useState('');
-  const [subclass, setSubclass] = useState<string>('');
-  const [customSubclass, setCustomSubclass] = useState<string>('');
-
-  const gearDef = selectedClass !== 'custom' ? CLASS_GEAR[selectedClass] : undefined;
-  const [gearSelections, setGearSelections] = useState<number[]>([]);
-
-  const [backgroundKey, setBackgroundKey] = useState<string>(BACKGROUNDS[0]?.key || 'custom');
-  const [customBackground, setCustomBackground] = useState<string>('');
-
-  const [statMethod, setStatMethod] = useState<StatMethod>('array');
-  const [stats, setStats] = useState<Record<AbilityKey, number>>({ ...STANDARD_ARRAY });
-  const [pbStats, setPbStats] = useState<Record<AbilityKey, number>>({
-    strength: 8,
-    dexterity: 8,
-    constitution: 8,
-    intelligence: 8,
-    wisdom: 8,
-    charisma: 8,
-  });
-
-  const [flexPick1, setFlexPick1] = useState<AbilityKey>('strength');
-  const [flexPick2, setFlexPick2] = useState<AbilityKey>('dexterity');
-
-  const [storageMode, setStorageMode] = useState<StorageMode>('local-only');
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [authVersion, setAuthVersion] = useState(0);
+  const [draft, setDraft] = useState<CreateCharacterDraft>(() => createInitialDraft());
+  const [isDraftLoaded, setIsDraftLoaded] = useState(false);
+  const [hasRestoredDraft, setHasRestoredDraft] = useState(false);
+  const [, setAuthVersion] = useState(0);
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
 
-  const isSignedIn = useMemo(() => Boolean(fbAuth.currentUser), [authVersion]);
+  const isSignedIn = Boolean(fbAuth.currentUser);
+  const derived = useMemo(() => deriveDraftDefaults(draft), [draft]);
+  const step = draft.step;
 
   useEffect(() => {
-    if (!gearDef) return;
-    setGearSelections((prev) => {
-      if (prev.length === gearDef.choices.length) return prev;
-      return gearDef.choices.map((_, i) => prev[i] ?? 0);
+    let mounted = true;
+    void createCharacterDraftRepository.loadDraft().then((stored) => {
+      if (!mounted) return;
+      if (stored) {
+        setDraft(mergeDraftWithDefaults(stored));
+        setHasRestoredDraft(true);
+      }
+      setIsDraftLoaded(true);
     });
-  }, [gearDef]);
-
-  useEffect(() => {
-    if (selectedClass === 'custom') setGearSelections([]);
-  }, [selectedClass]);
-
-  useEffect(() => {
-    if (startMethod === 'quick') {
-      setStatMethod('array');
-      setStats({ ...STANDARD_ARRAY });
-    }
-  }, [startMethod]);
-
-  const isCustomRace = useCustomRace;
-  const raceDef: RaceDefinition | undefined = !isCustomRace ? RACES[raceKey] : undefined;
-  const subraceDef = !isCustomRace && subraceKey ? raceDef?.subraces?.[subraceKey] : undefined;
-  const availableSubclasses = selectedClass === 'custom' ? [] : SUBCLASSES[selectedClass] || [];
-
-  const localizedClassName = useMemo(() => {
-    if (selectedClass === 'custom') return customClassName || 'Власний';
-    return CLASS_TRANSLATIONS[selectedClass] || selectedClass;
-  }, [selectedClass, customClassName]);
-
-  const classPreset = selectedClass === 'custom' ? undefined : CLASS_PRESETS[selectedClass];
-  const subDesc = subclass && selectedClass !== 'custom' ? SUBCLASS_DETAILS[selectedClass]?.[subclass] : undefined;
-
-  const baseStats = useMemo(() => (statMethod === 'array' ? stats : pbStats), [stats, pbStats, statMethod]);
-
-  const racialBonus = useMemo(() => {
-    const bonus: Record<AbilityKey, number> = {
-      strength: 0,
-      dexterity: 0,
-      constitution: 0,
-      intelligence: 0,
-      wisdom: 0,
-      charisma: 0,
+    return () => {
+      mounted = false;
     };
+  }, []);
 
-    ABILITY_KEYS.forEach((ability) => {
-      const raceValue = raceDef?.asi?.[ability];
-      const subraceValue = subraceDef?.asi?.[ability];
-      if (typeof raceValue === 'number') bonus[ability] += raceValue;
-      if (typeof subraceValue === 'number') bonus[ability] += subraceValue;
-    });
+  useEffect(() => {
+    if (!isDraftLoaded) return;
+    void createCharacterDraftRepository.saveDraft(draft);
+  }, [draft, isDraftLoaded]);
 
-    const flex = subraceDef?.flexible || raceDef?.flexible;
-    if (flex?.count === 2) {
-      const excluded = new Set(flex.exclude || []);
-      if (!excluded.has(flexPick1)) bonus[flexPick1] += 1;
-      if (flexPick2 !== flexPick1 && !excluded.has(flexPick2)) bonus[flexPick2] += 1;
+  useEffect(() => {
+    if (draft.storageMode === 'local-cloud' && !isOnline) {
+      updateDraft({ storageMode: 'local-only', shareTarget: 'none', inviteEmail: '' });
     }
+  }, [draft.storageMode, isOnline]);
 
-    return bonus;
-  }, [raceDef, subraceDef, flexPick1, flexPick2]);
+  const updateDraft = (patch: Partial<CreateCharacterDraft>): void => {
+    setDraft((prev) => ({ ...prev, ...patch }));
+  };
 
-  const finalStats = useMemo(() => {
-    const result: Record<AbilityKey, number> = {
-      strength: 0,
-      dexterity: 0,
-      constitution: 0,
-      intelligence: 0,
-      wisdom: 0,
-      charisma: 0,
-    };
-    ABILITY_KEYS.forEach((ability) => {
-      result[ability] = baseStats[ability] + racialBonus[ability];
-    });
-    return result;
-  }, [baseStats, racialBonus]);
+  const setTextField = (field: DraftTextField, value: string): void => {
+    updateDraft({ [field]: value } as Partial<CreateCharacterDraft>);
+  };
 
-  const pointBuySpent = useMemo(() => (Object.values(pbStats) as number[]).reduce((sum, v) => sum + COST[v], 0), [pbStats]);
-  const pointBuyValid = pointBuySpent <= POINT_BUY_BUDGET;
+  const setStep = (nextStep: number): void => {
+    updateDraft({ step: Math.max(1, Math.min(TOTAL_CREATE_CHARACTER_STEPS, nextStep)) });
+  };
 
-  const finalCoins = useMemo(() => {
-    const gp = BG_COINS[backgroundKey] || 0;
-    return { gold: gp, silver: 0, copper: 0 };
-  }, [backgroundKey]);
-
-  const chosenInventory: string[] = useMemo(() => {
-    if (selectedClass === 'custom') return ['Проста зброя', 'Рюкзак мандрівника'];
-    if (!gearDef) return [];
-    const picks = gearDef.choices.map((choice, index) => choice.options[gearSelections[index] ?? 0] || choice.options[0]);
-    return [...gearDef.base, ...picks];
-  }, [selectedClass, gearDef, gearSelections]);
-
-  const backgroundDef = BACKGROUNDS.find((b) => b.key === backgroundKey);
-  const resolvedBackground = backgroundKey === 'custom' ? customBackground.trim() : backgroundDef?.name || backgroundKey;
-  const resolvedRace = isCustomRace ? customRace.trim() : raceDef?.name || raceKey;
-  const resolvedSubrace = isCustomRace ? customSubrace.trim() || undefined : subraceKey || undefined;
-  const resolvedSubclass = selectedClass === 'custom' ? customSubclass.trim() || undefined : subclass || undefined;
-  const resolvedClassName = selectedClass === 'custom' ? customClassName.trim() : selectedClass;
-
-  const buildWizardValidationInput = () => ({
-    name,
-    level,
-    isCustomRace,
-    customRace,
-    selectedClass,
-    customClassName,
-    backgroundKey,
-    customBackground,
-    storageMode,
-    inviteEmail,
-    statMethod,
-    pointBuyValid,
+  const buildValidationInput = (targetStep: number) => ({
+    ...draft,
+    step: targetStep,
+    isCustomRace: draft.useCustomRace,
+    level: draft.level,
+    hpMax: draft.hpMax,
+    hpCurrent: draft.hpCurrent,
+    ac: draft.ac,
+    speed: draft.speed,
+    proficiencyBonus: draft.proficiencyBonus,
+    isOnline,
   });
 
-  const validateWizardStep = (targetStep: number, showAlert: boolean = true): boolean => {
-    const result = safeParseCreateCharacterWizardStep(buildWizardValidationInput(), targetStep);
+  const validateStep = (targetStep: number, showAlert = true): boolean => {
+    const result = safeParseCreateCharacterWizardStep(buildValidationInput(targetStep), targetStep);
     if (result.ok) return true;
     if (showAlert) {
-      const message = formatSchemaErrors(result.issues)[0] || 'Невалідні дані форми.';
-      Alert.alert('Помилка', message);
+      Alert.alert('Помилка', formatSchemaErrors(result.issues)[0] || 'Невалідні дані форми.');
     }
     return false;
   };
 
-  const stepTitle = useMemo(() => {
-    switch (step) {
-      case 1:
-        return 'Крок 1. Метод старту';
-      case 2:
-        return 'Крок 2. Базові дані';
-      case 3:
-        return 'Крок 3. Клас';
-      case 4:
-        return 'Крок 4. Характеристики';
-      case 5:
-        return 'Крок 5. Передісторія і спорядження';
-      case 6:
-        return 'Крок 6. Збереження і шерінг';
-      case 7:
-        return 'Крок 7. Перевірка';
-      default:
-        return 'Створення персонажа';
-    }
-  }, [step]);
-
-  const reviewHints = useMemo(() => {
-    const lines: string[] = [];
-    lines.push('Локально: зберігає лист тільки на цьому пристрої, офлайн-доступ завжди.');
-    lines.push('Хмара: зберігає лист у хмарі та синхронізує зміни між пристроями.');
-    lines.push('Спільно: відкриває живу співпрацю з DM/гравцем і показує маркери джерела змін.');
-
-    if (storageMode === 'local-only') {
-      lines.push('Поточний вибір: Локально. Лист залишиться локальним.');
-      lines.push('Хмару/шерінг можна підключити пізніше через "Синхронізувати зараз" або меню шерінгу.');
-    } else if (isSignedIn) {
-      lines.push('Поточний вибір: Локально + Хмара. Лист збережеться локально і в хмарі.');
-      lines.push('Після створення побачите статус синхронізації та шерінгу на Home/Character/DM.');
-      if (inviteEmail.trim()) lines.push(`Після збереження в хмару буде надіслано доступ редактору: ${inviteEmail.trim()}`);
-    } else {
-      lines.push('Обрано режим "Локально + Хмара", але ви ще не авторизовані.');
-      lines.push('Увійдіть через Google, інакше залишиться лише локальний режим.');
-    }
-    return lines;
-  }, [storageMode, isSignedIn, inviteEmail]);
-
-  const goNextFromStep = (): void => {
-    if (step >= 2 && step <= 6 && !validateWizardStep(step, true)) return;
-    if (step < TOTAL_STEPS) setStep((prev) => prev + 1);
+  const nextStepFrom = (current: number): number => {
+    if (current === 6 && !shouldShowMagicStep(draft)) return 8;
+    return Math.min(TOTAL_CREATE_CHARACTER_STEPS, current + 1);
   };
 
-  const onLogin = async () => {
+  const previousStepFrom = (current: number): number => {
+    if (current === 8 && !shouldShowMagicStep(draft)) return 6;
+    return Math.max(1, current - 1);
+  };
+
+  const goNext = (): void => {
+    if (!validateStep(step, true)) return;
+    setStep(nextStepFrom(step));
+  };
+
+  const goBack = (): void => {
+    setStep(previousStepFrom(step));
+  };
+
+  const pickPortrait = async (): Promise<void> => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.8,
+    });
+    if (!result.canceled && result.assets?.[0]?.uri) {
+      updateDraft({ photoUri: result.assets[0].uri });
+    }
+  };
+
+  const clearDraft = async (): Promise<void> => {
+    await createCharacterDraftRepository.clearDraft();
+    setDraft(createInitialDraft());
+    setHasRestoredDraft(false);
+  };
+
+  const onLogin = async (): Promise<void> => {
     try {
       setIsSigningIn(true);
       await onGoogleButtonPress();
@@ -345,71 +269,54 @@ const CreateCharacter = (): JSX.Element => {
     setIsSigningIn(false);
   };
 
-  const onCreate = async () => {
+  const onImport = async (): Promise<void> => {
+    if (isImporting) return;
+    try {
+      setIsImporting(true);
+      const imported = await FileService.importCharacterFromFile();
+      if (!imported) return;
+      await addCharacter(imported);
+      await ensureCharacterSync(imported.id, false);
+      await setLastSessionCharacterId(imported.id);
+      setCurrentCharacterId(imported.id);
+      await createCharacterDraftRepository.clearDraft();
+      navigation.navigate('Character', { character: imported });
+    } catch {
+      Alert.alert('Помилка', 'Не вдалося імпортувати персонажа.');
+    } finally {
+      setIsImporting(false);
+    }
+  };
+
+  const onCreate = async (): Promise<void> => {
     if (isCreating) return;
 
-    if (!validateWizardStep(2, true)) {
-      setStep(2);
-      return;
-    }
-    if (!validateWizardStep(3, true)) {
-      setStep(3);
-      return;
-    }
-    if (!validateWizardStep(4, true)) {
-      setStep(4);
-      return;
-    }
-    if (!validateWizardStep(5, true)) {
-      setStep(5);
-      return;
-    }
-    if (!validateWizardStep(6, true)) {
-      setStep(6);
+    const validationSteps = [2, 3, 4, 5, 10, 11];
+    const invalidStep = validationSteps.find((item) => !validateStep(item, false));
+    if (invalidStep) {
+      setStep(invalidStep);
+      validateStep(invalidStep, true);
       return;
     }
 
-    const cloudRequested = storageMode === 'local-cloud';
+    const cloudRequested = draft.storageMode === 'local-cloud';
     if (cloudRequested && !isSignedIn) {
-      setStep(6);
-      Alert.alert('Хмара недоступна', 'Для режиму "Локально + Хмара" потрібно увійти через Google.');
+      setStep(10);
+      Alert.alert('Потрібен вхід', 'Увійдіть через Google перед створенням хмарного персонажа.');
       return;
     }
 
     try {
       setIsCreating(true);
-
-      const lvl = Number(level);
       const localId = uuid.v4();
-      const templatePatch = buildTemplatePatch(characterTemplateId);
-
-      const character = createEmptyCharacter({
-        id: localId,
-        name: name.trim(),
-        class: resolvedClassName,
-        subclass: resolvedSubclass,
-        race: resolvedRace,
-        subrace: resolvedSubrace,
-        background: resolvedBackground || undefined,
-        level: lvl,
-        stats: finalStats,
-        skills: autoFillSkills(finalStats),
-        characterTemplateId,
-        customResources: templatePatch.customResources,
-        customSections: templatePatch.customSections,
-        homebrewEntries: templatePatch.homebrewEntries,
-      });
-
-      character.inventory = chosenInventory;
-      character.coins = finalCoins;
-
+      const character = buildCharacterFromDraft(draft, localId);
       await addCharacter(character);
       await ensureCharacterSync(character.id, cloudRequested);
 
       let createdCharacter = character;
+      let targetSheetId = character.id;
       let cloudSaved = false;
       let shareError: string | null = null;
-      let targetSheetId = character.id;
 
       if (cloudRequested) {
         try {
@@ -417,6 +324,7 @@ const CreateCharacter = (): JSX.Element => {
             character,
             syncState: useSyncStore.getState().syncByCharacter[character.id],
             actorRole: 'Player',
+            isOnline,
             syncPort: {
               ensureCharacterSync,
               setCloudAvailability,
@@ -424,11 +332,6 @@ const CreateCharacter = (): JSX.Element => {
               setSyncTransport,
               markSyncError,
             },
-            isOnline: true,
-            fallbackPath: 'overview.identity',
-            syncingMessage: 'Синхронізація...',
-            syncedMessage: 'Синхронізовано',
-            conflictFallbackPath: 'overview.identity',
           });
 
           if (syncResult.status !== 'synced') {
@@ -436,23 +339,21 @@ const CreateCharacter = (): JSX.Element => {
           }
 
           if (syncResult.targetCharacter.id !== character.id) {
-            const remappedCharacter = syncResult.targetCharacter;
-            await updateCharacter(character.id, remappedCharacter);
+            createdCharacter = syncResult.targetCharacter;
+            targetSheetId = createdCharacter.id;
+            await updateCharacter(character.id, createdCharacter);
             await removeCharacterSync(character.id);
-            await ensureCharacterSync(remappedCharacter.id, true);
-            createdCharacter = remappedCharacter;
-            targetSheetId = remappedCharacter.id;
+            await ensureCharacterSync(createdCharacter.id, true);
           }
 
           cloudSaved = true;
 
-          const email = inviteEmail.trim().toLowerCase();
-          if (email) {
+          const email = draft.inviteEmail.trim().toLowerCase();
+          if (email && draft.shareTarget !== 'none') {
             try {
               await addEditorByEmail(targetSheetId, email);
             } catch (error) {
-              const message = error instanceof Error ? error.message : 'Не вдалося додати редактора.';
-              shareError = message;
+              shareError = error instanceof Error ? error.message : 'Не вдалося додати редактора.';
             }
           }
         } catch {
@@ -461,19 +362,28 @@ const CreateCharacter = (): JSX.Element => {
         }
       }
 
+      await setLastSessionCharacterId(createdCharacter.id);
       setCurrentCharacterId(createdCharacter.id);
+      await createCharacterDraftRepository.clearDraft();
 
-      if (!cloudRequested) {
-        Alert.alert('Готово', 'Персонажа створено в локальному режимі.');
-      } else if (cloudSaved && !shareError) {
-        Alert.alert('Готово', 'Персонажа створено і синхронізовано з хмарою.');
-      } else if (cloudSaved && shareError) {
-        Alert.alert('Частково готово', `Лист синхронізовано, але шерінг не виконано: ${shareError}`);
-      } else {
-        Alert.alert('Частково готово', 'Персонажа створено локально, але синхронізація з хмарою не спрацювала.');
+      let alertTitle = 'Готово';
+      let alertMessage = 'Персонажа створено локально.';
+      if (cloudRequested && cloudSaved && !shareError) {
+        alertMessage = 'Персонажа створено і синхронізовано з хмарою.';
+      } else if (cloudRequested && cloudSaved && shareError) {
+        alertTitle = 'Частково готово';
+        alertMessage = `Лист синхронізовано, але шерінг не виконано: ${shareError}`;
+      } else if (cloudRequested) {
+        alertTitle = 'Частково готово';
+        alertMessage = 'Персонажа створено локально, але синхронізація з хмарою не спрацювала.';
       }
 
-      navigation.navigate('Character', { character: createdCharacter });
+      Alert.alert(alertTitle, alertMessage, [
+        {
+          text: 'Ок',
+          onPress: () => navigation.navigate('Character', { character: createdCharacter }),
+        },
+      ]);
     } catch {
       Alert.alert('Помилка', 'Не вдалося створити персонажа. Спробуйте ще раз.');
     } finally {
@@ -481,577 +391,668 @@ const CreateCharacter = (): JSX.Element => {
     }
   };
 
-  const Header = ({ title }: { title: string }) => <Text style={styles.sectionTitle}>{title}</Text>;
+  const footerLabel = step === TOTAL_CREATE_CHARACTER_STEPS ? (isCreating ? 'Створення...' : 'Створити персонажа') : 'Далі';
+  const footerAction = step === TOTAL_CREATE_CHARACTER_STEPS ? onCreate : goNext;
 
-  const StepNav = ({
-    showBack,
-    onNext,
-    nextLabel = 'Далі',
-    nextDisabled = false,
-  }: {
-    showBack?: boolean;
-    onNext: () => void;
-    nextLabel?: string;
-    nextDisabled?: boolean;
-  }) => (
-    <View style={styles.navRow}>
-      {showBack ? (
-        <Pressable
-          style={styles.navButton}
-          onPress={() => setStep((prev) => Math.max(prev - 1, 1))}
-          android_ripple={{ color: colors.ripple }}
-          testID='createCharacter.backButton'
-        >
-          <Text style={styles.navButtonText}>Назад</Text>
-        </Pressable>
-      ) : (
-        <View style={{ flex: 1 }} />
+  const renderHeader = () => (
+    <View style={styles.header}>
+      <View style={styles.progressRow}>
+        <Text style={styles.progressText}>
+          Крок {step}/{TOTAL_CREATE_CHARACTER_STEPS}
+        </Text>
+        <Text style={styles.progressText}>{displayStartModeLabel()}</Text>
+      </View>
+      <Text style={styles.title}>{STEP_TITLES[step]}</Text>
+      {hasRestoredDraft && (
+        <View style={styles.draftBanner}>
+          <Text style={styles.helperText}>Чернетку відновлено автоматично.</Text>
+          <Pressable onPress={clearDraft} android_ripple={{ color: colors.ripple }} style={styles.inlineAction}>
+            <Text style={styles.inlineActionText}>Очистити</Text>
+          </Pressable>
+        </View>
       )}
+    </View>
+  );
+
+  const renderFooter = () => (
+    <View style={styles.footer}>
       <Pressable
-        style={[styles.navButton, styles.navButtonPrimary, nextDisabled ? styles.navButtonDisabled : null]}
-        onPress={onNext}
-        disabled={nextDisabled}
+        style={[styles.navButton, step === 1 ? styles.navButtonDisabled : null]}
+        onPress={goBack}
+        disabled={step === 1 || isCreating}
         android_ripple={{ color: colors.ripple }}
-        testID={nextLabel.includes('Створити персонажа') ? 'createCharacter.submitButton' : 'createCharacter.nextButton'}
+        testID='createCharacter.backButton'
       >
-        <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{nextLabel}</Text>
+        <Text style={styles.navButtonText}>Назад</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.navButton, styles.navButtonPrimary, isCreating ? styles.navButtonDisabled : null]}
+        onPress={footerAction}
+        disabled={isCreating}
+        android_ripple={{ color: colors.ripple }}
+        testID={step === TOTAL_CREATE_CHARACTER_STEPS ? 'createCharacter.submitButton' : 'createCharacter.nextButton'}
+      >
+        {isCreating ? <ActivityIndicator color={colors.background} /> : <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{footerLabel}</Text>}
       </Pressable>
     </View>
   );
 
-  const RacePicker = () => (
-    <>
-      <Text style={styles.label}>Раса</Text>
-      <Picker
-        selectedValue={isCustomRace ? 'custom' : raceKey}
-        style={styles.picker}
-        onValueChange={(value: string) => {
-          if (value === 'custom') {
-            setUseCustomRace(true);
-            return;
-          }
-          setUseCustomRace(false);
-          setRaceKey(value);
-          setSubraceKey('');
-        }}
-      >
-        {RACE_OPTIONS.map((rk) => (
-          <Picker.Item key={rk} label={RACES[rk].name} value={rk} />
-        ))}
-        <Picker.Item label='Своя раса…' value='custom' />
-      </Picker>
+  const renderStep = () => {
+    if (step === 1) return renderStartStep();
+    if (step === 2) return renderIdentityStep();
+    if (step === 3) return renderRaceClassBackgroundStep();
+    if (step === 4) return renderStatsStep();
+    if (step === 5) return renderCombatStep();
+    if (step === 6) return renderEquipmentStep();
+    if (step === 7) return renderMagicStep();
+    if (step === 8) return renderPersonalityStep();
+    if (step === 9) return renderHomebrewStep();
+    if (step === 10) return renderStorageStep();
+    return renderReviewStep();
+  };
 
-      {isCustomRace ? (
-        <>
-          <Text style={styles.label}>Назва власної раси</Text>
-          <TextInput style={styles.input} value={customRace} onChangeText={setCustomRace} />
-          <Text style={styles.label}>Підраса (необов’язково)</Text>
-          <TextInput style={styles.input} value={customSubrace} onChangeText={setCustomSubrace} />
-        </>
-      ) : (
-        <>
-          {!!SUBRACE_OPTIONS(raceKey).length && (
-            <>
-              <Text style={styles.label}>Підраса</Text>
-              <Picker selectedValue={subraceKey} style={styles.picker} onValueChange={(value: string) => setSubraceKey(value)}>
-                <Picker.Item label='(без підраси)' value='' />
-                {SUBRACE_OPTIONS(raceKey).map((sr) => (
-                  <Picker.Item key={sr} label={sr} value={sr} />
-                ))}
-              </Picker>
-            </>
-          )}
-          {!!(raceDef?.description || subraceDef?.description) && (
-            <View style={styles.infoBox}>
-              <Text style={styles.sectionHint}>{subraceDef?.description || raceDef?.description}</Text>
-            </View>
-          )}
-        </>
-      )}
+  const renderStartStep = () => (
+    <View style={styles.card}>
+      <Text style={styles.sectionTitle}>Як створити персонажа?</Text>
+      {START_OPTIONS.map((option) => (
+        <Pressable
+          key={option.id}
+          style={[styles.methodCard, draft.startMethod === option.id ? styles.methodCardActive : null]}
+          onPress={() => (option.id === 'import' ? onImport() : setDraft((prev) => applyStartMethod(prev, option.id)))}
+          disabled={isImporting && option.id === 'import'}
+          android_ripple={{ color: colors.ripple }}
+          testID={`createCharacter.start.${option.id}`}
+        >
+          <Text style={styles.methodTitle}>{option.title}</Text>
+          <Text style={styles.methodMeta}>{option.id === 'import' && isImporting ? 'Імпорт...' : option.description}</Text>
+        </Pressable>
+      ))}
+    </View>
+  );
 
-      {!isCustomRace && (subraceDef?.flexible || raceDef?.flexible) && (
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Гнучкі бонуси (+1/+1)</Text>
-          <View style={styles.toggleRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.helperText}>Перший бонус</Text>
-              <Picker selectedValue={flexPick1} style={styles.picker} onValueChange={(value: AbilityKey) => setFlexPick1(value)}>
-                {ABILITY_KEYS.map((ability) => (
-                  <Picker.Item key={ability} label={ABILITY_NAMES_UA[ability]} value={ability} />
-                ))}
-              </Picker>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.helperText}>Другий бонус</Text>
-              <Picker selectedValue={flexPick2} style={styles.picker} onValueChange={(value: AbilityKey) => setFlexPick2(value)}>
-                {ABILITY_KEYS.map((ability) => (
-                  <Picker.Item key={ability} label={ABILITY_NAMES_UA[ability]} value={ability} />
-                ))}
-              </Picker>
-            </View>
-          </View>
-          {!!raceDef?.flexible?.exclude?.length && (
-            <Text style={styles.helperText}>
-              Обмеження: {raceDef.flexible.exclude.map((key) => ABILITY_NAMES_UA[key]).join(', ')}
-            </Text>
+  const renderIdentityStep = () => (
+    <View style={styles.card}>
+      <Text style={styles.label}>Ім’я</Text>
+      <TextInput style={styles.input} value={draft.name} onChangeText={(value) => setTextField('name', value)} testID='createCharacter.nameInput' />
+
+      <Text style={styles.label}>Рівень</Text>
+      <TextInput style={styles.input} value={draft.level} onChangeText={(value) => setTextField('level', value)} keyboardType='numeric' />
+
+      <Text style={styles.label}>Портрет</Text>
+      <View style={styles.portraitRow}>
+        {draft.photoUri ? <Image source={{ uri: draft.photoUri }} style={styles.portrait} /> : <View style={styles.portraitPlaceholder} />}
+        <View style={styles.portraitActions}>
+          <Pressable style={styles.smallButton} onPress={pickPortrait} android_ripple={{ color: colors.ripple }}>
+            <Text style={styles.smallButtonText}>{draft.photoUri ? 'Змінити' : 'Додати'}</Text>
+          </Pressable>
+          {draft.photoUri && (
+            <Pressable style={styles.smallButton} onPress={() => updateDraft({ photoUri: undefined })} android_ripple={{ color: colors.ripple }}>
+              <Text style={styles.smallButtonText}>Прибрати</Text>
+            </Pressable>
           )}
         </View>
-      )}
-    </>
-  );
-  const ClassPicker = () => (
-    <>
-      <Text style={styles.label}>Клас</Text>
-      <Picker
-        selectedValue={selectedClass}
-        style={styles.picker}
-        onValueChange={(value: string) => {
-          setSelectedClass(value);
-          setSubclass('');
-          setCustomSubclass('');
-          setGearSelections([]);
-        }}
-      >
-        {CLASS_OPTIONS.map((option) => (
-          <Picker.Item key={option} label={CLASS_TRANSLATIONS[option] || option} value={option} />
-        ))}
-      </Picker>
+      </View>
 
-      {selectedClass === 'custom' ? (
-        <>
-          <Text style={styles.label}>Назва власного класу</Text>
-          <TextInput style={styles.input} value={customClassName} onChangeText={setCustomClassName} />
-          <Text style={styles.label}>Підклас (необов’язково)</Text>
-          <TextInput style={styles.input} value={customSubclass} onChangeText={setCustomSubclass} placeholder='Наприклад: Танцюрист тіней' />
-        </>
-      ) : (
-        <>
-          <Text style={styles.label}>Підклас</Text>
-          <Picker selectedValue={subclass} style={styles.picker} onValueChange={(value: string) => setSubclass(value)}>
-            <Picker.Item label='(без підкласу)' value='' />
-            {availableSubclasses.map((item) => (
-              <Picker.Item key={item} label={item} value={item} />
-            ))}
-          </Picker>
+      <Text style={styles.label}>Кампанія</Text>
+      <TextInput style={styles.input} value={draft.campaign} onChangeText={(value) => setTextField('campaign', value)} />
 
-          {!!classPreset && (
-            <View style={styles.infoBox}>
-              <Text style={styles.sectionHint}>Хіт-дайс: d{classPreset.hitDie}</Text>
-              <Text style={styles.sectionHint}>
-                Сейви: {classPreset.savingThrows.map((ability) => ABILITY_NAMES_UA[ability as AbilityKey]).join(', ')}
-              </Text>
-              <Text style={styles.sectionHint}>
-                Основні: {classPreset.primaryAbilities.map((ability) => ABILITY_NAMES_UA[ability as AbilityKey]).join(', ')}
-              </Text>
-              {!!classPreset.spellcastingAbility && (
-                <Text style={styles.sectionHint}>Маг. характеристика: {ABILITY_NAMES_UA[classPreset.spellcastingAbility as AbilityKey]}</Text>
-              )}
-              <Text style={styles.sectionHint}>Профіцієнсії: {classPreset.proficiencies.join(', ')}</Text>
-            </View>
-          )}
+      <Text style={styles.label}>Ім’я гравця</Text>
+      <TextInput style={styles.input} value={draft.playerName} onChangeText={(value) => setTextField('playerName', value)} />
 
-          {!!subDesc && (
-            <View style={styles.infoBox}>
-              <Text style={styles.sectionHint}>{subDesc}</Text>
-            </View>
-          )}
-        </>
-      )}
-    </>
-  );
-  const BackgroundPicker = () => (
-    <>
-      <Text style={styles.label}>Предісторія</Text>
-      <Picker selectedValue={backgroundKey} style={styles.picker} onValueChange={(value: string) => setBackgroundKey(value)}>
-        {BACKGROUNDS.map((item) => (
-          <Picker.Item key={item.key} label={item.name} value={item.key} />
-        ))}
-        <Picker.Item label='Своя історія…' value='custom' />
-      </Picker>
-
-      {backgroundKey === 'custom' ? (
-        <>
-          <Text style={styles.label}>Назва власної історії</Text>
-          <TextInput style={styles.input} value={customBackground} onChangeText={setCustomBackground} />
-        </>
-      ) : (
-        !!backgroundDef && (
-          <View style={styles.infoBox}>
-            <Text style={styles.sectionHint}>Навички: {backgroundDef.skills.join(', ')}</Text>
-            {!!backgroundDef.tools?.length && <Text style={styles.sectionHint}>Інструменти: {backgroundDef.tools.join(', ')}</Text>}
-            {!!backgroundDef.languages && <Text style={styles.sectionHint}>Мови: +{backgroundDef.languages}</Text>}
-            <Text style={styles.sectionHint}>
-              {backgroundDef.featureName}: {backgroundDef.featureDescription}
-            </Text>
-          </View>
-        )
-      )}
-    </>
+      <Text style={styles.label}>Нотатки</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.notes} onChangeText={(value) => setTextField('notes', value)} multiline />
+    </View>
   );
 
-  const GearPicker = () => {
-    if (selectedClass === 'custom') {
-      return (
-        <View style={styles.infoBox}>
-          <Text style={styles.label}>Стартове спорядження</Text>
-          <Text style={styles.sectionHint}>Проста зброя, Рюкзак мандрівника</Text>
-        </View>
-      );
-    }
-
-    if (!gearDef) return null;
+  const renderRaceClassBackgroundStep = () => {
+    const availableSubraces = draft.useCustomRace ? [] : SUBRACE_OPTIONS(draft.raceKey);
+    const availableSubclasses = draft.selectedClass === 'custom' ? [] : SUBCLASSES[draft.selectedClass] || [];
+    const backgroundDef = BACKGROUNDS.find((item) => item.key === draft.backgroundKey);
 
     return (
-      <View style={styles.infoBox}>
-        <Text style={styles.label}>Стартове спорядження</Text>
-        {!!gearDef.base.length && <Text style={styles.sectionHint}>Базово: {gearDef.base.join(', ')}</Text>}
+      <View style={styles.card}>
+        <Text style={styles.label}>Раса</Text>
+        <Picker
+          selectedValue={draft.useCustomRace ? 'custom' : draft.raceKey}
+          style={styles.picker}
+          onValueChange={(value: string) => {
+            if (value === 'custom') {
+              updateDraft({ useCustomRace: true, customRace: draft.customRace || 'Власна раса' });
+              return;
+            }
+            setDraft((prev) => applyDerivedDefaults({ ...prev, useCustomRace: false, raceKey: value, subraceKey: '', speed: '' }, { forceCombat: true }));
+          }}
+        >
+          {RACE_OPTIONS.map((key) => (
+            <Picker.Item key={key} label={RACES[key].name} value={key} />
+          ))}
+          <Picker.Item label='Власна раса...' value='custom' />
+        </Picker>
+        {draft.useCustomRace ? (
+          <>
+            <Text style={styles.label}>Власна раса</Text>
+            <TextInput style={styles.input} value={draft.customRace} onChangeText={(value) => setTextField('customRace', value)} />
+            <Text style={styles.label}>Власна підраса</Text>
+            <TextInput style={styles.input} value={draft.customSubrace} onChangeText={(value) => setTextField('customSubrace', value)} />
+          </>
+        ) : (
+          <>
+            {!!availableSubraces.length && (
+              <>
+                <Text style={styles.label}>Підраса</Text>
+                <Picker selectedValue={draft.subraceKey} style={styles.picker} onValueChange={(value: string) => updateDraft({ subraceKey: value })}>
+                <Picker.Item label='Без підраси' value='' />
+                  {availableSubraces.map((item) => (
+                    <Picker.Item key={item} label={item} value={item} />
+                  ))}
+                </Picker>
+              </>
+            )}
+          </>
+        )}
 
-        {gearDef.choices.map((choice, index) => {
-          const selectedIndex = gearSelections[index] ?? 0;
-          return (
-            <View key={`${choice.label}-${index}`}>
-              <Text style={styles.helperText}>{choice.label}</Text>
-              <Picker
-                selectedValue={String(selectedIndex)}
-                style={styles.picker}
-                onValueChange={(value: string) => {
-                  const parsed = Number.parseInt(value, 10) || 0;
-                  setGearSelections((prev) => {
-                    const next = prev.length ? [...prev] : gearDef.choices.map(() => 0);
-                    next[index] = parsed;
-                    return next;
-                  });
-                }}
-              >
-                {choice.options.map((option, optionIndex) => (
-                  <Picker.Item key={`${choice.label}-${optionIndex}`} label={option} value={String(optionIndex)} />
-                ))}
-              </Picker>
+        <Text style={styles.label}>Клас</Text>
+        <Picker
+          selectedValue={draft.selectedClass}
+          style={styles.picker}
+          onValueChange={(value: string) => {
+            const spellcastingAbility = CLASS_PRESETS[value]?.spellcastingAbility as AbilityKey | undefined;
+            setDraft((prev) =>
+              applyDerivedDefaults(
+                {
+                  ...prev,
+                  selectedClass: value,
+                  subclass: '',
+                  customSubclass: '',
+                  customClassName: value === 'custom' ? prev.customClassName : '',
+                  gearSelections: [],
+                  magicEnabled: Boolean(spellcastingAbility) || prev.magicEnabled,
+                  spellcastingAbility: spellcastingAbility || prev.spellcastingAbility,
+                },
+                { forceCombat: true, forceEquipment: true },
+              ),
+            );
+          }}
+        >
+          {CLASS_OPTIONS.map((key) => (
+            <Picker.Item key={key} label={CLASS_TRANSLATIONS[key] || key} value={key} />
+          ))}
+          <Picker.Item label='Власний клас...' value='custom' />
+        </Picker>
+        {draft.selectedClass === 'custom' ? (
+          <>
+            <Text style={styles.label}>Власний клас</Text>
+            <TextInput style={styles.input} value={draft.customClassName} onChangeText={(value) => setTextField('customClassName', value)} />
+            <Text style={styles.label}>Власний підклас</Text>
+            <TextInput style={styles.input} value={draft.customSubclass} onChangeText={(value) => setTextField('customSubclass', value)} />
+          </>
+        ) : (
+          <>
+            {!!availableSubclasses.length && (
+              <>
+                <Text style={styles.label}>Підклас</Text>
+                <Picker selectedValue={draft.subclass} style={styles.picker} onValueChange={(value: string) => updateDraft({ subclass: value })}>
+                  <Picker.Item label='Ще не обрано' value='' />
+                  {availableSubclasses.map((item) => (
+                    <Picker.Item key={item} label={item} value={item} />
+                  ))}
+                </Picker>
+              </>
+            )}
+          </>
+        )}
+
+        <Text style={styles.label}>Передісторія</Text>
+        <Picker
+          selectedValue={draft.backgroundKey}
+          style={styles.picker}
+          onValueChange={(value: string) => updateDraft({ backgroundKey: value })}
+        >
+          {BACKGROUNDS.map((item) => (
+            <Picker.Item key={item.key} label={item.name} value={item.key} />
+          ))}
+          <Picker.Item label='Власна предісторія...' value='custom' />
+        </Picker>
+        {draft.backgroundKey === 'custom' ? (
+          <>
+            <Text style={styles.label}>Власна передісторія</Text>
+            <TextInput style={styles.input} value={draft.customBackground} onChangeText={(value) => setTextField('customBackground', value)} />
+          </>
+        ) : (
+          backgroundDef && (
+            <View style={styles.infoBox}>
+              <Text style={styles.sectionHint}>Навички: {backgroundDef.skills.join(', ')}</Text>
+              {!!backgroundDef.tools?.length && <Text style={styles.sectionHint}>Інструменти: {backgroundDef.tools.join(', ')}</Text>}
+              {!!backgroundDef.languages && <Text style={styles.sectionHint}>Мови: +{backgroundDef.languages}</Text>}
+              <Text style={styles.sectionHint}>{derived.backgroundMechanics.featureText}</Text>
             </View>
-          );
-        })}
+          )
+        )}
       </View>
     );
   };
 
-  const pointBuyEditor = (
-    <View style={styles.infoBox}>
-      {ABILITY_KEYS.map((ability) => {
-        const value = pbStats[ability];
-        const spent = pointBuySpent;
-        const remaining = POINT_BUY_BUDGET - spent;
-        const nextCost = COST[Math.min(value + 1, POINT_BUY_MAX)] - COST[value];
-        const canIncrease = value < POINT_BUY_MAX && remaining >= nextCost;
-        const canDecrease = value > POINT_BUY_MIN;
+  const renderStatsStep = () => (
+    <View style={styles.card}>
+      <View style={styles.toggleRow}>
+        {(['array', 'pointbuy', 'manual', 'roll', 'random'] as const).map((method) => (
+          <Pressable
+            key={method}
+            style={[styles.toggleButton, draft.statMethod === method ? styles.toggleButtonActive : null]}
+            onPress={() => selectStatMethod(method)}
+            android_ripple={{ color: colors.ripple }}
+            testID={`createCharacter.statMethod.${method}`}
+          >
+            <Text style={[styles.toggleButtonText, draft.statMethod === method ? styles.toggleButtonTextActive : null]}>{STAT_METHOD_LABELS[method]}</Text>
+          </Pressable>
+        ))}
+      </View>
 
-        return (
-          <View key={ability} style={styles.statRow}>
-            <Text style={styles.statLabel}>{ABILITY_NAMES_UA[ability]}</Text>
-            <Pressable
-              style={[styles.statControl, !canDecrease ? styles.navButtonDisabled : null]}
-              onPress={() => canDecrease && setPbStats((prev) => ({ ...prev, [ability]: prev[ability] - 1 }))}
-              disabled={!canDecrease}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={styles.statControlText}>-</Text>
-            </Pressable>
-            <Text style={styles.statValue}>{value}</Text>
-            <Pressable
-              style={[styles.statControl, !canIncrease ? styles.navButtonDisabled : null]}
-              onPress={() => canIncrease && setPbStats((prev) => ({ ...prev, [ability]: prev[ability] + 1 }))}
-              disabled={!canIncrease}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={styles.statControlText}>+</Text>
-            </Pressable>
-          </View>
-        );
-      })}
-      <Text style={pointBuyValid ? styles.helperText : styles.warningText}>
-        Використано: {pointBuySpent}/{POINT_BUY_BUDGET}
-      </Text>
-    </View>
-  );
+      {draft.statMethod === 'pointbuy' && (
+        <Text style={derived.pointBuyValid ? styles.helperText : styles.warningText}>
+          Купівля балів: {derived.pointBuySpent}/{POINT_BUY_BUDGET}
+        </Text>
+      )}
+      {draft.statMethod === 'roll' && (
+        <Text style={styles.helperText}>Для кожної характеристики киньте 4d6 через DiceRoller. Найменший куб відкидається, три інші додаються.</Text>
+      )}
+      {draft.statMethod === 'random' && (
+        <View style={styles.infoBox}>
+          <Text style={styles.sectionHint}>Випадковий набір генерує всі шість характеристик за правилом 4d6 з відкиданням найменшого куба.</Text>
+          <Pressable style={styles.smallButton} onPress={generateRandomStats} android_ripple={{ color: colors.ripple }} testID='createCharacter.randomStatsButton'>
+            <Text style={styles.smallButtonText}>Згенерувати заново</Text>
+          </Pressable>
+        </View>
+      )}
 
-  const arrayEditor = (
-    <View style={styles.infoBox}>
       {ABILITY_KEYS.map((ability) => (
-        <View key={ability}>
-          <Text style={styles.helperText}>{ABILITY_NAMES_UA[ability]}</Text>
-          <TextInput
-            style={styles.input}
-            value={String(stats[ability])}
-            keyboardType='numeric'
-            onChangeText={(text) => {
-              const parsed = Number.parseInt(text || '0', 10);
-              setStats((prev) => ({ ...prev, [ability]: Number.isFinite(parsed) ? parsed : 8 }));
-            }}
-          />
+        <View key={ability} style={styles.statRow}>
+          <View style={styles.statLabelBlock}>
+            <Text style={styles.statLabel}>{ABILITY_NAMES_UA[ability]}</Text>
+            <Text style={styles.helperText}>
+              {derived.finalStats[ability]} ({formatAbilityModifier(derived.finalStats[ability])})
+            </Text>
+          </View>
+          {draft.statMethod === 'pointbuy' ? (
+            <View style={styles.stepper}>
+              <Pressable style={styles.statControl} onPress={() => adjustPointBuy(ability, -1)} android_ripple={{ color: colors.ripple }}>
+                <Text style={styles.statControlText}>-</Text>
+              </Pressable>
+              <Text style={styles.statValue}>{draft.pointBuyStats[ability]}</Text>
+              <Pressable style={styles.statControl} onPress={() => adjustPointBuy(ability, 1)} android_ripple={{ color: colors.ripple }}>
+                <Text style={styles.statControlText}>+</Text>
+              </Pressable>
+            </View>
+          ) : draft.statMethod === 'manual' ? (
+            <TextInput
+              style={[styles.input, styles.statInput]}
+              value={draft.manualStats[ability]}
+              onChangeText={(value) => updateDraft({ manualStats: { ...draft.manualStats, [ability]: value } })}
+              keyboardType='numeric'
+            />
+          ) : draft.statMethod === 'roll' ? (
+            <View style={styles.rollControl}>
+              <Text style={styles.statValue}>{draft.rollStats[ability] || '—'}</Text>
+              <Pressable style={styles.smallButton} onPress={() => rollSingleStat(ability)} android_ripple={{ color: colors.ripple }} testID={`createCharacter.rollStat.${ability}`}>
+                <Text style={styles.smallButtonText}>Кинути куби</Text>
+              </Pressable>
+            </View>
+          ) : draft.statMethod === 'random' ? (
+            <View style={styles.rollControl}>
+              <Text style={styles.statValue}>{draft.rollStats[ability] || '—'}</Text>
+              {!!draft.rollDetails[ability] && <Text style={styles.helperText}>{draft.rollDetails[ability]}</Text>}
+            </View>
+          ) : (
+            <Text style={styles.statValue}>{STANDARD_ARRAY[ability]}</Text>
+          )}
+          {draft.statMethod === 'roll' && !!draft.rollDetails[ability] && <Text style={styles.helperText}>{draft.rollDetails[ability]}</Text>}
         </View>
       ))}
     </View>
   );
-  return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps='handled' testID='createCharacter.screen'>
-      <View style={styles.progressRow}>
-        <Text style={styles.progressText}>
-          Крок {step}/{TOTAL_STEPS}
-        </Text>
-        <Text style={styles.progressText}>{startMethod === 'guided' ? 'Покроковий режим' : 'Швидкий старт'}</Text>
+
+  const selectStatMethod = (method: CreateCharacterDraft['statMethod']): void => {
+    if (method === 'random') {
+      const result = rollAllAbilityScores();
+      updateDraft({ statMethod: method, rollStats: result.stats, rollDetails: result.details });
+      return;
+    }
+    updateDraft({ statMethod: method });
+  };
+
+  const rollSingleStat = (ability: AbilityKey): void => {
+    const result = rollAbilityScore();
+    updateDraft({
+      statMethod: 'roll',
+      rollStats: { ...draft.rollStats, [ability]: String(result.total) },
+      rollDetails: { ...draft.rollDetails, [ability]: result.detail },
+    });
+  };
+
+  const generateRandomStats = (): void => {
+    const result = rollAllAbilityScores();
+    updateDraft({ statMethod: 'random', rollStats: result.stats, rollDetails: result.details });
+  };
+
+  const adjustPointBuy = (ability: AbilityKey, delta: number): void => {
+    const current = draft.pointBuyStats[ability];
+    updateDraft({ pointBuyStats: { ...draft.pointBuyStats, [ability]: Math.max(POINT_BUY_MIN, Math.min(POINT_BUY_MAX, current + delta)) } });
+  };
+
+  const renderCombatStep = () => (
+    <View style={styles.card}>
+      <View style={styles.infoBox}>
+        <Text style={styles.sectionHint}>Рекомендоване здоров’я: {derived.defaultHp}</Text>
+        <Text style={styles.sectionHint}>Рекомендовані кістки здоров’я: {derived.defaultHitDice}</Text>
+        <Text style={styles.sectionHint}>Рекомендована швидкість: {derived.defaultSpeed}</Text>
+        <Text style={styles.sectionHint}>Рекомендований бонус майстерності: +{derived.defaultProficiencyBonus}</Text>
       </View>
-      <Text style={styles.title}>{stepTitle}</Text>
 
-      {step === 1 && (
-        <View style={styles.card}>
-          <Header title='Оберіть стартовий метод' />
-          <Text style={styles.sectionHint}>Покроковий режим дає повний контроль. Швидкий старт оптимізує початок і зберігає 7-крокову структуру.</Text>
+      <Text style={styles.label}>Максимум здоров’я</Text>
+      <TextInput style={styles.input} value={draft.hpMax} onChangeText={(value) => setTextField('hpMax', value)} keyboardType='numeric' />
+      <Text style={styles.label}>Поточне здоров’я</Text>
+      <TextInput style={styles.input} value={draft.hpCurrent} onChangeText={(value) => setTextField('hpCurrent', value)} keyboardType='numeric' />
+      <Text style={styles.label}>Кістки здоров’я</Text>
+      <TextInput style={styles.input} value={draft.hitDice} onChangeText={(value) => setTextField('hitDice', value)} />
+      <Text style={styles.label}>Клас броні</Text>
+      <TextInput style={styles.input} value={draft.ac} onChangeText={(value) => setTextField('ac', value)} keyboardType='numeric' />
+      <Text style={styles.label}>Швидкість</Text>
+      <TextInput style={styles.input} value={draft.speed} onChangeText={(value) => setTextField('speed', value)} keyboardType='numeric' />
+      <Text style={styles.label}>Ініціатива</Text>
+      <TextInput style={styles.input} value={draft.initiative} onChangeText={(value) => setTextField('initiative', value)} keyboardType='numbers-and-punctuation' />
+      <Text style={styles.label}>Бонус майстерності</Text>
+      <TextInput style={styles.input} value={draft.proficiencyBonus} onChangeText={(value) => setTextField('proficiencyBonus', value)} keyboardType='numeric' />
 
+      <Text style={styles.label}>Володіння рятівними кидками</Text>
+      <View style={styles.chipsWrap}>
+        {ABILITY_KEYS.map((ability) => (
           <Pressable
-            style={[styles.methodCard, startMethod === 'guided' ? styles.methodCardActive : null]}
-            onPress={() => setStartMethod('guided')}
+            key={ability}
+            style={[styles.chip, draft.savingThrows[ability] ? styles.chipActive : null]}
+            onPress={() => updateDraft({ savingThrows: { ...draft.savingThrows, [ability]: !draft.savingThrows[ability] } })}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={styles.methodTitle}>Покроково (повний контроль)</Text>
-            <Text style={styles.methodMeta}>Повні підказки на кожному кроці, з ручним контролем параметрів.</Text>
+            <Text style={[styles.chipText, draft.savingThrows[ability] ? styles.chipTextActive : null]}>{ABILITY_SHORT[ability]}</Text>
           </Pressable>
+        ))}
+      </View>
+      <Pressable
+        style={styles.smallButton}
+        onPress={() => updateDraft({ savingThrows: createSavingThrowDefaults(draft.selectedClass) })}
+        android_ripple={{ color: colors.ripple }}
+      >
+        <Text style={styles.smallButtonText}>Взяти з класу</Text>
+      </Pressable>
+    </View>
+  );
 
-          <Pressable
-            style={[styles.methodCard, startMethod === 'quick' ? styles.methodCardActive : null]}
-            onPress={() => setStartMethod('quick')}
-            android_ripple={{ color: colors.ripple }}
-          >
-            <Text style={styles.methodTitle}>Швидко (швидкий старт)</Text>
-            <Text style={styles.methodMeta}>Рекомендовані дефолти для швидкого проходження кроків.</Text>
-          </Pressable>
-
-          <Header title='Шаблон персонажа' />
-          <Text style={styles.sectionHint}>Шаблон застосовується лише під час створення і залишається повністю редагованим.</Text>
-          {CHARACTER_TEMPLATE_PRESETS.map((template) => (
-            <Pressable
-              key={template.id}
-              style={[styles.methodCard, characterTemplateId === template.id ? styles.methodCardActive : null]}
-              onPress={() => setCharacterTemplateId(template.id)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={styles.methodTitle}>{template.title}</Text>
-              <Text style={styles.methodMeta}>{template.description}</Text>
-            </Pressable>
-          ))}
-
-          <StepNav onNext={goNextFromStep} nextLabel='До базових даних' />
-        </View>
-      )}
-
-      {step === 2 && (
-        <View style={styles.card}>
-          <Header title='Ім’я, рівень, раса' />
-          <Text style={styles.label}>Ім’я персонажа</Text>
-          <TextInput style={styles.input} value={name} onChangeText={setName} testID='createCharacter.nameInput' />
-
-          <Text style={styles.label}>Рівень</Text>
-          <TextInput style={styles.input} value={level} onChangeText={setLevel} keyboardType='numeric' />
-
-          <RacePicker />
-
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До класу' nextDisabled={!validateWizardStep(2, false)} />
-        </View>
-      )}
-
-      {step === 3 && (
-        <View style={styles.card}>
-          <Header title='Клас і підклас' />
-          <ClassPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До характеристик' nextDisabled={!validateWizardStep(3, false)} />
-        </View>
-      )}
-
-      {step === 4 && (
-        <View style={styles.card}>
-          <Header title='Характеристики' />
-          <Text style={styles.sectionHint}>
-            {startMethod === 'quick'
-              ? 'Швидкий старт: рекомендовано стандартний масив. За потреби перемкніться на розподіл балів.'
-              : 'Оберіть спосіб розподілу характеристик.'}
-          </Text>
-
-          <View style={styles.toggleRow}>
-            <Pressable
-              style={[styles.toggleButton, statMethod === 'array' ? styles.toggleButtonActive : null]}
-              onPress={() => setStatMethod('array')}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.toggleButtonText, statMethod === 'array' ? styles.toggleButtonTextActive : null]}>Стандартний масив</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.toggleButton, statMethod === 'pointbuy' ? styles.toggleButtonActive : null]}
-              onPress={() => setStatMethod('pointbuy')}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.toggleButtonText, statMethod === 'pointbuy' ? styles.toggleButtonTextActive : null]}>Розподіл балів (27)</Text>
-            </Pressable>
-          </View>
-
-          {statMethod === 'array' ? arrayEditor : pointBuyEditor}
-
-          <View style={styles.infoBox}>
-            <Text style={styles.label}>Фінальні характеристики (з расовими бонусами)</Text>
-            {ABILITY_KEYS.map((ability) => (
-              <Text key={ability} style={styles.sectionHint}>
-                {ABILITY_NAMES_UA[ability]}: {finalStats[ability]}
-              </Text>
+  const renderEquipmentStep = () => {
+    const gearDef = draft.selectedClass !== 'custom' ? CLASS_GEAR[draft.selectedClass] : undefined;
+    return (
+      <View style={styles.card}>
+        {!!gearDef && (
+          <>
+            <Text style={styles.sectionTitle}>Стартовий набір</Text>
+            {gearDef.choices.map((choice, index) => (
+              <View key={choice.label}>
+                <Text style={styles.label}>{choice.label}</Text>
+                <Picker
+                  selectedValue={draft.gearSelections[index] ?? 0}
+                  style={styles.picker}
+                  onValueChange={(value: number) => {
+                    const next = [...draft.gearSelections];
+                    next[index] = value;
+                    setDraft((prev) => applyDerivedDefaults({ ...prev, gearSelections: next }, { forceEquipment: true }));
+                  }}
+                >
+                  {choice.options.map((option, optionIndex) => (
+                    <Picker.Item key={option} label={option} value={optionIndex} />
+                  ))}
+                </Picker>
+              </View>
             ))}
-          </View>
-
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До передісторії' nextDisabled={!validateWizardStep(4, false)} />
-        </View>
-      )}
-
-      {step === 5 && (
-        <View style={styles.card}>
-          <Header title='Предісторія та стартовий інвентар' />
-          <BackgroundPicker />
-          <GearPicker />
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До збереження' nextDisabled={!validateWizardStep(5, false)} />
-        </View>
-      )}
-
-      {step === 6 && (
-        <View style={styles.card}>
-          <Header title='Збереження та шерінг' />
-          <Text style={styles.sectionHint}>Оберіть, як зберігати персонажа після створення.</Text>
-          <View style={styles.infoBox}>
-            <Text style={styles.sectionHint}>Локально: тільки цей пристрій, максимальна офлайн-надійність.</Text>
-            <Text style={styles.sectionHint}>Хмара: синхронізація між пристроями + ручний/авто статус синхронізації.</Text>
-            <Text style={styles.sectionHint}>Спільно: жива копія для DM/гравця з маркером джерела змін та легкою історією.</Text>
-          </View>
-
-          <View style={styles.toggleRow}>
-            <Pressable
-              style={[styles.toggleButton, storageMode === 'local-only' ? styles.toggleButtonActive : null]}
-              onPress={() => setStorageMode('local-only')}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.toggleButtonText, storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>Локально</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.toggleButton, storageMode === 'local-cloud' ? styles.toggleButtonActive : null]}
-              onPress={() => setStorageMode('local-cloud')}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.toggleButtonText, storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>Локально + Хмара</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.infoBox}>
-            <Text style={styles.sectionHint}>Авторизація хмари: {isSignedIn ? 'Підключено' : 'Не підключено'}</Text>
-            {!isSignedIn && storageMode === 'local-cloud' && <Text style={styles.warningText}>Для синхронізації з хмарою потрібно увійти через Google.</Text>}
-            {!isSignedIn && storageMode === 'local-cloud' && (
-              <Pressable
-                style={[styles.navButton, styles.navButtonPrimary, isSigningIn ? styles.navButtonDisabled : null]}
-                onPress={onLogin}
-                disabled={isSigningIn}
-                android_ripple={{ color: colors.ripple }}
-              >
-                {isSigningIn ? (
-                  <ActivityIndicator color={colors.background} />
-                ) : (
-                  <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>Увійти через Google</Text>
-                )}
-              </Pressable>
-            )}
-          </View>
-
-          <Text style={styles.label}>Запросити редактора (ел. пошта, необов’язково)</Text>
-          <TextInput
-            style={styles.input}
-            value={inviteEmail}
-            onChangeText={setInviteEmail}
-            autoCapitalize='none'
-            keyboardType='email-address'
-            placeholder='name@example.com'
-            placeholderTextColor={colors.textSecondary}
-            editable={storageMode === 'local-cloud'}
-          />
-          {storageMode === 'local-only' && <Text style={styles.helperText}>Шерінг доступний лише в режимі "Локально + Хмара".</Text>}
-
-          <StepNav showBack onNext={goNextFromStep} nextLabel='До перевірки' nextDisabled={!validateWizardStep(6, false)} />
-        </View>
-      )}
-
-      {step === 7 && (
-        <View style={styles.card}>
-          <Header title='Перевірка перед створенням' />
-
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Ім’я</Text>
-            <Text style={styles.summaryValue}>{name.trim() || '—'}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Рівень</Text>
-            <Text style={styles.summaryValue}>{level}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Раса</Text>
-            <Text style={styles.summaryValue}>{resolvedRace || '—'}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Клас</Text>
-            <Text style={styles.summaryValue}>{localizedClassName || '—'}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Предісторія</Text>
-            <Text style={styles.summaryValue}>{resolvedBackground || '—'}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Збереження</Text>
-            <Text style={styles.summaryValue}>{storageMode === 'local-only' ? 'Локально' : 'Локально + Хмара'}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Шаблон</Text>
-            <Text style={styles.summaryValue}>{characterTemplateId}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Запрошення</Text>
-            <Text style={styles.summaryValue}>{inviteEmail.trim() || '—'}</Text>
-          </View>
-
-          <View style={styles.infoBox}>
-            <Text style={styles.label}>Підказки щодо синхронізації</Text>
-            {reviewHints.map((line) => (
-              <Text key={line} style={styles.sectionHint}>
-                • {line}
-              </Text>
-            ))}
-          </View>
-
-          <View style={styles.infoBox}>
-            <Text style={styles.label}>Підсумок характеристик</Text>
-            <View style={styles.chipsWrap}>
-              {ABILITY_KEYS.map((ability) => (
-                <View key={ability} style={styles.chip}>
-                  <Text style={styles.chipText}>
-                    {ABILITY_NAMES_UA[ability]} {finalStats[ability]}
-                  </Text>
-                </View>
+            <View style={styles.infoBox}>
+              {derived.selectedGear.map((item) => (
+                <Text key={item} style={styles.sectionHint}>{item}</Text>
               ))}
             </View>
-          </View>
+          </>
+        )}
 
-          <StepNav
-            showBack
-            onNext={onCreate}
-            nextLabel={isCreating ? 'Створення…' : 'Створити персонажа'}
-            nextDisabled={isCreating}
-          />
+        <Text style={styles.label}>Зброя</Text>
+        <TextInput style={[styles.input, styles.multilineInput]} value={draft.weaponsText} onChangeText={(value) => setTextField('weaponsText', value)} multiline />
+        <Text style={styles.label}>Броня</Text>
+        <TextInput style={styles.input} value={draft.armor} onChangeText={(value) => setTextField('armor', value)} />
+        <Pressable style={[styles.toggleButton, draft.shield ? styles.toggleButtonActive : null]} onPress={() => updateDraft({ shield: !draft.shield })} android_ripple={{ color: colors.ripple }}>
+          <Text style={[styles.toggleButtonText, draft.shield ? styles.toggleButtonTextActive : null]}>Щит</Text>
+        </Pressable>
+        <Text style={styles.label}>Інструменти</Text>
+        <TextInput style={[styles.input, styles.multilineInput]} value={draft.toolsText} onChangeText={(value) => setTextField('toolsText', value)} multiline />
+        <View style={styles.threeColumnRow}>
+          <View style={styles.column}>
+            <Text style={styles.label}>Золото</Text>
+            <TextInput style={styles.input} value={draft.currencyGold} onChangeText={(value) => setTextField('currencyGold', value)} keyboardType='numeric' />
+          </View>
+          <View style={styles.column}>
+            <Text style={styles.label}>Срібло</Text>
+            <TextInput style={styles.input} value={draft.currencySilver} onChangeText={(value) => setTextField('currencySilver', value)} keyboardType='numeric' />
+          </View>
+          <View style={styles.column}>
+            <Text style={styles.label}>Мідь</Text>
+            <TextInput style={styles.input} value={draft.currencyCopper} onChangeText={(value) => setTextField('currencyCopper', value)} keyboardType='numeric' />
+          </View>
         </View>
+        <Text style={styles.label}>Додатковий стартовий набір</Text>
+        <TextInput style={[styles.input, styles.multilineInput]} value={draft.startingPack} onChangeText={(value) => setTextField('startingPack', value)} multiline />
+      </View>
+    );
+  };
+
+  const renderMagicStep = () => (
+    <View style={styles.card}>
+      <Pressable style={[styles.toggleButton, draft.magicEnabled ? styles.toggleButtonActive : null]} onPress={() => updateDraft({ magicEnabled: !draft.magicEnabled })} android_ripple={{ color: colors.ripple }}>
+        <Text style={[styles.toggleButtonText, draft.magicEnabled ? styles.toggleButtonTextActive : null]}>Магію увімкнено</Text>
+      </Pressable>
+      <Text style={styles.label}>Характеристика заклять</Text>
+      <Picker selectedValue={draft.spellcastingAbility} style={styles.picker} onValueChange={(value: AbilityKey) => updateDraft({ spellcastingAbility: value, spellSaveDC: '', spellAttackBonus: '' })}>
+        {ABILITY_KEYS.map((ability) => (
+          <Picker.Item key={ability} label={ABILITY_NAMES_UA[ability]} value={ability} />
+        ))}
+      </Picker>
+      <Text style={styles.label}>Складність рятівного кидка</Text>
+      <TextInput style={styles.input} value={draft.spellSaveDC} onChangeText={(value) => setTextField('spellSaveDC', value)} keyboardType='numeric' />
+      <Text style={styles.label}>Бонус атаки закляттям</Text>
+      <TextInput style={styles.input} value={draft.spellAttackBonus} onChangeText={(value) => setTextField('spellAttackBonus', value)} keyboardType='numbers-and-punctuation' />
+      <Text style={styles.label}>Замовляння</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.cantripsText} onChangeText={(value) => setTextField('cantripsText', value)} multiline />
+      <Text style={styles.label}>Відомі закляття</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.knownSpellsText} onChangeText={(value) => setTextField('knownSpellsText', value)} multiline />
+      <Text style={styles.label}>Підготовлені закляття</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.preparedSpellsText} onChangeText={(value) => setTextField('preparedSpellsText', value)} multiline />
+      <Text style={styles.label}>Комірки заклять</Text>
+      <TextInput style={styles.input} value={draft.spellSlotsText} onChangeText={(value) => setTextField('spellSlotsText', value)} placeholder='1:2, 2:1' placeholderTextColor={colors.textSecondary} />
+    </View>
+  );
+
+  const renderPersonalityStep = () => (
+    <View style={styles.card}>
+      <Text style={styles.label}>Світогляд</Text>
+      <TextInput style={styles.input} value={draft.alignment} onChangeText={(value) => setTextField('alignment', value)} />
+      <Text style={styles.label}>Ідеали</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.ideals} onChangeText={(value) => setTextField('ideals', value)} multiline />
+      <Text style={styles.label}>Прив’язаності</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.bonds} onChangeText={(value) => setTextField('bonds', value)} multiline />
+      <Text style={styles.label}>Вади</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.flaws} onChangeText={(value) => setTextField('flaws', value)} multiline />
+      <Text style={styles.label}>Передісторія</Text>
+      <TextInput style={[styles.input, styles.largeInput]} value={draft.backstory} onChangeText={(value) => setTextField('backstory', value)} multiline />
+    </View>
+  );
+
+  const renderHomebrewStep = () => (
+    <View style={styles.card}>
+      <Text style={styles.label}>Шаблон</Text>
+      <Picker selectedValue={draft.characterTemplateId} style={styles.picker} onValueChange={(value) => updateDraft({ characterTemplateId: value })}>
+        {CHARACTER_TEMPLATE_PRESETS.map((preset) => (
+          <Picker.Item key={preset.id} label={displayTemplateTitle(preset.id)} value={preset.id} />
+        ))}
+      </Picker>
+      <Text style={styles.label}>Власні поля</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customFieldsText} onChangeText={(value) => setTextField('customFieldsText', value)} multiline />
+      <Text style={styles.label}>Власні ресурси</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customResourcesText} onChangeText={(value) => setTextField('customResourcesText', value)} multiline />
+      <Text style={styles.label}>Власні секції</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customSectionsText} onChangeText={(value) => setTextField('customSectionsText', value)} multiline />
+      <Text style={styles.label}>Власні трекери</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customTrackersText} onChangeText={(value) => setTextField('customTrackersText', value)} multiline />
+      <Text style={styles.label}>Власні здібності</Text>
+      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customAbilitiesText} onChangeText={(value) => setTextField('customAbilitiesText', value)} multiline />
+    </View>
+  );
+
+  const renderStorageStep = () => (
+    <View style={styles.card}>
+      <Text style={styles.sectionHint}>Локальне створення працює завжди. Хмарна синхронізація додає доступ між пристроями та шерінг електронною поштою.</Text>
+      <View style={styles.toggleRow}>
+        <Pressable
+          style={[styles.toggleButton, draft.storageMode === 'local-only' ? styles.toggleButtonActive : null]}
+          onPress={() => updateDraft({ storageMode: 'local-only', shareTarget: 'none', inviteEmail: '' })}
+          android_ripple={{ color: colors.ripple }}
+        >
+          <Text style={[styles.toggleButtonText, draft.storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>Тільки локально</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.toggleButton, draft.storageMode === 'local-cloud' ? styles.toggleButtonActive : null, !isOnline ? styles.navButtonDisabled : null]}
+          onPress={() => {
+            if (isOnline) updateDraft({ storageMode: 'local-cloud' });
+          }}
+          disabled={!isOnline}
+          android_ripple={{ color: colors.ripple }}
+        >
+          <Text style={[styles.toggleButtonText, draft.storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>Локально + Хмара</Text>
+        </Pressable>
+      </View>
+      {!isOnline && <Text style={styles.warningText}>Офлайн: хмарне створення тимчасово недоступне.</Text>}
+      {draft.storageMode === 'local-cloud' && !isSignedIn && (
+        <Pressable style={styles.smallButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: colors.ripple }}>
+          <Text style={styles.smallButtonText}>{isSigningIn ? 'Вхід...' : 'Увійти через Google'}</Text>
+        </Pressable>
       )}
-    </ScrollView>
+      <Text style={styles.label}>Доступ</Text>
+      <View style={styles.toggleRow}>
+        {(['none', 'dm', 'player'] as const).map((target) => (
+          <Pressable
+            key={target}
+            style={[styles.toggleButton, draft.shareTarget === target ? styles.toggleButtonActive : null, draft.storageMode === 'local-only' && target !== 'none' ? styles.navButtonDisabled : null]}
+            onPress={() => {
+              if (draft.storageMode === 'local-only' && target !== 'none') return;
+              updateDraft({ shareTarget: target, inviteEmail: target === 'none' ? '' : draft.inviteEmail });
+            }}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={[styles.toggleButtonText, draft.shareTarget === target ? styles.toggleButtonTextActive : null]}>{target === 'none' ? 'Ні' : target === 'dm' ? 'Майстер' : 'Гравець'}</Text>
+          </Pressable>
+        ))}
+      </View>
+      {draft.shareTarget !== 'none' && (
+        <>
+          <Text style={styles.label}>Електронна пошта для доступу</Text>
+          <TextInput
+            style={styles.input}
+            value={draft.inviteEmail}
+            onChangeText={(value) => setTextField('inviteEmail', value)}
+            keyboardType='email-address'
+            autoCapitalize='none'
+            placeholder='name@example.com'
+            placeholderTextColor={colors.textSecondary}
+          />
+        </>
+      )}
+    </View>
+  );
+
+  const renderReviewStep = () => (
+    <View style={styles.card} testID='createCharacter.review'>
+      <Text style={styles.reviewName}>{draft.name.trim() || '—'}</Text>
+      <Text style={styles.sectionHint}>
+        {derived.resolvedRace || '—'} {displayClassName()} · Рівень {draft.level || '1'}
+      </Text>
+      <SummaryRow label='Здоров’я' value={draft.hpMax || String(derived.defaultHp)} />
+      <SummaryRow label='КБ' value={draft.ac || '10'} />
+      <SummaryRow label='СИЛ' value={formatAbilityModifier(derived.finalStats.strength)} />
+      <SummaryRow label='ХАР' value={formatAbilityModifier(derived.finalStats.charisma)} />
+      <SummaryRow label='Збереження' value={draft.storageMode === 'local-only' ? 'Локально' : 'Хмара'} />
+      <SummaryRow label='Доступ' value={draft.shareTarget === 'none' ? 'Ні' : `${draft.shareTarget === 'dm' ? 'Майстер' : 'Гравець'} ${draft.inviteEmail.trim() || ''}`.trim()} />
+      {derived.showMagic && <SummaryRow label='Складність заклять' value={draft.spellSaveDC || '—'} />}
+    </View>
+  );
+
+  const SummaryRow = ({ label, value }: { label: string; value: string }) => (
+    <View style={styles.summaryRow}>
+      <Text style={styles.summaryLabel}>{label}</Text>
+      <Text style={styles.summaryValue}>{value}</Text>
+    </View>
+  );
+
+  const displayClassName = (): string => {
+    if (draft.selectedClass === 'custom') return draft.customClassName.trim() || 'Власний клас';
+    return CLASS_TRANSLATIONS[draft.selectedClass] || draft.selectedClass;
+  };
+
+  const displayStartModeLabel = (): string => {
+    const option = START_OPTIONS.find((item) => item.id === draft.startMethod);
+    if (option) return option.title;
+    return displayTemplateTitle(draft.characterTemplateId);
+  };
+
+  const displayTemplateTitle = (templateId: string): string => {
+    switch (templateId) {
+      case 'standard-5e':
+        return 'Стандартний 5e';
+      case 'homebrew-light':
+        return 'Легкий хоумбрю';
+      case 'homebrew-heavy':
+        return 'Розширений хоумбрю';
+      case 'caster':
+        return 'Заклинач';
+      case 'martial':
+        return 'Воїн';
+      case 'custom-blank':
+        return 'Порожній шаблон';
+      default:
+        return 'Створення персонажа';
+    }
+  };
+
+  if (!isDraftLoaded) {
+    return (
+      <SafeAreaView style={styles.screen}>
+        <View style={styles.loadingState}>
+          <ActivityIndicator color={colors.text} />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.screen}>
+      <KeyboardAvoidingView style={styles.keyboardAvoider} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <View style={styles.shell}>
+          {renderHeader()}
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.content}
+            keyboardShouldPersistTaps='handled'
+            keyboardDismissMode='on-drag'
+            testID='createCharacter.screen'
+          >
+            {renderStep()}
+          </ScrollView>
+          {renderFooter()}
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 export default CreateCharacter;
-
-
-
-
-
