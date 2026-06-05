@@ -3,6 +3,7 @@ import { z } from 'zod';
 import type {
   CharacterEntity,
   Dnd5DamageType,
+  SpellComponents,
   SpellDamageProfile,
   SpellbookSpell,
   UpsertSpellbookSpellInput,
@@ -29,6 +30,48 @@ const SPELL_SOURCE: SpellbookSpell['source'][] = ['system', 'custom', 'imported'
 
 function normalizeSpellLevel(value: unknown, fallback = 1): number {
   return clampNumber(Math.floor(toNumber(value, fallback)), 0, 9);
+}
+
+function toBoolean(value: unknown, fallback = false): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  const normalized = toTrimmedString(value).toLowerCase();
+  if (['true', 'yes', 'y', '1', 'так'].includes(normalized)) return true;
+  if (['false', 'no', 'n', '0', 'ні'].includes(normalized)) return false;
+  return fallback;
+}
+
+function parseDelimitedStringArray(value: unknown): string[] {
+  if (typeof value === 'string') {
+    return Array.from(new Set(value
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean)));
+  }
+  return toStringArray(value, { dedupe: true });
+}
+
+function parseSpellComponents(raw: unknown): SpellComponents {
+  if (typeof raw === 'string') {
+    const text = raw.trim();
+    const normalized = text.toLowerCase();
+    const hasVerbal = /\bv\b/.test(normalized) || normalized.includes('verbal') || normalized.includes('словес');
+    const hasSomatic = /\bs\b/.test(normalized) || normalized.includes('somatic') || normalized.includes('жест');
+    const materialMatch = text.match(/\bM\b\s*[:(,-]?\s*(.*)$/i);
+    const explicitMaterial = materialMatch?.[1]?.replace(/[()]/g, '').trim() || '';
+    return {
+      verbal: hasVerbal,
+      somatic: hasSomatic,
+      material: explicitMaterial,
+    };
+  }
+
+  const cast = asRecord(raw);
+  return {
+    verbal: toBoolean(cast.verbal, false),
+    somatic: toBoolean(cast.somatic, false),
+    material: toTrimmedString(cast.material),
+  };
 }
 
 function normalizeDamageType(value: unknown): Dnd5DamageType {
@@ -94,8 +137,16 @@ function parseSpellbookSpell(raw: unknown, fallbackId?: string): SpellbookSpell 
     name,
     level: normalizeSpellLevel(cast.level, 1),
     school: toTrimmedString(cast.school) || 'Універсальна',
+    castingTime: toTrimmedString(cast.castingTime),
+    range: toTrimmedString(cast.range),
+    components: parseSpellComponents(cast.components),
+    duration: toTrimmedString(cast.duration),
     description: toString(cast.description, '').trim(),
+    higherLevels: toString(cast.higherLevels, '').trim(),
+    classes: parseDelimitedStringArray(cast.classes),
     tags: toStringArray(cast.tags, { dedupe: true }),
+    ritual: toBoolean(cast.ritual, false),
+    concentration: toBoolean(cast.concentration, false),
     damageProfiles: parseDamageProfiles(cast.damageProfiles),
     source,
     createdAt: toNumber(cast.createdAt, now),
@@ -144,8 +195,16 @@ function parseUpsertSpellInput(raw: unknown): UpsertSpellbookSpellInput {
     name: toTrimmedString(cast.name),
     level: normalizeSpellLevel(cast.level, 1),
     school: toTrimmedString(cast.school) || 'Власне',
+    castingTime: toTrimmedString(cast.castingTime),
+    range: toTrimmedString(cast.range),
+    components: parseSpellComponents(cast.components),
+    duration: toTrimmedString(cast.duration),
     description: toString(cast.description, '').trim(),
+    higherLevels: toString(cast.higherLevels, '').trim(),
+    classes: parseDelimitedStringArray(cast.classes),
     tags: parsedTags,
+    ritual: toBoolean(cast.ritual, false),
+    concentration: toBoolean(cast.concentration, false),
     damageProfiles: parseDamageProfiles(cast.damageProfiles).map((profile) => ({
       label: profile.label,
       formula: profile.formula,

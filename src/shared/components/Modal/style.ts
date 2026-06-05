@@ -44,14 +44,19 @@ StyleSheet.create({
   },
   content: {
     minHeight: 0,
+    flexShrink: 1,
     paddingTop: 16,
   },
   scrollArea: {
-    maxHeight: '100%',
+    flexShrink: 1,
     minHeight: 0,
   },
   scrollContent: {
     paddingBottom: 18,
+  },
+  actions: {
+    paddingTop: sp(10),
+    backgroundColor: c.card,
   },
   submit: {
     marginTop: sp(12),

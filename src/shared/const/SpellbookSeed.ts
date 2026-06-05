@@ -1,4 +1,4 @@
-import type { Dnd5DamageType, UpsertSpellbookSpellInput } from '@/types/Spellbook';
+import type { Dnd5DamageType, SpellComponents, UpsertSpellbookSpellInput } from '@/types/Spellbook';
 
 const d = (label: string, formula: string, damageType: Dnd5DamageType, condition?: string) => ({
   label,
@@ -7,7 +7,139 @@ const d = (label: string, formula: string, damageType: Dnd5DamageType, condition
   condition,
 });
 
-export const SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
+const DEFAULT_COMPONENTS: SpellComponents = { verbal: true, somatic: true, material: '' };
+
+const ARCANE_CLASSES = ['Wizard', 'Sorcerer'];
+const DIVINE_CLASSES = ['Cleric', 'Paladin'];
+const NATURE_CLASSES = ['Druid', 'Ranger'];
+
+const SPELL_METADATA: Record<string, Partial<UpsertSpellbookSpellInput>> = {
+  'Вогняна куля': {
+    castingTime: '1 дія',
+    range: '150 футів',
+    components: { verbal: true, somatic: true, material: 'крихітна кулька гуано кажана та сірка' },
+    duration: 'Миттєво',
+    higherLevels: '+1d6 урону за кожен слот вище 3 рівня.',
+    classes: ['Wizard', 'Sorcerer'],
+  },
+  Щит: {
+    castingTime: '1 реакція',
+    range: 'На себе',
+    components: { verbal: true, somatic: true, material: '' },
+    duration: '1 раунд',
+    classes: ['Wizard', 'Sorcerer'],
+  },
+  'Броня мага': {
+    castingTime: '1 дія',
+    range: 'Дотик',
+    components: { verbal: true, somatic: true, material: 'шматочок обробленої шкіри' },
+    duration: '8 годин',
+    classes: ['Wizard', 'Sorcerer'],
+  },
+  Поспіх: {
+    castingTime: '1 дія',
+    range: '30 футів',
+    duration: 'До 1 хвилини',
+    concentration: true,
+    classes: ['Wizard', 'Sorcerer'],
+  },
+  Політ: {
+    castingTime: '1 дія',
+    range: 'Дотик',
+    duration: 'До 10 хвилин',
+    concentration: true,
+    classes: ['Wizard', 'Sorcerer', 'Warlock'],
+  },
+  Невидимість: {
+    castingTime: '1 дія',
+    range: 'Дотик',
+    duration: 'До 1 години',
+    concentration: true,
+    higherLevels: 'Додаткова ціль за кожен слот вище 2 рівня.',
+    classes: ['Wizard', 'Sorcerer', 'Warlock', 'Bard'],
+  },
+  'Покращена невидимість': {
+    castingTime: '1 дія',
+    range: 'Дотик',
+    duration: 'До 1 хвилини',
+    concentration: true,
+    classes: ['Wizard', 'Sorcerer', 'Bard'],
+  },
+  'Охоронці духу': {
+    castingTime: '1 дія',
+    range: 'На себе',
+    duration: 'До 10 хвилин',
+    concentration: true,
+    classes: ['Cleric'],
+  },
+  'Місячний промінь': {
+    castingTime: '1 дія',
+    range: '120 футів',
+    duration: 'До 1 хвилини',
+    concentration: true,
+    classes: ['Druid'],
+  },
+  Телекінез: {
+    castingTime: '1 дія',
+    range: '60 футів',
+    duration: 'До 10 хвилин',
+    concentration: true,
+    classes: ['Wizard', 'Sorcerer'],
+  },
+  Поліморф: {
+    castingTime: '1 дія',
+    range: '60 футів',
+    duration: 'До 1 години',
+    concentration: true,
+    classes: ['Wizard', 'Sorcerer', 'Druid', 'Bard'],
+  },
+  Вигнання: {
+    castingTime: '1 дія',
+    range: '60 футів',
+    duration: 'До 1 хвилини',
+    concentration: true,
+    classes: ['Cleric', 'Paladin', 'Wizard', 'Sorcerer', 'Warlock'],
+  },
+  'Магічна рука': {
+    castingTime: '1 дія',
+    range: '30 футів',
+    duration: '1 хвилина',
+    classes: ['Wizard', 'Sorcerer', 'Warlock', 'Bard'],
+  },
+  'Мала ілюзія': {
+    castingTime: '1 дія',
+    range: '30 футів',
+    duration: '1 хвилина',
+    classes: ['Wizard', 'Sorcerer', 'Warlock', 'Bard'],
+  },
+};
+
+function inferSpellClasses(spell: UpsertSpellbookSpellInput): string[] {
+  const tags = new Set((spell.tags || []).map((tag) => tag.toLowerCase()));
+  if (tags.has('healing') || spell.name.includes('Священне') || spell.name.includes('Воскресіння')) return [...DIVINE_CLASSES, 'Druid'];
+  if (spell.name.includes('Місячний') || spell.name.includes('Землетрус')) return [...NATURE_CLASSES];
+  if (tags.has('radiant')) return ['Cleric', 'Paladin'];
+  if (tags.has('necrotic')) return ['Wizard', 'Warlock', 'Cleric'];
+  return ARCANE_CLASSES;
+}
+
+function withMetadata(spell: UpsertSpellbookSpellInput): UpsertSpellbookSpellInput {
+  const override = SPELL_METADATA[spell.name] || {};
+  return {
+    castingTime: '1 дія',
+    range: spell.level === 0 ? '60 футів' : '90 футів',
+    components: DEFAULT_COMPONENTS,
+    duration: 'Миттєво',
+    higherLevels: '',
+    classes: inferSpellClasses(spell),
+    ritual: false,
+    concentration: false,
+    ...spell,
+    ...override,
+  };
+}
+
+const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
   // Cantrips
   {
     name: 'Вогняний болт',
@@ -563,3 +695,5 @@ export const SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     tags: ['utility', 'legendary'],
   },
 ];
+
+export const SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = RAW_SPELLBOOK_SEED.map(withMetadata);

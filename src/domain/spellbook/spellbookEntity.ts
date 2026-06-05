@@ -22,13 +22,27 @@ export interface SpellDamageProfile {
   condition?: string;
 }
 
+export interface SpellComponents {
+  verbal: boolean;
+  somatic: boolean;
+  material: string;
+}
+
 export interface SpellbookSpell {
   id: string;
   name: string;
   level: number;
   school: string;
+  castingTime: string;
+  range: string;
+  components: SpellComponents;
+  duration: string;
   description: string;
+  higherLevels: string;
+  classes: string[];
   tags: string[];
+  ritual: boolean;
+  concentration: boolean;
   damageProfiles: SpellDamageProfile[];
   source: SpellbookSource;
   createdAt: number;
@@ -40,8 +54,16 @@ export interface UpsertSpellbookSpellInput {
   name: string;
   level?: number;
   school?: string;
+  castingTime?: string;
+  range?: string;
+  components?: SpellComponents | string;
+  duration?: string;
   description?: string;
+  higherLevels?: string;
+  classes?: string[] | string;
   tags?: string[];
+  ritual?: boolean;
+  concentration?: boolean;
   damageProfiles?: Array<Omit<SpellDamageProfile, 'id'> | SpellDamageProfile>;
 }
 

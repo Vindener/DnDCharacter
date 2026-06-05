@@ -273,7 +273,11 @@ const DM: React.FC = () => {
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до бестіарію</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openHeroesNested('Spellbook')} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => openHeroesNested('Spellbook', { mode: 'dm', quickView: true })}
+            android_ripple={{ color: colors.ripple }}
+          >
             <Ionicons name='book-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>Швидкий доступ до книги заклять</Text>
           </Pressable>

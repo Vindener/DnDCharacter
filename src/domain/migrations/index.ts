@@ -12,7 +12,9 @@ export type MigrationKind =
   | 'dmUserTemplates'
   | 'appRole'
   | 'spellbookSpells'
-  | 'spellbookFavorites';
+  | 'spellbookFavorites'
+  | 'spellbookPins'
+  | 'spellbookNotes';
 
 export type VersionedStorageEnvelope<T> = {
   schemaVersion: number;
@@ -225,7 +227,7 @@ function ensureStringArray(payload: unknown): string[] {
 }
 
 function stampPersistedSchemaVersion(kind: MigrationKind, payload: unknown): unknown {
-  if (kind === 'appRole' || kind === 'dmPins' || kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites') {
+  if (kind === 'appRole' || kind === 'dmPins' || kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites' || kind === 'spellbookPins' || kind === 'spellbookNotes') {
     return payload;
   }
 
@@ -242,9 +244,9 @@ function stampPersistedSchemaVersion(kind: MigrationKind, payload: unknown): unk
 
 function migrateKindV1toV2(kind: MigrationKind, payload: unknown): unknown {
   if (kind === 'character') return migrateCharacterV1toV2(payload);
-  if (kind === 'dmPins') return ensureStringArray(payload);
+  if (kind === 'dmPins' || kind === 'spellbookPins') return ensureStringArray(payload);
   if (kind === 'appRole') return normalizeAppRole(payload);
-  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites') {
+  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites' || kind === 'spellbookNotes') {
     return payload;
   }
   return payload;
@@ -252,9 +254,9 @@ function migrateKindV1toV2(kind: MigrationKind, payload: unknown): unknown {
 
 function migrateKindV2toV3(kind: MigrationKind, payload: unknown): unknown {
   if (kind === 'character') return migrateCharacterV2toV3(payload);
-  if (kind === 'dmPins') return ensureStringArray(payload);
+  if (kind === 'dmPins' || kind === 'spellbookPins') return ensureStringArray(payload);
   if (kind === 'appRole') return normalizeAppRole(payload);
-  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites') {
+  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites' || kind === 'spellbookNotes') {
     return payload;
   }
   return payload;

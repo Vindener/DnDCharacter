@@ -20,6 +20,8 @@ const KINDS: MigrationKind[] = [
   'appRole',
   'spellbookSpells',
   'spellbookFavorites',
+  'spellbookPins',
+  'spellbookNotes',
 ];
 
 function legacyPayload(kind: MigrationKind): unknown {
@@ -65,6 +67,10 @@ function legacyPayload(kind: MigrationKind): unknown {
       ];
     case 'spellbookFavorites':
       return ['spell-1'];
+    case 'spellbookPins':
+      return ['spell-1', 'spell-1', 'spell-2'];
+    case 'spellbookNotes':
+      return { 'spell-1': 'Counterspell trigger', 'spell-2': 'Boss opener' };
     default:
       return null;
   }
@@ -106,8 +112,8 @@ describe('domain/migrations', () => {
         expect(arr[0]?.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
       }
 
-      if (kind === 'dmPins') {
-        expect(migrated).toEqual(['m1', 'm2']);
+      if (kind === 'dmPins' || kind === 'spellbookPins') {
+        expect(migrated).toEqual(kind === 'dmPins' ? ['m1', 'm2'] : ['spell-1', 'spell-2']);
       }
     }
   });

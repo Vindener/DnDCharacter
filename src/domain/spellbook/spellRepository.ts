@@ -1,7 +1,7 @@
 import { uuid } from 'expo-modules-core';
 import { parseSpellUpsertInput } from '@/domain/schemas';
 import { spellMapper } from '@/domain/mappers';
-import type { SpellDamageProfile, SpellbookSpell, UpsertSpellbookSpellInput } from './spellbookEntity';
+import type { SpellComponents, SpellDamageProfile, SpellbookSpell, UpsertSpellbookSpellInput } from './spellbookEntity';
 import { normalizeSpellName } from './characterSpellAdapter';
 import { createSpellCloudRepository } from './spellCloudRepository';
 import { createSpellLocalRepository } from './spellLocalRepository';
@@ -9,12 +9,16 @@ import { createSpellLocalRepository } from './spellLocalRepository';
 export interface SpellbookState {
   spells: SpellbookSpell[];
   favoriteSpellIds: string[];
+  pinnedSpellIds: string[];
+  spellNotesById: Record<string, string>;
 }
 
 export interface SpellLocalRepository {
   loadSpellbookState: () => Promise<SpellbookState>;
   saveSpells: (spells: SpellbookSpell[]) => Promise<void>;
   saveFavoriteSpellIds: (favoriteSpellIds: string[]) => Promise<void>;
+  savePinnedSpellIds: (pinnedSpellIds: string[]) => Promise<void>;
+  saveSpellNotesById: (spellNotesById: Record<string, string>) => Promise<void>;
 }
 
 export interface SpellCloudRepository {
@@ -30,6 +34,8 @@ export interface SpellRepository {
   ) => Promise<{ state: SpellbookState; spell: SpellbookSpell | null }>;
   removeCustomSpell: (currentState: SpellbookState, spellId: string) => Promise<SpellbookState>;
   toggleFavorite: (currentState: SpellbookState, spellId: string) => Promise<SpellbookState>;
+  togglePinnedSpell: (currentState: SpellbookState, spellId: string) => Promise<SpellbookState>;
+  updateSpellNote: (currentState: SpellbookState, spellId: string, note: string) => Promise<SpellbookState>;
 }
 
 type SpellRepositoryOptions = {
@@ -41,6 +47,16 @@ function toDamageProfiles(
   input: SpellbookSpell['damageProfiles'] | Array<Omit<SpellDamageProfile, 'id'> | SpellDamageProfile>,
 ): SpellbookSpell['damageProfiles'] {
   return spellMapper.normalizeSpellbookDamageProfiles(input || []);
+}
+
+function normalizeInputComponents(value: UpsertSpellbookSpellInput['components'] | undefined, fallback: SpellComponents): SpellComponents {
+  if (!value || typeof value === 'string') return fallback;
+  return value;
+}
+
+function normalizeInputClasses(value: UpsertSpellbookSpellInput['classes'] | undefined, fallback: string[]): string[] {
+  if (!value || typeof value === 'string') return fallback;
+  return value;
 }
 
 async function safePush(cloudRepository: SpellCloudRepository, state: SpellbookState): Promise<void> {
@@ -98,10 +114,18 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
             name,
             level: normalizedInput.level ?? existing.level,
             school: String(normalizedInput.school || existing.school || 'Власне').trim() || 'Власне',
+            castingTime: normalizedInput.castingTime ?? existing.castingTime,
+            range: normalizedInput.range ?? existing.range,
+            components: normalizeInputComponents(normalizedInput.components, existing.components),
+            duration: normalizedInput.duration ?? existing.duration,
             description: String(normalizedInput.description || existing.description || '').trim(),
+            higherLevels: normalizedInput.higherLevels ?? existing.higherLevels,
+            classes: normalizeInputClasses(normalizedInput.classes, existing.classes),
             tags: Array.isArray(normalizedInput.tags)
               ? normalizedInput.tags.map((tag) => String(tag || '').trim()).filter(Boolean)
               : existing.tags,
+            ritual: normalizedInput.ritual ?? existing.ritual,
+            concentration: normalizedInput.concentration ?? existing.concentration,
             damageProfiles: toDamageProfiles(normalizedInput.damageProfiles ?? existing.damageProfiles),
             createdAt: now,
             updatedAt: now,
@@ -122,10 +146,18 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
           name,
           level: normalizedInput.level ?? existing.level,
           school: String(normalizedInput.school || existing.school || 'Універсальна').trim() || 'Універсальна',
+          castingTime: normalizedInput.castingTime ?? existing.castingTime,
+          range: normalizedInput.range ?? existing.range,
+          components: normalizeInputComponents(normalizedInput.components, existing.components),
+          duration: normalizedInput.duration ?? existing.duration,
           description: String(normalizedInput.description || existing.description || '').trim(),
+          higherLevels: normalizedInput.higherLevels ?? existing.higherLevels,
+          classes: normalizeInputClasses(normalizedInput.classes, existing.classes),
           tags: Array.isArray(normalizedInput.tags)
             ? normalizedInput.tags.map((tag) => String(tag || '').trim()).filter(Boolean)
             : existing.tags,
+          ritual: normalizedInput.ritual ?? existing.ritual,
+          concentration: normalizedInput.concentration ?? existing.concentration,
           damageProfiles: toDamageProfiles(normalizedInput.damageProfiles ?? existing.damageProfiles),
           updatedAt: Date.now(),
         });
@@ -163,11 +195,15 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
       const nextState: SpellbookState = {
         spells: currentState.spells.filter((spell) => spell.id !== spellId),
         favoriteSpellIds: currentState.favoriteSpellIds.filter((id) => id !== spellId),
+        pinnedSpellIds: currentState.pinnedSpellIds.filter((id) => id !== spellId),
+        spellNotesById: Object.fromEntries(Object.entries(currentState.spellNotesById).filter(([id]) => id !== spellId)),
       };
 
       await Promise.all([
         localRepository.saveSpells(nextState.spells),
         localRepository.saveFavoriteSpellIds(nextState.favoriteSpellIds),
+        localRepository.savePinnedSpellIds(nextState.pinnedSpellIds),
+        localRepository.saveSpellNotesById(nextState.spellNotesById),
       ]);
       await safePush(cloudRepository, nextState);
       return nextState;
@@ -186,6 +222,39 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
 
       await localRepository.saveFavoriteSpellIds(nextState.favoriteSpellIds);
       await safePush(cloudRepository, nextState);
+      return nextState;
+    },
+
+    togglePinnedSpell: async (currentState, spellId) => {
+      const current = currentState.pinnedSpellIds || [];
+      const pinnedSpellIds = current.includes(spellId)
+        ? current.filter((id) => id !== spellId)
+        : [spellId, ...current];
+
+      const nextState: SpellbookState = {
+        ...currentState,
+        pinnedSpellIds,
+      };
+
+      await localRepository.savePinnedSpellIds(nextState.pinnedSpellIds);
+      return nextState;
+    },
+
+    updateSpellNote: async (currentState, spellId, note) => {
+      const trimmed = String(note || '').trim();
+      const spellNotesById = { ...(currentState.spellNotesById || {}) };
+      if (trimmed) {
+        spellNotesById[spellId] = trimmed;
+      } else {
+        delete spellNotesById[spellId];
+      }
+
+      const nextState: SpellbookState = {
+        ...currentState,
+        spellNotesById,
+      };
+
+      await localRepository.saveSpellNotesById(nextState.spellNotesById);
       return nextState;
     },
   };

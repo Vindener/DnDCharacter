@@ -71,6 +71,7 @@ export default function Support() {
   };
 
   const openTelegram = () => openUrl('https://t.me/mythgatednd?direct');
+  const openTelegramNews = () => openUrl('https://t.me/mythgatednd');
 
   return (
     <View style={styles.screen}>
@@ -89,7 +90,7 @@ export default function Support() {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.title}>Криптогаманці</Text>
+          <Text style={styles.title}>Криптогаманець</Text>
           {cryptoWallets.map((w) => (
             <View key={w.label} style={{ marginTop: sp(10) }}>
               <Text style={[styles.text, { marginBottom: sp(6) }]}>{w.label}</Text>
@@ -100,6 +101,9 @@ export default function Support() {
 
         <View style={styles.card}>
           <Text style={styles.title}>Зворотній зв’язок</Text>
+          <TouchableOpacity onPress={openTelegramNews} style={styles.btn}>
+            <Text style={styles.btnText}>Канал новин в Telegram</Text>
+          </TouchableOpacity>
           <TextInput
             value={feedback}
             onChangeText={setFeedback}

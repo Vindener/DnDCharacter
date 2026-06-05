@@ -43,8 +43,12 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 
               keyboardShouldPersistTaps='handled'
             >
               {children}
-              {onSubmit ? <Button title='Зберегти' variant='primary' onPress={onSubmit} /> : null}
             </ScrollView>
+            {onSubmit ? (
+              <View style={styles.actions}>
+                <Button title='Зберегти' variant='primary' onPress={onSubmit} />
+              </View>
+            ) : null}
           </View>
         </View>
       </View>

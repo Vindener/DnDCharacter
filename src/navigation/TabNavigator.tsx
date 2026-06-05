@@ -12,6 +12,8 @@ import CreateCharacter from '@/screens/CreateCharacter/CreateCharacter';
 import { CharacterViewModel } from '@/types/Character';
 import Spellbook from '@/screens/Spellbook/Spellbook';
 
+export type SpellbookTabParam = 'all' | 'prepared' | 'known' | 'favorites' | 'custom';
+
 export type TabStackParamList = {
   Home: undefined;
   DiceRoller: undefined;
@@ -22,7 +24,13 @@ export type TabStackParamList = {
     character: CharacterViewModel;
   };
   CreateCharacter: undefined;
-  Spellbook: undefined;
+  Spellbook: {
+    characterId?: string;
+    initialTab?: SpellbookTabParam;
+    mode?: 'player' | 'dm';
+    initialSpellId?: string;
+    quickView?: boolean;
+  } | undefined;
   Settings: undefined;
 };
 

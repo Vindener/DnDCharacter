@@ -54,22 +54,25 @@ describe('domain/spellbook/characterSpellAdapter', () => {
     const base = createEmptyCharacter({
       class: 'Wizard',
       level: 3,
-      spells: { ...EMPTY_SPELLS },
+      spells: { ...EMPTY_SPELLS, spellSlots: { 1: { max: 4, used: 1 }, 2: { max: 2, used: 0 } } },
     });
 
     const known = applySpellStatus(base, 'Magic Missile', 'known');
     expect(known.spells.knownSpells).toContain('Magic Missile');
     expect(known.spells.preparedSpells).toEqual([]);
+    expect(known.spells.spellSlots).toEqual(base.spells.spellSlots);
 
     const prepared = applySpellStatus(known, 'Magic Missile', 'prepared', { preparedLimit: 1 });
     expect(prepared.spells.preparedSpells).toContain('Magic Missile');
     expect(prepared.spells.knownSpells).toContain('Magic Missile');
+    expect(prepared.spells.spellSlots).toEqual(base.spells.spellSlots);
 
     const blocked = applySpellStatus(prepared, 'Shield', 'prepared', { preparedLimit: 1 });
     expect(blocked).toBe(prepared);
 
     const cantrip = applySpellStatus(prepared, 'Light', 'cantrip');
     expect(cantrip.spells.cantrips).toContain('Light');
+    expect(cantrip.spells.spellSlots).toEqual(base.spells.spellSlots);
 
     const cleared = applySpellStatus(cantrip, 'Light', 'available');
     expect(cleared.spells.cantrips).not.toContain('Light');

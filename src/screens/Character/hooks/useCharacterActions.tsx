@@ -4,6 +4,8 @@ import { View, Text, Pressable, TextInput as RNTextInput } from 'react-native';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { getStyles } from '../style';
 import useThemeStore from '@/context/Theme-store';
 import type {
@@ -47,6 +49,7 @@ import { buildUploadPlan, reconcileRemoteSnapshot, resolveConflict, syncToCloud 
 import useSpellbookStore from '@/context/Spellbook-store';
 import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/domain/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { useQuickActions } from './useQuickActions';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { getStatusToneColors } from '@/shared/styles/statusTones';
@@ -308,6 +311,7 @@ function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
 }
 
 export function useCharacterActions({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
+  const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'Character'>>();
   const fallbackFromStore = useCharacterStore(selectActiveCharacter);
   const { lastSessionCharacterId } = useCharacterStore(useShallow(selectCharacterStoreBasics));
   const { setLastSessionCharacterId, updateCharacter } = useCharacterStore(useShallow(selectCharacterStoreActions));
@@ -1224,6 +1228,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setIsSpellQuickModalVisible(true);
   }, []);
 
+  const openPreparedSpellbook = useCallback(() => {
+    navigation.navigate('Spellbook', {
+      characterId: characterData.id,
+      initialTab: 'prepared',
+      mode: 'player',
+    });
+  }, [characterData.id, navigation]);
+
   const closeSpellQuickModal = useCallback(() => {
     setIsSpellQuickModalVisible(false);
     setQuickSpellSearch('');
@@ -2049,6 +2061,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.blockTextMuted}>Слоти не налаштовані</Text>
         )}
 
+        <Pressable style={styles.secondaryAction} onPress={openPreparedSpellbook} android_ripple={{ color: colors.ripple }}>
+          <Text style={styles.secondaryActionText}>Відкрити Spellbook</Text>
+        </Pressable>
+
         <Text style={styles.subSectionTitle}>Кидки заклять</Text>
         {magicCombatSpells.length ? (
           magicCombatSpells.map((spell) => {
@@ -2118,18 +2134,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
         {!collapsedSecondary.Magic && (
           <>
-            <Text style={styles.subSectionTitle}>Каніпси</Text>
-            <Text style={styles.blockText}>
-              {characterData.spells.cantrips.length ? characterData.spells.cantrips.join(', ') : 'Немає каніпсів'}
-            </Text>
             <Text style={styles.subSectionTitle}>Підготовлені закляття</Text>
             <Text style={styles.blockText}>
               {preparedSpellsLimit !== null ? `Ліміт: ${preparedSpellsCount}/${preparedSpellsLimit}. ` : ''}
               {characterData.spells.preparedSpells.length ? characterData.spells.preparedSpells.join(', ') : 'Немає підготовлених'}
-            </Text>
-            <Text style={styles.subSectionTitle}>Відомі закляття</Text>
-            <Text style={styles.blockText}>
-              {characterData.spells.knownSpells.length ? characterData.spells.knownSpells.join(', ') : 'Немає відомих'}
             </Text>
           </>
         )}

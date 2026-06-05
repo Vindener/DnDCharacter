@@ -75,6 +75,32 @@ export const getStyles = (c: ThemeColors) =>
     filtersBlock: {
       gap: sp(6),
     },
+    tabsRow: {
+      gap: sp(8),
+      paddingVertical: sp(2),
+    },
+    tabButton: {
+      borderRadius: rd(8),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      paddingHorizontal: sp(12),
+      paddingVertical: sp(8),
+      minWidth: sp(72),
+      alignItems: 'center',
+    },
+    tabButtonActive: {
+      backgroundColor: c.primary,
+      borderColor: c.primary,
+    },
+    tabButtonText: {
+      color: c.text,
+      fontSize: fs(12),
+      fontWeight: '700',
+    },
+    tabButtonTextActive: {
+      color: c.onPrimary,
+    },
     chipsRow: {
       gap: sp(8),
       paddingVertical: sp(2),
@@ -101,6 +127,25 @@ export const getStyles = (c: ThemeColors) =>
     },
     chipTextActive: {
       color: c.onPrimary,
+    },
+    activeFiltersRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: sp(8),
+    },
+    clearButton: {
+      borderRadius: rd(8),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.card,
+      paddingHorizontal: sp(10),
+      paddingVertical: sp(6),
+    },
+    clearButtonText: {
+      color: c.text,
+      fontSize: fs(12),
+      fontWeight: '700',
     },
     characterPickerBlock: {
       gap: sp(6),
@@ -150,6 +195,45 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: fs(13),
       lineHeight: 18,
     },
+    metadataGrid: {
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: sp(8),
+      paddingVertical: sp(7),
+      gap: sp(3),
+    },
+    metadataText: {
+      color: c.text,
+      fontSize: fs(12),
+      lineHeight: 17,
+    },
+    tagRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: sp(6),
+    },
+    smallTag: {
+      borderRadius: rd(999),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: sp(8),
+      paddingVertical: sp(5),
+    },
+    smallTagActive: {
+      borderColor: c.success,
+      backgroundColor: c.success,
+    },
+    smallTagText: {
+      color: c.text,
+      fontSize: fs(11),
+      fontWeight: '700',
+    },
+    smallTagTextActive: {
+      color: c.onPrimary,
+    },
     damageBlock: {
       borderRadius: rd(10),
       borderWidth: 1,
@@ -177,6 +261,12 @@ export const getStyles = (c: ThemeColors) =>
       flexDirection: 'row',
       flexWrap: 'wrap',
       gap: sp(6),
+    },
+    toggleRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: sp(8),
+      marginTop: sp(4),
     },
     statusButton: {
       borderRadius: rd(8),
