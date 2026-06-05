@@ -8,6 +8,9 @@ import { createDmStoreEffects } from '@/services/storeEffects/dmStoreEffects';
 export interface DmStore {
   monsters: MonsterDto[];
   pinnedMonsterIds: string[];
+  favoriteMonsterIds: string[];
+  isLoaded: boolean;
+  loadError: string | null;
   role: AppRole;
   userTemplates: ResourceTemplate[];
   loadMonsters: () => Promise<void>;
@@ -17,6 +20,7 @@ export interface DmStore {
   updateMonster: (id: string, monster: MonsterDto) => Promise<void>;
   removeMonster: (id: string) => Promise<void>;
   togglePinnedMonster: (id: string) => Promise<void>;
+  toggleFavoriteMonster: (id: string) => Promise<void>;
   clearPinnedMonsters: () => Promise<void>;
   setRole: (role: AppRole) => Promise<void>;
   loadRole: () => Promise<void>;
@@ -31,6 +35,9 @@ const useDmStore = create<DmStore>((set, get) => {
   return {
     monsters: [],
     pinnedMonsterIds: [],
+    favoriteMonsterIds: [],
+    isLoaded: false,
+    loadError: null,
     role: 'Hybrid',
     userTemplates: [],
     loadMonsters: effects.loadMonsters,
@@ -40,6 +47,7 @@ const useDmStore = create<DmStore>((set, get) => {
     updateMonster: effects.updateMonster,
     removeMonster: effects.removeMonster,
     togglePinnedMonster: effects.togglePinnedMonster,
+    toggleFavoriteMonster: effects.toggleFavoriteMonster,
     clearPinnedMonsters: effects.clearPinnedMonsters,
     setRole: effects.setRole,
     loadRole: effects.loadRole,

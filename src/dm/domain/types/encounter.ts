@@ -20,7 +20,16 @@ export interface EncounterPrepMonster {
   name: string;
   challenge: string;
   count: number;
+  hitPoints?: number;
   selected: boolean;
+}
+
+export interface EncounterPrepMonsterSeed {
+  monsterId?: string;
+  name: string;
+  challenge?: string;
+  count?: number;
+  hitPoints?: number;
 }
 
 export interface EncounterPrepDraft {

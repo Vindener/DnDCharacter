@@ -25,6 +25,7 @@ type DmStoreEffects = Pick<
   | 'updateMonster'
   | 'removeMonster'
   | 'togglePinnedMonster'
+  | 'toggleFavoriteMonster'
   | 'clearPinnedMonsters'
   | 'setRole'
   | 'loadRole'
@@ -35,6 +36,7 @@ type DmStoreEffects = Pick<
 
 const MONSTERS_STORAGE_KEY = 'monsters';
 const PINS_STORAGE_KEY = 'monster-pins';
+const FAVORITES_STORAGE_KEY = 'monster-favorites';
 const ROLE_STORAGE_KEY = 'APP_ROLE_MODE_V1';
 const USER_TEMPLATES_STORAGE_KEY = 'RESOURCE_USER_TEMPLATES_V1';
 
@@ -63,11 +65,16 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
   const saveMonsters: DmStore['saveMonsters'] = async (newMonsters) => {
     try {
       const existingPins = get().pinnedMonsterIds;
+      const existingFavorites = get().favoriteMonsterIds;
       const validPins = existingPins.filter((id) => newMonsters.some((monster) => monster.id === id));
+      const validFavorites = existingFavorites.filter((id) => newMonsters.some((monster) => monster.id === id));
       await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsters', newMonsters)));
       await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', validPins)));
-      set({ monsters: newMonsters, pinnedMonsterIds: validPins });
-    } catch (_error) { /* intentionally ignored */ }
+      await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsterFavorites', validFavorites)));
+      set({ monsters: newMonsters, pinnedMonsterIds: validPins, favoriteMonsterIds: validFavorites, isLoaded: true, loadError: null });
+    } catch (error) {
+      set({ loadError: error instanceof Error ? error.message : 'Не вдалося зберегти бестіарій.' });
+    }
   };
 
   return {
@@ -83,8 +90,21 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
         const pinsMigrated = normalizeStorageEnvelope<string[]>('dmPins', pinsParsed, []);
         const validPins = Array.isArray(pinsMigrated.data) ? pinsMigrated.data.filter(Boolean) : [];
         const nextPins = validPins.filter((id) => filtered.some((monster) => (monster as { id?: string }).id === id));
-        set({ monsters: filtered as DmStore['monsters'], pinnedMonsterIds: nextPins });
-      } catch (_error) { /* intentionally ignored */ }
+        const rawFavorites = await AsyncStorage.getItem(FAVORITES_STORAGE_KEY);
+        const favoritesParsed = parseStoredValue(rawFavorites);
+        const favoritesMigrated = normalizeStorageEnvelope<string[]>('dmMonsterFavorites', favoritesParsed, []);
+        const validFavorites = Array.isArray(favoritesMigrated.data) ? favoritesMigrated.data.filter(Boolean) : [];
+        const nextFavorites = validFavorites.filter((id) => filtered.some((monster) => (monster as { id?: string }).id === id));
+        set({
+          monsters: filtered as DmStore['monsters'],
+          pinnedMonsterIds: nextPins,
+          favoriteMonsterIds: nextFavorites,
+          isLoaded: true,
+          loadError: null,
+        });
+      } catch (error) {
+        set({ isLoaded: true, loadError: error instanceof Error ? error.message : 'Не вдалося завантажити бестіарій.' });
+      }
     },
 
     saveMonsters,
@@ -122,6 +142,17 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
       try {
         await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', nextPins)));
         set({ pinnedMonsterIds: nextPins });
+      } catch (_error) { /* intentionally ignored */ }
+    },
+
+    toggleFavoriteMonster: async (id) => {
+      const currentFavorites = get().favoriteMonsterIds;
+      const nextFavorites = currentFavorites.includes(id)
+        ? currentFavorites.filter((itemId) => itemId !== id)
+        : [id, ...currentFavorites];
+      try {
+        await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsterFavorites', nextFavorites)));
+        set({ favoriteMonsterIds: nextFavorites });
       } catch (_error) { /* intentionally ignored */ }
     },
 

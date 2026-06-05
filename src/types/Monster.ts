@@ -11,6 +11,17 @@ export interface MonsterDto {
   armorClass?: number;
   hitPoints?: number;
   speed?: string;
+  savingThrows?: string;
+  skills?: string;
+  senses?: string;
+  languages?: string;
+  traits?: string;
+  reactions?: string;
+  legendaryActions?: string;
+  mainAttack?: string;
+  attackBonus?: string;
+  damage?: string;
+  isCustom?: boolean;
   stats: {
     strength: number;
     dexterity: number;

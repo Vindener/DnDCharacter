@@ -25,12 +25,16 @@ vi.mock('@react-native-async-storage/async-storage', () => ({
 const ROLE_STORAGE_KEY = 'APP_ROLE_MODE_V1';
 const MONSTERS_STORAGE_KEY = 'monsters';
 const PINS_STORAGE_KEY = 'monster-pins';
+const FAVORITES_STORAGE_KEY = 'monster-favorites';
 const USER_TEMPLATES_STORAGE_KEY = 'RESOURCE_USER_TEMPLATES_V1';
 
 function createHarness() {
   let state: DmStore = {
     monsters: [],
     pinnedMonsterIds: [],
+    favoriteMonsterIds: [],
+    isLoaded: false,
+    loadError: null,
     role: 'Hybrid',
     userTemplates: [],
     loadMonsters: async () => {},
@@ -40,6 +44,7 @@ function createHarness() {
     updateMonster: async () => {},
     removeMonster: async () => {},
     togglePinnedMonster: async () => {},
+    toggleFavoriteMonster: async () => {},
     clearPinnedMonsters: async () => {},
     setRole: async () => {},
     loadRole: async () => {},
@@ -88,12 +93,55 @@ describe('dmStoreEffects migration pipeline', () => {
       ]),
     );
     storage.set(PINS_STORAGE_KEY, JSON.stringify(['monster-1', 'missing']));
+    storage.set(FAVORITES_STORAGE_KEY, JSON.stringify(['monster-1', 'missing']));
 
     const harness = createHarness();
     await harness.effects.loadMonsters();
 
     expect(harness.getState().monsters).toHaveLength(1);
     expect(harness.getState().pinnedMonsterIds).toEqual(['monster-1']);
+    expect(harness.getState().favoriteMonsterIds).toEqual(['monster-1']);
+    expect(harness.getState().isLoaded).toBe(true);
+  });
+
+  it('toggles favorite monsters and cleans favorites when a monster is removed', async () => {
+    const harness = createHarness();
+    await harness.effects.addMonster({
+      id: 'monster-1',
+      name: 'Goblin',
+      stats: { strength: 8, dexterity: 14, constitution: 10, intelligence: 8, wisdom: 8, charisma: 8 },
+    });
+
+    await harness.effects.toggleFavoriteMonster('monster-1');
+
+    expect(harness.getState().favoriteMonsterIds).toEqual(['monster-1']);
+    expect(storage.get(FAVORITES_STORAGE_KEY)).toContain('monster-1');
+
+    await harness.effects.removeMonster('monster-1');
+
+    expect(harness.getState().favoriteMonsterIds).toEqual([]);
+    expect(harness.getState().pinnedMonsterIds).toEqual([]);
+  });
+
+  it('saves custom monster combat metadata', async () => {
+    const harness = createHarness();
+    await harness.effects.addMonster({
+      id: 'custom-1',
+      name: 'Ash Goblin',
+      size: 'Small',
+      type: 'Humanoid',
+      mainAttack: 'Scimitar',
+      attackBonus: '+4',
+      damage: '1d6+2',
+      traits: 'Nimble Escape',
+      reactions: '',
+      legendaryActions: '',
+      isCustom: true,
+      stats: { strength: 8, dexterity: 14, constitution: 10, intelligence: 8, wisdom: 8, charisma: 8 },
+    });
+
+    expect(harness.getState().monsters[0].mainAttack).toBe('Scimitar');
+    expect(harness.getState().monsters[0].isCustom).toBe(true);
   });
 
   it('loads legacy user templates payload', async () => {

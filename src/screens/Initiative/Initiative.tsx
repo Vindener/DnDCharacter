@@ -15,7 +15,8 @@ interface InitiativeItem {
   id: string;
   name: string;
   roll: string;
-  hits?: string; 
+  hits?: string;
+  defeated?: boolean;
 }
 
 type Props = BottomTabScreenProps<AppStackParamList, 'Initiative'>;
@@ -44,8 +45,10 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
         name: String(entry.name || ''),
         roll: String(entry.roll || ''),
         hits: entry.hits,
+        defeated: false,
       })),
     );
+    setHitsEnabled(seed.entries.some((entry) => Boolean(entry.hits)));
     navigation.setParams({ seed: undefined });
   }, [navigation, route.params?.seed]);
 
@@ -77,6 +80,10 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, [key]: value } : it)));
   }, []);
 
+  const toggleDefeated = useCallback((id: string) => {
+    setItems((prev) => prev.map((it) => (it.id === id ? { ...it, defeated: !it.defeated, hits: it.defeated ? it.hits : '0' } : it)));
+  }, []);
+
   const toNonNegativeInt = (raw: string) => {
     const digits = raw.replace(/[^\d]/g, '');
     if (!digits) return '0';
@@ -94,7 +101,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
       const draggingStyle = isActive ? { shadowColor: colors.overlayStrong, shadowOpacity: 0.2, shadowRadius: 5, transform: [{ scale: 1.01 }] } : null;
 
       return (
-        <View style={[styles.row, draggingStyle]}>
+        <View style={[styles.row, item.defeated ? styles.rowDefeated : null, draggingStyle]}>
           <TouchableOpacity
             activeOpacity={1}
             onLongPress={() => {
@@ -107,6 +114,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
 
             <TextInput
               style={styles.inputName}
+              editable={!item.defeated}
               value={item.name}
               placeholder="Ім'я"
               onChangeText={(t) => handleChangeById(item.id, 'name', t)}
@@ -117,6 +125,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
 
             <TextInput
               style={styles.inputRoll}
+              editable={!item.defeated}
               value={item.roll}
               placeholder='Кидок'
               keyboardType='number-pad'
@@ -128,6 +137,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
             {hitsEnabled && (
               <TextInput
                 style={styles.inputHits}
+                editable={!item.defeated}
                 value={item.hits ?? '0'}
                 placeholder='ХП'
                 keyboardType='number-pad'
@@ -140,6 +150,16 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
             <View style={styles.moveButtons}>
               <Ionicons name='reorder-three-outline' size={24} color={colors.textSecondary} />
             </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => toggleDefeated(item.id)}
+            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+            style={styles.defeatedButton}
+            disabled={isActive}
+            accessibilityLabel={item.defeated ? 'Повернути в бій' : 'Позначити переможеним'}
+          >
+            <Ionicons name={item.defeated ? 'refresh-circle-outline' : 'skull-outline'} size={22} color={item.defeated ? colors.success : colors.textSecondary} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -157,20 +177,24 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
     [
       colors.danger,
       colors.overlayStrong,
+      colors.success,
       colors.textSecondary,
       editingId,
       handleChangeById,
       handleRemove,
       items,
       styles.row,
+      styles.rowDefeated,
       styles.rowContent,
       styles.order,
       styles.inputName,
       styles.inputRoll,
       styles.inputHits,
       styles.moveButtons,
+      styles.defeatedButton,
       styles.deleteButton,
       hitsEnabled,
+      toggleDefeated,
     ],
   );
 

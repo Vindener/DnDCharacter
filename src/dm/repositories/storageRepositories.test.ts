@@ -50,11 +50,13 @@ describe('dm/repositories storage migrations', () => {
       ]),
     );
     storage.set('monster-pins', JSON.stringify(['monster-1', 'missing']));
+    storage.set('monster-favorites', JSON.stringify(['monster-1', 'missing']));
 
     const next = await loadMonstersState();
 
     expect(next.monsters).toHaveLength(1);
     expect(next.pinnedMonsterIds).toEqual(['monster-1']);
+    expect(next.favoriteMonsterIds).toEqual(['monster-1']);
   });
 
   it('loads legacy user templates payload', async () => {

@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, InitiativeSeed } from '@/dm/domain/types';
+import type { DMCampaign, EncounterPrepMonsterSeed, InitiativeSeed } from '@/dm/domain/types';
 import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
 import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import useCharacterStore from '@/context/Character-store';
@@ -17,9 +17,11 @@ type Props = StackScreenProps<DMStackParamList, 'DMEncounterPrep'>;
 
 type EncounterMonster = {
   id: string;
+  monsterId?: string;
   name: string;
   challenge: string;
   count: number;
+  hitPoints?: number;
 };
 
 type PlayerSourceMode = 'campaign' | 'all';
@@ -40,6 +42,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, boolean>>({});
   const [monsterSearch, setMonsterSearch] = useState('');
   const [encounterMonsters, setEncounterMonsters] = useState<EncounterMonster[]>([]);
+  const consumedSeedKey = useRef('');
 
   useEffect(() => {
     void loadCharacters();
@@ -111,15 +114,22 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     }).slice(0, 24);
   }, [monsterSearch, monsters, pinnedMonsters]);
 
-  const addMonster = (name: string, challenge: string) => {
+  const addMonsterSeed = useCallback((seed: EncounterPrepMonsterSeed) => {
+    const name = seed.name || 'Монстр';
+    const challenge = seed.challenge || '0';
+    const count = Math.max(1, Number(seed.count) || 1);
+
     setEncounterMonsters((prev) => {
-      const existing = prev.find((item) => item.name === name && item.challenge === challenge);
+      const existing = prev.find((item) =>
+        seed.monsterId ? item.monsterId === seed.monsterId : item.name === name && item.challenge === challenge,
+      );
       if (existing) {
         return prev.map((item) =>
           item.id === existing.id
             ? {
                 ...item,
-                count: item.count + 1,
+                count: item.count + count,
+                hitPoints: item.hitPoints ?? seed.hitPoints,
               }
             : item,
         );
@@ -128,14 +138,25 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       return [
         ...prev,
         {
-          id: `${name}-${challenge}-${Date.now()}`,
+          id: `${seed.monsterId || name}-${challenge}-${Date.now()}`,
+          monsterId: seed.monsterId,
           name,
           challenge,
-          count: 1,
+          count,
+          hitPoints: seed.hitPoints,
         },
       ];
     });
-  };
+  }, []);
+
+  useEffect(() => {
+    const seeds = [route.params?.initialMonster, ...(route.params?.initialMonsters || [])].filter(Boolean) as EncounterPrepMonsterSeed[];
+    const seedKey = seeds.map((seed) => `${seed.monsterId || seed.name}:${seed.challenge || '0'}:${seed.count || 1}`).join('|');
+    if (!seedKey || consumedSeedKey.current === seedKey) return;
+    consumedSeedKey.current = seedKey;
+    seeds.forEach(addMonsterSeed);
+    navigation.setParams({ initialMonster: undefined, initialMonsters: undefined });
+  }, [addMonsterSeed, navigation, route.params?.initialMonster, route.params?.initialMonsters]);
 
   const removeMonster = (id: string) => {
     setEncounterMonsters((prev) => prev.filter((item) => item.id !== id));
@@ -169,7 +190,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
           id: `monster-${monster.id}-${index}`,
           name: monster.name || 'Монстр',
           roll: '',
-          hits: '',
+          hits: monster.hitPoints ? String(monster.hitPoints) : '',
         });
       }
     });
@@ -250,7 +271,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             >
               <Text style={styles.updateTitle}>{player.name || 'Персонаж'} {selected ? '• Обрано' : ''}</Text>
               <Text style={styles.updateMeta}>Кампанія: {campaignLabel}</Text>
-              <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • HP {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
+            <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • ХП {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
             </Pressable>
           );
         })}
@@ -270,11 +291,19 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
           <Pressable
             key={monster.id}
             style={styles.updateRow}
-            onPress={() => addMonster(monster.name || 'Монстр', monster.challenge || '0')}
+            onPress={() =>
+              addMonsterSeed({
+                monsterId: monster.id,
+                name: monster.name || 'Монстр',
+                challenge: monster.challenge || '0',
+                count: 1,
+                hitPoints: monster.hitPoints,
+              })
+            }
             android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.updateTitle}>{monster.name || 'Монстр'}</Text>
-            <Text style={styles.updateMeta}>CR {monster.challenge || '0'} • {monster.type || 'Невідомий тип'}</Text>
+            <Text style={styles.updateMeta}>Скл. {monster.challenge || '0'} • {monster.type || 'Невідомий тип'}</Text>
           </Pressable>
         ))}
       </View>
@@ -285,7 +314,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         {encounterMonsters.map((monster) => (
           <View key={monster.id} style={styles.updateRow}>
             <Text style={styles.updateTitle}>{monster.name}</Text>
-            <Text style={styles.updateMeta}>CR {monster.challenge} • Count {monster.count}</Text>
+            <Text style={styles.updateMeta}>Скл. {monster.challenge} • К-сть {monster.count} • ХП {monster.hitPoints ?? '—'}</Text>
             <View style={styles.laneGrid}>
               <Pressable
                 style={styles.laneButton}
@@ -323,8 +352,8 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.title}>Оцінка складності</Text>
         <Text style={styles.updateMeta}>Кампанія: {selectedCampaign?.name || '—'}</Text>
         <Text style={styles.updateMeta}>Складність: {encounterResult.difficulty}</Text>
-        <Text style={styles.updateMeta}>Скоригований XP: {encounterResult.adjustedXP}</Text>
-        <Text style={styles.updateMeta}>XP на гравця: {encounterResult.xpPerPlayer}</Text>
+        <Text style={styles.updateMeta}>Скоригований досвід: {encounterResult.adjustedXP}</Text>
+        <Text style={styles.updateMeta}>Досвід на гравця: {encounterResult.xpPerPlayer}</Text>
 
         <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>Почати ініціативу</Text>

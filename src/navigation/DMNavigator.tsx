@@ -10,6 +10,7 @@ import DMQuickEdit from '@/screens/DM/DMQuickEdit';
 import DMCampaignNotes from '@/screens/DM/DMCampaignNotes';
 import DMEncounterPrep from '@/screens/DM/DMEncounterPrep';
 import Header from '@/modules/Header/Header';
+import type { EncounterPrepMonsterSeed } from '@/dm/domain/types';
 
 export type DMStackParamList = {
   DMHome: undefined;
@@ -19,7 +20,7 @@ export type DMStackParamList = {
   DMPartyOverview: undefined;
   DMQuickEdit: { characterId: string };
   DMCampaignNotes: { campaignId?: string } | undefined;
-  DMEncounterPrep: { campaignId?: string } | undefined;
+  DMEncounterPrep: { campaignId?: string; initialMonster?: EncounterPrepMonsterSeed; initialMonsters?: EncounterPrepMonsterSeed[] } | undefined;
 };
 
 const Stack = createStackNavigator<DMStackParamList>();

@@ -11,6 +11,9 @@ export const getStyles = (c: ThemeColors) =>
       marginBottom: sp(8),
       height: 56,
     },
+    rowDefeated: {
+      opacity: 0.55,
+    },
     rowContent: { flexDirection: 'row', alignItems: 'center', flex: 1 },
     order: { color: c.text, width: 24, textAlign: 'center' },
     inputName: {
@@ -40,6 +43,10 @@ export const getStyles = (c: ThemeColors) =>
       marginLeft: sp(8),
     },
     moveButtons: { flexDirection: 'row', marginLeft: sp(8) },
+    defeatedButton: {
+      padding: sp(8),
+      marginLeft: sp(4),
+    },
     deleteButton: {
       padding: sp(8),
       marginLeft: sp(8),
