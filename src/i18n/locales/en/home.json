@@ -1,0 +1,58 @@
+{
+  "title": "My Characters",
+  "subtitle": "Quick access to characters, sessions, and sync.",
+  "actions": {
+    "createCharacter": "Create Character",
+    "openDice": "Roll Dice",
+    "openSpellbook": "Spells",
+    "openBestiary": "Bestiary",
+    "openDmTools": "DM Tools",
+    "continueSession": "Continue Session",
+    "openSheet": "Open Sheet",
+    "cloudLogin": "Sign in for Cloud"
+  },
+  "sections": {
+    "recentCharacters": "Recent Characters",
+    "localCharacters": "Local Characters",
+    "cloudCharacters": "Cloud Characters",
+    "sharedCharacters": "Shared Characters",
+    "quickActions": "Quick Actions",
+    "characters": "Characters"
+  },
+  "empty": {
+    "characters": "You do not have any characters yet.",
+    "shared": "No shared characters.",
+    "cloud": "No cloud characters.",
+    "firstCharacterTitle": "Create your first character",
+    "firstCharacterHint": "Start with a local character. Sync and sharing can be enabled later.",
+    "noCharactersTitle": "No characters yet",
+    "noCharactersHint": "Home becomes a quick start once the first sheet exists."
+  },
+  "hero": {
+    "continueGame": "Continue Game",
+    "mode": "Mode: {{role}} · {{name}}"
+  },
+  "characters": {
+    "readyCount": "{{count}} ready to play",
+    "none": "No characters",
+    "level": "Level {{level}}",
+    "shortLevel": "Lvl. {{level}}",
+    "health": "Health",
+    "ac": "AC",
+    "initiative": "Initiative",
+    "continueMeta": "Health {{current}}/{{max}} · AC {{ac}} · {{sync}}"
+  },
+  "syncStrip": {
+    "errorTitle": "Loading Error",
+    "conflictTitle": "Conflict Detected",
+    "pendingTitle": "Offline Changes Pending",
+    "syncedTitle": "Synced",
+    "cloudConnected": "Cloud connected",
+    "cloudNeedsLogin": "Cloud: sign-in required",
+    "lastSync": "Sync: {{value}}",
+    "pending": "Offline changes pending: {{count}}",
+    "noPending": "No local queue",
+    "conflicts": "Conflicts detected: {{count}}",
+    "noConflicts": "No conflicts"
+  }
+}

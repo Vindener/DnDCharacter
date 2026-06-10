@@ -1,0 +1,36 @@
+{
+  "title": "Settings",
+  "appearance": {
+    "title": "Appearance",
+    "darkTheme": "Dark theme"
+  },
+  "account": {
+    "title": "Account",
+    "hint": "Sync and backup through your Google account.",
+    "signInWithGoogle": "Sign in with Google",
+    "signedInAs": "Signed in as",
+    "signOut": "Sign Out"
+  },
+  "language": {
+    "title": "Language",
+    "hint": "Choose the app interface language.",
+    "ukrainian": "Українська",
+    "english": "English"
+  },
+  "customCoins": {
+    "title": "Custom Coins",
+    "hint": "Add your own denominations for inventory and campaign economy.",
+    "add": "Add Coin",
+    "empty": "No custom coins yet",
+    "newCoin": "New Coin",
+    "name": "Name",
+    "namePlaceholder": "E.g., Platinum",
+    "code": "Code",
+    "codePlaceholder": "E.g., PLT"
+  },
+  "bestiary": {
+    "title": "Bestiary",
+    "hint": "Import a monster book file into the local database.",
+    "importBook": "Import Book"
+  }
+}

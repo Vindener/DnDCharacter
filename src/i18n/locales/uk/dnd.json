@@ -1,0 +1,44 @@
+{
+  "abilities": {
+    "strength": "Сила",
+    "dexterity": "Спритність",
+    "constitution": "Статура",
+    "intelligence": "Інтелект",
+    "wisdom": "Мудрість",
+    "charisma": "Харизма"
+  },
+  "abilityShort": {
+    "strength": "СИЛ",
+    "dexterity": "СПР",
+    "constitution": "СТА",
+    "intelligence": "ІНТ",
+    "wisdom": "МУД",
+    "charisma": "ХАР"
+  },
+  "classes": {
+    "barbarian": "Варвар",
+    "bard": "Бард",
+    "cleric": "Клірик",
+    "druid": "Друїд",
+    "fighter": "Боєць",
+    "monk": "Монах",
+    "paladin": "Паладин",
+    "ranger": "Рейнджер",
+    "rogue": "Розбійник",
+    "sorcerer": "Чародій",
+    "warlock": "Чаклун",
+    "wizard": "Чарівник",
+    "artificer": "Артифісер",
+    "custom": "Власний клас"
+  },
+  "schools": {
+    "abjuration": "Огородження",
+    "conjuration": "Виклик",
+    "divination": "Віщування",
+    "enchantment": "Причарування",
+    "evocation": "Втілення",
+    "illusion": "Ілюзія",
+    "necromancy": "Некромантія",
+    "transmutation": "Перетворення"
+  }
+}

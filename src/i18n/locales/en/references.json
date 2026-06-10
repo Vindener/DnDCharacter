@@ -1,0 +1,31 @@
+{
+  "title": "References",
+  "hint": "Quick access to game references for players and DMs.",
+  "soon": "Soon",
+  "entries": {
+    "bestiary": {
+      "title": "Bestiary",
+      "description": "Monsters, filters, pinned entries, and encounter prep."
+    },
+    "spellbook": {
+      "title": "Spellbook",
+      "description": "Spell search, favorites, custom entries, and DM notes."
+    },
+    "items": {
+      "title": "Items",
+      "description": "Magic items, equipment, and quick notes."
+    },
+    "conditions": {
+      "title": "Conditions",
+      "description": "Effects, advantages, limits, and rules reminders."
+    },
+    "rules": {
+      "title": "Rules",
+      "description": "Quick rules for combat, rests, checks, and actions."
+    },
+    "classes": {
+      "title": "Classes and Origins",
+      "description": "Class features, races, backgrounds, and character growth."
+    }
+  }
+}

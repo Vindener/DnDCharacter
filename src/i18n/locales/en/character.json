@@ -1,0 +1,15 @@
+{
+  "title": "Character Sheet",
+  "modes": {
+    "play": "Play",
+    "edit": "Edit"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "combat": "Combat",
+    "magic": "Magic",
+    "inventory": "Inventory",
+    "notes": "Notes",
+    "homebrew": "Homebrew"
+  }
+}

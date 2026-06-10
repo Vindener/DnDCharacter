@@ -1,0 +1,12 @@
+{
+  "title": "Створити персонажа",
+  "steps": {
+    "start": "Старт",
+    "identity": "Основа",
+    "stats": "Характеристики",
+    "gameplay": "Ігрові дані",
+    "homebrew": "Homebrew",
+    "storage": "Збереження",
+    "review": "Перевірка"
+  }
+}

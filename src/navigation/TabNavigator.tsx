@@ -1,6 +1,7 @@
 import React, { JSX, useEffect, useRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainerRef, StackActions, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import Character from '../screens/Character/Character';
 import DiceRoller from '../screens/DiceRoller/DiceRoller';
@@ -30,6 +31,7 @@ export type TabStackParamList = {
 const Stack = createStackNavigator<TabStackParamList>();
 
 export default function TabNavigator(): JSX.Element {
+  const { t } = useTranslation('navigation');
   const navigation = useNavigation();
   const stackRef = useRef<NavigationContainerRef<TabStackParamList>>(null);
 
@@ -43,13 +45,12 @@ export default function TabNavigator(): JSX.Element {
   return (
     <Stack.Navigator id={undefined}>
       <Stack.Screen name='Home' component={Home} options={{ header: () => <Header /> }} />
-      <Stack.Screen name='DiceRoller' component={DiceRoller} options={{ title: 'Кидок кубика' }} />
-      <Stack.Screen name='Dice' component={Dice} options={{ title: 'Кидок' }} />
-      <Stack.Screen name='Character' component={Character} options={{ title: 'Лист персонажа' }} />
-      <Stack.Screen name='CreateCharacter' component={CreateCharacter} options={{ title: 'Створити персонажа' }} />
-      <Stack.Screen name='Spellbook' component={Spellbook} options={{ title: 'Книга заклять' }} />
-      <Stack.Screen name='Settings' component={Settings} options={{ title: 'Налаштування', header: () => <Header /> }} />
+      <Stack.Screen name='DiceRoller' component={DiceRoller} options={{ title: t('diceRoller') }} />
+      <Stack.Screen name='Dice' component={Dice} options={{ title: t('dice') }} />
+      <Stack.Screen name='Character' component={Character} options={{ title: t('characterSheet') }} />
+      <Stack.Screen name='CreateCharacter' component={CreateCharacter} options={{ title: t('createCharacter') }} />
+      <Stack.Screen name='Spellbook' component={Spellbook} options={{ title: t('spellbook') }} />
+      <Stack.Screen name='Settings' component={Settings} options={{ title: t('settings'), header: () => <Header /> }} />
     </Stack.Navigator>
   );
 }
-

@@ -1,0 +1,15 @@
+{
+  "title": "Лист персонажа",
+  "modes": {
+    "play": "Гра",
+    "edit": "Редагування"
+  },
+  "tabs": {
+    "overview": "Огляд",
+    "combat": "Бій",
+    "magic": "Магія",
+    "inventory": "Інвентар",
+    "notes": "Нотатки",
+    "homebrew": "Homebrew"
+  }
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Pressable, Image } from 'react-native';
 import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import type { AppStackParamList } from '@/navigation/AppNavigator';
@@ -12,6 +13,7 @@ import { Text } from '@/shared/ui';
 type Navigation = StackNavigationProp<AppStackParamList & TabStackParamList>;
 
 const Header = () => {
+  const { t } = useTranslation('navigation');
   const navigation = useNavigation<Navigation>();
   const route = useRoute();
   const colors = useThemeStore((s) => s.colors);
@@ -23,21 +25,21 @@ const Header = () => {
   const getTitle = () => {
     switch (route.name) {
       case 'Home':
-        return 'Мої персонажі';
+        return t('home');
       case 'Settings':
-        return 'Налаштування';
+        return t('settings');
       case 'Initiative':
-        return 'Інціатива';
+        return t('initiative');
       case 'DMHome':
-        return 'ДМ головна';
+        return t('dmHome');
       case 'ReferencesHome':
-        return 'Довідки';
+        return t('references');
       case 'List':
-        return 'Бестіарій';
+        return t('bestiary');
       case 'Spellbook':
-        return 'Книга заклять';
+        return t('spellbook');
       case 'Support':
-        return 'Підтримка проекту';
+        return t('supportProject');
       default:
         return route.name;
     }

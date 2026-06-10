@@ -1,0 +1,49 @@
+{
+  "title": "Кидок кубика",
+  "subtitle": "Кидки для перевірок, атак, спаскидків і формул урону.",
+  "actions": {
+    "roll": "Кинути",
+    "reroll": "Перекинути",
+    "clear": "Очистити",
+    "rollAgain": "Кинути ще раз",
+    "clearHistory": "Очистити історію"
+  },
+  "labels": {
+    "dice": "Кубики",
+    "diceType": "Тип кубика",
+    "modifier": "Модифікатор",
+    "result": "Результат",
+    "history": "Історія",
+    "proficiencyBonus": "Бонус майстерності",
+    "mode": "Режим",
+    "customFormula": "Власна формула",
+    "rolls": "Кидки",
+    "used": "Використано",
+    "proficiency": "Майстерність",
+    "total": "Разом",
+    "ready": "Готово",
+    "rolling": "Кидаємо...",
+    "customRoll": "Користувацький кидок",
+    "diceRoll": "Кидок {{dice}}",
+    "criticalSuccess": "Критичний успіх",
+    "criticalFailure": "Критичний провал",
+    "singleRollBreakdown": "Кидок {{roll}}{{modifier}} = {{total}}",
+    "multiRollBreakdown": "Куби {{rolls}}{{modifier}} = {{total}}",
+    "advantageBreakdown": "Кидки {{rolls}} -> {{used}}{{modifier}} = {{total}}"
+  },
+  "modes": {
+    "normal": "Звичайний",
+    "advantage": "Перевага",
+    "disadvantage": "Перешкода"
+  },
+  "toggles": {
+    "enabled": "Увімк.",
+    "disabled": "Вимк."
+  },
+  "empty": {
+    "history": "Історія кидків порожня."
+  },
+  "errors": {
+    "rollFailed": "Не вдалося виконати кидок."
+  }
+}

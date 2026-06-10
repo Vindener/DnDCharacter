@@ -1,0 +1,12 @@
+{
+  "title": "Spellbook",
+  "search": {
+    "placeholder": "Search spells..."
+  },
+  "filters": {
+    "level": "Level",
+    "school": "School",
+    "class": "Class",
+    "clear": "Clear filters"
+  }
+}

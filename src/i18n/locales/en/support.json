@@ -1,0 +1,32 @@
+{
+  "title": "Support",
+  "sections": {
+    "contact": "Contact",
+    "feedback": "Feedback",
+    "donation": "Support the Project"
+  },
+  "donation": {
+    "warning": "We are currently raising funds to publish on Google Play.",
+    "description": "Your support helps develop the app. Choose a convenient option:",
+    "monobankJar": "Monobank (jar)"
+  },
+  "crypto": {
+    "title": "Crypto Wallet"
+  },
+  "feedback": {
+    "title": "Feedback",
+    "telegramNews": "Telegram News Channel",
+    "messagePlaceholder": "Write your ideas, bugs, or requests...",
+    "emailPlaceholder": "Email (optional)",
+    "sendEmail": "Send Email",
+    "telegramDirect": "Message on Telegram",
+    "emptyTitle": "Message Required",
+    "emptyMessage": "Write a few words",
+    "emailSubject": "Feedback for MythgateDND",
+    "emailLabel": "Email"
+  },
+  "errors": {
+    "openLinkTitle": "Error",
+    "openLinkMessage": "Could not open the link"
+  }
+}

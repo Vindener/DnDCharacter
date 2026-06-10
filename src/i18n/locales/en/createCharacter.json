@@ -1,0 +1,12 @@
+{
+  "title": "Create Character",
+  "steps": {
+    "start": "Start",
+    "identity": "Identity",
+    "stats": "Stats",
+    "gameplay": "Gameplay",
+    "homebrew": "Homebrew",
+    "storage": "Storage",
+    "review": "Review"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "add": "Add",
+    "remove": "Remove",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "confirm": "Confirm",
+    "search": "Search",
+    "reset": "Reset",
+    "import": "Import",
+    "export": "Export",
+    "open": "Open",
+    "share": "Share",
+    "sync": "Sync"
+  },
+  "states": {
+    "loading": "Loading...",
+    "empty": "Nothing here yet",
+    "error": "Something went wrong",
+    "offline": "Offline",
+    "online": "Online",
+    "synced": "Synced",
+    "localOnly": "Local only",
+    "pendingSync": "Sync pending"
+  },
+  "status": {
+    "online": "Online",
+    "offline": "Offline",
+    "localOnly": "Local",
+    "cloud": "Cloud",
+    "shared": "Shared",
+    "homebrew": "Homebrew",
+    "synced": "Synced",
+    "pendingSync": "Sync pending",
+    "offlineChanges": "Offline changes",
+    "conflict": "Conflict",
+    "conflictDetected": "Conflict detected",
+    "sharedWithDm": "Shared with DM",
+    "sharedWithPlayer": "Shared with Player",
+    "notSyncedYet": "never"
+  },
+  "roles": {
+    "Player": "Player",
+    "DM": "DM",
+    "Hybrid": "Hybrid"
+  },
+  "fallbacks": {
+    "character": "Character",
+    "class": "Class",
+    "race": "Race",
+    "none": "—"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidValue": "Invalid value"
+  }
+}

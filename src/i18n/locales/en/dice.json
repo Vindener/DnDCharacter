@@ -1,0 +1,49 @@
+{
+  "title": "Dice Roller",
+  "subtitle": "Roll checks, attacks, saving throws, and damage formulas.",
+  "actions": {
+    "roll": "Roll",
+    "reroll": "Reroll",
+    "clear": "Clear",
+    "rollAgain": "Roll Again",
+    "clearHistory": "Clear History"
+  },
+  "labels": {
+    "dice": "Dice",
+    "diceType": "Dice Type",
+    "modifier": "Modifier",
+    "result": "Result",
+    "history": "History",
+    "proficiencyBonus": "Proficiency Bonus",
+    "mode": "Mode",
+    "customFormula": "Custom Formula",
+    "rolls": "Rolls",
+    "used": "Used",
+    "proficiency": "Proficiency",
+    "total": "Total",
+    "ready": "Ready",
+    "rolling": "Rolling...",
+    "customRoll": "Custom Roll",
+    "diceRoll": "{{dice}} Roll",
+    "criticalSuccess": "Critical Success",
+    "criticalFailure": "Critical Failure",
+    "singleRollBreakdown": "Roll {{roll}}{{modifier}} = {{total}}",
+    "multiRollBreakdown": "Dice {{rolls}}{{modifier}} = {{total}}",
+    "advantageBreakdown": "Rolls {{rolls}} -> {{used}}{{modifier}} = {{total}}"
+  },
+  "modes": {
+    "normal": "Normal",
+    "advantage": "Advantage",
+    "disadvantage": "Disadvantage"
+  },
+  "toggles": {
+    "enabled": "On",
+    "disabled": "Off"
+  },
+  "empty": {
+    "history": "Roll history is empty."
+  },
+  "errors": {
+    "rollFailed": "Could not roll dice."
+  }
+}

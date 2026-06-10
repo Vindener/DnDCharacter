@@ -1,17 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
 import type { DiceRollResult, DiceType, RollMode } from '@/shared/services/diceRoller';
 import { rollDice, rollFormula } from '@/shared/services/diceRoller';
 
 const DICE_OPTIONS: DiceType[] = ['d20', 'd12', 'd10', 'd8', 'd6', 'd4', 'd100'];
-const MODE_OPTIONS: Array<{ id: RollMode; label: string }> = [
-  { id: 'normal', label: 'Звичайний' },
-  { id: 'advantage', label: 'Перевага' },
-  { id: 'disadvantage', label: 'Перешкода' },
-];
+const MODE_OPTIONS: RollMode[] = ['normal', 'advantage', 'disadvantage'];
 
 function signed(value: number): string {
   if (value === 0) return '+0';
@@ -23,33 +21,38 @@ function appendFormulaModifier(formula: string, modifier: number): string {
   return `${formula}${modifier > 0 ? `+${modifier}` : modifier}`;
 }
 
-function formatResultDetails(result: DiceRollResult): string[] {
+function formatResultDetails(result: DiceRollResult, t: TFunction<'dice'>): string[] {
   const lines: string[] = [];
   if (result.mode === 'advantage' || result.mode === 'disadvantage') {
-    lines.push(`Кидки: ${result.rolls.join(' / ')}`);
-    lines.push(`Використано: ${result.usedRoll}`);
+    lines.push(`${t('labels.rolls')}: ${result.rolls.join(' / ')}`);
+    lines.push(`${t('labels.used')}: ${result.usedRoll}`);
   } else {
-    lines.push(`Кидки: ${result.rolls.join(' + ')}`);
+    lines.push(`${t('labels.rolls')}: ${result.rolls.join(' + ')}`);
   }
-  lines.push(`Модифікатор: ${signed(result.modifier)}`);
-  if (result.proficiencyBonus) lines.push(`Майстерність: ${signed(result.proficiencyBonus)}`);
-  lines.push(`Разом: ${result.total}`);
+  lines.push(`${t('labels.modifier')}: ${signed(result.modifier)}`);
+  if (result.proficiencyBonus) lines.push(`${t('labels.proficiency')}: ${signed(result.proficiencyBonus)}`);
+  lines.push(`${t('labels.total')}: ${result.total}`);
   return lines;
 }
 
-function formatImmediateResult(result: DiceRollResult): string {
+function formatImmediateResult(result: DiceRollResult, t: TFunction<'dice'>): string {
   const modifierTotal = result.modifier + result.proficiencyBonus;
   const modifierText = modifierTotal === 0 ? '' : ` ${signed(modifierTotal)}`;
 
   if (result.mode === 'advantage' || result.mode === 'disadvantage') {
-    return `Кидки ${result.rolls.join(' / ')} → ${result.usedRoll}${modifierText} = ${result.total}`;
+    return t('labels.advantageBreakdown', {
+      rolls: result.rolls.join(' / '),
+      used: result.usedRoll,
+      modifier: modifierText,
+      total: result.total,
+    });
   }
 
   if (result.rolls.length === 1) {
-    return `Кидок ${result.usedRoll}${modifierText} = ${result.total}`;
+    return t('labels.singleRollBreakdown', { roll: result.usedRoll, modifier: modifierText, total: result.total });
   }
 
-  return `Куби ${result.rolls.join(' + ')}${modifierText} = ${result.total}`;
+  return t('labels.multiRollBreakdown', { rolls: result.rolls.join(' + '), modifier: modifierText, total: result.total });
 }
 
 export type DiceRollerPreset = {
@@ -90,6 +93,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
   preset,
   resultAction,
 }) => {
+  const { t } = useTranslation('dice');
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
   const pulse = useRef(new Animated.Value(1)).current;
@@ -139,7 +143,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
         const formula = config.customFormula.trim();
         const formulaModifier = config.modifier + (config.includeProficiency ? config.proficiencyBonus : 0);
         const next = formula
-          ? rollFormula({ formula: appendFormulaModifier(formula, formulaModifier), label: config.label ?? 'Користувацький кидок' })
+          ? rollFormula({ formula: appendFormulaModifier(formula, formulaModifier), label: config.label ?? t('labels.customRoll') })
           : rollDice({
               dice: config.dice,
               count: 1,
@@ -147,14 +151,14 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
               proficiencyBonus: config.proficiencyBonus,
               includeProficiency: config.includeProficiency,
               mode: config.mode,
-              label: config.label ?? `Кидок ${config.dice.toUpperCase()}`,
+              label: config.label ?? t('labels.diceRoll', { dice: config.dice.toUpperCase() }),
             });
         commitResult(next);
       } catch (caught) {
-        setError(caught instanceof Error ? caught.message : 'Не вдалося виконати кидок.');
+        setError(caught instanceof Error ? caught.message : t('errors.rollFailed'));
       }
     });
-  }, [animateRoll, commitResult, onRollPress]);
+  }, [animateRoll, commitResult, onRollPress, t]);
 
   useEffect(() => {
     if (!preset) {
@@ -229,23 +233,23 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
   return (
     <View style={embedded ? styles.embeddedContent : styles.content}>
       <View style={styles.header}>
-        <Text style={styles.title}>Кидок кубика</Text>
-        <Text style={styles.subtitle}>Кидки для перевірок, атак, спаскидків і формул урону.</Text>
+        <Text style={styles.title}>{t('title')}</Text>
+        <Text style={styles.subtitle}>{t('subtitle')}</Text>
       </View>
 
       <Animated.View style={[styles.resultCard, { transform: [{ scale: pulse }] }, resultToneStyle]}>
         <MaterialCommunityIcons name='dice-multiple-outline' size={48} color={colors.text} />
-        <Text style={styles.resultLabel}>{isRolling ? 'Кидаємо...' : result?.label || 'Готово'}</Text>
+        <Text style={styles.resultLabel}>{isRolling ? t('labels.rolling') : result?.label || t('labels.ready')}</Text>
         <Text style={styles.resultValue}>{isRolling ? '...' : result ? result.total : '—'}</Text>
-        {result ? <Text style={styles.resultBreakdownText}>{formatImmediateResult(result)}</Text> : null}
+        {result ? <Text style={styles.resultBreakdownText}>{formatImmediateResult(result, t)}</Text> : null}
         {result ? <Text style={styles.formulaText}>{result.formula}</Text> : null}
-        {result?.isCriticalSuccess ? <Text style={styles.criticalSuccess}>Критичний успіх</Text> : null}
-        {result?.isCriticalFailure ? <Text style={styles.criticalFailure}>Критичний провал</Text> : null}
+        {result?.isCriticalSuccess ? <Text style={styles.criticalSuccess}>{t('labels.criticalSuccess')}</Text> : null}
+        {result?.isCriticalFailure ? <Text style={styles.criticalFailure}>{t('labels.criticalFailure')}</Text> : null}
       </Animated.View>
       {result && resultAction ? <View style={styles.resultActionSlot}>{resultAction}</View> : null}
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Тип кубика</Text>
+        <Text style={styles.sectionTitle}>{t('labels.diceType')}</Text>
         <View style={styles.chipGrid}>
           {DICE_OPTIONS.map((dice) => (
             <Pressable
@@ -261,7 +265,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Модифікатор</Text>
+        <Text style={styles.sectionTitle}>{t('labels.modifier')}</Text>
         <View style={styles.stepperRow}>
           <Pressable style={styles.stepperButton} onPress={() => adjustModifier(-1)} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.stepperText}>-</Text>
@@ -275,14 +279,14 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
 
       <View style={styles.section}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Бонус майстерності</Text>
+          <Text style={styles.sectionTitle}>{t('labels.proficiencyBonus')}</Text>
           <Pressable
             style={[styles.toggleButton, includeProficiency ? styles.toggleButtonActive : null]}
             onPress={() => setIncludeProficiency((prev) => !prev)}
             android_ripple={{ color: colors.ripple }}
           >
             <Text style={[styles.toggleText, includeProficiency ? styles.toggleTextActive : null]}>
-              {includeProficiency ? 'Увімк.' : 'Вимк.'}
+              {includeProficiency ? t('toggles.enabled') : t('toggles.disabled')}
             </Text>
           </Pressable>
         </View>
@@ -298,23 +302,23 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Режим</Text>
+        <Text style={styles.sectionTitle}>{t('labels.mode')}</Text>
         <View style={styles.segmented}>
           {MODE_OPTIONS.map((item) => (
             <Pressable
-              key={item.id}
-              style={[styles.segment, mode === item.id ? styles.segmentActive : null]}
-              onPress={() => handleModeChange(item.id)}
+              key={item}
+              style={[styles.segment, mode === item ? styles.segmentActive : null]}
+              onPress={() => handleModeChange(item)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.segmentText, mode === item.id ? styles.segmentTextActive : null]}>{item.label}</Text>
+              <Text style={[styles.segmentText, mode === item ? styles.segmentTextActive : null]}>{t(`modes.${item}`)}</Text>
             </Pressable>
           ))}
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Власна формула</Text>
+        <Text style={styles.sectionTitle}>{t('labels.customFormula')}</Text>
         <TextInput
           value={customFormula}
           onChangeText={handleFormulaChange}
@@ -330,19 +334,19 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
 
       <View style={styles.actionRow}>
         <Pressable style={styles.rollButton} onPress={performRoll} android_ripple={{ color: colors.ripple }} disabled={isRolling}>
-          <Text style={styles.rollButtonText}>{result ? 'Кинути ще раз' : 'Кинути'}</Text>
+          <Text style={styles.rollButtonText}>{result ? t('actions.rollAgain') : t('actions.roll')}</Text>
         </Pressable>
         <Pressable style={styles.secondaryButton} onPress={() => setHistory([])} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.secondaryButtonText}>Очистити історію</Text>
+          <Text style={styles.secondaryButtonText}>{t('actions.clearHistory')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.section}>
         <View style={styles.sectionTitleRow}>
-          <Text style={styles.sectionTitle}>Історія</Text>
+          <Text style={styles.sectionTitle}>{t('labels.history')}</Text>
           <Text style={styles.historyCount}>{history.length}</Text>
         </View>
-        {!history.length ? <Text style={styles.emptyHistory}>Історія кидків порожня.</Text> : null}
+        {!history.length ? <Text style={styles.emptyHistory}>{t('empty.history')}</Text> : null}
         {history.map((item, index) => (
           <View key={`${item.createdAt.toISOString()}-${index}`} style={styles.historyItem}>
             <View style={styles.historyHeader}>
@@ -351,7 +355,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
               </Text>
               <Text style={styles.historyTime}>{item.createdAt.toLocaleTimeString()}</Text>
             </View>
-            {formatResultDetails(item).map((line) => (
+            {formatResultDetails(item, t).map((line) => (
               <Text key={`${item.createdAt.toISOString()}-${line}`} style={styles.historyDetail}>
                 {line}
               </Text>

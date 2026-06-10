@@ -3,6 +3,8 @@ import { View, Text, Image, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
@@ -20,15 +22,15 @@ interface MonsterCardProps {
   cardTestID?: string;
 }
 
-const getMetaLine = (monster: MonsterDto): string => {
+const getMetaLine = (monster: MonsterDto, t: TFunction<'bestiary'>): string => {
   const sizeType = [monster.size, monster.type].filter(Boolean).join(' ');
-  return sizeType || monster.type || 'Тип невідомий';
+  return sizeType || monster.type || t('labels.unknownType');
 };
 
-const getMainAttack = (monster: MonsterDto): string => {
+const getMainAttack = (monster: MonsterDto, t: TFunction<'bestiary'>): string => {
   if (monster.mainAttack) return monster.mainAttack;
   const match = (monster.actions || '').match(/\*\*([^.*]+)\./);
-  return match?.[1]?.trim() || 'Атака не вказана';
+  return match?.[1]?.trim() || t('labels.missingAttack');
 };
 
 export const MonsterCard = ({
@@ -41,6 +43,7 @@ export const MonsterCard = ({
   onDuplicate,
   cardTestID,
 }: MonsterCardProps) => {
+  const { t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const removeMonster = useMonsterStore((s) => s.removeMonster);
   const colors = useThemeStore((s) => s.colors);
@@ -74,24 +77,26 @@ export const MonsterCard = ({
             </Pressable>
           )}
         </View>
-        <Text style={styles.meta}>{getMetaLine(monster)} · Скл. {monster.challenge || '—'}</Text>
+        <Text style={styles.meta}>
+          {getMetaLine(monster, t)} · {t('labels.challengeShort')} {monster.challenge || '—'}
+        </Text>
         <View style={styles.statGrid}>
           <View style={styles.statPill}>
-            <Text style={styles.statLabel}>КД</Text>
+            <Text style={styles.statLabel}>{t('labels.armorClassShort')}</Text>
             <Text style={styles.statValue}>{monster.armorClass ?? '—'}</Text>
           </View>
           <View style={styles.statPill}>
-            <Text style={styles.statLabel}>ХП</Text>
+            <Text style={styles.statLabel}>{t('labels.hitPointsShort')}</Text>
             <Text style={styles.statValue}>{monster.hitPoints ?? '—'}</Text>
           </View>
           <View style={styles.statPill}>
-            <Text style={styles.statLabel}>Швидк.</Text>
+            <Text style={styles.statLabel}>{t('labels.speedShort')}</Text>
             <Text style={styles.statValue}>{monster.speed || '—'}</Text>
           </View>
         </View>
         <Text style={styles.attackLine} numberOfLines={2}>
-          {getMainAttack(monster)}
-          {monster.attackBonus ? ` · ${monster.attackBonus} до атаки` : ''}
+          {getMainAttack(monster, t)}
+          {monster.attackBonus ? ` · ${t('labels.attackBonus', { value: monster.attackBonus })}` : ''}
           {monster.damage ? ` · ${monster.damage}` : ''}
         </Text>
         <View style={styles.actionRow}>
@@ -106,7 +111,7 @@ export const MonsterCard = ({
               testID='monsterCard.addToEncounterButton'
             >
               <Ionicons name='add-circle-outline' size={15} color={colors.text} />
-              <Text style={styles.actionText}>До сутички</Text>
+              <Text style={styles.actionText}>{t('actions.addToEncounterShort')}</Text>
             </Pressable>
           )}
           {!!onTogglePin && (
@@ -120,7 +125,7 @@ export const MonsterCard = ({
               testID='monsterCard.pinButton'
             >
               <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={15} color={colors.text} />
-              <Text style={styles.actionText}>{isPinned ? 'Закріплено' : 'Закріпити'}</Text>
+              <Text style={styles.actionText}>{isPinned ? t('actions.pinned') : t('actions.pin')}</Text>
             </Pressable>
           )}
           {!!onDuplicate && (
@@ -134,13 +139,13 @@ export const MonsterCard = ({
               testID='monsterCard.duplicateButton'
             >
               <Ionicons name='copy-outline' size={15} color={colors.text} />
-              <Text style={styles.actionText}>Копія</Text>
+              <Text style={styles.actionText}>{t('actions.duplicate')}</Text>
             </Pressable>
           )}
         </View>
-        {!!monster.environment && <Text style={styles.meta}>Середовище: {monster.environment}</Text>}
-        {!!monster.source && <Text style={styles.meta}>Джерело: {monster.source}</Text>}
-        {!!monster.isCustom && <Text style={styles.customMeta}>Власний монстр</Text>}
+        {!!monster.environment && <Text style={styles.meta}>{t('labels.environment', { value: monster.environment })}</Text>}
+        {!!monster.source && <Text style={styles.meta}>{t('labels.source', { value: monster.source })}</Text>}
+        {!!monster.isCustom && <Text style={styles.customMeta}>{t('labels.customMonster')}</Text>}
       </View>
       <Pressable
         onPress={(event) => {
@@ -155,4 +160,3 @@ export const MonsterCard = ({
     </Pressable>
   );
 };
-

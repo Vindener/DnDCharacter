@@ -1,0 +1,44 @@
+{
+  "abilities": {
+    "strength": "Strength",
+    "dexterity": "Dexterity",
+    "constitution": "Constitution",
+    "intelligence": "Intelligence",
+    "wisdom": "Wisdom",
+    "charisma": "Charisma"
+  },
+  "abilityShort": {
+    "strength": "STR",
+    "dexterity": "DEX",
+    "constitution": "CON",
+    "intelligence": "INT",
+    "wisdom": "WIS",
+    "charisma": "CHA"
+  },
+  "classes": {
+    "barbarian": "Barbarian",
+    "bard": "Bard",
+    "cleric": "Cleric",
+    "druid": "Druid",
+    "fighter": "Fighter",
+    "monk": "Monk",
+    "paladin": "Paladin",
+    "ranger": "Ranger",
+    "rogue": "Rogue",
+    "sorcerer": "Sorcerer",
+    "warlock": "Warlock",
+    "wizard": "Wizard",
+    "artificer": "Artificer",
+    "custom": "Custom class"
+  },
+  "schools": {
+    "abjuration": "Abjuration",
+    "conjuration": "Conjuration",
+    "divination": "Divination",
+    "enchantment": "Enchantment",
+    "evocation": "Evocation",
+    "illusion": "Illusion",
+    "necromancy": "Necromancy",
+    "transmutation": "Transmutation"
+  }
+}

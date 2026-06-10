@@ -1,0 +1,58 @@
+{
+  "title": "Мої персонажі",
+  "subtitle": "Швидкий доступ до персонажів, сесій і синхронізації.",
+  "actions": {
+    "createCharacter": "Створити персонажа",
+    "openDice": "Кинути кубики",
+    "openSpellbook": "Заклинання",
+    "openBestiary": "Бестіарій",
+    "openDmTools": "Інструменти ДМ",
+    "continueSession": "Продовжити сесію",
+    "openSheet": "Відкрити лист",
+    "cloudLogin": "Увійти для хмари"
+  },
+  "sections": {
+    "recentCharacters": "Останні персонажі",
+    "localCharacters": "Локальні персонажі",
+    "cloudCharacters": "Хмарні персонажі",
+    "sharedCharacters": "Спільні персонажі",
+    "quickActions": "Швидкі дії",
+    "characters": "Персонажі"
+  },
+  "empty": {
+    "characters": "У тебе ще немає персонажів.",
+    "shared": "Немає спільних персонажів.",
+    "cloud": "Немає персонажів у хмарі.",
+    "firstCharacterTitle": "Створи першого персонажа",
+    "firstCharacterHint": "Почни з локального персонажа. Синхронізацію й шерінг можна підключити пізніше.",
+    "noCharactersTitle": "Ще немає персонажів",
+    "noCharactersHint": "Головна стане швидким стартом, щойно з'явиться перший лист."
+  },
+  "hero": {
+    "continueGame": "Продовжити гру",
+    "mode": "Режим: {{role}} · {{name}}"
+  },
+  "characters": {
+    "readyCount": "{{count}} готово до гри",
+    "none": "Немає персонажів",
+    "level": "Рівень {{level}}",
+    "shortLevel": "Рів. {{level}}",
+    "health": "Здоров'я",
+    "ac": "КЗ",
+    "initiative": "Ініціатива",
+    "continueMeta": "Здоров'я {{current}}/{{max}} · КЗ {{ac}} · {{sync}}"
+  },
+  "syncStrip": {
+    "errorTitle": "Помилка завантаження",
+    "conflictTitle": "Виявлено конфлікт",
+    "pendingTitle": "Очікують офлайн-зміни",
+    "syncedTitle": "Синхронізовано",
+    "cloudConnected": "Хмара підключена",
+    "cloudNeedsLogin": "Хмара: потрібен вхід",
+    "lastSync": "Синхронізація: {{value}}",
+    "pending": "Очікують офлайн-зміни: {{count}}",
+    "noPending": "Немає локальної черги",
+    "conflicts": "Виявлено конфліктів: {{count}}",
+    "noConflicts": "Конфліктів немає"
+  }
+}
