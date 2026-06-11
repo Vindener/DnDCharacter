@@ -11,5 +11,423 @@
     "inventory": "Інвентар",
     "notes": "Нотатки",
     "homebrew": "Homebrew"
+  },
+  "actions": {
+    "roll": "Кидок",
+    "expand": "Розгорнути",
+    "collapse": "Згорнути"
+  },
+  "empty": {
+    "notFound": "Персонаж не знайдений",
+    "none": "Немає",
+    "blank": "Порожньо",
+    "notSpecified": "Не вказано",
+    "noDescription": "Без опису",
+    "noActiveConditions": "Немає активних станів",
+    "noActiveCombatConditions": "Немає активних бойових станів",
+    "noSessionNotes": "Немає нотаток сесії"
+  },
+  "header": {
+    "unnamed": "Без імені",
+    "raceFallback": "Раса",
+    "classFallback": "Клас",
+    "level": "Рівень {{level}}",
+    "session": "Сесія"
+  },
+  "summary": {
+    "title": "Бойовий підсумок",
+    "tempHp": "Тимч. {{value}}",
+    "speed": "Швидк.",
+    "initiative": "Ініц.",
+    "proficiency": "Майст.",
+    "spellDc": "DC заклять",
+    "passivePerception": "Пасивне сприйняття"
+  },
+  "quickActions": {
+    "editHp": "Редактор HP",
+    "tempHp": "Тимчасове HP",
+    "roll": "Кинути",
+    "shortRest": "Короткий відпочинок",
+    "longRest": "Довгий відпочинок",
+    "condition": "Стан",
+    "note": "Нотатка"
+  },
+  "sync": {
+    "syncNow": "Синхронізувати зараз",
+    "waitingLocalChanges": "Очікування локальних змін",
+    "cloudConnected": "Підключено хмарний документ",
+    "localOnlyCharacter": "Лише локальний персонаж",
+    "conflictNeedsReview": "Виявлено конфлікт. Потрібна перевірка.",
+    "cloudSectionMerged": "Злиття секції з хмари застосовано",
+    "latestCloudLoaded": "Завантажено останню хмарну ревізію",
+    "offlineQueue": "Офлайн-черга: {{count}} шлях(ів) очікує",
+    "uploadingLocalChanges": "Вивантаження локальних змін...",
+    "autoSynced": "Щойно автосинхронізовано",
+    "retryAfterNetworkError": "Повтор після мережевої помилки...",
+    "syncErrorRetry": "Помилка синхронізації. Повторіть через \"Синхронізувати зараз\".",
+    "conflictResolvedLocal": "Конфлікт вирішено локальною версією",
+    "conflictResolveLocalFailed": "Не вдалося вирішити конфлікт локальною версією",
+    "conflictResolvedCloud": "Конфлікт вирішено хмарною версією",
+    "conflictDeferred": "Конфлікт знято. Ручну перевірку відкладено.",
+    "signInRequired": "Для синхронізації з хмарою потрібен вхід",
+    "offlineQueueActive": "Активна офлайн-черга. Відновіть з’єднання і повторіть синхронізацію.",
+    "syncing": "Синхронізація...",
+    "synced": "Синхронізовано",
+    "syncErrorWithMessage": "Помилка синхронізації: {{message}}"
+  },
+  "badges": {
+    "localOnly": "Лише локально",
+    "homebrew": "Власне",
+    "offline": "Офлайн",
+    "conflict": "Конфлікт"
+  },
+  "conflict": {
+    "title": "Виявлено конфлікт синхронізації",
+    "message": "Локальні та cloud зміни перетнулися в одній секції. Обери стратегію злиття.",
+    "paths": "Шляхи: {{paths}}",
+    "keepLocal": "Залишити локальне",
+    "useCloud": "Використати хмару",
+    "resolveLater": "Вирішити пізніше"
+  },
+  "history": {
+    "title": "Історія спільних змін ({{tab}})",
+    "latestChange": "Маркер останньої зміни: {{label}} о {{date}}",
+    "empty": "Для цієї вкладки ще немає спільної історії."
+  },
+  "overview": {
+    "abilityScores": "Основні характеристики",
+    "savesAndSkills": "Сейви та навички",
+    "savingThrows": "Рятівні кидки",
+    "saveLabel": "Сейв: {{ability}}",
+    "skills": "Навички",
+    "passivePerception": "Пасивне сприйняття",
+    "proficiencies": "Професії",
+    "features": "Риси та особливості",
+    "conditions": "Поточні стани"
+  },
+  "combat": {
+    "tools": "Бойові інструменти",
+    "actions": "Дії",
+    "bonusActions": "Бонусні дії",
+    "reactions": "Реакції",
+    "attacks": "Атаки",
+    "conditions": "Стани",
+    "notes": "Бойові нотатки",
+    "deathSaves": "Кидки смерті",
+    "deathSaveCounts": "Успіхи: {{successes}} | Провали: {{failures}}",
+    "weaponFallback": "Зброя {{index}}",
+    "noWeapons": "Зброя не додана",
+    "noActionTemplates": "• Немає шаблонів дій",
+    "noBonusActionTemplates": "• Немає шаблонів бонусних дій",
+    "noReactionTemplates": "• Немає шаблонів реакцій",
+    "proficiencyBonus": "Бонус майстерності"
+  },
+  "magic": {
+    "title": "Огляд магії",
+    "spellcasting": "Чаклування",
+    "dc": "Складність",
+    "attackBonus": "Бонус атаки",
+    "concentration": "Концентрація",
+    "notCaster": "Не чаклун",
+    "nonCasterHint": "Для non-caster персонажа магічні ресурси не налаштовані.",
+    "slots": "Слоти",
+    "slotLevel": "{{level}} рівень",
+    "noSlots": "Слоти не налаштовані",
+    "openSpellbook": "Відкрити Spellbook",
+    "spellRolls": "Кидки заклять",
+    "quickRollsEmpty": "Додайте закляття до Prepared/Known/Cantrip для швидких кидків.",
+    "preparedSpells": "Підготовлені закляття",
+    "preparedLimit": "Ліміт: {{count}}/{{limit}}. ",
+    "noPrepared": "Немає підготовлених"
+  },
+  "inventory": {
+    "title": "Інвентар",
+    "armor": "Броня",
+    "shield": "Щит",
+    "carryingCapacity": "Переносима вага",
+    "weapons": "Зброя",
+    "equipment": "Спорядження",
+    "empty": "Інвентар порожній",
+    "attunedItems": "Прив’язані предмети",
+    "noAttunedItems": "Немає прив’язаних предметів",
+    "currency": "Валюта"
+  },
+  "notes": {
+    "title": "Нотатки",
+    "empty": "Нотаток поки немає.",
+    "session": "Нотатки сесії",
+    "campaign": "Кампанія",
+    "quests": "Квести",
+    "alliesEnemies": "Союзники / вороги",
+    "roleplay": "Рольова гра"
+  },
+  "homebrew": {
+    "title": "Власне",
+    "customFields": "Власні поля",
+    "customResources": "Власні ресурси",
+    "customSections": "Власні розділи",
+    "customEntries": "Власні записи",
+    "noFields": "Поля не додані",
+    "noResources": "Ресурси не додані",
+    "noSections": "Секції не додані",
+    "noEntries": "Записи не додані"
+  },
+  "boolean": {
+    "yes": "Так",
+    "no": "Ні"
+  },
+  "defaults": {
+    "newWeapon": "Нова зброя",
+    "customSpellSchool": "Власне",
+    "customField": "Власне поле",
+    "customResource": "Власний ресурс",
+    "customSection": "Власний розділ",
+    "customNotesGroup": "Власна група",
+    "customEntryName": "Власне: {{kind}}"
+  },
+  "edit": {
+    "identity": {
+      "title": "Ідентичність",
+      "name": "Ім’я",
+      "namePlaceholder": "Ім’я персонажа",
+      "class": "Клас",
+      "race": "Раса",
+      "campaign": "Кампанія",
+      "campaignPlaceholder": "Назва кампанії",
+      "level": "Рівень",
+      "experience": "Досвід",
+      "proficiencyBonus": "Бонус майстерності"
+    },
+    "proficiency": {
+      "savingThrows": "Майстерність у сейвах",
+      "skills": "Майстерність у навичках"
+    },
+    "combat": {
+      "title": "Налаштування бою",
+      "currentHp": "Поточне HP",
+      "maxHp": "Макс. HP",
+      "tempHp": "Тимчасове HP",
+      "acPlaceholder": "Клас захисту",
+      "speed": "Швидкість",
+      "initiative": "Ініціатива",
+      "templates": "Бойові шаблони",
+      "actionsLines": "Дії (по одній в рядку)",
+      "actionsPlaceholder": "Атака довгим мечем",
+      "bonusActionsLines": "Бонусні дії (по одній в рядку)",
+      "bonusActionsPlaceholder": "Друге дихання",
+      "reactionsLines": "Реакції (по одній в рядку)",
+      "reactionsPlaceholder": "Атака при нагоді"
+    },
+    "magic": {
+      "title": "Налаштування магії",
+      "spellcastingAbility": "Характеристика чаклування",
+      "spellSaveDc": "Складність заклять (DC)",
+      "spellAttackBonus": "Бонус атаки заклять",
+      "spellAttackBonusPlaceholder": "Бонус атаки",
+      "quickAdd": "Швидке додавання заклять",
+      "quickAddHint": "Форма відкривається в модальному вікні, щоб не захаращувати екран редагування.",
+      "openQuickAdd": "Відкрити додавання закляття",
+      "preparedLines": "Підготовлені закляття (по одному в рядку)",
+      "preparedPlaceholder": "Магічна стріла",
+      "knownLines": "Відомі закляття (по одному в рядку)",
+      "knownPlaceholder": "Щит",
+      "cantripsLines": "Кантріпи (по одному в рядку)",
+      "cantripsPlaceholder": "Вогняний болт",
+      "slotLevelShort": "Рів. {{level}}",
+      "slotMaxPlaceholder": "макс",
+      "slotUsedPlaceholder": "викор"
+    },
+    "inventory": {
+      "title": "Налаштування інвентаря",
+      "itemsLines": "Інвентар (по одному предмету в рядку)",
+      "itemsPlaceholder": "Мотузка\nСмолоскип",
+      "attunedLines": "Прив’язані предмети (по одному в рядку)",
+      "weaponsTitle": "Налаштування зброї",
+      "addWeapon": "+ Додати зброю",
+      "weaponName": "Назва зброї",
+      "weaponNamePlaceholder": "Короткий меч",
+      "attackBonus": "Бонус атаки",
+      "damageFormula": "Шкода (XdY або XdY+Z)",
+      "removeWeapon": "Видалити зброю",
+      "notesPlaceholder": "Загальні нотатки",
+      "coins": "Монети (GP / SP / CP)"
+    },
+    "notes": {
+      "groups": "Групи нотаток",
+      "addGroup": "+ Додати групу нотаток",
+      "groupTitle": "Назва групи",
+      "groupContent": "Вміст групи",
+      "groupContentPlaceholder": "Вміст нотаток",
+      "removeGroup": "Видалити групу нотаток"
+    },
+    "homebrew": {
+      "addField": "+ Додати власне поле",
+      "name": "Назва",
+      "fieldNamePlaceholder": "Назва поля",
+      "type": "Тип: {{type}}",
+      "changeType": "Змінити тип",
+      "optionsLines": "Опції (по одній в рядку)",
+      "optionsPlaceholder": "Опція A\nОпція B",
+      "value": "Значення",
+      "removeField": "Видалити поле",
+      "addResource": "+ Додати ресурс",
+      "systemTemplates": "Системні шаблони",
+      "applyTemplate": "Застосувати: {{name}}",
+      "userTemplates": "Шаблони користувача",
+      "applyUserTemplate": "Застосувати шаблон користувача",
+      "removeTemplate": "Видалити шаблон",
+      "resourceName": "Назва ресурсу",
+      "current": "Поточне",
+      "maxOptional": "Макс. (необов’язково)",
+      "changeReset": "Змінити відновлення",
+      "saveAsUserTemplate": "Зберегти як шаблон користувача",
+      "removeResource": "Видалити ресурс",
+      "addSection": "+ Додати розділ",
+      "sectionTitle": "Назва розділу",
+      "sectionContent": "Вміст розділу",
+      "removeSection": "Видалити розділ",
+      "addSpell": "+ Закляття",
+      "addAbility": "+ Здібність",
+      "addFeat": "+ Риса",
+      "entryName": "Назва запису",
+      "description": "Опис",
+      "tagsLines": "Теги (по одному в рядку)",
+      "tagsPlaceholder": "тег-а\nтег-б",
+      "removeEntry": "Видалити запис"
+    }
+  },
+  "legacy": {
+    "backstory": {
+      "campaign": "Кампанія:",
+      "campaignPlaceholder": "Введіть кампанію",
+      "backstory": "Історія героя:",
+      "backstoryPlaceholder": "Введіть історію героя",
+      "alliesAndOrganizations": "Союзники та організації:",
+      "alliesAndOrganizationsPlaceholder": "Введіть союзників та організації героя"
+    },
+    "notes": {
+      "title": "Нотатки:",
+      "placeholder": "Введіть ваші нотатки"
+    },
+    "traits": {
+      "personality": "Риси характеру:",
+      "personalityPlaceholder": "Введіть особистість",
+      "ideals": "Ідеали:",
+      "idealsPlaceholder": "Введіть ідеали",
+      "bonds": "Зв’язки:",
+      "bondsPlaceholder": "Введіть зв’язки",
+      "flaws": "Вади:",
+      "flawsPlaceholder": "Введіть вади"
+    }
+  },
+  "skillRanks": {
+    "none": "Без майст.",
+    "half": "1/2 майст.",
+    "proficient": "Майст.",
+    "expertise": "Експертиза",
+    "saved": "Збережено"
+  },
+  "rollDetails": {
+    "formula": "Формула: {{formula}}",
+    "rolls": "Кидки: {{rolls}}",
+    "used": "Використано: {{value}}",
+    "dice": "Куби: [{{rolls}}]",
+    "modifier": "Модифікатор: {{value}}",
+    "proficiency": "Майстерність: {{value}}",
+    "total": "Разом: {{total}}",
+    "profile": "Профіль: {{profile}}",
+    "damageType": "Тип урону: {{type}}",
+    "condition": "Умова: {{condition}}",
+    "criticalSuccess": "Критичний успіх",
+    "criticalFailure": "Критичний провал"
+  },
+  "conditions": {
+    "blinded": "Не бачить. Атаки по ньому з перевагою, його атаки з перешкодою.",
+    "charmed": "Не може атакувати того, хто зачарував; той має перевагу на соціальні перевірки.",
+    "deafened": "Не чує й автоматично провалює перевірки, що потребують слуху.",
+    "frightened": "Перешкода на перевірки та атаки, поки джерело страху видно.",
+    "grappled": "Швидкість стає 0.",
+    "incapacitated": "Не може виконувати дії або реакції.",
+    "invisible": "Атаки невидимого з перевагою; атаки по ньому з перешкодою.",
+    "paralyzed": "Недієздатний, не рухається; ближні влучання стають критичними.",
+    "petrified": "Скам’янілий, недієздатний, має опір більшості шкоди.",
+    "poisoned": "Перешкода на атаки та перевірки характеристик.",
+    "prone": "Перешкода на атаки; ближні атаки по цілі з перевагою.",
+    "restrained": "Швидкість 0, атаки по цілі з перевагою, її атаки з перешкодою.",
+    "stunned": "Недієздатний, не рухається, ледве говорить.",
+    "unconscious": "Недієздатний, падає, ближні влучання стають критичними.",
+    "exhausted": "Застосуй поточний рівень виснаження."
+  },
+  "modals": {
+    "hp": {
+      "current": "Поточне HP",
+      "currentPlaceholder": "Поточне",
+      "max": "Макс. HP",
+      "maxPlaceholder": "Макс."
+    },
+    "tempHp": {
+      "title": "Тимчасове HP",
+      "value": "Значення тимчасового HP"
+    },
+    "level": {
+      "title": "Підтвердити рівень {{level}}",
+      "subtitle": "Редагування основних характеристик перед застосуванням",
+      "newLevel": "Новий рівень: {{level}}",
+      "abilities": "Характеристики",
+      "save": "Зберегти"
+    },
+    "roll": {
+      "title": "Кидок",
+      "weaponAttack": "Кидок на влучення",
+      "weaponDamage": "Кидок шкоди",
+      "spellAttack": "Атака закляттям",
+      "spellDamage": "Шкода закляттям",
+      "weaponFallback": "Зброя",
+      "hitLabel": "Влучення: {{weapon}}",
+      "damageLabel": "Шкода: {{weapon}}",
+      "spellAttackLabel": "Атака закляттям: {{spell}}",
+      "spellDamageLabel": "Шкода закляттям: {{spell}}",
+      "rollDamage": "Кинути шкоду ({{formula}})",
+      "attackD20": "Атака (d20)",
+      "damageFormula": "Шкода ({{formula}})",
+      "damageNoProfile": "Шкода (нема профілю)",
+      "damageProfile": "Шкода: {{label}} ({{formula}} {{type}})"
+    },
+    "condition": {
+      "title": "Додати стан",
+      "label": "Стан",
+      "placeholder": "Отруєний"
+    },
+    "quickNote": {
+      "title": "Швидка нотатка",
+      "label": "Нотатка сесії",
+      "placeholder": "Напишіть коротку нотатку..."
+    },
+    "spell": {
+      "title": "Додати закляття",
+      "search": "Пошук у Spellbook",
+      "searchPlaceholder": "Введи назву або школу",
+      "empty": "Нічого не знайдено у spellbook.",
+      "name": "Назва закляття",
+      "namePlaceholder": "Назва закляття",
+      "levelLabel": "Рівень (0-9)",
+      "quickRolls": "Швидкі кидки: {{spell}}",
+      "preparedCount": "Підготовлено: {{count}}/{{limit}}",
+      "preparedLimitReached": "Ліміт підготовлених заклять досягнуто для цього персонажа.",
+      "preparedLimitTitle": "Ліміт підготовлених заклять",
+      "preparedLimitMessage": "Підготовлено {{count}}/{{limit}}. Приберіть одне підготовлене закляття або підвищіть рівень/характеристику.",
+      "addKnown": "+ Додати у відомі",
+      "addPrepared": "+ Додати у підготовлені",
+      "addCantrip": "+ Додати як каніпс",
+      "cantrip": "каніпс",
+      "level": "рівень {{level}}"
+    },
+    "rest": {
+      "title": "Відпочинок",
+      "shortHint": "Короткий відпочинок відкриває DiceRoller напряму з панелі швидких дій.",
+      "hitDice": "Кості хітів: {{rolls}}d{{sides}}",
+      "conFormula": "CON: {{modifier}} за кістку. Формула лікування: {{formula}}",
+      "apply": "Застосувати відпочинок"
+    }
   }
 }

@@ -5,7 +5,7 @@ import useThemeStore from '@/context/Theme-store';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 
 const donateLinks = [
-  { label: 'ПриватБанк', url: 'http://www.privat24.ua/send/3bi8n' },
+  { labelKey: 'donation.privatBank', url: 'http://www.privat24.ua/send/3bi8n' },
   { labelKey: 'donation.monobankJar', url: 'https://send.monobank.ua/jar/7bLHe7oo8j' },
 ];
 
@@ -85,7 +85,7 @@ export default function Support() {
           <View style={styles.row}>
             {donateLinks.map((d) => (
               <TouchableOpacity key={d.url} onPress={() => openUrl(d.url)} style={styles.pill}>
-                <Text style={styles.pillText}>{'labelKey' in d ? t(d.labelKey) : d.label}</Text>
+                <Text style={styles.pillText}>{t(d.labelKey)}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -133,4 +133,3 @@ export default function Support() {
     </View>
   );
 }
-

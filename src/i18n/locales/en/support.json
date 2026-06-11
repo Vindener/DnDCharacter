@@ -8,7 +8,8 @@
   "donation": {
     "warning": "We are currently raising funds to publish on Google Play.",
     "description": "Your support helps develop the app. Choose a convenient option:",
-    "monobankJar": "Monobank (jar)"
+    "privatBank": "PrivatBank",
+    "monobankJar": "Monobank"
   },
   "crypto": {
     "title": "Crypto Wallet"

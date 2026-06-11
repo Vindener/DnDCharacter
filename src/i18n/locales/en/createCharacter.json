@@ -1,12 +1,201 @@
 {
   "title": "Create Character",
+  "progress": "Step {{step}}/{{total}}",
   "steps": {
-    "start": "Start",
-    "identity": "Identity",
-    "stats": "Stats",
-    "gameplay": "Gameplay",
-    "homebrew": "Homebrew",
+    "1": "Start",
+    "2": "Character Details",
+    "3": "Race / Class / Background",
+    "4": "Abilities",
+    "5": "Combat Basics",
+    "6": "Equipment",
+    "7": "Magic",
+    "8": "Personality",
+    "9": "Homebrew",
+    "10": "Storage and Access",
+    "11": "Review"
+  },
+  "actions": {
+    "ok": "OK",
+    "next": "Next",
+    "back": "Back",
+    "create": "Create character",
+    "creating": "Creating...",
+    "clear": "Clear",
+    "add": "Add",
+    "change": "Change",
+    "remove": "Remove",
+    "importing": "Importing...",
+    "signingIn": "Signing in..."
+  },
+  "alerts": {
+    "errorTitle": "Error",
+    "invalidForm": "Invalid form data.",
+    "importFailed": "Could not import character.",
+    "signInRequiredTitle": "Sign-in required",
+    "signInRequiredMessage": "Sign in with Google before creating a cloud character.",
+    "shareFailed": "Could not add editor.",
+    "doneTitle": "Done",
+    "partialTitle": "Partially done",
+    "createdLocal": "Character created locally.",
+    "createdCloud": "Character created and synced to the cloud.",
+    "createdCloudShareFailed": "Sheet synced, but sharing failed: {{error}}",
+    "createdLocalCloudFailed": "Character created locally, but cloud sync did not complete.",
+    "createFailed": "Could not create character. Try again."
+  },
+  "draft": {
+    "restored": "Draft restored automatically."
+  },
+  "start": {
+    "title": "How do you want to create a character?",
+    "options": {
+      "standard-5e": {
+        "title": "Standard 5e",
+        "description": "A full step-by-step character using baseline 5e logic."
+      },
+      "quick": {
+        "title": "Quick character",
+        "description": "Fast defaults to start from, with everything still editable."
+      },
+      "homebrew-blank": {
+        "title": "Blank homebrew",
+        "description": "Empty custom race, class, mechanics, and fields."
+      },
+      "import": {
+        "title": "Import",
+        "description": "Import a character JSON file."
+      }
+    }
+  },
+  "identity": {
+    "name": "Name",
+    "level": "Level",
+    "portrait": "Portrait",
+    "campaign": "Campaign",
+    "playerName": "Player name",
+    "notes": "Notes"
+  },
+  "raceClass": {
+    "race": "Race",
+    "subrace": "Subrace",
+    "class": "Class",
+    "subclass": "Subclass",
+    "background": "Background",
+    "customRaceOption": "Custom race...",
+    "customRace": "Custom race",
+    "customSubrace": "Custom subrace",
+    "noSubrace": "No subrace",
+    "customClassOption": "Custom class...",
+    "customClass": "Custom class",
+    "customSubclass": "Custom subclass",
+    "noSubclass": "Not selected yet",
+    "customBackgroundOption": "Custom background...",
+    "customBackground": "Custom background",
+    "backgroundSkills": "Skills: {{value}}",
+    "backgroundTools": "Tools: {{value}}",
+    "backgroundLanguages": "Languages: +{{value}}"
+  },
+  "stats": {
+    "methods": {
+      "array": "Standard array",
+      "pointbuy": "Point buy",
+      "manual": "Manual",
+      "roll": "Dice",
+      "random": "Random"
+    },
+    "pointBuySpent": "Point buy: {{spent}}/{{budget}}",
+    "rollHint": "For each ability, roll 4d6 through DiceRoller. Drop the lowest die and add the other three.",
+    "randomHint": "Random generation creates all six abilities with 4d6, dropping the lowest die.",
+    "regenerate": "Regenerate",
+    "rollDice": "Roll dice",
+    "rollDetail": "Rolls: {{rolls}} · kept {{kept}} · dropped {{dropped}}"
+  },
+  "combat": {
+    "recommendedHp": "Recommended HP: {{value}}",
+    "recommendedHitDice": "Recommended hit dice: {{value}}",
+    "recommendedSpeed": "Recommended speed: {{value}}",
+    "recommendedProficiency": "Recommended proficiency bonus: +{{value}}",
+    "hpMax": "Maximum HP",
+    "hpCurrent": "Current HP",
+    "hitDice": "Hit dice",
+    "armorClass": "Armor class",
+    "speed": "Speed",
+    "initiative": "Initiative",
+    "proficiencyBonus": "Proficiency bonus",
+    "savingThrowProficiencies": "Saving throw proficiencies",
+    "takeFromClass": "Use class defaults"
+  },
+  "equipment": {
+    "startingGear": "Starting gear",
+    "weapons": "Weapons",
+    "armor": "Armor",
+    "shield": "Shield",
+    "tools": "Tools",
+    "gold": "Gold",
+    "silver": "Silver",
+    "copper": "Copper",
+    "extraStartingPack": "Extra starting pack"
+  },
+  "magic": {
+    "enabled": "Magic enabled",
+    "spellcastingAbility": "Spellcasting ability",
+    "spellSaveDC": "Spell save DC",
+    "spellAttackBonus": "Spell attack bonus",
+    "cantrips": "Cantrips",
+    "knownSpells": "Known spells",
+    "preparedSpells": "Prepared spells",
+    "spellSlots": "Spell slots"
+  },
+  "personality": {
+    "alignment": "Alignment",
+    "ideals": "Ideals",
+    "bonds": "Bonds",
+    "flaws": "Flaws",
+    "backstory": "Backstory"
+  },
+  "homebrew": {
+    "template": "Template",
+    "customFields": "Custom fields",
+    "customResources": "Custom resources",
+    "customSections": "Custom sections",
+    "customTrackers": "Custom trackers",
+    "customAbilities": "Custom abilities"
+  },
+  "storage": {
+    "hint": "Local creation always works. Cloud sync adds cross-device access and email sharing.",
+    "localOnly": "Local only",
+    "localCloud": "Local + Cloud",
+    "offline": "Offline: cloud creation is temporarily unavailable.",
+    "signInWithGoogle": "Sign in with Google",
+    "access": "Access",
+    "inviteEmail": "Access email",
+    "local": "Local",
+    "cloud": "Cloud",
+    "shareTargets": {
+      "none": "No",
+      "dm": "DM",
+      "player": "Player"
+    }
+  },
+  "review": {
+    "level": "Level {{level}}",
+    "hp": "HP",
+    "ac": "AC",
     "storage": "Storage",
-    "review": "Review"
+    "access": "Access",
+    "spellSaveDC": "Spell save DC"
+  },
+  "templates": {
+    "standard-5e": "Standard 5e",
+    "homebrew-light": "Light homebrew",
+    "homebrew-heavy": "Expanded homebrew",
+    "caster": "Caster",
+    "martial": "Martial",
+    "custom-blank": "Blank template",
+    "default": "Character creation"
+  },
+  "defaults": {
+    "customRace": "Custom race",
+    "customClass": "Custom class",
+    "customBackground": "Custom background"
   }
 }

@@ -62,5 +62,64 @@
     "medium": "Medium",
     "unknownType": "Unknown type",
     "speed": "30 ft."
+  },
+  "detail": {
+    "actions": {
+      "uploadPhoto": "Upload photo",
+      "removePhoto": "Remove photo",
+      "unpin": "Unpin",
+      "addFavorite": "Favorite",
+      "removeFavorite": "Remove favorite",
+      "duplicate": "Duplicate",
+      "showLess": "Collapse",
+      "showMore": "Show more",
+      "exportJson": "Export JSON"
+    },
+    "labels": {
+      "damageValue": "{{value}} damage"
+    },
+    "fields": {
+      "type": "Type",
+      "size": "Size",
+      "alignment": "Alignment",
+      "challenge": "Challenge",
+      "environment": "Environment",
+      "source": "Source",
+      "mainAttack": "Main attack",
+      "attackBonus": "Attack bonus",
+      "damage": "Damage",
+      "armorClass": "Armor class",
+      "speed": "Speed",
+      "savingThrows": "Saving throws",
+      "skills": "Skills",
+      "senses": "Senses",
+      "languages": "Languages",
+      "tags": "Tags"
+    },
+    "placeholders": {
+      "tags": "tag, tag"
+    },
+    "sections": {
+      "abilities": "Abilities",
+      "traits": "Traits",
+      "actions": "Actions",
+      "reactions": "Reactions",
+      "legendaryActions": "Legendary actions",
+      "notes": "DM notes"
+    },
+    "abilities": {
+      "strength": "STR",
+      "dexterity": "DEX",
+      "constitution": "CON",
+      "intelligence": "INT",
+      "wisdom": "WIS",
+      "charisma": "CHA"
+    },
+    "empty": {
+      "traits": "No traits.",
+      "actions": "No actions.",
+      "reactions": "No reactions.",
+      "notes": "No notes."
+    }
   }
 }

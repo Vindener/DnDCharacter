@@ -8,6 +8,7 @@
   "donation": {
     "warning": "Зараз збираємо гроші для публікації в Google Play.",
     "description": "Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:",
+    "privatBank": "ПриватБанк",
     "monobankJar": "Monobank (банка)"
   },
   "crypto": {

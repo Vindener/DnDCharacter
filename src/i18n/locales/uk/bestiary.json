@@ -62,5 +62,64 @@
     "medium": "Середній",
     "unknownType": "Невідомий тип",
     "speed": "30 фт."
+  },
+  "detail": {
+    "actions": {
+      "uploadPhoto": "Завантажити фото",
+      "removePhoto": "Видалити фото",
+      "unpin": "Відкріпити",
+      "addFavorite": "В улюблені",
+      "removeFavorite": "З улюблених",
+      "duplicate": "Дублювати",
+      "showLess": "Згорнути",
+      "showMore": "Показати більше",
+      "exportJson": "Експорт JSON"
+    },
+    "labels": {
+      "damageValue": "{{value}} урону"
+    },
+    "fields": {
+      "type": "Тип",
+      "size": "Розмір",
+      "alignment": "Світогляд",
+      "challenge": "Складність",
+      "environment": "Середовище",
+      "source": "Джерело",
+      "mainAttack": "Основна атака",
+      "attackBonus": "Бонус атаки",
+      "damage": "Урон",
+      "armorClass": "Клас доспіхів",
+      "speed": "Швидкість",
+      "savingThrows": "Ряткидки",
+      "skills": "Навички",
+      "senses": "Чуття",
+      "languages": "Мови",
+      "tags": "Теги"
+    },
+    "placeholders": {
+      "tags": "тег, тег"
+    },
+    "sections": {
+      "abilities": "Характеристики",
+      "traits": "Риси",
+      "actions": "Дії",
+      "reactions": "Реакції",
+      "legendaryActions": "Легендарні дії",
+      "notes": "Нотатки майстра"
+    },
+    "abilities": {
+      "strength": "СИЛ",
+      "dexterity": "СПР",
+      "constitution": "ВИТ",
+      "intelligence": "ІНТ",
+      "wisdom": "МДР",
+      "charisma": "ХАР"
+    },
+    "empty": {
+      "traits": "Немає рис.",
+      "actions": "Немає дій.",
+      "reactions": "Немає реакцій.",
+      "notes": "Нотаток немає."
+    }
   }
 }

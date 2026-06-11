@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { CommonActions, RouteProp, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './style';
 import { MonsterDto } from '@/types/Monster';
@@ -48,29 +49,29 @@ const previewText = (value?: string): string => {
   return `${value.slice(0, COLLAPSE_LIMIT).trim()}...`;
 };
 
-const createMonsterSeed = (monster: MonsterDto) => ({
+const createMonsterSeed = (monster: MonsterDto, monsterFallback: string) => ({
   monsterId: monster.id,
-  name: monster.name || 'Монстр',
+  name: monster.name || monsterFallback,
   challenge: monster.challenge || '0',
   count: 1,
   hitPoints: monster.hitPoints,
 });
 
-const createDuplicateMonster = (monster: MonsterDto): MonsterDto => ({
+const createDuplicateMonster = (monster: MonsterDto, monsterFallback: string, copyLabel: string, customSource: string): MonsterDto => ({
   ...monster,
   id: `${monster.id}-copy-${Date.now()}`,
-  name: `${monster.name || 'Монстр'} Копія`,
-  source: monster.source || 'Власне',
+  name: `${monster.name || monsterFallback} ${copyLabel}`,
+  source: monster.source || customSource,
   isCustom: true,
 });
 
 const getMetaLine = (monster: MonsterDto): string =>
   [monster.size, monster.type, monster.alignment].filter(Boolean).join(' · ') || '—';
 
-const getMainAttack = (monster: MonsterDto): string => {
+const getMainAttack = (monster: MonsterDto, fallback: string): string => {
   if (monster.mainAttack) return monster.mainAttack;
   const match = (monster.actions || '').match(/\*\*([^.*]+)\./);
-  return match?.[1]?.trim() || '—';
+  return match?.[1]?.trim() || fallback;
 };
 
 const CollapsibleTextBlock = ({
@@ -81,6 +82,8 @@ const CollapsibleTextBlock = ({
   onToggle,
   style,
   rippleColor,
+  showLessLabel,
+  showMoreLabel,
   testID,
 }: {
   title: string;
@@ -90,6 +93,8 @@ const CollapsibleTextBlock = ({
   onToggle: () => void;
   style: ReturnType<typeof getStyles>;
   rippleColor: string;
+  showLessLabel: string;
+  showMoreLabel: string;
   testID?: string;
 }) => {
   const content = value?.trim() || emptyText || '—';
@@ -102,7 +107,7 @@ const CollapsibleTextBlock = ({
       <Text style={style.value}>{text}</Text>
       {canToggle && (
         <Pressable style={style.collapseButton} onPress={onToggle} android_ripple={{ color: rippleColor }}>
-          <Text style={style.collapseButtonText}>{expanded ? 'Згорнути' : 'Показати більше'}</Text>
+          <Text style={style.collapseButtonText}>{expanded ? showLessLabel : showMoreLabel}</Text>
         </Pressable>
       )}
     </View>
@@ -111,6 +116,7 @@ const CollapsibleTextBlock = ({
 
 export default function Monster({ route }: Props) {
   const { monster } = route.params;
+  const { t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'Monster'>>();
   const updateMonster = useMonsterStore((s) => s.updateMonster);
   const addMonster = useMonsterStore((s) => s.addMonster);
@@ -156,7 +162,7 @@ export default function Monster({ route }: Props) {
   };
 
   const duplicateCurrent = () => {
-    void addMonster(createDuplicateMonster(data));
+    void addMonster(createDuplicateMonster(data, t('defaults.monster'), t('defaults.copy'), t('defaults.customSource')));
   };
 
   const addToEncounter = () => {
@@ -165,8 +171,8 @@ export default function Monster({ route }: Props) {
         name: 'DM',
         params: {
           screen: 'DMEncounterPrep',
-          params: {
-            initialMonster: createMonsterSeed(data),
+            params: {
+            initialMonster: createMonsterSeed(data, t('defaults.monster')),
           },
         },
       }),
@@ -223,11 +229,11 @@ export default function Monster({ route }: Props) {
       {data.photoUri ? <Image source={{ uri: data.photoUri }} style={styles.photo} /> : <View style={styles.placeholderPhoto} />}
       {editing && (
         <View style={styles.photoButtonsRow}>
-          <Button title='Завантажити фото' onPress={pickPhoto} />
+          <Button title={t('detail.actions.uploadPhoto')} onPress={pickPhoto} />
           {data.photoUri && (
             <>
               <View style={{ width: 8 }} />
-              <Button title='Видалити фото' onPress={removePhoto} />
+              <Button title={t('detail.actions.removePhoto')} onPress={removePhoto} />
             </>
           )}
         </View>
@@ -250,81 +256,81 @@ export default function Monster({ route }: Props) {
       <View style={styles.actionRow}>
         <Pressable style={styles.actionButton} onPress={addToEncounter} android_ripple={{ color: colors.ripple }} testID='monster.addToEncounterButton'>
           <Ionicons name='add-circle-outline' size={16} color={colors.text} />
-          <Text style={styles.actionText}>До сутички</Text>
+          <Text style={styles.actionText}>{t('actions.addToEncounterShort')}</Text>
         </Pressable>
         <Pressable style={styles.actionButton} onPress={() => void togglePinnedMonster(data.id)} android_ripple={{ color: colors.ripple }}>
           <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={16} color={colors.text} />
-          <Text style={styles.actionText}>{isPinned ? 'Відкріпити' : 'Закріпити'}</Text>
+          <Text style={styles.actionText}>{isPinned ? t('detail.actions.unpin') : t('actions.pin')}</Text>
         </Pressable>
         <Pressable style={styles.actionButton} onPress={() => void toggleFavoriteMonster(data.id)} android_ripple={{ color: colors.ripple }}>
           <Ionicons name={isFavorite ? 'star' : 'star-outline'} size={16} color={colors.text} />
-          <Text style={styles.actionText}>{isFavorite ? 'З улюблених' : 'В улюблені'}</Text>
+          <Text style={styles.actionText}>{isFavorite ? t('detail.actions.removeFavorite') : t('detail.actions.addFavorite')}</Text>
         </Pressable>
         <Pressable style={styles.actionButton} onPress={duplicateCurrent} android_ripple={{ color: colors.ripple }}>
           <Ionicons name='copy-outline' size={16} color={colors.text} />
-          <Text style={styles.actionText}>Дублювати</Text>
+          <Text style={styles.actionText}>{t('detail.actions.duplicate')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.summaryGrid}>
         <View style={styles.summaryCell}>
-          <Text style={styles.statName}>КД</Text>
+          <Text style={styles.statName}>{t('labels.armorClassShort')}</Text>
           <Text style={styles.summaryValue}>{data.armorClass ?? '—'}</Text>
         </View>
         <View style={styles.summaryCell}>
-          <Text style={styles.statName}>ХП</Text>
+          <Text style={styles.statName}>{t('labels.hitPointsShort')}</Text>
           <Text style={styles.summaryValue}>{data.hitPoints ?? '—'}</Text>
         </View>
         <View style={styles.summaryCell}>
-          <Text style={styles.statName}>Швидк.</Text>
+          <Text style={styles.statName}>{t('labels.speedShort')}</Text>
           <Text style={styles.summaryValue}>{data.speed || '—'}</Text>
         </View>
         <View style={styles.summaryCell}>
-          <Text style={styles.statName}>Скл.</Text>
+          <Text style={styles.statName}>{t('labels.challengeShort')}</Text>
           <Text style={styles.summaryValue}>{data.challenge || '—'}</Text>
         </View>
       </View>
 
       <View style={styles.quickBlock}>
-        <Text style={styles.sectionTitle}>Швидкий огляд майстра</Text>
+        <Text style={styles.sectionTitle}>{t('quick.title')}</Text>
         <Text style={styles.value}>
-          {getMainAttack(data)}
-          {data.attackBonus ? ` · ${data.attackBonus} до атаки` : ''}
-          {data.damage ? ` · ${data.damage} урону` : ''}
+          {getMainAttack(data, '—')}
+          {data.attackBonus ? ` · ${t('labels.attackBonus', { value: data.attackBonus })}` : ''}
+          {data.damage ? ` · ${t('detail.labels.damageValue', { value: data.damage })}` : ''}
         </Text>
       </View>
 
       {editing ? (
         <>
-          {renderTextField('Тип', 'type')}
-          {renderTextField('Розмір', 'size')}
-          {renderTextField('Світогляд', 'alignment')}
-          {renderTextField('Складність', 'challenge')}
-          {renderTextField('Середовище', 'environment')}
-          {renderTextField('Джерело', 'source')}
-          {renderTextField('Основна атака', 'mainAttack')}
-          {renderTextField('Бонус атаки', 'attackBonus', '+4')}
-          {renderTextField('Урон', 'damage', '1d6+2')}
-          <Text style={styles.label}>Клас доспіхів</Text>
+          {renderTextField(t('detail.fields.type'), 'type')}
+          {renderTextField(t('detail.fields.size'), 'size')}
+          {renderTextField(t('detail.fields.alignment'), 'alignment')}
+          {renderTextField(t('detail.fields.challenge'), 'challenge')}
+          {renderTextField(t('detail.fields.environment'), 'environment')}
+          {renderTextField(t('detail.fields.source'), 'source')}
+          {renderTextField(t('detail.fields.mainAttack'), 'mainAttack')}
+          {renderTextField(t('detail.fields.attackBonus'), 'attackBonus', '+4')}
+          {renderTextField(t('detail.fields.damage'), 'damage', '1d6+2')}
+          <Text style={styles.label}>{t('detail.fields.armorClass')}</Text>
           <TextInput
             style={styles.input}
             value={typeof data.armorClass === 'number' ? String(data.armorClass) : ''}
             onChangeText={(text) => setNumberField('armorClass', text)}
             keyboardType='numeric'
           />
-          <Text style={styles.label}>ХП</Text>
+          <Text style={styles.label}>{t('labels.hitPointsShort')}</Text>
           <TextInput
             style={styles.input}
             value={typeof data.hitPoints === 'number' ? String(data.hitPoints) : ''}
             onChangeText={(text) => setNumberField('hitPoints', text)}
             keyboardType='numeric'
           />
-          {renderTextField('Швидкість', 'speed')}
-          {renderTextField('Ряткидки', 'savingThrows')}
-          {renderTextField('Навички', 'skills')}
-          {renderTextField('Чуття', 'senses')}
-          {renderTextField('Мови', 'languages')}
-          <Text style={styles.label}>Теги</Text>
+          {renderTextField(t('detail.fields.speed'), 'speed')}
+          {renderTextField(t('detail.fields.savingThrows'), 'savingThrows')}
+          {renderTextField(t('detail.fields.skills'), 'skills')}
+          {renderTextField(t('detail.fields.senses'), 'senses')}
+          {renderTextField(t('detail.fields.languages'), 'languages')}
+          <Text style={styles.label}>{t('detail.fields.tags')}</Text>
           <TextInput
             style={styles.input}
             value={(data.tags || []).join(', ')}
@@ -337,109 +343,119 @@ export default function Monster({ route }: Props) {
                   .filter(Boolean),
               }))
             }
-            placeholder='тег, тег'
+            placeholder={t('detail.placeholders.tags')}
             placeholderTextColor={colors.textSecondary}
           />
         </>
       ) : (
         <View style={styles.metadataGrid}>
-          <Text style={styles.metadataText}>Ряткидки: {data.savingThrows || '—'}</Text>
-          <Text style={styles.metadataText}>Навички: {data.skills || '—'}</Text>
-          <Text style={styles.metadataText}>Чуття: {data.senses || '—'}</Text>
-          <Text style={styles.metadataText}>Мови: {data.languages || '—'}</Text>
-          <Text style={styles.metadataText}>Джерело: {data.source || '—'}</Text>
-          <Text style={styles.metadataText}>Середовище: {data.environment || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.savingThrows')}: {data.savingThrows || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.skills')}: {data.skills || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.senses')}: {data.senses || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.languages')}: {data.languages || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.source')}: {data.source || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.environment')}: {data.environment || '—'}</Text>
         </View>
       )}
 
-      <Text style={styles.sectionTitle}>Характеристики</Text>
+      <Text style={styles.sectionTitle}>{t('detail.sections.abilities')}</Text>
       <View style={styles.statRow}>
-        <Stat label='СИЛ' stat='strength' />
-        <Stat label='СПР' stat='dexterity' />
-        <Stat label='ВИТ' stat='constitution' />
+        <Stat label={t('detail.abilities.strength')} stat='strength' />
+        <Stat label={t('detail.abilities.dexterity')} stat='dexterity' />
+        <Stat label={t('detail.abilities.constitution')} stat='constitution' />
       </View>
       <View style={styles.statRow}>
-        <Stat label='ІНТ' stat='intelligence' />
-        <Stat label='МДР' stat='wisdom' />
-        <Stat label='ХАР' stat='charisma' />
+        <Stat label={t('detail.abilities.intelligence')} stat='intelligence' />
+        <Stat label={t('detail.abilities.wisdom')} stat='wisdom' />
+        <Stat label={t('detail.abilities.charisma')} stat='charisma' />
       </View>
 
       {editing ? (
         <>
-          <Text style={styles.label}>Риси</Text>
+          <Text style={styles.label}>{t('detail.sections.traits')}</Text>
           <TextInput style={styles.textArea} multiline value={data.traits || ''} onChangeText={(text) => setTextField('traits', text)} />
-          <Text style={styles.label}>Дії</Text>
+          <Text style={styles.label}>{t('detail.sections.actions')}</Text>
           <TextInput style={styles.textArea} multiline value={data.actions || ''} onChangeText={(text) => setTextField('actions', text)} />
-          <Text style={styles.label}>Реакції</Text>
+          <Text style={styles.label}>{t('detail.sections.reactions')}</Text>
           <TextInput style={styles.textArea} multiline value={data.reactions || ''} onChangeText={(text) => setTextField('reactions', text)} />
-          <Text style={styles.label}>Легендарні дії</Text>
+          <Text style={styles.label}>{t('detail.sections.legendaryActions')}</Text>
           <TextInput
             style={styles.textArea}
             multiline
             value={data.legendaryActions || ''}
             onChangeText={(text) => setTextField('legendaryActions', text)}
           />
-          <Text style={styles.label}>Нотатки майстра</Text>
+          <Text style={styles.label}>{t('detail.sections.notes')}</Text>
           <TextInput style={styles.textArea} multiline value={data.notes || ''} onChangeText={(text) => setTextField('notes', text)} />
         </>
       ) : (
         <>
           <CollapsibleTextBlock
-            title='Риси'
+            title={t('detail.sections.traits')}
             value={data.traits}
-            emptyText='Немає рис.'
+            emptyText={t('detail.empty.traits')}
             expanded={Boolean(expandedSections.traits)}
             onToggle={() => toggleSection('traits')}
             style={styles}
             rippleColor={colors.ripple}
+            showLessLabel={t('detail.actions.showLess')}
+            showMoreLabel={t('detail.actions.showMore')}
             testID='monster.traitsSection'
           />
           <CollapsibleTextBlock
-            title='Дії'
+            title={t('detail.sections.actions')}
             value={data.actions}
-            emptyText='Немає дій.'
+            emptyText={t('detail.empty.actions')}
             expanded={Boolean(expandedSections.actions)}
             onToggle={() => toggleSection('actions')}
             style={styles}
             rippleColor={colors.ripple}
+            showLessLabel={t('detail.actions.showLess')}
+            showMoreLabel={t('detail.actions.showMore')}
             testID='monster.actionsSection'
           />
           <CollapsibleTextBlock
-            title='Реакції'
+            title={t('detail.sections.reactions')}
             value={data.reactions}
-            emptyText='Немає реакцій.'
+            emptyText={t('detail.empty.reactions')}
             expanded={Boolean(expandedSections.reactions)}
             onToggle={() => toggleSection('reactions')}
             style={styles}
             rippleColor={colors.ripple}
+            showLessLabel={t('detail.actions.showLess')}
+            showMoreLabel={t('detail.actions.showMore')}
             testID='monster.reactionsSection'
           />
           {data.legendaryActions ? (
             <CollapsibleTextBlock
-              title='Легендарні дії'
+              title={t('detail.sections.legendaryActions')}
               value={data.legendaryActions}
               expanded={Boolean(expandedSections.legendaryActions)}
               onToggle={() => toggleSection('legendaryActions')}
               style={styles}
               rippleColor={colors.ripple}
+              showLessLabel={t('detail.actions.showLess')}
+              showMoreLabel={t('detail.actions.showMore')}
               testID='monster.legendaryActionsSection'
             />
           ) : null}
           <CollapsibleTextBlock
-            title='Нотатки майстра'
+            title={t('detail.sections.notes')}
             value={data.notes}
-            emptyText='Нотаток немає.'
+            emptyText={t('detail.empty.notes')}
             expanded={Boolean(expandedSections.notes)}
             onToggle={() => toggleSection('notes')}
             style={styles}
             rippleColor={colors.ripple}
+            showLessLabel={t('detail.actions.showLess')}
+            showMoreLabel={t('detail.actions.showMore')}
             testID='monster.notesSection'
           />
         </>
       )}
 
       <View style={{ marginTop: sp(12) }}>
-        <Button title='Експорт JSON' onPress={() => FileService.exportMonster(data)} />
+        <Button title={t('detail.actions.exportJson')} onPress={() => FileService.exportMonster(data)} />
       </View>
     </ScrollView>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { ScrollView, TouchableOpacity, View, Text } from 'react-native'; 
+import { useTranslation } from 'react-i18next';
 import useCharacterStore from '@/context/Character-store';
 import { useFocusEffect } from '@react-navigation/native';
 import { Modal } from '@/shared/components/Modal/Modal';
@@ -22,6 +23,7 @@ interface InitiativeItem {
 type Props = BottomTabScreenProps<AppStackParamList, 'Initiative'>;
 
 const Initiative: React.FC<Props> = ({ route, navigation }) => {
+  const { t } = useTranslation('initiative');
   const colors = useThemeStore((s) => s.colors);
   const styles = getStyles(colors);
 
@@ -62,10 +64,10 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
     (heroId: string) => {
       const hero = characters.find((c) => c.id === heroId);
       if (!hero) return;
-      setItems((prev) => [{ id: `${Date.now()}`, name: hero.name || 'Без імені', roll: '', hits: '' }, ...prev]);
+      setItems((prev) => [{ id: `${Date.now()}`, name: hero.name || t('heroPicker.fallbackName'), roll: '', hits: '' }, ...prev]);
       setHeroPickerVisible(false);
     },
-    [characters],
+    [characters, t],
   );
 
   const handleAdd = useCallback(() => {
@@ -116,7 +118,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
               style={styles.inputName}
               editable={!item.defeated}
               value={item.name}
-              placeholder="Ім'я"
+              placeholder={t('placeholders.name')}
               onChangeText={(t) => handleChangeById(item.id, 'name', t)}
               onFocus={() => setEditingId(item.id)}
               onBlur={() => setEditingId((p) => (p === item.id ? null : p))}
@@ -127,7 +129,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
               style={styles.inputRoll}
               editable={!item.defeated}
               value={item.roll}
-              placeholder='Кидок'
+              placeholder={t('placeholders.roll')}
               keyboardType='number-pad'
               onChangeText={(t) => handleChangeById(item.id, 'roll', t)}
               onFocus={() => setEditingId(item.id)}
@@ -139,7 +141,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
                 style={styles.inputHits}
                 editable={!item.defeated}
                 value={item.hits ?? '0'}
-                placeholder='ХП'
+                placeholder={t('placeholders.hits')}
                 keyboardType='number-pad'
                 onChangeText={(t) => handleChangeById(item.id, 'hits', toNonNegativeInt(t))}
                 onFocus={() => setEditingId(item.id)}
@@ -157,7 +159,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
             hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
             style={styles.defeatedButton}
             disabled={isActive}
-            accessibilityLabel={item.defeated ? 'Повернути в бій' : 'Позначити переможеним'}
+            accessibilityLabel={item.defeated ? t('actions.returnToFight') : t('actions.markDefeated')}
           >
             <Ionicons name={item.defeated ? 'refresh-circle-outline' : 'skull-outline'} size={22} color={item.defeated ? colors.success : colors.textSecondary} />
           </TouchableOpacity>
@@ -167,7 +169,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
             hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
             style={styles.deleteButton}
             disabled={isActive}
-            accessibilityLabel='Видалити рядок'
+            accessibilityLabel={t('actions.deleteRow')}
           >
             <Ionicons name='trash-outline' size={22} color={colors.danger} />
           </TouchableOpacity>
@@ -194,6 +196,7 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
       styles.defeatedButton,
       styles.deleteButton,
       hitsEnabled,
+      t,
       toggleDefeated,
     ],
   );
@@ -213,16 +216,16 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
             <Ionicons name='add-circle-outline' size={28} color={colors.success} />
-            <Text style={styles.addText}>Додати ще</Text>
+            <Text style={styles.addText}>{t('actions.addRow')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => setHeroPickerVisible(true)}
             style={styles.addHeroButton}
-            accessibilityLabel='Додати героя з переліку'
+            accessibilityLabel={t('actions.addHeroFromList')}
           >
             <Ionicons name='person-add-outline' size={22} color={colors.text} />
-            <Text style={styles.addHeroText}>Додати героя</Text>
+            <Text style={styles.addHeroText}>{t('actions.addHero')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -233,18 +236,18 @@ const Initiative: React.FC<Props> = ({ route, navigation }) => {
           accessibilityState={{ checked: hitsEnabled }}
         >
           <Ionicons name={hitsEnabled ? 'checkbox-outline' : 'square-outline'} size={22} color={colors.text} />
-          <Text style={styles.checkboxLabel}>Вкл. хіт</Text>
+          <Text style={styles.checkboxLabel}>{t('actions.enableHits')}</Text>
         </TouchableOpacity>
 
-        <Modal title='Обрати героя' isVisible={isHeroPickerVisible} onClose={() => setHeroPickerVisible(false)}>
+        <Modal title={t('heroPicker.title')} isVisible={isHeroPickerVisible} onClose={() => setHeroPickerVisible(false)}>
           <ScrollView style={{ maxHeight: 320 }}>
-            {characters.length === 0 && <Text style={{ color: colors.textSecondary }}>Немає створених героїв</Text>}
+            {characters.length === 0 && <Text style={{ color: colors.textSecondary }}>{t('heroPicker.empty')}</Text>}
             {characters.map((hero) => (
               <TouchableOpacity key={hero.id} onPress={() => addHeroToInitiative(hero.id)} style={styles.heroItem}>
                 <Ionicons name='person-outline' size={18} color={colors.textSecondary} />
-                <Text style={styles.heroItemText}>{hero.name || 'Без імені'}</Text>
+                <Text style={styles.heroItemText}>{hero.name || t('heroPicker.fallbackName')}</Text>
                 <Text style={styles.heroItemText}>{hero.class || '???'}</Text>
-                <Text style={styles.heroItemText}>{hero.level || '? рівень'}</Text>
+                <Text style={styles.heroItemText}>{hero.level || t('heroPicker.fallbackLevel')}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>

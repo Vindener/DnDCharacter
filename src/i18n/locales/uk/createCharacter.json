@@ -1,12 +1,201 @@
 {
   "title": "Створити персонажа",
+  "progress": "Крок {{step}}/{{total}}",
   "steps": {
-    "start": "Старт",
-    "identity": "Основа",
-    "stats": "Характеристики",
-    "gameplay": "Ігрові дані",
-    "homebrew": "Homebrew",
+    "1": "Старт",
+    "2": "Дані персонажа",
+    "3": "Раса / Клас / Передісторія",
+    "4": "Характеристики",
+    "5": "Бойова база",
+    "6": "Спорядження",
+    "7": "Магія",
+    "8": "Особистість",
+    "9": "Хоумбрю",
+    "10": "Збереження і доступ",
+    "11": "Перевірка"
+  },
+  "actions": {
+    "ok": "Ок",
+    "next": "Далі",
+    "back": "Назад",
+    "create": "Створити персонажа",
+    "creating": "Створення...",
+    "clear": "Очистити",
+    "add": "Додати",
+    "change": "Змінити",
+    "remove": "Прибрати",
+    "importing": "Імпорт...",
+    "signingIn": "Вхід..."
+  },
+  "alerts": {
+    "errorTitle": "Помилка",
+    "invalidForm": "Невалідні дані форми.",
+    "importFailed": "Не вдалося імпортувати персонажа.",
+    "signInRequiredTitle": "Потрібен вхід",
+    "signInRequiredMessage": "Увійдіть через Google перед створенням хмарного персонажа.",
+    "shareFailed": "Не вдалося додати редактора.",
+    "doneTitle": "Готово",
+    "partialTitle": "Частково готово",
+    "createdLocal": "Персонажа створено локально.",
+    "createdCloud": "Персонажа створено і синхронізовано з хмарою.",
+    "createdCloudShareFailed": "Лист синхронізовано, але шерінг не виконано: {{error}}",
+    "createdLocalCloudFailed": "Персонажа створено локально, але синхронізація з хмарою не спрацювала.",
+    "createFailed": "Не вдалося створити персонажа. Спробуйте ще раз."
+  },
+  "draft": {
+    "restored": "Чернетку відновлено автоматично."
+  },
+  "start": {
+    "title": "Як створити персонажа?",
+    "options": {
+      "standard-5e": {
+        "title": "Стандартний 5e",
+        "description": "Повний покроковий персонаж за базовою логікою 5e."
+      },
+      "quick": {
+        "title": "Швидкий персонаж",
+        "description": "Швидкі дефолти для старту, все можна відредагувати."
+      },
+      "homebrew-blank": {
+        "title": "Порожній хоумбрю",
+        "description": "Порожні власні раса, клас, механіки і поля."
+      },
+      "import": {
+        "title": "Імпорт",
+        "description": "Імпорт JSON персонажа з файлу."
+      }
+    }
+  },
+  "identity": {
+    "name": "Ім’я",
+    "level": "Рівень",
+    "portrait": "Портрет",
+    "campaign": "Кампанія",
+    "playerName": "Ім’я гравця",
+    "notes": "Нотатки"
+  },
+  "raceClass": {
+    "race": "Раса",
+    "subrace": "Підраса",
+    "class": "Клас",
+    "subclass": "Підклас",
+    "background": "Передісторія",
+    "customRaceOption": "Власна раса...",
+    "customRace": "Власна раса",
+    "customSubrace": "Власна підраса",
+    "noSubrace": "Без підраси",
+    "customClassOption": "Власний клас...",
+    "customClass": "Власний клас",
+    "customSubclass": "Власний підклас",
+    "noSubclass": "Ще не обрано",
+    "customBackgroundOption": "Власна предісторія...",
+    "customBackground": "Власна передісторія",
+    "backgroundSkills": "Навички: {{value}}",
+    "backgroundTools": "Інструменти: {{value}}",
+    "backgroundLanguages": "Мови: +{{value}}"
+  },
+  "stats": {
+    "methods": {
+      "array": "Стандартний масив",
+      "pointbuy": "Купівля балів",
+      "manual": "Вручну",
+      "roll": "Куби",
+      "random": "Випадково"
+    },
+    "pointBuySpent": "Купівля балів: {{spent}}/{{budget}}",
+    "rollHint": "Для кожної характеристики киньте 4d6 через DiceRoller. Найменший куб відкидається, три інші додаються.",
+    "randomHint": "Випадковий набір генерує всі шість характеристик за правилом 4d6 з відкиданням найменшого куба.",
+    "regenerate": "Згенерувати заново",
+    "rollDice": "Кинути куби",
+    "rollDetail": "Кидки: {{rolls}} · залишено {{kept}} · відкинуто {{dropped}}"
+  },
+  "combat": {
+    "recommendedHp": "Рекомендоване здоров’я: {{value}}",
+    "recommendedHitDice": "Рекомендовані кістки здоров’я: {{value}}",
+    "recommendedSpeed": "Рекомендована швидкість: {{value}}",
+    "recommendedProficiency": "Рекомендований бонус майстерності: +{{value}}",
+    "hpMax": "Максимум здоров’я",
+    "hpCurrent": "Поточне здоров’я",
+    "hitDice": "Кістки здоров’я",
+    "armorClass": "Клас броні",
+    "speed": "Швидкість",
+    "initiative": "Ініціатива",
+    "proficiencyBonus": "Бонус майстерності",
+    "savingThrowProficiencies": "Володіння рятівними кидками",
+    "takeFromClass": "Взяти з класу"
+  },
+  "equipment": {
+    "startingGear": "Стартовий набір",
+    "weapons": "Зброя",
+    "armor": "Броня",
+    "shield": "Щит",
+    "tools": "Інструменти",
+    "gold": "Золото",
+    "silver": "Срібло",
+    "copper": "Мідь",
+    "extraStartingPack": "Додатковий стартовий набір"
+  },
+  "magic": {
+    "enabled": "Магію увімкнено",
+    "spellcastingAbility": "Характеристика заклять",
+    "spellSaveDC": "Складність рятівного кидка",
+    "spellAttackBonus": "Бонус атаки закляттям",
+    "cantrips": "Замовляння",
+    "knownSpells": "Відомі закляття",
+    "preparedSpells": "Підготовлені закляття",
+    "spellSlots": "Комірки заклять"
+  },
+  "personality": {
+    "alignment": "Світогляд",
+    "ideals": "Ідеали",
+    "bonds": "Прив’язаності",
+    "flaws": "Вади",
+    "backstory": "Передісторія"
+  },
+  "homebrew": {
+    "template": "Шаблон",
+    "customFields": "Власні поля",
+    "customResources": "Власні ресурси",
+    "customSections": "Власні секції",
+    "customTrackers": "Власні трекери",
+    "customAbilities": "Власні здібності"
+  },
+  "storage": {
+    "hint": "Локальне створення працює завжди. Хмарна синхронізація додає доступ між пристроями та шерінг електронною поштою.",
+    "localOnly": "Тільки локально",
+    "localCloud": "Локально + Хмара",
+    "offline": "Офлайн: хмарне створення тимчасово недоступне.",
+    "signInWithGoogle": "Увійти через Google",
+    "access": "Доступ",
+    "inviteEmail": "Електронна пошта для доступу",
+    "local": "Локально",
+    "cloud": "Хмара",
+    "shareTargets": {
+      "none": "Ні",
+      "dm": "Майстер",
+      "player": "Гравець"
+    }
+  },
+  "review": {
+    "level": "Рівень {{level}}",
+    "hp": "Здоров’я",
+    "ac": "КБ",
     "storage": "Збереження",
-    "review": "Перевірка"
+    "access": "Доступ",
+    "spellSaveDC": "Складність заклять"
+  },
+  "templates": {
+    "standard-5e": "Стандартний 5e",
+    "homebrew-light": "Легкий хоумбрю",
+    "homebrew-heavy": "Розширений хоумбрю",
+    "caster": "Заклинач",
+    "martial": "Воїн",
+    "custom-blank": "Порожній шаблон",
+    "default": "Створення персонажа"
+  },
+  "defaults": {
+    "customRace": "Власна раса",
+    "customClass": "Власний клас",
+    "customBackground": "Власна предісторія"
   }
 }

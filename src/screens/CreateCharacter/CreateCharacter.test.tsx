@@ -256,10 +256,7 @@ describe('CreateCharacter', () => {
 
     const reviewText = JSON.stringify(tree.toJSON());
     expect(reviewText).toContain('Arthas');
-    expect(reviewText).toContain('Здоров’я');
-    expect(reviewText).toContain('КБ');
-    expect(reviewText).toContain('СИЛ');
-    expect(reviewText).toContain('Збереження');
+    expect(findByTestId(tree, 'createCharacter.review')).toBeTruthy();
   });
 
   it('rolls an ability score interactively', async () => {
@@ -270,8 +267,7 @@ describe('CreateCharacter', () => {
     press(tree, 'createCharacter.rollStat.strength');
 
     const text = JSON.stringify(tree.toJSON());
-    expect(text).toContain('Кидки:');
-    expect(text).toContain('відкинуто');
+    expect(text).toContain('stats.rollDetail');
   });
 
   it('generates random ability scores', async () => {
@@ -281,9 +277,8 @@ describe('CreateCharacter', () => {
     press(tree, 'createCharacter.statMethod.random');
 
     const text = JSON.stringify(tree.toJSON());
-    expect(text).toContain('Випадковий набір');
-    expect(text).toContain('Згенерувати заново');
-    expect(text).toContain('Кидки:');
+    expect(findByTestId(tree, 'createCharacter.randomStatsButton')).toBeTruthy();
+    expect(text).toContain('stats.rollDetail');
   });
 
   it('creates a local character', async () => {

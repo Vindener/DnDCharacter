@@ -1,0 +1,22 @@
+{
+  "placeholders": {
+    "name": "Name",
+    "roll": "Roll",
+    "hits": "HP"
+  },
+  "actions": {
+    "addRow": "Add row",
+    "addHero": "Add hero",
+    "enableHits": "Enable HP",
+    "returnToFight": "Return to fight",
+    "markDefeated": "Mark defeated",
+    "deleteRow": "Delete row",
+    "addHeroFromList": "Add hero from list"
+  },
+  "heroPicker": {
+    "title": "Choose hero",
+    "empty": "No heroes created",
+    "fallbackName": "Unnamed",
+    "fallbackLevel": "Level ?"
+  }
+}

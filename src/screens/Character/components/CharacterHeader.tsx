@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import CharacterMenu from '@/shared/components/CharacterMenu/CharacterMenu';
 import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
@@ -40,6 +41,7 @@ function CharacterHeaderBase({
   setMode,
   toggleSessionMode,
 }: CharacterHeaderProps) {
+  const { t } = useTranslation('character');
   return (
     <View style={styles.headerCard} testID='character.header'>
       <View style={styles.headerTop}>
@@ -53,7 +55,7 @@ function CharacterHeaderBase({
 
         <View style={styles.headerInfo}>
           <View style={styles.nameRow}>
-            <Text style={styles.characterName}>{characterData.name || 'Без імені'}</Text>
+            <Text style={styles.characterName}>{characterData.name || t('header.unnamed')}</Text>
             <CharacterMenu
               character={characterData}
               isCloudDoc={isCloudDoc}
@@ -63,7 +65,7 @@ function CharacterHeaderBase({
             />
           </View>
           <Text style={styles.characterMeta}>
-            {characterData.race || 'Раса'} · {characterData.class || 'Клас'} · Рівень {characterData.level}
+            {characterData.race || t('header.raceFallback')} · {characterData.class || t('header.classFallback')} · {t('header.level', { level: characterData.level })}
           </Text>
           <View style={styles.badgesRow}>{syncBadges.map(renderBadge)}</View>
           <View style={styles.syncIndicatorRow}>
@@ -72,7 +74,7 @@ function CharacterHeaderBase({
           </View>
           <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: colors.ripple }}>
             <MaterialCommunityIcons name='sync' size={16} color={colors.text} />
-            <Text style={styles.syncNowButtonText}>Синхронізувати зараз</Text>
+            <Text style={styles.syncNowButtonText}>{t('sync.syncNow')}</Text>
           </Pressable>
         </View>
       </View>
@@ -111,7 +113,7 @@ function CharacterHeaderBase({
           android_ripple={{ color: colors.ripple }}
           testID='character.sessionMode.toggle'
         >
-          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>Сесія</Text>
+          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>{t('header.session')}</Text>
         </Pressable>
       </View>
     </View>

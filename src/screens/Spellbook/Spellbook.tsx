@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, FlatList, Pressable, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useSpellbookStore from '@/context/Spellbook-store';
@@ -21,58 +22,28 @@ type Props = {
 type SpellbookTab = 'all' | 'prepared' | 'known' | 'favorites' | 'custom';
 type LevelFilter = 'all' | number;
 type BooleanFilter = 'all' | 'yes' | 'no';
-
-const TABS: Array<{ id: SpellbookTab; label: string }> = [
-  { id: 'all', label: 'Всі' },
-  { id: 'prepared', label: 'Підготовлені' },
-  { id: 'known', label: 'Відомі' },
-  { id: 'favorites', label: 'Улюблені' },
-  { id: 'custom', label: 'Власні' },
-];
-
-const LEVEL_FILTERS: Array<{ id: LevelFilter; label: string }> = [
-  { id: 'all', label: 'Усі' },
-  { id: 0, label: 'Каніпс' },
-  { id: 1, label: '1' },
-  { id: 2, label: '2' },
-  { id: 3, label: '3' },
-  { id: 4, label: '4' },
-  { id: 5, label: '5' },
-  { id: 6, label: '6' },
-  { id: 7, label: '7' },
-  { id: 8, label: '8' },
-  { id: 9, label: '9' },
-];
-
-const BOOLEAN_FILTERS: Array<{ id: BooleanFilter; label: string }> = [
-  { id: 'all', label: 'Усі' },
-  { id: 'yes', label: 'Так' },
-  { id: 'no', label: 'Ні' },
-];
-
-const SPELL_STATUS_LABEL: Record<CharacterSpellStatus, string> = {
-  available: 'Доступне',
-  known: 'Відоме',
-  prepared: 'Підготовлене',
-  cantrip: 'Каніпс',
+type DisplaySpell = {
+  name: string;
+  school: string;
+  castingTime: string;
+  range: string;
+  components: SpellComponents;
+  duration: string;
+  description: string;
+  higherLevels: string;
+  damageProfiles: SpellDamageProfile[];
 };
 
-function sourceLabel(source: SpellbookSpell['source']): string {
-  if (source === 'custom') return 'власне';
-  if (source === 'imported') return 'імпортоване';
-  return 'системне';
-}
+const TABS: SpellbookTab[] = ['all', 'prepared', 'known', 'favorites', 'custom'];
+const LEVEL_FILTERS: LevelFilter[] = ['all', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const BOOLEAN_FILTERS: BooleanFilter[] = ['all', 'yes', 'no'];
 
-function formatLevel(level: number): string {
-  return level === 0 ? 'Каніпс' : `Рівень ${level}`;
-}
-
-function componentsToText(components: SpellComponents): string {
+function componentsToText(components: SpellComponents, emptyLabel: string): string {
   const parts: string[] = [];
   if (components.verbal) parts.push('V');
   if (components.somatic) parts.push('S');
   if (components.material) parts.push(`M (${components.material})`);
-  return parts.length ? parts.join(', ') : 'Немає';
+  return parts.length ? parts.join(', ') : emptyLabel;
 }
 
 function damageProfilesToText(profiles: SpellDamageProfile[]): string {
@@ -83,6 +54,91 @@ function damageProfilesToText(profiles: SpellDamageProfile[]): string {
       return parts.join(' | ');
     })
     .join('\n');
+}
+
+function getTranslatedString(t: (key: string, options?: Record<string, unknown>) => string, key: string, fallback: string): string {
+  const translated = t(key, { defaultValue: fallback });
+  return typeof translated === 'string' ? translated : fallback;
+}
+
+function translateEnglishSeedMetaValue(value: string): string {
+  const feetMatch = value.match(/^(\d+) футів$/);
+  if (feetMatch) return `${feetMatch[1]} feet`;
+
+  switch (value) {
+    case '1 дія':
+      return '1 action';
+    case '1 реакція':
+      return '1 reaction';
+    case 'Дотик':
+      return 'Touch';
+    case 'На себе':
+      return 'Self';
+    case 'Миттєво':
+      return 'Instantaneous';
+    case '1 раунд':
+      return '1 round';
+    case '1 хвилина':
+      return '1 minute';
+    case '8 годин':
+      return '8 hours';
+    case 'До 1 хвилини':
+      return 'Up to 1 minute';
+    case 'До 10 хвилин':
+      return 'Up to 10 minutes';
+    case 'До 1 години':
+      return 'Up to 1 hour';
+    default:
+      return value;
+  }
+}
+
+function translateEnglishMaterial(value: string): string {
+  switch (value) {
+    case 'крихітна кулька гуано кажана та сірка':
+      return 'a tiny ball of bat guano and sulfur';
+    case 'шматочок обробленої шкіри':
+      return 'a piece of cured leather';
+    default:
+      return value;
+  }
+}
+
+function getDisplaySpell(t: (key: string, options?: Record<string, unknown>) => string, spell: SpellbookSpell, language: string): DisplaySpell {
+  if (spell.source !== 'system' || language !== 'en') {
+    return {
+      name: spell.name,
+      school: spell.school,
+      castingTime: spell.castingTime,
+      range: spell.range,
+      components: spell.components,
+      duration: spell.duration,
+      description: spell.description,
+      higherLevels: spell.higherLevels,
+      damageProfiles: spell.damageProfiles,
+    };
+  }
+
+  return {
+    name: getTranslatedString(t, `seedSpells.${spell.id}.name`, spell.name),
+    school: getTranslatedString(t, `seedSpells.${spell.id}.school`, spell.school),
+    castingTime: translateEnglishSeedMetaValue(spell.castingTime),
+    range: translateEnglishSeedMetaValue(spell.range),
+    components: {
+      ...spell.components,
+      material: spell.components.material ? translateEnglishMaterial(spell.components.material) : spell.components.material,
+    },
+    duration: translateEnglishSeedMetaValue(spell.duration),
+    description: getTranslatedString(t, `seedSpells.${spell.id}.description`, spell.description),
+    higherLevels: getTranslatedString(t, `seedSpells.${spell.id}.higherLevels`, spell.higherLevels),
+    damageProfiles: spell.damageProfiles.map((profile, index) => ({
+      ...profile,
+      label: getTranslatedString(t, `seedSpells.${spell.id}.damageProfiles.${index}.label`, profile.label),
+      condition: profile.condition
+        ? getTranslatedString(t, `seedSpells.${spell.id}.damageProfiles.${index}.condition`, profile.condition)
+        : profile.condition,
+    })),
+  };
 }
 
 function hasCasterSetup(character: CharacterViewModel | null): boolean {
@@ -97,13 +153,13 @@ function hasCasterSetup(character: CharacterViewModel | null): boolean {
   );
 }
 
-function buildImportedSpell(name: string): SpellbookSpell {
+function buildImportedSpell(name: string, importedSchool: string, importedTag: string): SpellbookSpell {
   const key = normalizeSpellName(name).replace(/\s+/g, '-');
   return {
     id: `spell-imported-${key}`,
     name,
     level: 1,
-    school: 'З листа персонажа',
+    school: importedSchool,
     castingTime: '',
     range: '',
     components: { verbal: false, somatic: false, material: '' },
@@ -111,7 +167,7 @@ function buildImportedSpell(name: string): SpellbookSpell {
     description: '',
     higherLevels: '',
     classes: [],
-    tags: ['імпортоване'],
+    tags: [importedTag],
     ritual: false,
     concentration: false,
     damageProfiles: [],
@@ -122,8 +178,10 @@ function buildImportedSpell(name: string): SpellbookSpell {
 }
 
 const Spellbook = ({ route }: Props) => {
+  const { t, i18n } = useTranslation('spellbook');
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
+  const sortLocale = i18n.language === 'uk' ? 'uk' : 'en';
   const params = route.params;
   const mode = params?.mode || 'player';
   const isDmMode = mode === 'dm';
@@ -160,8 +218,8 @@ const Spellbook = ({ route }: Props) => {
   const [editingSpell, setEditingSpell] = useState<SpellbookSpell | null>(null);
   const [modalName, setModalName] = useState('');
   const [modalLevel, setModalLevel] = useState('1');
-  const [modalSchool, setModalSchool] = useState('Власне');
-  const [modalCastingTime, setModalCastingTime] = useState('1 дія');
+  const [modalSchool, setModalSchool] = useState(t('defaults.customSchool'));
+  const [modalCastingTime, setModalCastingTime] = useState(t('defaults.castingTime'));
   const [modalRange, setModalRange] = useState('');
   const [modalComponents, setModalComponents] = useState('V, S');
   const [modalDuration, setModalDuration] = useState('');
@@ -230,12 +288,12 @@ const Spellbook = ({ route }: Props) => {
       collectCharacterSpellNames(character).forEach((name) => {
         const key = normalizeSpellName(name);
         if (!key || byName.has(key)) return;
-        byName.set(key, buildImportedSpell(name));
+        byName.set(key, buildImportedSpell(name, t('defaults.importedSchool'), t('sources.imported')));
       });
     });
 
     return Array.from(byName.values());
-  }, [characters, spells]);
+  }, [characters, spells, t]);
 
   const selectedSpell = useMemo(
     () => spellbookWithCharacterImports.find((spell) => spell.id === selectedSpellId) || null,
@@ -255,22 +313,24 @@ const Spellbook = ({ route }: Props) => {
   const classOptions = useMemo(() => {
     const values = new Set<string>();
     spellbookWithCharacterImports.forEach((spell) => spell.classes.forEach((className) => values.add(className)));
-    return Array.from(values).sort((a, b) => a.localeCompare(b, 'uk'));
-  }, [spellbookWithCharacterImports]);
+    return Array.from(values).sort((a, b) => a.localeCompare(b, sortLocale));
+  }, [sortLocale, spellbookWithCharacterImports]);
 
   const schoolOptions = useMemo(() => {
     const values = new Set<string>();
     spellbookWithCharacterImports.forEach((spell) => {
-      if (spell.school) values.add(spell.school);
+      const display = getDisplaySpell(t, spell, i18n.language);
+      if (display.school) values.add(display.school);
     });
-    return Array.from(values).sort((a, b) => a.localeCompare(b, 'uk'));
-  }, [spellbookWithCharacterImports]);
+    return Array.from(values).sort((a, b) => a.localeCompare(b, sortLocale));
+  }, [i18n.language, sortLocale, spellbookWithCharacterImports, t]);
 
   const filteredSpells = useMemo(() => {
     const filter = search.trim().toLowerCase();
 
     return spellbookWithCharacterImports
       .filter((spell) => {
+        const display = getDisplaySpell(t, spell, i18n.language);
         const status = getCharacterSpellStatus(selectedCharacter, spell.name);
         if (activeTab === 'prepared' && status !== 'prepared') return false;
         if (activeTab === 'known' && status !== 'known' && status !== 'cantrip') return false;
@@ -278,7 +338,7 @@ const Spellbook = ({ route }: Props) => {
         if (activeTab === 'custom' && spell.source !== 'custom') return false;
         if (levelFilter !== 'all' && spell.level !== levelFilter) return false;
         if (classFilter !== 'all' && !spell.classes.includes(classFilter)) return false;
-        if (schoolFilter !== 'all' && spell.school !== schoolFilter) return false;
+        if (schoolFilter !== 'all' && display.school !== schoolFilter) return false;
         if (ritualFilter !== 'all' && spell.ritual !== (ritualFilter === 'yes')) return false;
         if (concentrationFilter !== 'all' && spell.concentration !== (concentrationFilter === 'yes')) return false;
         if (!filter) return true;
@@ -286,18 +346,30 @@ const Spellbook = ({ route }: Props) => {
         const damageText = spell.damageProfiles
           .map((profile) => `${profile.label} ${profile.formula} ${profile.damageType} ${profile.condition || ''}`)
           .join(' ');
+        const translatedDamageText = display.damageProfiles
+          .map((profile) => `${profile.label} ${profile.formula} ${profile.damageType} ${profile.condition || ''}`)
+          .join(' ');
         const haystack = [
           spell.name,
+          display.name,
           spell.school,
+          display.school,
           spell.castingTime,
+          display.castingTime,
           spell.range,
-          componentsToText(spell.components),
+          display.range,
+          componentsToText(spell.components, t('labels.noComponents')),
+          componentsToText(display.components, t('labels.noComponents')),
           spell.duration,
+          display.duration,
           spell.description,
+          display.description,
           spell.higherLevels,
+          display.higherLevels,
           spell.classes.join(' '),
           spell.tags.join(' '),
           damageText,
+          translatedDamageText,
         ].join(' ').toLowerCase();
         return haystack.includes(filter);
       })
@@ -307,7 +379,7 @@ const Spellbook = ({ route }: Props) => {
           if (pinDelta) return pinDelta;
         }
         if (a.level !== b.level) return a.level - b.level;
-        return a.name.localeCompare(b.name, 'uk');
+        return getDisplaySpell(t, a, i18n.language).name.localeCompare(getDisplaySpell(t, b, i18n.language).name, sortLocale);
       });
   }, [
     activeTab,
@@ -321,7 +393,10 @@ const Spellbook = ({ route }: Props) => {
     schoolFilter,
     search,
     selectedCharacter,
+    sortLocale,
     spellbookWithCharacterImports,
+    t,
+    i18n.language,
   ]);
 
   const activeFilterCount =
@@ -347,7 +422,7 @@ const Spellbook = ({ route }: Props) => {
       const key = normalizeSpellName(spellName);
       const alreadyPrepared = selectedPreparedSpellNames.has(key);
       if (!alreadyPrepared && selectedPreparedCount >= selectedPreparedLimit) {
-        setNotice(`Ліміт підготовлених заклять: ${selectedPreparedCount}/${selectedPreparedLimit}.`);
+        setNotice(t('notices.preparedLimit', { count: selectedPreparedCount, limit: selectedPreparedLimit }));
         return;
       }
     }
@@ -360,15 +435,15 @@ const Spellbook = ({ route }: Props) => {
     setEditingSpell(null);
     setModalName('');
     setModalLevel('1');
-    setModalSchool('Власне');
-    setModalCastingTime('1 дія');
+    setModalSchool(t('defaults.customSchool'));
+    setModalCastingTime(t('defaults.castingTime'));
     setModalRange('');
     setModalComponents('V, S');
     setModalDuration('');
     setModalDescription('');
     setModalHigherLevels('');
     setModalClasses('');
-    setModalTags('власне');
+    setModalTags(t('defaults.customTag'));
     setModalRitual(false);
     setModalConcentration(false);
     setModalDamageProfiles('');
@@ -379,10 +454,10 @@ const Spellbook = ({ route }: Props) => {
     setEditingSpell(spell);
     setModalName(spell.name);
     setModalLevel(String(spell.level));
-    setModalSchool(spell.school || 'Власне');
+    setModalSchool(spell.school || t('defaults.customSchool'));
     setModalCastingTime(spell.castingTime || '');
     setModalRange(spell.range || '');
-    setModalComponents(componentsToText(spell.components));
+    setModalComponents(componentsToText(spell.components, t('labels.noComponents')));
     setModalDuration(spell.duration || '');
     setModalDescription(spell.description || '');
     setModalHigherLevels(spell.higherLevels || '');
@@ -413,7 +488,7 @@ const Spellbook = ({ route }: Props) => {
       damageProfiles: modalDamageProfiles,
     });
     if (!validation.ok) {
-      setNotice(formatSchemaErrors(validation.issues)[0] || 'Невалідні дані закляття.');
+      setNotice(formatSchemaErrors(validation.issues)[0] || t('errors.invalidSpell'));
       return;
     }
 
@@ -443,10 +518,10 @@ const Spellbook = ({ route }: Props) => {
       return null;
     }
     if (!selectedCharacter) {
-      return <Text style={styles.metaMuted}>Оберіть персонажа, щоб керувати відомими й підготовленими закляттями.</Text>;
+      return <Text style={styles.metaMuted}>{t('characterActions.selectCharacter')}</Text>;
     }
     if (!canUseCharacterActions) {
-      return <Text style={styles.metaMuted}>У персонажа не налаштовано магію; Spellbook працює як довідник.</Text>;
+      return <Text style={styles.metaMuted}>{t('characterActions.notCaster')}</Text>;
     }
 
     return (
@@ -464,7 +539,7 @@ const Spellbook = ({ route }: Props) => {
             disabled={nextStatus === 'prepared' && !canSetPrepared}
           >
             <Text style={[styles.statusButtonText, status === nextStatus ? styles.statusButtonTextActive : null]}>
-              {SPELL_STATUS_LABEL[nextStatus]}
+              {t(`status.${nextStatus}`)}
             </Text>
           </Pressable>
         ))}
@@ -477,6 +552,7 @@ const Spellbook = ({ route }: Props) => {
     const isFavorite = favoriteSet.has(item.id);
     const isPinned = pinnedSet.has(item.id);
     const canFavorite = item.source !== 'imported';
+    const display = getDisplaySpell(t, item, i18n.language);
 
     return (
       <Pressable
@@ -487,9 +563,9 @@ const Spellbook = ({ route }: Props) => {
       >
         <View style={styles.cardHeader}>
           <View style={styles.cardHeaderMain}>
-            <Text style={styles.spellName}>{item.name}</Text>
+            <Text style={styles.spellName}>{display.name}</Text>
             <Text style={styles.meta}>
-              {formatLevel(item.level)} · {item.school || 'Школа невідома'} · {sourceLabel(item.source)}
+              {item.level === 0 ? t('levels.cantrip') : t('levels.level', { level: item.level })} · {display.school || t('labels.unknownSchool')} · {t(`sources.${item.source}`)}
             </Text>
           </View>
           {isDmMode ? (
@@ -518,27 +594,27 @@ const Spellbook = ({ route }: Props) => {
         </View>
 
         <View style={styles.metadataGrid}>
-          <Text style={styles.metadataText}>Каст: {item.castingTime || '—'}</Text>
-          <Text style={styles.metadataText}>Дистанція: {item.range || '—'}</Text>
-          <Text style={styles.metadataText}>Компоненти: {componentsToText(item.components)}</Text>
-          <Text style={styles.metadataText}>Тривалість: {item.duration || '—'}</Text>
+          <Text style={styles.metadataText}>{t('labels.cast')}: {display.castingTime || '—'}</Text>
+          <Text style={styles.metadataText}>{t('labels.range')}: {display.range || '—'}</Text>
+          <Text style={styles.metadataText}>{t('labels.components')}: {componentsToText(display.components, t('labels.noComponents'))}</Text>
+          <Text style={styles.metadataText}>{t('labels.duration')}: {display.duration || '—'}</Text>
         </View>
 
         <View style={styles.tagRow}>
           <View style={[styles.smallTag, item.concentration ? styles.smallTagActive : null]}>
             <Text style={[styles.smallTagText, item.concentration ? styles.smallTagTextActive : null]}>
-              Концентрація: {item.concentration ? 'Так' : 'Ні'}
+              {t('labels.concentration')}: {item.concentration ? t('boolean.yes') : t('boolean.no')}
             </Text>
           </View>
           <View style={[styles.smallTag, item.ritual ? styles.smallTagActive : null]}>
-            <Text style={[styles.smallTagText, item.ritual ? styles.smallTagTextActive : null]}>Ритуал: {item.ritual ? 'Так' : 'Ні'}</Text>
+            <Text style={[styles.smallTagText, item.ritual ? styles.smallTagTextActive : null]}>{t('labels.ritual')}: {item.ritual ? t('boolean.yes') : t('boolean.no')}</Text>
           </View>
         </View>
 
-        {item.description ? <Text style={styles.description}>{item.description}</Text> : null}
+        {display.description ? <Text style={styles.description}>{display.description}</Text> : null}
 
         <View style={styles.statusLine}>
-          <Text style={styles.statusText}>Статус: {SPELL_STATUS_LABEL[status]}</Text>
+          <Text style={styles.statusText}>{t('labels.status')}: {t(`status.${status}`)}</Text>
         </View>
 
         {renderStatusActions(item)}
@@ -546,15 +622,15 @@ const Spellbook = ({ route }: Props) => {
         <View style={styles.cardActionRow}>
           <Pressable style={styles.cardActionButton} onPress={() => setSelectedSpellId(item.id)} android_ripple={{ color: colors.ripple }}>
             <MaterialCommunityIcons name='text-box-search-outline' size={14} color={colors.text} />
-            <Text style={styles.cardActionText}>Швидкий перегляд</Text>
+            <Text style={styles.cardActionText}>{t('actions.quickView')}</Text>
           </Pressable>
           <Pressable style={styles.cardActionButton} onPress={() => openEditSpellModal(item)} android_ripple={{ color: colors.ripple }}>
             <MaterialCommunityIcons name='pencil-outline' size={14} color={colors.text} />
-            <Text style={styles.cardActionText}>{item.source === 'custom' ? 'Редагувати' : 'Копія'}</Text>
+            <Text style={styles.cardActionText}>{item.source === 'custom' ? t('actions.edit') : t('actions.copy')}</Text>
           </Pressable>
           {item.source === 'custom' ? (
             <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: colors.ripple }}>
-              <Text style={styles.deleteCustomButtonText}>Видалити</Text>
+              <Text style={styles.deleteCustomButtonText}>{t('actions.delete')}</Text>
             </Pressable>
           ) : null}
         </View>
@@ -566,24 +642,24 @@ const Spellbook = ({ route }: Props) => {
     <View style={styles.container} testID='spellbook.screen'>
       <View style={styles.headerRow}>
         <View style={styles.headerMeta}>
-          <Text style={styles.title}>Книга заклять</Text>
-          <Text style={styles.hint}>{isDmMode ? 'Закріплені довідки, нотатки і швидкий пошук для столу.' : 'Пошук, підготовка, улюблені й прив’язка заклять до персонажа.'}</Text>
+          <Text style={styles.title}>{t('title')}</Text>
+          <Text style={styles.hint}>{isDmMode ? t('hint.dm') : t('hint.player')}</Text>
         </View>
         <Pressable style={styles.headerAction} onPress={openCreateSpellModal} android_ripple={{ color: colors.ripple }}>
           <MaterialCommunityIcons name='plus' size={16} color={colors.onPrimary} />
-          <Text style={styles.headerActionText}>Додати</Text>
+          <Text style={styles.headerActionText}>{t('actions.add')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.offlineBanner}>
         <MaterialCommunityIcons name='cloud-off-outline' size={16} color={colors.onInfo} />
-        <Text style={styles.offlineBannerText}>Локальна книга заклять. DM-закріплення і нотатки зберігаються на цьому пристрої.</Text>
+        <Text style={styles.offlineBannerText}>{t('offlineBanner')}</Text>
       </View>
 
       <TextInput
         value={search}
         onChangeText={setSearch}
-        placeholder='Пошук закляття...'
+        placeholder={t('search.placeholder')}
         placeholderTextColor={colors.textSecondary}
         style={styles.search}
         testID='spellbook.searchInput'
@@ -592,13 +668,13 @@ const Spellbook = ({ route }: Props) => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsRow}>
         {TABS.map((tab) => (
           <Pressable
-            key={tab.id}
-            style={[styles.tabButton, activeTab === tab.id ? styles.tabButtonActive : null]}
-            onPress={() => setActiveTab(tab.id)}
+            key={tab}
+            style={[styles.tabButton, activeTab === tab ? styles.tabButtonActive : null]}
+            onPress={() => setActiveTab(tab)}
             android_ripple={{ color: colors.ripple }}
-            testID={`spellbook.tab.${tab.id}`}
+            testID={`spellbook.tab.${tab}`}
           >
-            <Text style={[styles.tabButtonText, activeTab === tab.id ? styles.tabButtonTextActive : null]}>{tab.label}</Text>
+            <Text style={[styles.tabButtonText, activeTab === tab ? styles.tabButtonTextActive : null]}>{t(`tabs.${tab}`)}</Text>
           </Pressable>
         ))}
       </ScrollView>
@@ -607,16 +683,18 @@ const Spellbook = ({ route }: Props) => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
           {LEVEL_FILTERS.map((item) => (
             <Pressable
-              key={`level-${String(item.id)}`}
-              style={[styles.chip, levelFilter === item.id ? styles.chipActive : null]}
-              onPress={() => setLevelFilter(item.id)}
+              key={`level-${String(item)}`}
+              style={[styles.chip, levelFilter === item ? styles.chipActive : null]}
+              onPress={() => setLevelFilter(item)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, levelFilter === item.id ? styles.chipTextActive : null]}>{item.label}</Text>
+              <Text style={[styles.chipText, levelFilter === item ? styles.chipTextActive : null]}>
+                {item === 'all' ? t('filters.all') : item === 0 ? t('levels.cantrip') : String(item)}
+              </Text>
             </Pressable>
           ))}
           <Pressable style={[styles.chip, classFilter !== 'all' ? styles.chipActive : null]} onPress={() => setClassFilter('all')} android_ripple={{ color: colors.ripple }}>
-            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{classFilter === 'all' ? 'Клас' : classFilter}</Text>
+            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{classFilter === 'all' ? t('filters.class') : classFilter}</Text>
           </Pressable>
           {classOptions.map((className) => (
             <Pressable
@@ -629,7 +707,7 @@ const Spellbook = ({ route }: Props) => {
             </Pressable>
           ))}
           <Pressable style={[styles.chip, schoolFilter !== 'all' ? styles.chipActive : null]} onPress={() => setSchoolFilter('all')} android_ripple={{ color: colors.ripple }}>
-            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{schoolFilter === 'all' ? 'Школа' : schoolFilter}</Text>
+            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{schoolFilter === 'all' ? t('filters.school') : schoolFilter}</Text>
           </Pressable>
           {schoolOptions.map((school) => (
             <Pressable
@@ -643,34 +721,34 @@ const Spellbook = ({ route }: Props) => {
           ))}
           {BOOLEAN_FILTERS.map((item) => (
             <Pressable
-              key={`ritual-${item.id}`}
-              style={[styles.chip, ritualFilter === item.id && item.id !== 'all' ? styles.chipActive : null]}
-              onPress={() => setRitualFilter(item.id)}
+              key={`ritual-${item}`}
+              style={[styles.chip, ritualFilter === item && item !== 'all' ? styles.chipActive : null]}
+              onPress={() => setRitualFilter(item)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, ritualFilter === item.id && item.id !== 'all' ? styles.chipTextActive : null]}>
-                Ритуал: {item.label}
+              <Text style={[styles.chipText, ritualFilter === item && item !== 'all' ? styles.chipTextActive : null]}>
+                {t('labels.ritual')}: {t(`boolean.${item}`)}
               </Text>
             </Pressable>
           ))}
           {BOOLEAN_FILTERS.map((item) => (
             <Pressable
-              key={`concentration-${item.id}`}
-              style={[styles.chip, concentrationFilter === item.id && item.id !== 'all' ? styles.chipActive : null]}
-              onPress={() => setConcentrationFilter(item.id)}
+              key={`concentration-${item}`}
+              style={[styles.chip, concentrationFilter === item && item !== 'all' ? styles.chipActive : null]}
+              onPress={() => setConcentrationFilter(item)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, concentrationFilter === item.id && item.id !== 'all' ? styles.chipTextActive : null]}>
-                Концентрація: {item.label}
+              <Text style={[styles.chipText, concentrationFilter === item && item !== 'all' ? styles.chipTextActive : null]}>
+                {t('labels.concentration')}: {t(`boolean.${item}`)}
               </Text>
             </Pressable>
           ))}
         </ScrollView>
         {activeFilterCount ? (
           <View style={styles.activeFiltersRow}>
-            <Text style={styles.preparedInfo}>Активні фільтри: {activeFilterCount}</Text>
+            <Text style={styles.preparedInfo}>{t('filters.active', { count: activeFilterCount })}</Text>
             <Pressable style={styles.clearButton} onPress={clearFilters} android_ripple={{ color: colors.ripple }}>
-              <Text style={styles.clearButtonText}>Скинути</Text>
+              <Text style={styles.clearButtonText}>{t('filters.clear')}</Text>
             </Pressable>
           </View>
         ) : null}
@@ -678,10 +756,10 @@ const Spellbook = ({ route }: Props) => {
 
       {!isDmMode ? (
         <View style={styles.characterPickerBlock}>
-          <Text style={styles.sectionLabel}>Прив’язка до персонажа</Text>
+          <Text style={styles.sectionLabel}>{t('characterBinding.title')}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
             <Pressable style={[styles.chip, !selectedCharacter ? styles.chipActive : null]} onPress={() => setSelectedCharacterId('')} android_ripple={{ color: colors.ripple }}>
-              <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>Лише довідник</Text>
+              <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>{t('characterBinding.referenceOnly')}</Text>
             </Pressable>
             {characters.map((character) => (
               <Pressable
@@ -691,18 +769,18 @@ const Spellbook = ({ route }: Props) => {
                 android_ripple={{ color: colors.ripple }}
               >
                 <Text style={[styles.chipText, selectedCharacter?.id === character.id ? styles.chipTextActive : null]}>
-                  {character.name || 'Персонаж'}
+                  {character.name || t('characterBinding.characterFallback')}
                 </Text>
               </Pressable>
             ))}
           </ScrollView>
-          {selectedCharacter && selectedPreparedLimit !== null ? <Text style={styles.preparedInfo}>Підготовлено: {selectedPreparedCount}/{selectedPreparedLimit}</Text> : null}
-          {selectedCharacter && !selectedCharacterIsCaster ? <Text style={styles.preparedWarning}>Не кастер: режим довідника.</Text> : null}
+          {selectedCharacter && selectedPreparedLimit !== null ? <Text style={styles.preparedInfo}>{t('characterBinding.prepared', { count: selectedPreparedCount, limit: selectedPreparedLimit })}</Text> : null}
+          {selectedCharacter && !selectedCharacterIsCaster ? <Text style={styles.preparedWarning}>{t('characterBinding.notCaster')}</Text> : null}
           {notice ? <Text style={styles.preparedWarning}>{notice}</Text> : null}
         </View>
       ) : null}
 
-      {isDmMode && pinnedSpellIds.length ? <Text style={styles.preparedInfo}>Закріплені закляття показуються першими.</Text> : null}
+      {isDmMode && pinnedSpellIds.length ? <Text style={styles.preparedInfo}>{t('pinnedHint')}</Text> : null}
       {loadError ? <Text style={styles.errorText}>{loadError}</Text> : null}
       {!loadError && !isLoaded ? <SkeletonSpellbook /> : null}
 
@@ -712,49 +790,53 @@ const Spellbook = ({ route }: Props) => {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
           renderItem={renderSpellCard}
-          ListEmptyComponent={<Text style={styles.empty}>Заклять не знайдено. Змініть пошук, скиньте фільтри або додайте власне закляття.</Text>}
+          ListEmptyComponent={<Text style={styles.empty}>{t('empty')}</Text>}
         />
       ) : null}
 
       <Modal
         isVisible={Boolean(selectedSpell)}
         onClose={() => setSelectedSpellId(null)}
-        title={selectedSpell?.name || 'Деталі закляття'}
-        subtitle={selectedSpell ? `${formatLevel(selectedSpell.level)} · ${selectedSpell.school}` : undefined}
+        title={selectedSpell ? getDisplaySpell(t, selectedSpell, i18n.language).name : t('detail.title')}
+        subtitle={selectedSpell ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(t, selectedSpell, i18n.language).school}` : undefined}
       >
         {selectedSpell ? (
           <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
+            {(() => {
+              const display = getDisplaySpell(t, selectedSpell, i18n.language);
+              return (
+                <>
             <View style={styles.metadataGrid}>
-              <Text style={styles.metadataText}>Час касту: {selectedSpell.castingTime || '—'}</Text>
-              <Text style={styles.metadataText}>Дистанція: {selectedSpell.range || '—'}</Text>
-              <Text style={styles.metadataText}>Компоненти: {componentsToText(selectedSpell.components)}</Text>
-              <Text style={styles.metadataText}>Тривалість: {selectedSpell.duration || '—'}</Text>
+              <Text style={styles.metadataText}>{t('labels.castingTime')}: {display.castingTime || '—'}</Text>
+              <Text style={styles.metadataText}>{t('labels.range')}: {display.range || '—'}</Text>
+              <Text style={styles.metadataText}>{t('labels.components')}: {componentsToText(display.components, t('labels.noComponents'))}</Text>
+              <Text style={styles.metadataText}>{t('labels.duration')}: {display.duration || '—'}</Text>
             </View>
             <View style={styles.tagRow}>
               <View style={[styles.smallTag, selectedSpell.concentration ? styles.smallTagActive : null]}>
                 <Text style={[styles.smallTagText, selectedSpell.concentration ? styles.smallTagTextActive : null]}>
-                  Концентрація: {selectedSpell.concentration ? 'Так' : 'Ні'}
+                  {t('labels.concentration')}: {selectedSpell.concentration ? t('boolean.yes') : t('boolean.no')}
                 </Text>
               </View>
               <View style={[styles.smallTag, selectedSpell.ritual ? styles.smallTagActive : null]}>
-                <Text style={[styles.smallTagText, selectedSpell.ritual ? styles.smallTagTextActive : null]}>Ритуал: {selectedSpell.ritual ? 'Так' : 'Ні'}</Text>
+                <Text style={[styles.smallTagText, selectedSpell.ritual ? styles.smallTagTextActive : null]}>{t('labels.ritual')}: {selectedSpell.ritual ? t('boolean.yes') : t('boolean.no')}</Text>
               </View>
             </View>
-            <Text style={styles.modalLabel}>Опис</Text>
-            <Text style={styles.description}>{selectedSpell.description || 'Опису немає.'}</Text>
-            {selectedSpell.higherLevels ? (
+            <Text style={styles.modalLabel}>{t('labels.description')}</Text>
+            <Text style={styles.description}>{display.description || t('detail.noDescription')}</Text>
+            {display.higherLevels ? (
               <>
-                <Text style={styles.modalLabel}>На вищих рівнях</Text>
-                <Text style={styles.description}>{selectedSpell.higherLevels}</Text>
+                <Text style={styles.modalLabel}>{t('labels.higherLevels')}</Text>
+                <Text style={styles.description}>{display.higherLevels}</Text>
               </>
             ) : null}
-            <Text style={styles.modalLabel}>Класи</Text>
+            <Text style={styles.modalLabel}>{t('labels.classes')}</Text>
             <Text style={styles.description}>{selectedSpell.classes.length ? selectedSpell.classes.join(', ') : '—'}</Text>
-            <Text style={styles.modalLabel}>Теги</Text>
+            <Text style={styles.modalLabel}>{t('labels.tags')}</Text>
             <Text style={styles.description}>{selectedSpell.tags.length ? selectedSpell.tags.join(', ') : '—'}</Text>
-            {selectedSpell.damageProfiles.length ? (
+            {display.damageProfiles.length ? (
               <View style={styles.damageBlock}>
-                {selectedSpell.damageProfiles.map((damage) => (
+                {display.damageProfiles.map((damage) => (
                   <Text key={damage.id} style={styles.damageLine}>
                     {damage.label}: {damage.formula} {damage.damageType}
                     {damage.condition ? ` (${damage.condition})` : ''}
@@ -762,33 +844,36 @@ const Spellbook = ({ route }: Props) => {
                 ))}
               </View>
             ) : null}
+                </>
+              );
+            })()}
             {renderStatusActions(selectedSpell)}
             <View style={styles.cardActionRow}>
               <Pressable style={styles.cardActionButton} onPress={() => void toggleFavorite(selectedSpell.id)} android_ripple={{ color: colors.ripple }}>
                 <MaterialCommunityIcons name={favoriteSet.has(selectedSpell.id) ? 'star' : 'star-outline'} size={14} color={colors.text} />
-                <Text style={styles.cardActionText}>{favoriteSet.has(selectedSpell.id) ? 'Прибрати з улюблених' : 'В улюблені'}</Text>
+                <Text style={styles.cardActionText}>{favoriteSet.has(selectedSpell.id) ? t('actions.removeFavorite') : t('actions.addFavorite')}</Text>
               </Pressable>
               {isDmMode ? (
                 <Pressable style={styles.cardActionButton} onPress={() => void togglePinnedSpell(selectedSpell.id)} android_ripple={{ color: colors.ripple }}>
                   <MaterialCommunityIcons name={pinnedSet.has(selectedSpell.id) ? 'pin' : 'pin-outline'} size={14} color={colors.text} />
-                  <Text style={styles.cardActionText}>{pinnedSet.has(selectedSpell.id) ? 'Відкріпити' : 'Закріпити'}</Text>
+                  <Text style={styles.cardActionText}>{pinnedSet.has(selectedSpell.id) ? t('actions.unpin') : t('actions.pin')}</Text>
                 </Pressable>
               ) : null}
             </View>
             {isDmMode ? (
               <>
-                <Text style={styles.modalLabel}>Нотатки DM</Text>
+                <Text style={styles.modalLabel}>{t('dmNotes.title')}</Text>
                 <TextInput
                   value={noteDraft}
                   onChangeText={setNoteDraft}
-                  placeholder='Приватна нотатка для цього закляття'
+                  placeholder={t('dmNotes.placeholder')}
                   placeholderTextColor={colors.textSecondary}
                   style={[styles.modalInput, styles.modalInputMultiline]}
                   multiline
                 />
                 <Pressable style={styles.headerAction} onPress={saveDmNote} android_ripple={{ color: colors.ripple }}>
                   <MaterialCommunityIcons name='content-save-outline' size={16} color={colors.onPrimary} />
-                  <Text style={styles.headerActionText}>Зберегти нотатку</Text>
+                  <Text style={styles.headerActionText}>{t('dmNotes.save')}</Text>
                 </Pressable>
               </>
             ) : null}
@@ -800,51 +885,51 @@ const Spellbook = ({ route }: Props) => {
         isVisible={isSpellModalVisible}
         onClose={() => setIsSpellModalVisible(false)}
         onSubmit={() => void submitSpellModal()}
-        title={editingSpell ? 'Редагування закляття' : 'Нове закляття'}
-        subtitle={editingSpell && editingSpell.source !== 'custom' ? 'Збереження створить власну редаговану копію.' : 'Метадані власного закляття зберігаються локально.'}
+        title={editingSpell ? t('form.editTitle') : t('form.newTitle')}
+        subtitle={editingSpell && editingSpell.source !== 'custom' ? t('form.copySubtitle') : t('form.localSubtitle')}
       >
         <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
-          <Text style={styles.modalLabel}>Назва</Text>
-          <TextInput value={modalName} onChangeText={setModalName} placeholder='Назва закляття' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Рівень (0-9)</Text>
+          <Text style={styles.modalLabel}>{t('form.name')}</Text>
+          <TextInput value={modalName} onChangeText={setModalName} placeholder={t('form.placeholders.name')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.level')}</Text>
           <TextInput value={modalLevel} onChangeText={setModalLevel} keyboardType='number-pad' placeholder='1' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Школа</Text>
-          <TextInput value={modalSchool} onChangeText={setModalSchool} placeholder='Втілення / Ілюзія / ...' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Час касту</Text>
-          <TextInput value={modalCastingTime} onChangeText={setModalCastingTime} placeholder='1 дія' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Дистанція</Text>
-          <TextInput value={modalRange} onChangeText={setModalRange} placeholder='150 футів' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Компоненти</Text>
-          <TextInput value={modalComponents} onChangeText={setModalComponents} placeholder='V, S, M (матеріальний компонент)' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Тривалість</Text>
-          <TextInput value={modalDuration} onChangeText={setModalDuration} placeholder='Миттєво' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.school')}</Text>
+          <TextInput value={modalSchool} onChangeText={setModalSchool} placeholder={t('form.placeholders.school')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.castingTime')}</Text>
+          <TextInput value={modalCastingTime} onChangeText={setModalCastingTime} placeholder={t('defaults.castingTime')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.range')}</Text>
+          <TextInput value={modalRange} onChangeText={setModalRange} placeholder={t('form.placeholders.range')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.components')}</Text>
+          <TextInput value={modalComponents} onChangeText={setModalComponents} placeholder={t('form.placeholders.components')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.duration')}</Text>
+          <TextInput value={modalDuration} onChangeText={setModalDuration} placeholder={t('form.placeholders.duration')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
           <View style={styles.toggleRow}>
             <Pressable style={[styles.statusButton, modalRitual ? styles.statusButtonActive : null]} onPress={() => setModalRitual((value) => !value)} android_ripple={{ color: colors.ripple }}>
-              <Text style={[styles.statusButtonText, modalRitual ? styles.statusButtonTextActive : null]}>Ритуал</Text>
+              <Text style={[styles.statusButtonText, modalRitual ? styles.statusButtonTextActive : null]}>{t('labels.ritual')}</Text>
             </Pressable>
             <Pressable style={[styles.statusButton, modalConcentration ? styles.statusButtonActive : null]} onPress={() => setModalConcentration((value) => !value)} android_ripple={{ color: colors.ripple }}>
-              <Text style={[styles.statusButtonText, modalConcentration ? styles.statusButtonTextActive : null]}>Концентрація</Text>
+              <Text style={[styles.statusButtonText, modalConcentration ? styles.statusButtonTextActive : null]}>{t('labels.concentration')}</Text>
             </Pressable>
           </View>
-          <Text style={styles.modalLabel}>Опис</Text>
-          <TextInput value={modalDescription} onChangeText={setModalDescription} placeholder='Ефект закляття' placeholderTextColor={colors.textSecondary} style={[styles.modalInput, styles.modalInputMultiline]} multiline />
-          <Text style={styles.modalLabel}>На вищих рівнях</Text>
-          <TextInput value={modalHigherLevels} onChangeText={setModalHigherLevels} placeholder='Як змінюється при касті вищим слотом' placeholderTextColor={colors.textSecondary} style={[styles.modalInput, styles.modalInputMultiline]} multiline />
-          <Text style={styles.modalLabel}>Класи (через кому)</Text>
+          <Text style={styles.modalLabel}>{t('form.description')}</Text>
+          <TextInput value={modalDescription} onChangeText={setModalDescription} placeholder={t('form.placeholders.description')} placeholderTextColor={colors.textSecondary} style={[styles.modalInput, styles.modalInputMultiline]} multiline />
+          <Text style={styles.modalLabel}>{t('form.higherLevels')}</Text>
+          <TextInput value={modalHigherLevels} onChangeText={setModalHigherLevels} placeholder={t('form.placeholders.higherLevels')} placeholderTextColor={colors.textSecondary} style={[styles.modalInput, styles.modalInputMultiline]} multiline />
+          <Text style={styles.modalLabel}>{t('form.classes')}</Text>
           <TextInput value={modalClasses} onChangeText={setModalClasses} placeholder='Wizard, Sorcerer' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Теги (через кому)</Text>
-          <TextInput value={modalTags} onChangeText={setModalTags} placeholder='урон, aoe, fire' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
-          <Text style={styles.modalLabel}>Профілі урону (по одному в рядку)</Text>
+          <Text style={styles.modalLabel}>{t('form.tags')}</Text>
+          <TextInput value={modalTags} onChangeText={setModalTags} placeholder={t('form.placeholders.tags')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <Text style={styles.modalLabel}>{t('form.damageProfiles')}</Text>
           <TextInput
             value={modalDamageProfiles}
             onChangeText={setModalDamageProfiles}
-            placeholder='Базово | 8d6 | fire | DEX save, половина'
+            placeholder={t('form.placeholders.damageProfiles')}
             placeholderTextColor={colors.textSecondary}
             style={[styles.modalInput, styles.modalInputLarge]}
             multiline
           />
-          <Text style={styles.modalHint}>Формат рядка: Назва | Формула | Тип | Умова(опційно)</Text>
-          <Text style={styles.modalHint}>Типи урону 5e: {SPELL_DAMAGE_TYPES.join(', ')}</Text>
+          <Text style={styles.modalHint}>{t('form.damageProfileFormat')}</Text>
+          <Text style={styles.modalHint}>{t('form.damageTypes', { types: SPELL_DAMAGE_TYPES.join(', ') })}</Text>
         </ScrollView>
       </Modal>
     </View>

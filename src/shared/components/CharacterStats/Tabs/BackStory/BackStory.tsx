@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
@@ -11,6 +12,7 @@ interface BackStoryProps {
 }
 
 const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
+  const { t } = useTranslation('character');
   const updateCharacterCampaign = useCharacterStore((s) => s.updateCharacterCampaign);
   const updateCharacterBackstory = useCharacterStore((s) => s.updateCharacterBackstory);
   const updateCharacterAlliesAndOrganizations = useCharacterStore((s) => s.updateCharacterAlliesAndOrganizations);
@@ -32,32 +34,31 @@ const BackStory: React.FC<BackStoryProps> = ({ data }: BackStoryProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Кампанія:</Text>
+      <Text style={styles.label}>{t('legacy.backstory.campaign')}</Text>
       <MultiTextInput
         numberOfLines={8}
         value={character?.campaign || ''}
         onChangeText={handleChangeCampaign}
-        placeholder='Введіть кампанію'
+        placeholder={t('legacy.backstory.campaignPlaceholder')}
       />
 
-      <Text style={styles.label}>Історія героя:</Text>
+      <Text style={styles.label}>{t('legacy.backstory.backstory')}</Text>
       <MultiTextInput
         numberOfLines={8}
         value={character?.backstory || ''}
         onChangeText={handleChangeBackstory}
-        placeholder='Введіть історія героя'
+        placeholder={t('legacy.backstory.backstoryPlaceholder')}
       />
 
-      <Text style={styles.label}>Союзники та організації:</Text>
+      <Text style={styles.label}>{t('legacy.backstory.alliesAndOrganizations')}</Text>
       <MultiTextInput
         numberOfLines={8}
         value={character?.alliesAndOrganizations || ''}
         onChangeText={handleChangeAlliesAndOrganizations}
-        placeholder='Введіть союзники та організації героя'
+        placeholder={t('legacy.backstory.alliesAndOrganizationsPlaceholder')}
       />
     </View>
   );
 };
 
 export default BackStory;
-

@@ -40,5 +40,25 @@
     "illusion": "Ілюзія",
     "necromancy": "Некромантія",
     "transmutation": "Перетворення"
+  },
+  "skills": {
+    "acrobatics": "Акробатика",
+    "animalHandling": "Догляд за тваринами",
+    "arcana": "Аркана",
+    "athletics": "Атлетика",
+    "deception": "Обман",
+    "history": "Історія",
+    "insight": "Проникливість",
+    "intimidation": "Залякування",
+    "investigation": "Розслідування",
+    "medicine": "Медицина",
+    "nature": "Природа",
+    "perception": "Сприйняття",
+    "performance": "Виступ",
+    "persuasion": "Переконання",
+    "religion": "Релігія",
+    "sleightOfHand": "Спритність рук",
+    "stealth": "Прихованість",
+    "survival": "Виживання"
   }
 }
