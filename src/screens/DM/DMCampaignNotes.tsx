@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
@@ -24,6 +25,7 @@ import { getShareDisplayStatus, isNetworkOnline } from '@/shared/helpers/collabo
 
 type Props = StackScreenProps<DMStackParamList, 'DMCampaignNotes'>;
 const DMCampaignNotes: React.FC<Props> = ({ route }) => {
+  const { t } = useTranslation(['dm', 'common']);
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
   const netInfo = useNetInfo();
@@ -35,7 +37,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   const [titleInput, setTitleInput] = useState('');
   const [contentInput, setContentInput] = useState('');
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
-  const [statusText, setStatusText] = useState('Готово');
+  const [statusText, setStatusText] = useState(t('dm:campaignNotes.ready'));
 
 
 
@@ -56,7 +58,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           return;
         }
 
-        const fallback = await ensureCampaignForName('Базова кампанія');
+        const fallback = await ensureCampaignForName(t('dm:campaignNotes.defaultCampaign'));
         if (!fallback || cancelled) return;
         setSelectedCampaignId(fallback.id);
       });
@@ -68,7 +70,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
       cancelled = true;
       if (typeof unsub === 'function') unsub();
     };
-  }, [selectedCampaignId]);
+  }, [selectedCampaignId, t]);
 
   useEffect(() => {
     if (!selectedCampaignId) {
@@ -126,7 +128,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
       content: contentInput,
     });
     if (!formValidation.ok) {
-      const firstError = formatSchemaErrors(formValidation.issues)[0] || 'Заповніть заголовок або вміст нотатки.';
+      const firstError = formatSchemaErrors(formValidation.issues)[0] || t('dm:campaignNotes.validationFallback');
       setStatusText(firstError);
       return;
     }
@@ -157,13 +159,13 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
     // Show saved note immediately in the list, without waiting for subscription roundtrip.
     setNotes((prev) => mergeNoteIntoList(prev, next));
-    setStatusText(`Збережено • ${next.syncStatus}`);
+    setStatusText(t('dm:campaignNotes.saved', { status: formatSyncStatus(next.syncStatus) }));
     resetEditor();
   };
 
   const syncNow = async () => {
     await flushCampaignNotesQueue();
-    setStatusText('Чергу синхронізації очищено');
+    setStatusText(t('dm:campaignNotes.queueFlushed'));
   };
 
   const resolveConflict = async (note: DMCampaignNote, strategy: 'keep-local' | 'keep-cloud' | 'merge-manual') => {
@@ -172,15 +174,35 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
     if (resolved) {
       setNotes((prev) => mergeNoteIntoList(prev, resolved));
     }
-    setStatusText(`Конфлікт вирішено: ${strategy}`);
+    setStatusText(t('dm:campaignNotes.conflictResolved', { strategy: t(`dm:campaignNotes.strategies.${strategy}`) }));
+  };
+
+  const formatSyncStatus = (status: string) => {
+    if (status === 'Synced') return t('common:status.synced');
+    if (status === 'Pending sync') return t('common:status.pendingSync');
+    if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+    if (status === 'Conflict detected') return t('common:status.conflictDetected');
+    if (status === 'Local only') return t('common:status.localOnly');
+    return status;
+  };
+
+  const formatShareStatus = (status: string) => {
+    if (status === 'Shared with DM') return t('common:status.sharedWithDm');
+    if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
+    return status;
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>Нотатки кампанії</Text>
-        <Text style={styles.hint}>Нотатки з хмарною та офлайн-чергою і безпечним переглядом конфліктів.</Text>
-        <Text style={styles.hint}>Мережа: {isNetworkOnline(netInfo.isConnected) ? 'Онлайн' : 'Офлайн'} • {statusText}</Text>
+        <Text style={styles.title}>{t('dm:campaignNotes.title')}</Text>
+        <Text style={styles.hint}>{t('dm:campaignNotes.hint')}</Text>
+        <Text style={styles.hint}>
+          {t('dm:campaignNotes.networkStatus', {
+            network: isNetworkOnline(netInfo.isConnected) ? t('common:status.online') : t('common:status.offline'),
+            status: statusText,
+          })}
+        </Text>
 
         <View style={styles.statsRow}>
           {campaigns.map((campaign) => {
@@ -202,23 +224,25 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
         </View>
 
         <Pressable style={styles.authButton} onPress={() => { void syncNow(); }} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.authButtonText}>Синхронізувати зараз</Text>
+          <Text style={styles.authButtonText}>{t('dm:campaignNotes.syncNow')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>{activeNoteId ? 'Редагувати нотатку' : 'Нова нотатка'} {selectedCampaign ? `• ${selectedCampaign.name}` : ''}</Text>
+        <Text style={styles.title}>
+          {activeNoteId ? t('dm:campaignNotes.editTitle') : t('dm:campaignNotes.newTitle')} {selectedCampaign ? `• ${selectedCampaign.name}` : ''}
+        </Text>
         <TextInput
           value={titleInput}
           onChangeText={setTitleInput}
-          placeholder='Заголовок нотатки'
+          placeholder={t('dm:campaignNotes.titlePlaceholder')}
           placeholderTextColor={colors.textSecondary}
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, marginBottom: sp(10) }}
         />
         <TextInput
           value={contentInput}
           onChangeText={setContentInput}
-          placeholder='Вміст нотатки'
+          placeholder={t('dm:campaignNotes.contentPlaceholder')}
           placeholderTextColor={colors.textSecondary}
           multiline
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, minHeight: 120, textAlignVertical: 'top' }}
@@ -227,20 +251,20 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
         <View style={styles.laneGrid}>
           <Pressable style={styles.laneButton} onPress={() => { void saveNote(); }} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='save-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Зберегти нотатку</Text>
+            <Text style={styles.laneButtonText}>{t('dm:campaignNotes.save')}</Text>
           </Pressable>
           {activeNoteId && (
             <Pressable style={styles.laneButton} onPress={resetEditor} android_ripple={{ color: colors.ripple }}>
               <Ionicons name='close-outline' size={18} color={colors.text} />
-              <Text style={styles.laneButtonText}>Скасувати редагування</Text>
+              <Text style={styles.laneButtonText}>{t('dm:campaignNotes.cancelEdit')}</Text>
             </Pressable>
           )}
         </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Останні зміни</Text>
-        {!recent.length && <Text style={styles.hint}>Для вибраної кампанії нотаток немає.</Text>}
+        <Text style={styles.title}>{t('dm:campaignNotes.recentChanges')}</Text>
+        {!recent.length && <Text style={styles.hint}>{t('dm:campaignNotes.empty')}</Text>}
         {recent.map((note) => {
           const displaySyncStatus =
             note.syncStatus === 'Pending sync' && !isNetworkOnline(netInfo.isConnected)
@@ -254,23 +278,23 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
           return (
             <View key={note.id} style={styles.updateRow}>
-              <Text style={styles.updateTitle}>{note.title || 'Нотатка без назви'}</Text>
-              <Text style={styles.updateMeta}>Оновлено: {new Date(note.updatedAtMs).toLocaleString()}</Text>
-              <Text style={styles.updateMeta}>Статус синхронізації: {displaySyncStatus}</Text>
-              {!!shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {shareStatus}</Text>}
+              <Text style={styles.updateTitle}>{note.title || t('dm:campaignNotes.untitled')}</Text>
+              <Text style={styles.updateMeta}>{t('dm:campaignNotes.updated', { value: new Date(note.updatedAtMs).toLocaleString() })}</Text>
+              <Text style={styles.updateMeta}>{t('dm:campaignNotes.syncStatus', { status: formatSyncStatus(displaySyncStatus) })}</Text>
+              {!!shareStatus && <Text style={styles.updateMeta}>{t('dm:campaignNotes.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>}
 
               {!!note.content && <Text style={styles.updateMeta}>{note.content.slice(0, 140)}</Text>}
 
               {note.syncStatus === 'Conflict detected' && note.conflictRemote && (
                 <View style={styles.laneGrid}>
                   <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-local'); }} android_ripple={{ color: colors.ripple }}>
-                    <Text style={styles.laneButtonText}>Залишити локальну</Text>
+                    <Text style={styles.laneButtonText}>{t('dm:campaignNotes.keepLocal')}</Text>
                   </Pressable>
                   <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-cloud'); }} android_ripple={{ color: colors.ripple }}>
-                    <Text style={styles.laneButtonText}>Залишити хмарну</Text>
+                    <Text style={styles.laneButtonText}>{t('dm:campaignNotes.keepCloud')}</Text>
                   </Pressable>
                   <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'merge-manual'); }} android_ripple={{ color: colors.ripple }}>
-                    <Text style={styles.laneButtonText}>Об’єднати вручну</Text>
+                    <Text style={styles.laneButtonText}>{t('dm:campaignNotes.mergeManual')}</Text>
                   </Pressable>
                 </View>
               )}
@@ -278,7 +302,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
               <View style={styles.laneGrid}>
                 <Pressable style={styles.laneButton} onPress={() => openNote(note)} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Редагувати</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:campaignNotes.edit')}</Text>
                 </Pressable>
                 <Pressable
                   style={styles.laneButton}
@@ -290,7 +314,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
                   android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='trash-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Видалити</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:campaignNotes.delete')}</Text>
                 </Pressable>
               </View>
             </View>
@@ -302,8 +326,6 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 };
 
 export default DMCampaignNotes;
-
-
 
 
 

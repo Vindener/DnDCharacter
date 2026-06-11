@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
@@ -25,8 +26,17 @@ interface MonsterGroup {
 }
 
 const uid = () => Math.random().toString(36).slice(2, 9);
+const DIFFICULTY_KEYS: Record<string, string> = {
+  'Немає даних': 'none',
+  'Дуже легко': 'trivial',
+  'Легко': 'easy',
+  'Середньо': 'medium',
+  'Складно': 'hard',
+  'Смертельно': 'deadly',
+};
 
 const EncounterCalculator: React.FC = () => {
+  const { t } = useTranslation(['dm', 'common']);
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -99,9 +109,11 @@ const EncounterCalculator: React.FC = () => {
     };
   }, [players, monsters]);
 
+  const difficultyLabel = t(`dm:encounterPrep.difficulties.${DIFFICULTY_KEYS[result.difficulty] || 'none'}`);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.section}>Гравці</Text>
+      <Text style={styles.section}>{t('dm:encounterCalculator.players')}</Text>
 
       {players.map((p) => (
         <View key={p.id} style={styles.row}>
@@ -109,14 +121,14 @@ const EncounterCalculator: React.FC = () => {
             value={p.level}
             keyboardType='numeric'
             onChangeText={(t) => updatePlayer(p.id, { level: t })}
-            placeholder='Рівень'
+            placeholder={t('dm:encounterCalculator.levelPlaceholder')}
             style={{ width: 70, marginRight: sp(8) }}
           />
           <TextInput
             value={p.count}
             keyboardType='numeric'
             onChangeText={(t) => updatePlayer(p.id, { count: t })}
-            placeholder='К-сть'
+            placeholder={t('dm:encounterCalculator.countPlaceholder')}
             style={{ width: 70, marginRight: sp(8) }}
           />
           <TouchableOpacity onPress={() => removePlayer(p.id)} style={styles.deleteBtn}>
@@ -128,25 +140,25 @@ const EncounterCalculator: React.FC = () => {
       <View style={styles.addButton}>
         <TouchableOpacity onPress={addPlayer} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name='add-circle-outline' size={20} color={colors.text} />
-          <Text style={styles.addText}>Додати групу вручну</Text>
+          <Text style={styles.addText}>{t('dm:encounterCalculator.addPlayerGroup')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.addButton}>
         <TouchableOpacity onPress={() => setHeroesModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name='person-add-outline' size={20} color={colors.text} />
-          <Text style={styles.addText}>Додати з героїв</Text>
+          <Text style={styles.addText}>{t('dm:encounterCalculator.addFromHeroes')}</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={[styles.section, { marginTop: sp(12) }]}>Монстри</Text>
+      <Text style={[styles.section, { marginTop: sp(12) }]}>{t('dm:encounterCalculator.monsters')}</Text>
 
       {monsters.map((m) => (
         <View key={m.id} style={styles.row}>
           <TextInput
             value={m.name}
             onChangeText={(t) => updateMonster(m.id, { name: t })}
-            placeholder='Назва'
+            placeholder={t('dm:encounterCalculator.namePlaceholder')}
             style={{ flex: 1, marginRight: sp(8) }}
           />
           <TextInput
@@ -159,7 +171,7 @@ const EncounterCalculator: React.FC = () => {
             value={m.count}
             keyboardType='numeric'
             onChangeText={(t) => updateMonster(m.id, { count: t })}
-            placeholder='К-сть'
+            placeholder={t('dm:encounterCalculator.countPlaceholder')}
             style={{ width: 70, marginRight: sp(8) }}
           />
           <TouchableOpacity onPress={() => removeMonster(m.id)} style={styles.deleteBtn}>
@@ -171,28 +183,28 @@ const EncounterCalculator: React.FC = () => {
       <View style={styles.addButton}>
         <TouchableOpacity onPress={addMonster} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name='add-circle-outline' size={20} color={colors.text} />
-          <Text style={styles.addText}>Додати монстра вручну</Text>
+          <Text style={styles.addText}>{t('dm:encounterCalculator.addMonsterManual')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.addButton}>
         <TouchableOpacity onPress={() => setBestiaryModal(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name='skull-outline' size={20} color={colors.text} />
-          <Text style={styles.addText}>Додати з бестіарія</Text>
+          <Text style={styles.addText}>{t('dm:encounterCalculator.addFromBestiary')}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.result}>
-        <Text style={styles.resultText}>Складність: {result.difficulty}</Text>
+        <Text style={styles.resultText}>{t('dm:encounterCalculator.difficulty', { difficulty: difficultyLabel })}</Text>
         {result.totalXP > 0 && (
-          <Text style={styles.resultText}>Досвід за бій: {result.totalXP} (≈{result.xpPerPlayer} за гравця)</Text>
+          <Text style={styles.resultText}>{t('dm:encounterCalculator.xp', { total: result.totalXP, perPlayer: result.xpPerPlayer })}</Text>
         )}
       </View>
 
-      <Modal isVisible={isHeroesModal} title='Додати героя' onClose={() => setHeroesModal(false)}>
+      <Modal isVisible={isHeroesModal} title={t('dm:encounterCalculator.addHeroTitle')} onClose={() => setHeroesModal(false)}>
         <ScrollView style={{ maxHeight: 360 }}>
           {characters.length === 0 ? (
-            <Text style={{ color: colors.textSecondary }}>Немає збережених героїв</Text>
+            <Text style={{ color: colors.textSecondary }}>{t('dm:encounterCalculator.noHeroes')}</Text>
           ) : (
             characters.map((hero) => (
               <TouchableOpacity
@@ -201,9 +213,9 @@ const EncounterCalculator: React.FC = () => {
                 style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: sp(10) }}
               >
                 <Ionicons name='person-outline' size={18} color={colors.textSecondary} />
-                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{hero.name || 'Без імені'}</Text>
+                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{hero.name || t('dm:encounterCalculator.unnamedHero')}</Text>
                 <Text style={{ marginLeft: sp(8), color: colors.textSecondary, fontSize: fs(14) }}>
-                  {hero.class || '???'} · {hero.level || '?'} рівень
+                  {hero.class || '???'} · {t('dm:encounterCalculator.heroLevel', { level: hero.level || '?' })}
                 </Text>
               </TouchableOpacity>
             ))
@@ -211,10 +223,10 @@ const EncounterCalculator: React.FC = () => {
         </ScrollView>
       </Modal>
 
-      <Modal isVisible={isBestiaryModal} title='Додати монстра' onClose={() => setBestiaryModal(false)}>
+      <Modal isVisible={isBestiaryModal} title={t('dm:encounterCalculator.addMonsterTitle')} onClose={() => setBestiaryModal(false)}>
         <ScrollView style={{ maxHeight: 360 }}>
           {monstersStore.length === 0 ? (
-            <Text style={{ color: colors.textSecondary }}>Бестіарій порожній</Text>
+            <Text style={{ color: colors.textSecondary }}>{t('dm:encounterCalculator.emptyBestiary')}</Text>
           ) : (
             monstersStore.map((mon) => (
               <TouchableOpacity
@@ -223,7 +235,7 @@ const EncounterCalculator: React.FC = () => {
                 style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: sp(10) }}
               >
                 <Ionicons name='skull-outline' size={18} color={colors.textSecondary} />
-                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{mon.name || 'Без назви'}</Text>
+                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{mon.name || t('dm:encounterCalculator.unnamedMonster')}</Text>
                 {!!mon.challenge && (
                   <Text style={{ marginLeft: sp(8), color: colors.textSecondary, fontSize: fs(14) }}>CR {mon.challenge}</Text>
                 )}
@@ -237,7 +249,6 @@ const EncounterCalculator: React.FC = () => {
 };
 
 export default EncounterCalculator;
-
 
 
 

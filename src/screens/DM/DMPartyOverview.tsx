@@ -4,6 +4,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
@@ -30,6 +31,7 @@ type PartyItem = {
 };
 
 const DMPartyOverview = () => {
+  const { t, i18n } = useTranslation(['dm', 'common']);
   const navigation = useNavigation<StackNavigationProp<DMStackParamList, 'DMPartyOverview'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
@@ -108,7 +110,7 @@ const DMPartyOverview = () => {
 
       const campaign = getCampaignForLink(toCampaignLinkInput(payload), campaigns);
       const campaignId = campaign?.id || payload.campaignId || buildCampaignFallbackIdForCharacter(payload);
-      const campaignName = campaign?.name || String(payload.campaign || 'Кампанія не призначена');
+      const campaignName = campaign?.name || String(payload.campaign || t('dm:partyOverview.unassignedCampaign'));
 
       byId.set(payload.id, {
         id: payload.id,
@@ -125,8 +127,10 @@ const DMPartyOverview = () => {
     mySheets.forEach((doc) => pushItem(mapCloudCharacterToLocalDto(doc), 'mine', doc));
     sharedSheets.forEach((doc) => pushItem(mapCloudCharacterToLocalDto(doc), 'shared', doc));
 
-    return Array.from(byId.values()).sort((a, b) => a.campaignName.localeCompare(b.campaignName) || a.payload.name.localeCompare(b.payload.name));
-  }, [campaigns, localCharacters, mySheets, netInfo.isConnected, roleMode, sharedSheets, syncByCharacter]);
+    return Array.from(byId.values()).sort(
+      (a, b) => a.campaignName.localeCompare(b.campaignName, i18n.language) || a.payload.name.localeCompare(b.payload.name, i18n.language),
+    );
+  }, [campaigns, i18n.language, localCharacters, mySheets, netInfo.isConnected, roleMode, sharedSheets, syncByCharacter, t]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, { id: string; name: string; items: PartyItem[] }>();
@@ -143,8 +147,8 @@ const DMPartyOverview = () => {
       }
     }
 
-    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
-  }, [party]);
+    return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name, i18n.language));
+  }, [i18n.language, party]);
 
   const ensureLocalCharacter = async (character: CharacterViewModel) => {
     const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
@@ -174,17 +178,34 @@ const DMPartyOverview = () => {
     navigation.navigate('DMQuickEdit', { characterId: local.id });
   };
 
+  const formatSyncStatus = (status: string) => {
+    if (status === 'Synced') return t('common:status.synced');
+    if (status === 'Pending sync') return t('common:status.pendingSync');
+    if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+    if (status === 'Conflict detected') return t('common:status.conflictDetected');
+    if (status === 'Local only') return t('common:status.localOnly');
+    return status;
+  };
+
+  const formatShareStatus = (status: string) => {
+    if (status === 'Shared with DM') return t('common:status.sharedWithDm');
+    if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
+    return status;
+  };
+
+  const formatSource = (source: PartyItem['source']) => t(`dm:partyOverview.sources.${source}`);
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>Огляд групи</Text>
-        <Text style={styles.hint}>Єдине групування локальних, хмарних і спільних персонажів за кампаніями.</Text>
+        <Text style={styles.title}>{t('dm:partyOverview.title')}</Text>
+        <Text style={styles.hint}>{t('dm:partyOverview.hint')}</Text>
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Кампанії: {grouped.length}</Text>
+            <Text style={styles.statChipText}>{t('dm:partyOverview.campaigns', { count: grouped.length })}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Персонажі: {party.length}</Text>
+            <Text style={styles.statChipText}>{t('dm:partyOverview.characters', { count: party.length })}</Text>
           </View>
         </View>
       </View>
@@ -192,28 +213,35 @@ const DMPartyOverview = () => {
       {grouped.map((group) => (
         <View key={group.id} style={styles.card}>
           <Text style={styles.title}>{group.name}</Text>
-          <Text style={styles.hint}>ID кампанії: {group.id}</Text>
+          <Text style={styles.hint}>{t('dm:partyOverview.campaignId', { id: group.id })}</Text>
 
           {group.items.map((item) => (
             <View key={item.id} style={styles.updateRow}>
               <Text style={styles.updateTitle}>{item.payload.name || 'Character'}</Text>
-              <Text style={styles.updateMeta}>Джерело: {item.source}</Text>
-              <Text style={styles.updateMeta}>Статус синхронізації: {item.syncStatus}</Text>
-              {!!item.shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {item.shareStatus}</Text>}
-              <Text style={styles.updateMeta}>Клас/раса: {item.payload.class || 'Клас'} / {item.payload.race || 'Раса'}</Text>
+              <Text style={styles.updateMeta}>{t('dm:partyOverview.source', { source: formatSource(item.source) })}</Text>
+              <Text style={styles.updateMeta}>{t('dm:partyOverview.syncStatus', { status: formatSyncStatus(item.syncStatus) })}</Text>
+              {!!item.shareStatus && (
+                <Text style={styles.updateMeta}>{t('dm:partyOverview.shareStatus', { status: formatShareStatus(item.shareStatus) })}</Text>
+              )}
+              <Text style={styles.updateMeta}>
+                {t('dm:partyOverview.classRace', {
+                  className: item.payload.class || t('common:fallbacks.class'),
+                  race: item.payload.race || t('common:fallbacks.race'),
+                })}
+              </Text>
 
               <View style={styles.laneGrid}>
                 <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='link-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:partyOverview.openLiveCopy')}</Text>
                 </Pressable>
                 <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Швидке редагування</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:partyOverview.quickEdit')}</Text>
                 </Pressable>
                 <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
                   <Ionicons name='document-text-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:partyOverview.openFullSheet')}</Text>
                 </Pressable>
               </View>
             </View>
@@ -223,7 +251,7 @@ const DMPartyOverview = () => {
 
       {!grouped.length && (
         <View style={styles.card}>
-          <Text style={styles.hint}>Для огляду групи поки немає доступних персонажів.</Text>
+          <Text style={styles.hint}>{t('dm:partyOverview.empty')}</Text>
         </View>
       )}
     </ScrollView>
@@ -231,6 +259,5 @@ const DMPartyOverview = () => {
 };
 
 export default DMPartyOverview;
-
 
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useTranslation } from 'react-i18next';
 
 import Attributes from './Tabs/Attributes/Attributes';
 import Spells from './Tabs/Spells/Spells';
@@ -23,6 +24,7 @@ interface CharacterStatsProps {
 }
 
 const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterStatsProps) => {
+  const { t } = useTranslation('character');
   const [selectedTab, setSelectedTab] = useState<CharacterTabs>('Attributes');
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -35,16 +37,16 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
     <View style={styles.tabsContainer}>
       <CharacterOverview />
       <Picker selectedValue={selectedTab} style={styles.picker} onValueChange={(itemValue) => handleTabChange(itemValue as CharacterTabs)}>
-        <Picker.Item label='Характеристики' value='Attributes' />
-        <Picker.Item label='Навички' value='Skills' />
-        <Picker.Item label='Закляття' value='Spells' />
-        <Picker.Item label='Бій' value='Combat' />
-        <Picker.Item label='Інвентар та зброя' value='Inventory' />
-        <Picker.Item label='Професійні навички' value='Proficiencies' />
-        <Picker.Item label='Історія героя' value='BackStory' />
-        <Picker.Item label='Нотатки' value='Notes' />
-        <Picker.Item label='Риси' value='Traits' />
-        <Picker.Item label='Монети' value='Coins' />
+        <Picker.Item label={t('legacy.tabs.attributes')} value='Attributes' />
+        <Picker.Item label={t('legacy.tabs.skills')} value='Skills' />
+        <Picker.Item label={t('legacy.tabs.spells')} value='Spells' />
+        <Picker.Item label={t('legacy.tabs.combat')} value='Combat' />
+        <Picker.Item label={t('legacy.tabs.inventoryWeapons')} value='Inventory' />
+        <Picker.Item label={t('legacy.tabs.proficiencies')} value='Proficiencies' />
+        <Picker.Item label={t('legacy.tabs.backstory')} value='BackStory' />
+        <Picker.Item label={t('legacy.tabs.notes')} value='Notes' />
+        <Picker.Item label={t('legacy.tabs.traits')} value='Traits' />
+        <Picker.Item label={t('legacy.tabs.coins')} value='Coins' />
       </Picker>
 
       {selectedTab === 'Attributes' && <Attributes data={character} />}
@@ -62,4 +64,3 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({ character }: CharacterS
 };
 
 export default CharacterStats;
-

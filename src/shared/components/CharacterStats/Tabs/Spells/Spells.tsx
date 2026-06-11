@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { TextInput, MultiTextInput } from '@/shared/components/TextInput/index';
 import { Ionicons } from '@expo/vector-icons';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
@@ -24,6 +25,7 @@ const EMPTY_SPELLS: SpellsType = {
 };
 
 const Spells: React.FC<SpellsProps> = ({ data }) => {
+  const { t } = useTranslation('character');
   const updateCharacterSpells = useCharacterStore((s) => s.updateCharacterSpells);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
   const colors = useThemeStore((s) => s.colors);
@@ -103,28 +105,28 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.row}>
-        <Text style={styles.label}>Характеристика:</Text>
+        <Text style={styles.label}>{t('legacy.spells.ability')}</Text>
         <TextInput style={{ flex: 1 }} value={spells.spellcastingAbility} onChangeText={handleAbilityChange} />
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Рятівний куб:</Text>
+        <Text style={styles.label}>{t('legacy.spells.saveDc')}</Text>
         <TextInput value={`${spells.spellSaveDC}`} onChangeText={handleSaveDCChange} />
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Бонус атаки закляттям:</Text>
+        <Text style={styles.label}>{t('legacy.spells.attackBonus')}</Text>
         <TextInput value={`${spells.spellAttackBonus}`} onChangeText={handleAttackBonusChange} />
       </View>
 
-      <Text style={styles.label}>Слоти закляття:</Text>
+      <Text style={styles.label}>{t('legacy.spells.slots')}</Text>
       {Object.keys(spells.spellSlots)
         .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
         .map((level) => (
           <View key={level} style={[styles.row, { marginLeft: sp(10) }]}>
             <Text style={[styles.label, { width: 50 }]}>Lvl {level}</Text>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>Макс:</Text>
+              <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>{t('legacy.spells.max')}</Text>
               <TextInput
                 style={{ marginHorizontal: 4 }}
                 value={`${spells.spellSlots[level].max}`}
@@ -132,7 +134,7 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
               />
             </View>
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>Вик:</Text>
+              <Text style={[styles.label, { marginHorizontal: 4, flex: 0 }]}>{t('legacy.spells.used')}</Text>
               <TextInput value={`${spells.spellSlots[level].used}`} onChangeText={(t) => handleSlotChange(level, 'used', t)} />
             </View>
           </View>
@@ -140,34 +142,33 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
       {!Object.keys(spells.spellSlots).includes('9') && (
         <TouchableOpacity onPress={handleAddSlot} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
           <Ionicons name='add-circle-outline' size={24} color={colors.success} />
-          <Text style={{ marginLeft: sp(8), color: colors.success }}>Додати рівень</Text>
+          <Text style={{ marginLeft: sp(8), color: colors.success }}>{t('legacy.spells.addLevel')}</Text>
         </TouchableOpacity>
       )}
 
-      <Text style={styles.label}>Відомі закляття:</Text>
+      <Text style={styles.label}>{t('legacy.spells.known')}</Text>
       <MultiTextInput
         numberOfLines={8}
         value={knownSpellsText}
         onChangeText={handleKnownSpellsChange}
-        placeholder='Введіть відомі закляття'
+        placeholder={t('legacy.spells.knownPlaceholder')}
       />
 
-      <Text style={styles.label}>Підготовлені закляття:</Text>
+      <Text style={styles.label}>{t('legacy.spells.prepared')}</Text>
       <MultiTextInput
         numberOfLines={8}
         value={preparedSpellsText}
         onChangeText={handlePreparedSpellsChange}
-        placeholder='Введіть підготовлені закляття'
+        placeholder={t('legacy.spells.preparedPlaceholder')}
       />
 
-      <Text style={styles.label}>Заговори:</Text>
-      <MultiTextInput numberOfLines={4} value={cantripsText} onChangeText={handleCantripsChange} placeholder='Введіть кантіпси' />
+      <Text style={styles.label}>{t('legacy.spells.cantrips')}</Text>
+      <MultiTextInput numberOfLines={4} value={cantripsText} onChangeText={handleCantripsChange} placeholder={t('legacy.spells.cantripsPlaceholder')} />
     </ScrollView>
   );
 };
 
 export default Spells;
-
 
 
 

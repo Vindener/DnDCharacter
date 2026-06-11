@@ -23,6 +23,7 @@
   "states": {
     "loading": "Завантаження...",
     "empty": "Поки що порожньо",
+    "comingSoon": "Скоро буде...",
     "error": "Сталася помилка",
     "offline": "Офлайн",
     "online": "Онлайн",
@@ -60,5 +61,21 @@
   "validation": {
     "required": "Це поле обов'язкове",
     "invalidValue": "Некоректне значення"
+  },
+  "auth": {
+    "googleSignIn": "Google вхід",
+    "firebaseAuth": "Firebase авторизація",
+    "authError": "Помилка авторизації",
+    "logoutSuccessTitle": "Вихід виконано",
+    "logoutErrorTitle": "Не вдалося вийти",
+    "webClientConfigured": "Налаштовано webClientId",
+    "checkingPlayServices": "Перевірка Play Services...",
+    "openingGoogleAuth": "Відкриття Google-авторизації...",
+    "missingIdToken": "Не отримано ID-токен",
+    "idTokenNotFound": "ID-токен не знайдено",
+    "idTokenReceived": "ID-токен отримано",
+    "signingInWithCredential": "Вхід за обліковими даними...",
+    "signInSuccess": "Успішний вхід",
+    "logoutSuccessMessage": "Ви вийшли з акаунта"
   }
 }

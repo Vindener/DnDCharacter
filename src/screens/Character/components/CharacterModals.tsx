@@ -370,7 +370,7 @@ function CharacterModalsBase({
             onChangeText={(value) => setLevelDraftField('hpCurrent', value)}
             keyboardType='number-pad'
             style={[styles.modalInput, styles.levelModalInlineInput]}
-            placeholder='Current'
+            placeholder={t('modals.hp.currentPlaceholder')}
             placeholderTextColor={colors.textSecondary}
           />
           <RNTextInput
@@ -378,7 +378,7 @@ function CharacterModalsBase({
             onChangeText={(value) => setLevelDraftField('hpMax', value)}
             keyboardType='number-pad'
             style={[styles.modalInput, styles.levelModalInlineInput]}
-            placeholder='Max'
+            placeholder={t('modals.hp.maxPlaceholder')}
             placeholderTextColor={colors.textSecondary}
           />
         </View>

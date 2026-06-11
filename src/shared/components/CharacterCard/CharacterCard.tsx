@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getStyles } from './style';
@@ -17,6 +18,7 @@ interface CharacterCardProps {
 }
 
 export const CharacterCard = ({ character }: CharacterCardProps) => {
+  const { t } = useTranslation('character');
   const navigation = useNavigation<NavigationProp>();
   const removeCharacter = useCharacterStore((s) => s.removeCharacter);
   const colors = useThemeStore((s) => s.colors);
@@ -57,12 +59,12 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
       {/*/>*/}
       <View style={styles.info}>
         <Text style={styles.name}>
-          {character.name} {isShared ? '· Спільний' : ''}
+          {character.name} {isShared ? `· ${t('legacy.card.shared')}` : ''}
         </Text>
         <Text style={styles.meta}>
-          Рівень {character.level || 1} <Text style={styles.separator}>|</Text> {character.race || 'Людина'}
+          {t('legacy.card.level', { level: character.level || 1 })} <Text style={styles.separator}>|</Text> {character.race || t('legacy.card.raceFallback')}
         </Text>
-        <Text style={styles.classText}>{character.class || 'Клас'}</Text>
+        <Text style={styles.classText}>{character.class || t('legacy.card.classFallback')}</Text>
       </View>
       <TouchableOpacity onPress={handleDelete}>
         <Ionicons name='trash-outline' size={20} color={colors.text} />
@@ -70,7 +72,6 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
-
 
 
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Modal } from '@/shared/components/Modal/Modal';
 import Loader from '@/shared/components/Loader/Loader';
 import useThemeStore from '@/context/Theme-store';
@@ -18,6 +19,7 @@ interface RollResultModalProps {
 }
 
 export const RollResultModal: React.FC<RollResultModalProps> = ({ isVisible, onClose, roll }) => {
+  const { t } = useTranslation('dice');
   const [result, setResult] = useState<RollResult | null>(null);
   const [previousResult, setPreviousResult] = useState<RollResult | null>(null);
 
@@ -45,24 +47,24 @@ export const RollResultModal: React.FC<RollResultModalProps> = ({ isVisible, onC
       {!result && <Loader />}
       {result && (
         <>
-          {result.random === 20 && <Text style={styles.criticalSuccess}>Критичний успіх!</Text>}
-          {result.random === 1 && <Text style={styles.criticalFailure}>Критична поразка!</Text>}
+          {result.random === 20 && <Text style={styles.criticalSuccess}>{t('labels.criticalSuccess')}</Text>}
+          {result.random === 1 && <Text style={styles.criticalFailure}>{t('labels.criticalFailure')}</Text>}
 
           <Text style={styles.rollResult}>
-            Результат: {result.total} ({result.formula} мод)
+            {t('labels.rollResultWithModifier', { total: result.total, formula: result.formula })}
           </Text>
 
           {previousResult && (
             <View style={styles.previousBlock}>
-              <Text style={styles.previousTitle}>Минулий кидок:</Text>
+              <Text style={styles.previousTitle}>{t('labels.previousRoll')}</Text>
               <Text style={styles.previousText}>
-                {previousResult.total} ({previousResult.formula} мод)
+                {t('labels.previousRollWithModifier', { total: previousResult.total, formula: previousResult.formula })}
               </Text>
             </View>
           )}
 
           <TouchableOpacity style={styles.rerollButton} onPress={handleReroll}>
-            <Text style={styles.rerollButtonText}>Кинути ще</Text>
+            <Text style={styles.rerollButtonText}>{t('actions.rollAgain')}</Text>
           </TouchableOpacity>
         </>
       )}

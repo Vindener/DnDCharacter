@@ -23,6 +23,7 @@
   "states": {
     "loading": "Loading...",
     "empty": "Nothing here yet",
+    "comingSoon": "Coming soon...",
     "error": "Something went wrong",
     "offline": "Offline",
     "online": "Online",
@@ -60,5 +61,21 @@
   "validation": {
     "required": "This field is required",
     "invalidValue": "Invalid value"
+  },
+  "auth": {
+    "googleSignIn": "Google sign-in",
+    "firebaseAuth": "Firebase auth",
+    "authError": "Authentication error",
+    "logoutSuccessTitle": "Signed out",
+    "logoutErrorTitle": "Could not sign out",
+    "webClientConfigured": "webClientId configured",
+    "checkingPlayServices": "Checking Play Services...",
+    "openingGoogleAuth": "Opening Google authorization...",
+    "missingIdToken": "ID token was not returned",
+    "idTokenNotFound": "ID token not found",
+    "idTokenReceived": "ID token received",
+    "signingInWithCredential": "Signing in with credential...",
+    "signInSuccess": "Signed in successfully",
+    "logoutSuccessMessage": "You signed out of the account"
   }
 }

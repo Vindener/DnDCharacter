@@ -92,7 +92,14 @@
   "history": {
     "title": "Історія спільних змін ({{tab}})",
     "latestChange": "Маркер останньої зміни: {{label}} о {{date}}",
-    "empty": "Для цієї вкладки ще немає спільної історії."
+    "empty": "Для цієї вкладки ще немає спільної історії.",
+    "sources": {
+      "you": "редаговано вами",
+      "dm": "редаговано DM",
+      "player": "редаговано гравцем",
+      "remote": "редаговано віддалено",
+      "uid": "редаговано {{uid}}"
+    }
   },
   "overview": {
     "abilityScores": "Основні характеристики",
@@ -297,6 +304,60 @@
     }
   },
   "legacy": {
+    "menu": {
+      "syncing": "Синхронізація...",
+      "synced": "Синхронізовано",
+      "syncFailed": "Не вдалося синхронізувати",
+      "savedToCloud": "Персонажа збережено у хмарі.",
+      "updatedInCloud": "Зміни персонажа успішно оновлені у хмарі.",
+      "successTitle": "Успіх",
+      "ok": "Ок",
+      "authErrorTitle": "Помилка авторизації",
+      "authErrorMessage": "Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару.",
+      "errorTitle": "Помилка",
+      "saveCloudFailed": "Не вдалося зберегти у хмару. Спробуйте ще раз.",
+      "localCopySuffix": "Локальна копія",
+      "sharedDuplicateSuffix": "Спільний дублікат",
+      "copyDoneTitle": "Готово",
+      "localCopyCreated": "Створено локальну копію без живої синхронізації.",
+      "sharedDuplicateCreated": "Створено незалежний дублікат зі спільного листа.",
+      "sharedLiveTitle": "Спільна жива копія",
+      "sharedLiveNeedsCloud": "Для живого режиму спочатку створіть хмарну версію.",
+      "sharedLiveOpened": "Поточний лист відкрито в живому режимі з хмарною синхронізацією.",
+      "cloudRequiredTitle": "Потрібна хмарна версія",
+      "cloudRequiredToShare": "Щоб поділитися персонажем, спочатку збережіть його в хмарі.",
+      "uploadPhoto": "Завантажити фото",
+      "removePhoto": "Видалити фото",
+      "rename": "Змінити ім'я",
+      "editExperience": "Редагувати досвід",
+      "editSpeed": "Редагувати швидкість",
+      "editAc": "Редагувати захист",
+      "editInitiative": "Редагувати ініціативу",
+      "updateCloud": "Оновити в хмарі",
+      "saveCloud": "Зберегти в хмарі",
+      "syncNow": "Синхронізувати зараз",
+      "sharedLiveCopy": "Спільна жива копія",
+      "createLocalCopy": "Створити локальну копію",
+      "duplicateShared": "Дублювати зі спільного",
+      "share": "Поділитися",
+      "newName": "Нове ім'я",
+      "speed": "Швидкість",
+      "ac": "Захист",
+      "initiative": "Ініціатива",
+      "experience": "Досвід",
+      "levelValue": "Рівень: {{level}}",
+      "experienceValue": "Досвід: {{experience}}",
+      "levelShort": "{{level}} рів."
+    },
+    "share": {
+      "title": "Поділитися персонажем",
+      "inviteEditor": "Запросити редактора за email",
+      "share": "Поділитися",
+      "editors": "Редактори",
+      "remove": "Видалити",
+      "emptyEditors": "Поки що немає редакторів",
+      "close": "Закрити"
+    },
     "backstory": {
       "campaign": "Кампанія:",
       "campaignPlaceholder": "Введіть кампанію",
@@ -318,6 +379,100 @@
       "bondsPlaceholder": "Введіть зв’язки",
       "flaws": "Вади:",
       "flawsPlaceholder": "Введіть вади"
+    },
+    "tabs": {
+      "attributes": "Характеристики",
+      "skills": "Навички",
+      "spells": "Закляття",
+      "combat": "Бій",
+      "inventoryWeapons": "Інвентар та зброя",
+      "proficiencies": "Професійні навички",
+      "backstory": "Історія героя",
+      "notes": "Нотатки",
+      "traits": "Риси",
+      "coins": "Монети"
+    },
+    "overview": {
+      "speed": "Швидкість: {{value}}",
+      "ac": "Захист: {{value}}",
+      "initiative": "Ініціатива: {{value}}"
+    },
+    "card": {
+      "shared": "Спільний",
+      "level": "Рівень {{level}}",
+      "raceFallback": "Людина",
+      "classFallback": "Клас"
+    },
+    "inventory": {
+      "movedTitle": "Переміщено",
+      "movedToWeapons": "“{{name}}” додано до розділу Зброя",
+      "title": "Інвентар персонажа:",
+      "itemPlaceholder": "Назва предмета",
+      "addItem": "Додати предмет"
+    },
+    "coins": {
+      "title": "Монети персонажа",
+      "gold": "Золото",
+      "silver": "Срібло",
+      "copper": "Мідь",
+      "custom": "Кастомні монети",
+      "emptyCustom": "Немає кастомних монет. Додайте в Налаштуваннях."
+    },
+    "combat": {
+      "initiative": "Ініціатива:",
+      "speed": "Швидкість:",
+      "ac": "КД:",
+      "armorDetails": "Деталі броні:",
+      "hitDice": "Кість хітів:",
+      "hp": "Хіти:",
+      "maxHp": "Максимальні:",
+      "currentHp": "Поточні хіти:",
+      "tempHp": "Тимчасові хіти:",
+      "deathSaves": "Рятівні кидки:",
+      "successes": "Успіхи:",
+      "failures": "Провали:"
+    },
+    "proficiencies": {
+      "title": "Професійні навички персонажа:",
+      "placeholder": "Введіть навички персонажа"
+    },
+    "spells": {
+      "ability": "Характеристика:",
+      "saveDc": "Рятівний куб:",
+      "attackBonus": "Бонус атаки закляттям:",
+      "slots": "Слоти закляття:",
+      "max": "Макс:",
+      "used": "Вик:",
+      "addLevel": "Додати рівень",
+      "known": "Відомі закляття:",
+      "knownPlaceholder": "Введіть відомі закляття",
+      "prepared": "Підготовлені закляття:",
+      "preparedPlaceholder": "Введіть підготовлені закляття",
+      "cantrips": "Заговори:",
+      "cantripsPlaceholder": "Введіть кантіпси"
+    },
+    "weapons": {
+      "weaponTitle": "Зброя #{{index}}",
+      "remove": "Видалити",
+      "name": "Назва",
+      "namePlaceholder": "Напр.: Короткий меч",
+      "damage": "Шкода (XdY)",
+      "attackRoll": "Кидок на влучання",
+      "damageRoll": "Кидок на урон",
+      "addWeapon": "+ Додати зброю",
+      "close": "Закрити",
+      "targetAc": "КД цілі",
+      "targetAcPlaceholder": "Напр.: 13",
+      "attackBonus": "Бонус атаки",
+      "damageModifier": "Модифікатор урону",
+      "rollD20": "Кинути d20",
+      "rollDice": "Кинути куби",
+      "attackResult": "Кидок d20: {{d20}}  |  Бонус: {{bonus}}  ->  Разом: {{total}}\n",
+      "criticalHit": "Критичне влучання!\n",
+      "criticalMiss": "Автопромах!\n",
+      "hitAc": "Влучив проти AC {{ac}}",
+      "missAc": "Промах проти AC {{ac}}",
+      "damageResult": "Кидок {{expression}}: [{{rolls}}] ({{total}}) + мод {{modifier}} -> Разом: {{sum}}"
     }
   },
   "skillRanks": {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 import {
   addEditorByEmail,
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: Props) {
+  const { t } = useTranslation('character');
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(
     () =>
@@ -154,9 +156,9 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
     <Modal visible={visible} transparent animationType='slide' onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.card}>
-          <Text style={styles.title}>Поділитися персонажем</Text>
+          <Text style={styles.title}>{t('legacy.share.title')}</Text>
 
-          <Text style={styles.sectionLabel}>Запросити редактора за email</Text>
+          <Text style={styles.sectionLabel}>{t('legacy.share.inviteEditor')}</Text>
           <TextInput
             value={email}
             onChangeText={setEmail}
@@ -169,10 +171,10 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
           <TouchableOpacity onPress={onShare} style={styles.shareButton}>
-            <Text style={styles.shareButtonText}>Поділитися</Text>
+            <Text style={styles.shareButtonText}>{t('legacy.share.share')}</Text>
           </TouchableOpacity>
 
-          <Text style={styles.editorsTitle}>Редактори</Text>
+          <Text style={styles.editorsTitle}>{t('legacy.share.editors')}</Text>
           <FlatList
             data={editors}
             keyExtractor={(item) => item.uid}
@@ -180,22 +182,21 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
               <View style={styles.editorRow}>
                 <Text style={styles.editorEmail}>{item.email}</Text>
                 <TouchableOpacity onPress={() => onRemove(item.uid)}>
-                  <Text style={styles.removeText}>Видалити</Text>
+                  <Text style={styles.removeText}>{t('legacy.share.remove')}</Text>
                 </TouchableOpacity>
               </View>
             )}
-            ListEmptyComponent={<Text style={styles.emptyText}>Поки що немає редакторів</Text>}
+            ListEmptyComponent={<Text style={styles.emptyText}>{t('legacy.share.emptyEditors')}</Text>}
           />
 
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeText}>Закрити</Text>
+            <Text style={styles.closeText}>{t('legacy.share.close')}</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
 }
-
 
 
 

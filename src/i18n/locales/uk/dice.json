@@ -27,6 +27,11 @@
     "diceRoll": "Кидок {{dice}}",
     "criticalSuccess": "Критичний успіх",
     "criticalFailure": "Критичний провал",
+    "dieTitle": "К{{sides}}",
+    "simpleResult": "Результат: {{result}}",
+    "rollResultWithModifier": "Результат: {{total}} ({{formula}} мод)",
+    "previousRoll": "Минулий кидок:",
+    "previousRollWithModifier": "{{total}} ({{formula}} мод)",
     "singleRollBreakdown": "Кидок {{roll}}{{modifier}} = {{total}}",
     "multiRollBreakdown": "Куби {{rolls}}{{modifier}} = {{total}}",
     "advantageBreakdown": "Кидки {{rolls}} -> {{used}}{{modifier}} = {{total}}"

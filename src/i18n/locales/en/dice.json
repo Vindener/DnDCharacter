@@ -27,6 +27,11 @@
     "diceRoll": "{{dice}} Roll",
     "criticalSuccess": "Critical Success",
     "criticalFailure": "Critical Failure",
+    "dieTitle": "d{{sides}}",
+    "simpleResult": "Result: {{result}}",
+    "rollResultWithModifier": "Result: {{total}} ({{formula}} mod)",
+    "previousRoll": "Previous roll:",
+    "previousRollWithModifier": "{{total}} ({{formula}} mod)",
     "singleRollBreakdown": "Roll {{roll}}{{modifier}} = {{total}}",
     "multiRollBreakdown": "Dice {{rolls}}{{modifier}} = {{total}}",
     "advantageBreakdown": "Rolls {{rolls}} -> {{used}}{{modifier}} = {{total}}"

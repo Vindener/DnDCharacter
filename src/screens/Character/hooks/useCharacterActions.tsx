@@ -39,7 +39,6 @@ import { parseCharacter } from '@/domain/schemas';
 import useTrackerTemplateStore, { SYSTEM_RESOURCE_TEMPLATES } from '@/context/TrackerTemplates-store';
 import useAppRoleStore from '@/context/AppRole-store';
 import {
-  getChangeSourceLabel,
   getShareDisplayStatus,
   getSyncDisplayStatus,
   getSyncStatusKind,
@@ -245,7 +244,7 @@ function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
 }
 
 export function useCharacterActions({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
-  const { t, i18n } = useTranslation(['character', 'dnd', 'spellbook']);
+  const { t, i18n } = useTranslation(['character', 'dnd', 'spellbook', 'common']);
   const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'Character'>>();
   const fallbackFromStore = useCharacterStore(selectActiveCharacter);
   const { lastSessionCharacterId } = useCharacterStore(useShallow(selectCharacterStoreBasics));
@@ -465,6 +464,32 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const shareStatusLabel = useMemo(
     () => getShareDisplayStatus({ isSharedSheet, role: roleMode, isOwnedByMe }),
     [isOwnedByMe, isSharedSheet, roleMode],
+  );
+  const formatSyncStatus = useCallback((status: string) => {
+    if (status === 'Synced') return t('common:status.synced');
+    if (status === 'Pending sync') return t('common:status.pendingSync');
+    if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+    if (status === 'Conflict detected') return t('common:status.conflictDetected');
+    if (status === 'Local only') return t('common:status.localOnly');
+    return status;
+  }, [t]);
+  const formatShareStatus = useCallback((status: string) => {
+    if (status === 'Shared with DM') return t('common:status.sharedWithDm');
+    if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
+    return status;
+  }, [t]);
+  const formatChangeSource = useCallback((entry: { uid: string; actorRole?: string | null }) => {
+    const currentUid = fbAuth.currentUser?.uid;
+    if (currentUid && entry.uid && currentUid === entry.uid) return t('history.sources.you');
+    if (entry.actorRole === 'DM') return t('history.sources.dm');
+    if (entry.actorRole === 'Player') return t('history.sources.player');
+    if (!entry.uid) return t('history.sources.remote');
+    return t('history.sources.uid', { uid: entry.uid.slice(0, 6) });
+  }, [t]);
+  const syncStatusDisplayLabel = useMemo(() => formatSyncStatus(syncStatusLabel), [formatSyncStatus, syncStatusLabel]);
+  const shareStatusDisplayLabel = useMemo(
+    () => (shareStatusLabel ? formatShareStatus(shareStatusLabel) : null),
+    [formatShareStatus, shareStatusLabel],
   );
 
   useEffect(() => {
@@ -1648,13 +1673,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       badges.push({ id, label: safeLabel, kind });
     };
 
-    pushBadge(syncStatusLabel, getSyncStatusKind(syncStatusLabel));
-    if (shareStatusLabel) pushBadge(shareStatusLabel, 'accent');
+    pushBadge(syncStatusDisplayLabel, getSyncStatusKind(syncStatusLabel));
+    if (shareStatusDisplayLabel) pushBadge(shareStatusDisplayLabel, 'accent');
     if (!isCloudDoc) pushBadge(t('badges.localOnly'), 'neutral');
     if (hasHomebrew) pushBadge(t('badges.homebrew'), 'warning');
     if (!isOnline) pushBadge(t('badges.offline'), 'warning');
     return badges;
-  }, [hasHomebrew, isCloudDoc, isOnline, shareStatusLabel, syncStatusLabel]);
+  }, [hasHomebrew, isCloudDoc, isOnline, shareStatusDisplayLabel, syncStatusDisplayLabel, syncStatusLabel, t]);
 
   const hasConflictForPrefixes = useCallback((prefixes: string[]) => {
     if (!conflictPaths.length) return false;
@@ -1685,20 +1710,11 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
   const latestTabChange = tabHistory[0];
   const latestTabChangeLabel = latestTabChange
-    ? getChangeSourceLabel({
-        uid: latestTabChange.uid,
-        actorRole: latestTabChange.actorRole,
-        currentUid: fbAuth.currentUser?.uid,
-      })
+    ? formatChangeSource(latestTabChange)
     : null;
   const getHistoryAuthorLabel = useCallback(
-    (entry: CharacterChangeHistoryEntry) =>
-      getChangeSourceLabel({
-        uid: entry.uid,
-        actorRole: entry.actorRole,
-        currentUid: fbAuth.currentUser?.uid,
-      }),
-    [],
+    (entry: CharacterChangeHistoryEntry) => formatChangeSource(entry),
+    [formatChangeSource],
   );
 
   const openTab = useCallback((tab: CharacterTab) => setSelectedTab(tab), []);
@@ -3222,7 +3238,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     onCharacterMenuChange: (next: CharacterViewModel) => setCharacterData(ensureCharacterDefaults(next)),
     syncBadges,
     renderBadge,
-    syncStatusLabel,
+    syncStatusLabel: syncStatusDisplayLabel,
     syncFeedback,
     currentSync,
     syncNow,

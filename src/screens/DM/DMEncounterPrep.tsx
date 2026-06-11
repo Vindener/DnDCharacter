@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
@@ -26,7 +27,17 @@ type EncounterMonster = {
 
 type PlayerSourceMode = 'campaign' | 'all';
 
+const DIFFICULTY_KEYS: Record<string, string> = {
+  'Немає даних': 'none',
+  'Дуже легко': 'trivial',
+  'Легко': 'easy',
+  'Середньо': 'medium',
+  'Складно': 'hard',
+  'Смертельно': 'deadly',
+};
+
 const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
+  const { t } = useTranslation('dm');
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -115,7 +126,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   }, [monsterSearch, monsters, pinnedMonsters]);
 
   const addMonsterSeed = useCallback((seed: EncounterPrepMonsterSeed) => {
-    const name = seed.name || 'Монстр';
+    const name = seed.name || t('encounterPrep.monsterFallback');
     const challenge = seed.challenge || '0';
     const count = Math.max(1, Number(seed.count) || 1);
 
@@ -147,7 +158,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         },
       ];
     });
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const seeds = [route.params?.initialMonster, ...(route.params?.initialMonsters || [])].filter(Boolean) as EncounterPrepMonsterSeed[];
@@ -171,6 +182,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       })),
     );
   }, [encounterMonsters, selectedParty]);
+  const difficultyLabel = t(`encounterPrep.difficulties.${DIFFICULTY_KEYS[encounterResult.difficulty] || 'none'}`);
 
   const startInitiative = () => {
     const entries: InitiativeSeed['entries'] = [];
@@ -178,7 +190,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     selectedParty.forEach((player) => {
       entries.push({
         id: `player-${player.id}`,
-        name: player.name || 'Гравець',
+        name: player.name || t('encounterPrep.playerFallback'),
         roll: '',
         hits: String(player.hp?.current || 0),
       });
@@ -188,7 +200,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       for (let index = 0; index < Math.max(1, monster.count); index += 1) {
         entries.push({
           id: `monster-${monster.id}-${index}`,
-          name: monster.name || 'Монстр',
+          name: monster.name || t('encounterPrep.monsterFallback'),
           roll: '',
           hits: monster.hitPoints ? String(monster.hitPoints) : '',
         });
@@ -223,8 +235,8 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.card}>
-        <Text style={styles.title}>Підготовка сутички</Text>
-        <Text style={styles.hint}>Оберіть кампанію, персонажів та монстрів, потім запустіть Ініціативу з підготовленими записами.</Text>
+        <Text style={styles.title}>{t('encounterPrep.title')}</Text>
+        <Text style={styles.hint}>{t('encounterPrep.hint')}</Text>
         <View style={styles.statsRow}>
           {campaigns.map((campaign) => (
             <Pressable
@@ -240,25 +252,25 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Персонажі ({selectedParty.length})</Text>
+        <Text style={styles.title}>{t('encounterPrep.characters', { count: selectedParty.length })}</Text>
         <View style={styles.statsRow}>
           <Pressable
             style={[styles.statChip, playerSourceMode === 'campaign' ? { borderColor: colors.text } : null]}
             onPress={() => setPlayerSourceMode('campaign')}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={styles.statChipText}>Група кампанії</Text>
+            <Text style={styles.statChipText}>{t('encounterPrep.campaignParty')}</Text>
           </Pressable>
           <Pressable
             style={[styles.statChip, playerSourceMode === 'all' ? { borderColor: colors.text } : null]}
             onPress={() => setPlayerSourceMode('all')}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={styles.statChipText}>Усі персонажі</Text>
+            <Text style={styles.statChipText}>{t('encounterPrep.allCharacters')}</Text>
           </Pressable>
         </View>
-        {!party.length && playerSourceMode === 'campaign' && <Text style={styles.hint}>До вибраної кампанії не прив’язано учасників групи.</Text>}
-        {!party.length && playerSourceMode === 'all' && <Text style={styles.hint}>У списку персонажів поки порожньо.</Text>}
+        {!party.length && playerSourceMode === 'campaign' && <Text style={styles.hint}>{t('encounterPrep.emptyCampaignParty')}</Text>}
+        {!party.length && playerSourceMode === 'all' && <Text style={styles.hint}>{t('encounterPrep.emptyAllCharacters')}</Text>}
         {party.map((player) => {
           const selected = selectedPlayers[player.id];
           const campaignLabel = getCharacterCampaignLabel(player, campaignNamesById);
@@ -269,20 +281,20 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               onPress={() => setSelectedPlayers((prev) => ({ ...prev, [player.id]: !prev[player.id] }))}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={styles.updateTitle}>{player.name || 'Персонаж'} {selected ? '• Обрано' : ''}</Text>
-              <Text style={styles.updateMeta}>Кампанія: {campaignLabel}</Text>
-            <Text style={styles.updateMeta}>Рів. {player.level || 1} • Ініц. {player.initiative || 0} • ХП {player.hp?.current || 0}/{player.hp?.max || 0}</Text>
+              <Text style={styles.updateTitle}>{player.name || t('encounterPrep.characterFallback')} {selected ? `• ${t('encounterPrep.selected')}` : ''}</Text>
+              <Text style={styles.updateMeta}>{t('encounterPrep.campaign', { campaign: campaignLabel })}</Text>
+            <Text style={styles.updateMeta}>{t('encounterPrep.playerMeta', { level: player.level || 1, initiative: player.initiative || 0, current: player.hp?.current || 0, max: player.hp?.max || 0 })}</Text>
             </Pressable>
           );
         })}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Монстри</Text>
+        <Text style={styles.title}>{t('encounterPrep.monsters')}</Text>
         <TextInput
           value={monsterSearch}
           onChangeText={setMonsterSearch}
-          placeholder={pinnedMonsters.length ? 'Пошук у закріпленому бестіарії' : 'Пошук у бестіарії'}
+          placeholder={pinnedMonsters.length ? t('encounterPrep.searchPinned') : t('encounterPrep.searchBestiary')}
           placeholderTextColor={colors.textSecondary}
           style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text }}
         />
@@ -294,7 +306,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             onPress={() =>
               addMonsterSeed({
                 monsterId: monster.id,
-                name: monster.name || 'Монстр',
+                name: monster.name || t('encounterPrep.monsterFallback'),
                 challenge: monster.challenge || '0',
                 count: 1,
                 hitPoints: monster.hitPoints,
@@ -302,19 +314,19 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             }
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={styles.updateTitle}>{monster.name || 'Монстр'}</Text>
-            <Text style={styles.updateMeta}>Скл. {monster.challenge || '0'} • {monster.type || 'Невідомий тип'}</Text>
+            <Text style={styles.updateTitle}>{monster.name || t('encounterPrep.monsterFallback')}</Text>
+            <Text style={styles.updateMeta}>{t('encounterPrep.monsterMeta', { challenge: monster.challenge || '0', type: monster.type || t('encounterPrep.unknownType') })}</Text>
           </Pressable>
         ))}
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Склад сутички ({encounterMonsters.length})</Text>
-        {!encounterMonsters.length && <Text style={styles.hint}>Додайте монстрів зі списку вище.</Text>}
+        <Text style={styles.title}>{t('encounterPrep.encounterRoster', { count: encounterMonsters.length })}</Text>
+        {!encounterMonsters.length && <Text style={styles.hint}>{t('encounterPrep.emptyRoster')}</Text>}
         {encounterMonsters.map((monster) => (
           <View key={monster.id} style={styles.updateRow}>
             <Text style={styles.updateTitle}>{monster.name}</Text>
-            <Text style={styles.updateMeta}>Скл. {monster.challenge} • К-сть {monster.count} • ХП {monster.hitPoints ?? '—'}</Text>
+            <Text style={styles.updateMeta}>{t('encounterPrep.rosterMeta', { challenge: monster.challenge, count: monster.count, hp: monster.hitPoints ?? '—' })}</Text>
             <View style={styles.laneGrid}>
               <Pressable
                 style={styles.laneButton}
@@ -327,7 +339,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.laneButtonText}>К-сть -1</Text>
+                <Text style={styles.laneButtonText}>{t('encounterPrep.countMinus')}</Text>
               </Pressable>
               <Pressable
                 style={styles.laneButton}
@@ -338,10 +350,10 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.laneButtonText}>К-сть +1</Text>
+                <Text style={styles.laneButtonText}>{t('encounterPrep.countPlus')}</Text>
               </Pressable>
               <Pressable style={styles.laneButton} onPress={() => removeMonster(monster.id)} android_ripple={{ color: colors.ripple }}>
-                <Text style={styles.laneButtonText}>Видалити</Text>
+                <Text style={styles.laneButtonText}>{t('encounterPrep.delete')}</Text>
               </Pressable>
             </View>
           </View>
@@ -349,14 +361,14 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Оцінка складності</Text>
-        <Text style={styles.updateMeta}>Кампанія: {selectedCampaign?.name || '—'}</Text>
-        <Text style={styles.updateMeta}>Складність: {encounterResult.difficulty}</Text>
-        <Text style={styles.updateMeta}>Скоригований досвід: {encounterResult.adjustedXP}</Text>
-        <Text style={styles.updateMeta}>Досвід на гравця: {encounterResult.xpPerPlayer}</Text>
+        <Text style={styles.title}>{t('encounterPrep.difficultyTitle')}</Text>
+        <Text style={styles.updateMeta}>{t('encounterPrep.campaign', { campaign: selectedCampaign?.name || '—' })}</Text>
+        <Text style={styles.updateMeta}>{t('encounterPrep.difficulty', { difficulty: difficultyLabel })}</Text>
+        <Text style={styles.updateMeta}>{t('encounterPrep.adjustedXp', { xp: encounterResult.adjustedXP })}</Text>
+        <Text style={styles.updateMeta}>{t('encounterPrep.xpPerPlayer', { xp: encounterResult.xpPerPlayer })}</Text>
 
         <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.authButtonText}>Почати ініціативу</Text>
+          <Text style={styles.authButtonText}>{t('encounterPrep.startInitiative')}</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -364,6 +376,4 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMEncounterPrep;
-
-
 

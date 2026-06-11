@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, ScrollView, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
@@ -38,6 +39,7 @@ interface CharacterMenuProps {
 }
 
 const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, onSyncNow }) => {
+  const { t } = useTranslation('character');
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const updateCharacter = useCharacterStore((s: CharacterStoreState) => s.updateCharacter);
   const addCharacter = useCharacterStore((s: CharacterStoreState) => s.addCharacter);
@@ -129,13 +131,13 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         },
         isOnline: true,
         fallbackPath: 'overview.identity',
-        syncingMessage: 'Синхронізація...',
-        syncedMessage: 'Синхронізовано',
+        syncingMessage: t('legacy.menu.syncing'),
+        syncedMessage: t('legacy.menu.synced'),
         conflictFallbackPath: 'overview.identity',
       });
 
       if (result.status !== 'synced') {
-        throw new Error(result.message || 'Не вдалося синхронізувати');
+        throw new Error(result.message || t('legacy.menu.syncFailed'));
       }
 
       const syncedCharacter = result.targetCharacter;
@@ -154,15 +156,15 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       onChange?.(syncedCharacter);
 
       const successMessage = result.created
-        ? 'Персонажа збережено у хмарі.'
-        : 'Зміни персонажа успішно оновлені у хмарі.';
+        ? t('legacy.menu.savedToCloud')
+        : t('legacy.menu.updatedInCloud');
 
       Alert.alert(
-        'Успіх',
+        t('legacy.menu.successTitle'),
         successMessage,
         [
           {
-            text: 'Ок',
+            text: t('legacy.menu.ok'),
             onPress: () => {
               closeMenu();
               if (targetSheetId !== character.id) {
@@ -176,20 +178,20 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       const message = errorCodeOrMessage(error);
       console.warn('[save] failed', message);
       if (message === 'Not signed in') {
-        Alert.alert('Помилка авторизації', 'Ви не ввійшли у свій акаунт Google! Будь ласка, авторизуйтеся перед збереженням у хмару.');
+        Alert.alert(t('legacy.menu.authErrorTitle'), t('legacy.menu.authErrorMessage'));
       } else {
-        Alert.alert('Помилка', 'Не вдалося зберегти у хмару. Спробуйте ще раз.');
+        Alert.alert(t('legacy.menu.errorTitle'), t('legacy.menu.saveCloudFailed'));
       }
     }
   };
   const closeMenu = () => setMenuVisible(false);
 
   const createDetachedCopy = async (mode: 'local-copy' | 'duplicate-shared') => {
-    const suffix = mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат';
+    const suffix = mode === 'local-copy' ? t('legacy.menu.localCopySuffix') : t('legacy.menu.sharedDuplicateSuffix');
     const copy: CharacterViewModel = {
       ...characterData,
       id: String(uuid.v4()),
-      name: `${characterData.name || 'Персонаж'} (${suffix})`,
+      name: `${characterData.name || t('header.unnamed')} (${suffix})`,
     };
 
     await addCharacter(copy);
@@ -197,11 +199,11 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
     setCurrentCharacterId(copy.id);
 
     Alert.alert(
-      'Готово',
-      mode === 'local-copy' ? 'Створено локальну копію без живої синхронізації.' : 'Створено незалежний дублікат зі спільного листа.',
+      t('legacy.menu.copyDoneTitle'),
+      mode === 'local-copy' ? t('legacy.menu.localCopyCreated') : t('legacy.menu.sharedDuplicateCreated'),
       [
         {
-          text: 'Ок',
+          text: t('legacy.menu.ok'),
           onPress: () => navigation.navigate('Character', { character: copy }),
         },
       ],
@@ -210,17 +212,17 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
   const openSharedLiveCopy = () => {
     if (!isCharacterInCloud) {
-      Alert.alert('Спільна жива копія', 'Для живого режиму спочатку створіть хмарну версію.');
+      Alert.alert(t('legacy.menu.sharedLiveTitle'), t('legacy.menu.sharedLiveNeedsCloud'));
       return;
     }
 
     onSyncNow?.();
-    Alert.alert('Спільна жива копія', 'Поточний лист відкрито в живому режимі з хмарною синхронізацією.');
+    Alert.alert(t('legacy.menu.sharedLiveTitle'), t('legacy.menu.sharedLiveOpened'));
   };
 
   const openShareModal = () => {
     if (!isCharacterInCloud) {
-      Alert.alert('Потрібна хмарна версія', 'Щоб поділитися персонажем, спочатку збережіть його в хмарі.');
+      Alert.alert(t('legacy.menu.cloudRequiredTitle'), t('legacy.menu.cloudRequiredToShare'));
       return;
     }
 
@@ -326,7 +328,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             pickPhoto();
           }}
         >
-          Завантажити фото
+          {t('legacy.menu.uploadPhoto')}
         </MenuItem>
 
         <MenuItem
@@ -336,7 +338,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             removePhoto();
           }}
         >
-          Видалити фото
+          {t('legacy.menu.removePhoto')}
         </MenuItem>
 
         <MenuItem
@@ -346,7 +348,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             renameCharacter();
           }}
         >
-          Змінити ім'я
+          {t('legacy.menu.rename')}
         </MenuItem>
 
         <MenuDivider color={colors.border} />
@@ -358,7 +360,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             setIsExpModalVisible(true);
           }}
         >
-          Редагувати досвід
+          {t('legacy.menu.editExperience')}
         </MenuItem>
 
         <MenuItem
@@ -368,7 +370,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             setIsSpeedModalVisible(true);
           }}
         >
-          Редагувати швидкість
+          {t('legacy.menu.editSpeed')}
         </MenuItem>
 
         <MenuItem
@@ -378,7 +380,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             setIsAcModalVisible(true);
           }}
         >
-          Редагувати захист
+          {t('legacy.menu.editAc')}
         </MenuItem>
 
         <MenuItem
@@ -388,13 +390,13 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             setIsInitModalVisible(true);
           }}
         >
-          Редагувати ініціативу
+          {t('legacy.menu.editInitiative')}
         </MenuItem>
 
         <MenuDivider color={colors.border} />
 
         <MenuItem textStyle={styles.menuItemText} onPress={onSaveToCloud}>
-          {isCharacterInCloud ? 'Оновити в хмарі' : 'Зберегти в хмарі'}
+          {isCharacterInCloud ? t('legacy.menu.updateCloud') : t('legacy.menu.saveCloud')}
         </MenuItem>
         <MenuItem
           textStyle={styles.menuItemText}
@@ -403,7 +405,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             onSyncNow?.();
           }}
         >
-          Синхронізувати зараз
+          {t('legacy.menu.syncNow')}
         </MenuItem>
         <MenuItem
           textStyle={styles.menuItemText}
@@ -412,7 +414,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             openSharedLiveCopy();
           }}
         >
-          Спільна жива копія
+          {t('legacy.menu.sharedLiveCopy')}
         </MenuItem>
         <MenuItem
           textStyle={styles.menuItemText}
@@ -421,7 +423,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             void createDetachedCopy('local-copy');
           }}
         >
-          Створити локальну копію
+          {t('legacy.menu.createLocalCopy')}
         </MenuItem>
         {isSharedSheet && (
           <MenuItem
@@ -431,7 +433,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
               void createDetachedCopy('duplicate-shared');
             }}
           >
-            Дублювати зі спільного
+            {t('legacy.menu.duplicateShared')}
           </MenuItem>
         )}
 
@@ -442,13 +444,13 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
             openShareModal();
           }}
         >
-          Поділитися
+          {t('legacy.menu.share')}
         </MenuItem>
       </Menu>
-      <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title="Нове ім'я">
+      <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title={t('legacy.menu.newName')}>
         <TextInput value={newName} onChangeText={setNewName} style={styles.tableCell} />
       </Modal>
-      <Modal isVisible={isSpeedModalVisible} onClose={() => setIsSpeedModalVisible(false)} onSubmit={handleSaveSpeed} title='Швидкість'>
+      <Modal isVisible={isSpeedModalVisible} onClose={() => setIsSpeedModalVisible(false)} onSubmit={handleSaveSpeed} title={t('legacy.menu.speed')}>
         <TextInput
           value={String(tempSpeed)}
           onChangeText={(t) => {
@@ -458,7 +460,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           keyboardType='numeric'
         />
       </Modal>
-      <Modal isVisible={isAcModalVisible} onClose={() => setIsAcModalVisible(false)} onSubmit={handleSaveAc} title='Захист'>
+      <Modal isVisible={isAcModalVisible} onClose={() => setIsAcModalVisible(false)} onSubmit={handleSaveAc} title={t('legacy.menu.ac')}>
         <TextInput
           value={String(tempAc)}
           onChangeText={(t) => {
@@ -468,7 +470,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           keyboardType='numeric'
         />
       </Modal>
-      <Modal isVisible={isInitModalVisible} onClose={() => setIsInitModalVisible(false)} onSubmit={handleSaveInit} title='Ініціатива'>
+      <Modal isVisible={isInitModalVisible} onClose={() => setIsInitModalVisible(false)} onSubmit={handleSaveInit} title={t('legacy.menu.initiative')}>
         <TextInput
           value={String(tempInit)}
           onChangeText={(t) => {
@@ -478,9 +480,9 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           keyboardType='numeric'
         />
       </Modal>
-      <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title='Досвід'>
-        <Text style={styles.modalInfoText}>Рівень: {getLevelByExperience(tempExp)}</Text>
-        <Text style={styles.modalInfoText}>Досвід: {tempExp}</Text>
+      <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title={t('legacy.menu.experience')}>
+        <Text style={styles.modalInfoText}>{t('legacy.menu.levelValue', { level: getLevelByExperience(tempExp) })}</Text>
+        <Text style={styles.modalInfoText}>{t('legacy.menu.experienceValue', { experience: tempExp })}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp(12) }}>
           <TextInput value={expDelta} onChangeText={setExpDelta} keyboardType='numeric' style={{ flexGrow: 1, marginRight: sp(8) }} />
           <TouchableOpacity onPress={() => applyInputDelta(1)} style={styles.adjustButton}>
@@ -506,7 +508,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
                   color: getLevelByExperience(tempExp) === row.level ? colors.highlight : colors.text,
                 }}
               >
-                {row.level} рів.
+                {t('legacy.menu.levelShort', { level: row.level })}
               </Text>
               <Text
                 style={{
@@ -535,7 +537,5 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
 
 export default CharacterMenu;
-
-
 
 

@@ -92,7 +92,14 @@
   "history": {
     "title": "Shared Change History ({{tab}})",
     "latestChange": "Last change marker: {{label}} at {{date}}",
-    "empty": "This tab has no shared history yet."
+    "empty": "This tab has no shared history yet.",
+    "sources": {
+      "you": "edited by you",
+      "dm": "edited by DM",
+      "player": "edited by player",
+      "remote": "edited remotely",
+      "uid": "edited by {{uid}}"
+    }
   },
   "overview": {
     "abilityScores": "Ability Scores",
@@ -297,6 +304,60 @@
     }
   },
   "legacy": {
+    "menu": {
+      "syncing": "Syncing...",
+      "synced": "Synced",
+      "syncFailed": "Could not sync",
+      "savedToCloud": "Character saved to cloud.",
+      "updatedInCloud": "Character changes updated in cloud.",
+      "successTitle": "Success",
+      "ok": "OK",
+      "authErrorTitle": "Authentication Error",
+      "authErrorMessage": "You are not signed in to your Google account. Please sign in before saving to cloud.",
+      "errorTitle": "Error",
+      "saveCloudFailed": "Could not save to cloud. Try again.",
+      "localCopySuffix": "Local copy",
+      "sharedDuplicateSuffix": "Shared duplicate",
+      "copyDoneTitle": "Done",
+      "localCopyCreated": "Created a local copy without live sync.",
+      "sharedDuplicateCreated": "Created an independent duplicate of the shared sheet.",
+      "sharedLiveTitle": "Shared Live Copy",
+      "sharedLiveNeedsCloud": "Create a cloud version before using live mode.",
+      "sharedLiveOpened": "Current sheet is open in live mode with cloud sync.",
+      "cloudRequiredTitle": "Cloud Version Required",
+      "cloudRequiredToShare": "Save the character to cloud before sharing it.",
+      "uploadPhoto": "Upload photo",
+      "removePhoto": "Remove photo",
+      "rename": "Rename",
+      "editExperience": "Edit experience",
+      "editSpeed": "Edit speed",
+      "editAc": "Edit armor",
+      "editInitiative": "Edit initiative",
+      "updateCloud": "Update in cloud",
+      "saveCloud": "Save to cloud",
+      "syncNow": "Sync now",
+      "sharedLiveCopy": "Shared live copy",
+      "createLocalCopy": "Create local copy",
+      "duplicateShared": "Duplicate shared",
+      "share": "Share",
+      "newName": "New name",
+      "speed": "Speed",
+      "ac": "Armor",
+      "initiative": "Initiative",
+      "experience": "Experience",
+      "levelValue": "Level: {{level}}",
+      "experienceValue": "Experience: {{experience}}",
+      "levelShort": "level {{level}}"
+    },
+    "share": {
+      "title": "Share Character",
+      "inviteEditor": "Invite editor by email",
+      "share": "Share",
+      "editors": "Editors",
+      "remove": "Remove",
+      "emptyEditors": "No editors yet",
+      "close": "Close"
+    },
     "backstory": {
       "campaign": "Campaign:",
       "campaignPlaceholder": "Enter campaign",
@@ -318,6 +379,100 @@
       "bondsPlaceholder": "Enter bonds",
       "flaws": "Flaws:",
       "flawsPlaceholder": "Enter flaws"
+    },
+    "tabs": {
+      "attributes": "Attributes",
+      "skills": "Skills",
+      "spells": "Spells",
+      "combat": "Combat",
+      "inventoryWeapons": "Inventory and Weapons",
+      "proficiencies": "Proficiencies",
+      "backstory": "Hero Story",
+      "notes": "Notes",
+      "traits": "Traits",
+      "coins": "Coins"
+    },
+    "overview": {
+      "speed": "Speed: {{value}}",
+      "ac": "Armor: {{value}}",
+      "initiative": "Initiative: {{value}}"
+    },
+    "card": {
+      "shared": "Shared",
+      "level": "Level {{level}}",
+      "raceFallback": "Human",
+      "classFallback": "Class"
+    },
+    "inventory": {
+      "movedTitle": "Moved",
+      "movedToWeapons": "“{{name}}” added to Weapons",
+      "title": "Character inventory:",
+      "itemPlaceholder": "Item name",
+      "addItem": "Add item"
+    },
+    "coins": {
+      "title": "Character coins",
+      "gold": "Gold",
+      "silver": "Silver",
+      "copper": "Copper",
+      "custom": "Custom coins",
+      "emptyCustom": "No custom coins. Add them in Settings."
+    },
+    "combat": {
+      "initiative": "Initiative:",
+      "speed": "Speed:",
+      "ac": "AC:",
+      "armorDetails": "Armor details:",
+      "hitDice": "Hit dice:",
+      "hp": "Hit points:",
+      "maxHp": "Maximum:",
+      "currentHp": "Current HP:",
+      "tempHp": "Temporary HP:",
+      "deathSaves": "Death saves:",
+      "successes": "Successes:",
+      "failures": "Failures:"
+    },
+    "proficiencies": {
+      "title": "Character proficiencies:",
+      "placeholder": "Enter character proficiencies"
+    },
+    "spells": {
+      "ability": "Ability:",
+      "saveDc": "Save DC:",
+      "attackBonus": "Spell attack bonus:",
+      "slots": "Spell slots:",
+      "max": "Max:",
+      "used": "Used:",
+      "addLevel": "Add level",
+      "known": "Known spells:",
+      "knownPlaceholder": "Enter known spells",
+      "prepared": "Prepared spells:",
+      "preparedPlaceholder": "Enter prepared spells",
+      "cantrips": "Cantrips:",
+      "cantripsPlaceholder": "Enter cantrips"
+    },
+    "weapons": {
+      "weaponTitle": "Weapon #{{index}}",
+      "remove": "Remove",
+      "name": "Name",
+      "namePlaceholder": "E.g.: Shortsword",
+      "damage": "Damage (XdY)",
+      "attackRoll": "Attack roll",
+      "damageRoll": "Damage roll",
+      "addWeapon": "+ Add weapon",
+      "close": "Close",
+      "targetAc": "Target AC",
+      "targetAcPlaceholder": "E.g.: 13",
+      "attackBonus": "Attack bonus",
+      "damageModifier": "Damage modifier",
+      "rollD20": "Roll d20",
+      "rollDice": "Roll dice",
+      "attackResult": "d20 roll: {{d20}}  |  Bonus: {{bonus}}  ->  Total: {{total}}\n",
+      "criticalHit": "Critical hit!\n",
+      "criticalMiss": "Automatic miss!\n",
+      "hitAc": "Hit against AC {{ac}}",
+      "missAc": "Miss against AC {{ac}}",
+      "damageResult": "Roll {{expression}}: [{{rolls}}] ({{total}}) + mod {{modifier}} -> Total: {{sum}}"
     }
   },
   "skillRanks": {
