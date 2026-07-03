@@ -1,0 +1,125 @@
+{
+  "title": "Bestiary",
+  "hint": "A combat reference for DMs: search, pins, favorites, and encounter prep.",
+  "search": {
+    "placeholder": "Search monster..."
+  },
+  "filters": {
+    "challengeShort": "CR",
+    "type": "Type",
+    "environment": "Environment",
+    "size": "Size",
+    "source": "Source",
+    "favorites": "Favorites",
+    "active": "Active filters: {{count}}",
+    "clear": "Reset"
+  },
+  "modes": {
+    "full": "Bestiary",
+    "quick": "DM Quick View"
+  },
+  "labels": {
+    "unknownType": "Unknown type",
+    "missingAttack": "No attack listed",
+    "challengeShort": "CR",
+    "armorClassShort": "AC",
+    "hitPointsShort": "HP",
+    "speedShort": "Speed",
+    "attackBonus": "{{value}} to hit",
+    "environment": "Environment: {{value}}",
+    "source": "Source: {{value}}",
+    "customMonster": "Custom monster"
+  },
+  "empty": {
+    "database": "The bestiary is empty. Add a custom monster or import JSON.",
+    "filtered": "No monsters match the current search or filters."
+  },
+  "actions": {
+    "add": "Add",
+    "importMonster": "Import Monster",
+    "addToEncounterShort": "Encounter",
+    "pinned": "Pinned",
+    "pin": "Pin",
+    "duplicate": "Copy",
+    "clear": "Clear"
+  },
+  "pinned": {
+    "title": "Pinned Monsters ({{count}})",
+    "emptyHint": "Pin monsters for the next encounter. Quick view shows them first.",
+    "readyHint": "Pinned monsters are ready for encounter prep and appear first in DM quick view."
+  },
+  "quick": {
+    "title": "DM Quick View",
+    "hint": "Compact blocks: AC, HP, attack bonus, damage, traits, and actions."
+  },
+  "errors": {
+    "load": "Loading Error"
+  },
+  "defaults": {
+    "monster": "Monster",
+    "copy": "Copy",
+    "customSource": "Custom",
+    "medium": "Medium",
+    "unknownType": "Unknown type",
+    "speed": "30 ft."
+  },
+  "detail": {
+    "actions": {
+      "uploadPhoto": "Upload photo",
+      "removePhoto": "Remove photo",
+      "unpin": "Unpin",
+      "addFavorite": "Favorite",
+      "removeFavorite": "Remove favorite",
+      "duplicate": "Duplicate",
+      "showLess": "Collapse",
+      "showMore": "Show more",
+      "exportJson": "Export JSON"
+    },
+    "labels": {
+      "damageValue": "{{value}} damage"
+    },
+    "fields": {
+      "type": "Type",
+      "size": "Size",
+      "alignment": "Alignment",
+      "challenge": "Challenge",
+      "environment": "Environment",
+      "source": "Source",
+      "mainAttack": "Main attack",
+      "attackBonus": "Attack bonus",
+      "damage": "Damage",
+      "armorClass": "Armor class",
+      "speed": "Speed",
+      "savingThrows": "Saving throws",
+      "skills": "Skills",
+      "senses": "Senses",
+      "languages": "Languages",
+      "tags": "Tags"
+    },
+    "placeholders": {
+      "tags": "tag, tag"
+    },
+    "sections": {
+      "abilities": "Abilities",
+      "traits": "Traits",
+      "actions": "Actions",
+      "reactions": "Reactions",
+      "legendaryActions": "Legendary actions",
+      "notes": "DM notes"
+    },
+    "abilities": {
+      "strength": "STR",
+      "dexterity": "DEX",
+      "constitution": "CON",
+      "intelligence": "INT",
+      "wisdom": "WIS",
+      "charisma": "CHA"
+    },
+    "empty": {
+      "traits": "No traits.",
+      "actions": "No actions.",
+      "reactions": "No reactions.",
+      "notes": "No notes."
+    }
+  }
+}

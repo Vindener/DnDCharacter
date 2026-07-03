@@ -57,6 +57,38 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: fs(13),
       fontWeight: '600',
     },
+    languageRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: sp(8),
+    },
+    languageButton: {
+      minHeight: 44,
+      minWidth: 116,
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: sp(10),
+      paddingHorizontal: sp(14),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    languageButtonActive: {
+      borderColor: c.brand,
+      backgroundColor: c.inputBackground,
+    },
+    languageButtonPressed: {
+      opacity: 0.84,
+    },
+    languageButtonText: {
+      color: c.text,
+      fontSize: fs(13),
+      fontWeight: '600',
+    },
+    languageButtonTextActive: {
+      color: c.brand,
+    },
     coinsList: {
       gap: sp(8),
     },
@@ -194,6 +226,5 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '600',
     },
   });
-
 
 

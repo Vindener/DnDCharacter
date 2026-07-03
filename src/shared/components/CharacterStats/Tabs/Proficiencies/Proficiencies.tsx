@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
@@ -11,6 +12,7 @@ interface ProficienciesProps {
 }
 
 const Proficiencies: React.FC<ProficienciesProps> = ({ data }: ProficienciesProps) => {
+  const { t } = useTranslation('character');
   const updateCharacterProficiencies = useCharacterStore((s) => s.updateCharacterProficiencies);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
   const colors = useThemeStore((s) => s.colors);
@@ -25,12 +27,12 @@ const Proficiencies: React.FC<ProficienciesProps> = ({ data }: ProficienciesProp
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Професійні навички персонажа:</Text>
+      <Text style={styles.label}>{t('legacy.proficiencies.title')}</Text>
       <MultiTextInput
         numberOfLines={8}
         value={proficienciesText}
         onChangeText={handleChange}
-        placeholder='Введіть навички персонажа'
+        placeholder={t('legacy.proficiencies.placeholder')}
         blurOnSubmit={false}
       />
     </View>
@@ -38,4 +40,3 @@ const Proficiencies: React.FC<ProficienciesProps> = ({ data }: ProficienciesProp
 };
 
 export default Proficiencies;
-

@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, FlatList, TextInput, Pressable, ScrollView } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import useMonsterStore from '@/context/Monster-store';
 import { MonsterCard } from '@/shared/components/MonsterCard/MonsterCard';
 import useThemeStore from '@/context/Theme-store';
@@ -22,40 +24,34 @@ import {
 type ViewMode = 'full' | 'quick';
 type ListMonster = MonsterDto & { section?: 'pinned' | 'all' };
 
-const CR_FILTERS: Array<{ id: CRFilter; label: string }> = [
-  { id: 'all', label: 'Скл.' },
-  { id: '0-1', label: '0-1' },
-  { id: '2-4', label: '2-4' },
-  { id: '5-10', label: '5-10' },
-  { id: '11+', label: '11+' },
-];
+const CR_FILTERS: CRFilter[] = ['all', '0-1', '2-4', '5-10', '11+'];
 
-const createMonsterSeed = (monster: MonsterDto) => ({
+const createMonsterSeed = (monster: MonsterDto, fallbackName: string) => ({
   monsterId: monster.id,
-  name: monster.name || 'Монстр',
+  name: monster.name || fallbackName,
   challenge: monster.challenge || '0',
   count: 1,
   hitPoints: monster.hitPoints,
 });
 
-const createDuplicateMonster = (monster: MonsterDto): MonsterDto => ({
+const createDuplicateMonster = (monster: MonsterDto, fallbackName: string, copyLabel: string, customSource: string): MonsterDto => ({
   ...monster,
   id: `${monster.id}-copy-${Date.now()}`,
-  name: `${monster.name || 'Монстр'} Копія`,
-  source: monster.source || 'Власне',
+  name: `${monster.name || fallbackName} ${copyLabel}`,
+  source: monster.source || customSource,
   isCustom: true,
 });
 
-const createBlankMonster = (): MonsterDto => ({
+const createBlankMonster = (t: TFunction<'bestiary'>): MonsterDto => ({
   id: `monster-${Date.now()}`,
-  name: 'Монстр',
-  size: 'Середній',
-  type: 'Невідомий тип',
+  name: t('defaults.monster'),
+  size: t('defaults.medium'),
+  type: t('defaults.unknownType'),
   challenge: '0',
   armorClass: 10,
   hitPoints: 1,
-  speed: '30 фт.',
-  source: 'Власне',
+  speed: t('defaults.speed'),
+  source: t('defaults.customSource'),
   tags: [],
   isCustom: true,
   stats: {
@@ -69,6 +65,7 @@ const createBlankMonster = (): MonsterDto => ({
 });
 
 const Bestiary = () => {
+  const { t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const monsters = useMonsterStore((s) => s.monsters);
   const pinnedMonsterIds = useMonsterStore((s) => s.pinnedMonsterIds);
@@ -124,7 +121,7 @@ const Bestiary = () => {
         params: {
           screen: 'DMEncounterPrep',
           params: {
-            initialMonster: createMonsterSeed(monster),
+            initialMonster: createMonsterSeed(monster, t('defaults.monster')),
           },
         },
       }),
@@ -132,7 +129,7 @@ const Bestiary = () => {
   };
 
   const duplicateMonster = (monster: MonsterDto) => {
-    void addMonster(createDuplicateMonster(monster));
+    void addMonster(createDuplicateMonster(monster, t('defaults.monster'), t('defaults.copy'), t('defaults.customSource')));
   };
 
   const renderChoiceChip = (label: string, active: boolean, onPress: () => void, testID?: string, chipKey = `${label}-${testID || ''}`) => (
@@ -151,26 +148,26 @@ const Bestiary = () => {
     <View>
       <View style={styles.headerRow}>
         <View style={styles.headerMeta}>
-          <Text style={styles.sectionTitle}>Бестіарій</Text>
-          <Text style={styles.sectionHint}>Бойовий довідник майстра: пошук, закріплення, улюблені й підготовка сутички.</Text>
+          <Text style={styles.sectionTitle}>{t('title')}</Text>
+          <Text style={styles.sectionHint}>{t('hint')}</Text>
         </View>
         <Pressable
           style={styles.headerAction}
-          onPress={() => void addMonster(createBlankMonster())}
+          onPress={() => void addMonster(createBlankMonster(t))}
           android_ripple={{ color: colors.ripple }}
           testID='bestiary.addCustomButton'
         >
-          <Text style={styles.headerActionText}>Додати</Text>
+          <Text style={styles.headerActionText}>{t('actions.add')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.modeRow}>
-        {renderChoiceChip('Бестіарій', viewMode === 'full', () => setViewMode('full'), 'bestiary.mode.full')}
-        {renderChoiceChip('Швидкий огляд майстра', viewMode === 'quick', () => setViewMode('quick'), 'bestiary.mode.quick')}
+        {renderChoiceChip(t('modes.full'), viewMode === 'full', () => setViewMode('full'), 'bestiary.mode.full')}
+        {renderChoiceChip(t('modes.quick'), viewMode === 'quick', () => setViewMode('quick'), 'bestiary.mode.quick')}
       </View>
 
       <TextInput
-        placeholder='Пошук монстра...'
+        placeholder={t('search.placeholder')}
         placeholderTextColor={colors.textSecondary}
         style={styles.search}
         value={filters.search}
@@ -182,32 +179,32 @@ const Bestiary = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
           {CR_FILTERS.map((item) =>
             renderChoiceChip(
-              item.label,
-              filters.cr === item.id && item.id !== 'all',
-              () => patchFilters({ cr: item.id }),
-              `bestiary.filter.cr.${item.id}`,
-              `cr-${item.id}`,
+              item === 'all' ? t('filters.challengeShort') : item,
+              filters.cr === item && item !== 'all',
+              () => patchFilters({ cr: item }),
+              `bestiary.filter.cr.${item}`,
+              `cr-${item}`,
             ),
           )}
-          {renderChoiceChip('Улюблені', filters.favoritesOnly, () => patchFilters({ favoritesOnly: !filters.favoritesOnly }), 'bestiary.filter.favorites', 'favorites')}
-          {renderChoiceChip(filters.type === 'all' ? 'Тип' : filters.type, filters.type !== 'all', () => patchFilters({ type: 'all' }), undefined, 'type-all')}
+          {renderChoiceChip(t('filters.favorites'), filters.favoritesOnly, () => patchFilters({ favoritesOnly: !filters.favoritesOnly }), 'bestiary.filter.favorites', 'favorites')}
+          {renderChoiceChip(filters.type === 'all' ? t('filters.type') : filters.type, filters.type !== 'all', () => patchFilters({ type: 'all' }), undefined, 'type-all')}
           {typeOptions.map((option) =>
             renderChoiceChip(option, filters.type === option, () => patchFilters({ type: option }), `bestiary.filter.type.${option}`, `type-${option}`),
           )}
-          {renderChoiceChip(filters.environment === 'all' ? 'Середовище' : filters.environment, filters.environment !== 'all', () => patchFilters({ environment: 'all' }), undefined, 'environment-all')}
+          {renderChoiceChip(filters.environment === 'all' ? t('filters.environment') : filters.environment, filters.environment !== 'all', () => patchFilters({ environment: 'all' }), undefined, 'environment-all')}
           {environmentOptions.map((option) =>
             renderChoiceChip(option, filters.environment === option, () => patchFilters({ environment: option }), undefined, `environment-${option}`),
           )}
-          {renderChoiceChip(filters.size === 'all' ? 'Розмір' : filters.size, filters.size !== 'all', () => patchFilters({ size: 'all' }), undefined, 'size-all')}
+          {renderChoiceChip(filters.size === 'all' ? t('filters.size') : filters.size, filters.size !== 'all', () => patchFilters({ size: 'all' }), undefined, 'size-all')}
           {sizeOptions.map((option) => renderChoiceChip(option, filters.size === option, () => patchFilters({ size: option }), undefined, `size-${option}`))}
-          {renderChoiceChip(filters.source === 'all' ? 'Джерело' : filters.source, filters.source !== 'all', () => patchFilters({ source: 'all' }), undefined, 'source-all')}
+          {renderChoiceChip(filters.source === 'all' ? t('filters.source') : filters.source, filters.source !== 'all', () => patchFilters({ source: 'all' }), undefined, 'source-all')}
           {sourceOptions.map((option) => renderChoiceChip(option, filters.source === option, () => patchFilters({ source: option }), undefined, `source-${option}`))}
         </ScrollView>
         {activeFilterCount ? (
           <View style={styles.activeFiltersRow}>
-            <Text style={styles.activeFiltersText}>Активні фільтри: {activeFilterCount}</Text>
+            <Text style={styles.activeFiltersText}>{t('filters.active', { count: activeFilterCount })}</Text>
             <Pressable style={styles.clearButton} onPress={clearFilters} android_ripple={{ color: colors.ripple }} testID='bestiary.clearFiltersButton'>
-              <Text style={styles.clearButtonText}>Скинути</Text>
+              <Text style={styles.clearButtonText}>{t('filters.clear')}</Text>
             </Pressable>
           </View>
         ) : null}
@@ -215,30 +212,30 @@ const Bestiary = () => {
 
       <View style={styles.sectionCard}>
         <View style={styles.pinnedRow}>
-          <Text style={styles.sectionTitle}>Закріплені монстри ({pinnedMonsters.length})</Text>
+          <Text style={styles.sectionTitle}>{t('pinned.title', { count: pinnedMonsters.length })}</Text>
           {!!pinnedMonsters.length && (
             <Pressable style={styles.clearPinsButton} onPress={() => void clearPinnedMonsters()} android_ripple={{ color: colors.ripple }}>
-              <Text style={styles.clearPinsText}>Очистити</Text>
+              <Text style={styles.clearPinsText}>{t('actions.clear')}</Text>
             </Pressable>
           )}
         </View>
         {!pinnedMonsters.length ? (
-          <Text style={styles.sectionHint}>Закріплюйте монстрів для наступної сутички. Швидкий огляд показує їх першими.</Text>
+          <Text style={styles.sectionHint}>{t('pinned.emptyHint')}</Text>
         ) : (
-          <Text style={styles.sectionHint}>Закріплені монстри готові до підготовки сутички й показуються першими у швидкому огляді майстра.</Text>
+          <Text style={styles.sectionHint}>{t('pinned.readyHint')}</Text>
         )}
       </View>
 
       {viewMode === 'quick' ? (
         <View style={styles.quickBanner} testID='bestiary.quickViewBanner'>
-          <Text style={styles.quickBannerTitle}>Швидкий огляд майстра</Text>
-          <Text style={styles.sectionHint}>Компактні блоки: КД, ХП, бонус атаки, урон, риси й дії.</Text>
+          <Text style={styles.quickBannerTitle}>{t('quick.title')}</Text>
+          <Text style={styles.sectionHint}>{t('quick.hint')}</Text>
         </View>
       ) : null}
 
       {!monsters.length ? (
         <View style={styles.emptyPanel} testID='bestiary.emptyState'>
-          <Text style={styles.emptyText}>Бестіарій порожній. Додайте власного монстра або імпортуйте JSON.</Text>
+          <Text style={styles.emptyText}>{t('empty.database')}</Text>
         </View>
       ) : null}
     </View>
@@ -248,7 +245,7 @@ const Bestiary = () => {
     return (
       <View style={styles.container}>
         <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Помилка завантаження</Text>
+          <Text style={styles.sectionTitle}>{t('errors.load')}</Text>
           <Text style={styles.errorText}>{loadError}</Text>
         </View>
       </View>
@@ -272,7 +269,7 @@ const Bestiary = () => {
         ListEmptyComponent={
           monsters.length ? (
             <View style={styles.emptyPanel} testID='bestiary.noResultsState'>
-              <Text style={styles.emptyText}>Немає монстрів за поточним пошуком або фільтрами.</Text>
+              <Text style={styles.emptyText}>{t('empty.filtered')}</Text>
             </View>
           ) : null
         }
@@ -301,7 +298,7 @@ const Bestiary = () => {
           style={styles.utilityButton}
           android_ripple={{ color: colors.ripple }}
         >
-          <Text style={styles.utilityButtonText}>Імпортувати монстра</Text>
+          <Text style={styles.utilityButtonText}>{t('actions.importMonster')}</Text>
         </Pressable>
       </View>
     </View>

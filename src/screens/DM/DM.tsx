@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { CommonActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
@@ -19,6 +20,8 @@ import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/reposi
 import { loadLocalCampaignNotes } from '@/dm/repositories/campaignNotesRepository';
 import type { DMCampaign } from '@/dm/domain/types';
 import type { CharacterViewModel } from '@/types/Character';
+import type { AppRole } from '@/types/Product';
+import type { ShareDisplayStatus, SyncDisplayStatus } from '@/shared/helpers/collaboration/status';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
 
@@ -36,6 +39,7 @@ const toMillis = (value: TimestampLike): number => {
 };
 
 const DM: React.FC = () => {
+  const { t } = useTranslation(['dm', 'common']);
   const navigation = useNavigation<StackNavigationProp<DMStackParamList, 'DMHome'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -63,6 +67,34 @@ const DM: React.FC = () => {
 
   const isSignedIn = Boolean(fbAuth.currentUser);
   const isOnline = isNetworkOnline(netInfo.isConnected);
+
+  const formatRole = React.useCallback((role: AppRole) => t(`common:roles.${role}`), [t]);
+  const formatSyncStatus = React.useCallback(
+    (status: SyncDisplayStatus) => {
+      if (status === 'Synced') return t('common:status.synced');
+      if (status === 'Pending sync') return t('common:status.pendingSync');
+      if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+      if (status === 'Conflict detected') return t('common:status.conflictDetected');
+      return t('common:status.localOnly');
+    },
+    [t],
+  );
+  const formatShareStatus = React.useCallback(
+    (status: ShareDisplayStatus) => {
+      if (status === 'Shared with DM') return t('common:status.sharedWithDm');
+      if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
+      return '';
+    },
+    [t],
+  );
+  const formatSource = React.useCallback(
+    (source: DashboardCharacter['source']) => {
+      if (source === 'local') return t('common:status.localOnly');
+      if (source === 'mine') return t('common:status.cloud');
+      return t('common:status.shared');
+    },
+    [t],
+  );
 
   useEffect(() => {
     let unsubCampaigns = () => {};
@@ -214,26 +246,28 @@ const DM: React.FC = () => {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='dm.screen'>
       <View style={styles.card}>
-        <Text style={styles.title}>Огляд групи</Text>
-        <Text style={styles.hint}>DM-орієнтований дашборд стану групи, спільного доступу та ризиків синхронізації.</Text>
+        <Text style={styles.title}>{t('dm:dashboard.partyOverviewTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:dashboard.partyOverviewHint')}</Text>
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Кампанії: {campaigns.length}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.campaigns', { count: campaigns.length })}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Розмір групи: {unifiedParty.length}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.partySize', { count: unifiedParty.length })}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Мережа: {isOnline ? 'Онлайн' : 'Офлайн'}</Text>
+            <Text style={styles.statChipText}>
+              {t('dm:dashboard.network', { status: isOnline ? t('common:status.online') : t('common:status.offline') })}
+            </Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Очікує синхронізації: {pendingSyncCount}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.pendingSync', { count: pendingSyncCount })}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Конфлікти: {conflictCount}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.conflicts', { count: conflictCount })}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Роль: {roleMode}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.role', { role: formatRole(roleMode) })}</Text>
           </View>
         </View>
         <Pressable
@@ -242,13 +276,13 @@ const DM: React.FC = () => {
           android_ripple={{ color: colors.ripple }}
           testID='dm.partyOverviewButton'
         >
-          <Text style={styles.authButtonText}>Відкрити повний огляд групи</Text>
+          <Text style={styles.authButtonText}>{t('dm:dashboard.openPartyOverview')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Підготовка сутички</Text>
-        <Text style={styles.hint}>Зберіть склад сутички з персонажів та бестіарію і передайте в Ініціативу одним потоком.</Text>
+        <Text style={styles.title}>{t('dm:dashboard.encounterPrepTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:dashboard.encounterPrepHint')}</Text>
         <View style={styles.laneGrid}>
           <Pressable
             style={styles.laneButton}
@@ -257,15 +291,15 @@ const DM: React.FC = () => {
             testID='dm.encounterPrepButton'
           >
             <Ionicons name='rocket-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Почати підготовку сутички</Text>
+            <Text style={styles.laneButtonText}>{t('dm:dashboard.startEncounterPrep')}</Text>
           </Pressable>
           <Pressable style={styles.laneButton} onPress={() => openRootTab('Initiative')} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='flame-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Відкрити ініціативу</Text>
+            <Text style={styles.laneButtonText}>{t('dm:dashboard.openInitiative')}</Text>
           </Pressable>
           <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='skull-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Швидкий доступ до бестіарію</Text>
+            <Text style={styles.laneButtonText}>{t('dm:dashboard.quickBestiary')}</Text>
           </Pressable>
           <Pressable
             style={styles.laneButton}
@@ -273,14 +307,14 @@ const DM: React.FC = () => {
             android_ripple={{ color: colors.ripple }}
           >
             <Ionicons name='book-outline' size={18} color={colors.text} />
-            <Text style={styles.laneButtonText}>Швидкий доступ до книги заклять</Text>
+            <Text style={styles.laneButtonText}>{t('dm:dashboard.quickSpellbook')}</Text>
           </Pressable>
         </View>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Доступ до спільних персонажів + швидке редагування</Text>
-        <Text style={styles.hint}>Відкрийте спільну живу копію, швидко редагуйте критичні для сесії поля або перейдіть до повного листа.</Text>
+        <Text style={styles.title}>{t('dm:dashboard.sharedCharactersTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:dashboard.sharedCharactersHint')}</Text>
         {unifiedParty.slice(0, 4).map((item) => {
           const syncStatus = getSyncDisplayStatus(syncByCharacter[item.id], netInfo.isConnected);
           const shareStatus = getShareDisplayStatus({
@@ -291,10 +325,10 @@ const DM: React.FC = () => {
 
           return (
             <View key={item.id} style={styles.updateRow}>
-              <Text style={styles.updateTitle}>{item.payload.name || 'Character'}</Text>
-              <Text style={styles.updateMeta}>Джерело: {item.source}</Text>
-              <Text style={styles.updateMeta}>Статус синхронізації: {syncStatus}</Text>
-              {!!shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {shareStatus}</Text>}
+              <Text style={styles.updateTitle}>{item.payload.name || t('common:fallbacks.character')}</Text>
+              <Text style={styles.updateMeta}>{t('dm:dashboard.source', { source: formatSource(item.source) })}</Text>
+              <Text style={styles.updateMeta}>{t('dm:dashboard.syncStatus', { status: formatSyncStatus(syncStatus) })}</Text>
+              {!!shareStatus && <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>}
               <View style={styles.laneGrid}>
                 <Pressable
                   style={styles.laneButton}
@@ -304,7 +338,7 @@ const DM: React.FC = () => {
                   android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='link-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Відкрити спільну живу копію</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:dashboard.openLiveCopy')}</Text>
                 </Pressable>
                 <Pressable
                   style={styles.laneButton}
@@ -314,7 +348,7 @@ const DM: React.FC = () => {
                   android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Швидке редагування</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:dashboard.quickEdit')}</Text>
                 </Pressable>
                 <Pressable
                   style={styles.laneButton}
@@ -324,7 +358,7 @@ const DM: React.FC = () => {
                   android_ripple={{ color: colors.ripple }}
                 >
                   <Ionicons name='document-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>Відкрити повний лист</Text>
+                  <Text style={styles.laneButtonText}>{t('dm:dashboard.openFullSheet')}</Text>
                 </Pressable>
               </View>
             </View>
@@ -333,14 +367,14 @@ const DM: React.FC = () => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Нотатки кампанії</Text>
-        <Text style={styles.hint}>Черга нотаток кампанії з підтримкою хмари й офлайну та статусами синхронізації/конфліктів.</Text>
+        <Text style={styles.title}>{t('dm:dashboard.campaignNotesTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:dashboard.campaignNotesHint')}</Text>
         <View style={styles.statsRow}>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Нотатки кампанії: {notesCount}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.campaignNotesCount', { count: notesCount })}</Text>
           </View>
           <View style={styles.statChip}>
-            <Text style={styles.statChipText}>Кампаній відстежується: {campaigns.length}</Text>
+            <Text style={styles.statChipText}>{t('dm:dashboard.trackedCampaigns', { count: campaigns.length })}</Text>
           </View>
         </View>
         <Pressable
@@ -349,20 +383,20 @@ const DM: React.FC = () => {
           android_ripple={{ color: colors.ripple }}
           testID='dm.campaignNotesButton'
         >
-          <Text style={styles.authButtonText}>Відкрити нотатки кампанії</Text>
+          <Text style={styles.authButtonText}>{t('dm:dashboard.openCampaignNotes')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>Останні спільні зміни</Text>
-        <Text style={styles.hint}>Компактна стрічка з переходом у чергу детального перегляду в один дотик.</Text>
+        <Text style={styles.title}>{t('dm:dashboard.recentSharedTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:dashboard.recentSharedHint')}</Text>
         {!recentSharedUpdates.length ? (
-          <Text style={styles.hint}>Спільних змін поки немає.</Text>
+          <Text style={styles.hint}>{t('dm:dashboard.noSharedUpdates')}</Text>
         ) : (
           recentSharedUpdates.map((item) => {
             const id = String(item.id || '');
             const updatedAt = toMillis(item.updatedAt as TimestampLike);
-            const timeLabel = updatedAt ? new Date(updatedAt).toLocaleString() : '—';
+            const timeLabel = updatedAt ? new Date(updatedAt).toLocaleString() : t('common:fallbacks.none');
             const syncState = syncByCharacter[id];
             const syncStatus = getSyncDisplayStatus(syncState, netInfo.isConnected);
             const shareStatus = getShareDisplayStatus({
@@ -372,10 +406,10 @@ const DM: React.FC = () => {
             });
             return (
               <View key={`recent-${id}`} style={styles.updateRow}>
-                <Text style={styles.updateTitle}>{String(item.name || 'Character')}</Text>
-                <Text style={styles.updateMeta}>Оновлено: {timeLabel}</Text>
-                <Text style={styles.updateMeta}>Статус синхронізації: {syncStatus}</Text>
-                {!!shareStatus && <Text style={styles.updateMeta}>Статус спільного доступу: {shareStatus}</Text>}
+                <Text style={styles.updateTitle}>{String(item.name || t('common:fallbacks.character'))}</Text>
+                <Text style={styles.updateMeta}>{t('dm:dashboard.updatedAt', { value: timeLabel })}</Text>
+                <Text style={styles.updateMeta}>{t('dm:dashboard.syncStatus', { status: formatSyncStatus(syncStatus) })}</Text>
+                {!!shareStatus && <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>}
               </View>
             );
           })
@@ -387,12 +421,12 @@ const DM: React.FC = () => {
           android_ripple={{ color: colors.ripple }}
           testID='dm.sharedUpdatesButton'
         >
-          <Text style={styles.authButtonText}>Відкрити чергу спільних оновлень</Text>
+          <Text style={styles.authButtonText}>{t('dm:dashboard.openSharedQueue')}</Text>
         </Pressable>
 
         {!isSignedIn && (
           <Pressable style={styles.authButton} onPress={onLogin} disabled={isSigningIn} android_ripple={{ color: colors.ripple }}>
-            <Text style={styles.authButtonText}>{isSigningIn ? 'Авторизація…' : 'Увійти через Google для спільної синхронізації'}</Text>
+            <Text style={styles.authButtonText}>{isSigningIn ? t('dm:dashboard.signingIn') : t('dm:dashboard.signInForSharedSync')}</Text>
           </Pressable>
         )}
       </View>
@@ -401,7 +435,6 @@ const DM: React.FC = () => {
 };
 
 export default DM;
-
 
 
 

@@ -1,0 +1,81 @@
+{
+  "actions": {
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "edit": "Редагувати",
+    "create": "Створити",
+    "add": "Додати",
+    "remove": "Прибрати",
+    "close": "Закрити",
+    "back": "Назад",
+    "next": "Далі",
+    "done": "Готово",
+    "confirm": "Підтвердити",
+    "search": "Пошук",
+    "reset": "Скинути",
+    "import": "Імпорт",
+    "export": "Експорт",
+    "open": "Відкрити",
+    "share": "Поділитися",
+    "sync": "Синхронізувати"
+  },
+  "states": {
+    "loading": "Завантаження...",
+    "empty": "Поки що порожньо",
+    "comingSoon": "Скоро буде...",
+    "error": "Сталася помилка",
+    "offline": "Офлайн",
+    "online": "Онлайн",
+    "synced": "Синхронізовано",
+    "localOnly": "Лише локально",
+    "pendingSync": "Очікує синхронізації"
+  },
+  "status": {
+    "online": "Онлайн",
+    "offline": "Офлайн",
+    "localOnly": "Локально",
+    "cloud": "Хмара",
+    "shared": "Спільний доступ",
+    "homebrew": "Авторський",
+    "synced": "Синхронізовано",
+    "pendingSync": "Очікує синхронізації",
+    "offlineChanges": "Офлайн-зміни",
+    "conflict": "Конфлікт",
+    "conflictDetected": "Виявлено конфлікт",
+    "sharedWithDm": "Спільно з ДМ",
+    "sharedWithPlayer": "Спільно з гравцем",
+    "notSyncedYet": "ще не було"
+  },
+  "roles": {
+    "Player": "Гравець",
+    "DM": "Майстер",
+    "Hybrid": "Обидва"
+  },
+  "fallbacks": {
+    "character": "Персонаж",
+    "class": "Клас",
+    "race": "Раса",
+    "none": "—"
+  },
+  "validation": {
+    "required": "Це поле обов'язкове",
+    "invalidValue": "Некоректне значення"
+  },
+  "auth": {
+    "googleSignIn": "Google вхід",
+    "firebaseAuth": "Firebase авторизація",
+    "authError": "Помилка авторизації",
+    "logoutSuccessTitle": "Вихід виконано",
+    "logoutErrorTitle": "Не вдалося вийти",
+    "webClientConfigured": "Налаштовано webClientId",
+    "checkingPlayServices": "Перевірка Play Services...",
+    "openingGoogleAuth": "Відкриття Google-авторизації...",
+    "missingIdToken": "Не отримано ID-токен",
+    "idTokenNotFound": "ID-токен не знайдено",
+    "idTokenReceived": "ID-токен отримано",
+    "signingInWithCredential": "Вхід за обліковими даними...",
+    "signInSuccess": "Успішний вхід",
+    "logoutSuccessMessage": "Ви вийшли з акаунта"
+  }
+}

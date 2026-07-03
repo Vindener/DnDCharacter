@@ -1,0 +1,33 @@
+{
+  "title": "Підтримка",
+  "sections": {
+    "contact": "Зв'язок",
+    "feedback": "Відгук",
+    "donation": "Підтримати проєкт"
+  },
+  "donation": {
+    "warning": "Зараз збираємо гроші для публікації в Google Play.",
+    "description": "Твоя підтримка допомагає розвивати застосунок. Обери зручний спосіб:",
+    "privatBank": "ПриватБанк",
+    "monobankJar": "Monobank (банка)"
+  },
+  "crypto": {
+    "title": "Криптогаманець"
+  },
+  "feedback": {
+    "title": "Зворотній зв'язок",
+    "telegramNews": "Канал новин в Telegram",
+    "messagePlaceholder": "Напиши свої ідеї, баги або побажання...",
+    "emailPlaceholder": "Ел. пошта (за бажанням)",
+    "sendEmail": "Надіслати лист",
+    "telegramDirect": "Написати в Telegram",
+    "emptyTitle": "Заповни повідомлення",
+    "emptyMessage": "Напиши кілька слів",
+    "emailSubject": "Відгук щодо MythgateDND",
+    "emailLabel": "Email"
+  },
+  "errors": {
+    "openLinkTitle": "Помилка",
+    "openLinkMessage": "Не вдалося відкрити посилання"
+  }
+}

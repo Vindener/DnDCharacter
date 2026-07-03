@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import TabNavigator from '@/navigation/TabNavigator';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useThemeStore from '@/context/Theme-store';
@@ -26,6 +27,7 @@ export type AppStackParamList = {
 const Stack = createBottomTabNavigator<AppStackParamList>();
 
 export default function AppNavigator() {
+  const { t } = useTranslation('navigation');
   const theme = useThemeStore((s) => s.theme);
   const colors = useThemeStore((s) => s.colors);
   const loadTheme = useThemeStore((s) => s.loadTheme);
@@ -69,16 +71,15 @@ export default function AppNavigator() {
         })}
       >
         {/* <Stack.Screen name='Library' component={EmptyPlaceholder} /> */}
-        <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false, title: 'Герої' }} />
-        <Stack.Screen name='Initiative' component={Initiative} options={{ title: 'Інціатива' }} />
-        <Stack.Screen name='DM' component={DMNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name='References' component={ReferencesNavigator} options={{ headerShown: false, title: 'Довідки' }} />
-        <Stack.Screen name='Support' component={Support} options={{ title: 'Підтримка' }} />
+        <Stack.Screen name='Heroes' component={TabNavigator} options={{ headerShown: false, title: t('heroes') }} />
+        <Stack.Screen name='Initiative' component={Initiative} options={{ title: t('initiative') }} />
+        <Stack.Screen name='DM' component={DMNavigator} options={{ headerShown: false, title: t('dm') }} />
+        <Stack.Screen name='References' component={ReferencesNavigator} options={{ headerShown: false, title: t('references') }} />
+        <Stack.Screen name='Support' component={Support} options={{ title: t('support') }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 
 
 

@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { getStyles } from './styles';
 import useThemeStore from '@/context/Theme-store';
@@ -29,6 +30,7 @@ import {
 const HOME_ROLE = 'Player' as const;
 
 const Home = () => {
+  const { t } = useTranslation(['home', 'common']);
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -58,7 +60,7 @@ const Home = () => {
   const isSignedIn = Boolean(user);
   const isOnline = isNetworkOnline(netInfo.isConnected);
   const providerPhoto = user?.photoURL || user?.providerData?.find(Boolean)?.photoURL || null;
-  const userName = user?.displayName || user?.email?.split('@')[0] || 'Влад';
+  const userName = user?.displayName || user?.email?.split('@')[0] || t('common:fallbacks.character');
 
   useEffect(() => {
     configureGoogleSignIn('608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com');
@@ -185,32 +187,50 @@ const Home = () => {
       id: 'createCharacter',
       testID: 'home.createCharacterButton',
       icon: 'person-add-outline' as const,
-      label: 'Створити персонажа',
+      label: t('home:actions.createCharacter'),
       onPress: () => navigation.navigate('CreateCharacter'),
     };
     const rollDice = {
       id: 'rollDice',
       testID: 'home.openDiceButton',
       icon: 'dice-outline' as const,
-      label: 'Кинути кубики',
+      label: t('home:actions.openDice'),
       onPress: () => navigation.navigate('DiceRoller'),
     };
     const spellbook = {
       id: 'spellbook',
       testID: 'home.openSpellbookButton',
       icon: 'book-outline' as const,
-      label: 'Заклинання',
+      label: t('home:actions.openSpellbook'),
       onPress: () => navigation.navigate('Spellbook'),
     };
     const bestiary = {
       id: 'bestiary',
       testID: 'home.openBestiaryButton',
       icon: 'skull-outline' as const,
-      label: 'Бестіарій',
+      label: t('home:actions.openBestiary'),
       onPress: () => openRootTab('References', { screen: 'List' }),
     };
     return [createCharacter, rollDice, spellbook, bestiary];
-  }, [navigation, openRootTab]);
+  }, [navigation, openRootTab, t]);
+
+  const formatBadgeLabel = React.useCallback(
+    (kind: (typeof previewList)[number]['badges'][number]['kind'], fallback: string) => {
+      if (kind === 'local') return t('common:status.localOnly');
+      if (kind === 'cloud') return t('common:status.cloud');
+      if (kind === 'shared') return t('common:status.shared');
+      if (kind === 'homebrew') return t('common:status.homebrew');
+      if (kind === 'synced') return t('common:status.synced');
+      if (kind === 'pending') return t('common:status.pendingSync');
+      if (kind === 'offline') return t('common:status.offlineChanges');
+      if (kind === 'conflict') return t('common:status.conflict');
+      return fallback;
+    },
+    [t],
+  );
+
+  const lastSyncAt = storeLastSyncAt ?? cloudPulseAt;
+  const lastSyncDisplay = lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString() : t('common:status.notSyncedYet');
 
   const openCharacter = async (character: (typeof previewList)[number]) => {
     const existsLocal = characters.find((c) => c.id === character.id);
@@ -258,8 +278,8 @@ const Home = () => {
       <View style={styles.heroCard} testID='home.header'>
         <View style={styles.headerTopRow}>
           <View style={styles.headerTextWrap}>
-            <Text style={styles.greetingTitle}>Продовжити гру</Text>
-            <Text style={styles.greetingMeta}>Режим: Гравець · {userName}</Text>
+            <Text style={styles.greetingTitle}>{t('home:hero.continueGame')}</Text>
+            <Text style={styles.greetingMeta}>{t('home:hero.mode', { role: t('common:roles.Player'), name: userName })}</Text>
           </View>
           {providerPhoto ? <Image source={{ uri: providerPhoto }} style={styles.authAvatar} resizeMode='cover' /> : null}
         </View>
@@ -267,13 +287,13 @@ const Home = () => {
 
       {charactersLoadError ? (
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Помилка завантаження</Text>
+          <Text style={styles.sectionTitle}>{t('home:syncStrip.errorTitle')}</Text>
           <Text style={styles.sectionHint}>{charactersLoadError}</Text>
         </View>
       ) : null}
 
       <View style={styles.card} testID='home.quickActions'>
-        <Text style={styles.sectionTitle}>Швидкі дії</Text>
+        <Text style={styles.sectionTitle}>{t('home:sections.quickActions')}</Text>
         <View style={styles.quickGrid}>
           {quickActions.map((action) => (
             <Pressable
@@ -293,13 +313,22 @@ const Home = () => {
       <View style={styles.card} testID='home.continueSession'>
         {continueState.character ? (
           <>
-            <Text style={styles.sectionEyebrow}>Продовжити сесію</Text>
+            <Text style={styles.sectionEyebrow}>{t('home:actions.continueSession')}</Text>
             <Text style={styles.continueName}>
-              {continueState.character.name} — {continueState.character.className} Рів. {continueState.character.level}
+              {continueState.character.name} — {continueState.character.className} {t('home:characters.shortLevel', { level: continueState.character.level })}
             </Text>
             <Text style={styles.continueMeta}>
-              Здоров’я {continueState.character.hpCurrent}/{continueState.character.hpMax} · КЗ {continueState.character.ac} ·{' '}
-              {continueState.character.syncStatus === 'Synced' ? 'Синхронізовано' : continueState.character.badges.at(-1)?.label || 'Локально'}
+              {t('home:characters.continueMeta', {
+                current: continueState.character.hpCurrent,
+                max: continueState.character.hpMax,
+                ac: continueState.character.ac,
+                sync:
+                  continueState.character.syncStatus === 'Synced'
+                    ? t('common:status.synced')
+                    : continueState.character.badges.at(-1)
+                      ? formatBadgeLabel(continueState.character.badges.at(-1)!.kind, continueState.character.badges.at(-1)!.label)
+                      : t('common:status.localOnly'),
+              })}
             </Text>
             <Pressable
               style={styles.primaryButton}
@@ -308,13 +337,13 @@ const Home = () => {
               testID='home.openSheetButton'
             >
               <Ionicons name='document-text-outline' size={18} color={colors.onPrimary} />
-              <Text style={styles.primaryButtonText}>Відкрити лист</Text>
+              <Text style={styles.primaryButtonText}>{t('home:actions.openSheet')}</Text>
             </Pressable>
           </>
         ) : (
           <>
-            <Text style={styles.sectionEyebrow}>Створи першого персонажа</Text>
-            <Text style={styles.sectionHint}>Почни з локального персонажа. Синхронізацію й шерінг можна підключити пізніше.</Text>
+            <Text style={styles.sectionEyebrow}>{t('home:empty.firstCharacterTitle')}</Text>
+            <Text style={styles.sectionHint}>{t('home:empty.firstCharacterHint')}</Text>
             <Pressable
               style={styles.primaryButton}
               onPress={() => navigation.navigate('CreateCharacter')}
@@ -322,15 +351,15 @@ const Home = () => {
               testID='home.emptyCreateButton'
             >
               <Ionicons name='person-add-outline' size={18} color={colors.onPrimary} />
-              <Text style={styles.primaryButtonText}>Створити персонажа</Text>
+              <Text style={styles.primaryButtonText}>{t('home:actions.createCharacter')}</Text>
             </Pressable>
           </>
         )}
       </View>
 
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Персонажі</Text>
-        <Text style={styles.sectionHint}>{previewList.length ? `${previewList.length} готово до гри` : 'Немає персонажів'}</Text>
+        <Text style={styles.sectionTitle}>{t('home:sections.characters')}</Text>
+        <Text style={styles.sectionHint}>{previewList.length ? t('home:characters.readyCount', { count: previewList.length }) : t('home:characters.none')}</Text>
       </View>
 
       {previewList.map((item) => (
@@ -347,7 +376,7 @@ const Home = () => {
             <View style={styles.characterTitleWrap}>
               <Text style={styles.characterName}>{item.name}</Text>
               <Text style={styles.characterMeta}>
-                {item.race} {item.className} · Рівень {item.level}
+                {item.race} {item.className} · {t('home:characters.level', { level: item.level })}
               </Text>
             </View>
             <Ionicons name='chevron-forward-outline' size={20} color={colors.textSecondary} />
@@ -355,15 +384,15 @@ const Home = () => {
 
           <View style={styles.characterStatsRow}>
             <View style={styles.characterStatBox}>
-              <Text style={styles.characterStatLabel}>Здоров’я</Text>
+              <Text style={styles.characterStatLabel}>{t('home:characters.health')}</Text>
               <Text style={styles.characterStatValue}>{item.hpCurrent}/{item.hpMax}</Text>
             </View>
             <View style={styles.characterStatBox}>
-              <Text style={styles.characterStatLabel}>КЗ</Text>
+              <Text style={styles.characterStatLabel}>{t('home:characters.ac')}</Text>
               <Text style={styles.characterStatValue}>{item.ac}</Text>
             </View>
             <View style={styles.characterStatBox}>
-              <Text style={styles.characterStatLabel}>Ініціатива</Text>
+              <Text style={styles.characterStatLabel}>{t('home:characters.initiative')}</Text>
               <Text style={styles.characterStatValue}>{formatInitiative(item.initiative)}</Text>
             </View>
           </View>
@@ -372,6 +401,7 @@ const Home = () => {
             {item.badges.map((badge) => (
               <View
                 key={`${item.id}-${badge.kind}`}
+                testID={`home.character.${item.id}.badge.${badge.kind}`}
                 style={[
                   styles.badge,
                   badge.kind === 'synced' ? styles.successBadge : null,
@@ -387,7 +417,7 @@ const Home = () => {
                     badge.kind === 'conflict' ? styles.conflictBadgeText : null,
                   ]}
                 >
-                  {badge.label}
+                  {formatBadgeLabel(badge.kind, badge.label)}
                 </Text>
               </View>
             ))}
@@ -397,8 +427,8 @@ const Home = () => {
 
       {!previewList.length ? (
         <View style={styles.emptyInline} testID='home.emptyState'>
-          <Text style={styles.emptyTitle}>Ще немає персонажів</Text>
-          <Text style={styles.sectionHint}>Головна стане швидким стартом, щойно з’явиться перший лист.</Text>
+          <Text style={styles.emptyTitle}>{t('home:empty.noCharactersTitle')}</Text>
+          <Text style={styles.sectionHint}>{t('home:empty.noCharactersHint')}</Text>
         </View>
       ) : null}
 
@@ -416,18 +446,20 @@ const Home = () => {
             size={20}
             color={syncStrip.hasConflict ? colors.danger : syncStrip.hasPending ? colors.warning : colors.success}
           />
-          <Text style={styles.syncStripTitle}>{syncStrip.hasConflict ? 'Виявлено конфлікт' : syncStrip.hasPending ? 'Очікують офлайн-зміни' : 'Синхронізовано'}</Text>
+          <Text style={styles.syncStripTitle}>
+            {syncStrip.hasConflict ? t('home:syncStrip.conflictTitle') : syncStrip.hasPending ? t('home:syncStrip.pendingTitle') : t('home:syncStrip.syncedTitle')}
+          </Text>
         </View>
         <View style={styles.syncPillRow}>
-          <Text style={styles.syncPillText}>{syncStrip.networkLabel}</Text>
-          <Text style={styles.syncPillText}>{syncStrip.cloudLabel}</Text>
-          <Text style={styles.syncPillText}>{syncStrip.lastSyncLabel}</Text>
-          <Text style={styles.syncPillText}>{syncStrip.pendingLabel}</Text>
-          <Text style={styles.syncPillText}>{syncStrip.conflictLabel}</Text>
+          <Text style={styles.syncPillText}>{isOnline ? t('common:status.online') : t('common:status.offline')}</Text>
+          <Text style={styles.syncPillText}>{isSignedIn ? t('home:syncStrip.cloudConnected') : t('home:syncStrip.cloudNeedsLogin')}</Text>
+          <Text style={styles.syncPillText}>{t('home:syncStrip.lastSync', { value: lastSyncDisplay })}</Text>
+          <Text style={styles.syncPillText}>{pendingSyncCount > 0 ? t('home:syncStrip.pending', { count: pendingSyncCount }) : t('home:syncStrip.noPending')}</Text>
+          <Text style={styles.syncPillText}>{conflictCount > 0 ? t('home:syncStrip.conflicts', { count: conflictCount }) : t('home:syncStrip.noConflicts')}</Text>
         </View>
         {!isSignedIn ? (
           <Pressable style={styles.cloudLoginButton} onPress={onLogin} android_ripple={{ color: colors.ripple }} testID='home.cloudLoginButton'>
-            <Text style={styles.cloudLoginText}>Увійти для хмари</Text>
+            <Text style={styles.cloudLoginText}>{t('home:actions.cloudLogin')}</Text>
           </Pressable>
         ) : null}
       </View>

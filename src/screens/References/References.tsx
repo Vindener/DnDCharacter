@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
+import { useTranslation } from 'react-i18next';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './styles';
@@ -20,6 +21,7 @@ type ReferenceEntry = {
 type Navigation = StackNavigationProp<ReferencesStackParamList, 'ReferencesHome'>;
 
 export default function References() {
+  const { t } = useTranslation('references');
   const navigation = useNavigation<Navigation>();
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
@@ -27,48 +29,48 @@ export default function References() {
   const entries: ReferenceEntry[] = [
     {
       id: 'bestiary',
-      title: 'Бестіарій',
-      description: 'Монстри, фільтри, закріплення і підготовка сутички.',
+      title: t('entries.bestiary.title'),
+      description: t('entries.bestiary.description'),
       icon: 'skull-outline',
       testID: 'references.openBestiaryButton',
       onPress: () => navigation.navigate('List'),
     },
     {
       id: 'spellbook',
-      title: 'Книга заклять',
-      description: 'Пошук заклять, улюблені, власні записи і DM-нотатки.',
+      title: t('entries.spellbook.title'),
+      description: t('entries.spellbook.description'),
       icon: 'book-outline',
       testID: 'references.openSpellbookButton',
       onPress: () => navigation.navigate('Spellbook'),
     },
     {
       id: 'items',
-      title: 'Предмети',
-      description: 'Магічні предмети, спорядження і швидкі нотатки.',
+      title: t('entries.items.title'),
+      description: t('entries.items.description'),
       icon: 'cube-outline',
       testID: 'references.placeholder.items',
       disabled: true,
     },
     {
       id: 'conditions',
-      title: 'Стани',
-      description: 'Ефекти, переваги, обмеження і нагадування за правилами.',
+      title: t('entries.conditions.title'),
+      description: t('entries.conditions.description'),
       icon: 'pulse-outline',
       testID: 'references.placeholder.conditions',
       disabled: true,
     },
     {
       id: 'rules',
-      title: 'Правила',
-      description: 'Швидкі правила бою, відпочинку, перевірок і дій.',
+      title: t('entries.rules.title'),
+      description: t('entries.rules.description'),
       icon: 'reader-outline',
       testID: 'references.placeholder.rules',
       disabled: true,
     },
     {
       id: 'classes',
-      title: 'Класи та походження',
-      description: 'Класові особливості, раси, походження і розвиток героя.',
+      title: t('entries.classes.title'),
+      description: t('entries.classes.description'),
       icon: 'people-outline',
       testID: 'references.placeholder.classes',
       disabled: true,
@@ -78,8 +80,8 @@ export default function References() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='references.screen'>
       <View style={styles.headerBlock}>
-        <Text style={styles.title}>Довідки</Text>
-        <Text style={styles.hint}>Швидкий доступ до ігрових довідників для гравця і майстра.</Text>
+        <Text style={styles.title}>{t('title')}</Text>
+        <Text style={styles.hint}>{t('hint')}</Text>
       </View>
 
       <View style={styles.grid}>
@@ -98,7 +100,7 @@ export default function References() {
               </View>
               {entry.disabled ? (
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Скоро</Text>
+                  <Text style={styles.badgeText}>{t('soon')}</Text>
                 </View>
               ) : (
                 <Ionicons name='chevron-forward-outline' size={18} color={colors.textSecondary} />

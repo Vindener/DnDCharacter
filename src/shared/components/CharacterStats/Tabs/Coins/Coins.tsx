@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import { CharacterViewModel } from '@/types/Character';
@@ -17,6 +18,7 @@ const clampToNonNegativeInt = (value: string | number) => {
 };
 
 const Coins: React.FC<CoinsProps> = ({ data }) => {
+  const { t } = useTranslation('character');
   const colors = useThemeStore((s) => s.colors);
   const sharedStyles = useMemo(() => getStyles(colors), [colors]);
   const local = useMemo(
@@ -131,16 +133,16 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
 
   return (
     <View style={sharedStyles.container}>
-      <Text style={local.sectionTitle}>Монети персонажа</Text>
+      <Text style={local.sectionTitle}>{t('legacy.coins.title')}</Text>
 
-      <Row label='Золото' value={gold} onChange={updateGold} />
-      <Row label='Срібло' value={silver} onChange={updateSilver} />
-      <Row label='Мідь' value={copper} onChange={updateCopper} />
+      <Row label={t('legacy.coins.gold')} value={gold} onChange={updateGold} />
+      <Row label={t('legacy.coins.silver')} value={silver} onChange={updateSilver} />
+      <Row label={t('legacy.coins.copper')} value={copper} onChange={updateCopper} />
 
       <View style={local.divider} />
-      <Text style={local.subTitle}>Кастомні монети</Text>
+      <Text style={local.subTitle}>{t('legacy.coins.custom')}</Text>
       {customCoinsList.length === 0 ? (
-        <Text style={{ color: colors.text, opacity: 0.7 }}>Немає кастомних монет. Додайте в Налаштуваннях.</Text>
+        <Text style={{ color: colors.text, opacity: 0.7 }}>{t('legacy.coins.emptyCustom')}</Text>
       ) : (
         <FlatList
           data={customCoinsList}
@@ -159,6 +161,5 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
 };
 
 export default Coins;
-
 
 

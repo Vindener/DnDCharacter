@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
@@ -11,6 +12,7 @@ interface NotesProps {
 }
 
 const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
+  const { t } = useTranslation('character');
   const updateCharacterNotes = useCharacterStore((s) => s.updateCharacterNotes);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
   const colors = useThemeStore((s) => s.colors);
@@ -22,11 +24,11 @@ const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Нотатки:</Text>
+      <Text style={styles.label}>{t('legacy.notes.title')}</Text>
       <MultiTextInput
         value={character?.notes || ''}
         onChangeText={handleChange}
-        placeholder='Введіть ваші нотатки'
+        placeholder={t('legacy.notes.placeholder')}
         initialHeight={160}
         minHeight={100}
         maxHeight={560}
@@ -36,5 +38,4 @@ const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
 };
 
 export default Notes;
-
 

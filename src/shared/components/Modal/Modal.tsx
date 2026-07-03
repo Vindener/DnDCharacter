@@ -3,6 +3,7 @@ import { Modal as RNModal, View, Pressable, StyleSheet, ScrollView } from 'react
 import { getStyles } from '@/shared/components/Modal/style';
 import useThemeStore from '@/context/Theme-store';
 import { Button, Text } from '@/shared/ui';
+import { useTranslation } from 'react-i18next';
 
 interface ModalProps {
   title?: string;
@@ -15,6 +16,7 @@ interface ModalProps {
 }
 
 export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 0, children, isVisible }: ModalProps) => {
+  const { t } = useTranslation('common');
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const scrollRef = React.useRef<ScrollView>(null);
@@ -46,7 +48,7 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 
             </ScrollView>
             {onSubmit ? (
               <View style={styles.actions}>
-                <Button title='Зберегти' variant='primary' onPress={onSubmit} />
+                <Button title={t('actions.save')} variant='primary' onPress={onSubmit} />
               </View>
             ) : null}
           </View>

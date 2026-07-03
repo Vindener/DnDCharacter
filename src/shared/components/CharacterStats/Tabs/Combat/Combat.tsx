@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import TextInput from '@/shared/components/TextInput/TextInput';
 import { Ionicons } from '@expo/vector-icons';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
@@ -19,6 +20,7 @@ const EMPTY_HP: HitPoints = { max: 1, current: 1, temp: 0 };
 const EMPTY_DEATH: DeathSaves = { successes: 1, failures: 1 };
 
 const Combat: React.FC<CombatProps> = ({ data }) => {
+  const { t } = useTranslation('character');
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
   const colors = useThemeStore((s) => s.colors);
@@ -110,41 +112,41 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.row}>
-        <Text style={styles.label}>Ініціатива:</Text>
+        <Text style={styles.label}>{t('legacy.combat.initiative')}</Text>
         <TextInput value={`${initiative}`} onChangeText={handleInitiativeChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Швидкість:</Text>
+        <Text style={styles.label}>{t('legacy.combat.speed')}</Text>
         <TextInput value={`${speed}`} onChangeText={handleSpeedChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>КД:</Text>
+        <Text style={styles.label}>{t('legacy.combat.ac')}</Text>
         <TextInput value={`${ac}`} onChangeText={handleAcChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Деталі броні:</Text>
+        <Text style={styles.label}>{t('legacy.combat.armorDetails')}</Text>
         <TextInput style={{ flex: 1 }} value={armorDetails} onChangeText={handleArmorDetailsChange} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Кість хітів:</Text>
+        <Text style={styles.label}>{t('legacy.combat.hitDice')}</Text>
         <TextInput style={{ flex: 1 }} value={hitDice} onChangeText={handleHitDiceChange} />
       </View>
-      <Text style={styles.label}>Хіти:</Text>
+      <Text style={styles.label}>{t('legacy.combat.hp')}</Text>
       <View style={[styles.row, { marginLeft: sp(10) }]}>
-        <Text style={[styles.label, { width: 70 }]}>Максимальні:</Text>
+        <Text style={[styles.label, { width: 70 }]}>{t('legacy.combat.maxHp')}</Text>
         <TextInput value={`${hp.max}`} onChangeText={(t) => handleHpChange('max', t)} />
       </View>
       <View style={[styles.row, { marginLeft: sp(10) }]}>
-        <Text style={[styles.label, { width: 70 }]}>Поточні хіти:</Text>
+        <Text style={[styles.label, { width: 70 }]}>{t('legacy.combat.currentHp')}</Text>
         <TextInput value={`${hp.current}`} onChangeText={(t) => handleHpChange('current', t)} />
       </View>
       <View style={[styles.row, { marginLeft: sp(10) }]}>
-        <Text style={[styles.label, { width: 70 }]}>Тимчасові хіти:</Text>
+        <Text style={[styles.label, { width: 70 }]}>{t('legacy.combat.tempHp')}</Text>
         <TextInput value={`${hp.temp}`} onChangeText={(t) => handleHpChange('temp', t)} />
       </View>
-      <Text style={styles.label}>Рятівні кидки:</Text>
+      <Text style={styles.label}>{t('legacy.combat.deathSaves')}</Text>
       <View style={[styles.row, { marginLeft: sp(10) }]}>
-        <Text style={[styles.label, { width: 90 }]}>Успіхи:</Text>
+        <Text style={[styles.label, { width: 90 }]}>{t('legacy.combat.successes')}</Text>
         {[0, 1, 2].map((i) => (
           <TouchableOpacity key={i} onPress={() => handleSuccessPress(i)} style={{ marginHorizontal: 4 }}>
             <Ionicons name={i < deathSaves.successes ? 'ellipse' : 'ellipse-outline'} size={24} color={colors.success} />
@@ -157,7 +159,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
         </TouchableOpacity>
       </View>
       <View style={[styles.row, { marginLeft: sp(10) }]}>
-        <Text style={[styles.label, { width: 90 }]}>Провали:</Text>
+        <Text style={[styles.label, { width: 90 }]}>{t('legacy.combat.failures')}</Text>
         {[0, 1, 2].map((i) => (
           <TouchableOpacity key={i} onPress={() => handleFailurePress(i)} style={{ marginHorizontal: 4 }}>
             <Ionicons name={i < deathSaves.failures ? 'ellipse' : 'ellipse-outline'} size={24} color={colors.danger} />
@@ -170,6 +172,5 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
 };
 
 export default Combat;
-
 
 

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { useTranslation } from 'react-i18next';
 import { configureGoogleSignIn, onGoogleButtonPress, logout } from '@/shared/services/auth/index';
 import { ensureUserIndexOnLogin } from '@/services/users';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/Settings/styles';
 
 export default function Auth() {
+  const { t } = useTranslation('settings');
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   useEffect(() => {
@@ -37,7 +39,7 @@ export default function Auth() {
     return (
       <View style={styles.authContainer}>
         <TouchableOpacity onPress={() => onGoogleButtonPress()} style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Увійти за допомогою Google</Text>
+          <Text style={styles.actionButtonText}>{t('account.signInWithGoogle')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -56,12 +58,12 @@ export default function Auth() {
           </View>
         )}
         <View style={styles.authUserTextWrap}>
-          <Text style={styles.authWelcome}>Ви авторизовані як</Text>
+          <Text style={styles.authWelcome}>{t('account.signedInAs')}</Text>
           <Text style={styles.authUserEmail}>{user.email}</Text>
         </View>
       </View>
       <TouchableOpacity onPress={() => logout()} style={styles.actionButton}>
-        <Text style={styles.actionButtonText}>Вийти</Text>
+        <Text style={styles.actionButtonText}>{t('account.signOut')}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { WEAPONS_DB } from '@/shared/const/WeaponsDb';
 import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
@@ -15,6 +16,7 @@ interface InventoryProps {
 }
 
 const Inventory: React.FC<InventoryProps> = ({ data }) => {
+  const { t } = useTranslation('character');
   const updateCharacterInventory = useCharacterStore((s) => s.updateCharacterInventory);
   const character = useCharacterStore((s) => s.characters.find((c) => c.id === data.id));
   const updateCharacterWeapons = useCharacterStore((s) => s.updateCharacterWeapons);
@@ -32,7 +34,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
     // Move to weapons list
     const currentWeapons = character?.weapons || [];
     updateCharacterWeapons(data.id, [...currentWeapons, { name: entry.name, attackBonus: 0, damage: entry.damage }]);
-    Alert.alert('Переміщено', `“${entry.name}” додано до розділу Зброя`);
+    Alert.alert(t('legacy.inventory.movedTitle'), t('legacy.inventory.movedToWeapons', { name: entry.name }));
     return true;
   };
 
@@ -62,7 +64,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
     <View style={styles.container}>
       <Weapon />
 
-      <Text style={styles.label}>Інвентар персонажа:</Text>
+      <Text style={styles.label}>{t('legacy.inventory.title')}</Text>
 
       <FlatList
         data={items}
@@ -75,7 +77,7 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
               style={{ flex: 1, height: 40 }}
               value={item}
               onChangeText={(text) => handleChangeItem(text, index)}
-              placeholder='Назва предмета'
+              placeholder={t('legacy.inventory.itemPlaceholder')}
             />
             <TouchableOpacity onPress={() => handleDeleteItem(index)} style={{ marginLeft: sp(8) }}>
               <Ionicons name='trash-outline' size={24} color={colors.danger} />
@@ -93,14 +95,13 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
         }}
       >
         <Ionicons name='add-circle-outline' size={28} color={colors.success} />
-        <Text style={{ marginLeft: sp(8), color: colors.success, fontSize: fs(16) }}>Додати предмет</Text>
+        <Text style={{ marginLeft: sp(8), color: colors.success, fontSize: fs(16) }}>{t('legacy.inventory.addItem')}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Inventory;
-
 
 
 

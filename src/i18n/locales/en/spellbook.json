@@ -1,0 +1,204 @@
+{
+  "title": "Spellbook",
+  "hint": {
+    "player": "Search, prepare, favorite, and bind spells to a character.",
+    "dm": "Pinned references, notes, and fast table search."
+  },
+  "offlineBanner": "Local spellbook. DM pins and notes are saved on this device.",
+  "tabs": {
+    "all": "All",
+    "prepared": "Prepared",
+    "known": "Known",
+    "favorites": "Favorites",
+    "custom": "Custom"
+  },
+  "search": {
+    "placeholder": "Search spell..."
+  },
+  "filters": {
+    "all": "All",
+    "level": "Level",
+    "school": "School",
+    "class": "Class",
+    "active": "Active filters: {{count}}",
+    "clear": "Reset"
+  },
+  "boolean": {
+    "all": "All",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "levels": {
+    "cantrip": "Cantrip",
+    "level": "Level {{level}}"
+  },
+  "status": {
+    "available": "Available",
+    "known": "Known",
+    "prepared": "Prepared",
+    "cantrip": "Cantrip"
+  },
+  "sources": {
+    "system": "system",
+    "custom": "custom",
+    "imported": "imported"
+  },
+  "labels": {
+    "cast": "Cast",
+    "castingTime": "Casting time",
+    "range": "Range",
+    "components": "Components",
+    "duration": "Duration",
+    "concentration": "Concentration",
+    "ritual": "Ritual",
+    "status": "Status",
+    "description": "Description",
+    "higherLevels": "At higher levels",
+    "classes": "Classes",
+    "tags": "Tags",
+    "unknownSchool": "Unknown school",
+    "noComponents": "None"
+  },
+  "actions": {
+    "add": "Add",
+    "quickView": "Quick view",
+    "edit": "Edit",
+    "copy": "Copy",
+    "delete": "Delete",
+    "addFavorite": "Favorite",
+    "removeFavorite": "Remove favorite",
+    "pin": "Pin",
+    "unpin": "Unpin"
+  },
+  "characterBinding": {
+    "title": "Character binding",
+    "referenceOnly": "Reference only",
+    "characterFallback": "Character",
+    "prepared": "Prepared: {{count}}/{{limit}}",
+    "notCaster": "Not a caster: reference mode."
+  },
+  "characterActions": {
+    "selectCharacter": "Select a character to manage known and prepared spells.",
+    "notCaster": "This character has no magic setup; Spellbook works as a reference."
+  },
+  "detail": {
+    "title": "Spell details",
+    "noDescription": "No description."
+  },
+  "dmNotes": {
+    "title": "DM notes",
+    "placeholder": "Private note for this spell",
+    "save": "Save note"
+  },
+  "form": {
+    "newTitle": "New spell",
+    "editTitle": "Edit spell",
+    "copySubtitle": "Saving creates a custom editable copy.",
+    "localSubtitle": "Custom spell metadata is saved locally.",
+    "name": "Name",
+    "level": "Level (0-9)",
+    "school": "School",
+    "castingTime": "Casting time",
+    "range": "Range",
+    "components": "Components",
+    "duration": "Duration",
+    "description": "Description",
+    "higherLevels": "At higher levels",
+    "classes": "Classes (comma-separated)",
+    "tags": "Tags (comma-separated)",
+    "damageProfiles": "Damage profiles (one per line)",
+    "damageProfileFormat": "Line format: Name | Formula | Type | Condition(optional)",
+    "damageTypes": "5e damage types: {{types}}",
+    "placeholders": {
+      "name": "Spell name",
+      "school": "Evocation / Illusion / ...",
+      "range": "150 feet",
+      "components": "V, S, M (material component)",
+      "duration": "Instantaneous",
+      "description": "Spell effect",
+      "higherLevels": "How this changes when cast with a higher slot",
+      "tags": "damage, aoe, fire",
+      "damageProfiles": "Base | 8d6 | fire | DEX save, half"
+    }
+  },
+  "defaults": {
+    "customSchool": "Custom",
+    "castingTime": "1 action",
+    "customTag": "custom",
+    "importedSchool": "From character sheet"
+  },
+  "seedSpells": {
+    "spell-system-1": { "name": "Fire Bolt", "school": "Evocation", "description": "A ranged spell attack with fire." },
+    "spell-system-2": { "name": "Ray of Frost", "school": "Evocation", "description": "A ranged cold spell attack that slows the target." },
+    "spell-system-3": { "name": "Shocking Grasp", "school": "Evocation", "description": "A melee spell attack with lightning." },
+    "spell-system-4": { "name": "Acid Splash", "school": "Evocation", "description": "The target makes a DEX saving throw or takes acid damage." },
+    "spell-system-5": { "name": "Sacred Flame", "school": "Evocation", "description": "The target makes a DEX saving throw against radiant light." },
+    "spell-system-6": { "name": "Poison Spray", "school": "Evocation", "description": "The target makes a CON saving throw against a poisonous cloud." },
+    "spell-system-7": { "name": "Eldritch Blast", "school": "Evocation", "description": "A ranged spell attack with a beam of force." },
+    "spell-system-8": { "name": "Vicious Mockery", "school": "Enchantment", "description": "The target makes a WIS saving throw against a psychic insult." },
+    "spell-system-9": { "name": "Mage Hand", "school": "Conjuration", "description": "A spectral hand that can interact with objects." },
+    "spell-system-10": { "name": "Minor Illusion", "school": "Illusion", "description": "Creates a simple visual or sound illusion." },
+    "spell-system-11": { "name": "Magic Missile", "school": "Evocation", "description": "Force darts that hit automatically." },
+    "spell-system-12": { "name": "Shield", "school": "Abjuration", "description": "Reaction: +5 AC until the start of your next turn." },
+    "spell-system-13": { "name": "Mage Armor", "school": "Abjuration", "description": "Raises the base AC of an unarmored target." },
+    "spell-system-14": { "name": "Burning Hands", "school": "Evocation", "description": "A cone of fire; DEX save for half damage." },
+    "spell-system-15": { "name": "Chromatic Orb", "school": "Evocation", "description": "A spell attack with an element of your choice." },
+    "spell-system-16": { "name": "Guiding Bolt", "school": "Evocation", "description": "A radiant spell attack; the next attack against the target has advantage." },
+    "spell-system-17": { "name": "Thunderwave", "school": "Evocation", "description": "A cube of thunderous force; CON save for half damage." },
+    "spell-system-18": { "name": "Inflict Wounds", "school": "Necromancy", "description": "A melee spell attack with necrotic energy." },
+    "spell-system-19": { "name": "Cure Wounds", "school": "Conjuration", "description": "Restores HP by touch." },
+    "spell-system-20": { "name": "Healing Word", "school": "Conjuration", "description": "Fast ranged HP recovery." },
+    "spell-system-21": { "name": "Scorching Ray", "school": "Evocation", "description": "Three fire spell attacks." },
+    "spell-system-22": { "name": "Shatter", "school": "Evocation", "description": "A loud burst; CON save for half damage." },
+    "spell-system-23": { "name": "Melf's Acid Arrow", "school": "Evocation", "description": "Acid on hit and additional damage at the start of the next turn." },
+    "spell-system-24": { "name": "Spiritual Weapon", "school": "Conjuration", "description": "Attacks a target with force as a bonus action." },
+    "spell-system-25": { "name": "Moonbeam", "school": "Evocation", "description": "A target in the area makes a CON saving throw." },
+    "spell-system-26": { "name": "Misty Step", "school": "Conjuration", "description": "Teleport as a bonus action." },
+    "spell-system-27": { "name": "Invisibility", "school": "Illusion", "description": "Makes a target invisible for the duration." },
+    "spell-system-28": { "name": "Hold Person", "school": "Enchantment", "description": "Paralyzes a humanoid on a failed WIS saving throw." },
+    "spell-system-29": { "name": "Fireball", "school": "Evocation", "description": "The classic fire AoE explosion.", "higherLevels": "+1d6 damage for each slot level above 3rd." },
+    "spell-system-30": { "name": "Lightning Bolt", "school": "Evocation", "description": "A line of lightning." },
+    "spell-system-31": { "name": "Counterspell", "school": "Abjuration", "description": "Interrupts another spell as a reaction." },
+    "spell-system-32": { "name": "Dispel Magic", "school": "Abjuration", "description": "Ends active magical effects." },
+    "spell-system-33": { "name": "Fly", "school": "Transmutation", "description": "Grants a flying speed." },
+    "spell-system-34": { "name": "Haste", "school": "Transmutation", "description": "A strong speed and action buff." },
+    "spell-system-35": { "name": "Spirit Guardians", "school": "Conjuration", "description": "An area around the caster; WIS saving throw." },
+    "spell-system-36": { "name": "Vampiric Touch", "school": "Necromancy", "description": "A spell attack that heals the caster for half the damage dealt." },
+    "spell-system-37": { "name": "Blight", "school": "Necromancy", "description": "Powerful necrotic damage to a single target." },
+    "spell-system-38": { "name": "Ice Storm", "school": "Evocation", "description": "An area of ice and debris." },
+    "spell-system-39": { "name": "Wall of Fire", "school": "Evocation", "description": "A wall that deals fire damage on contact." },
+    "spell-system-40": { "name": "Greater Invisibility", "school": "Illusion", "description": "Invisibility does not end from attacks or casting." },
+    "spell-system-41": { "name": "Polymorph", "school": "Transmutation", "description": "Transforms a target into a beast." },
+    "spell-system-42": { "name": "Banishment", "school": "Abjuration", "description": "Temporarily removes a target from the battlefield." },
+    "spell-system-43": { "name": "Cone of Cold", "school": "Evocation", "description": "A large cone of frost." },
+    "spell-system-44": { "name": "Flame Strike", "school": "Evocation", "description": "A column of divine fire." },
+    "spell-system-45": { "name": "Cloudkill", "school": "Conjuration", "description": "A moving toxic cloud." },
+    "spell-system-46": { "name": "Hold Monster", "school": "Enchantment", "description": "Paralyzes any creature on a failed WIS save." },
+    "spell-system-47": { "name": "Telekinesis", "school": "Transmutation", "description": "Moves objects or a creature with mental force." },
+    "spell-system-48": { "name": "Wall of Force", "school": "Evocation", "description": "An impenetrable barrier with no damage." },
+    "spell-system-49": { "name": "Chain Lightning", "school": "Evocation", "description": "Strikes multiple targets with lightning." },
+    "spell-system-50": { "name": "Disintegrate", "school": "Transmutation", "description": "Very high damage on a failed DEX save." },
+    "spell-system-51": { "name": "Circle of Death", "school": "Necromancy", "description": "A large area of necrotic damage." },
+    "spell-system-52": { "name": "Sunbeam", "school": "Evocation", "description": "A radiant beam each round; CON saving throw." },
+    "spell-system-53": { "name": "Heal", "school": "Conjuration", "description": "Powerful guaranteed healing for a target." },
+    "spell-system-54": { "name": "Delayed Blast Fireball", "school": "Evocation", "description": "Stores a charge and then explodes." },
+    "spell-system-55": { "name": "Finger of Death", "school": "Necromancy", "description": "A deadly necrotic surge." },
+    "spell-system-56": { "name": "Fire Storm", "school": "Evocation", "description": "A large area of flame." },
+    "spell-system-57": { "name": "Resurrection", "school": "Necromancy", "description": "Returns the dead to life." },
+    "spell-system-58": { "name": "Sunburst", "school": "Evocation", "description": "A massive flash of light." },
+    "spell-system-59": { "name": "Incendiary Cloud", "school": "Conjuration", "description": "A burning cloud that moves." },
+    "spell-system-60": { "name": "Earthquake", "school": "Evocation", "description": "Breaks terrain and creates difficult conditions." },
+    "spell-system-61": { "name": "Meteor Swarm", "school": "Evocation", "description": "The strongest 5e AoE explosion." },
+    "spell-system-62": { "name": "Power Word Kill", "school": "Enchantment", "description": "Instantly kills a target with low HP." },
+    "spell-system-63": { "name": "Time Stop", "school": "Transmutation", "description": "Gives extra turns only to the caster." },
+    "spell-system-64": { "name": "Wish", "school": "Conjuration", "description": "The most flexible spell with a nearly unlimited effect." }
+  },
+  "notices": {
+    "preparedLimit": "Prepared spell limit: {{count}}/{{limit}}."
+  },
+  "errors": {
+    "invalidSpell": "Invalid spell data."
+  },
+  "pinnedHint": "Pinned spells are shown first.",
+  "empty": "No spells found. Change search, reset filters, or add a custom spell."
+}

@@ -1,6 +1,7 @@
 import auth, { GoogleAuthProvider } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { toast } from '@/shared/services/toast';
+import i18n from '@/i18n';
 
 let configured = false;
 
@@ -34,34 +35,34 @@ export function configureGoogleSignIn(webClientId: string) {
     profileImageSize: 150,
   });
   configured = true;
-  toast.info('Google вхід', 'Налаштовано webClientId');
+  toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.webClientConfigured'));
 }
 
 export async function onGoogleButtonPress() {
   try {
-    toast.info('Google вхід', 'Перевірка Play Services…');
+    toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.checkingPlayServices'));
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    toast.info('Google вхід', 'Відкриття Google-авторизації…');
+    toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.openingGoogleAuth'));
 
     const res = await GoogleSignin.signIn();
 
     // Підтримуємо новий і старий формат результату:
     const idToken = getGoogleIdToken(res);
     if (!idToken) {
-      toast.error('Google вхід', 'Не отримано ID-токен');
-      throw new Error('ID-токен не знайдено');
+      toast.error(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.missingIdToken'));
+      throw new Error(i18n.t('common:auth.idTokenNotFound'));
     }
-    toast.info('Google вхід', 'ID-токен отримано');
+    toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.idTokenReceived'));
 
     const credential = GoogleAuthProvider.credential(idToken);
 
-    toast.info('Firebase авторизація', 'Вхід за обліковими даними…');
+    toast.info(i18n.t('common:auth.firebaseAuth'), i18n.t('common:auth.signingInWithCredential'));
     const r = await auth().signInWithCredential(credential);
-    toast.success('Firebase авторизація', 'Успішний вхід');
+    toast.success(i18n.t('common:auth.firebaseAuth'), i18n.t('common:auth.signInSuccess'));
     return r;
   } catch (err: unknown) {
     const code = getErrorCodeOrMessage(err);
-    toast.error('Помилка авторизації', typeof code === 'string' ? code : JSON.stringify(code));
+    toast.error(i18n.t('common:auth.authError'), typeof code === 'string' ? code : JSON.stringify(code));
     throw err;
   }
 }
@@ -69,10 +70,9 @@ export async function onGoogleButtonPress() {
 export async function logout() {
   try {
     await auth().signOut();
-    toast.success('Вихід виконано', 'Ви вийшли з акаунта');
+    toast.success(i18n.t('common:auth.logoutSuccessTitle'), i18n.t('common:auth.logoutSuccessMessage'));
   } catch (err: unknown) {
-    toast.error('Не вдалося вийти', getErrorCodeOrMessage(err));
+    toast.error(i18n.t('common:auth.logoutErrorTitle'), getErrorCodeOrMessage(err));
     throw err;
   }
 }
-

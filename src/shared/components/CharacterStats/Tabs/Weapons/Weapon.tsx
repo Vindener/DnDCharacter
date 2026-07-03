@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, ScrollView, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import useCharacterStore from '@/context/Character-store';
 import useThemeStore from '@/context/Theme-store';
 import { Weapon as WeaponType } from '@/types/Weapon';
@@ -29,6 +30,7 @@ const EMPTY_WEAPON: WeaponType = {
 };
 
 const Weapons: React.FC = () => {
+  const { t } = useTranslation('character');
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(
     () =>
@@ -199,10 +201,10 @@ const Weapons: React.FC = () => {
     const bonus = Number(attackBonus || '0');
     const ac = Number(targetAC || '0');
     const total = d20 + bonus;
-    let text = `Кидок d20: ${d20}  |  Бонус: ${bonus}  ->  Разом: ${total}\n`;
-    if (d20 === 20) text += 'Критичне влучання!\n';
-    if (d20 === 1) text += 'Автопромах!\n';
-    text += total >= ac ? `Влучив проти AC ${ac}` : `Промах проти AC ${ac}`;
+    let text = t('legacy.weapons.attackResult', { d20, bonus, total });
+    if (d20 === 20) text += t('legacy.weapons.criticalHit');
+    if (d20 === 1) text += t('legacy.weapons.criticalMiss');
+    text += total >= ac ? t('legacy.weapons.hitAc', { ac }) : t('legacy.weapons.missAc', { ac });
     setRollResult(text);
   };
 
@@ -212,7 +214,7 @@ const Weapons: React.FC = () => {
     const { rolls, total } = rollDice(expression);
     const modifier = Number(damageMod || '0');
     const sum = total + modifier;
-    const text = `Кидок ${expression}: [${rolls.join(', ')}] (${total}) + мод ${modifier} -> Разом: ${sum}`;
+    const text = t('legacy.weapons.damageResult', { expression, rolls: rolls.join(', '), total, modifier, sum });
     setRollResult(text);
   };
 
@@ -222,22 +224,22 @@ const Weapons: React.FC = () => {
         {safeWeapons.map((weapon, index) => (
           <View key={`${weapon.name}-${index}`} style={styles.weaponCard}>
             <View style={styles.weaponHeader}>
-              <Text style={styles.weaponTitle}>Зброя #{index + 1}</Text>
+              <Text style={styles.weaponTitle}>{t('legacy.weapons.weaponTitle', { index: index + 1 })}</Text>
               <TouchableOpacity onPress={() => handleRemoveWeapon(index)}>
-                <Text style={styles.removeText}>Видалити</Text>
+                <Text style={styles.removeText}>{t('legacy.weapons.remove')}</Text>
               </TouchableOpacity>
             </View>
 
-            <Text style={styles.fieldLabel}>Назва</Text>
+            <Text style={styles.fieldLabel}>{t('legacy.weapons.name')}</Text>
             <TextInput
               style={styles.input}
               value={weapon.name}
               onChangeText={(value) => patchWeapon(index, { name: value })}
-              placeholder='Напр.: Короткий меч'
+              placeholder={t('legacy.weapons.namePlaceholder')}
               placeholderTextColor={colors.textSecondary}
             />
 
-            <Text style={styles.fieldLabel}>Шкода (XdY)</Text>
+            <Text style={styles.fieldLabel}>{t('legacy.weapons.damage')}</Text>
             <TextInput
               style={styles.input}
               value={weapon.damage}
@@ -248,17 +250,17 @@ const Weapons: React.FC = () => {
 
             <View style={styles.actionRow}>
               <TouchableOpacity onPress={() => openAttackModal(index)} style={styles.primaryButton}>
-                <Text style={styles.buttonText}>Кидок на влучання</Text>
+                <Text style={styles.buttonText}>{t('legacy.weapons.attackRoll')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => openDamageModal(index)} style={styles.magicButton}>
-                <Text style={styles.buttonText}>Кидок на урон</Text>
+                <Text style={styles.buttonText}>{t('legacy.weapons.damageRoll')}</Text>
               </TouchableOpacity>
             </View>
           </View>
         ))}
 
         <TouchableOpacity onPress={handleAddWeapon} style={styles.addWeaponButton}>
-          <Text style={styles.addWeaponText}>+ Додати зброю</Text>
+          <Text style={styles.addWeaponText}>{t('legacy.weapons.addWeapon')}</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -266,24 +268,24 @@ const Weapons: React.FC = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{modalOpen?.kind === 'attack' ? 'Кидок на влучання' : 'Кидок на урон'}</Text>
+              <Text style={styles.modalTitle}>{modalOpen?.kind === 'attack' ? t('legacy.weapons.attackRoll') : t('legacy.weapons.damageRoll')}</Text>
               <TouchableOpacity onPress={closeModal}>
-                <Text style={styles.modalCloseText}>Закрити</Text>
+                <Text style={styles.modalCloseText}>{t('legacy.weapons.close')}</Text>
               </TouchableOpacity>
             </View>
 
             {modalOpen?.kind === 'attack' ? (
               <View style={{ marginTop: sp(12) }}>
-                <Text style={styles.fieldLabel}>КД цілі</Text>
+                <Text style={styles.fieldLabel}>{t('legacy.weapons.targetAc')}</Text>
                 <TextInput
                   style={styles.input}
                   value={targetAC}
                   onChangeText={setTargetAC}
                   keyboardType='numeric'
-                  placeholder='Напр.: 13'
+                  placeholder={t('legacy.weapons.targetAcPlaceholder')}
                   placeholderTextColor={colors.textSecondary}
                 />
-                <Text style={styles.fieldLabel}>Бонус атаки</Text>
+                <Text style={styles.fieldLabel}>{t('legacy.weapons.attackBonus')}</Text>
                 <TextInput
                   style={styles.input}
                   value={attackBonus}
@@ -294,12 +296,12 @@ const Weapons: React.FC = () => {
                 />
 
                 <TouchableOpacity onPress={doAttackRoll} style={[styles.primaryButton, { marginTop: sp(12) }]}>
-                  <Text style={styles.buttonText}>Кинути d20</Text>
+                  <Text style={styles.buttonText}>{t('legacy.weapons.rollD20')}</Text>
                 </TouchableOpacity>
               </View>
             ) : (
               <View style={{ marginTop: sp(12) }}>
-                <Text style={styles.fieldLabel}>Модифікатор урону</Text>
+                <Text style={styles.fieldLabel}>{t('legacy.weapons.damageModifier')}</Text>
                 <TextInput
                   style={styles.input}
                   value={damageMod}
@@ -315,7 +317,7 @@ const Weapons: React.FC = () => {
                   }}
                   style={[styles.magicButton, { marginTop: sp(12) }]}
                 >
-                  <Text style={styles.buttonText}>Кинути куби</Text>
+                  <Text style={styles.buttonText}>{t('legacy.weapons.rollDice')}</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -333,5 +335,4 @@ const Weapons: React.FC = () => {
 };
 
 export default Weapons;
-
 

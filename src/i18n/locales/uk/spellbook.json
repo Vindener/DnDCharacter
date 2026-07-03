@@ -1,0 +1,138 @@
+{
+  "title": "Книга заклять",
+  "hint": {
+    "player": "Пошук, підготовка, улюблені й прив’язка заклять до персонажа.",
+    "dm": "Закріплені довідки, нотатки і швидкий пошук для столу."
+  },
+  "offlineBanner": "Локальна книга заклять. DM-закріплення і нотатки зберігаються на цьому пристрої.",
+  "tabs": {
+    "all": "Всі",
+    "prepared": "Підготовлені",
+    "known": "Відомі",
+    "favorites": "Улюблені",
+    "custom": "Власні"
+  },
+  "search": {
+    "placeholder": "Пошук закляття..."
+  },
+  "filters": {
+    "all": "Усі",
+    "level": "Рівень",
+    "school": "Школа",
+    "class": "Клас",
+    "active": "Активні фільтри: {{count}}",
+    "clear": "Скинути"
+  },
+  "boolean": {
+    "all": "Усі",
+    "yes": "Так",
+    "no": "Ні"
+  },
+  "levels": {
+    "cantrip": "Каніпс",
+    "level": "Рівень {{level}}"
+  },
+  "status": {
+    "available": "Доступне",
+    "known": "Відоме",
+    "prepared": "Підготовлене",
+    "cantrip": "Каніпс"
+  },
+  "sources": {
+    "system": "системне",
+    "custom": "власне",
+    "imported": "імпортоване"
+  },
+  "labels": {
+    "cast": "Каст",
+    "castingTime": "Час касту",
+    "range": "Дистанція",
+    "components": "Компоненти",
+    "duration": "Тривалість",
+    "concentration": "Концентрація",
+    "ritual": "Ритуал",
+    "status": "Статус",
+    "description": "Опис",
+    "higherLevels": "На вищих рівнях",
+    "classes": "Класи",
+    "tags": "Теги",
+    "unknownSchool": "Школа невідома",
+    "noComponents": "Немає"
+  },
+  "actions": {
+    "add": "Додати",
+    "quickView": "Швидкий перегляд",
+    "edit": "Редагувати",
+    "copy": "Копія",
+    "delete": "Видалити",
+    "addFavorite": "В улюблені",
+    "removeFavorite": "Прибрати з улюблених",
+    "pin": "Закріпити",
+    "unpin": "Відкріпити"
+  },
+  "characterBinding": {
+    "title": "Прив’язка до персонажа",
+    "referenceOnly": "Лише довідник",
+    "characterFallback": "Персонаж",
+    "prepared": "Підготовлено: {{count}}/{{limit}}",
+    "notCaster": "Не кастер: режим довідника."
+  },
+  "characterActions": {
+    "selectCharacter": "Оберіть персонажа, щоб керувати відомими й підготовленими закляттями.",
+    "notCaster": "У персонажа не налаштовано магію; Spellbook працює як довідник."
+  },
+  "detail": {
+    "title": "Деталі закляття",
+    "noDescription": "Опису немає."
+  },
+  "dmNotes": {
+    "title": "Нотатки DM",
+    "placeholder": "Приватна нотатка для цього закляття",
+    "save": "Зберегти нотатку"
+  },
+  "form": {
+    "newTitle": "Нове закляття",
+    "editTitle": "Редагування закляття",
+    "copySubtitle": "Збереження створить власну редаговану копію.",
+    "localSubtitle": "Метадані власного закляття зберігаються локально.",
+    "name": "Назва",
+    "level": "Рівень (0-9)",
+    "school": "Школа",
+    "castingTime": "Час касту",
+    "range": "Дистанція",
+    "components": "Компоненти",
+    "duration": "Тривалість",
+    "description": "Опис",
+    "higherLevels": "На вищих рівнях",
+    "classes": "Класи (через кому)",
+    "tags": "Теги (через кому)",
+    "damageProfiles": "Профілі урону (по одному в рядку)",
+    "damageProfileFormat": "Формат рядка: Назва | Формула | Тип | Умова(опційно)",
+    "damageTypes": "Типи урону 5e: {{types}}",
+    "placeholders": {
+      "name": "Назва закляття",
+      "school": "Втілення / Ілюзія / ...",
+      "range": "150 футів",
+      "components": "V, S, M (матеріальний компонент)",
+      "duration": "Миттєво",
+      "description": "Ефект закляття",
+      "higherLevels": "Як змінюється при касті вищим слотом",
+      "tags": "урон, aoe, fire",
+      "damageProfiles": "Базово | 8d6 | fire | DEX save, половина"
+    }
+  },
+  "defaults": {
+    "customSchool": "Власне",
+    "castingTime": "1 дія",
+    "customTag": "власне",
+    "importedSchool": "З листа персонажа"
+  },
+  "notices": {
+    "preparedLimit": "Ліміт підготовлених заклять: {{count}}/{{limit}}."
+  },
+  "errors": {
+    "invalidSpell": "Невалідні дані закляття."
+  },
+  "pinnedHint": "Закріплені закляття показуються першими.",
+  "empty": "Заклять не знайдено. Змініть пошук, скиньте фільтри або додайте власне закляття."
+}

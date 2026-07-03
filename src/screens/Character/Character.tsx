@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import type { CharacterViewModel } from '@/types/Character';
 import { useCharacterActions } from './hooks/useCharacterActions';
 import type { CharacterActionsReadyState } from './hooks/useCharacterActions';
@@ -23,6 +24,7 @@ interface CharacterProps {
 }
 
 export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
+  const { t } = useTranslation('character');
   const state = useCharacterActions({ route });
   const insets = useSafeAreaInsets();
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
@@ -44,7 +46,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
     return (
       <View style={state.styles.emptyState}>
-        <Text style={state.styles.emptyText}>Персонаж не знайдений</Text>
+        <Text style={state.styles.emptyText}>{t('empty.notFound')}</Text>
       </View>
     );
   }
@@ -103,19 +105,19 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         {currentSync?.status === 'conflict' && (
           <View style={styles.conflictCard}>
             <View style={styles.conflictHeader}>
-              <Text style={styles.conflictTitle}>Виявлено конфлікт синхронізації</Text>
+              <Text style={styles.conflictTitle}>{t('conflict.title')}</Text>
             </View>
-            <Text style={styles.conflictText}>Локальні та cloud зміни перетнулися в одній секції. Обери стратегію злиття.</Text>
-            {currentSync.conflictPaths.length > 0 && <Text style={styles.conflictPaths}>Шляхи: {currentSync.conflictPaths.join(', ')}</Text>}
+            <Text style={styles.conflictText}>{t('conflict.message')}</Text>
+            {currentSync.conflictPaths.length > 0 && <Text style={styles.conflictPaths}>{t('conflict.paths', { paths: currentSync.conflictPaths.join(', ') })}</Text>}
             <View style={styles.conflictActionsRow}>
               <Pressable style={styles.conflictAction} onPress={resolveConflictWithLocal} android_ripple={{ color: colors.ripple }}>
-                <Text style={styles.conflictActionText}>Залишити локальне</Text>
+                <Text style={styles.conflictActionText}>{t('conflict.keepLocal')}</Text>
               </Pressable>
               <Pressable style={styles.conflictAction} onPress={resolveConflictWithCloud} android_ripple={{ color: colors.ripple }}>
-                <Text style={styles.conflictActionText}>Використати хмару</Text>
+                <Text style={styles.conflictActionText}>{t('conflict.useCloud')}</Text>
               </Pressable>
               <Pressable style={styles.conflictAction} onPress={resolveConflictManual} android_ripple={{ color: colors.ripple }}>
-                <Text style={styles.conflictActionText}>Вирішити пізніше</Text>
+                <Text style={styles.conflictActionText}>{t('conflict.resolveLater')}</Text>
               </Pressable>
             </View>
           </View>
@@ -143,12 +145,12 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
         {isSharedSheet && (
           <View style={styles.cardSecondary}>
             <View style={styles.sectionTitleRow}>
-              <Text style={styles.sectionTitle}>Історія спільних змін ({tabLabels[selectedTab]})</Text>
+              <Text style={styles.sectionTitle}>{t('history.title', { tab: tabLabels[selectedTab] })}</Text>
             </View>
             {latestTabChangeLabel && latestTabChange ? (
-              <Text style={styles.blockTextMuted}>Маркер останньої зміни: {latestTabChangeLabel} о {new Date(latestTabChange.atMs).toLocaleString()}</Text>
+              <Text style={styles.blockTextMuted}>{t('history.latestChange', { label: latestTabChangeLabel, date: new Date(latestTabChange.atMs).toLocaleString() })}</Text>
             ) : null}
-            {!tabHistory.length && <Text style={styles.blockTextMuted}>Для цієї вкладки ще немає спільної історії.</Text>}
+            {!tabHistory.length && <Text style={styles.blockTextMuted}>{t('history.empty')}</Text>}
             {tabHistory.map((entry: CharacterChangeHistoryEntry) => (
               <View key={entry.id} style={styles.historyRow}>
                 <Text style={styles.historyAuthor}>{getHistoryAuthorLabel(entry)}</Text>
@@ -189,5 +191,4 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
-
 

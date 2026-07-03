@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, Pressable, TextInput as RNTextInput, View, FlatList } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { DiceRollerPanel, type DiceRollerPreset } from '@/screens/DiceRoller/DiceRoller';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
@@ -158,6 +159,7 @@ function CharacterModalsBase({
   diceSides,
   applyShortRestRolls,
 }: CharacterModalsProps) {
+  const { t } = useTranslation('character');
   const [diceModalScrollSignal, setDiceModalScrollSignal] = React.useState(0);
   const [contextRollScrollSignal, setContextRollScrollSignal] = React.useState(0);
   const [restRollScrollSignal, setRestRollScrollSignal] = React.useState(0);
@@ -187,7 +189,7 @@ function CharacterModalsBase({
         android_ripple={{ color: colors.ripple }}
       >
         <Text style={styles.secondaryActionText}>
-          {item.name} • {item.level === 0 ? 'каніпс' : `рівень ${item.level}`}
+          {item.name} • {item.level === 0 ? t('modals.spell.cantrip') : t('modals.spell.level', { level: item.level })}
         </Text>
       </Pressable>
     ),
@@ -195,14 +197,14 @@ function CharacterModalsBase({
   );
 
   const contextRollModalTitle = React.useMemo(() => {
-    if (!weaponRollRequest) return 'Кидок';
+    if (!weaponRollRequest) return t('modals.roll.title');
     if (weaponRollRequest.kind === 'ability' || weaponRollRequest.kind === 'saving-throw' || weaponRollRequest.kind === 'skill') {
       return weaponRollRequest.title;
     }
-    if (weaponRollRequest.kind === 'weapon-attack') return 'Кидок на влучення';
-    if (weaponRollRequest.kind === 'weapon-damage') return 'Кидок шкоди';
-    if (weaponRollRequest.kind === 'spell-attack') return 'Атака закляттям';
-    return 'Шкода закляттям';
+    if (weaponRollRequest.kind === 'weapon-attack') return t('modals.roll.weaponAttack');
+    if (weaponRollRequest.kind === 'weapon-damage') return t('modals.roll.weaponDamage');
+    if (weaponRollRequest.kind === 'spell-attack') return t('modals.roll.spellAttack');
+    return t('modals.roll.spellDamage');
   }, [weaponRollRequest]);
 
   const contextRollSubtitle = React.useMemo(() => {
@@ -211,7 +213,7 @@ function CharacterModalsBase({
       return weaponRollRequest.label;
     }
     if (weaponRollRequest.kind === 'weapon-attack' || weaponRollRequest.kind === 'weapon-damage') {
-      return weaponRollRequest.weapon.name || 'Зброя';
+      return weaponRollRequest.weapon.name || t('modals.roll.weaponFallback');
     }
     return weaponRollRequest.spellName;
   }, [weaponRollRequest]);
@@ -238,34 +240,34 @@ function CharacterModalsBase({
     }
     if (weaponRollRequest.kind === 'weapon-attack') {
       const attackBonus = Number(weaponRollRequest.weapon.attackBonus || 0);
-      const weaponName = weaponRollRequest.weapon.name || 'Зброя';
+      const weaponName = weaponRollRequest.weapon.name || t('modals.roll.weaponFallback');
       return {
         id: `weapon-attack-${weaponName}-${attackBonus}`,
-        label: `Влучення: ${weaponName}`,
+        label: t('modals.roll.hitLabel', { weapon: weaponName }),
         dice: 'd20',
         modifier: attackBonus,
       };
     }
     if (weaponRollRequest.kind === 'weapon-damage') {
-      const weaponName = weaponRollRequest.weapon.name || 'Зброя';
+      const weaponName = weaponRollRequest.weapon.name || t('modals.roll.weaponFallback');
       const formula = String(weaponRollRequest.weapon.damage || '1d6');
       return {
         id: `weapon-damage-${weaponName}-${formula}`,
-        label: `Шкода: ${weaponName}`,
+        label: t('modals.roll.damageLabel', { weapon: weaponName }),
         formula,
       };
     }
     if (weaponRollRequest.kind === 'spell-attack') {
       return {
         id: `spell-attack-${weaponRollRequest.spellName}-${weaponRollRequest.baseModifier}`,
-        label: `Атака закляттям: ${weaponRollRequest.spellName}`,
+        label: t('modals.roll.spellAttackLabel', { spell: weaponRollRequest.spellName }),
         dice: 'd20',
         modifier: weaponRollRequest.baseModifier,
       };
     }
     return {
       id: `spell-damage-${weaponRollRequest.spellName}-${weaponRollRequest.profile.id}-${weaponRollRequest.profile.formula}`,
-      label: `Шкода закляттям: ${weaponRollRequest.spellName}`,
+      label: t('modals.roll.spellDamageLabel', { spell: weaponRollRequest.spellName }),
       formula: weaponRollRequest.profile.formula,
     };
   }, [characterData.proficiencyBonus, weaponRollRequest]);
@@ -280,7 +282,7 @@ function CharacterModalsBase({
         onPress={() => rollWeaponDamage(weaponRollRequest.weapon)}
         android_ripple={{ color: colors.ripple }}
       >
-        <Text style={styles.secondaryActionText}>Кинути шкоду ({formula})</Text>
+        <Text style={styles.secondaryActionText}>{t('modals.roll.rollDamage', { formula })}</Text>
       </Pressable>
     );
   }, [colors.ripple, rollWeaponDamage, styles.secondaryAction, styles.secondaryActionText, weaponRollRequest]);
@@ -292,7 +294,7 @@ function CharacterModalsBase({
     if (restStep !== 'roll' || rollsNeeded <= 0 || diceSides <= 0) return undefined;
     return {
       id: `short-rest-${rollsNeeded}-${diceSides}-${shortRestHealingModifier}`,
-      label: 'Короткий відпочинок',
+      label: t('quickActions.shortRest'),
       formula: shortRestFormula,
     };
   }, [diceSides, restStep, rollsNeeded, shortRestFormula, shortRestHealingModifier]);
@@ -304,28 +306,28 @@ function CharacterModalsBase({
   return (
     <>
       <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={saveHpModal} title='HP'>
-        <Text style={styles.modalLabel}>Поточне HP</Text>
+        <Text style={styles.modalLabel}>{t('modals.hp.current')}</Text>
         <RNTextInput
           value={tempCurrentHp}
           onChangeText={setTempCurrentHp}
           keyboardType='number-pad'
           style={styles.modalInput}
-          placeholder='Поточне'
+          placeholder={t('modals.hp.currentPlaceholder')}
           placeholderTextColor={colors.textSecondary}
         />
-        <Text style={styles.modalLabel}>Макс. HP</Text>
+        <Text style={styles.modalLabel}>{t('modals.hp.max')}</Text>
         <RNTextInput
           value={tempMaxHp}
           onChangeText={setTempMaxHp}
           keyboardType='number-pad'
           style={styles.modalInput}
-          placeholder='Макс.'
+          placeholder={t('modals.hp.maxPlaceholder')}
           placeholderTextColor={colors.textSecondary}
         />
       </Modal>
 
-      <Modal isVisible={isTempHpModalVisible} onClose={() => setIsTempHpModalVisible(false)} onSubmit={saveTempHp} title='Тимчасове HP'>
-        <Text style={styles.modalLabel}>Значення тимчасового HP</Text>
+      <Modal isVisible={isTempHpModalVisible} onClose={() => setIsTempHpModalVisible(false)} onSubmit={saveTempHp} title={t('modals.tempHp.title')}>
+        <Text style={styles.modalLabel}>{t('modals.tempHp.value')}</Text>
         <RNTextInput
           value={tempShieldInput}
           onChangeText={setTempShieldInput}
@@ -339,12 +341,12 @@ function CharacterModalsBase({
       <Modal
         isVisible={isLevelChangeModalVisible}
         onClose={cancelLevelChange}
-        title={`Підтвердити рівень ${levelChangeTarget}`}
-        subtitle='Редагування основних характеристик перед застосуванням'
+        title={t('modals.level.title', { level: levelChangeTarget })}
+        subtitle={t('modals.level.subtitle')}
       >
-        <Text style={styles.modalLabel}>Новий рівень: {levelChangeTarget}</Text>
+        <Text style={styles.modalLabel}>{t('modals.level.newLevel', { level: levelChangeTarget })}</Text>
 
-        <Text style={styles.modalLabel}>Характеристики</Text>
+        <Text style={styles.modalLabel}>{t('modals.level.abilities')}</Text>
         <View style={styles.levelModalStatsGrid}>
           {LEVEL_STAT_FIELDS.map((field) => (
             <View key={`level-modal-${field.key}`} style={styles.levelModalStatCell}>
@@ -368,7 +370,7 @@ function CharacterModalsBase({
             onChangeText={(value) => setLevelDraftField('hpCurrent', value)}
             keyboardType='number-pad'
             style={[styles.modalInput, styles.levelModalInlineInput]}
-            placeholder='Current'
+            placeholder={t('modals.hp.currentPlaceholder')}
             placeholderTextColor={colors.textSecondary}
           />
           <RNTextInput
@@ -376,7 +378,7 @@ function CharacterModalsBase({
             onChangeText={(value) => setLevelDraftField('hpMax', value)}
             keyboardType='number-pad'
             style={[styles.modalInput, styles.levelModalInlineInput]}
-            placeholder='Max'
+            placeholder={t('modals.hp.maxPlaceholder')}
             placeholderTextColor={colors.textSecondary}
           />
         </View>
@@ -391,7 +393,7 @@ function CharacterModalsBase({
           placeholderTextColor={colors.textSecondary}
         />
 
-        <Text style={styles.modalLabel}>Ініціатива</Text>
+        <Text style={styles.modalLabel}>{t('summary.initiative')}</Text>
         <RNTextInput
           value={levelChangeDraftText.initiative}
           onChangeText={(value) => setLevelDraftField('initiative', value)}
@@ -401,7 +403,7 @@ function CharacterModalsBase({
           placeholderTextColor={colors.textSecondary}
         />
 
-        <Text style={styles.modalLabel}>Бонус майстерності</Text>
+        <Text style={styles.modalLabel}>{t('combat.proficiencyBonus')}</Text>
         <RNTextInput
           value={levelChangeDraftText.proficiencyBonus}
           onChangeText={(value) => setLevelDraftField('proficiencyBonus', value)}
@@ -412,7 +414,7 @@ function CharacterModalsBase({
         />
 
         <Pressable style={[styles.secondaryAction, styles.levelModalSubmit]} onPress={confirmLevelChange} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.secondaryActionText}>Зберегти</Text>
+          <Text style={styles.secondaryActionText}>{t('modals.level.save')}</Text>
         </Pressable>
       </Modal>
 
@@ -439,36 +441,36 @@ function CharacterModalsBase({
         ) : null}
       </Modal>
 
-      <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title='Додати стан'>
-        <Text style={styles.modalLabel}>Стан</Text>
+      <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title={t('modals.condition.title')}>
+        <Text style={styles.modalLabel}>{t('modals.condition.label')}</Text>
         <RNTextInput
           value={conditionInput}
           onChangeText={setConditionInput}
           style={styles.modalInput}
-          placeholder='Отруєний'
+          placeholder={t('modals.condition.placeholder')}
           placeholderTextColor={colors.textSecondary}
         />
       </Modal>
 
-      <Modal isVisible={isQuickNoteModalVisible} onClose={() => setIsQuickNoteModalVisible(false)} onSubmit={addQuickSessionNote} title='Швидка нотатка'>
-        <Text style={styles.modalLabel}>Нотатка сесії</Text>
+      <Modal isVisible={isQuickNoteModalVisible} onClose={() => setIsQuickNoteModalVisible(false)} onSubmit={addQuickSessionNote} title={t('modals.quickNote.title')}>
+        <Text style={styles.modalLabel}>{t('modals.quickNote.label')}</Text>
         <RNTextInput
           value={quickNoteInput}
           onChangeText={setQuickNoteInput}
           style={[styles.modalInput, styles.modalInputMultiline]}
-          placeholder='Напишіть коротку нотатку...'
+          placeholder={t('modals.quickNote.placeholder')}
           placeholderTextColor={colors.textSecondary}
           multiline
         />
       </Modal>
 
-      <Modal isVisible={isSpellQuickModalVisible} onClose={closeSpellQuickModal} title='Додати закляття'>
-        <Text style={styles.modalLabel}>Пошук у Spellbook</Text>
+      <Modal isVisible={isSpellQuickModalVisible} onClose={closeSpellQuickModal} title={t('modals.spell.title')}>
+        <Text style={styles.modalLabel}>{t('modals.spell.search')}</Text>
         <RNTextInput
           value={quickSpellSearch}
           onChangeText={setQuickSpellSearch}
           style={styles.modalInput}
-          placeholder='Введи назву або школу'
+          placeholder={t('modals.spell.searchPlaceholder')}
           placeholderTextColor={colors.textSecondary}
         />
                 {quickSpellCandidates.length ? (
@@ -482,18 +484,18 @@ function CharacterModalsBase({
             scrollEnabled={false}
           />
         ) : (
-          <Text style={styles.blockTextMuted}>Нічого не знайдено у spellbook.</Text>
+          <Text style={styles.blockTextMuted}>{t('modals.spell.empty')}</Text>
         )}
 
-        <Text style={styles.modalLabel}>Назва закляття</Text>
+        <Text style={styles.modalLabel}>{t('modals.spell.name')}</Text>
         <RNTextInput
           value={quickSpellName}
           onChangeText={setQuickSpellName}
           style={styles.modalInput}
-          placeholder='Назва закляття'
+          placeholder={t('modals.spell.namePlaceholder')}
           placeholderTextColor={colors.textSecondary}
         />
-        <Text style={styles.modalLabel}>Рівень (0-9)</Text>
+        <Text style={styles.modalLabel}>{t('modals.spell.levelLabel')}</Text>
         <RNTextInput
           value={quickSpellLevel}
           onChangeText={setQuickSpellLevel}
@@ -504,14 +506,14 @@ function CharacterModalsBase({
         />
         {!!selectedQuickSpell && (
           <View style={styles.editCardBlock}>
-            <Text style={styles.subSectionTitle}>Швидкі кидки: {selectedQuickSpell.name}</Text>
+            <Text style={styles.subSectionTitle}>{t('modals.spell.quickRolls', { spell: selectedQuickSpell.name })}</Text>
             <View style={styles.weaponActionRow}>
               <Pressable
                 style={[styles.weaponActionButton, styles.weaponActionButtonPrimary]}
                 onPress={() => rollSpellAttack(selectedQuickSpell.name)}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.weaponActionText}>Атака (d20)</Text>
+                <Text style={styles.weaponActionText}>{t('modals.roll.attackD20')}</Text>
               </Pressable>
               <Pressable
                 style={[
@@ -525,8 +527,8 @@ function CharacterModalsBase({
               >
                 <Text style={styles.weaponActionText}>
                   {selectedQuickSpell.damageProfiles?.[0]
-                    ? `Шкода (${selectedQuickSpell.damageProfiles[0].formula})`
-                    : 'Шкода (нема профілю)'}
+                    ? t('modals.roll.damageFormula', { formula: selectedQuickSpell.damageProfiles[0].formula })
+                    : t('modals.roll.damageNoProfile')}
                 </Text>
               </Pressable>
             </View>
@@ -538,7 +540,7 @@ function CharacterModalsBase({
                 android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.secondaryActionText}>
-                  Шкода: {profile.label} ({profile.formula} {profile.damageType})
+                  {t('modals.roll.damageProfile', { label: profile.label, formula: profile.formula, type: profile.damageType })}
                 </Text>
               </Pressable>
             ))}
@@ -554,12 +556,12 @@ function CharacterModalsBase({
             ))}
           </View>
         )}
-        {preparedSpellsLimit !== null && <Text style={styles.blockTextMuted}>Підготовлено: {preparedSpellsCount}/{preparedSpellsLimit}</Text>}
+        {preparedSpellsLimit !== null && <Text style={styles.blockTextMuted}>{t('modals.spell.preparedCount', { count: preparedSpellsCount, limit: preparedSpellsLimit })}</Text>}
         {preparedSpellsLimit !== null && !canAddPreparedFromQuickModal && !isQuickSpellAlreadyPrepared && (
-          <Text style={styles.blockTextMuted}>Ліміт підготовлених заклять досягнуто для цього персонажа.</Text>
+          <Text style={styles.blockTextMuted}>{t('modals.spell.preparedLimitReached')}</Text>
         )}
         <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('known')} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.secondaryActionText}>+ Додати у відомі</Text>
+          <Text style={styles.secondaryActionText}>{t('modals.spell.addKnown')}</Text>
         </Pressable>
         <Pressable
           style={[styles.secondaryAction, !canAddPreparedFromQuickModal ? { opacity: 0.45 } : null]}
@@ -567,34 +569,34 @@ function CharacterModalsBase({
           android_ripple={{ color: colors.ripple }}
           disabled={!canAddPreparedFromQuickModal}
         >
-          <Text style={styles.secondaryActionText}>+ Додати у підготовлені</Text>
+          <Text style={styles.secondaryActionText}>{t('modals.spell.addPrepared')}</Text>
         </Pressable>
         <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('cantrip')} android_ripple={{ color: colors.ripple }}>
-          <Text style={styles.secondaryActionText}>+ Додати як каніпс</Text>
+          <Text style={styles.secondaryActionText}>{t('modals.spell.addCantrip')}</Text>
         </Pressable>
       </Modal>
 
       <Modal
         isVisible={isRestModalVisible}
         onClose={() => setIsRestModalVisible(false)}
-        title='Відпочинок'
+        title={t('modals.rest.title')}
         scrollToTopSignal={restRollScrollSignal}
       >
         {restStep === 'choose' && (
           <>
-            <Text style={styles.blockTextMuted}>Короткий відпочинок відкриває DiceRoller напряму з панелі швидких дій.</Text>
+            <Text style={styles.blockTextMuted}>{t('modals.rest.shortHint')}</Text>
             <Pressable onPress={applyLongRest} style={styles.restButton} android_ripple={{ color: colors.ripple }}>
-              <Text style={styles.restButtonText}>Довгий відпочинок</Text>
+              <Text style={styles.restButtonText}>{t('quickActions.longRest')}</Text>
             </Pressable>
           </>
         )}
         {restStep === 'roll' && (
           <>
             <Text style={styles.modalLabel}>
-              Кості хітів: {rollsNeeded}d{diceSides}
+              {t('modals.rest.hitDice', { rolls: rollsNeeded, sides: diceSides })}
             </Text>
             <Text style={styles.blockTextMuted}>
-              CON: {shortRestConModifier >= 0 ? `+${shortRestConModifier}` : shortRestConModifier} за кістку. Формула лікування: {shortRestFormula}
+              {t('modals.rest.conFormula', { modifier: shortRestConModifier >= 0 ? `+${shortRestConModifier}` : shortRestConModifier, formula: shortRestFormula })}
             </Text>
             {shortRestPreset ? (
               <DiceRollerPanel
@@ -607,7 +609,7 @@ function CharacterModalsBase({
             ) : null}
             {rollResults.length >= rollsNeeded && (
               <Pressable onPress={applyShortRestRolls} style={styles.restButton} android_ripple={{ color: colors.ripple }}>
-                <Text style={styles.restButtonText}>Застосувати відпочинок</Text>
+                <Text style={styles.restButtonText}>{t('modals.rest.apply')}</Text>
               </Pressable>
             )}
           </>
@@ -618,6 +620,3 @@ function CharacterModalsBase({
 }
 
 export const CharacterModals = React.memo(CharacterModalsBase);
-
-
-

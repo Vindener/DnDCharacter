@@ -1,0 +1,22 @@
+{
+  "placeholders": {
+    "name": "Ім'я",
+    "roll": "Кидок",
+    "hits": "ХП"
+  },
+  "actions": {
+    "addRow": "Додати ще",
+    "addHero": "Додати героя",
+    "enableHits": "Вкл. хіти",
+    "returnToFight": "Повернути в бій",
+    "markDefeated": "Позначити переможеним",
+    "deleteRow": "Видалити рядок",
+    "addHeroFromList": "Додати героя з переліку"
+  },
+  "heroPicker": {
+    "title": "Обрати героя",
+    "empty": "Немає створених героїв",
+    "fallbackName": "Без імені",
+    "fallbackLevel": "? рівень"
+  }
+}

@@ -206,7 +206,7 @@ describe('Home screen', () => {
     const tree = await renderHome();
 
     expect(tree.root.findByProps({ testID: 'home.character.arthas' })).toBeTruthy();
-    expect(tree.root.findAllByProps({ children: 'Синхронізовано' }).length).toBeGreaterThan(0);
+    expect(tree.root.findByProps({ testID: 'home.character.arthas.badge.synced' })).toBeTruthy();
 
     act(() => {
       tree.unmount();

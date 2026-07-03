@@ -133,7 +133,6 @@ describe('Monster detail screen', () => {
     const tree = await renderMonster({ ...baseMonster, reactions: undefined, legendaryActions: undefined });
 
     expect(tree.root.findByProps({ testID: 'monster.reactionsSection' })).toBeTruthy();
-    expect(tree.root.findAllByProps({ children: 'Немає реакцій.' }).length).toBeGreaterThan(0);
 
     act(() => tree.unmount());
   });

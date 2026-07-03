@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainerRef, StackActions, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import DM from '@/screens/DM/DM';
 import LootGenerator from '@/screens/DM/LootGenerator/LootGenerator';
 import EncounterCalculator from '@/screens/DM/EncounterCalculator/EncounterCalculator';
@@ -26,6 +27,7 @@ export type DMStackParamList = {
 const Stack = createStackNavigator<DMStackParamList>();
 
 export default function DMNavigator() {
+  const { t } = useTranslation('navigation');
   const navigation = useNavigation();
   const stackRef = useRef<NavigationContainerRef<DMStackParamList>>(null);
 
@@ -39,13 +41,13 @@ export default function DMNavigator() {
   return (
     <Stack.Navigator id={undefined}>
       <Stack.Screen name='DMHome' component={DM} options={{ header: () => <Header /> }} />
-      <Stack.Screen name='LootGenerator' component={LootGenerator} options={{ title: 'Генератор добичі' }} />
-      <Stack.Screen name='EncounterCalculator' component={EncounterCalculator} options={{ title: 'Калькулятор бою' }} />
-      <Stack.Screen name='DMSharedUpdates' component={DMSharedUpdates} options={{ title: 'Спільні оновлення' }} />
-      <Stack.Screen name='DMPartyOverview' component={DMPartyOverview} options={{ title: 'Огляд групи' }} />
-      <Stack.Screen name='DMQuickEdit' component={DMQuickEdit} options={{ title: 'Швидке редагування DM' }} />
-      <Stack.Screen name='DMCampaignNotes' component={DMCampaignNotes} options={{ title: 'Нотатки кампанії' }} />
-      <Stack.Screen name='DMEncounterPrep' component={DMEncounterPrep} options={{ title: 'Підготовка сутички' }} />
+      <Stack.Screen name='LootGenerator' component={LootGenerator} options={{ title: t('lootGenerator') }} />
+      <Stack.Screen name='EncounterCalculator' component={EncounterCalculator} options={{ title: t('encounterCalculator') }} />
+      <Stack.Screen name='DMSharedUpdates' component={DMSharedUpdates} options={{ title: t('dmSharedUpdates') }} />
+      <Stack.Screen name='DMPartyOverview' component={DMPartyOverview} options={{ title: t('dmPartyOverview') }} />
+      <Stack.Screen name='DMQuickEdit' component={DMQuickEdit} options={{ title: t('dmQuickEdit') }} />
+      <Stack.Screen name='DMCampaignNotes' component={DMCampaignNotes} options={{ title: t('dmCampaignNotes') }} />
+      <Stack.Screen name='DMEncounterPrep' component={DMEncounterPrep} options={{ title: t('dmEncounterPrep') }} />
     </Stack.Navigator>
   );
 }

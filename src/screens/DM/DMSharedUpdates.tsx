@@ -4,6 +4,7 @@ import { useNetInfo } from '@react-native-community/netinfo';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { uuid } from 'expo-modules-core';
+import { useTranslation } from 'react-i18next';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 import { fbAuth } from '@/services/firebase';
@@ -16,7 +17,6 @@ import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import useAppRoleStore from '@/context/AppRole-store';
 import {
-  getChangeSourceLabel,
   getShareDisplayStatus,
   getSyncDisplayStatus,
   isNetworkOnline,
@@ -25,12 +25,7 @@ import {
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 type FilterKey = 'all' | 'mine' | 'shared' | 'needs-review';
-const FILTER_LABELS: Record<FilterKey, string> = {
-  all: 'Усі',
-  mine: 'Мої',
-  shared: 'Спільні',
-  'needs-review': 'Потребують перевірки',
-};
+const FILTER_KEYS: FilterKey[] = ['all', 'mine', 'shared', 'needs-review'];
 
 type SharedRecord = {
   id: string;
@@ -74,6 +69,7 @@ const sanitizeHistory = (value: unknown): SharedRecord['changeHistory'] => {
 };
 
 const DMSharedUpdates = () => {
+  const { t } = useTranslation(['dm', 'common']);
   const navigation = useNavigation<StackNavigationProp<DMStackParamList, 'DMSharedUpdates'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -133,7 +129,7 @@ const DMSharedUpdates = () => {
   const records = useMemo<SharedRecord[]>(() => {
     const mine = mySheets.map((sheet) => ({
       id: String(sheet.id || ''),
-      name: String(sheet.name || 'Персонаж'),
+      name: String(sheet.name || t('dm:sharedUpdates.characterFallback')),
       source: 'mine' as const,
       updatedAtMs: toMillis(sheet.updatedAt),
       payload: sheet,
@@ -141,7 +137,7 @@ const DMSharedUpdates = () => {
     }));
     const shared = sharedSheets.map((sheet) => ({
       id: String(sheet.id || ''),
-      name: String(sheet.name || 'Персонаж'),
+      name: String(sheet.name || t('dm:sharedUpdates.characterFallback')),
       source: 'shared' as const,
       updatedAtMs: toMillis(sheet.updatedAt),
       payload: sheet,
@@ -150,7 +146,7 @@ const DMSharedUpdates = () => {
 
     const merged = [...mine, ...shared];
     return merged.sort((a, b) => b.updatedAtMs - a.updatedAtMs);
-  }, [mySheets, sharedSheets]);
+  }, [mySheets, sharedSheets, t]);
 
   const withReviewState = useMemo(() => {
     return records.map((record) => {
@@ -218,10 +214,11 @@ const DMSharedUpdates = () => {
 
   const createDetachedCopy = async (doc: Record<string, unknown>, mode: 'local-copy' | 'duplicate-shared') => {
     const mapped = mapCloudCharacterToLocalDto(doc);
+    const suffix = mode === 'local-copy' ? t('dm:sharedUpdates.localCopySuffix') : t('dm:sharedUpdates.sharedDuplicateSuffix');
     const copy: CharacterViewModel = {
       ...mapped,
       id: String(uuid.v4()),
-      name: `${mapped.name || 'Персонаж'} (${mode === 'local-copy' ? 'Локальна копія' : 'Спільний дублікат'})`,
+      name: `${mapped.name || t('dm:sharedUpdates.characterFallback')} (${suffix})`,
     };
 
     await addCharacter(copy);
@@ -259,25 +256,56 @@ const DMSharedUpdates = () => {
       },
       isOnline,
       historyPaths: ['overview.identity'],
-      offlineMessage: 'Офлайн-черга',
-      syncingMessage: 'Синхронізація...',
-      syncedMessage: 'Синхронізовано',
+      offlineMessage: t('dm:sharedUpdates.offlineQueue'),
+      syncingMessage: t('dm:sharedUpdates.syncing'),
+      syncedMessage: t('dm:sharedUpdates.synced'),
       conflictFallbackPath: 'overview.identity',
     });
 
     if (result.status === 'error') {
-      await setSyncTransport(normalized.id, 'error', result.message || 'Помилка синхронізації');
+      await setSyncTransport(normalized.id, 'error', result.message || t('dm:sharedUpdates.syncError'));
     }
+  };
+
+  const formatSyncStatus = (status: string) => {
+    if (status === 'Synced') return t('common:status.synced');
+    if (status === 'Pending sync') return t('common:status.pendingSync');
+    if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+    if (status === 'Conflict detected') return t('common:status.conflictDetected');
+    if (status === 'Local only') return t('common:status.localOnly');
+    return status;
+  };
+
+  const formatShareStatus = (status: string) => {
+    if (status === 'Shared with DM') return t('common:status.sharedWithDm');
+    if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
+    return status;
+  };
+
+  const formatSource = (source: SharedRecord['source']) => t(`dm:sharedUpdates.sources.${source}`);
+
+  const formatChangeSource = (entry: { uid: string; actorRole?: string }) => {
+    const currentUid = fbAuth.currentUser?.uid;
+    if (currentUid && entry.uid && currentUid === entry.uid) return t('dm:sharedUpdates.changeSources.you');
+    if (entry.actorRole === 'DM') return t('dm:sharedUpdates.changeSources.dm');
+    if (entry.actorRole === 'Player') return t('dm:sharedUpdates.changeSources.player');
+    if (!entry.uid) return t('dm:sharedUpdates.changeSources.remote');
+    return t('dm:sharedUpdates.changeSources.uid', { uid: entry.uid.slice(0, 6) });
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 20 }}>
       <View style={styles.card}>
-        <Text style={styles.title}>Черга спільних оновлень</Text>
-        <Text style={styles.hint}>Процес: перегляд змін, позначення перевірки, відкриття в локальному листі персонажа.</Text>
-        <Text style={styles.hint}>Мережа: {isOnline ? 'Онлайн' : 'Офлайн'} • Роль: {roleMode}</Text>
+        <Text style={styles.title}>{t('dm:sharedUpdates.title')}</Text>
+        <Text style={styles.hint}>{t('dm:sharedUpdates.hint')}</Text>
+        <Text style={styles.hint}>
+          {t('dm:sharedUpdates.networkRole', {
+            network: isOnline ? t('common:status.online') : t('common:status.offline'),
+            role: t(`common:roles.${roleMode}`),
+          })}
+        </Text>
         <View style={styles.filterRow}>
-          {(['all', 'mine', 'shared', 'needs-review'] as FilterKey[]).map((item) => {
+          {FILTER_KEYS.map((item) => {
             const active = filter === item;
             return (
               <Pressable
@@ -286,45 +314,44 @@ const DMSharedUpdates = () => {
                 onPress={() => setFilter(item)}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={[styles.filterChipText, active ? styles.filterChipTextActive : null]}>{FILTER_LABELS[item]}</Text>
+                <Text style={[styles.filterChipText, active ? styles.filterChipTextActive : null]}>{t(`dm:sharedUpdates.filters.${item}`)}</Text>
               </Pressable>
             );
           })}
         </View>
       </View>
 
-      {!filtered.length && <Text style={styles.emptyText}>Немає записів спільних листів для вибраного фільтра.</Text>}
+      {!filtered.length && <Text style={styles.emptyText}>{t('dm:sharedUpdates.empty')}</Text>}
 
       {filtered.map((item) => {
         const localCopyExists = characters.some((character) => character.id === item.id);
         const updatedLabel = item.updatedAtMs ? new Date(item.updatedAtMs).toLocaleString() : '—';
-        const latestHistoryLabel = item.latestHistory
-          ? getChangeSourceLabel({
-              uid: item.latestHistory.uid,
-              actorRole: item.latestHistory.actorRole,
-              currentUid: fbAuth.currentUser?.uid,
-            })
-          : null;
+        const latestHistoryLabel = item.latestHistory ? formatChangeSource(item.latestHistory) : null;
 
         return (
           <View key={`shared-${item.source}-${item.id}`} style={styles.itemCard}>
             <Text style={styles.itemTitle}>{item.name}</Text>
-            <Text style={styles.itemMeta}>ID листа: {item.id}</Text>
-            <Text style={styles.itemMeta}>Джерело: {item.source}</Text>
-            <Text style={styles.itemMeta}>Оновлено: {updatedLabel}</Text>
-            <Text style={styles.itemMeta}>Статус синхронізації: {item.syncStatus}</Text>
-            {!!item.shareStatus && <Text style={styles.itemMeta}>Статус спільного доступу: {item.shareStatus}</Text>}
+            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.sheetId', { id: item.id })}</Text>
+            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.source', { source: formatSource(item.source) })}</Text>
+            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.updated', { value: updatedLabel })}</Text>
+            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.syncStatus', { status: formatSyncStatus(item.syncStatus) })}</Text>
+            {!!item.shareStatus && (
+              <Text style={styles.itemMeta}>{t('dm:sharedUpdates.shareStatus', { status: formatShareStatus(item.shareStatus) })}</Text>
+            )}
             {latestHistoryLabel && (
               <Text style={styles.itemMeta}>
-                Останній маркер: {latestHistoryLabel} ({item.latestHistory?.summary || 'Без підсумку'})
+                {t('dm:sharedUpdates.latestMarker', {
+                  actor: latestHistoryLabel,
+                  summary: item.latestHistory?.summary || t('dm:sharedUpdates.noSummary'),
+                })}
               </Text>
             )}
             <View style={styles.statusRow}>
               <View style={styles.statusChip}>
-                <Text style={styles.statusChipText}>{item.needsReview ? 'Потребує перевірки' : 'Перевірено'}</Text>
+                <Text style={styles.statusChipText}>{item.needsReview ? t('dm:sharedUpdates.needsReview') : t('dm:sharedUpdates.reviewed')}</Text>
               </View>
               <View style={styles.statusChip}>
-                <Text style={styles.statusChipText}>{localCopyExists ? 'Локальна копія існує' : 'Немає локальної копії'}</Text>
+                <Text style={styles.statusChipText}>{localCopyExists ? t('dm:sharedUpdates.localCopyExists') : t('dm:sharedUpdates.noLocalCopy')}</Text>
               </View>
             </View>
             {!!item.changeHistory.length && (
@@ -335,8 +362,7 @@ const DMSharedUpdates = () => {
                   .slice(0, 3)
                   .map((entry) => (
                     <Text key={entry.id} style={styles.historyText}>
-                      {getChangeSourceLabel({ uid: entry.uid, actorRole: entry.actorRole, currentUid: fbAuth.currentUser?.uid })} •{' '}
-                      {entry.summary || 'Без підсумку'} • {new Date(entry.atMs).toLocaleString()}
+                      {formatChangeSource(entry)} • {entry.summary || t('dm:sharedUpdates.noSummary')} • {new Date(entry.atMs).toLocaleString()}
                     </Text>
                   ))}
               </View>
@@ -349,7 +375,7 @@ const DMSharedUpdates = () => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.actionButtonText}>Спільна жива копія</Text>
+                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.openLiveCopy')}</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}
@@ -358,7 +384,7 @@ const DMSharedUpdates = () => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.actionButtonText}>Позначити перевіреним</Text>
+                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.markReviewed')}</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}
@@ -367,7 +393,7 @@ const DMSharedUpdates = () => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.actionButtonText}>Синхронізувати зараз</Text>
+                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.syncNow')}</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}
@@ -376,7 +402,7 @@ const DMSharedUpdates = () => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.actionButtonText}>Локальна копія</Text>
+                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.localCopy')}</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}
@@ -385,7 +411,7 @@ const DMSharedUpdates = () => {
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.actionButtonText}>Дублювати зі спільного</Text>
+                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.duplicateShared')}</Text>
               </Pressable>
             </View>
           </View>
@@ -396,7 +422,6 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
-
 
 
 
