@@ -18,7 +18,7 @@ Skeletons should match the shape of the content that will appear after loading.
 Skeleton for:
 - continue session card;
 - character cards;
-- DM preview;
+- GM preview;
 - sync strip.
 
 ### Character Sheet

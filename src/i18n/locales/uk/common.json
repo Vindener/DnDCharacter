@@ -43,13 +43,13 @@
     "offlineChanges": "Офлайн-зміни",
     "conflict": "Конфлікт",
     "conflictDetected": "Виявлено конфлікт",
-    "sharedWithDm": "Спільно з ДМ",
+    "sharedWithDm": "Спільно з GM",
     "sharedWithPlayer": "Спільно з гравцем",
     "notSyncedYet": "ще не було"
   },
   "roles": {
     "Player": "Гравець",
-    "DM": "Майстер",
+    "DM": "Game Master",
     "Hybrid": "Обидва"
   },
   "fallbacks": {

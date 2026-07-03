@@ -1,4 +1,4 @@
-DND Character Page React Native Project
+# Mythgate 5e Companion React Native Project
 
 ## Product Docs
 

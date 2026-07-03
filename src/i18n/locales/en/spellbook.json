@@ -4,7 +4,7 @@
     "player": "Search, prepare, favorite, and bind spells to a character.",
     "dm": "Pinned references, notes, and fast table search."
   },
-  "offlineBanner": "Local spellbook. DM pins and notes are saved on this device.",
+  "offlineBanner": "Local spellbook. GM pins and notes are saved on this device.",
   "tabs": {
     "all": "All",
     "prepared": "Prepared",
@@ -86,7 +86,7 @@
     "noDescription": "No description."
   },
   "dmNotes": {
-    "title": "DM notes",
+    "title": "GM notes",
     "placeholder": "Private note for this spell",
     "save": "Save note"
   },

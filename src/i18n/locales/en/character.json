@@ -95,7 +95,7 @@
     "empty": "This tab has no shared history yet.",
     "sources": {
       "you": "edited by you",
-      "dm": "edited by DM",
+      "dm": "edited by GM",
       "player": "edited by player",
       "remote": "edited remotely",
       "uid": "edited by {{uid}}"

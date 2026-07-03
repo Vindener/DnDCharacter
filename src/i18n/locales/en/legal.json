@@ -1,0 +1,25 @@
+{
+  "title": "Legal & Licenses",
+  "intro": "Mythgate 5e Companion is an independent 5e companion app. This page collects the license notices used for rules-reference content.",
+  "sections": {
+    "srd": {
+      "title": "SRD 5.1 / OGL 1.0a",
+      "body": "Some rules-reference content may be derived from SRD 5.1 and used under the Open Game License version 1.0a. The app uses neutral 5e terminology and does not use Product Identity as app branding."
+    },
+    "productIdentity": {
+      "title": "Product Identity",
+      "body": "Mythgate 5e Companion does not present itself as an official product and does not use protected tabletop roleplaying brands as public app branding."
+    },
+    "notice": {
+      "title": "Copyright Notice",
+      "ogl": "Open Game License v 1.0a Copyright 2000, Wizards of the Coast, LLC.",
+      "srd": "System Reference Document 5.1 Copyright 2016, Wizards of the Coast, Inc.; Authors Mike Mearls, Jeremy Crawford, Chris Perkins, Rodney Thompson, Peter Lee, James Wyatt, Robert J. Schwalb, Bruce R. Cordell, Chris Sims, and Steve Townshend, based on original material by E. Gary Gygax and Dave Arneson.",
+      "placeholder": "Additional original Open Game Content notices for this app should be added here before public release."
+    }
+  },
+  "sources": {
+    "title": "Reference Sources",
+    "srdOglPdf": "SRD 5.1 / OGL 1.0a PDF",
+    "srdFaq": "SRD FAQ"
+  }
+}

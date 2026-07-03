@@ -7,11 +7,11 @@
 4. Create Character + scroll/keyboard fix
 5. Spellbook
 6. Bestiary
-7. Future: DM Desktop Workspace
+7. Future: GM Desktop Workspace
 
 ## Product Direction
-DnDCharacter is not only a mobile character sheet.
-It is a DnD companion for players and DMs with local-first storage, cloud sync, shared sheets, and homebrew support.
+Mythgate 5e Companion is not only a mobile character sheet.
+It is a 5e companion for players and DMs with local-first storage, cloud sync, shared sheets, and homebrew support.
 
 The first polish cycle should improve visible quality without rewriting the product architecture.
 
@@ -36,7 +36,7 @@ Priority:
 
 Out of scope for the first pass:
 - full Character Sheet redesign;
-- DM Desktop;
+- GM Desktop;
 - Firebase schema changes.
 
 ### Home
@@ -44,7 +44,7 @@ Priority:
 - make Home a fast start center, not a static menu;
 - show continue session;
 - show character cards with Local/Cloud/Shared state;
-- expose quick actions for Create Character, Roll Dice, Spellbook, Bestiary, and DM tools;
+- expose quick actions for Create Character, Roll Dice, Spellbook, Bestiary, and GM tools;
 - show sync/offline/conflict status.
 
 ### Character Sheet
@@ -58,7 +58,7 @@ Priority:
 Priority:
 - turn Create Character into a wizard;
 - fix scroll and keyboard behavior;
-- follow DnD character creation flow;
+- follow 5e character creation flow;
 - preserve partial draft data while navigating between steps.
 
 ### Spellbook
@@ -71,10 +71,10 @@ Priority:
 
 ### Bestiary
 Priority:
-- make Bestiary a DM combat tool, not only a reference list;
+- make Bestiary a GM combat tool, not only a reference list;
 - expose AC, HP, speed, CR, traits, actions, reactions, and quick attack data;
 - support search, filters, pinned monsters, and encounter preparation.
 
-### Future: DM Desktop Workspace
-DM Desktop Workspace is a later larger direction.
+### Future: GM Desktop Workspace
+GM Desktop Workspace is a later larger direction.
 Do not start it during the first UX/UI polish cycle unless explicitly requested.

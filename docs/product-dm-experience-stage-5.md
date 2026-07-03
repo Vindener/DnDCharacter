@@ -1,20 +1,20 @@
-# Stage 5: DM Experience Redesign (DM-first Mode)
+# Stage 5: GM Experience Redesign (GM-first Mode)
 
 > Historical planning document.
 > Do not use this as the current sprint plan.
 > Current roadmap: `docs/ux-ui-roadmap.md`.
 
 Date: 2026-03-29
-Project: DnD Character (mobile)
+Project: Mythgate 5e Companion (mobile)
 
 ## Goal
 
-Make DM workflow a first-class mode, not a player sheet extension.
+Make GM workflow a first-class mode, not a player sheet extension.
 
-- dedicated DM dashboard and flows;
+- dedicated GM dashboard and flows;
 - campaign-aware party operations;
 - cloud/offline campaign notes with conflict handling;
-- quick edit for shared player sheets with DM attribution;
+- quick edit for shared player sheets with GM attribution;
 - encounter prep handoff into initiative.
 
 Cross-stage alignment:
@@ -25,7 +25,7 @@ Cross-stage alignment:
 
 ## Scope Delivered
 
-1. DM dashboard IA redesign:
+1. GM dashboard IA redesign:
 - `Party Overview` block;
 - `Shared Character Access + Quick Edit` block;
 - `Campaign Notes` block;
@@ -33,7 +33,7 @@ Cross-stage alignment:
 - `Recent Shared Changes` block;
 - quick reference entrypoints to `Bestiary`, `Spellbook`, `Initiative`.
 
-2. DM stack extensions:
+2. GM stack extensions:
 - `DMPartyOverview`;
 - `DMQuickEdit({ characterId })`;
 - `DMCampaignNotes({ campaignId? })`;
@@ -54,7 +54,7 @@ Cross-stage alignment:
   - keep cloud
   - merge manual
 
-5. Expanded DM quick edit:
+5. Expanded GM quick edit:
 - HP/current/temp;
 - conditions;
 - initiative and AC;
@@ -62,7 +62,7 @@ Cross-stage alignment:
 - custom resources;
 - inventory add/remove;
 - short note append;
-- quick edit pushes shared history with `actorRole: DM`.
+- quick edit pushes shared history with `actorRole: GM`.
 
 6. Encounter prep starter flow:
 - select campaign;
@@ -74,7 +74,7 @@ Cross-stage alignment:
 ## Data and Interface Notes
 
 - `CharacterDto` now includes `campaignId?: string`; legacy `campaign?: string` is preserved.
-- New DM domain types:
+- New GM domain types:
   - `DMCampaign`
   - `DMCampaignNote`
   - `DMCampaignNoteSyncState`
@@ -96,9 +96,9 @@ Rules mirror `characterSheets` semantics:
 
 In the old stage plan, Stage 5 was considered complete when:
 
-1. DM has a dedicated dashboard with DM-native IA and workflows.
+1. GM has a dedicated dashboard with GM-native IA and workflows.
 2. Party overview is campaign-aware and not limited to local characters.
-3. DM can quick-edit shared sheets without entering full player edit flow.
+3. GM can quick-edit shared sheets without entering full player edit flow.
 4. Campaign notes remain usable offline and synchronize once online.
 5. Note conflicts are explicit and resolvable in-app.
 6. Encounter prep can start initiative with prefilled lineup.
@@ -108,4 +108,4 @@ In the old stage plan, Stage 5 was considered complete when:
 
 - Owner/editor model remains unchanged (no granular ACL in Stage 5).
 - No rules automation engine in this stage.
-- Bestiary and Spellbook remain standalone screens with DM quick access.
+- Bestiary and Spellbook remain standalone screens with GM quick access.

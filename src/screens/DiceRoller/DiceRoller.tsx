@@ -10,6 +10,8 @@ import { rollDice, rollFormula } from '@/shared/services/diceRoller';
 
 const DICE_OPTIONS: DiceType[] = ['d20', 'd12', 'd10', 'd8', 'd6', 'd4', 'd100'];
 const MODE_OPTIONS: RollMode[] = ['normal', 'advantage', 'disadvantage'];
+const MIN_DICE_COUNT = 1;
+const MAX_DICE_COUNT = 100;
 
 function signed(value: number): string {
   if (value === 0) return '+0';
@@ -19,6 +21,11 @@ function signed(value: number): string {
 function appendFormulaModifier(formula: string, modifier: number): string {
   if (modifier === 0) return formula;
   return `${formula}${modifier > 0 ? `+${modifier}` : modifier}`;
+}
+
+function clampDiceCount(count: number): number {
+  if (!Number.isFinite(count)) return MIN_DICE_COUNT;
+  return Math.min(Math.max(Math.floor(count), MIN_DICE_COUNT), MAX_DICE_COUNT);
 }
 
 function formatResultDetails(result: DiceRollResult, t: TFunction<'dice'>): string[] {
@@ -63,6 +70,7 @@ export type DiceRollerPreset = {
   proficiencyBonus?: number;
   includeProficiency?: boolean;
   mode?: RollMode;
+  count?: number;
   formula?: string;
 };
 
@@ -81,6 +89,7 @@ type RollExecutionConfig = {
   proficiencyBonus: number;
   includeProficiency: boolean;
   mode: RollMode;
+  count: number;
   customFormula: string;
   label?: string;
 };
@@ -104,6 +113,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
   const [proficiencyBonus, setProficiencyBonus] = useState(preset?.proficiencyBonus ?? 2);
   const [includeProficiency, setIncludeProficiency] = useState(preset?.includeProficiency ?? false);
   const [mode, setMode] = useState<RollMode>(preset?.mode ?? 'normal');
+  const [diceCount, setDiceCount] = useState(clampDiceCount(preset?.count ?? 1));
   const [customFormula, setCustomFormula] = useState(preset?.formula ?? '');
   const [result, setResult] = useState<DiceRollResult | null>(null);
   const [history, setHistory] = useState<DiceRollResult[]>([]);
@@ -115,6 +125,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
     : result?.isCriticalFailure
       ? styles.resultFailure
       : styles.resultNeutral;
+  const isCountLocked = mode !== 'normal';
 
   const animateRoll = useCallback((onComplete: () => void) => {
     setIsRolling(true);
@@ -146,12 +157,14 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
           ? rollFormula({ formula: appendFormulaModifier(formula, formulaModifier), label: config.label ?? t('labels.customRoll') })
           : rollDice({
               dice: config.dice,
-              count: 1,
+              count: config.mode === 'normal' ? config.count : 1,
               modifier: config.modifier,
               proficiencyBonus: config.proficiencyBonus,
               includeProficiency: config.includeProficiency,
               mode: config.mode,
-              label: config.label ?? t('labels.diceRoll', { dice: config.dice.toUpperCase() }),
+              label: config.label ?? t('labels.diceRoll', {
+                dice: `${config.mode === 'normal' ? config.count : 1}${config.dice}`.toUpperCase(),
+              }),
             });
         commitResult(next);
       } catch (caught) {
@@ -171,6 +184,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
     const nextProficiencyBonus = preset.proficiencyBonus ?? 2;
     const nextIncludeProficiency = preset.includeProficiency ?? false;
     const nextMode = preset.mode ?? 'normal';
+    const nextCount = nextMode === 'normal' ? clampDiceCount(preset.count ?? 1) : 1;
     const nextFormula = preset.formula ?? '';
 
     setSelectedDice(nextDice);
@@ -178,6 +192,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
     setProficiencyBonus(nextProficiencyBonus);
     setIncludeProficiency(nextIncludeProficiency);
     setMode(nextMode);
+    setDiceCount(nextCount);
     setCustomFormula(nextFormula);
     setResult(null);
     setHistory([]);
@@ -191,6 +206,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
         proficiencyBonus: nextProficiencyBonus,
         includeProficiency: nextIncludeProficiency,
         mode: nextMode,
+        count: nextCount,
         customFormula: nextFormula,
         label: preset.label,
       });
@@ -206,6 +222,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
     setMode(nextMode);
     if (nextMode !== 'normal') {
       setSelectedDice('d20');
+      setDiceCount(1);
       if (customFormula.trim()) setCustomFormula('');
     }
   };
@@ -222,6 +239,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
       proficiencyBonus,
       includeProficiency,
       mode,
+      count: diceCount,
       customFormula,
       label: preset?.label,
     });
@@ -229,6 +247,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
 
   const adjustModifier = (delta: number) => setModifier((prev) => prev + delta);
   const adjustProficiency = (delta: number) => setProficiencyBonus((prev) => Math.max(prev + delta, 0));
+  const adjustDiceCount = (delta: number) => setDiceCount((prev) => clampDiceCount(prev + delta));
 
   return (
     <View style={embedded ? styles.embeddedContent : styles.content}>
@@ -262,6 +281,32 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
             </Pressable>
           ))}
         </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t('labels.count')}</Text>
+        <View style={styles.stepperRow}>
+          <Pressable
+            testID='diceRoller.count.decrement'
+            style={[styles.stepperButton, isCountLocked ? styles.stepperButtonDisabled : null]}
+            onPress={() => adjustDiceCount(-1)}
+            android_ripple={{ color: colors.ripple }}
+            disabled={isCountLocked || diceCount <= MIN_DICE_COUNT}
+          >
+            <Text style={styles.stepperText}>-</Text>
+          </Pressable>
+          <Text testID='diceRoller.count.value' style={styles.stepperValue}>{diceCount}</Text>
+          <Pressable
+            testID='diceRoller.count.increment'
+            style={[styles.stepperButton, isCountLocked ? styles.stepperButtonDisabled : null]}
+            onPress={() => adjustDiceCount(1)}
+            android_ripple={{ color: colors.ripple }}
+            disabled={isCountLocked || diceCount >= MAX_DICE_COUNT}
+          >
+            <Text style={styles.stepperText}>+</Text>
+          </Pressable>
+        </View>
+        {isCountLocked ? <Text style={styles.helperText}>{t('labels.countLockedForD20Mode')}</Text> : null}
       </View>
 
       <View style={styles.section}>
@@ -307,6 +352,7 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
           {MODE_OPTIONS.map((item) => (
             <Pressable
               key={item}
+              testID={`diceRoller.mode.${item}`}
               style={[styles.segment, mode === item ? styles.segmentActive : null]}
               onPress={() => handleModeChange(item)}
               android_ripple={{ color: colors.ripple }}
@@ -333,7 +379,13 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
       <View style={styles.actionRow}>
-        <Pressable style={styles.rollButton} onPress={performRoll} android_ripple={{ color: colors.ripple }} disabled={isRolling}>
+        <Pressable
+          testID='diceRoller.rollButton'
+          style={styles.rollButton}
+          onPress={performRoll}
+          android_ripple={{ color: colors.ripple }}
+          disabled={isRolling}
+        >
           <Text style={styles.rollButtonText}>{result ? t('actions.rollAgain') : t('actions.roll')}</Text>
         </Pressable>
         <Pressable style={styles.secondaryButton} onPress={() => setHistory([])} android_ripple={{ color: colors.ripple }}>

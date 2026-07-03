@@ -5,7 +5,7 @@
 > Current roadmap: `docs/ux-ui-roadmap.md`.
 
 Date: 2026-03-29  
-Project: DnD Character (mobile)
+Project: Mythgate 5e Companion (mobile)
 
 ## Goal
 

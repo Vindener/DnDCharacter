@@ -1,0 +1,25 @@
+{
+  "title": "Юридична інформація та ліцензії",
+  "intro": "Mythgate 5e Companion — незалежний 5e-застосунок. На цій сторінці зібрані ліцензійні примітки для довідкового контенту правил.",
+  "sections": {
+    "srd": {
+      "title": "SRD 5.1 / OGL 1.0a",
+      "body": "Частина довідкового контенту правил може походити з SRD 5.1 і використовуватися за Open Game License версії 1.0a. Застосунок використовує нейтральну 5e-термінологію і не використовує Product Identity як брендинг застосунку."
+    },
+    "productIdentity": {
+      "title": "Product Identity",
+      "body": "Mythgate 5e Companion не позиціонує себе як офіційний продукт і не використовує захищені бренди настільних рольових ігор як публічний брендинг застосунку."
+    },
+    "notice": {
+      "title": "Copyright Notice",
+      "ogl": "Open Game License v 1.0a Copyright 2000, Wizards of the Coast, LLC.",
+      "srd": "System Reference Document 5.1 Copyright 2016, Wizards of the Coast, Inc.; Authors Mike Mearls, Jeremy Crawford, Chris Perkins, Rodney Thompson, Peter Lee, James Wyatt, Robert J. Schwalb, Bruce R. Cordell, Chris Sims, and Steve Townshend, based on original material by E. Gary Gygax and Dave Arneson.",
+      "placeholder": "Додаткові copyright notices для оригінального Open Game Content цього застосунку потрібно додати тут перед публічним релізом."
+    }
+  },
+  "sources": {
+    "title": "Джерела",
+    "srdOglPdf": "SRD 5.1 / OGL 1.0a PDF",
+    "srdFaq": "SRD FAQ"
+  }
+}

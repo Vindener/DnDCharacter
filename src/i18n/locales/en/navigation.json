@@ -1,13 +1,14 @@
 {
   "heroes": "Heroes",
   "initiative": "Initiative",
-  "dm": "DM",
-  "dmHome": "DM Home",
+  "dm": "GM",
+  "dmHome": "GM Home",
   "references": "References",
   "support": "Support",
   "supportProject": "Support the Project",
   "home": "My Characters",
   "settings": "Settings",
+  "legalLicenses": "Legal & Licenses",
   "diceRoller": "Dice Roller",
   "dice": "Roll",
   "characterSheet": "Character Sheet",
@@ -19,7 +20,7 @@
   "lootGenerator": "Loot Generator",
   "dmSharedUpdates": "Shared Updates",
   "dmPartyOverview": "Party Overview",
-  "dmQuickEdit": "DM Quick Edit",
+  "dmQuickEdit": "GM Quick Edit",
   "dmCampaignNotes": "Campaign Notes",
   "dmEncounterPrep": "Encounter Prep"
 }

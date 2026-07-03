@@ -1,13 +1,14 @@
 {
   "heroes": "Герої",
   "initiative": "Ініціатива",
-  "dm": "ДМ",
-  "dmHome": "ДМ головна",
+  "dm": "GM",
+  "dmHome": "GM головна",
   "references": "Довідки",
   "support": "Підтримка",
   "supportProject": "Підтримка проекту",
   "home": "Мої персонажі",
   "settings": "Налаштування",
+  "legalLicenses": "Юридична інформація",
   "diceRoller": "Кидок кубика",
   "dice": "Кидок",
   "characterSheet": "Лист персонажа",
@@ -19,7 +20,7 @@
   "lootGenerator": "Генератор добичі",
   "dmSharedUpdates": "Спільні оновлення",
   "dmPartyOverview": "Огляд групи",
-  "dmQuickEdit": "Швидке редагування DM",
+  "dmQuickEdit": "Швидке редагування GM",
   "dmCampaignNotes": "Нотатки кампанії",
   "dmEncounterPrep": "Підготовка сутички"
 }

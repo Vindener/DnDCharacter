@@ -5,7 +5,7 @@
 > Current roadmap: `docs/ux-ui-roadmap.md`.
 
 Date: 2026-03-29
-Project: DnD Character (mobile)
+Project: Mythgate 5e Companion (mobile)
 
 ## Goal
 
@@ -19,7 +19,7 @@ Make character sheet a true in-session core feature that can replace paper sheet
 
 Note on cross-stage consistency:
 - Historically, Stage 1 (`product-foundation-stage-1.md`) was used for role model and sync policy.
-- Stage 2 terminology follows Stage 1 role set: `Player`, `DM`, `Hybrid`.
+- Stage 2 terminology follows Stage 1 role set: `Player`, `GM`, `Hybrid`.
 
 ## Scope Delivered In This Iteration
 
@@ -42,10 +42,10 @@ Note on cross-stage consistency:
 - persisted in local + cloud DTO mapping.
 
 3. Home redesign foundations:
-- role switch (`Player`, `DM`, `Hybrid`);
+- role switch (`Player`, `GM`, `Hybrid`);
 - resume block with `Continue Session`;
 - live character preview cards with badges (`Local`, `Synced`, `Shared`, `Homebrew`);
-- DM preview block with quick entry points;
+- GM preview block with quick entry points;
 - quick actions panel;
 - sync/status strip.
 
@@ -88,7 +88,7 @@ Current implementation baseline:
 - role switch;
 - resume and continue session;
 - character cards with statuses;
-- DM preview section;
+- GM preview section;
 - quick actions;
 - sync strip.
 
@@ -117,10 +117,10 @@ Next pass targets:
 - storage/share step (`Local only` vs `Local + Cloud`);
 - review with explicit sync onboarding hints.
 
-### D. DM
+### D. GM
 
 Current project state:
-- DM entry and tools exist, but still broad.
+- GM entry and tools exist, but still broad.
 
 Next pass targets:
 - party overview as primary card;
@@ -137,7 +137,7 @@ Current project state:
 Next pass targets:
 - stronger filters (`CR`, `type`, `environment`, `source`, tags);
 - collapsible long sections;
-- DM quick view and encounter pinning.
+- GM quick view and encounter pinning.
 
 ## Historical Definition Of Done For Stage 2
 
@@ -163,6 +163,6 @@ Stage 4 should focus on shared collaboration quality:
 
 - explicit sync state model in store;
 - conflict review UI;
-- DM party-first workflows and shared change timeline.
+- GM party-first workflows and shared change timeline.
 
 

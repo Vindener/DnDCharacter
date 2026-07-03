@@ -172,7 +172,7 @@
     "cloud": "Cloud",
     "shareTargets": {
       "none": "No",
-      "dm": "DM",
+      "dm": "GM",
       "player": "Player"
     }
   },

@@ -4,6 +4,7 @@ import type { NavigatorScreenParams } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TabNavigator from '@/navigation/TabNavigator';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import useThemeStore from '@/context/Theme-store';
@@ -15,6 +16,7 @@ import ReferencesNavigator from '@/navigation/ReferencesNavigator';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import Support from '@/screens/Support/Support';
 import type { InitiativeSeed } from '@/dm/domain/types';
+import { sp } from '@/shared/styles/tokens';
 
 export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
@@ -31,6 +33,8 @@ export default function AppNavigator() {
   const theme = useThemeStore((s) => s.theme);
   const colors = useThemeStore((s) => s.colors);
   const loadTheme = useThemeStore((s) => s.loadTheme);
+  const insets = useSafeAreaInsets();
+  const bottomInset = Math.max(insets.bottom, sp(6));
 
   useEffect(() => {
     loadTheme();
@@ -63,7 +67,13 @@ export default function AppNavigator() {
           header: () => <Header />,
           tabBarActiveTintColor: colors.brand,
           tabBarInactiveTintColor: colors.textSecondary,
-          tabBarStyle: { backgroundColor: colors.card, borderTopWidth: 0 },
+          tabBarStyle: {
+            backgroundColor: colors.card,
+            borderTopWidth: 0,
+            height: 56 + bottomInset,
+            paddingBottom: bottomInset,
+            paddingTop: sp(4),
+          },
           tabBarIcon: ({ color, size }) => {
             const iconName = getIconName(route.name);
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -80,6 +90,5 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
-
 
 

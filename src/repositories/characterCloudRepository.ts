@@ -400,42 +400,35 @@ export async function upsertCharacterSheetFromLocal(
 
   const ref = db.collection('characterSheets').doc(dto.id);
 
-  try {
-    let existingMeta: CharacterSheet | null = null;
-    try {
-      const snap = await ref.get();
-      if (hasDoc(snap)) {
-        existingMeta = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
-      }
-    } catch (_error) { /* intentionally ignored */ }
-
-    const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
-    const historyPaths = options?.historyPaths || [];
-    if (historyPaths.length) {
-      const atMs = Date.now();
-      const additions = buildHistoryEntries(me, historyPaths, atMs, options?.actorRole);
-      payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additions, 50);
-    }
-
-    if (existingMeta) {
-      payload.owners = existingMeta.owners || [me];
-      payload.editors = existingMeta.editors || [];
-    } else {
-      payload.owners = [me];
-      payload.editors = [];
-    }
-
-    await ref.set(payload, { merge: true });
-
-    if (existingMeta) {
-      return { id: dto.id, updated: true };
-    }
-
-    return { id: dto.id, created: true };
-  } catch {
-    const newId = await saveCharacterSheetAsNew(dto);
-    return { id: newId, created: true };
+  let existingMeta: CharacterSheet | null = null;
+  const snap = await ref.get();
+  if (hasDoc(snap)) {
+    existingMeta = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
   }
+
+  const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
+  const historyPaths = options?.historyPaths || [];
+  if (historyPaths.length) {
+    const atMs = Date.now();
+    const additions = buildHistoryEntries(me, historyPaths, atMs, options?.actorRole);
+    payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additions, 50);
+  }
+
+  if (existingMeta) {
+    payload.owners = existingMeta.owners || [me];
+    payload.editors = existingMeta.editors || [];
+  } else {
+    payload.owners = [me];
+    payload.editors = [];
+  }
+
+  await ref.set(payload, { merge: true });
+
+  if (existingMeta) {
+    return { id: dto.id, updated: true };
+  }
+
+  return { id: dto.id, created: true };
 }
 
 export async function bulkUpsertFromLocal(list: CharacterDto[]) {
@@ -700,7 +693,6 @@ export const characterCloudRepository: CharacterCloudRepository = {
   removeEditor,
   getEditorsForSheet,
 };
-
 
 
 

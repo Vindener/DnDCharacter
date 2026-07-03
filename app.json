@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "MythgateDND",
+    "name": "Mythgate 5e Companion",
     "slug": "DnDCharacter",
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-google-signin/google-signin",
       "expo-font"
     ],
-    "version": "0.91.0",
+    "version": "0.91.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

@@ -81,6 +81,25 @@ describe('diceRoller service', () => {
     expect(result.isCriticalFailure).toBe(false);
   });
 
+  it('clamps dice count between 1 and 100', () => {
+    const low = rollDice({ dice: 'd6', count: 0, random: fixedRandom(0.5) });
+    const high = rollDice({ dice: 'd4', count: 150, random: fixedRandom(0) });
+
+    expect(low.rolls).toHaveLength(1);
+    expect(low.formula).toBe('1d6');
+    expect(high.rolls).toHaveLength(100);
+    expect(high.formula).toBe('100d4');
+  });
+
+  it('totals multiple normal dice', () => {
+    const result = rollDice({ dice: 'd8', count: 3, modifier: 2, random: fixedRandom(0, 0.5, 0.99) });
+
+    expect(result.rolls).toEqual([1, 5, 8]);
+    expect(result.usedRoll).toBe(14);
+    expect(result.total).toBe(16);
+    expect(result.formula).toBe('3d8 + 2');
+  });
+
   it('custom formula works', () => {
     const result = rollFormula({ formula: '2d6 + 3 + 1d8', random: fixedRandom(0.5, 0.1, 0.875) });
 

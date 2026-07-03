@@ -43,13 +43,13 @@
     "offlineChanges": "Offline changes",
     "conflict": "Conflict",
     "conflictDetected": "Conflict detected",
-    "sharedWithDm": "Shared with DM",
+    "sharedWithDm": "Shared with GM",
     "sharedWithPlayer": "Shared with Player",
     "notSyncedYet": "never"
   },
   "roles": {
     "Player": "Player",
-    "DM": "DM",
+    "DM": "Game Master",
     "Hybrid": "Hybrid"
   },
   "fallbacks": {

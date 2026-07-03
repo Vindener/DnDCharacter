@@ -148,6 +148,9 @@ export const getStyles = (c: ThemeColors) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
+    stepperButtonDisabled: {
+      opacity: 0.5,
+    },
     stepperText: {
       color: c.text,
       fontSize: fs(22),
@@ -228,6 +231,11 @@ export const getStyles = (c: ThemeColors) =>
       color: c.danger,
       fontSize: fs(12),
       fontWeight: '700',
+    },
+    helperText: {
+      color: c.textSecondary,
+      fontSize: fs(12),
+      lineHeight: 17,
     },
     actionRow: {
       flexDirection: 'row',

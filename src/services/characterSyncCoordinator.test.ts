@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/repositories/characterCloudRepository', () => ({
   characterCloudRepository: {
@@ -23,13 +23,19 @@ vi.mock('@/domain/mappers', async (importOriginal) => {
 });
 
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
+import { characterCloudRepository } from '@/repositories/characterCloudRepository';
 import {
   applySyncTransition,
   normalizeSyncState,
   reconcileRemoteSnapshot,
+  syncToCloud,
   type ReconcileRemoteSnapshotResult,
 } from '@/services/characterSyncCoordinator';
 import type { CharacterSyncMap } from '@/types/Sync';
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('characterSyncCoordinator helpers', () => {
   it('normalizes sync state and deduplicates path lists', () => {
@@ -137,5 +143,31 @@ describe('characterSyncCoordinator helpers', () => {
       syncState: { ...normalizeSyncState('char-3', null), pendingPaths: ['notes.journal'] },
     });
     expect(noopResult.action).toBe('noop');
+  });
+
+  it('keeps the original local character when cloud upsert fails', async () => {
+    vi.mocked(characterCloudRepository.upsertFromLocal).mockRejectedValueOnce(new Error('permission denied'));
+    const character = createEmptyCharacter({ id: 'char-sync-error', name: 'Local Only' });
+    const syncPort = {
+      ensureCharacterSync: vi.fn(async () => {}),
+      setCloudAvailability: vi.fn(async () => {}),
+      markCloudUploaded: vi.fn(async () => {}),
+      setSyncTransport: vi.fn(async () => {}),
+      markSyncError: vi.fn(async () => {}),
+    };
+
+    const result = await syncToCloud({
+      character,
+      actorRole: 'Player',
+      syncPort,
+      isOnline: true,
+      fallbackPath: 'overview.identity',
+    });
+
+    expect(result.status).toBe('error');
+    expect(result.targetCharacter.id).toBe('char-sync-error');
+    expect(syncPort.markSyncError).toHaveBeenCalledWith('char-sync-error', 'permission denied');
+    expect(syncPort.markCloudUploaded).not.toHaveBeenCalled();
+    expect(syncPort.setCloudAvailability).not.toHaveBeenCalled();
   });
 });

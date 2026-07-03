@@ -63,7 +63,7 @@ export type HomeSyncStrip = {
 
 export const ROLE_LABELS: Record<AppRole, string> = {
   Player: 'Гравець',
-  DM: 'Майстер',
+  DM: 'Game Master',
   Hybrid: 'Обидва',
 };
 

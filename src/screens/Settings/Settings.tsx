@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, Switch, Modal, TextInput, Pressable, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { getStyles } from '@/screens/Settings/styles';
 import useThemeStore from '@/context/Theme-store';
@@ -9,9 +11,13 @@ import useMonsterStore from '@/context/Monster-store';
 import Auth from '@/shared/components/Firebase/Auth';
 import { changeAppLanguage, getCurrentLanguage } from '@/i18n';
 import type { AppLanguage } from '@/i18n/languageStorage';
+import type { TabStackParamList } from '@/navigation/TabNavigator';
+
+type SettingsNavigation = StackNavigationProp<TabStackParamList, 'Settings'>;
 
 const Settings = () => {
   const { i18n, t } = useTranslation(['settings', 'common']);
+  const navigation = useNavigation<SettingsNavigation>();
   const isDark = useThemeStore((s) => s.isDark);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const colors = useThemeStore((s) => s.colors);
@@ -49,6 +55,7 @@ const Settings = () => {
       await addMonsters(monsters);
     }
   };
+  const openLegalLicenses = () => navigation.navigate('LegalLicenses');
   const handleLanguageChange = React.useCallback(
     async (language: AppLanguage) => {
       if (language === selectedLanguage) return;
@@ -148,6 +155,14 @@ const Settings = () => {
           <Text style={styles.sectionHint}>{t('settings:bestiary.hint')}</Text>
           <Pressable onPress={importMonsterBook} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.actionButtonText}>{t('settings:bestiary.importBook')}</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('settings:legal.title')}</Text>
+          <Text style={styles.sectionHint}>{t('settings:legal.hint')}</Text>
+          <Pressable onPress={openLegalLicenses} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
+            <Text style={styles.actionButtonText}>{t('settings:legal.open')}</Text>
           </Pressable>
         </View>
       </ScrollView>

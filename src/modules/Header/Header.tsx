@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Pressable, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
@@ -40,6 +41,8 @@ const Header = () => {
         return t('spellbook');
       case 'Support':
         return t('supportProject');
+      case 'LegalLicenses':
+        return t('legalLicenses');
       default:
         return route.name;
     }
@@ -55,19 +58,21 @@ const Header = () => {
   };
 
   return (
-    <View style={styles.header}>
-      <Pressable onPress={openSettings} android_ripple={{ color: colors.ripple }}>
-        <View style={styles.logoCircle}>
-          {providerPhoto ? (
-            <Image source={{ uri: providerPhoto }} style={styles.logoAvatar} resizeMode='cover' />
-          ) : (
-            <Text style={styles.logoText}>D</Text>
-          )}
-        </View>
-      </Pressable>
-      <Text style={styles.title}>{getTitle()}</Text>
-      <View style={{ width: 36 }} />
-    </View>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
+      <View style={styles.header}>
+        <Pressable onPress={openSettings} android_ripple={{ color: colors.ripple }}>
+          <View style={styles.logoCircle}>
+            {providerPhoto ? (
+              <Image source={{ uri: providerPhoto }} style={styles.logoAvatar} resizeMode='cover' />
+            ) : (
+              <Text style={styles.logoText}>M</Text>
+            )}
+          </View>
+        </Pressable>
+        <Text style={styles.title}>{getTitle()}</Text>
+        <View style={styles.trailingSpacer} />
+      </View>
+    </SafeAreaView>
   );
 };
 

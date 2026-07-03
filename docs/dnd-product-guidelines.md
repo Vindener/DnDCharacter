@@ -1,9 +1,9 @@
-# DnD Product Guidelines
+# 5e Product Guidelines
 
-## Core DnD Loop
-The DM describes the situation.
+## Core 5e Loop
+The GM describes the situation.
 Players describe actions.
-The DM resolves consequences.
+The GM resolves consequences.
 
 The UI should help users act quickly during that loop.
 
@@ -78,4 +78,4 @@ Monster cards should prioritize:
 - reactions;
 - add to encounter.
 
-Bestiary should support DM quick view and encounter preparation, not only long-form reading.
+Bestiary should support GM quick view and encounter preparation, not only long-form reading.

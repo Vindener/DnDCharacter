@@ -3,16 +3,19 @@ import { ThemeColors } from '@/shared/styles/theme';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 export const getStyles = (c: ThemeColors) =>
 StyleSheet.create({
+  safeArea: {
+    backgroundColor: c.card,
+    borderBottomWidth: 1,
+    borderColor: c.border,
+  },
   header: {
-    paddingTop: 8,
-    height: 64,
+    minHeight: 56,
     backgroundColor: c.card,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: sp(16),
-    borderBottomWidth: 1,
-    borderColor: c.border,
+    paddingVertical: sp(8),
   },
   logoCircle: {
     width: 36,
@@ -28,7 +31,7 @@ StyleSheet.create({
     borderRadius: rd(18),
   },
   logoText: {
-    color: c.text,
+    color: c.onBrand,
     fontSize: fs(18),
     fontWeight: 'bold',
   },
@@ -36,8 +39,12 @@ StyleSheet.create({
     color: c.text,
     fontSize: fs(18),
     fontWeight: '600',
+    flex: 1,
+    textAlign: 'center',
+  },
+  trailingSpacer: {
+    width: 36,
   },
 });
-
 
 

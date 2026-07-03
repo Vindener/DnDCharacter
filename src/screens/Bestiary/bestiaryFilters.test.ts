@@ -28,7 +28,7 @@ const monsters: MonsterDto[] = [
     hitPoints: 178,
     speed: '40 ft., fly 80 ft.',
     environment: 'Mountain',
-    source: 'Monster Manual',
+    source: 'SRD 5.1',
     legendaryActions: 'Detect. The dragon makes a Wisdom check.',
     stats: { strength: 23, dexterity: 10, constitution: 21, intelligence: 14, wisdom: 11, charisma: 19 },
   },
@@ -50,7 +50,7 @@ describe('bestiaryFilters', () => {
 
   it('filters by size, source, environment, and favorites', () => {
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, size: 'Small' }, []).map((monster) => monster.id)).toEqual(['goblin']);
-    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, source: 'Monster Manual' }, []).map((monster) => monster.id)).toEqual(['dragon']);
+    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, source: 'SRD 5.1' }, []).map((monster) => monster.id)).toEqual(['dragon']);
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, environment: 'Forest' }, []).map((monster) => monster.id)).toEqual(['goblin']);
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, favoritesOnly: true }, ['dragon']).map((monster) => monster.id)).toEqual(['dragon']);
   });
@@ -61,4 +61,3 @@ describe('bestiaryFilters', () => {
     expect(result).toEqual([]);
   });
 });
-

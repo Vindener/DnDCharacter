@@ -16,7 +16,7 @@
   },
   "modes": {
     "full": "Bestiary",
-    "quick": "DM Quick View"
+    "quick": "GM Quick View"
   },
   "labels": {
     "unknownType": "Unknown type",
@@ -46,10 +46,10 @@
   "pinned": {
     "title": "Pinned Monsters ({{count}})",
     "emptyHint": "Pin monsters for the next encounter. Quick view shows them first.",
-    "readyHint": "Pinned monsters are ready for encounter prep and appear first in DM quick view."
+    "readyHint": "Pinned monsters are ready for encounter prep and appear first in GM quick view."
   },
   "quick": {
-    "title": "DM Quick View",
+    "title": "GM Quick View",
     "hint": "Compact blocks: AC, HP, attack bonus, damage, traits, and actions."
   },
   "errors": {
@@ -105,7 +105,7 @@
       "actions": "Actions",
       "reactions": "Reactions",
       "legendaryActions": "Legendary actions",
-      "notes": "DM notes"
+      "notes": "GM notes"
     },
     "abilities": {
       "strength": "STR",

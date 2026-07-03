@@ -5,15 +5,15 @@
 > Current roadmap: `docs/ux-ui-roadmap.md`.
 
 Date: 2026-03-29
-Project: DnD Character (mobile)
+Project: Mythgate 5e Companion (mobile)
 
 ## 1. Updated Positioning
 
-DnD Character is a mobile character sheet for DnD and homebrew campaigns, optimized for:
+Mythgate 5e Companion is a mobile character sheet for 5e and homebrew campaigns, optimized for:
 
 - fast in-session usage;
 - flexible between-session configuration;
-- player/DM collaboration via cloud sync;
+- player/GM collaboration via cloud sync;
 - guaranteed local access to data as the default safety baseline.
 
 ### Product Pillars
@@ -25,12 +25,12 @@ DnD Character is a mobile character sheet for DnD and homebrew campaigns, optimi
 - homebrew customization without hacks;
 - offline-first access.
 
-2. DM-friendly
+2. GM-friendly
 - fast access to party and characters;
 - controlled editing and synchronization;
 - shared updates workflow;
 - campaign control tools;
-- bestiary, spells reference, notes, initiative as first-class DM tools.
+- bestiary, spells reference, notes, initiative as first-class GM tools.
 
 ## 2. Product Principles For Redesign
 
@@ -52,26 +52,26 @@ DnD Character is a mobile character sheet for DnD and homebrew campaigns, optimi
 - custom reset rules;
 - custom spell lists and feature blocks.
 
-5. DM is not secondary
-- DM workspace is a coherent operating area, not an incidental list of screens.
+5. GM is not secondary
+- GM workspace is a coherent operating area, not an incidental list of screens.
 
 ## 3. Roles and Capability Model
 
 ### Roles
 
 - Player: owns and manages own sheet for play.
-- DM: oversees party data and campaign tooling.
+- GM: oversees party data and campaign tooling.
 - Hybrid: can do both without switching accounts.
 
 ### Capability Matrix
 
-| Capability | Player | DM | Hybrid |
+| Capability | Player | GM | Hybrid |
 | --- | --- | --- | --- |
 | Quick session actions on own sheet | Yes | Optional | Yes |
 | Full edit of own sheet | Yes | Optional | Yes |
 | Edit another player's shared sheet | By permission | Yes (with permission) | Yes |
 | Party overview | Optional | Yes | Yes |
-| DM tools (notes, bestiary, initiative, spells ref) | Optional | Yes | Yes |
+| GM tools (notes, bestiary, initiative, spells ref) | Optional | Yes | Yes |
 | Resolve sync conflicts | Own sheets | Shared/party sheets | Both |
 
 ## 4. Main User Flows
@@ -98,23 +98,23 @@ Success criteria:
 - deep edit does not degrade Play Mode speed;
 - unsaved local draft is never lost.
 
-### Flow C: DM Edits Player Sheet
+### Flow C: GM Edits Player Sheet
 
-1. DM opens party roster.
-2. DM opens shared player sheet (editor permission).
-3. DM applies change in Edit Mode.
+1. GM opens party roster.
+2. GM opens shared player sheet (editor permission).
+3. GM applies change in Edit Mode.
 4. Change is synced and appears in player's shared timeline.
 
 Success criteria:
 - explicit attribution for who changed what;
 - safe permissions (owner/editor model).
 
-### Flow D: Player Edits, DM Sees Updates
+### Flow D: Player Edits, GM Sees Updates
 
 1. Player edits own sheet locally.
 2. Sync publishes changes to cloud shared state.
-3. DM party view shows update marker and timestamp.
-4. DM can review diff and continue.
+3. GM party view shows update marker and timestamp.
+4. GM can review diff and continue.
 
 Success criteria:
 - near-real-time visibility online;
@@ -198,7 +198,7 @@ Priority rule:
 ### 6.5 Notes / Journal
 
 - notes, backstory, campaign log, allies/organizations;
-- session notes feed (player + DM shared visibility by permission).
+- session notes feed (player + GM shared visibility by permission).
 
 ### 6.6 Homebrew Extensions
 
@@ -229,9 +229,9 @@ Priority rule:
 - explicit save semantics (auto local + cloud status);
 - advanced forms, reorder lists, rule configuration.
 
-## 8. DM Workspace Structure
+## 8. GM Workspace Structure
 
-DM workspace must include:
+GM workspace must include:
 
 - party overview (all shared characters);
 - character access and edit entry;
@@ -246,12 +246,12 @@ DM workspace must include:
 In the old stage plan, Stage 1 was considered complete when:
 
 1. Positioning and product pillars are fixed.
-2. Role model (`Player`, `DM`, `Hybrid`) is explicit.
+2. Role model (`Player`, `GM`, `Hybrid`) is explicit.
 3. Five core user flows are documented and accepted.
 4. Local/cloud/last-sync/conflict model is defined.
 5. Character data schema is partitioned into core sections and homebrew extensions.
 6. Play Mode vs Edit Mode boundaries are fixed.
-7. DM workspace is treated as first-class in IA.
+7. GM workspace is treated as first-class in IA.
 
 ## 10. Notes For Implementation (Stage 2+)
 
@@ -266,7 +266,7 @@ In the old stage plan, Stage 1 was considered complete when:
 
 Stage 1 is now anchored in codebase foundations:
 
-1. Roles fixed (`Player`, `DM`, `Hybrid`) with persisted app-level role state.
+1. Roles fixed (`Player`, `GM`, `Hybrid`) with persisted app-level role state.
 2. Local/cloud/last-sync/conflict model formalized as typed sync state and persisted sync store.
 3. Conflict policy codified in helper logic (`collectConflictPaths`, `resolveSyncStatus`).
 4. Character schema extended for session/homebrew foundation (`sessionMode`, `conditions`, `customFields`, `customTrackers`, `customSections`, `customResources`, `customResetRules`, `customFeatureBlocks`, `customSpellLists`, `notesBlocks`).

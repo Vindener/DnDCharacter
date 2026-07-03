@@ -71,7 +71,7 @@ type SourceLabelArgs = {
 
 export function getChangeSourceLabel({ uid, actorRole, currentUid }: SourceLabelArgs): string {
   if (currentUid && uid && currentUid === uid) return 'редаговано вами';
-  if (actorRole === 'DM') return 'редаговано DM';
+  if (actorRole === 'DM') return 'редаговано GM';
   if (actorRole === 'Player') return 'редаговано гравцем';
   if (!uid) return 'редаговано віддалено';
   return `редаговано ${uid.slice(0, 6)}`;

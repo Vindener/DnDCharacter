@@ -1,5 +1,5 @@
 {
-  "title": "DM Tools",
+  "title": "GM Tools",
   "sections": {
     "party": "Party",
     "sharedCharacters": "Shared Characters",
@@ -9,7 +9,7 @@
   },
   "dashboard": {
     "partyOverviewTitle": "Party Overview",
-    "partyOverviewHint": "A DM-focused dashboard for party state, sharing, and sync risks.",
+    "partyOverviewHint": "A Game Master-focused dashboard for party state, sharing, and sync risks.",
     "campaigns": "Campaigns: {{count}}",
     "partySize": "Party size: {{count}}",
     "network": "Network: {{status}}",
@@ -47,15 +47,15 @@
   "quickEdit": {
     "ready": "Ready",
     "savedLocal": "Saved locally",
-    "syncing": "Syncing DM quick edit...",
+    "syncing": "Syncing GM quick edit...",
     "synced": "Synced",
     "syncError": "Sync error",
     "offlineQueue": "Offline queue",
-    "title": "DM Quick Edit",
+    "title": "GM Quick Edit",
     "notFound": "Character not found in local storage.",
-    "titleWithName": "DM Quick Edit • {{name}}",
+    "titleWithName": "GM Quick Edit • {{name}}",
     "characterFallback": "Character",
-    "hint": "Expanded quick editing with DM attribution and shared change history markers.",
+    "hint": "Expanded quick editing with Game Master attribution and shared change history markers.",
     "status": "Status: {{status}}",
     "openFullEdit": "Open full edit",
     "coreTitle": "HP / AC / Initiative",
@@ -172,7 +172,7 @@
     },
     "changeSources": {
       "you": "edited by you",
-      "dm": "edited by DM",
+      "dm": "edited by GM",
       "player": "edited by player",
       "remote": "edited remotely",
       "uid": "edited by {{uid}}"

@@ -11,6 +11,8 @@
   "labels": {
     "dice": "Dice",
     "diceType": "Dice Type",
+    "count": "Count",
+    "countLockedForD20Mode": "Advantage and disadvantage are always 1d20.",
     "modifier": "Modifier",
     "result": "Result",
     "history": "History",

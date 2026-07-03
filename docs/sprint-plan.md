@@ -17,7 +17,7 @@ Scope:
 
 Out of scope:
 - Full Character Sheet redesign.
-- DM Desktop.
+- GM Desktop.
 - Firebase schema changes.
 
 Definition of Done:
@@ -35,12 +35,12 @@ Make Home a fast start center for active play.
 Scope:
 - Continue Session block.
 - Character cards with HP, AC, initiative, and sync/share badges.
-- Quick actions for Create Character, Roll Dice, Spellbook, Bestiary, and DM tools.
-- DM preview when DM data exists.
+- Quick actions for Create Character, Roll Dice, Spellbook, Bestiary, and GM tools.
+- GM preview when GM data exists.
 - Sync status strip.
 
 Out of scope:
-- Full DM Desktop.
+- Full GM Desktop.
 - New cloud schema.
 - Deep Character Sheet redesign.
 
@@ -63,7 +63,7 @@ Scope:
 
 Out of scope:
 - Full rule automation engine.
-- DM Desktop.
+- GM Desktop.
 - Broad data model rewrite unless required by the screen polish.
 
 Definition of Done:
@@ -107,7 +107,7 @@ Scope:
 
 Out of scope:
 - Full spell rules automation.
-- DM Desktop.
+- GM Desktop.
 - New remote schema unless explicitly needed.
 
 Definition of Done:
@@ -118,7 +118,7 @@ Definition of Done:
 ## Sprint 6: Bestiary
 
 Goal:
-Make Bestiary a fast DM encounter tool.
+Make Bestiary a fast GM encounter tool.
 
 Scope:
 - Search.
@@ -129,18 +129,18 @@ Scope:
 
 Out of scope:
 - Full encounter builder rewrite.
-- DM Desktop.
+- GM Desktop.
 - Automated balancing engine unless explicitly requested.
 
 Definition of Done:
-- DM can quickly find, inspect, pin, and prepare monsters.
+- GM can quickly find, inspect, pin, and prepare monsters.
 - Monster mechanical data is not hidden deep in long text.
 - Loading, empty, and search states are clear.
 
-## Future Sprint: DM Desktop Workspace
+## Future Sprint: GM Desktop Workspace
 
 Goal:
-Create a larger DM workspace after the mobile player/DM UX polish cycle.
+Create a larger GM workspace after the mobile player/GM UX polish cycle.
 
 Scope ideas:
 - campaign workspace;

@@ -32,5 +32,10 @@
     "title": "Bestiary",
     "hint": "Import a monster book file into the local database.",
     "importBook": "Import Book"
+  },
+  "legal": {
+    "title": "Legal & Licenses",
+    "hint": "Review SRD 5.1, OGL 1.0a, and app license notices.",
+    "open": "Open Legal & Licenses"
   }
 }
