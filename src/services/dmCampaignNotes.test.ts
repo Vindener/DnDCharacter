@@ -47,6 +47,7 @@ vi.mock('@/services/dmCampaigns', () => ({
 }));
 
 import { loadLocalCampaignNotes } from '@/services/dmCampaignNotes';
+import { LATEST_SCHEMA_VERSION } from '@/domain/migrations';
 
 beforeEach(() => {
   storage.clear();
@@ -64,13 +65,13 @@ describe('dmCampaignNotes migration pipeline', () => {
     expect(notes).toHaveLength(1);
     expect(notes[0].id).toBe('legacy-old-1');
     expect(notes[0].campaignId).toBe('campaign-base');
-    expect(notes[0].schemaVersion).toBe(3);
+    expect(notes[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(storage.has('DM_NOTES_V2')).toBe(false);
     expect(storage.get('DM_NOTES_V2_MIGRATED_TO_CAMPAIGN_V1')).toBe('1');
 
     const stored = JSON.parse(storage.get('DM_CAMPAIGN_NOTES_V1') || '{}');
-    expect(stored.schemaVersion).toBe(3);
+    expect(stored.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(Array.isArray(stored.data)).toBe(true);
-    expect(stored.data[0].schemaVersion).toBe(3);
+    expect(stored.data[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
   });
 });

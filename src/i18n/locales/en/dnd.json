@@ -31,6 +31,27 @@
     "artificer": "Artificer",
     "custom": "Custom class"
   },
+  "races": {
+    "dragonborn": "Dragonborn",
+    "dwarf": "Dwarf",
+    "elf": "Elf",
+    "gnome": "Gnome",
+    "half-elf": "Half-Elf",
+    "half-orc": "Half-Orc",
+    "halfling": "Halfling",
+    "human": "Human",
+    "tiefling": "Tiefling"
+  },
+  "subraces": {
+    "hill-dwarf": "Hill Dwarf",
+    "mountain-dwarf": "Mountain Dwarf",
+    "high-elf": "High Elf",
+    "rock-gnome": "Rock Gnome",
+    "lightfoot": "Lightfoot"
+  },
+  "backgrounds": {
+    "acolyte": "Acolyte"
+  },
   "schools": {
     "abjuration": "Abjuration",
     "conjuration": "Conjuration",

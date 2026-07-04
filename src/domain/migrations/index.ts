@@ -1,6 +1,6 @@
 type AnyRecord = Record<string, unknown>;
 
-export const LATEST_SCHEMA_VERSION = 3;
+export const LATEST_SCHEMA_VERSION = 4;
 
 export type MigrationKind =
   | 'character'
@@ -46,6 +46,62 @@ const NOTE_GROUP_SEED: Array<{ key: string; title: string; order: number }> = [
 
 const APP_ROLES = new Set(['Player', 'DM', 'Hybrid']);
 
+const SRD_CLASS_NAME_TO_ID: Record<string, string> = {
+  barbarian: 'barbarian',
+  варвар: 'barbarian',
+  bard: 'bard',
+  бард: 'bard',
+  cleric: 'cleric',
+  клірик: 'cleric',
+  druid: 'druid',
+  друїд: 'druid',
+  fighter: 'fighter',
+  боєць: 'fighter',
+  paladin: 'paladin',
+  паладин: 'paladin',
+  ranger: 'ranger',
+  рейнджер: 'ranger',
+  monk: 'monk',
+  монах: 'monk',
+  rogue: 'rogue',
+  розбійник: 'rogue',
+  warlock: 'warlock',
+  чаклун: 'warlock',
+  wizard: 'wizard',
+  чарівник: 'wizard',
+  sorcerer: 'sorcerer',
+  чародій: 'sorcerer',
+};
+
+const SRD_RACE_NAME_TO_ID: Record<string, string> = {
+  dragonborn: 'dragonborn',
+  'драконороджений': 'dragonborn',
+  dwarf: 'dwarf',
+  дварф: 'dwarf',
+  elf: 'elf',
+  ельф: 'elf',
+  gnome: 'gnome',
+  гном: 'gnome',
+  'half-elf': 'half-elf',
+  halfelf: 'half-elf',
+  'half elf': 'half-elf',
+  напівельф: 'half-elf',
+  'half-orc': 'half-orc',
+  halforc: 'half-orc',
+  'half orc': 'half-orc',
+  напіворк: 'half-orc',
+  halfling: 'halfling',
+  галфлінг: 'halfling',
+  human: 'human',
+  людина: 'human',
+  tiefling: 'tiefling',
+  тіфлінг: 'tiefling',
+};
+
+const SRD_BACKGROUND_NAME_TO_ID: Record<string, string> = {
+  acolyte: 'acolyte',
+};
+
 function asRecord(value: unknown): AnyRecord {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
   return value as AnyRecord;
@@ -54,6 +110,10 @@ function asRecord(value: unknown): AnyRecord {
 function toTrimmedString(value: unknown, fallback = ''): string {
   if (value === null || value === undefined) return fallback;
   return String(value).trim();
+}
+
+function normalizeLookupKey(value: unknown): string {
+  return toTrimmedString(value).toLowerCase();
 }
 
 function toNumber(value: unknown, fallback = 0): number {
@@ -208,6 +268,88 @@ function migrateCharacterV2toV3(payload: unknown): unknown {
   return next;
 }
 
+function buildSrdContentSource(id: string, name: string) {
+  return {
+    origin: 'srd-5.1',
+    source: 'srd-5.1',
+    license: 'ogl-1.0a',
+    id,
+    name,
+    legacyCustom: false,
+  };
+}
+
+function buildHomebrewContentSource(id: string, name: string) {
+  return {
+    origin: 'homebrew',
+    source: 'homebrew',
+    license: 'custom',
+    id,
+    name,
+    legacyCustom: false,
+  };
+}
+
+function buildLegacyCustomContentSource(name: string) {
+  return {
+    origin: 'legacy-custom',
+    source: 'user-custom',
+    license: 'unknown',
+    name,
+    legacyCustom: true,
+  };
+}
+
+function migrateCharacterV3toV4(payload: unknown): unknown {
+  if (Array.isArray(payload)) return payload.map((item) => migrateCharacterV3toV4(item));
+
+  const record = asRecord(payload);
+  const next: AnyRecord = { ...record };
+  const contentSources = { ...asRecord(record.contentSources) };
+
+  const classText = toTrimmedString(record.class);
+  const classKey = normalizeLookupKey(classText);
+  if (!toTrimmedString(record.classId)) {
+    const classId = SRD_CLASS_NAME_TO_ID[classKey];
+    if (classId) {
+      next.classId = classId;
+      contentSources.class = buildSrdContentSource(classId, classText || classId);
+    } else if (classKey === 'artificer' || classKey === 'артифісер') {
+      contentSources.class = buildHomebrewContentSource('artificer', classText || 'Artificer');
+    } else if (classText) {
+      contentSources.class = buildLegacyCustomContentSource(classText);
+    }
+  }
+
+  const raceText = toTrimmedString(record.race);
+  const raceId = SRD_RACE_NAME_TO_ID[normalizeLookupKey(raceText)];
+  if (!toTrimmedString(record.raceId)) {
+    if (raceId) {
+      next.raceId = raceId;
+      contentSources.race = buildSrdContentSource(raceId, raceText || raceId);
+    } else if (raceText) {
+      contentSources.race = buildLegacyCustomContentSource(raceText);
+    }
+  }
+
+  const backgroundText = toTrimmedString(record.background);
+  const backgroundId = SRD_BACKGROUND_NAME_TO_ID[normalizeLookupKey(backgroundText)];
+  if (!toTrimmedString(record.backgroundId)) {
+    if (backgroundId) {
+      next.backgroundId = backgroundId;
+      contentSources.background = buildSrdContentSource(backgroundId, backgroundText || backgroundId);
+    } else if (backgroundText) {
+      contentSources.background = buildLegacyCustomContentSource(backgroundText);
+    }
+  }
+
+  if (Object.keys(contentSources).length) {
+    next.contentSources = contentSources;
+  }
+
+  return next;
+}
+
 function normalizeAppRole(payload: unknown): string {
   const role = toTrimmedString(payload);
   if (APP_ROLES.has(role)) return role;
@@ -271,6 +413,11 @@ export function migrateV2toV3(kind: MigrationKind, payload: unknown): unknown {
   return migrateKindV2toV3(kind, payload);
 }
 
+export function migrateV3toV4(kind: MigrationKind, payload: unknown): unknown {
+  if (kind === 'character') return migrateCharacterV3toV4(payload);
+  return payload;
+}
+
 export function migrateToLatest(kind: MigrationKind, payload: unknown, fromSchemaVersion = 1): unknown {
   const safeFrom = readSchemaVersion(fromSchemaVersion);
   let next = payload;
@@ -280,6 +427,9 @@ export function migrateToLatest(kind: MigrationKind, payload: unknown, fromSchem
   }
   if (safeFrom <= 2) {
     next = migrateV2toV3(kind, next);
+  }
+  if (safeFrom <= 3) {
+    next = migrateV3toV4(kind, next);
   }
 
   return stampPersistedSchemaVersion(kind, next);
@@ -334,4 +484,3 @@ export function createStorageEnvelope<T>(kind: MigrationKind, payload: T): Versi
     data: migrateToLatest(kind, payload, LATEST_SCHEMA_VERSION) as T,
   };
 }
-

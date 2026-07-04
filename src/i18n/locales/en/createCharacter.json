@@ -85,6 +85,7 @@
     "customSubrace": "Custom subrace",
     "noSubrace": "No subrace",
     "customClassOption": "Custom class...",
+    "homebrewClassLabel": "{{name}} (Homebrew)",
     "customClass": "Custom class",
     "customSubclass": "Custom subclass",
     "noSubclass": "Not selected yet",

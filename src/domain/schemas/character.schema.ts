@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { CharacterEntity, CharacterDraft, SkillProficiencyRank } from '@/domain/types';
+import type { CharacterContentSourceRef, CharacterEntity, CharacterDraft, SkillProficiencyRank } from '@/domain/types';
 import { parseHomebrew } from './homebrew.schema';
 import { normalizeCharacterSpells } from './spell.schema';
 import { asRecord, safeParseWithIssues, toBoolean, toFiniteStringRecord, toNumber, toString, toStringArray, toTrimmedString } from './utils';
@@ -96,6 +96,44 @@ function parseTraits(raw: unknown): CharacterEntity['traits'] {
   };
 }
 
+function parseContentSourceRef(raw: unknown): CharacterContentSourceRef {
+  const cast = asRecord(raw);
+  const origin = toTrimmedString(cast.origin);
+  const allowedOrigins = new Set(['srd-5.1', 'homebrew', 'custom', 'legacy-custom']);
+  const safeOrigin = allowedOrigins.has(origin) ? origin : 'legacy-custom';
+  const source = toTrimmedString(cast.source);
+  const license = toTrimmedString(cast.license);
+
+  return {
+    origin: safeOrigin as 'srd-5.1' | 'homebrew' | 'custom' | 'legacy-custom',
+    source: source === 'srd-5.1' || source === 'homebrew' || source === 'user-custom' ? source : undefined,
+    license: license === 'ogl-1.0a' || license === 'custom' || license === 'unknown' ? license : undefined,
+    id: toTrimmedString(cast.id) || undefined,
+    name: toTrimmedString(cast.name) || undefined,
+    legacyCustom: toBoolean(cast.legacyCustom, safeOrigin === 'legacy-custom'),
+  };
+}
+
+function parseContentSourceRefArray(raw: unknown): NonNullable<CharacterEntity['contentSources']>['featuresAndTraits'] {
+  if (!Array.isArray(raw)) return undefined;
+  const parsed = raw.map((item) => parseContentSourceRef(item));
+  return parsed.length ? parsed : undefined;
+}
+
+function parseContentSources(raw: unknown): CharacterEntity['contentSources'] {
+  const cast = asRecord(raw);
+  const contentSources: CharacterEntity['contentSources'] = {};
+
+  if (cast.race) contentSources.race = parseContentSourceRef(cast.race);
+  if (cast.subrace) contentSources.subrace = parseContentSourceRef(cast.subrace);
+  if (cast.class) contentSources.class = parseContentSourceRef(cast.class);
+  if (cast.background) contentSources.background = parseContentSourceRef(cast.background);
+  contentSources.featuresAndTraits = parseContentSourceRefArray(cast.featuresAndTraits);
+  contentSources.equipment = parseContentSourceRefArray(cast.equipment);
+
+  return Object.keys(contentSources).length ? contentSources : undefined;
+}
+
 function parseHitPoints(raw: unknown): CharacterEntity['hp'] {
   const cast = asRecord(raw);
   return {
@@ -147,9 +185,14 @@ function parseCharacterEntity(raw: unknown): CharacterEntity {
     name: toString(cast.name, ''),
     class: toString(cast.class, ''),
     subclass: toTrimmedString(cast.subclass) || undefined,
+    classId: toTrimmedString(cast.classId) || undefined,
     race: toString(cast.race, ''),
     subrace: toTrimmedString(cast.subrace) || undefined,
+    raceId: toTrimmedString(cast.raceId) || undefined,
+    subraceId: toTrimmedString(cast.subraceId) || undefined,
     background: toTrimmedString(cast.background) || undefined,
+    backgroundId: toTrimmedString(cast.backgroundId) || undefined,
+    contentSources: parseContentSources(cast.contentSources),
     level: Math.max(1, Math.floor(toNumber(cast.level, 1))),
     experience: Math.max(0, toNumber(cast.experience, 0)),
     initiative: toNumber(cast.initiative, 0),
@@ -222,7 +265,5 @@ export function safeParseCharacter(input: unknown) {
 export function normalizeCharacter(input: unknown): CharacterEntity {
   return parseCharacter(input);
 }
-
-
 
 

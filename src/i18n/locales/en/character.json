@@ -78,6 +78,9 @@
   "badges": {
     "localOnly": "Local only",
     "homebrew": "Homebrew",
+    "srd51": "SRD 5.1",
+    "custom": "Custom",
+    "legacyCustom": "Legacy custom",
     "offline": "Offline",
     "conflict": "Conflict"
   },
@@ -110,6 +113,8 @@
     "passivePerception": "Passive Perception",
     "proficiencies": "Proficiencies",
     "features": "Features and Traits",
+    "source": "Source",
+    "srdDetails": "SRD Details",
     "conditions": "Current Conditions"
   },
   "combat": {

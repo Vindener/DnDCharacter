@@ -4,6 +4,7 @@ import {
   parseCampaignNoteQueueItem,
   safeParseCampaignNoteFormInput,
 } from '@/domain/schemas';
+import { LATEST_SCHEMA_VERSION } from '@/domain/migrations';
 
 describe('campaignNote.schema', () => {
   it('normalizes note payload and sync status', () => {
@@ -19,7 +20,7 @@ describe('campaignNote.schema', () => {
     });
 
     expect(parsed.id).toBe('note-1');
-    expect(parsed.schemaVersion).toBe(3);
+    expect(parsed.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(parsed.campaignId).toBe('campaign-1');
     expect(parsed.title).toBe('Session');
     expect(parsed.syncStatus).toBe('Local only');
@@ -50,4 +51,3 @@ describe('campaignNote.schema', () => {
     expect(result.ok).toBe(false);
   });
 });
-

@@ -685,6 +685,28 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: 16,
       paddingLeft: sp(10),
     },
+    sourceFeatureRow: {
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: sp(8),
+      paddingVertical: sp(7),
+      gap: sp(4),
+      marginTop: sp(4),
+    },
+    sourceFeatureHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: sp(8),
+    },
+    sourceFeatureText: {
+      color: c.text,
+      fontSize: fs(12),
+      lineHeight: 18,
+      flex: 1,
+    },
 
     trackerCard: {
       borderRadius: rd(12),
@@ -949,6 +971,5 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '800',
     },
   });
-
 
 

@@ -85,6 +85,7 @@
     "customSubrace": "Власна підраса",
     "noSubrace": "Без підраси",
     "customClassOption": "Власний клас...",
+    "homebrewClassLabel": "{{name}} (хоумбрю)",
     "customClass": "Власний клас",
     "customSubclass": "Власний підклас",
     "noSubclass": "Ще не обрано",

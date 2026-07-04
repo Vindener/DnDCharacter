@@ -19,6 +19,7 @@ const { storage, asyncStorageMock } = vi.hoisted(() => {
 vi.mock('@react-native-async-storage/async-storage', () => ({ default: asyncStorageMock }));
 
 import { characterLocalRepository } from '@/repositories/characterLocalRepository';
+import { LATEST_SCHEMA_VERSION } from '@/domain/migrations';
 
 const CHARACTERS_STORAGE_KEY = 'characters';
 
@@ -46,7 +47,7 @@ describe('characterLocalRepository migration pipeline', () => {
 
     expect(characters).toHaveLength(1);
     expect(characters[0].id).toBe('char-legacy');
-    expect(characters[0].schemaVersion).toBe(3);
+    expect(characters[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(characters[0].customTrackers).toEqual([]);
   });
 
@@ -95,8 +96,8 @@ describe('characterLocalRepository migration pipeline', () => {
     ]);
 
     const stored = JSON.parse(storage.get(CHARACTERS_STORAGE_KEY) || '{}');
-    expect(stored.schemaVersion).toBe(3);
+    expect(stored.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(Array.isArray(stored.data)).toBe(true);
-    expect(stored.data[0].schemaVersion).toBe(3);
+    expect(stored.data[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
   });
 });

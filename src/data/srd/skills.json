@@ -1,0 +1,21 @@
+[
+  { "id": "acrobatics", "name": "Acrobatics", "ability": "dexterity", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "animalHandling", "name": "Animal Handling", "ability": "wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "arcana", "name": "Arcana", "ability": "intelligence", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "athletics", "name": "Athletics", "ability": "strength", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "deception", "name": "Deception", "ability": "charisma", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "history", "name": "History", "ability": "intelligence", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "insight", "name": "Insight", "ability": "wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "intimidation", "name": "Intimidation", "ability": "charisma", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "investigation", "name": "Investigation", "ability": "intelligence", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "medicine", "name": "Medicine", "ability": "wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "nature", "name": "Nature", "ability": "intelligence", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "perception", "name": "Perception", "ability": "wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "performance", "name": "Performance", "ability": "charisma", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "persuasion", "name": "Persuasion", "ability": "charisma", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "religion", "name": "Religion", "ability": "intelligence", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "sleightOfHand", "name": "Sleight of Hand", "ability": "dexterity", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "stealth", "name": "Stealth", "ability": "dexterity", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] },
+  { "id": "survival", "name": "Survival", "ability": "wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["skill"] }
+]
+

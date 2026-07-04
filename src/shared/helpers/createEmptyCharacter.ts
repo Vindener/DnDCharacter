@@ -29,9 +29,14 @@ export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterE
     name: overrides.name ?? '',
     class: overrides.class ?? '',
     subclass: overrides.subclass,
+    classId: overrides.classId,
     race: overrides.race ?? '',
     subrace: overrides.subrace,
+    raceId: overrides.raceId,
+    subraceId: overrides.subraceId,
     background: overrides.background,
+    backgroundId: overrides.backgroundId,
+    contentSources: overrides.contentSources,
     level: overrides.level ?? 1,
     experience: overrides.experience ?? 0,
     initiative: overrides.initiative ?? 0,
@@ -152,4 +157,3 @@ export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterE
 
   return parseCharacter(base);
 }
-

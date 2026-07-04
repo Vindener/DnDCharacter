@@ -1,4 +1,5 @@
 import type {
+  CharacterContentSourceRef,
   CharacterCustomField,
   CharacterCustomResource,
   CharacterCustomSection,
@@ -7,12 +8,23 @@ import type {
   CharacterTemplateId,
   SkillProficiencyRank,
 } from '@/domain/types';
-import { BACKGROUNDS } from '@/shared/const/Backgrounds';
-import { CLASS_OPTIONS } from '@/shared/const/CharacterClass';
-import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
-import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
 import { buildTemplatePatch } from '@/shared/const/CharacterTemplates';
-import { AbilityKey, RACES, RACE_OPTIONS } from '@/shared/const/Races';
+import {
+  getSrdBackgroundById,
+  getSrdBackgrounds,
+  getSrdClassById,
+  getSrdClasses,
+  getSrdProgressionFeatureNames,
+  getSrdRaceAbilityIncreases,
+  getSrdRaceById,
+  getSrdRaceFlexibleIncrease,
+  getSrdRaceLanguages,
+  getSrdRaceTraits,
+  getSrdRaces,
+  getSrdSubraceById,
+  getStartingEquipmentForClass,
+} from '@/domain/srd';
+import type { SrdAbilityId as AbilityKey, SrdClassFeature, SrdStartingEquipment } from '@/domain/srd';
 import { abilityMod, proficiencyBonus } from '@/shared/helpers/combat';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { rollDice as rollDiceWithService } from '@/shared/services/diceRoller';
@@ -25,6 +37,10 @@ export type ShareTarget = 'none' | 'dm' | 'player';
 
 export const TOTAL_CREATE_CHARACTER_STEPS = 11;
 export const ABILITY_KEYS: AbilityKey[] = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+export const SRD_CLASS_OPTIONS = getSrdClasses().map((item) => item.id);
+export const CREATE_CLASS_OPTIONS = [...SRD_CLASS_OPTIONS, 'artificer'];
+export const SRD_RACE_OPTIONS = getSrdRaces().map((item) => item.id);
+export const SRD_BACKGROUND_OPTIONS = getSrdBackgrounds().map((item) => item.id);
 
 export const ABILITY_NAMES_UA: Record<AbilityKey, string> = {
   strength: 'Сила',
@@ -67,42 +83,66 @@ const DEFAULT_ROLL_STATS: Record<AbilityKey, number> = {
   charisma: 12,
 };
 
-const BG_COINS: Record<string, number> = {
-  acolyte: 15,
-  criminal: 15,
-  soldier: 10,
-  entertainer: 15,
-  folkhero: 10,
-  guildartisan: 15,
-  hermit: 5,
-  noble: 25,
-  outlander: 10,
-  sage: 10,
-  sailor: 10,
-  urchin: 10,
+type CreateClassDefinition = {
+  id: string;
+  name: string;
+  source: 'srd-5.1' | 'homebrew';
+  license: 'ogl-1.0a' | 'custom';
+  tags: string[];
+  hitDie: number;
+  primaryAbilities: AbilityKey[];
+  savingThrows: AbilityKey[];
+  proficiencies: string[];
+  spellcastingAbility?: AbilityKey;
+  skillChoices: { choose: number; from: SkillKey[] };
+  startingEquipment: SrdStartingEquipment;
+  features: Array<Omit<SrdClassFeature, 'source' | 'license'> & { source: 'srd-5.1' | 'homebrew'; license: 'ogl-1.0a' | 'custom' }>;
 };
 
-const BACKGROUND_SKILL_MAP: Record<string, SkillKey> = {
-  Акробатика: 'acrobatics',
-  'Догляд за тваринами': 'animalHandling',
-  Тваринництво: 'animalHandling',
-  Аркана: 'arcana',
-  Атлетика: 'athletics',
-  Обман: 'deception',
-  Історія: 'history',
-  Проникливість: 'insight',
-  Залякування: 'intimidation',
-  Розслідування: 'investigation',
-  Медицина: 'medicine',
-  Природа: 'nature',
-  Увага: 'perception',
-  Виступ: 'performance',
-  Переконання: 'persuasion',
-  Релігія: 'religion',
-  'Спритність рук': 'sleightOfHand',
-  Скритність: 'stealth',
-  Виживання: 'survival',
+const HOMEBREW_ARTIFICER: CreateClassDefinition = {
+  id: 'artificer',
+  name: 'Artificer',
+  source: 'homebrew',
+  license: 'custom',
+  tags: ['homebrew', 'class'],
+  hitDie: 8,
+  primaryAbilities: ['intelligence'],
+  savingThrows: ['constitution', 'intelligence'],
+  proficiencies: ['Light armor', 'Medium armor', 'Shields', 'Simple weapons', "Artisan's tools"],
+  spellcastingAbility: 'intelligence',
+  skillChoices: {
+    choose: 2,
+    from: ['arcana', 'history', 'investigation', 'medicine', 'nature', 'perception', 'sleightOfHand'],
+  },
+  startingEquipment: {
+    base: ['Leather armor', "Artisan's tools"],
+    choices: [
+      { label: 'Weapon', options: ['Any simple weapon'] },
+      { label: 'Pack', options: ["Scholar's pack", "Explorer's pack"] },
+    ],
+  },
+  features: [
+    {
+      id: 'artificer-homebrew-marker',
+      name: 'Artificer',
+      level: 1,
+      summary: 'Homebrew/non-SRD class preserved separately from SRD 5.1 data.',
+      source: 'homebrew',
+      license: 'custom',
+      tags: ['homebrew', 'class-feature'],
+    },
+  ],
 };
+
+export function getCreateClassById(classId: string): CreateClassDefinition | undefined {
+  if (classId === 'artificer') return HOMEBREW_ARTIFICER;
+  return getSrdClassById(classId);
+}
+
+export function getCreateStartingEquipmentForClass(classId: string): SrdStartingEquipment | undefined {
+  if (classId === 'artificer') return HOMEBREW_ARTIFICER.startingEquipment;
+  return getStartingEquipmentForClass(classId);
+}
 
 export interface CreateCharacterDraft {
   step: number;
@@ -212,12 +252,12 @@ export interface AbilityRollResult {
 }
 
 export function createInitialDraft(): CreateCharacterDraft {
-  const selectedClass = CLASS_OPTIONS[0] || 'fighter';
-  const raceKey = RACE_OPTIONS[0] || 'human';
-  const backgroundKey = BACKGROUNDS[0]?.key || 'custom';
+  const selectedClass = CREATE_CLASS_OPTIONS[0] || 'fighter';
+  const raceKey = SRD_RACE_OPTIONS[0] || 'human';
+  const backgroundKey = SRD_BACKGROUND_OPTIONS[0] || 'custom';
   const level = '1';
-  const hitDie = CLASS_PRESETS[selectedClass]?.hitDie ?? 8;
-  const speed = RACES[raceKey]?.speed ?? 30;
+  const hitDie = getCreateClassById(selectedClass)?.hitDie ?? 8;
+  const speed = getSrdRaceById(raceKey)?.speed ?? 30;
 
   return {
     step: 1,
@@ -267,12 +307,12 @@ export function createInitialDraft(): CreateCharacterDraft {
     armor: '',
     shield: false,
     toolsText: '',
-    currencyGold: String(BG_COINS[backgroundKey] || 0),
+    currencyGold: String(getSrdBackgroundById(backgroundKey)?.startingGold ?? 0),
     currencySilver: '0',
     currencyCopper: '0',
     startingPack: '',
-    magicEnabled: Boolean(CLASS_PRESETS[selectedClass]?.spellcastingAbility),
-    spellcastingAbility: (CLASS_PRESETS[selectedClass]?.spellcastingAbility as AbilityKey | undefined) ?? 'intelligence',
+    magicEnabled: Boolean(getCreateClassById(selectedClass)?.spellcastingAbility),
+    spellcastingAbility: getCreateClassById(selectedClass)?.spellcastingAbility ?? 'intelligence',
     spellSaveDC: '',
     spellAttackBonus: '',
     cantripsText: '',
@@ -344,7 +384,7 @@ export function applyStartMethod(draft: CreateCharacterDraft, method: StartMetho
       stats: { ...STANDARD_ARRAY },
       selectedClass: draft.selectedClass === 'custom' ? 'fighter' : draft.selectedClass,
       useCustomRace: false,
-      magicEnabled: Boolean(CLASS_PRESETS[draft.selectedClass]?.spellcastingAbility),
+      magicEnabled: Boolean(getCreateClassById(draft.selectedClass)?.spellcastingAbility),
     };
     return applyDerivedDefaults(next, { forceCombat: true, forceEquipment: true });
   }
@@ -371,7 +411,7 @@ export function applyStartMethod(draft: CreateCharacterDraft, method: StartMetho
       startMethod: method,
       characterTemplateId: 'standard-5e' as CharacterTemplateId,
       useCustomRace: false,
-      selectedClass: draft.selectedClass === 'custom' ? CLASS_OPTIONS[0] || 'fighter' : draft.selectedClass,
+      selectedClass: draft.selectedClass === 'custom' ? CREATE_CLASS_OPTIONS[0] || 'fighter' : draft.selectedClass,
       statMethod: draft.statMethod === 'manual' ? 'array' : draft.statMethod,
     };
     return applyDerivedDefaults(next, { forceCombat: true });
@@ -385,7 +425,7 @@ export function applyDerivedDefaults(
   options: { forceCombat?: boolean; forceEquipment?: boolean } = {},
 ): CreateCharacterDraft {
   const defaults = deriveDraftDefaults(draft);
-  const spellAbility = (CLASS_PRESETS[draft.selectedClass]?.spellcastingAbility as AbilityKey | undefined) ?? draft.spellcastingAbility;
+  const spellAbility = getCreateClassById(draft.selectedClass)?.spellcastingAbility ?? draft.spellcastingAbility;
   const spellMod = abilityMod(defaults.finalStats[spellAbility] ?? 10);
   const proficiency = defaults.defaultProficiencyBonus;
   const saveDc = 8 + proficiency + spellMod;
@@ -405,7 +445,7 @@ export function applyDerivedDefaults(
     armor: options.forceEquipment ? selectedGear.find((item) => looksLikeArmor(item)) || draft.armor : draft.armor,
     shield: options.forceEquipment ? selectedGear.some((item) => item.toLowerCase().includes('щит')) : draft.shield,
     startingPack: options.forceEquipment ? selectedGear.filter((item) => !looksLikeWeapon(item) && !looksLikeArmor(item)).join('\n') : draft.startingPack,
-    currencyGold: draft.currencyGold || String(BG_COINS[draft.backgroundKey] || 0),
+    currencyGold: draft.currencyGold || String(getSrdBackgroundById(draft.backgroundKey)?.startingGold ?? 0),
     magicEnabled: draft.magicEnabled || defaults.isCaster,
     spellcastingAbility: spellAbility,
     spellSaveDC: draft.spellSaveDC || String(saveDc),
@@ -415,19 +455,20 @@ export function applyDerivedDefaults(
 
 export function deriveDraftDefaults(draft: CreateCharacterDraft): DraftDefaults {
   const level = parseInteger(draft.level, 1);
-  const raceDef = draft.useCustomRace ? undefined : RACES[draft.raceKey];
-  const subraceDef = !draft.useCustomRace && draft.subraceKey ? raceDef?.subraces?.[draft.subraceKey] : undefined;
+  const raceDef = draft.useCustomRace ? undefined : getSrdRaceById(draft.raceKey);
+  const subraceDef = !draft.useCustomRace && draft.subraceKey ? getSrdSubraceById(draft.raceKey, draft.subraceKey) : undefined;
   const baseStats = getBaseStats(draft);
   const racialBonus = createEmptyStats();
+  const abilityIncreases = draft.useCustomRace ? {} : getSrdRaceAbilityIncreases(draft.raceKey, draft.subraceKey);
 
   ABILITY_KEYS.forEach((ability) => {
-    const raceValue = raceDef?.asi?.[ability];
-    const subraceValue = subraceDef?.asi?.[ability];
+    const raceValue = abilityIncreases[ability];
+    const subraceValue = undefined;
     if (typeof raceValue === 'number') racialBonus[ability] += raceValue;
     if (typeof subraceValue === 'number') racialBonus[ability] += subraceValue;
   });
 
-  const flex = subraceDef?.flexible || raceDef?.flexible;
+  const flex = draft.useCustomRace ? undefined : getSrdRaceFlexibleIncrease(draft.raceKey, draft.subraceKey);
   if (flex?.count === 2) {
     const excluded = new Set(flex.exclude || []);
     if (!excluded.has(draft.flexPick1)) racialBonus[draft.flexPick1] += 1;
@@ -439,13 +480,13 @@ export function deriveDraftDefaults(draft: CreateCharacterDraft): DraftDefaults 
     finalStats[ability] = baseStats[ability] + racialBonus[ability];
   });
 
-  const classPreset = CLASS_PRESETS[draft.selectedClass];
+  const classPreset = getCreateClassById(draft.selectedClass);
   const hitDie = classPreset?.hitDie ?? 8;
   const defaultHp = Math.max(1, hitDie + abilityMod(finalStats.constitution));
   const defaultSpeed = raceDef?.speed ?? parseInteger(draft.speed, 30);
   const defaultInitiative = abilityMod(finalStats.dexterity);
   const defaultProficiencyBonus = proficiencyBonus(level);
-  const gearDef = draft.selectedClass !== 'custom' ? CLASS_GEAR[draft.selectedClass] : undefined;
+  const gearDef = draft.selectedClass !== 'custom' ? getCreateStartingEquipmentForClass(draft.selectedClass) : undefined;
   const selectedGear = gearDef
     ? [
         ...gearDef.base,
@@ -453,7 +494,7 @@ export function deriveDraftDefaults(draft: CreateCharacterDraft): DraftDefaults 
       ]
     : [];
 
-  const backgroundDef = BACKGROUNDS.find((item) => item.key === draft.backgroundKey);
+  const backgroundDef = getSrdBackgroundById(draft.backgroundKey);
   const isCaster = Boolean(classPreset?.spellcastingAbility);
 
   return {
@@ -463,7 +504,7 @@ export function deriveDraftDefaults(draft: CreateCharacterDraft): DraftDefaults 
     pointBuySpent: pointBuySpent(draft.pointBuyStats),
     pointBuyValid: pointBuySpent(draft.pointBuyStats) <= POINT_BUY_BUDGET,
     resolvedRace: draft.useCustomRace ? draft.customRace.trim() : raceDef?.name || draft.raceKey,
-    resolvedSubrace: draft.useCustomRace ? draft.customSubrace.trim() || undefined : draft.subraceKey || undefined,
+    resolvedSubrace: draft.useCustomRace ? draft.customSubrace.trim() || undefined : subraceDef?.name || undefined,
     resolvedClassName: draft.selectedClass === 'custom' ? draft.customClassName.trim() : draft.selectedClass,
     resolvedSubclass: draft.selectedClass === 'custom' ? draft.customSubclass.trim() || undefined : draft.subclass || undefined,
     resolvedBackground: draft.backgroundKey === 'custom' ? draft.customBackground.trim() : backgroundDef?.name || draft.backgroundKey,
@@ -501,7 +542,7 @@ export function pointBuySpent(stats: Record<AbilityKey, number>): number {
 }
 
 export function createSavingThrowDefaults(selectedClass: string): Record<AbilityKey, boolean> {
-  const savingThrows = new Set(CLASS_PRESETS[selectedClass]?.savingThrows || []);
+  const savingThrows = new Set(getCreateClassById(selectedClass)?.savingThrows || []);
   return {
     strength: savingThrows.has('strength'),
     dexterity: savingThrows.has('dexterity'),
@@ -513,25 +554,24 @@ export function createSavingThrowDefaults(selectedClass: string): Record<Ability
 }
 
 export function buildBackgroundMechanics(backgroundKey: string): BackgroundMechanics {
-  const background = BACKGROUNDS.find((item) => item.key === backgroundKey);
+  const background = getSrdBackgroundById(backgroundKey);
   if (!background) {
     return { skillProficiencies: {}, tools: [], proficiencies: [] };
   }
 
   const skillProficiencies: Partial<Record<SkillKey, SkillProficiencyRank>> = {};
-  background.skills.forEach((label) => {
-    const skill = BACKGROUND_SKILL_MAP[label];
-    if (skill) skillProficiencies[skill] = 'proficient';
+  background.skills.forEach((skill) => {
+    skillProficiencies[skill] = 'proficient';
   });
 
-  const proficiencies = [...background.skills];
-  if (background.languages) proficiencies.push(`Мови: +${background.languages}`);
+  const proficiencies: string[] = [...background.skills];
+  if (background.languages) proficiencies.push(`Languages: +${background.languages}`);
 
   return {
     skillProficiencies,
     tools: background.tools || [],
     proficiencies,
-    featureText: `${background.featureName}: ${background.featureDescription}`,
+    featureText: `${background.feature.name}: ${background.feature.summary}`,
   };
 }
 
@@ -578,20 +618,41 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
   const templatePatch = buildTemplatePatch(normalized.characterTemplateId);
   const backgroundMechanics = defaults.backgroundMechanics;
   const proficiencies = [
-    ...(CLASS_PRESETS[normalized.selectedClass]?.proficiencies || []),
+    ...(getCreateClassById(normalized.selectedClass)?.proficiencies || []),
     ...backgroundMechanics.proficiencies,
     ...backgroundMechanics.tools,
   ];
   if (backgroundMechanics.featureText) proficiencies.push(backgroundMechanics.featureText);
+  const raceLanguages = normalized.useCustomRace ? [] : getSrdRaceLanguages(normalized.raceKey, normalized.subraceKey);
+  if (raceLanguages.length) proficiencies.push(`Languages: ${raceLanguages.join(', ')}`);
+
+  const srdRaceTraits = normalized.useCustomRace ? [] : getSrdRaceTraits(normalized.raceKey, normalized.subraceKey);
+  const classFeatureNames = normalized.selectedClass === 'custom'
+    ? []
+    : getSrdProgressionFeatureNames(normalized.selectedClass, level);
+  const classFeatureSummaries = (getCreateClassById(normalized.selectedClass)?.features || [])
+    .filter((feature) => feature.level <= level)
+    .map((feature) => `${feature.name}: ${feature.summary}`);
+  const featuresAndTraits = Array.from(new Set([
+    ...srdRaceTraits.map((trait) => `${trait.name}: ${trait.summary}`),
+    ...classFeatureNames,
+    ...classFeatureSummaries,
+  ].filter(Boolean)));
+  const featureSources = buildFeatureSourceRefs(normalized, srdRaceTraits, classFeatureNames.length + classFeatureSummaries.length);
 
   const character = createEmptyCharacter({
     id,
     name: normalized.name.trim(),
     class: defaults.resolvedClassName,
     subclass: defaults.resolvedSubclass,
+    classId: normalized.selectedClass !== 'custom' && normalized.selectedClass !== 'artificer' ? normalized.selectedClass : undefined,
     race: defaults.resolvedRace,
     subrace: defaults.resolvedSubrace,
+    raceId: normalized.useCustomRace ? undefined : normalized.raceKey,
+    subraceId: normalized.useCustomRace ? undefined : normalized.subraceKey || undefined,
     background: defaults.resolvedBackground || undefined,
+    backgroundId: normalized.backgroundKey !== 'custom' ? normalized.backgroundKey : undefined,
+    contentSources: buildContentSources(normalized, featureSources),
     level,
     stats: defaults.finalStats,
     skills: autoFillSkills(defaults.finalStats),
@@ -603,7 +664,7 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
     ac: parseInteger(normalized.ac, 10),
     speed: parseInteger(normalized.speed, defaults.defaultSpeed),
     initiative: parseInteger(normalized.initiative, defaults.defaultInitiative),
-    proficiencies,
+    proficiencies: Array.from(new Set(proficiencies)),
     tools: splitLines(normalized.toolsText).concat(backgroundMechanics.tools),
     inventory: buildInventory(normalized, defaults.selectedGear),
     equipment: {
@@ -634,6 +695,7 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
       bonds: normalized.bonds.trim(),
       flaws: normalized.flaws.trim(),
     },
+    featuresAndTraits,
     notes: buildNotes(normalized),
     backstory: normalized.backstory.trim() || undefined,
     campaign: normalized.campaign.trim() || undefined,
@@ -741,6 +803,93 @@ function parseSpellSlots(value: string): CharacterEntity['spells']['spellSlots']
     slots[Number(match[1])] = { max: Math.max(0, Number(match[2])), used: 0 };
   });
   return slots;
+}
+
+function srdSourceRef(id: string, name: string): CharacterContentSourceRef {
+  return {
+    origin: 'srd-5.1',
+    source: 'srd-5.1',
+    license: 'ogl-1.0a',
+    id,
+    name,
+    legacyCustom: false,
+  };
+}
+
+function homebrewSourceRef(id: string, name: string): CharacterContentSourceRef {
+  return {
+    origin: 'homebrew',
+    source: 'homebrew',
+    license: 'custom',
+    id,
+    name,
+    legacyCustom: false,
+  };
+}
+
+function customSourceRef(name: string): CharacterContentSourceRef {
+  return {
+    origin: 'custom',
+    source: 'user-custom',
+    license: 'custom',
+    name,
+    legacyCustom: false,
+  };
+}
+
+function buildFeatureSourceRefs(
+  draft: CreateCharacterDraft,
+  raceTraits: Array<{ id: string; name: string }>,
+  classFeatureCount: number,
+): CharacterContentSourceRef[] {
+  const refs = raceTraits.map((trait) => srdSourceRef(trait.id, trait.name));
+  if (draft.selectedClass === 'artificer') {
+    for (let index = 0; index < classFeatureCount; index += 1) {
+      refs.push(homebrewSourceRef('artificer', 'Artificer'));
+    }
+    return refs;
+  }
+  if (draft.selectedClass !== 'custom') {
+    for (let index = 0; index < classFeatureCount; index += 1) {
+      refs.push(srdSourceRef(draft.selectedClass, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass));
+    }
+  }
+  return refs;
+}
+
+function buildContentSources(
+  draft: CreateCharacterDraft,
+  featureSources: CharacterContentSourceRef[],
+): CharacterEntity['contentSources'] {
+  const race = draft.useCustomRace
+    ? customSourceRef(draft.customRace.trim() || 'Custom race')
+    : srdSourceRef(draft.raceKey, getSrdRaceById(draft.raceKey)?.name || draft.raceKey);
+  const subrace = draft.useCustomRace
+    ? (draft.customSubrace.trim() ? customSourceRef(draft.customSubrace.trim()) : undefined)
+    : draft.subraceKey
+      ? srdSourceRef(draft.subraceKey, getSrdSubraceById(draft.raceKey, draft.subraceKey)?.name || draft.subraceKey)
+      : undefined;
+  const classSource = draft.selectedClass === 'custom'
+    ? customSourceRef(draft.customClassName.trim() || 'Custom class')
+    : draft.selectedClass === 'artificer'
+      ? homebrewSourceRef('artificer', 'Artificer')
+      : srdSourceRef(draft.selectedClass, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass);
+  const background = draft.backgroundKey === 'custom'
+    ? customSourceRef(draft.customBackground.trim() || 'Custom background')
+    : srdSourceRef(draft.backgroundKey, getSrdBackgroundById(draft.backgroundKey)?.name || draft.backgroundKey);
+
+  return {
+    race,
+    subrace,
+    class: classSource,
+    background,
+    featuresAndTraits: featureSources.length ? featureSources : undefined,
+    equipment: draft.selectedClass === 'artificer'
+      ? [homebrewSourceRef('artificer-starting-equipment', 'Artificer starting equipment')]
+      : draft.selectedClass === 'custom'
+        ? undefined
+        : [srdSourceRef(`${draft.selectedClass}-starting-equipment`, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass)],
+  };
 }
 
 function templateCustomFields(draft: CreateCharacterDraft): CharacterCustomField[] {

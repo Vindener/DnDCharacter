@@ -15,6 +15,7 @@ import type {
   CharacterCustomResource,
   CharacterViewModel,
   CharacterHomebrewEntry,
+  CharacterContentSourceRef,
   CustomFieldType,
   SkillProficiencyRank,
   TrackerResetRule,
@@ -60,6 +61,12 @@ import {
   MIN_CHARACTER_LEVEL,
   type LevelChangeDraftValues,
 } from './levelChange';
+import {
+  getSrdClassFeaturesAtLevel,
+  getSrdProgressionFeatureNames,
+  getSrdRaceTraits,
+} from '@/domain/srd';
+import { CharacterSourceBadge } from '../components/CharacterSourceBadge';
 
 interface CharacterProps {
   route: {
@@ -75,6 +82,11 @@ type BadgeKind = 'neutral' | 'success' | 'warning' | 'accent' | 'danger';
 type SyncBadge = { id: string; label: string; kind: BadgeKind };
 type RollResult = { title: string; details: string[] };
 type Translate = (key: string, options?: Record<string, unknown>) => string;
+type SourceFeatureRow = {
+  id: string;
+  text: string;
+  source?: CharacterContentSourceRef;
+};
 type ContextRollRequest =
   | { kind: 'ability'; title: string; label: string; baseModifier: number }
   | { kind: 'saving-throw'; title: string; label: string; baseModifier: number; proficient: boolean }
@@ -1661,6 +1673,66 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     return entries.sort((a, b) => b[1] - a[1]);
   }, [characterData.skillProficiencies, characterData.skills, characterData.stats, proficiency]);
 
+  const sourceFeatureRows = useMemo<SourceFeatureRow[]>(() => {
+    const rows: SourceFeatureRow[] = [];
+    const featureSources = characterData.contentSources?.featuresAndTraits || [];
+    const seen = new Set<string>();
+    const pushRow = (id: string, text: string, source?: CharacterContentSourceRef) => {
+      const safeText = String(text || '').trim();
+      if (!safeText || seen.has(safeText.toLowerCase())) return;
+      seen.add(safeText.toLowerCase());
+      rows.push({ id, text: safeText, source });
+    };
+
+    (characterData.featuresAndTraits || []).forEach((feature, index) => {
+      pushRow(`saved-${index}`, feature, featureSources[index]);
+    });
+
+    getSrdRaceTraits(characterData.raceId, characterData.subraceId).forEach((trait) => {
+      pushRow(`race-${trait.id}`, `${trait.name}: ${trait.summary}`, {
+        origin: 'srd-5.1',
+        source: 'srd-5.1',
+        license: 'ogl-1.0a',
+        id: trait.id,
+        name: trait.name,
+      });
+    });
+
+    getSrdClassFeaturesAtLevel(characterData.classId, characterData.level).forEach((feature) => {
+      pushRow(`class-${feature.id}`, `${feature.name}: ${feature.summary}`, {
+        origin: 'srd-5.1',
+        source: 'srd-5.1',
+        license: 'ogl-1.0a',
+        id: feature.id,
+        name: feature.name,
+      });
+    });
+
+    getSrdProgressionFeatureNames(characterData.classId, characterData.level).forEach((feature, index) => {
+      pushRow(`progression-${index}-${feature}`, feature, {
+        origin: 'srd-5.1',
+        source: 'srd-5.1',
+        license: 'ogl-1.0a',
+        id: characterData.classId,
+        name: feature,
+      });
+    });
+
+    if (!rows.length && characterData.contentSources?.class) {
+      pushRow('class-source', characterData.contentSources.class.name || characterData.class, characterData.contentSources.class);
+    }
+
+    return rows;
+  }, [
+    characterData.class,
+    characterData.classId,
+    characterData.contentSources,
+    characterData.featuresAndTraits,
+    characterData.level,
+    characterData.raceId,
+    characterData.subraceId,
+  ]);
+
   const syncBadges = useMemo(() => {
     const badges: SyncBadge[] = [];
     const seen = new Set<string>();
@@ -1740,6 +1812,29 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     colors,
     styles.badge,
     styles.badgeText,
+  ]);
+
+  const renderSourceBadge = useCallback((source: CharacterContentSourceRef | undefined, id: string) => {
+    return <CharacterSourceBadge source={source} id={id} styles={styles} />;
+  }, [styles]);
+
+  const renderFeatureRows = useCallback((rows: SourceFeatureRow[]) => {
+    if (!rows.length) return <Text style={styles.blockText}>{t('empty.none')}</Text>;
+    return rows.map((row) => (
+      <View key={row.id} style={styles.sourceFeatureRow}>
+        <View style={styles.sourceFeatureHeader}>
+          <Text style={styles.sourceFeatureText}>{row.text}</Text>
+          {renderSourceBadge(row.source, row.id)}
+        </View>
+      </View>
+    ));
+  }, [
+    renderSourceBadge,
+    styles.blockText,
+    styles.sourceFeatureHeader,
+    styles.sourceFeatureRow,
+    styles.sourceFeatureText,
+    t,
   ]);
 
   const renderConditionList = (emptyLabel: string) =>
@@ -1865,7 +1960,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             <Text style={styles.subSectionTitle}>{t('overview.proficiencies')}</Text>
             <Text style={styles.blockText}>{characterData.proficiencies.length ? characterData.proficiencies.join(', ') : t('empty.none')}</Text>
             <Text style={styles.subSectionTitle}>{t('overview.features')}</Text>
-            <Text style={styles.blockText}>{characterData.featuresAndTraits?.length ? characterData.featuresAndTraits.join(', ') : t('empty.none')}</Text>
+            {renderFeatureRows(sourceFeatureRows)}
             <Text style={styles.subSectionTitle}>{t('overview.conditions')}</Text>
             {renderConditionList(t('empty.noActiveConditions'))}
           </>
@@ -2433,6 +2528,8 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         '2',
         { keyboardType: 'number-pad' },
       )}
+      <Text style={styles.subSectionTitle}>{t('overview.srdDetails')}</Text>
+      {renderFeatureRows(sourceFeatureRows)}
       <Text style={styles.subSectionTitle}>{t('overview.abilityScores')}</Text>
       <View style={styles.levelModalStatsGrid}>
         {STAT_LABELS.map((stat) => (

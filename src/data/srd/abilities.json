@@ -1,0 +1,9 @@
+[
+  { "id": "strength", "name": "Strength", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "physical"] },
+  { "id": "dexterity", "name": "Dexterity", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "physical"] },
+  { "id": "constitution", "name": "Constitution", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "physical"] },
+  { "id": "intelligence", "name": "Intelligence", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "mental"] },
+  { "id": "wisdom", "name": "Wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "mental"] },
+  { "id": "charisma", "name": "Charisma", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "mental"] }
+]
+

@@ -109,15 +109,40 @@ export interface CharacterCombatTemplates {
   reactions?: string[];
 }
 
+export type CharacterContentOrigin = 'srd-5.1' | 'homebrew' | 'custom' | 'legacy-custom';
+
+export interface CharacterContentSourceRef {
+  origin: CharacterContentOrigin;
+  source?: 'srd-5.1' | 'homebrew' | 'user-custom';
+  license?: 'ogl-1.0a' | 'custom' | 'unknown';
+  id?: string;
+  name?: string;
+  legacyCustom?: boolean;
+}
+
+export interface CharacterContentSources {
+  race?: CharacterContentSourceRef;
+  subrace?: CharacterContentSourceRef;
+  class?: CharacterContentSourceRef;
+  background?: CharacterContentSourceRef;
+  featuresAndTraits?: CharacterContentSourceRef[];
+  equipment?: CharacterContentSourceRef[];
+}
+
 export interface CharacterModelBase {
   schemaVersion?: number;
   id: string;
   name: string;
   class: string;
   subclass?: string;
+  classId?: string;
   race: string;
   subrace?: string;
+  raceId?: string;
+  subraceId?: string;
   background?: string;
+  backgroundId?: string;
+  contentSources?: CharacterContentSources;
   level: number;
   experience: number;
   initiative: number;
@@ -177,5 +202,4 @@ export type CharacterDto = CharacterModelBase;
 export type CharacterDraft = Partial<Omit<CharacterEntity, 'id'>> & { id?: string };
 
 export type CharacterViewModel = CharacterEntity;
-
 

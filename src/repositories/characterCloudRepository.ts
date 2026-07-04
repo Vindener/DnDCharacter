@@ -28,8 +28,13 @@ export type CharacterSheet = {
   name: string;
   class: string;
   subclass?: string;
+  classId?: CharacterDto['classId'];
   race: string;
   subrace?: string;
+  raceId?: CharacterDto['raceId'];
+  subraceId?: CharacterDto['subraceId'];
+  backgroundId?: CharacterDto['backgroundId'];
+  contentSources?: CharacterDto['contentSources'];
 
   level: number;
   experience: number;
@@ -199,8 +204,13 @@ function toSheetSnapshotDoc(id: string, raw: unknown): CharacterSheet {
     name: normalizedDto.name,
     class: normalizedDto.class,
     subclass: normalizedDto.subclass,
+    classId: normalizedDto.classId,
     race: normalizedDto.race,
     subrace: normalizedDto.subrace,
+    raceId: normalizedDto.raceId,
+    subraceId: normalizedDto.subraceId,
+    backgroundId: normalizedDto.backgroundId,
+    contentSources: normalizedDto.contentSources,
 
     level: normalizedDto.level,
     experience: normalizedDto.experience,
@@ -273,8 +283,13 @@ function dtoToSheet(dto: CharacterCloudDto): CharacterSheet {
     name: normalizedDto.name,
     class: normalizedDto.class,
     subclass: normalizedDto.subclass,
+    classId: normalizedDto.classId,
     race: normalizedDto.race,
     subrace: normalizedDto.subrace,
+    raceId: normalizedDto.raceId,
+    subraceId: normalizedDto.subraceId,
+    backgroundId: normalizedDto.backgroundId,
+    contentSources: normalizedDto.contentSources,
 
     level: normalizedDto.level,
     experience: normalizedDto.experience,
@@ -693,7 +708,6 @@ export const characterCloudRepository: CharacterCloudRepository = {
   removeEditor,
   getEditorsForSheet,
 };
-
 
 
 

@@ -78,6 +78,9 @@
   "badges": {
     "localOnly": "Лише локально",
     "homebrew": "Власне",
+    "srd51": "SRD 5.1",
+    "custom": "Власне",
+    "legacyCustom": "Застаріле власне",
     "offline": "Офлайн",
     "conflict": "Конфлікт"
   },
@@ -110,6 +113,8 @@
     "passivePerception": "Пасивне сприйняття",
     "proficiencies": "Професії",
     "features": "Риси та особливості",
+    "source": "Джерело",
+    "srdDetails": "Деталі SRD",
     "conditions": "Поточні стани"
   },
   "combat": {

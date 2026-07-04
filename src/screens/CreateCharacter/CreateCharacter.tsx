@@ -27,12 +27,14 @@ import { addEditorByEmail } from '@/repositories/characterCloudRepository';
 import { createCharacterDraftRepository } from '@/repositories/createCharacterDraftRepository';
 import { fbAuth } from '@/services/firebase';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
-import { BACKGROUNDS } from '@/shared/const/Backgrounds';
-import { CLASS_OPTIONS } from '@/shared/const/CharacterClass';
-import { CLASS_GEAR } from '@/shared/const/ClassStartingGear';
-import { CLASS_PRESETS } from '@/shared/const/ClassPresets';
 import { CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
-import { RACES, RACE_OPTIONS, SUBRACE_OPTIONS, type AbilityKey } from '@/shared/const/Races';
+import {
+  getSrdBackgroundById,
+  getSrdBackgrounds,
+  getSrdRaces,
+  getSrdSubraces,
+} from '@/domain/srd';
+import type { SrdAbilityId as AbilityKey } from '@/domain/srd';
 import { SUBCLASSES } from '@/shared/const/Subclasses';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import FileService from '@/shared/services/fileSerice';
@@ -45,6 +47,7 @@ import {
   POINT_BUY_MIN,
   STANDARD_ARRAY,
   TOTAL_CREATE_CHARACTER_STEPS,
+  CREATE_CLASS_OPTIONS,
   applyDerivedDefaults,
   applyStartMethod,
   buildCharacterFromDraft,
@@ -52,6 +55,8 @@ import {
   createSavingThrowDefaults,
   deriveDraftDefaults,
   formatAbilityModifier,
+  getCreateClassById,
+  getCreateStartingEquipmentForClass,
   mergeDraftWithDefaults,
   rollAbilityScore,
   shouldShowMagicStep,
@@ -479,9 +484,9 @@ const CreateCharacter = (): JSX.Element => {
   );
 
   const renderRaceClassBackgroundStep = () => {
-    const availableSubraces = draft.useCustomRace ? [] : SUBRACE_OPTIONS(draft.raceKey);
+    const availableSubraces = draft.useCustomRace ? [] : getSrdSubraces(draft.raceKey);
     const availableSubclasses = draft.selectedClass === 'custom' ? [] : SUBCLASSES[draft.selectedClass] || [];
-    const backgroundDef = BACKGROUNDS.find((item) => item.key === draft.backgroundKey);
+    const backgroundDef = getSrdBackgroundById(draft.backgroundKey);
 
     return (
       <View style={styles.card}>
@@ -497,8 +502,8 @@ const CreateCharacter = (): JSX.Element => {
             setDraft((prev) => applyDerivedDefaults({ ...prev, useCustomRace: false, raceKey: value, subraceKey: '', speed: '' }, { forceCombat: true }));
           }}
         >
-          {RACE_OPTIONS.map((key) => (
-            <Picker.Item key={key} label={RACES[key].name} value={key} />
+          {getSrdRaces().map((race) => (
+            <Picker.Item key={race.id} label={t(`dnd:races.${race.id}`, { defaultValue: race.name })} value={race.id} />
           ))}
           <Picker.Item label={t('raceClass.customRaceOption')} value='custom' />
         </Picker>
@@ -517,7 +522,7 @@ const CreateCharacter = (): JSX.Element => {
                 <Picker selectedValue={draft.subraceKey} style={styles.picker} onValueChange={(value: string) => updateDraft({ subraceKey: value })}>
                 <Picker.Item label={t('raceClass.noSubrace')} value='' />
                   {availableSubraces.map((item) => (
-                    <Picker.Item key={item} label={item} value={item} />
+                    <Picker.Item key={item.id} label={t(`dnd:subraces.${item.id}`, { defaultValue: item.name })} value={item.id} />
                   ))}
                 </Picker>
               </>
@@ -530,7 +535,7 @@ const CreateCharacter = (): JSX.Element => {
           selectedValue={draft.selectedClass}
           style={styles.picker}
           onValueChange={(value: string) => {
-            const spellcastingAbility = CLASS_PRESETS[value]?.spellcastingAbility as AbilityKey | undefined;
+            const spellcastingAbility = getCreateClassById(value)?.spellcastingAbility;
             setDraft((prev) =>
               applyDerivedDefaults(
                 {
@@ -548,8 +553,14 @@ const CreateCharacter = (): JSX.Element => {
             );
           }}
         >
-          {CLASS_OPTIONS.map((key) => (
-            <Picker.Item key={key} label={t(`dnd:classes.${key}`, { defaultValue: key })} value={key} />
+          {CREATE_CLASS_OPTIONS.map((key) => (
+            <Picker.Item
+              key={key}
+              label={key === 'artificer'
+                ? t('raceClass.homebrewClassLabel', { name: t('dnd:classes.artificer', { defaultValue: 'Artificer' }) })
+                : t(`dnd:classes.${key}`, { defaultValue: getCreateClassById(key)?.name || key })}
+              value={key}
+            />
           ))}
           <Picker.Item label={t('raceClass.customClassOption')} value='custom' />
         </Picker>
@@ -582,8 +593,8 @@ const CreateCharacter = (): JSX.Element => {
           style={styles.picker}
           onValueChange={(value: string) => updateDraft({ backgroundKey: value })}
         >
-          {BACKGROUNDS.map((item) => (
-            <Picker.Item key={item.key} label={item.name} value={item.key} />
+          {getSrdBackgrounds().map((item) => (
+            <Picker.Item key={item.id} label={t(`dnd:backgrounds.${item.id}`, { defaultValue: item.name })} value={item.id} />
           ))}
           <Picker.Item label={t('raceClass.customBackgroundOption')} value='custom' />
         </Picker>
@@ -761,7 +772,7 @@ const CreateCharacter = (): JSX.Element => {
   );
 
   const renderEquipmentStep = () => {
-    const gearDef = draft.selectedClass !== 'custom' ? CLASS_GEAR[draft.selectedClass] : undefined;
+    const gearDef = draft.selectedClass !== 'custom' ? getCreateStartingEquipmentForClass(draft.selectedClass) : undefined;
     return (
       <View style={styles.card}>
         {!!gearDef && (

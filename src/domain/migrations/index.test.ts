@@ -6,6 +6,7 @@ import {
   migrateToLatest,
   migrateV1toV2,
   migrateV2toV3,
+  migrateV3toV4,
   normalizeStorageEnvelope,
 } from '@/domain/migrations';
 
@@ -133,5 +134,52 @@ describe('domain/migrations', () => {
     expect(Array.isArray(envelope.data)).toBe(true);
     expect((envelope.data[0] as Record<string, unknown>).schemaVersion).toBe(LATEST_SCHEMA_VERSION);
   });
-});
 
+  it('maps legacy SRD race and class strings to ids in v4', () => {
+    const migrated = migrateV3toV4('character', {
+      id: 'char-srd',
+      race: 'Людина',
+      class: 'Wizard',
+      background: 'acolyte',
+    }) as Record<string, unknown>;
+    const contentSources = migrated.contentSources as Record<string, Record<string, unknown>>;
+
+    expect(migrated.raceId).toBe('human');
+    expect(migrated.classId).toBe('wizard');
+    expect(migrated.backgroundId).toBe('acolyte');
+    expect(contentSources.race.origin).toBe('srd-5.1');
+    expect(contentSources.class.license).toBe('ogl-1.0a');
+  });
+
+  it('keeps Artificer separated as homebrew during v4 migration', () => {
+    const migrated = migrateV3toV4('character', {
+      id: 'char-artificer',
+      race: 'Human',
+      class: 'Artificer',
+    }) as Record<string, unknown>;
+    const contentSources = migrated.contentSources as Record<string, Record<string, unknown>>;
+
+    expect(migrated.classId).toBeUndefined();
+    expect(contentSources.class.origin).toBe('homebrew');
+    expect(contentSources.class.source).toBe('homebrew');
+    expect(migrated.raceId).toBe('human');
+  });
+
+  it('preserves unmatched legacy race and class text as legacy custom metadata', () => {
+    const migrated = migrateV3toV4('character', {
+      id: 'char-custom',
+      race: 'Moonfolk',
+      class: 'Rune Binder',
+      notes: 'do not delete',
+      inventory: ['old sword'],
+    }) as Record<string, unknown>;
+    const contentSources = migrated.contentSources as Record<string, Record<string, unknown>>;
+
+    expect(migrated.race).toBe('Moonfolk');
+    expect(migrated.class).toBe('Rune Binder');
+    expect(migrated.notes).toBe('do not delete');
+    expect(migrated.inventory).toEqual(['old sword']);
+    expect(contentSources.race.legacyCustom).toBe(true);
+    expect(contentSources.class.origin).toBe('legacy-custom');
+  });
+});

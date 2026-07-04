@@ -1,0 +1,23 @@
+[
+  {
+    "id": "acolyte",
+    "name": "Acolyte",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["background"],
+    "skills": ["insight", "religion"],
+    "tools": [],
+    "languages": 2,
+    "equipment": ["Holy symbol", "Prayer book or prayer wheel", "Incense", "Vestments", "Common clothes"],
+    "feature": {
+      "id": "acolyte-shelter-of-the-faithful",
+      "name": "Shelter of the Faithful",
+      "summary": "Can receive basic aid from those who share your faith.",
+      "source": "srd-5.1",
+      "license": "ogl-1.0a",
+      "tags": ["background-feature"]
+    },
+    "startingGold": 15
+  }
+]
+

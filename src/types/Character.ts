@@ -1,5 +1,8 @@
 export type {
   CharacterCombatTemplates,
+  CharacterContentOrigin,
+  CharacterContentSourceRef,
+  CharacterContentSources,
   CharacterCustomFeatureBlock,
   CharacterCustomField,
   CharacterCustomNotesGroup,

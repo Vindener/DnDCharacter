@@ -41,7 +41,13 @@ function CharacterHeaderBase({
   setMode,
   toggleSessionMode,
 }: CharacterHeaderProps) {
-  const { t } = useTranslation('character');
+  const { t } = useTranslation(['character', 'dnd']);
+  const raceLabel = characterData.raceId
+    ? t(`dnd:races.${characterData.raceId}`, { defaultValue: characterData.race || t('character:header.raceFallback') })
+    : characterData.race || t('character:header.raceFallback');
+  const classLabel = characterData.classId
+    ? t(`dnd:classes.${characterData.classId}`, { defaultValue: characterData.class || t('character:header.classFallback') })
+    : characterData.class || t('character:header.classFallback');
   return (
     <View style={styles.headerCard} testID='character.header'>
       <View style={styles.headerTop}>
@@ -65,7 +71,7 @@ function CharacterHeaderBase({
             />
           </View>
           <Text style={styles.characterMeta}>
-            {characterData.race || t('header.raceFallback')} · {characterData.class || t('header.classFallback')} · {t('header.level', { level: characterData.level })}
+            {raceLabel} · {classLabel} · {t('character:header.level', { level: characterData.level })}
           </Text>
           <View style={styles.badgesRow}>{syncBadges.map(renderBadge)}</View>
           <View style={styles.syncIndicatorRow}>
@@ -90,7 +96,7 @@ function CharacterHeaderBase({
             testID='character.mode.play'
           >
             <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>
-              Play
+              {t('character:modes.play')}
             </Text>
           </Pressable>
           <Pressable
@@ -102,7 +108,7 @@ function CharacterHeaderBase({
             testID='character.mode.edit'
           >
             <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>
-              Edit
+              {t('character:modes.edit')}
             </Text>
           </Pressable>
         </View>
@@ -113,7 +119,7 @@ function CharacterHeaderBase({
           android_ripple={{ color: colors.ripple }}
           testID='character.sessionMode.toggle'
         >
-          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>{t('header.session')}</Text>
+          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>{t('character:header.session')}</Text>
         </Pressable>
       </View>
     </View>

@@ -31,6 +31,27 @@
     "artificer": "Артифісер",
     "custom": "Власний клас"
   },
+  "races": {
+    "dragonborn": "Драконороджений",
+    "dwarf": "Дварф",
+    "elf": "Ельф",
+    "gnome": "Гном",
+    "half-elf": "Напівельф",
+    "half-orc": "Напіворк",
+    "halfling": "Галфлінг",
+    "human": "Людина",
+    "tiefling": "Тіфлінг"
+  },
+  "subraces": {
+    "hill-dwarf": "Дварф пагорбів",
+    "mountain-dwarf": "Гірський дварф",
+    "high-elf": "Вищий ельф",
+    "rock-gnome": "Кам'яний гном",
+    "lightfoot": "Лайтфут"
+  },
+  "backgrounds": {
+    "acolyte": "Аколіт"
+  },
   "schools": {
     "abjuration": "Огородження",
     "conjuration": "Виклик",

@@ -28,6 +28,7 @@ vi.mock('@react-native-async-storage/async-storage', () => ({
 vi.mock('@/services/firebase', () => firebaseMock);
 
 import { loadLocalCampaigns, upsertCampaign } from '@/services/dmCampaigns';
+import { LATEST_SCHEMA_VERSION } from '@/domain/migrations';
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -53,7 +54,7 @@ describe('dmCampaigns migration pipeline', () => {
 
     expect(campaigns).toHaveLength(1);
     expect(campaigns[0].id).toBe('campaign-1');
-    expect(campaigns[0].schemaVersion).toBe(3);
+    expect(campaigns[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
   });
 
   it('writes campaigns in schema-versioned envelope on upsert', async () => {
@@ -72,8 +73,8 @@ describe('dmCampaigns migration pipeline', () => {
 
     expect(asyncStorageMock.setItem).toHaveBeenCalledTimes(1);
     const payload = JSON.parse(asyncStorageMock.setItem.mock.calls[0][1]);
-    expect(payload.schemaVersion).toBe(3);
+    expect(payload.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(Array.isArray(payload.data)).toBe(true);
-    expect(payload.data[0].schemaVersion).toBe(3);
+    expect(payload.data[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
   });
 });

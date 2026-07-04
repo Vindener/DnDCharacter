@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseCharacter } from '@/domain/schemas';
+import { LATEST_SCHEMA_VERSION } from '@/domain/migrations';
 
 describe('character.schema', () => {
   it('normalizes legacy death save fields and defaults', () => {
@@ -12,7 +13,7 @@ describe('character.schema', () => {
     });
 
     expect(parsed.id).toBe('char-1');
-    expect(parsed.schemaVersion).toBe(3);
+    expect(parsed.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(parsed.deathSaves).toEqual({ successes: 2, failures: 1 });
     expect(parsed.hp).toEqual({ current: 7, max: 12, temp: 0 });
     expect(parsed.speed).toBe(30);
@@ -63,4 +64,3 @@ describe('character.schema', () => {
     });
   });
 });
-

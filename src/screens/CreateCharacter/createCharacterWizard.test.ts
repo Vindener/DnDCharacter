@@ -27,12 +27,12 @@ describe('createCharacterWizard helpers', () => {
   });
 
   it('applies background mechanics to skills, tools, languages, and features', () => {
-    const mechanics = buildBackgroundMechanics('sage');
+    const mechanics = buildBackgroundMechanics('acolyte');
 
-    expect(mechanics.skillProficiencies.arcana).toBe('proficient');
-    expect(mechanics.skillProficiencies.history).toBe('proficient');
-    expect(mechanics.proficiencies).toContain('Мови: +2');
-    expect(mechanics.featureText).toContain('Дослідник знань');
+    expect(mechanics.skillProficiencies.insight).toBe('proficient');
+    expect(mechanics.skillProficiencies.religion).toBe('proficient');
+    expect(mechanics.proficiencies).toContain('Languages: +2');
+    expect(mechanics.featureText).toContain('Shelter of the Faithful');
   });
 
   it('shows magic for casters or explicit magic toggle', () => {
@@ -66,7 +66,7 @@ describe('createCharacterWizard helpers', () => {
         name: 'Arthas',
         selectedClass: 'paladin',
         raceKey: 'human',
-        backgroundKey: 'soldier',
+        backgroundKey: 'acolyte',
         ac: '18',
         hpMax: '12',
         hpCurrent: '12',
@@ -81,11 +81,35 @@ describe('createCharacterWizard helpers', () => {
 
     expect(character.name).toBe('Arthas');
     expect(character.class).toBe('paladin');
+    expect(character.classId).toBe('paladin');
+    expect(character.raceId).toBe('human');
+    expect(character.backgroundId).toBe('acolyte');
+    expect(character.contentSources?.class?.origin).toBe('srd-5.1');
     expect(character.hp.max).toBeGreaterThan(0);
     expect(character.ac).toBe(18);
     expect(character.speed).toBeGreaterThan(0);
     expect(character.spells.spellcastingAbility).toBe('charisma');
     expect(character.inventory.length).toBeGreaterThan(0);
-    expect(character.skillProficiencies?.athletics).toBe('proficient');
+    expect(character.featuresAndTraits).toContain('Divine Sense');
+    expect(character.featuresAndTraits?.some((item) => item.includes('Lay on Hands'))).toBe(true);
+    expect(character.skillProficiencies?.insight).toBe('proficient');
+  });
+
+  it('creates valid custom/homebrew metadata without marking it as SRD', () => {
+    const draft = applyDerivedDefaults({
+      ...createInitialDraft(),
+      name: 'Gearwright',
+      selectedClass: 'artificer',
+      raceKey: 'human',
+      backgroundKey: 'acolyte',
+    }, { forceCombat: true, forceEquipment: true });
+
+    const character = buildCharacterFromDraft(draft, 'artificer-id');
+
+    expect(character.class).toBe('artificer');
+    expect(character.classId).toBeUndefined();
+    expect(character.contentSources?.class?.origin).toBe('homebrew');
+    expect(character.contentSources?.class?.source).toBe('homebrew');
+    expect(character.contentSources?.race?.origin).toBe('srd-5.1');
   });
 });
