@@ -12,6 +12,12 @@ import type { CharacterSpellStatus, SpellComponents, SpellDamageProfile, Spellbo
 import type { CharacterViewModel } from '@/types/Character';
 import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 import { SkeletonSpellbook } from '@/shared/ui/skeleton';
+import {
+  filterSpellbookSpells,
+  type SpellbookBooleanFilter as BooleanFilter,
+  type SpellbookFilterTab as SpellbookTab,
+  type SpellbookLevelFilter as LevelFilter,
+} from './spellbookFilters';
 import { getStyles } from './styles';
 
 type Props = {
@@ -19,9 +25,6 @@ type Props = {
     params?: SpellbookRouteParams;
   };
 };
-type SpellbookTab = 'all' | 'prepared' | 'known' | 'favorites' | 'custom';
-type LevelFilter = 'all' | number;
-type BooleanFilter = 'all' | 'yes' | 'no';
 type DisplaySpell = {
   name: string;
   school: string;
@@ -56,89 +59,33 @@ function damageProfilesToText(profiles: SpellDamageProfile[]): string {
     .join('\n');
 }
 
-function getTranslatedString(t: (key: string, options?: Record<string, unknown>) => string, key: string, fallback: string): string {
-  const translated = t(key, { defaultValue: fallback });
-  return typeof translated === 'string' ? translated : fallback;
-}
-
-function translateEnglishSeedMetaValue(value: string): string {
-  const feetMatch = value.match(/^(\d+) футів$/);
-  if (feetMatch) return `${feetMatch[1]} feet`;
-
-  switch (value) {
-    case '1 дія':
-      return '1 action';
-    case '1 реакція':
-      return '1 reaction';
-    case 'Дотик':
-      return 'Touch';
-    case 'На себе':
-      return 'Self';
-    case 'Миттєво':
-      return 'Instantaneous';
-    case '1 раунд':
-      return '1 round';
-    case '1 хвилина':
-      return '1 minute';
-    case '8 годин':
-      return '8 hours';
-    case 'До 1 хвилини':
-      return 'Up to 1 minute';
-    case 'До 10 хвилин':
-      return 'Up to 10 minutes';
-    case 'До 1 години':
-      return 'Up to 1 hour';
-    default:
-      return value;
-  }
-}
-
-function translateEnglishMaterial(value: string): string {
-  switch (value) {
-    case 'крихітна кулька гуано кажана та сірка':
-      return 'a tiny ball of bat guano and sulfur';
-    case 'шматочок обробленої шкіри':
-      return 'a piece of cured leather';
-    default:
-      return value;
-  }
-}
-
-function getDisplaySpell(t: (key: string, options?: Record<string, unknown>) => string, spell: SpellbookSpell, language: string): DisplaySpell {
-  if (spell.source !== 'system' || language !== 'en') {
-    return {
-      name: spell.name,
-      school: spell.school,
-      castingTime: spell.castingTime,
-      range: spell.range,
-      components: spell.components,
-      duration: spell.duration,
-      description: spell.description,
-      higherLevels: spell.higherLevels,
-      damageProfiles: spell.damageProfiles,
-    };
-  }
-
+function getDisplaySpell(spell: SpellbookSpell): DisplaySpell {
   return {
-    name: getTranslatedString(t, `seedSpells.${spell.id}.name`, spell.name),
-    school: getTranslatedString(t, `seedSpells.${spell.id}.school`, spell.school),
-    castingTime: translateEnglishSeedMetaValue(spell.castingTime),
-    range: translateEnglishSeedMetaValue(spell.range),
-    components: {
-      ...spell.components,
-      material: spell.components.material ? translateEnglishMaterial(spell.components.material) : spell.components.material,
-    },
-    duration: translateEnglishSeedMetaValue(spell.duration),
-    description: getTranslatedString(t, `seedSpells.${spell.id}.description`, spell.description),
-    higherLevels: getTranslatedString(t, `seedSpells.${spell.id}.higherLevels`, spell.higherLevels),
-    damageProfiles: spell.damageProfiles.map((profile, index) => ({
-      ...profile,
-      label: getTranslatedString(t, `seedSpells.${spell.id}.damageProfiles.${index}.label`, profile.label),
-      condition: profile.condition
-        ? getTranslatedString(t, `seedSpells.${spell.id}.damageProfiles.${index}.condition`, profile.condition)
-        : profile.condition,
-    })),
+    name: spell.name,
+    school: spell.school,
+    castingTime: spell.castingTime,
+    range: spell.range,
+    components: spell.components,
+    duration: spell.duration,
+    description: spell.description,
+    higherLevels: spell.higherLevels,
+    damageProfiles: spell.damageProfiles,
   };
+}
+
+function isEditableSpellSource(spell: SpellbookSpell): boolean {
+  return spell.source === 'user-custom' || spell.source === 'homebrew' || spell.source === 'imported';
+}
+
+function getSourceLabel(t: (key: string, options?: Record<string, unknown>) => string, source: SpellbookSpell['source']): string {
+  if (source === 'srd-5.1') return t('sources.srd51');
+  if (source === 'user-custom') return t('sources.userCustom');
+  return t(`sources.${source}`);
+}
+
+function getLicenseLabel(t: (key: string, options?: Record<string, unknown>) => string, license: SpellbookSpell['license']): string {
+  if (license === 'ogl-1.0a') return t('licenses.ogl10a');
+  return t(`licenses.${license}`);
 }
 
 function hasCasterSetup(character: CharacterViewModel | null): boolean {
@@ -172,6 +119,7 @@ function buildImportedSpell(name: string, importedSchool: string, importedTag: s
     concentration: false,
     damageProfiles: [],
     source: 'imported',
+    license: 'unknown',
     createdAt: Date.now(),
     updatedAt: Date.now(),
   };
@@ -204,6 +152,7 @@ const Spellbook = ({ route }: Props) => {
   const updateSpellNote = useSpellbookStore((s) => s.updateSpellNote);
 
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [activeTab, setActiveTab] = useState<SpellbookTab>(params?.initialTab || 'all');
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [classFilter, setClassFilter] = useState('all');
@@ -235,6 +184,11 @@ const Spellbook = ({ route }: Props) => {
   useEffect(() => {
     loadSpellbook().catch(() => {});
   }, [loadSpellbook]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedSearch(search), 250);
+    return () => clearTimeout(timeout);
+  }, [search]);
 
   useEffect(() => {
     if (params?.characterId) {
@@ -319,84 +273,42 @@ const Spellbook = ({ route }: Props) => {
   const schoolOptions = useMemo(() => {
     const values = new Set<string>();
     spellbookWithCharacterImports.forEach((spell) => {
-      const display = getDisplaySpell(t, spell, i18n.language);
+      const display = getDisplaySpell(spell);
       if (display.school) values.add(display.school);
     });
     return Array.from(values).sort((a, b) => a.localeCompare(b, sortLocale));
-  }, [i18n.language, sortLocale, spellbookWithCharacterImports, t]);
+  }, [sortLocale, spellbookWithCharacterImports]);
 
   const filteredSpells = useMemo(() => {
-    const filter = search.trim().toLowerCase();
-
-    return spellbookWithCharacterImports
-      .filter((spell) => {
-        const display = getDisplaySpell(t, spell, i18n.language);
-        const status = getCharacterSpellStatus(selectedCharacter, spell.name);
-        if (activeTab === 'prepared' && status !== 'prepared') return false;
-        if (activeTab === 'known' && status !== 'known' && status !== 'cantrip') return false;
-        if (activeTab === 'favorites' && !favoriteSet.has(spell.id)) return false;
-        if (activeTab === 'custom' && spell.source !== 'custom') return false;
-        if (levelFilter !== 'all' && spell.level !== levelFilter) return false;
-        if (classFilter !== 'all' && !spell.classes.includes(classFilter)) return false;
-        if (schoolFilter !== 'all' && display.school !== schoolFilter) return false;
-        if (ritualFilter !== 'all' && spell.ritual !== (ritualFilter === 'yes')) return false;
-        if (concentrationFilter !== 'all' && spell.concentration !== (concentrationFilter === 'yes')) return false;
-        if (!filter) return true;
-
-        const damageText = spell.damageProfiles
-          .map((profile) => `${profile.label} ${profile.formula} ${profile.damageType} ${profile.condition || ''}`)
-          .join(' ');
-        const translatedDamageText = display.damageProfiles
-          .map((profile) => `${profile.label} ${profile.formula} ${profile.damageType} ${profile.condition || ''}`)
-          .join(' ');
-        const haystack = [
-          spell.name,
-          display.name,
-          spell.school,
-          display.school,
-          spell.castingTime,
-          display.castingTime,
-          spell.range,
-          display.range,
-          componentsToText(spell.components, t('labels.noComponents')),
-          componentsToText(display.components, t('labels.noComponents')),
-          spell.duration,
-          display.duration,
-          spell.description,
-          display.description,
-          spell.higherLevels,
-          display.higherLevels,
-          spell.classes.join(' '),
-          spell.tags.join(' '),
-          damageText,
-          translatedDamageText,
-        ].join(' ').toLowerCase();
-        return haystack.includes(filter);
-      })
-      .sort((a, b) => {
-        if (isDmMode) {
-          const pinDelta = Number(pinnedSet.has(b.id)) - Number(pinnedSet.has(a.id));
-          if (pinDelta) return pinDelta;
-        }
-        if (a.level !== b.level) return a.level - b.level;
-        return getDisplaySpell(t, a, i18n.language).name.localeCompare(getDisplaySpell(t, b, i18n.language).name, sortLocale);
-      });
+    return filterSpellbookSpells({
+      spells: spellbookWithCharacterImports,
+      search: debouncedSearch,
+      activeTab,
+      levelFilter,
+      classFilter,
+      schoolFilter,
+      ritualFilter,
+      concentrationFilter,
+      favoriteSpellIds,
+      pinnedSpellIds,
+      selectedCharacter,
+      isGmMode: isDmMode,
+      locale: sortLocale,
+    });
   }, [
     activeTab,
     classFilter,
     concentrationFilter,
-    favoriteSet,
+    favoriteSpellIds,
     isDmMode,
     levelFilter,
-    pinnedSet,
+    pinnedSpellIds,
     ritualFilter,
     schoolFilter,
-    search,
+    debouncedSearch,
     selectedCharacter,
     sortLocale,
     spellbookWithCharacterImports,
-    t,
-    i18n.language,
   ]);
 
   const activeFilterCount =
@@ -552,7 +464,7 @@ const Spellbook = ({ route }: Props) => {
     const isFavorite = favoriteSet.has(item.id);
     const isPinned = pinnedSet.has(item.id);
     const canFavorite = item.source !== 'imported';
-    const display = getDisplaySpell(t, item, i18n.language);
+    const display = getDisplaySpell(item);
 
     return (
       <Pressable
@@ -565,8 +477,13 @@ const Spellbook = ({ route }: Props) => {
           <View style={styles.cardHeaderMain}>
             <Text style={styles.spellName}>{display.name}</Text>
             <Text style={styles.meta}>
-              {item.level === 0 ? t('levels.cantrip') : t('levels.level', { level: item.level })} · {display.school || t('labels.unknownSchool')} · {t(`sources.${item.source}`)}
+              {item.level === 0 ? t('levels.cantrip') : t('levels.level', { level: item.level })} · {display.school || t('labels.unknownSchool')}
             </Text>
+            <View style={styles.tagRow}>
+              <View style={styles.sourceBadge}>
+                <Text style={styles.sourceBadgeText}>{getSourceLabel(t, item.source)}</Text>
+              </View>
+            </View>
           </View>
           {isDmMode ? (
             <Pressable
@@ -611,8 +528,6 @@ const Spellbook = ({ route }: Props) => {
           </View>
         </View>
 
-        {display.description ? <Text style={styles.description}>{display.description}</Text> : null}
-
         <View style={styles.statusLine}>
           <Text style={styles.statusText}>{t('labels.status')}: {t(`status.${status}`)}</Text>
         </View>
@@ -626,9 +541,9 @@ const Spellbook = ({ route }: Props) => {
           </Pressable>
           <Pressable style={styles.cardActionButton} onPress={() => openEditSpellModal(item)} android_ripple={{ color: colors.ripple }}>
             <MaterialCommunityIcons name='pencil-outline' size={14} color={colors.text} />
-            <Text style={styles.cardActionText}>{item.source === 'custom' ? t('actions.edit') : t('actions.copy')}</Text>
+            <Text style={styles.cardActionText}>{isEditableSpellSource(item) ? t('actions.edit') : t('actions.copy')}</Text>
           </Pressable>
-          {item.source === 'custom' ? (
+          {isEditableSpellSource(item) ? (
             <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: colors.ripple }}>
               <Text style={styles.deleteCustomButtonText}>{t('actions.delete')}</Text>
             </Pressable>
@@ -797,13 +712,13 @@ const Spellbook = ({ route }: Props) => {
       <Modal
         isVisible={Boolean(selectedSpell)}
         onClose={() => setSelectedSpellId(null)}
-        title={selectedSpell ? getDisplaySpell(t, selectedSpell, i18n.language).name : t('detail.title')}
-        subtitle={selectedSpell ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(t, selectedSpell, i18n.language).school}` : undefined}
+        title={selectedSpell ? getDisplaySpell(selectedSpell).name : t('detail.title')}
+        subtitle={selectedSpell ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(selectedSpell).school}` : undefined}
       >
         {selectedSpell ? (
           <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
             {(() => {
-              const display = getDisplaySpell(t, selectedSpell, i18n.language);
+              const display = getDisplaySpell(selectedSpell);
               return (
                 <>
             <View style={styles.metadataGrid}>
@@ -813,6 +728,9 @@ const Spellbook = ({ route }: Props) => {
               <Text style={styles.metadataText}>{t('labels.duration')}: {display.duration || '—'}</Text>
             </View>
             <View style={styles.tagRow}>
+              <View style={styles.sourceBadge}>
+                <Text style={styles.sourceBadgeText}>{getSourceLabel(t, selectedSpell.source)}</Text>
+              </View>
               <View style={[styles.smallTag, selectedSpell.concentration ? styles.smallTagActive : null]}>
                 <Text style={[styles.smallTagText, selectedSpell.concentration ? styles.smallTagTextActive : null]}>
                   {t('labels.concentration')}: {selectedSpell.concentration ? t('boolean.yes') : t('boolean.no')}
@@ -834,6 +752,10 @@ const Spellbook = ({ route }: Props) => {
             <Text style={styles.description}>{selectedSpell.classes.length ? selectedSpell.classes.join(', ') : '—'}</Text>
             <Text style={styles.modalLabel}>{t('labels.tags')}</Text>
             <Text style={styles.description}>{selectedSpell.tags.length ? selectedSpell.tags.join(', ') : '—'}</Text>
+            <Text style={styles.modalLabel}>{t('labels.sourceMetadata')}</Text>
+            <Text style={styles.description}>
+              {t('labels.source')}: {getSourceLabel(t, selectedSpell.source)} · {t('labels.license')}: {getLicenseLabel(t, selectedSpell.license)}
+            </Text>
             {display.damageProfiles.length ? (
               <View style={styles.damageBlock}>
                 {display.damageProfiles.map((damage) => (
@@ -886,7 +808,7 @@ const Spellbook = ({ route }: Props) => {
         onClose={() => setIsSpellModalVisible(false)}
         onSubmit={() => void submitSpellModal()}
         title={editingSpell ? t('form.editTitle') : t('form.newTitle')}
-        subtitle={editingSpell && editingSpell.source !== 'custom' ? t('form.copySubtitle') : t('form.localSubtitle')}
+        subtitle={editingSpell && !isEditableSpellSource(editingSpell) ? t('form.copySubtitle') : t('form.localSubtitle')}
       >
         <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
           <Text style={styles.modalLabel}>{t('form.name')}</Text>

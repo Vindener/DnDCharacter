@@ -146,11 +146,20 @@
     "slotLevel": "Level {{level}}",
     "noSlots": "Slots are not configured",
     "openSpellbook": "Open Spellbook",
+    "pinnedSpells": "Pinned Spells",
+    "noPinnedSpells": "No pinned spells",
+    "cantrip": "Cantrip",
     "spellRolls": "Spell Rolls",
     "quickRollsEmpty": "Add spells to Prepared/Known/Cantrip for quick rolls.",
     "preparedSpells": "Prepared Spells",
     "preparedLimit": "Limit: {{count}}/{{limit}}. ",
-    "noPrepared": "No prepared spells"
+    "noPrepared": "No prepared spells",
+    "sources": {
+      "srd51": "SRD 5.1",
+      "userCustom": "Custom",
+      "homebrew": "Homebrew",
+      "imported": "Imported"
+    }
   },
   "inventory": {
     "title": "Inventory",

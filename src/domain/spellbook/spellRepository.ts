@@ -71,6 +71,10 @@ function mergeCloudState(localState: SpellbookState, _cloudState: Partial<Spellb
   return localState;
 }
 
+function isEditableSpell(spell: SpellbookSpell | null | undefined): boolean {
+  return spell?.source === 'user-custom' || spell?.source === 'homebrew' || spell?.source === 'imported';
+}
+
 export function createSpellRepository(options: SpellRepositoryOptions = {}): SpellRepository {
   const localRepository = options.localRepository || createSpellLocalRepository();
   const cloudRepository = options.cloudRepository || createSpellCloudRepository();
@@ -100,17 +104,18 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
         ? currentSpells.find((spell) => spell.id === normalizedInput.spellId)
         : null;
       const existingCustomByName = currentSpells.find(
-        (spell) => spell.source === 'custom' && normalizeSpellName(spell.name) === normalizedName,
+        (spell) => spell.source === 'user-custom' && normalizeSpellName(spell.name) === normalizedName,
       );
-      const existing = byId?.source === 'custom' ? byId : existingCustomByName || byId;
+      const existing = isEditableSpell(byId) ? byId : existingCustomByName || byId;
 
       if (existing) {
-        if (existing.source !== 'custom') {
+        if (!isEditableSpell(existing)) {
           const now = Date.now();
           const createdFromBase = spellMapper.spellbookMapper.draftToEntity({
             ...existing,
             id: `spell-custom-${uuid.v4()}`,
-            source: 'custom',
+            source: 'user-custom',
+            license: 'custom',
             name,
             level: normalizedInput.level ?? existing.level,
             school: String(normalizedInput.school || existing.school || 'Власне').trim() || 'Власне',
@@ -190,7 +195,7 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
 
     removeCustomSpell: async (currentState, spellId) => {
       const target = currentState.spells.find((spell) => spell.id === spellId);
-      if (!target || target.source !== 'custom') return currentState;
+      if (!target || !isEditableSpell(target)) return currentState;
 
       const nextState: SpellbookState = {
         spells: currentState.spells.filter((spell) => spell.id !== spellId),

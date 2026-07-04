@@ -14,6 +14,8 @@ import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/charact
 import { fbAuth } from '@/services/firebase';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import useAppRoleStore from '@/context/AppRole-store';
+import useMonsterStore from '@/context/Monster-store';
+import useSpellbookStore from '@/context/Spellbook-store';
 import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
@@ -51,6 +53,12 @@ const DM: React.FC = () => {
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const roleMode = useAppRoleStore((s) => s.role);
+  const monsters = useMonsterStore((s) => s.monsters);
+  const pinnedMonsterIds = useMonsterStore((s) => s.pinnedMonsterIds);
+  const loadMonsters = useMonsterStore((s) => s.loadMonsters);
+  const spells = useSpellbookStore((s) => s.spells);
+  const pinnedSpellIds = useSpellbookStore((s) => s.pinnedSpellIds);
+  const loadSpellbook = useSpellbookStore((s) => s.loadSpellbook);
   const netInfo = useNetInfo();
 
   const [authVersion, setAuthVersion] = useState(0);
@@ -95,6 +103,11 @@ const DM: React.FC = () => {
     },
     [t],
   );
+
+  useEffect(() => {
+    void loadMonsters();
+    void loadSpellbook();
+  }, [loadMonsters, loadSpellbook]);
 
   useEffect(() => {
     let unsubCampaigns = () => {};
@@ -200,6 +213,16 @@ const DM: React.FC = () => {
       .slice(0, 4);
   }, [mySheets, sharedSheets]);
 
+  const pinnedMonsters = useMemo(
+    () => monsters.filter((monster) => pinnedMonsterIds.includes(monster.id)).slice(0, 4),
+    [monsters, pinnedMonsterIds],
+  );
+
+  const pinnedSpells = useMemo(
+    () => spells.filter((spell) => pinnedSpellIds.includes(spell.id)).slice(0, 4),
+    [pinnedSpellIds, spells],
+  );
+
   const openRootTab = (routeName: string, params?: Record<string, unknown>) => {
     const parent = navigation.getParent();
     if (!parent) return;
@@ -297,6 +320,50 @@ const DM: React.FC = () => {
             <Ionicons name='flame-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:dashboard.openInitiative')}</Text>
           </Pressable>
+          <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
+            <Ionicons name='skull-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>{t('dm:dashboard.quickBestiary')}</Text>
+          </Pressable>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => openRootTab('References', { screen: 'Spellbook', params: { mode: 'dm', quickView: true } })}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Ionicons name='book-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>{t('dm:dashboard.quickSpellbook')}</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.title}>{t('dm:dashboard.pinnedReferencesTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:dashboard.pinnedReferencesHint')}</Text>
+        <View style={styles.statsRow}>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>{t('dm:dashboard.pinnedMonsters', { count: pinnedMonsters.length })}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipText}>{t('dm:dashboard.pinnedSpells', { count: pinnedSpells.length })}</Text>
+          </View>
+        </View>
+        {pinnedMonsters.map((monster) => (
+          <View key={`monster-${monster.id}`} style={styles.updateRow}>
+            <Text style={styles.updateTitle}>{monster.name}</Text>
+            <Text style={styles.updateMeta}>
+              {t('dm:dashboard.monsterSummary', { cr: monster.challenge || '—', ac: monster.armorClass ?? '—', hp: monster.hitPoints ?? '—' })}
+            </Text>
+          </View>
+        ))}
+        {pinnedSpells.map((spell) => (
+          <View key={`spell-${spell.id}`} style={styles.updateRow}>
+            <Text style={styles.updateTitle}>{spell.name}</Text>
+            <Text style={styles.updateMeta}>
+              {t('dm:dashboard.spellSummary', { level: spell.level === 0 ? t('dm:dashboard.cantrip') : spell.level, school: spell.school, source: spell.source })}
+            </Text>
+          </View>
+        ))}
+        {!pinnedMonsters.length && !pinnedSpells.length ? <Text style={styles.hint}>{t('dm:dashboard.noPinnedReferences')}</Text> : null}
+        <View style={styles.laneGrid}>
           <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:dashboard.quickBestiary')}</Text>
@@ -435,6 +502,5 @@ const DM: React.FC = () => {
 };
 
 export default DM;
-
 
 

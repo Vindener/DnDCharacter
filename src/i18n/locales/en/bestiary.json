@@ -26,9 +26,22 @@
     "hitPointsShort": "HP",
     "speedShort": "Speed",
     "attackBonus": "{{value}} to hit",
+    "traitsShort": "Traits",
     "environment": "Environment: {{value}}",
     "source": "Source: {{value}}",
     "customMonster": "Custom monster"
+  },
+  "sources": {
+    "srd51": "SRD 5.1",
+    "userCustom": "Custom",
+    "homebrew": "Homebrew",
+    "imported": "Imported",
+    "unknown": "Unknown"
+  },
+  "licenses": {
+    "ogl10a": "OGL 1.0a",
+    "custom": "Custom",
+    "unknown": "Unknown"
   },
   "empty": {
     "database": "The bestiary is empty. Add a custom monster or import JSON.",
@@ -94,6 +107,13 @@
       "skills": "Skills",
       "senses": "Senses",
       "languages": "Languages",
+      "hitDice": "Hit dice",
+      "xp": "XP",
+      "damageVulnerabilities": "Damage vulnerabilities",
+      "damageResistances": "Damage resistances",
+      "damageImmunities": "Damage immunities",
+      "conditionImmunities": "Condition immunities",
+      "license": "License",
       "tags": "Tags"
     },
     "placeholders": {

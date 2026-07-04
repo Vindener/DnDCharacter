@@ -29,8 +29,18 @@ const getMetaLine = (monster: MonsterDto, t: TFunction<'bestiary'>): string => {
 
 const getMainAttack = (monster: MonsterDto, t: TFunction<'bestiary'>): string => {
   if (monster.mainAttack) return monster.mainAttack;
-  const match = (monster.actions || '').match(/\*\*([^.*]+)\./);
+  const firstAction = monster.normalizedActions?.[0]?.name;
+  if (firstAction) return firstAction;
+  const match = (monster.actions || '').match(/(?:\*\*)?([^.*\n]+)\./);
   return match?.[1]?.trim() || t('labels.missingAttack');
+};
+
+const getSourceLabel = (monster: MonsterDto, t: TFunction<'bestiary'>): string => {
+  if (monster.source === 'srd-5.1') return t('sources.srd51');
+  if (monster.source === 'user-custom') return t('sources.userCustom');
+  if (monster.source === 'homebrew') return t('sources.homebrew');
+  if (monster.source === 'imported') return t('sources.imported');
+  return monster.source || t('sources.unknown');
 };
 
 export const MonsterCard = ({
@@ -48,6 +58,8 @@ export const MonsterCard = ({
   const removeMonster = useMonsterStore((s) => s.removeMonster);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
+  const isSrdMonster = monster.source === 'srd-5.1';
+  const traitsSummary = monster.normalizedTraits?.slice(0, 2).map((trait) => trait.name).join(', ') || monster.traits || '';
 
   const handleDelete = () => {
     removeMonster(monster.id);
@@ -99,6 +111,11 @@ export const MonsterCard = ({
           {monster.attackBonus ? ` · ${t('labels.attackBonus', { value: monster.attackBonus })}` : ''}
           {monster.damage ? ` · ${monster.damage}` : ''}
         </Text>
+        {!!traitsSummary && (
+          <Text style={styles.attackLine} numberOfLines={2}>
+            {t('labels.traitsShort')}: {traitsSummary}
+          </Text>
+        )}
         <View style={styles.actionRow}>
           {!!onAddToEncounter && (
             <Pressable
@@ -144,19 +161,27 @@ export const MonsterCard = ({
           )}
         </View>
         {!!monster.environment && <Text style={styles.meta}>{t('labels.environment', { value: monster.environment })}</Text>}
-        {!!monster.source && <Text style={styles.meta}>{t('labels.source', { value: monster.source })}</Text>}
+        {!!monster.source && (
+          <View style={styles.badgeRow}>
+            <View style={styles.sourceBadge} testID='monsterCard.sourceBadge'>
+              <Text style={styles.sourceBadgeText}>{getSourceLabel(monster, t)}</Text>
+            </View>
+          </View>
+        )}
         {!!monster.isCustom && <Text style={styles.customMeta}>{t('labels.customMonster')}</Text>}
       </View>
-      <Pressable
-        onPress={(event) => {
-          event.stopPropagation();
-          handleDelete();
-        }}
-        style={styles.deleteButton}
-        android_ripple={{ color: colors.ripple }}
-      >
-        <Ionicons name='trash-outline' size={20} color={colors.text} />
-      </Pressable>
+      {!isSrdMonster ? (
+        <Pressable
+          onPress={(event) => {
+            event.stopPropagation();
+            handleDelete();
+          }}
+          style={styles.deleteButton}
+          android_ripple={{ color: colors.ripple }}
+        >
+          <Ionicons name='trash-outline' size={20} color={colors.text} />
+        </Pressable>
+      ) : null}
     </Pressable>
   );
 };

@@ -26,9 +26,22 @@
     "hitPointsShort": "ХП",
     "speedShort": "Швидк.",
     "attackBonus": "{{value}} до атаки",
+    "traitsShort": "Риси",
     "environment": "Середовище: {{value}}",
     "source": "Джерело: {{value}}",
     "customMonster": "Власний монстр"
+  },
+  "sources": {
+    "srd51": "SRD 5.1",
+    "userCustom": "Власне",
+    "homebrew": "Хоумбрю",
+    "imported": "Імпортоване",
+    "unknown": "Невідоме"
+  },
+  "licenses": {
+    "ogl10a": "OGL 1.0a",
+    "custom": "Власна",
+    "unknown": "Невідома"
   },
   "empty": {
     "database": "Бестіарій порожній. Додайте власного монстра або імпортуйте JSON.",
@@ -94,6 +107,13 @@
       "skills": "Навички",
       "senses": "Чуття",
       "languages": "Мови",
+      "hitDice": "Кістки хітів",
+      "xp": "Досвід",
+      "damageVulnerabilities": "Вразливості до урону",
+      "damageResistances": "Стійкість до урону",
+      "damageImmunities": "Імунітет до урону",
+      "conditionImmunities": "Імунітет до станів",
+      "license": "Ліцензія",
       "tags": "Теги"
     },
     "placeholders": {

@@ -7,8 +7,11 @@ import {
   srdConditionSchema,
   srdEquipmentItemSchema,
   srdLanguageSchema,
+  srdMonsterSchema,
   srdRaceSchema,
+  srdReferenceEntrySchema,
   srdSkillSchema,
+  srdSpellSchema,
 } from './schemas';
 import type {
   SrdBackground,
@@ -18,8 +21,11 @@ import type {
   SrdCondition,
   SrdEquipmentItem,
   SrdLanguage,
+  SrdMonster,
   SrdRace,
+  SrdReferenceEntry,
   SrdSkill,
+  SrdSpell,
 } from './types';
 
 const races = parseSrdArray<SrdRace>(srdRaceSchema, srdData.races);
@@ -29,7 +35,10 @@ const backgrounds = parseSrdArray<SrdBackground>(srdBackgroundSchema, srdData.ba
 const conditions = parseSrdArray<SrdCondition>(srdConditionSchema, srdData.conditions);
 const equipment = parseSrdArray<SrdEquipmentItem>(srdEquipmentItemSchema, srdData.equipment);
 const languages = parseSrdArray<SrdLanguage>(srdLanguageSchema, srdData.languages);
+const monsters = parseSrdArray<SrdMonster>(srdMonsterSchema, srdData.monsters);
+const references = parseSrdArray<SrdReferenceEntry>(srdReferenceEntrySchema, srdData.references);
 const skills = parseSrdArray<SrdSkill>(srdSkillSchema, srdData.skills);
+const spells = parseSrdArray<SrdSpell>(srdSpellSchema, srdData.spells);
 
 export function getSrdRaces(): SrdRace[] {
   return races;
@@ -73,6 +82,30 @@ export function getConditions(): SrdCondition[] {
 
 export function getEquipment(): SrdEquipmentItem[] {
   return equipment;
+}
+
+export function getSrdSpells(): SrdSpell[] {
+  return spells;
+}
+
+export function getSrdSpellById(id: string): SrdSpell | undefined {
+  return spells.find((spell) => spell.id === id);
+}
+
+export function getSrdMonsters(): SrdMonster[] {
+  return monsters;
+}
+
+export function getSrdMonsterById(id: string): SrdMonster | undefined {
+  return monsters.find((monster) => monster.id === id);
+}
+
+export function getSrdReferences(): SrdReferenceEntry[] {
+  return references;
+}
+
+export function getSrdReferenceById(id: string): SrdReferenceEntry | undefined {
+  return references.find((entry) => entry.id === id);
 }
 
 export function getSrdBackgrounds(): SrdBackground[] {

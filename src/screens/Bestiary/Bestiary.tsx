@@ -34,11 +34,12 @@ const createMonsterSeed = (monster: MonsterDto, fallbackName: string) => ({
   hitPoints: monster.hitPoints,
 });
 
-const createDuplicateMonster = (monster: MonsterDto, fallbackName: string, copyLabel: string, customSource: string): MonsterDto => ({
+const createDuplicateMonster = (monster: MonsterDto, fallbackName: string, copyLabel: string): MonsterDto => ({
   ...monster,
   id: `${monster.id}-copy-${Date.now()}`,
   name: `${monster.name || fallbackName} ${copyLabel}`,
-  source: monster.source || customSource,
+  source: 'user-custom',
+  license: 'custom',
   isCustom: true,
 });
 
@@ -51,7 +52,8 @@ const createBlankMonster = (t: TFunction<'bestiary'>): MonsterDto => ({
   armorClass: 10,
   hitPoints: 1,
   speed: t('defaults.speed'),
-  source: t('defaults.customSource'),
+  source: 'user-custom',
+  license: 'custom',
   tags: [],
   isCustom: true,
   stats: {
@@ -81,11 +83,17 @@ const Bestiary = () => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const [filters, setFilters] = useState<BestiaryFilters>(DEFAULT_BESTIARY_FILTERS);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('full');
 
   useEffect(() => {
     void loadMonsters();
   }, [loadMonsters]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedSearch(filters.search), 250);
+    return () => clearTimeout(timeout);
+  }, [filters.search]);
 
   const typeOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.type || '')), [monsters]);
   const environmentOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.environment || '')), [monsters]);
@@ -94,7 +102,10 @@ const Bestiary = () => {
   const favoriteSet = useMemo(() => new Set(favoriteMonsterIds), [favoriteMonsterIds]);
   const pinnedSet = useMemo(() => new Set(pinnedMonsterIds), [pinnedMonsterIds]);
 
-  const filtered = useMemo(() => filterMonsters(monsters, filters, favoriteMonsterIds), [favoriteMonsterIds, filters, monsters]);
+  const filtered = useMemo(
+    () => filterMonsters(monsters, { ...filters, search: debouncedSearch }, favoriteMonsterIds),
+    [debouncedSearch, favoriteMonsterIds, filters, monsters],
+  );
   const pinnedMonsters = useMemo(() => monsters.filter((monster) => pinnedSet.has(monster.id)), [monsters, pinnedSet]);
   const activeFilterCount = getActiveBestiaryFilterCount(filters);
 
@@ -129,7 +140,7 @@ const Bestiary = () => {
   };
 
   const duplicateMonster = (monster: MonsterDto) => {
-    void addMonster(createDuplicateMonster(monster, t('defaults.monster'), t('defaults.copy'), t('defaults.customSource')));
+    void addMonster(createDuplicateMonster(monster, t('defaults.monster'), t('defaults.copy')));
   };
 
   const renderChoiceChip = (label: string, active: boolean, onPress: () => void, testID?: string, chipKey = `${label}-${testID || ''}`) => (

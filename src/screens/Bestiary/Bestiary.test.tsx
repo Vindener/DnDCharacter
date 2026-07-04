@@ -206,9 +206,13 @@ describe('Bestiary screen', () => {
   it('searches monsters and shows no-results state', async () => {
     mocks.monsterState.monsters = [goblin];
     const tree = await renderBestiary();
+    vi.useFakeTimers();
 
     act(() => {
       tree.root.findByProps({ testID: 'bestiary.searchInput' }).props.onChangeText('dragon');
+    });
+    act(() => {
+      vi.advanceTimersByTime(300);
     });
 
     expect(tree.root.findByProps({ testID: 'bestiary.noResultsState' })).toBeTruthy();
@@ -216,10 +220,14 @@ describe('Bestiary screen', () => {
     act(() => {
       tree.root.findByProps({ testID: 'bestiary.searchInput' }).props.onChangeText('goblin');
     });
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     expect(tree.root.findAllByProps({ testID: 'bestiary.monsterCard' })).toHaveLength(1);
 
     act(() => tree.unmount());
+    vi.useRealTimers();
   });
 
   it('adds a monster to encounter through DM navigation seed', async () => {

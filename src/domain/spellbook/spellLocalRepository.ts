@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SPELLBOOK_SEED } from '@/shared/const/SpellbookSeed';
 import { createStorageEnvelope, normalizeStorageEnvelope } from '@/domain/migrations';
 import { spellMapper } from '@/domain/mappers';
-import type { SpellbookSpell, SpellComponents } from './spellbookEntity';
+import { getSrdSpells } from '@/domain/srd/srdRepository';
+import { srdSpellToSpellbookSpell } from '@/domain/srd/adapters';
+import type { SpellbookSpell } from './spellbookEntity';
 import { normalizeSpellName } from './characterSpellAdapter';
 import type { SpellLocalRepository, SpellbookState } from './spellRepository';
 
@@ -25,43 +26,35 @@ function sortSpells(spells: SpellbookSpell[]): SpellbookSpell[] {
 }
 
 function buildSeedSpells(): SpellbookSpell[] {
-  const now = Date.now();
-  const emptyComponents: SpellComponents = { verbal: false, somatic: false, material: '' };
-
-  return sortSpells(
-    SPELLBOOK_SEED.map((spell, index) =>
-      spellMapper.spellbookMapper.draftToEntity({
-        id: `spell-system-${index + 1}`,
-        name: String(spell.name || '').trim(),
-        level: spell.level,
-        school: String(spell.school || 'Універсальна').trim() || 'Універсальна',
-        castingTime: String(spell.castingTime || '').trim(),
-        range: String(spell.range || '').trim(),
-        components: typeof spell.components === 'string' ? emptyComponents : spell.components || emptyComponents,
-        duration: String(spell.duration || '').trim(),
-        description: String(spell.description || '').trim(),
-        higherLevels: String(spell.higherLevels || '').trim(),
-        classes: Array.isArray(spell.classes) ? spell.classes.map((className) => String(className || '').trim()).filter(Boolean) : [],
-        tags: Array.isArray(spell.tags) ? spell.tags.map((tag) => String(tag || '').trim()).filter(Boolean) : [],
-        ritual: Boolean(spell.ritual),
-        concentration: Boolean(spell.concentration),
-        damageProfiles: spellMapper.normalizeSpellbookDamageProfiles(spell.damageProfiles || []),
-        source: 'system',
-        createdAt: now,
-        updatedAt: now,
-      }),
-    )
-      .filter((spell) => Boolean(spell.name)),
-  );
+  return sortSpells(getSrdSpells().map(srdSpellToSpellbookSpell).filter((spell) => Boolean(spell.name)));
 }
 
 function mergeStoredWithSeed(stored: SpellbookSpell[], seed: SpellbookSpell[]): SpellbookSpell[] {
-  const existingByName = new Set(stored.map((spell) => normalizeSpellName(spell.name)));
-  const missingSeed = seed.filter((spell) => !existingByName.has(normalizeSpellName(spell.name)));
+  const customStored = stored.filter((spell) => spell.source !== 'srd-5.1');
+  const existingByName = new Set(seed.map((spell) => normalizeSpellName(spell.name)));
+  const extraSystemByName = stored.filter((spell) => spell.source === 'srd-5.1' && !existingByName.has(normalizeSpellName(spell.name)));
+  const mergedStored = [...customStored, ...extraSystemByName];
+  const mergedByName = new Set(mergedStored.map((spell) => normalizeSpellName(spell.name)));
+  const missingSeed = seed.filter((spell) => !mergedByName.has(normalizeSpellName(spell.name)));
   if (!missingSeed.length) {
-    return sortSpells(stored);
+    return sortSpells(mergedStored);
   }
-  return sortSpells([...stored, ...missingSeed]);
+  return sortSpells([...mergedStored, ...missingSeed]);
+}
+
+function buildLegacyIdMap(stored: SpellbookSpell[], spells: SpellbookSpell[]): Map<string, string> {
+  const byName = new Map(spells.map((spell) => [normalizeSpellName(spell.name), spell.id]));
+  return new Map(
+    stored
+      .map((spell) => [spell.id, byName.get(normalizeSpellName(spell.name))] as const)
+      .filter((entry): entry is readonly [string, string] => Boolean(entry[1])),
+  );
+}
+
+function remapKnownIds(rawIds: string[], knownIds: Set<string>, legacyIdMap: Map<string, string>): string[] {
+  return Array.from(new Set(rawIds
+    .map((id) => (knownIds.has(id) ? id : legacyIdMap.get(id)))
+    .filter((id): id is string => Boolean(id) && knownIds.has(id))));
 }
 
 async function saveSpells(spells: SpellbookSpell[]): Promise<void> {
@@ -134,14 +127,16 @@ async function loadSpellbookState(): Promise<SpellbookState> {
     const spells = normalizedSpells.length ? mergeStoredWithSeed(normalizedSpells, seedSpells) : seedSpells;
 
     const knownIds = new Set(spells.map((spell) => spell.id));
+    const legacyIdMap = buildLegacyIdMap(normalizedSpells, spells);
     const rawFavoriteIds = Array.isArray(favoriteEnvelope.data) ? favoriteEnvelope.data.map((item) => String(item)) : [];
-    const favoriteSpellIds = rawFavoriteIds.filter((id) => knownIds.has(id));
+    const favoriteSpellIds = remapKnownIds(rawFavoriteIds, knownIds, legacyIdMap);
     const rawPinnedIds = Array.isArray(pinsEnvelope.data) ? pinsEnvelope.data.map((item) => String(item)) : [];
-    const pinnedSpellIds = rawPinnedIds.filter((id) => knownIds.has(id));
+    const pinnedSpellIds = remapKnownIds(rawPinnedIds, knownIds, legacyIdMap);
     const rawNotesById = notesEnvelope.data && typeof notesEnvelope.data === 'object' ? notesEnvelope.data : {};
     const spellNotesById = Object.fromEntries(
       Object.entries(rawNotesById)
-        .filter(([id, value]) => knownIds.has(id) && String(value || '').trim())
+        .map(([id, value]) => [knownIds.has(id) ? id : legacyIdMap.get(id), value] as const)
+        .filter((entry): entry is readonly [string, unknown] => Boolean(entry[0]) && knownIds.has(entry[0]) && Boolean(String(entry[1] || '').trim()))
         .map(([id, value]) => [id, String(value).trim()]),
     );
 

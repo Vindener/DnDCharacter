@@ -64,13 +64,13 @@ describe('References screen', () => {
     act(() => tree.unmount());
   });
 
-  it('keeps future reference entries disabled', () => {
+  it('renders structured SRD reference entries with source badges', () => {
     const tree = renderReferences();
 
-    expect(tree.root.findByProps({ testID: 'references.placeholder.items' }).props.disabled).toBe(true);
-    expect(tree.root.findByProps({ testID: 'references.placeholder.conditions' }).props.disabled).toBe(true);
-    expect(tree.root.findByProps({ testID: 'references.placeholder.rules' }).props.disabled).toBe(true);
-    expect(tree.root.findByProps({ testID: 'references.placeholder.classes' }).props.disabled).toBe(true);
+    expect(tree.root.findByProps({ testID: 'references.srd.conditions' }).props.disabled).toBeFalsy();
+    expect(tree.root.findByProps({ testID: 'references.srd.actions-in-combat' }).props.disabled).toBeFalsy();
+    expect(tree.root.findByProps({ testID: 'references.srd.equipment' }).props.disabled).toBeFalsy();
+    expect(tree.root.findByProps({ testID: 'references.sourceBadge.conditions' })).toBeTruthy();
 
     act(() => tree.unmount());
   });

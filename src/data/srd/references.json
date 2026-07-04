@@ -1,0 +1,128 @@
+[
+  {
+    "id": "conditions",
+    "category": "conditions",
+    "title": "Conditions",
+    "summary": "Common combat conditions and their mechanical effects.",
+    "entries": [],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "conditions"
+    ]
+  },
+  {
+    "id": "actions-in-combat",
+    "category": "combat",
+    "title": "Actions in Combat",
+    "summary": "Attack, Cast a Spell, Dash, Disengage, Dodge, Help, Hide, Ready, Search, and Use an Object.",
+    "entries": [
+      {
+        "title": "Common actions",
+        "body": "On your turn you can take one action. Common actions include Attack, Cast a Spell, Dash, Disengage, Dodge, Help, Hide, Ready, Search, and Use an Object."
+      }
+    ],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "combat",
+      "actions"
+    ]
+  },
+  {
+    "id": "resting",
+    "category": "adventuring",
+    "title": "Resting",
+    "summary": "Short and long rest rules for recovery during play.",
+    "entries": [
+      {
+        "title": "Short rest",
+        "body": "A short rest is a period of downtime, at least 1 hour long, during which characters do nothing more strenuous than eating, drinking, reading, and tending wounds."
+      },
+      {
+        "title": "Long rest",
+        "body": "A long rest is an extended downtime period used to recover hit points, features, and spell slots according to class rules."
+      }
+    ],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "resting"
+    ]
+  },
+  {
+    "id": "ability-checks",
+    "category": "checks",
+    "title": "Ability Checks",
+    "summary": "Ability checks resolve uncertain actions using d20 plus the relevant ability modifier and proficiency when applicable.",
+    "entries": [
+      {
+        "title": "Core check",
+        "body": "Roll a d20 and add the relevant ability modifier. If a character has proficiency that applies, add proficiency bonus."
+      }
+    ],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "checks"
+    ]
+  },
+  {
+    "id": "saving-throws",
+    "category": "checks",
+    "title": "Saving Throws",
+    "summary": "Saving throws resist harmful effects and use d20 plus an ability modifier and proficiency when applicable.",
+    "entries": [
+      {
+        "title": "Core save",
+        "body": "A saving throw represents an attempt to resist a spell, trap, poison, disease, or similar threat."
+      }
+    ],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "saves"
+    ]
+  },
+  {
+    "id": "equipment",
+    "category": "equipment",
+    "title": "Equipment",
+    "summary": "Weapons, armor, adventuring gear, tools, packs, and spellcasting focuses from SRD equipment data.",
+    "entries": [
+      {
+        "title": "Use at table",
+        "body": "Use equipment entries for quick lookup and to distinguish SRD equipment from custom or homebrew gear."
+      }
+    ],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "equipment"
+    ]
+  },
+  {
+    "id": "spellcasting-basics",
+    "category": "magic",
+    "title": "Spellcasting Basics",
+    "summary": "Spell level, casting time, range, components, duration, concentration, rituals, and higher-level casting.",
+    "entries": [
+      {
+        "title": "Spell anatomy",
+        "body": "A spell entry includes level, school, casting time, range, components, duration, and the spell text. Some spells have ritual, concentration, or higher-level casting rules."
+      }
+    ],
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": [
+      "reference",
+      "spellcasting"
+    ]
+  }
+]

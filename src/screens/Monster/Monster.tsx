@@ -57,11 +57,12 @@ const createMonsterSeed = (monster: MonsterDto, monsterFallback: string) => ({
   hitPoints: monster.hitPoints,
 });
 
-const createDuplicateMonster = (monster: MonsterDto, monsterFallback: string, copyLabel: string, customSource: string): MonsterDto => ({
+const createDuplicateMonster = (monster: MonsterDto, monsterFallback: string, copyLabel: string): MonsterDto => ({
   ...monster,
   id: `${monster.id}-copy-${Date.now()}`,
   name: `${monster.name || monsterFallback} ${copyLabel}`,
-  source: monster.source || customSource,
+  source: 'user-custom',
+  license: 'custom',
   isCustom: true,
 });
 
@@ -70,8 +71,23 @@ const getMetaLine = (monster: MonsterDto): string =>
 
 const getMainAttack = (monster: MonsterDto, fallback: string): string => {
   if (monster.mainAttack) return monster.mainAttack;
-  const match = (monster.actions || '').match(/\*\*([^.*]+)\./);
+  if (monster.normalizedActions?.[0]?.name) return monster.normalizedActions[0].name;
+  const match = (monster.actions || '').match(/(?:\*\*)?([^.*\n]+)\./);
   return match?.[1]?.trim() || fallback;
+};
+
+const getSourceLabel = (monster: MonsterDto, t: (key: string) => string): string => {
+  if (monster.source === 'srd-5.1') return t('sources.srd51');
+  if (monster.source === 'user-custom') return t('sources.userCustom');
+  if (monster.source === 'homebrew') return t('sources.homebrew');
+  if (monster.source === 'imported') return t('sources.imported');
+  return monster.source || t('sources.unknown');
+};
+
+const getLicenseLabel = (monster: MonsterDto, t: (key: string) => string): string => {
+  if (monster.license === 'ogl-1.0a') return t('licenses.ogl10a');
+  if (monster.license === 'custom') return t('licenses.custom');
+  return t('licenses.unknown');
 };
 
 const CollapsibleTextBlock = ({
@@ -133,6 +149,7 @@ export default function Monster({ route }: Props) {
 
   const isPinned = pinnedMonsterIds.includes(data.id);
   const isFavorite = favoriteMonsterIds.includes(data.id);
+  const canEditMonster = data.source !== 'srd-5.1';
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -157,12 +174,16 @@ export default function Monster({ route }: Props) {
   };
 
   const handleSave = () => {
+    if (!canEditMonster) {
+      setEditing(false);
+      return;
+    }
     void updateMonster(data.id, data);
     setEditing(false);
   };
 
   const duplicateCurrent = () => {
-    void addMonster(createDuplicateMonster(data, t('defaults.monster'), t('defaults.copy'), t('defaults.customSource')));
+    void addMonster(createDuplicateMonster(data, t('defaults.monster'), t('defaults.copy')));
   };
 
   const addToEncounter = () => {
@@ -248,9 +269,11 @@ export default function Monster({ route }: Props) {
             <Text style={styles.meta}>{getMetaLine(data)}</Text>
           </View>
         )}
-        <Pressable style={styles.iconButton} onPress={editing ? handleSave : () => setEditing(true)} android_ripple={{ color: colors.ripple }}>
-          <Ionicons name={editing ? 'checkmark' : 'pencil'} size={22} color={colors.text} />
-        </Pressable>
+        {canEditMonster ? (
+          <Pressable style={styles.iconButton} onPress={editing ? handleSave : () => setEditing(true)} android_ripple={{ color: colors.ripple }}>
+            <Ionicons name={editing ? 'checkmark' : 'pencil'} size={22} color={colors.text} />
+          </Pressable>
+        ) : null}
       </View>
 
       <View style={styles.actionRow}>
@@ -353,7 +376,15 @@ export default function Monster({ route }: Props) {
           <Text style={styles.metadataText}>{t('detail.fields.skills')}: {data.skills || '—'}</Text>
           <Text style={styles.metadataText}>{t('detail.fields.senses')}: {data.senses || '—'}</Text>
           <Text style={styles.metadataText}>{t('detail.fields.languages')}: {data.languages || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.source')}: {data.source || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.hitDice')}: {data.hitDice || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.xp')}: {data.xp ?? '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.damageVulnerabilities')}: {data.damageVulnerabilities || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.damageResistances')}: {data.damageResistances || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.damageImmunities')}: {data.damageImmunities || '—'}</Text>
+          <Text style={styles.metadataText}>{t('detail.fields.conditionImmunities')}: {data.conditionImmunities || '—'}</Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.source')}: {getSourceLabel(data, t)} · {t('detail.fields.license')}: {getLicenseLabel(data, t)}
+          </Text>
           <Text style={styles.metadataText}>{t('detail.fields.environment')}: {data.environment || '—'}</Text>
         </View>
       )}

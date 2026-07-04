@@ -26,7 +26,24 @@ export const SPELL_DAMAGE_TYPES: Dnd5DamageType[] = [
   'thunder',
 ];
 
-const SPELL_SOURCE: SpellbookSpell['source'][] = ['system', 'custom', 'imported'];
+const SPELL_SOURCE: SpellbookSpell['source'][] = ['srd-5.1', 'homebrew', 'user-custom', 'imported'];
+const SPELL_LICENSE: SpellbookSpell['license'][] = ['ogl-1.0a', 'custom', 'unknown'];
+
+function normalizeSpellSource(value: unknown): SpellbookSpell['source'] {
+  const candidate = toTrimmedString(value);
+  if (candidate === 'system') return 'srd-5.1';
+  if (candidate === 'custom') return 'user-custom';
+  if (SPELL_SOURCE.includes(candidate as SpellbookSpell['source'])) return candidate as SpellbookSpell['source'];
+  return 'srd-5.1';
+}
+
+function normalizeSpellLicense(value: unknown, source: SpellbookSpell['source']): SpellbookSpell['license'] {
+  const candidate = toTrimmedString(value);
+  if (SPELL_LICENSE.includes(candidate as SpellbookSpell['license'])) return candidate as SpellbookSpell['license'];
+  if (source === 'srd-5.1') return 'ogl-1.0a';
+  if (source === 'imported') return 'unknown';
+  return 'custom';
+}
 
 function normalizeSpellLevel(value: unknown, fallback = 1): number {
   return clampNumber(Math.floor(toNumber(value, fallback)), 0, 9);
@@ -128,8 +145,8 @@ function parseDamageProfiles(raw: unknown): SpellDamageProfile[] {
 function parseSpellbookSpell(raw: unknown, fallbackId?: string): SpellbookSpell {
   const cast = asRecord(raw);
   const name = toTrimmedString(cast.name) || 'Unnamed Spell';
-  const sourceCandidate = toTrimmedString(cast.source) as SpellbookSpell['source'];
-  const source = SPELL_SOURCE.includes(sourceCandidate) ? sourceCandidate : 'system';
+  const source = normalizeSpellSource(cast.source);
+  const license = normalizeSpellLicense(cast.license, source);
   const now = Date.now();
 
   return {
@@ -149,6 +166,7 @@ function parseSpellbookSpell(raw: unknown, fallbackId?: string): SpellbookSpell 
     concentration: toBoolean(cast.concentration, false),
     damageProfiles: parseDamageProfiles(cast.damageProfiles),
     source,
+    license,
     createdAt: toNumber(cast.createdAt, now),
     updatedAt: toNumber(cast.updatedAt, now),
   };
@@ -211,6 +229,10 @@ function parseUpsertSpellInput(raw: unknown): UpsertSpellbookSpellInput {
       damageType: profile.damageType,
       condition: profile.condition,
     })),
+    source: cast.source === undefined ? undefined : normalizeSpellSource(cast.source),
+    license: cast.license === undefined
+      ? undefined
+      : normalizeSpellLicense(cast.license, normalizeSpellSource(cast.source)),
   };
 }
 
@@ -290,5 +312,3 @@ export function safeParseSpellFormInput(value: unknown) {
 export function safeParseSpell(value: unknown) {
   return safeParseWithIssues(spellSchema, value);
 }
-
-

@@ -13,7 +13,8 @@ const monsters: MonsterDto[] = [
     hitPoints: 7,
     speed: '30 ft.',
     environment: 'Forest',
-    source: 'Basic Rules',
+    source: 'user-custom',
+    license: 'custom',
     tags: ['goblinoid'],
     actions: '**Scimitar.** Melee Weapon Attack: +4 to hit. Hit: 1d6+2.',
     stats: { strength: 8, dexterity: 14, constitution: 10, intelligence: 10, wisdom: 8, charisma: 8 },
@@ -28,7 +29,8 @@ const monsters: MonsterDto[] = [
     hitPoints: 178,
     speed: '40 ft., fly 80 ft.',
     environment: 'Mountain',
-    source: 'SRD 5.1',
+    source: 'srd-5.1',
+    license: 'ogl-1.0a',
     legendaryActions: 'Detect. The dragon makes a Wisdom check.',
     stats: { strength: 23, dexterity: 10, constitution: 21, intelligence: 14, wisdom: 11, charisma: 19 },
   },
@@ -38,7 +40,7 @@ describe('bestiaryFilters', () => {
   it('searches monster name, type, source, tags, and action text', () => {
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, search: 'scimitar' }, [])).toHaveLength(1);
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, search: 'dragon' }, [])[0].id).toBe('dragon');
-    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, search: 'basic rules' }, [])[0].id).toBe('goblin');
+    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, search: 'user-custom' }, [])[0].id).toBe('goblin');
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, search: 'goblinoid' }, [])[0].id).toBe('goblin');
   });
 
@@ -50,7 +52,7 @@ describe('bestiaryFilters', () => {
 
   it('filters by size, source, environment, and favorites', () => {
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, size: 'Small' }, []).map((monster) => monster.id)).toEqual(['goblin']);
-    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, source: 'SRD 5.1' }, []).map((monster) => monster.id)).toEqual(['dragon']);
+    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, source: 'srd-5.1' }, []).map((monster) => monster.id)).toEqual(['dragon']);
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, environment: 'Forest' }, []).map((monster) => monster.id)).toEqual(['goblin']);
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, favoritesOnly: true }, ['dragon']).map((monster) => monster.id)).toEqual(['dragon']);
   });

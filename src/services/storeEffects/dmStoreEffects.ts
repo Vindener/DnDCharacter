@@ -4,6 +4,9 @@ import type { CharacterCustomResource } from '@/types/Character';
 import type { ResourceTemplate } from '@/dm/domain/types';
 import type { DmStore } from '@/stores/dmStore';
 import { createStorageEnvelope, normalizeStorageEnvelope } from '@/domain/migrations';
+import { getSrdMonsters } from '@/domain/srd/srdRepository';
+import { srdMonsterToMonsterDto } from '@/domain/srd/adapters';
+import type { MonsterDto } from '@/types/Monster';
 
 type SetDmStore = (
   partial:
@@ -61,17 +64,53 @@ function parseStoredValue(raw: string | null): unknown {
     return raw;
   }
 }
+
+function isSrdMonster(monster: Pick<MonsterDto, 'source'>): boolean {
+  return monster.source === 'srd-5.1';
+}
+
+function normalizeCustomMonster(monster: MonsterDto): MonsterDto {
+  if (isSrdMonster(monster)) return monster;
+  return {
+    ...monster,
+    source: monster.source || 'user-custom',
+    license: monster.license || 'custom',
+    isCustom: monster.isCustom ?? true,
+  };
+}
+
+function getSrdMonsterSeed(): MonsterDto[] {
+  return getSrdMonsters().map(srdMonsterToMonsterDto);
+}
+
+function mergeMonstersWithSrd(stored: MonsterDto[]): MonsterDto[] {
+  const srdMonsters = getSrdMonsterSeed();
+  const srdNames = new Set(srdMonsters.map((monster) => monster.name.trim().toLowerCase()));
+  const custom = stored
+    .filter((monster) => !isSrdMonster(monster))
+    .map(normalizeCustomMonster)
+    .filter((monster) => monster.id && monster.name);
+  const customIds = new Set(custom.map((monster) => monster.id));
+  const mergedSrd = srdMonsters.filter((monster) => !customIds.has(monster.id));
+  const extras = custom.filter((monster) => !srdNames.has(monster.name.trim().toLowerCase()) || monster.isCustom);
+  return [...extras, ...mergedSrd];
+}
+
+function persistableMonsters(monsters: MonsterDto[]): MonsterDto[] {
+  return monsters.filter((monster) => !isSrdMonster(monster));
+}
 export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffects {
   const saveMonsters: DmStore['saveMonsters'] = async (newMonsters) => {
     try {
+      const mergedMonsters = mergeMonstersWithSrd(newMonsters as MonsterDto[]);
       const existingPins = get().pinnedMonsterIds;
       const existingFavorites = get().favoriteMonsterIds;
-      const validPins = existingPins.filter((id) => newMonsters.some((monster) => monster.id === id));
-      const validFavorites = existingFavorites.filter((id) => newMonsters.some((monster) => monster.id === id));
-      await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsters', newMonsters)));
+      const validPins = existingPins.filter((id) => mergedMonsters.some((monster) => monster.id === id));
+      const validFavorites = existingFavorites.filter((id) => mergedMonsters.some((monster) => monster.id === id));
+      await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsters', persistableMonsters(mergedMonsters))));
       await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', validPins)));
       await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsterFavorites', validFavorites)));
-      set({ monsters: newMonsters, pinnedMonsterIds: validPins, favoriteMonsterIds: validFavorites, isLoaded: true, loadError: null });
+      set({ monsters: mergedMonsters, pinnedMonsterIds: validPins, favoriteMonsterIds: validFavorites, isLoaded: true, loadError: null });
     } catch (error) {
       set({ loadError: error instanceof Error ? error.message : 'Не вдалося зберегти бестіарій.' });
     }
@@ -84,19 +123,20 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
         const monstersParsed = parseStoredValue(jsonValue);
         const monstersMigrated = normalizeStorageEnvelope<unknown[]>('dmMonsters', monstersParsed, []);
         const filtered = Array.isArray(monstersMigrated.data) ? monstersMigrated.data.filter(Boolean) : [];
+        const mergedMonsters = mergeMonstersWithSrd(filtered as MonsterDto[]);
 
         const rawPins = await AsyncStorage.getItem(PINS_STORAGE_KEY);
         const pinsParsed = parseStoredValue(rawPins);
         const pinsMigrated = normalizeStorageEnvelope<string[]>('dmPins', pinsParsed, []);
         const validPins = Array.isArray(pinsMigrated.data) ? pinsMigrated.data.filter(Boolean) : [];
-        const nextPins = validPins.filter((id) => filtered.some((monster) => (monster as { id?: string }).id === id));
+        const nextPins = validPins.filter((id) => mergedMonsters.some((monster) => monster.id === id));
         const rawFavorites = await AsyncStorage.getItem(FAVORITES_STORAGE_KEY);
         const favoritesParsed = parseStoredValue(rawFavorites);
         const favoritesMigrated = normalizeStorageEnvelope<string[]>('dmMonsterFavorites', favoritesParsed, []);
         const validFavorites = Array.isArray(favoritesMigrated.data) ? favoritesMigrated.data.filter(Boolean) : [];
-        const nextFavorites = validFavorites.filter((id) => filtered.some((monster) => (monster as { id?: string }).id === id));
+        const nextFavorites = validFavorites.filter((id) => mergedMonsters.some((monster) => monster.id === id));
         set({
-          monsters: filtered as DmStore['monsters'],
+          monsters: mergedMonsters as DmStore['monsters'],
           pinnedMonsterIds: nextPins,
           favoriteMonsterIds: nextFavorites,
           isLoaded: true,
@@ -111,7 +151,7 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
 
     addMonster: async (monster) => {
       const monsters = get().monsters;
-      const monsterWithId = { ...monster, id: monster.id || uuid.v4() };
+      const monsterWithId = normalizeCustomMonster({ ...monster, id: monster.id || uuid.v4() } as MonsterDto);
       if (monsters.some((item) => item.id === monsterWithId.id)) return;
       const updated = [...monsters, monsterWithId];
       await saveMonsters(updated);
@@ -121,17 +161,23 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
       const monsters = get().monsters;
       const deduped = [
         ...monsters,
-        ...newMonsters.map((monster) => ({ ...monster, id: monster.id || uuid.v4() })).filter((monster) => !monsters.some((existing) => existing.id === monster.id)),
+        ...newMonsters
+          .map((monster) => normalizeCustomMonster({ ...monster, id: monster.id || uuid.v4() } as MonsterDto))
+          .filter((monster) => !monsters.some((existing) => existing.id === monster.id)),
       ];
       await saveMonsters(deduped);
     },
 
     updateMonster: async (id, monster) => {
-      const updated = get().monsters.map((item) => (item.id === id ? monster : item));
+      const target = get().monsters.find((item) => item.id === id);
+      if (target && isSrdMonster(target)) return;
+      const updated = get().monsters.map((item) => (item.id === id ? normalizeCustomMonster(monster as MonsterDto) : item));
       await saveMonsters(updated);
     },
 
     removeMonster: async (id) => {
+      const target = get().monsters.find((item) => item.id === id);
+      if (target && isSrdMonster(target)) return;
       const updated = get().monsters.filter((item) => item.id !== id);
       await saveMonsters(updated);
     },
@@ -243,5 +289,4 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
     },
   };
 }
-
 

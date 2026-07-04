@@ -1,4 +1,6 @@
-export type SpellbookSource = 'system' | 'custom' | 'imported';
+import type { ContentLicense, ContentSource } from '@/domain/types/sourceMetadata';
+
+export type SpellbookSource = ContentSource | 'imported';
 export type Dnd5DamageType =
   | 'acid'
   | 'bludgeoning'
@@ -45,6 +47,7 @@ export interface SpellbookSpell {
   concentration: boolean;
   damageProfiles: SpellDamageProfile[];
   source: SpellbookSource;
+  license: ContentLicense;
   createdAt: number;
   updatedAt: number;
 }
@@ -65,7 +68,8 @@ export interface UpsertSpellbookSpellInput {
   ritual?: boolean;
   concentration?: boolean;
   damageProfiles?: Array<Omit<SpellDamageProfile, 'id'> | SpellDamageProfile>;
+  source?: SpellbookSource;
+  license?: ContentLicense;
 }
 
 export type CharacterSpellStatus = 'available' | 'known' | 'prepared' | 'cantrip';
-

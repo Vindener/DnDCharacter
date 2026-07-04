@@ -42,7 +42,8 @@ function createCustomSpell(id = 'spell-custom-legacy') {
     ritual: false,
     concentration: false,
     damageProfiles: [],
-    source: 'custom' as const,
+    source: 'user-custom' as const,
+    license: 'custom' as const,
     createdAt: 1,
     updatedAt: 1,
   };
@@ -117,7 +118,8 @@ describe('domain/spellbook/spellRepository', () => {
     });
 
     expect(result.spell).toBeTruthy();
-    expect(result.spell?.source).toBe('custom');
+    expect(result.spell?.source).toBe('user-custom');
+    expect(result.spell?.license).toBe('custom');
     expect(result.spell?.castingTime).toBe('1 Action');
     expect(result.spell?.range).toBe('150 ft');
     expect(result.spell?.components.material).toBe('ruby dust');

@@ -92,4 +92,10 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: fs(17),
       fontWeight: '600',
     },
+    detailText: {
+      color: c.text,
+      fontSize: fs(11),
+      lineHeight: fs(16),
+      fontWeight: '600',
+    },
   });

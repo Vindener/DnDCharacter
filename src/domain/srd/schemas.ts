@@ -6,8 +6,11 @@ import type {
   SrdCondition,
   SrdEquipmentItem,
   SrdLanguage,
+  SrdMonster,
   SrdRace,
+  SrdReferenceEntry,
   SrdSkill,
+  SrdSpell,
 } from './types';
 
 const abilityIds = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'] as const;
@@ -99,6 +102,71 @@ export const srdEquipmentItemSchema = srdBaseSchema.extend({
 }) satisfies z.ZodType<SrdEquipmentItem>;
 
 export const srdConditionSchema = srdFeatureSchema satisfies z.ZodType<SrdCondition>;
+
+export const srdSpellSchema = srdBaseSchema.extend({
+  level: z.number().int().min(0).max(9),
+  school: z.string().min(1),
+  castingTime: z.string(),
+  range: z.string(),
+  components: z.object({
+    verbal: z.boolean(),
+    somatic: z.boolean(),
+    material: z.string(),
+  }),
+  duration: z.string(),
+  concentration: z.boolean(),
+  ritual: z.boolean(),
+  classes: z.array(z.string()),
+  description: z.string(),
+  higherLevels: z.string(),
+}) satisfies z.ZodType<SrdSpell>;
+
+const srdMonsterActionSchema = z.object({
+  name: z.string().min(1),
+  description: z.string(),
+});
+
+export const srdMonsterSchema = srdBaseSchema.extend({
+  size: z.string().min(1),
+  type: z.string().min(1),
+  alignment: z.string(),
+  armorClass: z.number().int(),
+  hitPoints: z.number().int(),
+  hitDice: z.string(),
+  speed: z.string(),
+  abilities: z.object({
+    strength: z.number().int(),
+    dexterity: z.number().int(),
+    constitution: z.number().int(),
+    intelligence: z.number().int(),
+    wisdom: z.number().int(),
+    charisma: z.number().int(),
+  }),
+  savingThrows: z.string(),
+  skills: z.string(),
+  damageVulnerabilities: z.string(),
+  damageResistances: z.string(),
+  damageImmunities: z.string(),
+  conditionImmunities: z.string(),
+  senses: z.string(),
+  languages: z.string(),
+  challengeRating: z.string(),
+  xp: z.number().int().min(0),
+  traits: z.array(srdMonsterActionSchema),
+  actions: z.array(srdMonsterActionSchema),
+  reactions: z.array(srdMonsterActionSchema),
+  legendaryActions: z.array(srdMonsterActionSchema),
+}) satisfies z.ZodType<SrdMonster>;
+
+export const srdReferenceEntrySchema = srdBaseSchema.omit({ name: true }).extend({
+  category: z.string().min(1),
+  title: z.string().min(1),
+  summary: z.string(),
+  entries: z.array(z.object({
+    title: z.string().min(1),
+    body: z.string(),
+  })),
+}) satisfies z.ZodType<SrdReferenceEntry>;
 
 export const srdSkillSchema = srdBaseSchema.extend({
   ability: z.enum(abilityIds),

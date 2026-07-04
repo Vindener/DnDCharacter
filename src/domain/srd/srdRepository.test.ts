@@ -3,6 +3,9 @@ import {
   getClassProgression,
   getConditions,
   getEquipment,
+  getSrdMonsters,
+  getSrdReferences,
+  getSrdSpells,
   getSrdClassProgressions,
   getSrdClasses,
   getSrdRaces,
@@ -21,11 +24,24 @@ describe('srdRepository', () => {
     expect(getSrdClasses().length).toBeGreaterThan(0);
     expect(getEquipment().length).toBeGreaterThan(0);
     expect(getConditions().length).toBeGreaterThan(0);
+    expect(getSrdSpells().length).toBeGreaterThan(100);
+    expect(getSrdMonsters().length).toBeGreaterThan(100);
+    expect(getSrdReferences().length).toBeGreaterThan(0);
   });
 
   it('keeps all race ids unique', () => {
     const ids = getSrdRaces().map((race) => race.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('keeps spell, monster, and reference ids unique', () => {
+    const spellIds = getSrdSpells().map((spell) => spell.id);
+    const monsterIds = getSrdMonsters().map((monster) => monster.id);
+    const referenceIds = getSrdReferences().map((entry) => entry.id);
+
+    expect(new Set(spellIds).size).toBe(spellIds.length);
+    expect(new Set(monsterIds).size).toBe(monsterIds.length);
+    expect(new Set(referenceIds).size).toBe(referenceIds.length);
   });
 
   it('keeps all class ids unique and excludes homebrew artificer', () => {
@@ -58,6 +74,24 @@ describe('srdRepository', () => {
     });
     getEquipment().forEach(expectSrdMetadata);
     getConditions().forEach(expectSrdMetadata);
+    getSrdSpells().forEach((spell) => {
+      expectSrdMetadata(spell);
+      expect(spell.description).toEqual(expect.any(String));
+      expect(spell.components).toEqual(expect.objectContaining({
+        verbal: expect.any(Boolean),
+        somatic: expect.any(Boolean),
+        material: expect.any(String),
+      }));
+    });
+    getSrdMonsters().forEach((monster) => {
+      expectSrdMetadata(monster);
+      expect(monster.abilities.strength).toEqual(expect.any(Number));
+      expect(monster.actions).toEqual(expect.any(Array));
+    });
+    getSrdReferences().forEach((entry) => {
+      expectSrdMetadata(entry);
+      expect(entry.title).toEqual(expect.any(String));
+      expect(entry.entries).toEqual(expect.any(Array));
+    });
   });
 });
-

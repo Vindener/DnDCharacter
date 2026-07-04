@@ -146,11 +146,20 @@
     "slotLevel": "{{level}} рівень",
     "noSlots": "Слоти не налаштовані",
     "openSpellbook": "Відкрити Spellbook",
+    "pinnedSpells": "Закріплені закляття",
+    "noPinnedSpells": "Закріплених заклять немає",
+    "cantrip": "Каніпс",
     "spellRolls": "Кидки заклять",
     "quickRollsEmpty": "Додайте закляття до Prepared/Known/Cantrip для швидких кидків.",
     "preparedSpells": "Підготовлені закляття",
     "preparedLimit": "Ліміт: {{count}}/{{limit}}. ",
-    "noPrepared": "Немає підготовлених"
+    "noPrepared": "Немає підготовлених",
+    "sources": {
+      "srd51": "SRD 5.1",
+      "userCustom": "Власне",
+      "homebrew": "Хоумбрю",
+      "imported": "Імпортоване"
+    }
   },
   "inventory": {
     "title": "Інвентар",

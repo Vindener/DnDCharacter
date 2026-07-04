@@ -39,9 +39,15 @@
     "cantrip": "Каніпс"
   },
   "sources": {
-    "system": "системне",
-    "custom": "власне",
+    "srd51": "SRD 5.1",
+    "userCustom": "Власне",
+    "homebrew": "Хоумбрю",
     "imported": "імпортоване"
+  },
+  "licenses": {
+    "ogl10a": "OGL 1.0a",
+    "custom": "Власна",
+    "unknown": "Невідома"
   },
   "labels": {
     "cast": "Каст",
@@ -56,6 +62,9 @@
     "higherLevels": "На вищих рівнях",
     "classes": "Класи",
     "tags": "Теги",
+    "sourceMetadata": "Джерело і ліцензія",
+    "source": "Джерело",
+    "license": "Ліцензія",
     "unknownSchool": "Школа невідома",
     "noComponents": "Немає"
   },

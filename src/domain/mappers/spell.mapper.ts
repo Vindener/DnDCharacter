@@ -45,7 +45,8 @@ export function spellbookInputToEntity(input: UpsertSpellbookSpellInput, existin
     ? normalizeSpell(existing)
     : normalizeSpell({
         id: normalizedInput.spellId || `spell-custom-${uuid.v4()}`,
-        source: 'custom',
+        source: normalizedInput.source || 'user-custom',
+        license: normalizedInput.license || 'custom',
         name: normalizedInput.name || 'Unnamed Spell',
         level: normalizedInput.level ?? 1,
         school: normalizedInput.school || 'Власне',
@@ -81,7 +82,8 @@ export function spellbookInputToEntity(input: UpsertSpellbookSpellInput, existin
     ritual: normalizedInput.ritual ?? base.ritual,
     concentration: normalizedInput.concentration ?? base.concentration,
     damageProfiles: normalizeSpellbookDamageProfiles(normalizedInput.damageProfiles ?? base.damageProfiles),
-    source: existing?.source === 'custom' || existing?.source === 'imported' ? existing.source : 'custom',
+    source: normalizedInput.source || (existing?.source === 'homebrew' || existing?.source === 'imported' ? existing.source : 'user-custom'),
+    license: normalizedInput.license || (existing?.license && existing.source !== 'srd-5.1' ? existing.license : 'custom'),
     createdAt: existing?.createdAt || base.createdAt || now,
     updatedAt: now,
   });

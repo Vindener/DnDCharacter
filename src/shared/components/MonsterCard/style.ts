@@ -122,11 +122,29 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '700',
       marginTop: sp(4),
     },
+    badgeRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: sp(6),
+      marginTop: sp(6),
+    },
+    sourceBadge: {
+      borderRadius: rd(999),
+      borderWidth: 1,
+      borderColor: c.info,
+      backgroundColor: c.info,
+      paddingHorizontal: sp(8),
+      paddingVertical: sp(4),
+    },
+    sourceBadgeText: {
+      color: c.onInfo,
+      fontSize: fs(11),
+      fontWeight: '700',
+    },
     deleteButton: {
       marginLeft: sp(8),
       marginTop: sp(4),
       padding: sp(4),
     },
   });
-
 

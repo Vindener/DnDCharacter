@@ -39,9 +39,15 @@
     "cantrip": "Cantrip"
   },
   "sources": {
-    "system": "system",
-    "custom": "custom",
+    "srd51": "SRD 5.1",
+    "userCustom": "Custom",
+    "homebrew": "Homebrew",
     "imported": "imported"
+  },
+  "licenses": {
+    "ogl10a": "OGL 1.0a",
+    "custom": "Custom",
+    "unknown": "Unknown"
   },
   "labels": {
     "cast": "Cast",
@@ -56,6 +62,9 @@
     "higherLevels": "At higher levels",
     "classes": "Classes",
     "tags": "Tags",
+    "sourceMetadata": "Source and license",
+    "source": "Source",
+    "license": "License",
     "unknownSchool": "Unknown school",
     "noComponents": "None"
   },

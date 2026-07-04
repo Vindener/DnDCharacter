@@ -98,7 +98,8 @@ describe('dmStoreEffects migration pipeline', () => {
     const harness = createHarness();
     await harness.effects.loadMonsters();
 
-    expect(harness.getState().monsters).toHaveLength(1);
+    expect(harness.getState().monsters.length).toBeGreaterThan(1);
+    expect(harness.getState().monsters.some((monster) => monster.source === 'srd-5.1')).toBe(true);
     expect(harness.getState().pinnedMonsterIds).toEqual(['monster-1']);
     expect(harness.getState().favoriteMonsterIds).toEqual(['monster-1']);
     expect(harness.getState().isLoaded).toBe(true);
@@ -142,6 +143,24 @@ describe('dmStoreEffects migration pipeline', () => {
 
     expect(harness.getState().monsters[0].mainAttack).toBe('Scimitar');
     expect(harness.getState().monsters[0].isCustom).toBe(true);
+    expect(harness.getState().monsters[0].source).toBe('user-custom');
+    expect(harness.getState().monsters[0].license).toBe('custom');
+    const stored = JSON.parse(storage.get(MONSTERS_STORAGE_KEY) || '{}');
+    expect(stored.data.some((monster: { source?: string }) => monster.source === 'srd-5.1')).toBe(false);
+  });
+
+  it('persists pinned SRD monsters without writing SRD records into monster storage', async () => {
+    const harness = createHarness();
+    await harness.effects.loadMonsters();
+    const srdMonster = harness.getState().monsters.find((monster) => monster.source === 'srd-5.1');
+    expect(srdMonster).toBeTruthy();
+
+    await harness.effects.togglePinnedMonster(srdMonster!.id);
+
+    expect(harness.getState().pinnedMonsterIds).toContain(srdMonster!.id);
+    expect(storage.get(PINS_STORAGE_KEY)).toContain(srdMonster!.id);
+    const stored = JSON.parse(storage.get(MONSTERS_STORAGE_KEY) || '{"data":[]}');
+    expect((stored.data || []).some((monster: { source?: string }) => monster.source === 'srd-5.1')).toBe(false);
   });
 
   it('loads legacy user templates payload', async () => {

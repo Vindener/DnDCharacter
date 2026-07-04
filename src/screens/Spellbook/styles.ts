@@ -234,6 +234,19 @@ export const getStyles = (c: ThemeColors) =>
     smallTagTextActive: {
       color: c.onPrimary,
     },
+    sourceBadge: {
+      borderRadius: rd(999),
+      borderWidth: 1,
+      borderColor: c.info,
+      backgroundColor: c.info,
+      paddingHorizontal: sp(8),
+      paddingVertical: sp(5),
+    },
+    sourceBadgeText: {
+      color: c.onInfo,
+      fontSize: fs(11),
+      fontWeight: '700',
+    },
     damageBlock: {
       borderRadius: rd(10),
       borderWidth: 1,
@@ -390,7 +403,6 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: 16,
     },
   });
-
 
 
 

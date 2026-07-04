@@ -318,6 +318,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const loadSpellbook = useSpellbookStore((s) => s.loadSpellbook);
   const upsertCustomSpell = useSpellbookStore((s) => s.upsertCustomSpell);
   const spellbookSpells = useSpellbookStore((s) => s.spells);
+  const pinnedSpellIds = useSpellbookStore((s) => s.pinnedSpellIds);
   const [sharedHistory, setSharedHistory] = useState<CharacterChangeHistoryEntry[]>([]);
   const netInfo = useNetInfo();
   const isOnline = isNetworkOnline(netInfo.isConnected);
@@ -433,6 +434,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         name,
         status,
         damageProfiles: fromSpellbook?.damageProfiles || [],
+        source: fromSpellbook?.source || 'imported',
       };
     });
   }, [
@@ -441,6 +443,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     characterData.spells.preparedSpells,
     spellbookSpells,
   ]);
+  const pinnedMagicSpells = useMemo(
+    () => (spellbookSpells || []).filter((spell) => pinnedSpellIds.includes(spell.id)).slice(0, 6),
+    [pinnedSpellIds, spellbookSpells],
+  );
   const quickSpellCandidates = useMemo(() => {
     const filter = quickSpellSearch.trim().toLowerCase();
     return [...(spellbookSpells || [])]
@@ -471,6 +477,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const isQuickSpellAlreadyPrepared = Boolean(selectedQuickSpellKey && preparedSpellNameSet.has(selectedQuickSpellKey));
   const canAddPreparedFromQuickModal =
     preparedSpellsLimit === null || isQuickSpellAlreadyPrepared || preparedSpellsCount < preparedSpellsLimit;
+  const spellSourceLabel = useCallback((source: SpellbookSpell['source'] | 'imported') => {
+    if (source === 'srd-5.1') return t('magic.sources.srd51');
+    if (source === 'user-custom') return t('magic.sources.userCustom');
+    if (source === 'homebrew') return t('magic.sources.homebrew');
+    if (source === 'imported') return t('magic.sources.imported');
+    return source;
+  }, [t]);
   const conflictPaths = currentSync?.conflictPaths || [];
   const syncStatusLabel = useMemo(() => getSyncDisplayStatus(currentSync, netInfo.isConnected), [currentSync, netInfo.isConnected]);
   const shareStatusLabel = useMemo(
@@ -2134,6 +2147,25 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.secondaryActionText}>{t('magic.openSpellbook')}</Text>
         </Pressable>
 
+        <Text style={styles.subSectionTitle}>{t('magic.pinnedSpells')}</Text>
+        {pinnedMagicSpells.length ? (
+          pinnedMagicSpells.map((spell) => (
+            <View key={`magic-pinned-${spell.id}`} style={styles.weaponCombatCard}>
+              <View style={styles.rowLine}>
+                <Text style={styles.rowLabel}>{spell.name}</Text>
+                <Text style={styles.rowValue}>
+                  {spell.level === 0 ? t('magic.cantrip') : t('magic.slotLevel', { level: spell.level })} · {spellSourceLabel(spell.source)}
+                </Text>
+              </View>
+              <Text style={styles.blockTextMuted}>
+                {spell.school} · {spell.castingTime || '—'} · {spell.range || '—'}
+              </Text>
+            </View>
+          ))
+        ) : (
+          <Text style={styles.blockTextMuted}>{t('magic.noPinnedSpells')}</Text>
+        )}
+
         <Text style={styles.subSectionTitle}>{t('magic.spellRolls')}</Text>
         {magicCombatSpells.length ? (
           magicCombatSpells.map((spell) => {
@@ -2144,6 +2176,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                   <Text style={styles.rowLabel}>{spell.name}</Text>
                   <Text style={styles.rowValue}>
                     {spellStatusLabel(spell.status)}
+                    {` · ${spellSourceLabel(spell.source)}`}
                     {defaultProfile ? ` • ${defaultProfile.formula}` : ''}
                   </Text>
                 </View>

@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
+import { getConditions, getEquipment, getSrdReferences } from '@/domain/srd/srdRepository';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from './styles';
 
@@ -16,6 +17,8 @@ type ReferenceEntry = {
   testID: string;
   disabled?: boolean;
   onPress?: () => void;
+  source?: 'srd-5.1';
+  details?: Array<{ title: string; body: string }>;
 };
 
 type Navigation = StackNavigationProp<ReferencesStackParamList, 'ReferencesHome'>;
@@ -26,6 +29,7 @@ export default function References() {
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
+  const srdEntries = getSrdReferences();
   const entries: ReferenceEntry[] = [
     {
       id: 'bestiary',
@@ -43,38 +47,25 @@ export default function References() {
       testID: 'references.openSpellbookButton',
       onPress: () => navigation.navigate('Spellbook'),
     },
-    {
-      id: 'items',
-      title: t('entries.items.title'),
-      description: t('entries.items.description'),
-      icon: 'cube-outline',
-      testID: 'references.placeholder.items',
-      disabled: true,
-    },
-    {
-      id: 'conditions',
-      title: t('entries.conditions.title'),
-      description: t('entries.conditions.description'),
-      icon: 'pulse-outline',
-      testID: 'references.placeholder.conditions',
-      disabled: true,
-    },
-    {
-      id: 'rules',
-      title: t('entries.rules.title'),
-      description: t('entries.rules.description'),
-      icon: 'reader-outline',
-      testID: 'references.placeholder.rules',
-      disabled: true,
-    },
-    {
-      id: 'classes',
-      title: t('entries.classes.title'),
-      description: t('entries.classes.description'),
-      icon: 'people-outline',
-      testID: 'references.placeholder.classes',
-      disabled: true,
-    },
+    ...srdEntries.map((entry) => ({
+      id: entry.id,
+      title: t(`srd.${entry.id}.title`, { defaultValue: entry.title }),
+      description: t(`srd.${entry.id}.summary`, { defaultValue: entry.summary }),
+      icon: entry.id === 'conditions'
+        ? 'pulse-outline' as const
+        : entry.id === 'equipment'
+          ? 'cube-outline' as const
+          : entry.id === 'spellcasting-basics'
+            ? 'sparkles-outline' as const
+            : 'reader-outline' as const,
+      testID: `references.srd.${entry.id}`,
+      source: entry.source,
+      details: entry.id === 'conditions'
+        ? getConditions().slice(0, 8).map((condition) => ({ title: condition.name, body: condition.summary }))
+        : entry.id === 'equipment'
+          ? getEquipment().slice(0, 8).map((item) => ({ title: item.name, body: item.category }))
+          : entry.entries,
+    })),
   ];
 
   return (
@@ -98,7 +89,11 @@ export default function References() {
               <View style={styles.iconBox}>
                 <Ionicons name={entry.icon} size={20} color={colors.text} />
               </View>
-              {entry.disabled ? (
+              {entry.source ? (
+                <View style={styles.badge} testID={`references.sourceBadge.${entry.id}`}>
+                  <Text style={styles.badgeText}>{t('sourceBadge.srd51')}</Text>
+                </View>
+              ) : entry.disabled ? (
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>{t('soon')}</Text>
                 </View>
@@ -108,6 +103,11 @@ export default function References() {
             </View>
             <Text style={styles.cardTitle}>{entry.title}</Text>
             <Text style={styles.cardDescription}>{entry.description}</Text>
+            {entry.details?.slice(0, 3).map((detail) => (
+              <Text key={`${entry.id}-${detail.title}`} style={styles.detailText}>
+                {detail.title}: {detail.body}
+              </Text>
+            ))}
           </Pressable>
         ))}
       </View>
