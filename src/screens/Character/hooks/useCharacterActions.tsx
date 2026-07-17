@@ -3365,6 +3365,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     characterData,
     isCloudDoc,
     isSharedSheet,
+    isOwnedByMe,
     onCharacterMenuChange: (next: CharacterViewModel) => setCharacterData(ensureCharacterDefaults(next)),
     syncBadges,
     renderBadge,

@@ -12,6 +12,7 @@ type CharacterHeaderProps = Pick<
   | 'characterData'
   | 'isCloudDoc'
   | 'isSharedSheet'
+  | 'isOwnedByMe'
   | 'onCharacterMenuChange'
   | 'syncBadges'
   | 'renderBadge'
@@ -30,6 +31,7 @@ function CharacterHeaderBase({
   characterData,
   isCloudDoc,
   isSharedSheet,
+  isOwnedByMe,
   onCharacterMenuChange,
   syncBadges,
   renderBadge,
@@ -66,6 +68,7 @@ function CharacterHeaderBase({
               character={characterData}
               isCloudDoc={isCloudDoc}
               isSharedSheet={isSharedSheet}
+              isOwnedByMe={isOwnedByMe}
               onSyncNow={syncNow}
               onChange={onCharacterMenuChange}
             />

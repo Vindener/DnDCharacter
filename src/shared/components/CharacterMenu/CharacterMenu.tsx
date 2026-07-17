@@ -17,6 +17,8 @@ import { EXPERIENCE_TABLE, getLevelByExperience } from '@/shared/const/experienc
 import ShareCharacterSheetModal from '@/components/ShareCharacterSheetModal';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
+import { deleteCharacterCopies } from '@/services/characterDeletion';
+import { deleteCharacterSheet } from '@/repositories/characterCloudRepository';
 import { sp } from '@/shared/styles/tokens';
 
 type CharacterStoreState = ReturnType<typeof useCharacterStore.getState>;
@@ -35,14 +37,16 @@ interface CharacterMenuProps {
   onChange?: (character: CharacterViewModel) => void;
   isCloudDoc?: boolean;
   isSharedSheet?: boolean;
+  isOwnedByMe?: boolean;
   onSyncNow?: () => void;
 }
 
-const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, onSyncNow }) => {
+const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, isOwnedByMe = true, onSyncNow }) => {
   const { t } = useTranslation('character');
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const updateCharacter = useCharacterStore((s: CharacterStoreState) => s.updateCharacter);
   const addCharacter = useCharacterStore((s: CharacterStoreState) => s.addCharacter);
+  const removeCharacter = useCharacterStore((s: CharacterStoreState) => s.removeCharacter);
   const setCurrentCharacterId = useCharacterStore((s: CharacterStoreState) => s.setCurrentCharacterId);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
@@ -229,6 +233,64 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
     setShareOpen(true);
   };
 
+  const deleteCopies = async (deleteCloud: boolean) => {
+    try {
+      await deleteCharacterCopies({
+        characterId: characterData.id,
+        deleteCloud,
+        deleteCloudCopy: deleteCharacterSheet,
+        deleteLocalCopy: removeCharacter,
+      });
+      closeMenu();
+      navigation.navigate('Home');
+    } catch (error: unknown) {
+      console.warn('[delete character] failed', errorCodeOrMessage(error));
+      Alert.alert(
+        t('legacy.menu.deleteErrorTitle'),
+        deleteCloud ? t('legacy.menu.deleteCloudFailed') : t('legacy.menu.deleteLocalFailed'),
+      );
+    }
+  };
+
+  const confirmDelete = () => {
+    closeMenu();
+
+    if (isCharacterInCloud && isOwnedByMe) {
+      Alert.alert(
+        t('legacy.menu.deleteTitle'),
+        t('legacy.menu.deleteWithCloudMessage'),
+        [
+          { text: t('legacy.menu.cancel'), style: 'cancel' },
+          {
+            text: t('legacy.menu.deleteLocalOnly'),
+            onPress: () => void deleteCopies(false),
+          },
+          {
+            text: t('legacy.menu.deleteLocalAndCloud'),
+            style: 'destructive',
+            onPress: () => void deleteCopies(true),
+          },
+        ],
+      );
+      return;
+    }
+
+    Alert.alert(
+      t('legacy.menu.deleteTitle'),
+      isCharacterInCloud
+        ? t('legacy.menu.deleteSharedLocalMessage')
+        : t('legacy.menu.deleteLocalMessage'),
+      [
+        { text: t('legacy.menu.cancel'), style: 'cancel' },
+        {
+          text: t('legacy.menu.deleteLocalOnly'),
+          style: 'destructive',
+          onPress: () => void deleteCopies(false),
+        },
+      ],
+    );
+  };
+
   const pickPhoto = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -351,6 +413,14 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           {t('legacy.menu.rename')}
         </MenuItem>
 
+        <MenuItem
+          textStyle={styles.destructiveMenuItemText}
+          onPress={confirmDelete}
+          accessibilityLabel={t('legacy.menu.deleteCharacter')}
+        >
+          {t('legacy.menu.deleteCharacter')}
+        </MenuItem>
+
         <MenuDivider color={colors.border} />
 
         <MenuItem
@@ -446,6 +516,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         >
           {t('legacy.menu.share')}
         </MenuItem>
+
       </Menu>
       <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title={t('legacy.menu.newName')}>
         <TextInput value={newName} onChangeText={setNewName} style={styles.tableCell} />
@@ -537,5 +608,3 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
 
 
 export default CharacterMenu;
-
-

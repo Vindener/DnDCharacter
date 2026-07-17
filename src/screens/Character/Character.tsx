@@ -90,6 +90,7 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
           characterData={characterData}
           isCloudDoc={viewState.isCloudDoc}
           isSharedSheet={viewState.isSharedSheet}
+          isOwnedByMe={viewState.isOwnedByMe}
           onCharacterMenuChange={viewState.onCharacterMenuChange}
           syncBadges={viewState.syncBadges}
           renderBadge={viewState.renderBadge}
@@ -191,4 +192,3 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
     </View>
   );
 }
-

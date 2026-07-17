@@ -14,6 +14,7 @@ StyleSheet.create({
   },
 
   menuItemText: { color: c.text },
+  destructiveMenuItemText: { color: c.danger },
 
   adjustButton: {
     backgroundColor: c.inputBackground,
@@ -30,5 +31,4 @@ StyleSheet.create({
   tableCell: { color: c.text },
   tableCellActive: { color: c.highlight },
 });
-
 
