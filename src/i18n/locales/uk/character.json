@@ -78,7 +78,6 @@
   "badges": {
     "localOnly": "Лише локально",
     "homebrew": "Власне",
-    "srd51": "SRD 5.1",
     "custom": "Власне",
     "legacyCustom": "Застаріле власне",
     "offline": "Офлайн",
@@ -114,7 +113,7 @@
     "proficiencies": "Професії",
     "features": "Риси та особливості",
     "source": "Джерело",
-    "srdDetails": "Деталі SRD",
+    "srdDetails": "Деталі правил",
     "conditions": "Поточні стани"
   },
   "combat": {
@@ -155,7 +154,6 @@
     "preparedLimit": "Ліміт: {{count}}/{{limit}}. ",
     "noPrepared": "Немає підготовлених",
     "sources": {
-      "srd51": "SRD 5.1",
       "userCustom": "Власне",
       "homebrew": "Хоумбрю",
       "imported": "Імпортоване"

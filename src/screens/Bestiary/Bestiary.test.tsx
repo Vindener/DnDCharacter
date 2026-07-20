@@ -274,4 +274,18 @@ describe('Bestiary screen', () => {
 
     act(() => tree.unmount());
   });
+
+  it('does not expose the built-in rules source as a filter', async () => {
+    mocks.monsterState.monsters = [
+      { ...goblin, id: 'built-in-goblin', source: 'srd-5.1', license: 'ogl-1.0a' },
+      { ...goblin, id: 'custom-goblin', source: 'user-custom', license: 'custom', isCustom: true },
+    ];
+
+    const tree = await renderBestiary();
+
+    expect(tree.root.findAllByProps({ testID: 'bestiary.source.srd-5.1' })).toHaveLength(0);
+    expect(tree.root.findByProps({ testID: 'bestiary.source.user-custom' })).toBeTruthy();
+
+    act(() => tree.unmount());
+  });
 });

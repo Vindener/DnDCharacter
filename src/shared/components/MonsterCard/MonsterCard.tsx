@@ -10,6 +10,8 @@ import { getStyles } from './style';
 import useThemeStore from '@/context/Theme-store';
 import { MonsterDto } from '@/types/Monster';
 import useMonsterStore from '@/context/Monster-store';
+import { isBuiltInRulesSource, shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
+import { getLocalizedMonster } from '@/domain/srd/localization';
 
 interface MonsterCardProps {
   monster: MonsterDto;
@@ -35,8 +37,8 @@ const getMainAttack = (monster: MonsterDto, t: TFunction<'bestiary'>): string =>
   return match?.[1]?.trim() || t('labels.missingAttack');
 };
 
-const getSourceLabel = (monster: MonsterDto, t: TFunction<'bestiary'>): string => {
-  if (monster.source === 'srd-5.1') return t('sources.srd51');
+const getSourceLabel = (monster: MonsterDto, t: TFunction<'bestiary'>): string | null => {
+  if (!shouldDisplaySourceMetadata(monster.source)) return null;
   if (monster.source === 'user-custom') return t('sources.userCustom');
   if (monster.source === 'homebrew') return t('sources.homebrew');
   if (monster.source === 'imported') return t('sources.imported');
@@ -53,13 +55,15 @@ export const MonsterCard = ({
   onDuplicate,
   cardTestID,
 }: MonsterCardProps) => {
-  const { t } = useTranslation('bestiary');
+  const { i18n, t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const removeMonster = useMonsterStore((s) => s.removeMonster);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
-  const isSrdMonster = monster.source === 'srd-5.1';
-  const traitsSummary = monster.normalizedTraits?.slice(0, 2).map((trait) => trait.name).join(', ') || monster.traits || '';
+  const isSrdMonster = isBuiltInRulesSource(monster.source);
+  const displayMonster = getLocalizedMonster(monster, i18n.language);
+  const sourceLabel = getSourceLabel(monster, t);
+  const traitsSummary = displayMonster.normalizedTraits?.slice(0, 2).map((trait) => trait.name).join(', ') || displayMonster.traits || '';
 
   const handleDelete = () => {
     removeMonster(monster.id);
@@ -71,10 +75,10 @@ export const MonsterCard = ({
 
   return (
     <Pressable style={styles.card} onPress={handlePress} android_ripple={{ color: colors.ripple }} testID={cardTestID}>
-      {monster.photoUri ? <Image source={{ uri: monster.photoUri }} style={styles.avatar} /> : <View style={styles.avatar} />}
+      {displayMonster.photoUri ? <Image source={{ uri: displayMonster.photoUri }} style={styles.avatar} /> : <View style={styles.avatar} />}
       <View style={styles.info}>
         <View style={styles.titleRow}>
-          <Text style={styles.name}>{monster.name}</Text>
+          <Text style={styles.name}>{displayMonster.name}</Text>
           {!!onToggleFavorite && (
             <Pressable
               onPress={(event) => {
@@ -90,26 +94,26 @@ export const MonsterCard = ({
           )}
         </View>
         <Text style={styles.meta}>
-          {getMetaLine(monster, t)} · {t('labels.challengeShort')} {monster.challenge || '—'}
+          {getMetaLine(displayMonster, t)} · {t('labels.challengeShort')} {displayMonster.challenge || '—'}
         </Text>
         <View style={styles.statGrid}>
           <View style={styles.statPill}>
             <Text style={styles.statLabel}>{t('labels.armorClassShort')}</Text>
-            <Text style={styles.statValue}>{monster.armorClass ?? '—'}</Text>
+            <Text style={styles.statValue}>{displayMonster.armorClass ?? '—'}</Text>
           </View>
           <View style={styles.statPill}>
             <Text style={styles.statLabel}>{t('labels.hitPointsShort')}</Text>
-            <Text style={styles.statValue}>{monster.hitPoints ?? '—'}</Text>
+            <Text style={styles.statValue}>{displayMonster.hitPoints ?? '—'}</Text>
           </View>
           <View style={styles.statPill}>
             <Text style={styles.statLabel}>{t('labels.speedShort')}</Text>
-            <Text style={styles.statValue}>{monster.speed || '—'}</Text>
+            <Text style={styles.statValue}>{displayMonster.speed || '—'}</Text>
           </View>
         </View>
         <Text style={styles.attackLine} numberOfLines={2}>
-          {getMainAttack(monster, t)}
-          {monster.attackBonus ? ` · ${t('labels.attackBonus', { value: monster.attackBonus })}` : ''}
-          {monster.damage ? ` · ${monster.damage}` : ''}
+          {getMainAttack(displayMonster, t)}
+          {displayMonster.attackBonus ? ` · ${t('labels.attackBonus', { value: displayMonster.attackBonus })}` : ''}
+          {displayMonster.damage ? ` · ${displayMonster.damage}` : ''}
         </Text>
         {!!traitsSummary && (
           <Text style={styles.attackLine} numberOfLines={2}>
@@ -160,14 +164,14 @@ export const MonsterCard = ({
             </Pressable>
           )}
         </View>
-        {!!monster.environment && <Text style={styles.meta}>{t('labels.environment', { value: monster.environment })}</Text>}
-        {!!monster.source && (
+        {!!displayMonster.environment && <Text style={styles.meta}>{t('labels.environment', { value: displayMonster.environment })}</Text>}
+        {sourceLabel ? (
           <View style={styles.badgeRow}>
             <View style={styles.sourceBadge} testID='monsterCard.sourceBadge'>
-              <Text style={styles.sourceBadgeText}>{getSourceLabel(monster, t)}</Text>
+              <Text style={styles.sourceBadgeText}>{sourceLabel}</Text>
             </View>
           </View>
-        )}
+        ) : null}
         {!!monster.isCustom && <Text style={styles.customMeta}>{t('labels.customMonster')}</Text>}
       </View>
       {!isSrdMonster ? (

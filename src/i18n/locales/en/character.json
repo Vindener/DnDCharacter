@@ -78,7 +78,6 @@
   "badges": {
     "localOnly": "Local only",
     "homebrew": "Homebrew",
-    "srd51": "SRD 5.1",
     "custom": "Custom",
     "legacyCustom": "Legacy custom",
     "offline": "Offline",
@@ -114,7 +113,7 @@
     "proficiencies": "Proficiencies",
     "features": "Features and Traits",
     "source": "Source",
-    "srdDetails": "SRD Details",
+    "srdDetails": "Rules Details",
     "conditions": "Current Conditions"
   },
   "combat": {
@@ -155,7 +154,6 @@
     "preparedLimit": "Limit: {{count}}/{{limit}}. ",
     "noPrepared": "No prepared spells",
     "sources": {
-      "srd51": "SRD 5.1",
       "userCustom": "Custom",
       "homebrew": "Homebrew",
       "imported": "Imported"

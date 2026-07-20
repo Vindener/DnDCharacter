@@ -1,7 +1,9 @@
 import React from 'react';
 import { act, create } from 'react-test-renderer';
 import type { ReactTestRenderer } from 'react-test-renderer';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { initReactI18next } from 'react-i18next';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import i18n, { resources } from '@/i18n';
 import References from './References';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -27,8 +29,22 @@ vi.mock('@/context/Theme-store', async () => {
   };
 });
 
-beforeEach(() => {
+beforeAll(async () => {
+  if (!i18n.isInitialized) {
+    await i18n.use(initReactI18next).init({
+      lng: 'uk',
+      fallbackLng: 'en',
+      defaultNS: 'references',
+      interpolation: { escapeValue: false },
+    });
+  }
+  i18n.addResourceBundle('uk', 'references', resources.uk.references, true, true);
+  i18n.addResourceBundle('en', 'references', resources.en.references, true, true);
+});
+
+beforeEach(async () => {
   mocks.navigation.navigate.mockClear();
+  await i18n.changeLanguage('uk');
 });
 
 function renderReferences(): ReactTestRenderer {
@@ -64,13 +80,45 @@ describe('References screen', () => {
     act(() => tree.unmount());
   });
 
-  it('renders structured SRD reference entries with source badges', () => {
+  it('renders every localized rules reference without source badges', () => {
     const tree = renderReferences();
 
     expect(tree.root.findByProps({ testID: 'references.srd.conditions' }).props.disabled).toBeFalsy();
     expect(tree.root.findByProps({ testID: 'references.srd.actions-in-combat' }).props.disabled).toBeFalsy();
+    expect(tree.root.findByProps({ testID: 'references.srd.resting' }).props.disabled).toBeFalsy();
+    expect(tree.root.findByProps({ testID: 'references.srd.ability-checks' }).props.disabled).toBeFalsy();
+    expect(tree.root.findByProps({ testID: 'references.srd.saving-throws' }).props.disabled).toBeFalsy();
     expect(tree.root.findByProps({ testID: 'references.srd.equipment' }).props.disabled).toBeFalsy();
-    expect(tree.root.findByProps({ testID: 'references.sourceBadge.conditions' })).toBeTruthy();
+    expect(tree.root.findByProps({ testID: 'references.srd.spellcasting-basics' }).props.disabled).toBeFalsy();
+
+    const rendered = JSON.stringify(tree.toJSON());
+    expect(rendered).toContain('Стани');
+    expect(rendered).toContain('Дії в бою');
+    expect(rendered).toContain('Короткий відпочинок');
+    expect(rendered).toContain('Перевірки характеристик');
+    expect(rendered).toContain('Рятівні кидки');
+    expect(rendered).toContain('Дубина');
+    expect(rendered).toContain('Основи накладання заклять');
+    expect(rendered).not.toContain('SRD 5.1');
+    expect(tree.root.findAllByProps({ testID: 'references.sourceBadge.conditions' })).toHaveLength(0);
+
+    act(() => tree.unmount());
+  });
+
+  it('updates visible reference text when the language changes', async () => {
+    const tree = renderReferences();
+    expect(JSON.stringify(tree.toJSON())).toContain('Перевірки характеристик');
+
+    await act(async () => {
+      await i18n.changeLanguage('en');
+    });
+    expect(JSON.stringify(tree.toJSON())).toContain('Ability Checks');
+    expect(JSON.stringify(tree.toJSON())).toContain('Short rest');
+
+    await act(async () => {
+      await i18n.changeLanguage('uk');
+    });
+    expect(JSON.stringify(tree.toJSON())).toContain('Перевірки характеристик');
 
     act(() => tree.unmount());
   });

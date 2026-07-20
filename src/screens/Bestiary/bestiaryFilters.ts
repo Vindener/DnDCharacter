@@ -1,4 +1,5 @@
 import type { MonsterDto } from '@/types/Monster';
+import { getLocalizedMonsterSearchText } from '@/domain/srd/localization';
 
 export type CRFilter = 'all' | '0-1' | '2-4' | '5-10' | '11+';
 
@@ -80,13 +81,15 @@ export const filterMonsters = (
   monsters: MonsterDto[],
   filters: BestiaryFilters,
   favoriteMonsterIds: string[],
+  language = 'en',
 ): MonsterDto[] => {
   const searchText = filters.search.trim().toLowerCase();
   const favoriteSet = new Set(favoriteMonsterIds);
 
   return monsters.filter((monster) => {
     if (filters.favoritesOnly && !favoriteSet.has(monster.id)) return false;
-    if (searchText && !getMonsterSearchText(monster).includes(searchText)) return false;
+    const searchableText = `${getMonsterSearchText(monster)} ${getLocalizedMonsterSearchText(monster, language)}`.toLowerCase();
+    if (searchText && !searchableText.includes(searchText)) return false;
     if (!passCRFilter(monster, filters.cr)) return false;
     if (filters.type !== 'all' && (monster.type || '').toLowerCase() !== filters.type.toLowerCase()) return false;
     if (filters.environment !== 'all' && (monster.environment || '').toLowerCase() !== filters.environment.toLowerCase()) return false;
@@ -104,4 +107,3 @@ export const getActiveBestiaryFilterCount = (filters: BestiaryFilters): number =
   Number(filters.size !== 'all') +
   Number(filters.source !== 'all') +
   Number(filters.favoritesOnly);
-

@@ -19,6 +19,12 @@ import {
   type SpellbookLevelFilter as LevelFilter,
 } from './spellbookFilters';
 import { getStyles } from './styles';
+import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
+import {
+  getLocalizedSpellClass,
+  getLocalizedSpellFields,
+  getLocalizedSpellSchool,
+} from '@/domain/srd/localization';
 
 type Props = {
   route: {
@@ -34,6 +40,7 @@ type DisplaySpell = {
   duration: string;
   description: string;
   higherLevels: string;
+  classes: string[];
   damageProfiles: SpellDamageProfile[];
 };
 
@@ -59,16 +66,10 @@ function damageProfilesToText(profiles: SpellDamageProfile[]): string {
     .join('\n');
 }
 
-function getDisplaySpell(spell: SpellbookSpell): DisplaySpell {
+function getDisplaySpell(spell: SpellbookSpell, language: string): DisplaySpell {
+  const localized = getLocalizedSpellFields(spell, language);
   return {
-    name: spell.name,
-    school: spell.school,
-    castingTime: spell.castingTime,
-    range: spell.range,
-    components: spell.components,
-    duration: spell.duration,
-    description: spell.description,
-    higherLevels: spell.higherLevels,
+    ...localized,
     damageProfiles: spell.damageProfiles,
   };
 }
@@ -77,14 +78,14 @@ function isEditableSpellSource(spell: SpellbookSpell): boolean {
   return spell.source === 'user-custom' || spell.source === 'homebrew' || spell.source === 'imported';
 }
 
-function getSourceLabel(t: (key: string, options?: Record<string, unknown>) => string, source: SpellbookSpell['source']): string {
-  if (source === 'srd-5.1') return t('sources.srd51');
+function getSourceLabel(t: (key: string, options?: Record<string, unknown>) => string, source: SpellbookSpell['source']): string | null {
+  if (!shouldDisplaySourceMetadata(source)) return null;
   if (source === 'user-custom') return t('sources.userCustom');
   return t(`sources.${source}`);
 }
 
-function getLicenseLabel(t: (key: string, options?: Record<string, unknown>) => string, license: SpellbookSpell['license']): string {
-  if (license === 'ogl-1.0a') return t('licenses.ogl10a');
+function getLicenseLabel(t: (key: string, options?: Record<string, unknown>) => string, license: SpellbookSpell['license']): string | null {
+  if (license === 'ogl-1.0a') return null;
   return t(`licenses.${license}`);
 }
 
@@ -267,16 +268,19 @@ const Spellbook = ({ route }: Props) => {
   const classOptions = useMemo(() => {
     const values = new Set<string>();
     spellbookWithCharacterImports.forEach((spell) => spell.classes.forEach((className) => values.add(className)));
-    return Array.from(values).sort((a, b) => a.localeCompare(b, sortLocale));
+    return Array.from(values).sort((a, b) =>
+      getLocalizedSpellClass(a, sortLocale).localeCompare(getLocalizedSpellClass(b, sortLocale), sortLocale),
+    );
   }, [sortLocale, spellbookWithCharacterImports]);
 
   const schoolOptions = useMemo(() => {
     const values = new Set<string>();
     spellbookWithCharacterImports.forEach((spell) => {
-      const display = getDisplaySpell(spell);
-      if (display.school) values.add(display.school);
+      if (spell.school) values.add(spell.school);
     });
-    return Array.from(values).sort((a, b) => a.localeCompare(b, sortLocale));
+    return Array.from(values).sort((a, b) =>
+      getLocalizedSpellSchool(a, sortLocale).localeCompare(getLocalizedSpellSchool(b, sortLocale), sortLocale),
+    );
   }, [sortLocale, spellbookWithCharacterImports]);
 
   const filteredSpells = useMemo(() => {
@@ -464,7 +468,8 @@ const Spellbook = ({ route }: Props) => {
     const isFavorite = favoriteSet.has(item.id);
     const isPinned = pinnedSet.has(item.id);
     const canFavorite = item.source !== 'imported';
-    const display = getDisplaySpell(item);
+    const display = getDisplaySpell(item, sortLocale);
+    const sourceLabel = getSourceLabel(t, item.source);
 
     return (
       <Pressable
@@ -479,11 +484,13 @@ const Spellbook = ({ route }: Props) => {
             <Text style={styles.meta}>
               {item.level === 0 ? t('levels.cantrip') : t('levels.level', { level: item.level })} · {display.school || t('labels.unknownSchool')}
             </Text>
-            <View style={styles.tagRow}>
-              <View style={styles.sourceBadge}>
-                <Text style={styles.sourceBadgeText}>{getSourceLabel(t, item.source)}</Text>
+            {sourceLabel ? (
+              <View style={styles.tagRow}>
+                <View style={styles.sourceBadge} testID='spellbook.sourceBadge'>
+                  <Text style={styles.sourceBadgeText}>{sourceLabel}</Text>
+                </View>
               </View>
-            </View>
+            ) : null}
           </View>
           {isDmMode ? (
             <Pressable
@@ -609,7 +616,7 @@ const Spellbook = ({ route }: Props) => {
             </Pressable>
           ))}
           <Pressable style={[styles.chip, classFilter !== 'all' ? styles.chipActive : null]} onPress={() => setClassFilter('all')} android_ripple={{ color: colors.ripple }}>
-            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{classFilter === 'all' ? t('filters.class') : classFilter}</Text>
+            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{classFilter === 'all' ? t('filters.class') : getLocalizedSpellClass(classFilter, sortLocale)}</Text>
           </Pressable>
           {classOptions.map((className) => (
             <Pressable
@@ -618,11 +625,11 @@ const Spellbook = ({ route }: Props) => {
               onPress={() => setClassFilter(className)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, classFilter === className ? styles.chipTextActive : null]}>{className}</Text>
+              <Text style={[styles.chipText, classFilter === className ? styles.chipTextActive : null]}>{getLocalizedSpellClass(className, sortLocale)}</Text>
             </Pressable>
           ))}
           <Pressable style={[styles.chip, schoolFilter !== 'all' ? styles.chipActive : null]} onPress={() => setSchoolFilter('all')} android_ripple={{ color: colors.ripple }}>
-            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{schoolFilter === 'all' ? t('filters.school') : schoolFilter}</Text>
+            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{schoolFilter === 'all' ? t('filters.school') : getLocalizedSpellSchool(schoolFilter, sortLocale)}</Text>
           </Pressable>
           {schoolOptions.map((school) => (
             <Pressable
@@ -631,7 +638,7 @@ const Spellbook = ({ route }: Props) => {
               onPress={() => setSchoolFilter(school)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, schoolFilter === school ? styles.chipTextActive : null]}>{school}</Text>
+              <Text style={[styles.chipText, schoolFilter === school ? styles.chipTextActive : null]}>{getLocalizedSpellSchool(school, sortLocale)}</Text>
             </Pressable>
           ))}
           {BOOLEAN_FILTERS.map((item) => (
@@ -712,13 +719,15 @@ const Spellbook = ({ route }: Props) => {
       <Modal
         isVisible={Boolean(selectedSpell)}
         onClose={() => setSelectedSpellId(null)}
-        title={selectedSpell ? getDisplaySpell(selectedSpell).name : t('detail.title')}
-        subtitle={selectedSpell ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(selectedSpell).school}` : undefined}
+        title={selectedSpell ? getDisplaySpell(selectedSpell, sortLocale).name : t('detail.title')}
+        subtitle={selectedSpell ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(selectedSpell, sortLocale).school}` : undefined}
       >
         {selectedSpell ? (
           <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
             {(() => {
-              const display = getDisplaySpell(selectedSpell);
+              const display = getDisplaySpell(selectedSpell, sortLocale);
+              const sourceLabel = getSourceLabel(t, selectedSpell.source);
+              const licenseLabel = getLicenseLabel(t, selectedSpell.license);
               return (
                 <>
             <View style={styles.metadataGrid}>
@@ -728,9 +737,11 @@ const Spellbook = ({ route }: Props) => {
               <Text style={styles.metadataText}>{t('labels.duration')}: {display.duration || '—'}</Text>
             </View>
             <View style={styles.tagRow}>
-              <View style={styles.sourceBadge}>
-                <Text style={styles.sourceBadgeText}>{getSourceLabel(t, selectedSpell.source)}</Text>
-              </View>
+              {sourceLabel ? (
+                <View style={styles.sourceBadge} testID='spellbook.detailSourceBadge'>
+                  <Text style={styles.sourceBadgeText}>{sourceLabel}</Text>
+                </View>
+              ) : null}
               <View style={[styles.smallTag, selectedSpell.concentration ? styles.smallTagActive : null]}>
                 <Text style={[styles.smallTagText, selectedSpell.concentration ? styles.smallTagTextActive : null]}>
                   {t('labels.concentration')}: {selectedSpell.concentration ? t('boolean.yes') : t('boolean.no')}
@@ -749,13 +760,18 @@ const Spellbook = ({ route }: Props) => {
               </>
             ) : null}
             <Text style={styles.modalLabel}>{t('labels.classes')}</Text>
-            <Text style={styles.description}>{selectedSpell.classes.length ? selectedSpell.classes.join(', ') : '—'}</Text>
+            <Text style={styles.description}>{display.classes.length ? display.classes.join(', ') : '—'}</Text>
             <Text style={styles.modalLabel}>{t('labels.tags')}</Text>
             <Text style={styles.description}>{selectedSpell.tags.length ? selectedSpell.tags.join(', ') : '—'}</Text>
-            <Text style={styles.modalLabel}>{t('labels.sourceMetadata')}</Text>
-            <Text style={styles.description}>
-              {t('labels.source')}: {getSourceLabel(t, selectedSpell.source)} · {t('labels.license')}: {getLicenseLabel(t, selectedSpell.license)}
-            </Text>
+            {sourceLabel ? (
+              <>
+                <Text style={styles.modalLabel}>{t('labels.sourceMetadata')}</Text>
+                <Text style={styles.description}>
+                  {t('labels.source')}: {sourceLabel}
+                  {licenseLabel ? ` · ${t('labels.license')}: ${licenseLabel}` : ''}
+                </Text>
+              </>
+            ) : null}
             {display.damageProfiles.length ? (
               <View style={styles.damageBlock}>
                 {display.damageProfiles.map((damage) => (

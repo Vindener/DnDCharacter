@@ -17,7 +17,6 @@ type ReferenceEntry = {
   testID: string;
   disabled?: boolean;
   onPress?: () => void;
-  source?: 'srd-5.1';
   details?: Array<{ title: string; body: string }>;
 };
 
@@ -59,12 +58,20 @@ export default function References() {
             ? 'sparkles-outline' as const
             : 'reader-outline' as const,
       testID: `references.srd.${entry.id}`,
-      source: entry.source,
       details: entry.id === 'conditions'
-        ? getConditions().slice(0, 8).map((condition) => ({ title: condition.name, body: condition.summary }))
+        ? getConditions().slice(0, 8).map((condition) => ({
+            title: t(`srd.conditions.details.${condition.id}.title`, { defaultValue: condition.name }),
+            body: t(`srd.conditions.details.${condition.id}.body`, { defaultValue: condition.summary }),
+          }))
         : entry.id === 'equipment'
-          ? getEquipment().slice(0, 8).map((item) => ({ title: item.name, body: item.category }))
-          : entry.entries,
+          ? getEquipment().slice(0, 8).map((item) => ({
+              title: t(`srd.equipment.details.${item.id}.title`, { defaultValue: item.name }),
+              body: t(`srd.equipment.details.${item.id}.body`, { defaultValue: item.category }),
+            }))
+          : entry.entries.map((detail, index) => ({
+              title: t(`srd.${entry.id}.details.${index}.title`, { defaultValue: detail.title }),
+              body: t(`srd.${entry.id}.details.${index}.body`, { defaultValue: detail.body }),
+            })),
     })),
   ];
 
@@ -89,11 +96,7 @@ export default function References() {
               <View style={styles.iconBox}>
                 <Ionicons name={entry.icon} size={20} color={colors.text} />
               </View>
-              {entry.source ? (
-                <View style={styles.badge} testID={`references.sourceBadge.${entry.id}`}>
-                  <Text style={styles.badgeText}>{t('sourceBadge.srd51')}</Text>
-                </View>
-              ) : entry.disabled ? (
+              {entry.disabled ? (
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>{t('soon')}</Text>
                 </View>

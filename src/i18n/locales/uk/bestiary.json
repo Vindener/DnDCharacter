@@ -32,14 +32,12 @@
     "customMonster": "Власний монстр"
   },
   "sources": {
-    "srd51": "SRD 5.1",
     "userCustom": "Власне",
     "homebrew": "Хоумбрю",
     "imported": "Імпортоване",
     "unknown": "Невідоме"
   },
   "licenses": {
-    "ogl10a": "OGL 1.0a",
     "custom": "Власна",
     "unknown": "Невідома"
   },

@@ -67,6 +67,8 @@ import {
   getSrdRaceTraits,
 } from '@/domain/srd';
 import { CharacterSourceBadge } from '../components/CharacterSourceBadge';
+import { isBuiltInRulesSource } from '@/shared/helpers/sourcePresentation';
+import { getLocalizedSpellFields } from '@/domain/srd/localization';
 
 interface CharacterProps {
   route: {
@@ -422,6 +424,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     return collectedNames.map((name) => {
       const key = normalizeSpellName(name);
       const fromSpellbook = spellbookByName.get(key);
+      const localized = fromSpellbook ? getLocalizedSpellFields(fromSpellbook, i18n.language) : null;
       const status: 'available' | 'known' | 'prepared' | 'cantrip' = normalizedPrepared.has(key)
         ? 'prepared'
         : normalizedCantrips.has(key)
@@ -432,6 +435,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       return {
         key,
         name,
+        displayName: localized?.name || name,
         status,
         damageProfiles: fromSpellbook?.damageProfiles || [],
         source: fromSpellbook?.source || 'imported',
@@ -441,6 +445,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     characterData.spells.cantrips,
     characterData.spells.knownSpells,
     characterData.spells.preparedSpells,
+    i18n.language,
     spellbookSpells,
   ]);
   const pinnedMagicSpells = useMemo(
@@ -478,7 +483,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const canAddPreparedFromQuickModal =
     preparedSpellsLimit === null || isQuickSpellAlreadyPrepared || preparedSpellsCount < preparedSpellsLimit;
   const spellSourceLabel = useCallback((source: SpellbookSpell['source'] | 'imported') => {
-    if (source === 'srd-5.1') return t('magic.sources.srd51');
+    if (isBuiltInRulesSource(source)) return null;
     if (source === 'user-custom') return t('magic.sources.userCustom');
     if (source === 'homebrew') return t('magic.sources.homebrew');
     if (source === 'imported') return t('magic.sources.imported');
@@ -2149,19 +2154,23 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
         <Text style={styles.subSectionTitle}>{t('magic.pinnedSpells')}</Text>
         {pinnedMagicSpells.length ? (
-          pinnedMagicSpells.map((spell) => (
+          pinnedMagicSpells.map((spell) => {
+            const display = getLocalizedSpellFields(spell, i18n.language);
+            return (
             <View key={`magic-pinned-${spell.id}`} style={styles.weaponCombatCard}>
               <View style={styles.rowLine}>
-                <Text style={styles.rowLabel}>{spell.name}</Text>
+                <Text style={styles.rowLabel}>{display.name}</Text>
                 <Text style={styles.rowValue}>
-                  {spell.level === 0 ? t('magic.cantrip') : t('magic.slotLevel', { level: spell.level })} · {spellSourceLabel(spell.source)}
+                  {spell.level === 0 ? t('magic.cantrip') : t('magic.slotLevel', { level: spell.level })}
+                  {spellSourceLabel(spell.source) ? ` · ${spellSourceLabel(spell.source)}` : ''}
                 </Text>
               </View>
               <Text style={styles.blockTextMuted}>
-                {spell.school} · {spell.castingTime || '—'} · {spell.range || '—'}
+                {display.school} · {display.castingTime || '—'} · {display.range || '—'}
               </Text>
             </View>
-          ))
+            );
+          })
         ) : (
           <Text style={styles.blockTextMuted}>{t('magic.noPinnedSpells')}</Text>
         )}
@@ -2173,10 +2182,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             return (
               <View key={`magic-combat-${spell.key}`} style={styles.weaponCombatCard}>
                 <View style={styles.rowLine}>
-                  <Text style={styles.rowLabel}>{spell.name}</Text>
+                  <Text style={styles.rowLabel}>{spell.displayName}</Text>
                   <Text style={styles.rowValue}>
                     {spellStatusLabel(spell.status)}
-                    {` · ${spellSourceLabel(spell.source)}`}
+                    {spellSourceLabel(spell.source) ? ` · ${spellSourceLabel(spell.source)}` : ''}
                     {defaultProfile ? ` • ${defaultProfile.formula}` : ''}
                   </Text>
                 </View>

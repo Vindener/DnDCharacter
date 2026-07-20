@@ -11,6 +11,7 @@ import { Modal } from '@/shared/components/Modal/Modal';
 import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
 import { getStyles } from './style';
 import { fs, sp } from '@/shared/styles/tokens';
+import { getLocalizedMonster } from '@/domain/srd/localization';
 
 interface PlayerGroup {
   id: string;
@@ -36,7 +37,7 @@ const DIFFICULTY_KEYS: Record<string, string> = {
 };
 
 const EncounterCalculator: React.FC = () => {
-  const { t } = useTranslation(['dm', 'common']);
+  const { i18n, t } = useTranslation(['dm', 'common']);
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -44,6 +45,10 @@ const EncounterCalculator: React.FC = () => {
   const loadCharacters = useCharacterStore((s) => s.loadCharacters);
 
   const monstersStore = useMonsterStore((s) => s.monsters);
+  const localizedMonsters = useMemo(
+    () => monstersStore.map((monster) => getLocalizedMonster(monster, i18n.language)),
+    [i18n.language, monstersStore],
+  );
   const loadMonsters = useMonsterStore((s) => s.loadMonsters);
 
   useFocusEffect(
@@ -77,7 +82,7 @@ const EncounterCalculator: React.FC = () => {
   };
 
   const pickMonster = (monsterId: string) => {
-    const mon = monstersStore.find((m) => m.id === monsterId);
+    const mon = localizedMonsters.find((m) => m.id === monsterId);
     if (!mon) return;
     setMonsters((m) => [...m, { id: uid(), name: mon.name || '', cr: mon.challenge || '0', count: '1' }]);
     setBestiaryModal(false);
@@ -225,10 +230,10 @@ const EncounterCalculator: React.FC = () => {
 
       <Modal isVisible={isBestiaryModal} title={t('dm:encounterCalculator.addMonsterTitle')} onClose={() => setBestiaryModal(false)}>
         <ScrollView style={{ maxHeight: 360 }}>
-          {monstersStore.length === 0 ? (
+          {localizedMonsters.length === 0 ? (
             <Text style={{ color: colors.textSecondary }}>{t('dm:encounterCalculator.emptyBestiary')}</Text>
           ) : (
-            monstersStore.map((mon) => (
+            localizedMonsters.map((mon) => (
               <TouchableOpacity
                 key={mon.id}
                 onPress={() => pickMonster(mon.id)}
@@ -249,7 +254,6 @@ const EncounterCalculator: React.FC = () => {
 };
 
 export default EncounterCalculator;
-
 
 
 

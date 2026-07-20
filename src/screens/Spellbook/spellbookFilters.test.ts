@@ -73,6 +73,10 @@ describe('spellbookFilters', () => {
     expect(run({ concentrationFilter: 'yes' })).toEqual(['detect-magic']);
   });
 
+  it('searches built-in spells by their Ukrainian translation', () => {
+    expect(run({ search: 'чарівна ракета', locale: 'uk' })).toEqual(['magic-missile']);
+  });
+
   it('filters favorites, custom spells, known spells, and prepared spells', () => {
     expect(run({ activeTab: 'favorites', favoriteSpellIds: ['custom-flare'] })).toEqual(['custom-flare']);
     expect(run({ activeTab: 'custom' })).toEqual(['custom-flare']);

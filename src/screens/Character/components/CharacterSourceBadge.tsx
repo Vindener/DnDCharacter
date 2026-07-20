@@ -3,6 +3,7 @@ import { Text, View } from 'react-native';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { CharacterContentSourceRef } from '@/types/Character';
+import { isBuiltInRulesSource } from '@/shared/helpers/sourcePresentation';
 
 type CharacterSourceBadgeProps = {
   source?: CharacterContentSourceRef;
@@ -18,7 +19,7 @@ export function getCharacterSourceBadgeLabel(
   t: (key: string) => string,
 ): string | null {
   if (!source) return null;
-  if (source.origin === 'srd-5.1' || source.source === 'srd-5.1') return t('badges.srd51');
+  if (isBuiltInRulesSource(source.origin) || isBuiltInRulesSource(source.source)) return null;
   if (source.origin === 'homebrew' || source.source === 'homebrew') return t('badges.homebrew');
   if (source.origin === 'custom') return t('badges.custom');
   if (source.origin === 'legacy-custom' || source.legacyCustom) return t('badges.legacyCustom');

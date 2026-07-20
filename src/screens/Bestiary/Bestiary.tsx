@@ -12,6 +12,8 @@ import FileService from '@/shared/services/fileSerice';
 import type { MonsterDto } from '@/types/Monster';
 import { SkeletonBestiary } from '@/shared/ui/skeleton';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
+import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
+import { getLocalizedMonsterTerm } from '@/domain/srd/localization';
 import {
   collectUnique,
   DEFAULT_BESTIARY_FILTERS,
@@ -67,7 +69,7 @@ const createBlankMonster = (t: TFunction<'bestiary'>): MonsterDto => ({
 });
 
 const Bestiary = () => {
-  const { t } = useTranslation('bestiary');
+  const { i18n, t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const monsters = useMonsterStore((s) => s.monsters);
   const pinnedMonsterIds = useMonsterStore((s) => s.pinnedMonsterIds);
@@ -95,16 +97,29 @@ const Bestiary = () => {
     return () => clearTimeout(timeout);
   }, [filters.search]);
 
-  const typeOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.type || '')), [monsters]);
+  const typeOptions = useMemo(
+    () => collectUnique(monsters.map((monster) => monster.type || '')).sort((a, b) =>
+      getLocalizedMonsterTerm(a, i18n.language).localeCompare(getLocalizedMonsterTerm(b, i18n.language), i18n.language),
+    ),
+    [i18n.language, monsters],
+  );
   const environmentOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.environment || '')), [monsters]);
-  const sizeOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.size || '')), [monsters]);
-  const sourceOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.source || '')), [monsters]);
+  const sizeOptions = useMemo(
+    () => collectUnique(monsters.map((monster) => monster.size || '')).sort((a, b) =>
+      getLocalizedMonsterTerm(a, i18n.language).localeCompare(getLocalizedMonsterTerm(b, i18n.language), i18n.language),
+    ),
+    [i18n.language, monsters],
+  );
+  const sourceOptions = useMemo(
+    () => collectUnique(monsters.map((monster) => monster.source || '').filter(shouldDisplaySourceMetadata)),
+    [monsters],
+  );
   const favoriteSet = useMemo(() => new Set(favoriteMonsterIds), [favoriteMonsterIds]);
   const pinnedSet = useMemo(() => new Set(pinnedMonsterIds), [pinnedMonsterIds]);
 
   const filtered = useMemo(
-    () => filterMonsters(monsters, { ...filters, search: debouncedSearch }, favoriteMonsterIds),
-    [debouncedSearch, favoriteMonsterIds, filters, monsters],
+    () => filterMonsters(monsters, { ...filters, search: debouncedSearch }, favoriteMonsterIds, i18n.language),
+    [debouncedSearch, favoriteMonsterIds, filters, i18n.language, monsters],
   );
   const pinnedMonsters = useMemo(() => monsters.filter((monster) => pinnedSet.has(monster.id)), [monsters, pinnedSet]);
   const activeFilterCount = getActiveBestiaryFilterCount(filters);
@@ -198,18 +213,24 @@ const Bestiary = () => {
             ),
           )}
           {renderChoiceChip(t('filters.favorites'), filters.favoritesOnly, () => patchFilters({ favoritesOnly: !filters.favoritesOnly }), 'bestiary.filter.favorites', 'favorites')}
-          {renderChoiceChip(filters.type === 'all' ? t('filters.type') : filters.type, filters.type !== 'all', () => patchFilters({ type: 'all' }), undefined, 'type-all')}
+          {renderChoiceChip(filters.type === 'all' ? t('filters.type') : getLocalizedMonsterTerm(filters.type, i18n.language), filters.type !== 'all', () => patchFilters({ type: 'all' }), undefined, 'type-all')}
           {typeOptions.map((option) =>
-            renderChoiceChip(option, filters.type === option, () => patchFilters({ type: option }), `bestiary.filter.type.${option}`, `type-${option}`),
+            renderChoiceChip(getLocalizedMonsterTerm(option, i18n.language), filters.type === option, () => patchFilters({ type: option }), `bestiary.filter.type.${option}`, `type-${option}`),
           )}
           {renderChoiceChip(filters.environment === 'all' ? t('filters.environment') : filters.environment, filters.environment !== 'all', () => patchFilters({ environment: 'all' }), undefined, 'environment-all')}
           {environmentOptions.map((option) =>
             renderChoiceChip(option, filters.environment === option, () => patchFilters({ environment: option }), undefined, `environment-${option}`),
           )}
-          {renderChoiceChip(filters.size === 'all' ? t('filters.size') : filters.size, filters.size !== 'all', () => patchFilters({ size: 'all' }), undefined, 'size-all')}
-          {sizeOptions.map((option) => renderChoiceChip(option, filters.size === option, () => patchFilters({ size: option }), undefined, `size-${option}`))}
+          {renderChoiceChip(filters.size === 'all' ? t('filters.size') : getLocalizedMonsterTerm(filters.size, i18n.language), filters.size !== 'all', () => patchFilters({ size: 'all' }), undefined, 'size-all')}
+          {sizeOptions.map((option) => renderChoiceChip(getLocalizedMonsterTerm(option, i18n.language), filters.size === option, () => patchFilters({ size: option }), undefined, `size-${option}`))}
           {renderChoiceChip(filters.source === 'all' ? t('filters.source') : filters.source, filters.source !== 'all', () => patchFilters({ source: 'all' }), undefined, 'source-all')}
-          {sourceOptions.map((option) => renderChoiceChip(option, filters.source === option, () => patchFilters({ source: option }), undefined, `source-${option}`))}
+          {sourceOptions.map((option) => renderChoiceChip(
+            option,
+            filters.source === option,
+            () => patchFilters({ source: option }),
+            `bestiary.source.${option}`,
+            `source-${option}`,
+          ))}
         </ScrollView>
         {activeFilterCount ? (
           <View style={styles.activeFiltersRow}>

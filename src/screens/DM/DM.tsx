@@ -24,6 +24,7 @@ import type { DMCampaign } from '@/dm/domain/types';
 import type { CharacterViewModel } from '@/types/Character';
 import type { AppRole } from '@/types/Product';
 import type { ShareDisplayStatus, SyncDisplayStatus } from '@/shared/helpers/collaboration/status';
+import { getLocalizedMonster, getLocalizedSpellFields } from '@/domain/srd/localization';
 
 type TimestampLike = { toMillis?: () => number; seconds?: number } | null | undefined;
 
@@ -41,7 +42,7 @@ const toMillis = (value: TimestampLike): number => {
 };
 
 const DM: React.FC = () => {
-  const { t } = useTranslation(['dm', 'common']);
+  const { i18n, t } = useTranslation(['dm', 'common']);
   const navigation = useNavigation<StackNavigationProp<DMStackParamList, 'DMHome'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
@@ -346,22 +347,28 @@ const DM: React.FC = () => {
             <Text style={styles.statChipText}>{t('dm:dashboard.pinnedSpells', { count: pinnedSpells.length })}</Text>
           </View>
         </View>
-        {pinnedMonsters.map((monster) => (
+        {pinnedMonsters.map((monster) => {
+          const display = getLocalizedMonster(monster, i18n.language);
+          return (
           <View key={`monster-${monster.id}`} style={styles.updateRow}>
-            <Text style={styles.updateTitle}>{monster.name}</Text>
+            <Text style={styles.updateTitle}>{display.name}</Text>
             <Text style={styles.updateMeta}>
-              {t('dm:dashboard.monsterSummary', { cr: monster.challenge || '—', ac: monster.armorClass ?? '—', hp: monster.hitPoints ?? '—' })}
+              {t('dm:dashboard.monsterSummary', { cr: display.challenge || '—', ac: display.armorClass ?? '—', hp: display.hitPoints ?? '—' })}
             </Text>
           </View>
-        ))}
-        {pinnedSpells.map((spell) => (
+          );
+        })}
+        {pinnedSpells.map((spell) => {
+          const display = getLocalizedSpellFields(spell, i18n.language);
+          return (
           <View key={`spell-${spell.id}`} style={styles.updateRow}>
-            <Text style={styles.updateTitle}>{spell.name}</Text>
+            <Text style={styles.updateTitle}>{display.name}</Text>
             <Text style={styles.updateMeta}>
-              {t('dm:dashboard.spellSummary', { level: spell.level === 0 ? t('dm:dashboard.cantrip') : spell.level, school: spell.school, source: spell.source })}
+              {t('dm:dashboard.spellSummary', { level: spell.level === 0 ? t('dm:dashboard.cantrip') : spell.level, school: display.school })}
             </Text>
           </View>
-        ))}
+          );
+        })}
         {!pinnedMonsters.length && !pinnedSpells.length ? <Text style={styles.hint}>{t('dm:dashboard.noPinnedReferences')}</Text> : null}
         <View style={styles.laneGrid}>
           <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
@@ -502,5 +509,4 @@ const DM: React.FC = () => {
 };
 
 export default DM;
-
 

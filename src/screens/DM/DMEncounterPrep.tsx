@@ -13,6 +13,7 @@ import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
 import { getCharacterCampaignLabel, isCharacterInCampaign } from '@/screens/DM/adapters';
 import { rd, sp } from '@/shared/styles/tokens';
+import { getLocalizedMonster } from '@/domain/srd/localization';
 
 type Props = StackScreenProps<DMStackParamList, 'DMEncounterPrep'>;
 
@@ -37,7 +38,7 @@ const DIFFICULTY_KEYS: Record<string, string> = {
 };
 
 const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
-  const { t } = useTranslation('dm');
+  const { i18n, t } = useTranslation('dm');
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -110,11 +111,18 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     });
   }, [party, playerSourceMode]);
 
-  const pinnedMonsters = useMemo(() => monsters.filter((monster) => pinnedMonsterIds.includes(monster.id)), [monsters, pinnedMonsterIds]);
+  const localizedMonsters = useMemo(
+    () => monsters.map((monster) => getLocalizedMonster(monster, i18n.language)),
+    [i18n.language, monsters],
+  );
+  const pinnedMonsters = useMemo(
+    () => localizedMonsters.filter((monster) => pinnedMonsterIds.includes(monster.id)),
+    [localizedMonsters, pinnedMonsterIds],
+  );
 
   const filteredMonsters = useMemo(() => {
     const text = monsterSearch.trim().toLowerCase();
-    const list = pinnedMonsters.length ? pinnedMonsters : monsters;
+    const list = pinnedMonsters.length ? pinnedMonsters : localizedMonsters;
     if (!text) return list.slice(0, 24);
     return list.filter((monster) => {
       return (
@@ -123,10 +131,11 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         (monster.challenge || '').toLowerCase().includes(text)
       );
     }).slice(0, 24);
-  }, [monsterSearch, monsters, pinnedMonsters]);
+  }, [localizedMonsters, monsterSearch, pinnedMonsters]);
 
   const addMonsterSeed = useCallback((seed: EncounterPrepMonsterSeed) => {
-    const name = seed.name || t('encounterPrep.monsterFallback');
+    const localizedMatch = seed.monsterId ? localizedMonsters.find((monster) => monster.id === seed.monsterId) : undefined;
+    const name = localizedMatch?.name || seed.name || t('encounterPrep.monsterFallback');
     const challenge = seed.challenge || '0';
     const count = Math.max(1, Number(seed.count) || 1);
 
@@ -158,7 +167,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         },
       ];
     });
-  }, [t]);
+  }, [localizedMonsters, t]);
 
   useEffect(() => {
     const seeds = [route.params?.initialMonster, ...(route.params?.initialMonsters || [])].filter(Boolean) as EncounterPrepMonsterSeed[];
@@ -376,4 +385,3 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 };
 
 export default DMEncounterPrep;
-

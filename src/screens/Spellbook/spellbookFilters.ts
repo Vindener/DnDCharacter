@@ -1,6 +1,7 @@
 import type { CharacterViewModel } from '@/types/Character';
 import type { SpellbookSpell } from '@/types/Spellbook';
 import { getCharacterSpellStatus } from '@/domain/spellbook';
+import { getLocalizedSpellFields, getLocalizedSpellSearchText } from '@/domain/srd/localization';
 
 export type SpellbookFilterTab = 'all' | 'prepared' | 'known' | 'favorites' | 'custom';
 export type SpellbookLevelFilter = 'all' | number;
@@ -70,6 +71,7 @@ export function filterSpellbookSpells(options: SpellbookFilterOptions): Spellboo
         spell.source,
         spell.license,
         damageText,
+        getLocalizedSpellSearchText(spell, options.locale),
       ].join(' ').toLowerCase();
       return haystack.includes(filter);
     })
@@ -79,6 +81,9 @@ export function filterSpellbookSpells(options: SpellbookFilterOptions): Spellboo
         if (pinDelta) return pinDelta;
       }
       if (a.level !== b.level) return a.level - b.level;
-      return a.name.localeCompare(b.name, options.locale);
+      return getLocalizedSpellFields(a, options.locale).name.localeCompare(
+        getLocalizedSpellFields(b, options.locale).name,
+        options.locale,
+      );
     });
 }

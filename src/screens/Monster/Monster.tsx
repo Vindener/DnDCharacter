@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, ScrollView, Image, Button, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +13,8 @@ import TextInput from '@/shared/components/TextInput/TextInput';
 import FileService from '@/shared/services/fileSerice';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import { sp } from '@/shared/styles/tokens';
+import { isBuiltInRulesSource, shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
+import { getLocalizedMonster } from '@/domain/srd/localization';
 
 type MonsterRouteProp = RouteProp<ReferencesStackParamList, 'Monster'>;
 type MonsterTextField =
@@ -76,16 +78,16 @@ const getMainAttack = (monster: MonsterDto, fallback: string): string => {
   return match?.[1]?.trim() || fallback;
 };
 
-const getSourceLabel = (monster: MonsterDto, t: (key: string) => string): string => {
-  if (monster.source === 'srd-5.1') return t('sources.srd51');
+const getSourceLabel = (monster: MonsterDto, t: (key: string) => string): string | null => {
+  if (!shouldDisplaySourceMetadata(monster.source)) return null;
   if (monster.source === 'user-custom') return t('sources.userCustom');
   if (monster.source === 'homebrew') return t('sources.homebrew');
   if (monster.source === 'imported') return t('sources.imported');
   return monster.source || t('sources.unknown');
 };
 
-const getLicenseLabel = (monster: MonsterDto, t: (key: string) => string): string => {
-  if (monster.license === 'ogl-1.0a') return t('licenses.ogl10a');
+const getLicenseLabel = (monster: MonsterDto, t: (key: string) => string): string | null => {
+  if (monster.license === 'ogl-1.0a') return null;
   if (monster.license === 'custom') return t('licenses.custom');
   return t('licenses.unknown');
 };
@@ -132,7 +134,7 @@ const CollapsibleTextBlock = ({
 
 export default function Monster({ route }: Props) {
   const { monster } = route.params;
-  const { t } = useTranslation('bestiary');
+  const { i18n, t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'Monster'>>();
   const updateMonster = useMonsterStore((s) => s.updateMonster);
   const addMonster = useMonsterStore((s) => s.addMonster);
@@ -143,13 +145,21 @@ export default function Monster({ route }: Props) {
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
-  const [data, setData] = useState<MonsterDto>(monster);
+  const [data, setData] = useState<MonsterDto>(() => getLocalizedMonster(monster, i18n.language));
   const [editing, setEditing] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
   const isPinned = pinnedMonsterIds.includes(data.id);
   const isFavorite = favoriteMonsterIds.includes(data.id);
-  const canEditMonster = data.source !== 'srd-5.1';
+  const canEditMonster = !isBuiltInRulesSource(data.source);
+  const sourceLabel = getSourceLabel(data, t);
+  const licenseLabel = getLicenseLabel(data, t);
+
+  useEffect(() => {
+    if (isBuiltInRulesSource(monster.source)) {
+      setData(getLocalizedMonster(monster, i18n.language));
+    }
+  }, [i18n.language, monster]);
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -382,9 +392,12 @@ export default function Monster({ route }: Props) {
           <Text style={styles.metadataText}>{t('detail.fields.damageResistances')}: {data.damageResistances || '—'}</Text>
           <Text style={styles.metadataText}>{t('detail.fields.damageImmunities')}: {data.damageImmunities || '—'}</Text>
           <Text style={styles.metadataText}>{t('detail.fields.conditionImmunities')}: {data.conditionImmunities || '—'}</Text>
-          <Text style={styles.metadataText}>
-            {t('detail.fields.source')}: {getSourceLabel(data, t)} · {t('detail.fields.license')}: {getLicenseLabel(data, t)}
-          </Text>
+          {sourceLabel ? (
+            <Text style={styles.metadataText}>
+              {t('detail.fields.source')}: {sourceLabel}
+              {licenseLabel ? ` · ${t('detail.fields.license')}: ${licenseLabel}` : ''}
+            </Text>
+          ) : null}
           <Text style={styles.metadataText}>{t('detail.fields.environment')}: {data.environment || '—'}</Text>
         </View>
       )}

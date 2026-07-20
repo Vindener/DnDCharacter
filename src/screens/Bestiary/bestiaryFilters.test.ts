@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { MonsterDto } from '@/types/Monster';
 import { DEFAULT_BESTIARY_FILTERS, filterMonsters } from './bestiaryFilters';
+import { getSrdMonsterById } from '@/domain/srd/srdRepository';
+import { srdMonsterToMonsterDto } from '@/domain/srd/adapters';
 
 const monsters: MonsterDto[] = [
   {
@@ -61,5 +63,12 @@ describe('bestiaryFilters', () => {
     const result = filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, type: 'Dragon', environment: 'Forest' }, []);
 
     expect(result).toEqual([]);
+  });
+
+  it('searches built-in monsters by their Ukrainian translation', () => {
+    const monster = srdMonsterToMonsterDto(getSrdMonsterById('adult-black-dragon')!);
+    const result = filterMonsters([monster], { ...DEFAULT_BESTIARY_FILTERS, search: 'дорослий чорний дракон' }, [], 'uk');
+
+    expect(result.map((entry) => entry.id)).toEqual(['srd-monster-adult-black-dragon']);
   });
 });

@@ -39,13 +39,11 @@
     "cantrip": "Каніпс"
   },
   "sources": {
-    "srd51": "SRD 5.1",
     "userCustom": "Власне",
     "homebrew": "Хоумбрю",
     "imported": "імпортоване"
   },
   "licenses": {
-    "ogl10a": "OGL 1.0a",
     "custom": "Власна",
     "unknown": "Невідома"
   },

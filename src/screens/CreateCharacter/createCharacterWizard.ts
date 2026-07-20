@@ -126,7 +126,7 @@ const HOMEBREW_ARTIFICER: CreateClassDefinition = {
       id: 'artificer-homebrew-marker',
       name: 'Artificer',
       level: 1,
-      summary: 'Homebrew/non-SRD class preserved separately from SRD 5.1 data.',
+      summary: 'Homebrew class preserved separately from built-in rules data.',
       source: 'homebrew',
       license: 'custom',
       tags: ['homebrew', 'class-feature'],
