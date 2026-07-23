@@ -100,9 +100,9 @@ export default function References() {
                 <View style={styles.badge}>
                   <Text style={styles.badgeText}>{t('soon')}</Text>
                 </View>
-              ) : (
+              ) : entry.onPress ? (
                 <Ionicons name='chevron-forward-outline' size={18} color={colors.textSecondary} />
-              )}
+              ) : null}
             </View>
             <Text style={styles.cardTitle}>{entry.title}</Text>
             <Text style={styles.cardDescription}>{entry.description}</Text>

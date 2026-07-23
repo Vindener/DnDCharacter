@@ -101,6 +101,21 @@ describe('References screen', () => {
     expect(rendered).toContain('Основи накладання заклять');
     expect(rendered).not.toContain('SRD 5.1');
     expect(tree.root.findAllByProps({ testID: 'references.sourceBadge.conditions' })).toHaveLength(0);
+    [
+      'conditions',
+      'actions-in-combat',
+      'resting',
+      'ability-checks',
+      'saving-throws',
+      'equipment',
+      'spellcasting-basics',
+    ].forEach((entryId) => {
+      expect(
+        tree.root
+          .findByProps({ testID: `references.srd.${entryId}` })
+          .findAllByProps({ name: 'chevron-forward-outline' }),
+      ).toHaveLength(0);
+    });
 
     act(() => tree.unmount());
   });
