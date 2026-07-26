@@ -225,6 +225,101 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: fs(13),
       fontWeight: '600',
     },
+    dangerCard: {
+      backgroundColor: c.card,
+      borderRadius: rd(14),
+      borderWidth: 1,
+      borderColor: c.danger,
+      padding: sp(12),
+      gap: sp(10),
+    },
+    dangerButton: {
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.danger,
+      backgroundColor: c.danger,
+      paddingVertical: sp(10),
+      paddingHorizontal: sp(14),
+      alignSelf: 'flex-start',
+    },
+    dangerButtonText: {
+      color: c.onDanger,
+      fontSize: fs(13),
+      fontWeight: '700',
+    },
+    previewList: {
+      gap: sp(8),
+      maxHeight: 260,
+    },
+    previewItem: {
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingHorizontal: sp(10),
+      paddingVertical: sp(9),
+      gap: sp(4),
+    },
+    previewItemLabel: {
+      color: c.text,
+      fontSize: fs(14),
+      fontWeight: '700',
+    },
+    previewItemAction: {
+      color: c.textSecondary,
+      fontSize: fs(12),
+    },
+    ownerChoiceRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: sp(6),
+      marginTop: sp(4),
+    },
+    ownerChoiceOption: {
+      borderRadius: rd(999),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.inputBackground,
+      paddingVertical: sp(6),
+      paddingHorizontal: sp(10),
+    },
+    ownerChoiceOptionSelected: {
+      borderColor: c.brand,
+      backgroundColor: c.card,
+    },
+    ownerChoiceOptionText: {
+      color: c.text,
+      fontSize: fs(12),
+      fontWeight: '600',
+    },
+    checkboxRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: sp(8),
+      marginTop: sp(4),
+    },
+    checkbox: {
+      width: 22,
+      height: 22,
+      borderRadius: rd(6),
+      borderWidth: 1.5,
+      borderColor: c.border,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: c.background,
+    },
+    checkboxChecked: {
+      borderColor: c.brand,
+      backgroundColor: c.brand,
+    },
+    checkboxMark: {
+      color: c.onBrand,
+      fontSize: fs(13),
+      fontWeight: '700',
+    },
+    checkboxLabel: {
+      color: c.text,
+      fontSize: fs(13),
+      flex: 1,
+    },
   });
-
-

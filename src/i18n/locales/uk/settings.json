@@ -9,7 +9,32 @@
     "hint": "Синхронізація і резервне збереження через Google акаунт.",
     "signInWithGoogle": "Увійти за допомогою Google",
     "signedInAs": "Ви авторизовані як",
-    "signOut": "Вийти"
+    "signOut": "Вийти",
+    "dangerZone": {
+      "title": "Небезпечна зона",
+      "hint": "Видалення акаунта незворотне.",
+      "deleteButton": "Видалити акаунт",
+      "loadingPreview": "Перевіряємо, що станеться з твоїми аркушами й кампаніями…",
+      "previewTitle": "Що станеться",
+      "previewEmpty": "У хмарі немає твоїх персонажів чи кампаній — видалиться лише профіль.",
+      "previewDelete": "буде видалено",
+      "previewTransfer": "перейде до {{email}}",
+      "previewRemoveFromOwners": "ти перестанеш бути співвласником",
+      "previewRemoveFromEditors": "тебе прибрано зі списку редакторів",
+      "chooseNewOwner": "Кому передати «{{label}}»?",
+      "confirmCheckbox": "Розумію, що це незворотно",
+      "confirmButton": "Видалити назавжди",
+      "cancelButton": "Скасувати",
+      "reauthInProgress": "Підтверди вхід через Google…",
+      "deletingInProgress": "Видаляємо акаунт…",
+      "successTitle": "Акаунт видалено",
+      "successMessage": "Дякуємо, що були з нами.",
+      "partialFailureTitle": "Дані видалено частково",
+      "partialFailureMessage": "Хмарні дані видалено, але акаунт для входу може лишатися активним. Спробуй ще раз або напиши в підтримку.",
+      "errorTitle": "Не вдалося видалити акаунт",
+      "errorMessage": "Спробуй ще раз пізніше.",
+      "reauthCancelled": "Вхід скасовано, акаунт не видалено."
+    }
   },
   "language": {
     "title": "Мова",

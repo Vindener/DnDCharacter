@@ -9,6 +9,7 @@ import useCustomCoinsStore from '@/context/CustomCoins-store';
 import FileService from '@/shared/services/fileSerice';
 import useMonsterStore from '@/context/Monster-store';
 import Auth from '@/shared/components/Firebase/Auth';
+import DeleteAccountModal from '@/screens/Settings/DeleteAccountModal';
 import { changeAppLanguage, getCurrentLanguage } from '@/i18n';
 import type { AppLanguage } from '@/i18n/languageStorage';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
@@ -113,6 +114,8 @@ const Settings = () => {
           <Text style={styles.sectionHint}>{t('settings:account.hint')}</Text>
           <Auth />
         </View>
+
+        <DeleteAccountModal />
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('settings:language.title')}</Text>

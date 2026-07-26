@@ -1,9 +1,10 @@
-
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import functions from '@react-native-firebase/functions';
 
 export const fbAuth = auth();
 export const db = firestore();
+export const fns = functions();
 
 export const now = () => firestore.FieldValue.serverTimestamp();
 

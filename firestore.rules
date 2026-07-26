@@ -7,14 +7,14 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if isSignedIn();
       allow create, update: if isSignedIn() && userId == uid();
-      allow delete: if false;
+      allow delete: if isSignedIn() && userId == uid();
     }
 
     match /emailIndex/{emailLower} {
       allow read: if isSignedIn();
       allow create, update: if isSignedIn()
         && request.resource.data.uid == uid();
-      allow delete: if false;
+      allow delete: if isSignedIn() && resource.data.uid == uid();
     }
 
     match /connections/{connId} {

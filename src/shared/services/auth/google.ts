@@ -67,6 +67,32 @@ export async function onGoogleButtonPress() {
   }
 }
 
+/**
+ * Forces a fresh Google credential and re-authenticates the current Firebase user.
+ * Required before sensitive account operations (account deletion) so a stale
+ * cached session can't trigger them without the user actively signing in again.
+ */
+export async function reauthenticateWithGoogle(): Promise<void> {
+  const user = auth().currentUser;
+  if (!user) throw new Error('Not signed in');
+
+  try {
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    const res = await GoogleSignin.signIn();
+    const idToken = getGoogleIdToken(res);
+    if (!idToken) {
+      toast.error(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.missingIdToken'));
+      throw new Error(i18n.t('common:auth.idTokenNotFound'));
+    }
+    const credential = GoogleAuthProvider.credential(idToken);
+    await user.reauthenticateWithCredential(credential);
+  } catch (err: unknown) {
+    const code = getErrorCodeOrMessage(err);
+    toast.error(i18n.t('common:auth.authError'), typeof code === 'string' ? code : JSON.stringify(code));
+    throw err;
+  }
+}
+
 export async function logout() {
   try {
     await auth().signOut();

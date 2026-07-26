@@ -82,10 +82,54 @@ Play Console ще не створений. Це змінює все, бо кри
 | R1-1 | Play Console: реєстрація, верифікація, тип акаунта, створення застосунку, перший AAB в Internal testing, **старт Closed testing + 12 тестувальників** | — | Відлік 14 днів пішов; дата старту зафіксована в цьому файлі |
 | R1-2 | Play App Signing: отримати SHA-1, додати у **Firebase Console + OAuth client**; переконатися, що реліз не підписаний debug-keystore (PLY-4) | `android/app/build.gradle`, Firebase Console | `keytool -printcert -jarfile` показує реліз-сертифікат; **Google Sign-In працює у білді, встановленому з Play** |
 | R1-3 | Версії 1.0.0 (PLY-6) | `app.json`, `android/app/build.gradle` | Обидва файли `1.0.0`; фактичний `versionCode` від EAS зафіксований |
-| R1-4 | **Видалення акаунта** (PLY-1 + COL-10 + SEC-5): екран у Settings, re-auth, callable Cloud Function із каскадом owner/editor і передачею ownership, правило `delete` для `users`, веб-сторінка запиту | `Settings.tsx`, новий `src/services/accountDeletion.ts`, Cloud Function, `firestore.rules`, i18n | Акаунт видаляється; **аркуш зі співредакторами не зникає в них**; ownership передано; повторний логін дає чистий профіль; URL живий |
+| R1-4 | **Видалення акаунта** (PLY-1 + COL-10 + SEC-5): екран у Settings, re-auth, callable Cloud Function із каскадом owner/editor і передачею ownership, правило `delete` для `users`, веб-сторінка запиту — ✅ **код зроблено (2026-07-26)**, деплой і публікація URL — ручні кроки, ще не виконані | `Settings.tsx`, новий `src/services/accountDeletion.ts`, Cloud Function, `firestore.rules`, i18n | Акаунт видаляється; **аркуш зі співредакторами не зникає в них**; ownership передано; повторний логін дає чистий профіль; URL живий |
 | R1-5 | Privacy Policy (PLY-2): текст із розкриттям, що вміст аркуша видимий запрошеним співредакторам і що DM бачить журнал змін; хостинг; лінк у Settings | новий екран або `Linking`, i18n | URL відкривається; лінк у застосунку; поле заповнене в Play Console |
 | R1-6 | Чистка permissions (PLY-3) + знести `react-native-fs`, `expo-media-library`, `expo-intent-launcher`; обмежити дозволи `expo-image-picker`; синхронізувати `app.json` | `AndroidManifest.xml`, `app.json`, `package.json` | Імпорт/експорт файлів і вибір аватарки працюють на девайсі; `aapt dump permissions` показує лише INTERNET + VIBRATE |
 | R1-7 | Прибрати крипто-гаманець, ухвалити рішення по банківських донатах (PLY-5) | `Support.tsx` | Немає крипто-реквізитів |
+
+#### R1-4 додаток: текст веб-сторінки запиту на видалення акаунта
+
+Play Console вимагає публічний URL для видалення акаунта, навіть якщо видалення вже доступне в застосунку. Опублікуй текст нижче за стабільним публічним URL (GitHub Pages чи будь-який простий статичний хостинг) і встав цей URL у Play Console → App content → Data deletion. Код цього не зробить — URL має бути живий і доступний **без входу в акаунт**.
+
+**Українська:**
+
+> ## Видалення акаунта Mythgate 5e Companion
+>
+> Видалити акаунт можна безпосередньо в застосунку: **Налаштування → Акаунт → Небезпечна зона → Видалити акаунт**. Дія незворотна.
+>
+> Що видаляється:
+> - твій профіль (ім'я, email, фото з Google-акаунта);
+> - персонажі та DM-кампанії, власником яких є тільки ти;
+> - твій запис у списках співавторів чужих аркушів і кампаній.
+>
+> Що відбувається з аркушами й кампаніями, якими ти поділився з іншими:
+> - якщо в аркуша є інші редактори, право власності передається одному з них — аркуш не зникає в них;
+> - якщо ти один із кількох власників, тебе просто прибирають зі списку власників;
+> - якщо ти лише редактор чужого аркуша, тебе прибирають зі списку редакторів.
+>
+> Видалення акаунта **не торкається** локальних даних на пристрої (персонажів, створених без входу в акаунт) — застосунок працює локально без акаунта.
+>
+> Якщо не маєш доступу до застосунку, напиши на **vindener12@gmail.com** із темою «Видалення акаунта» і вкажи email, яким реєструвався. Заявки обробляються вручну протягом кількох днів.
+
+**English:**
+
+> ## Deleting your Mythgate 5e Companion account
+>
+> You can delete your account directly in the app: **Settings → Account → Danger zone → Delete account**. This action is permanent.
+>
+> What gets deleted:
+> - your profile (name, email, photo from your Google account);
+> - characters and DM campaigns you solely own;
+> - your entry in the collaborator lists of other people's sheets and campaigns.
+>
+> What happens to sheets and campaigns you shared with others:
+> - if a sheet has other editors, ownership is transferred to one of them — it does not disappear for them;
+> - if you are one of several owners, you are simply removed from the owners list;
+> - if you are only an editor on someone else's sheet, you are removed from the editors list.
+>
+> Local data on your device (characters created without signing in) is **not** affected by account deletion — the app works locally without an account.
+>
+> If you can't access the app, email **vindener12@gmail.com** with the subject "Account Deletion" and the email you registered with. Requests are handled manually within a few days.
 
 **Ризик спринту:** набір 12 реальних тестувальників. Починай сьогодні, паралельно з кодом, не після.
 

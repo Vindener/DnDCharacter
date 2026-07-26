@@ -9,7 +9,32 @@
     "hint": "Sync and backup through your Google account.",
     "signInWithGoogle": "Sign in with Google",
     "signedInAs": "Signed in as",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "dangerZone": {
+      "title": "Danger zone",
+      "hint": "Deleting your account is permanent.",
+      "deleteButton": "Delete account",
+      "loadingPreview": "Checking what happens to your sheets and campaigns…",
+      "previewTitle": "What will happen",
+      "previewEmpty": "You have no characters or campaigns in the cloud — only your profile will be deleted.",
+      "previewDelete": "will be deleted",
+      "previewTransfer": "will be transferred to {{email}}",
+      "previewRemoveFromOwners": "you will stop being a co-owner",
+      "previewRemoveFromEditors": "you will be removed from the editor list",
+      "chooseNewOwner": "Who should own \"{{label}}\"?",
+      "confirmCheckbox": "I understand this cannot be undone",
+      "confirmButton": "Delete permanently",
+      "cancelButton": "Cancel",
+      "reauthInProgress": "Confirm sign-in with Google…",
+      "deletingInProgress": "Deleting your account…",
+      "successTitle": "Account deleted",
+      "successMessage": "Thanks for playing with us.",
+      "partialFailureTitle": "Data partially deleted",
+      "partialFailureMessage": "Your cloud data was removed, but the sign-in account may still be active. Try again or contact support.",
+      "errorTitle": "Couldn't delete account",
+      "errorMessage": "Please try again later.",
+      "reauthCancelled": "Sign-in cancelled, the account was not deleted."
+    }
   },
   "language": {
     "title": "Language",

@@ -1,0 +1,28 @@
+{
+  "name": "mythgate-5e-companion-functions",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloud Functions for Mythgate 5e Companion — account deletion cascade (PLY-1 / COL-10).",
+  "main": "lib/index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "serve": "npm run build && firebase emulators:start --only functions,firestore,auth",
+    "deploy": "npm run build && firebase deploy --only functions:deleteMyAccount",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.2.0",
+    "firebase-functions": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.8"
+  }
+}
