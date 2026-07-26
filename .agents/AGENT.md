@@ -7,25 +7,17 @@ Inspect the existing repository before changing anything and make the smallest s
 This is **not** a greenfield project. It is a live Expo React Native app with local state, Firebase sync, existing navigation, and Android-first product priorities.
 
 ## Current Product Focus
-The current product focus is UX/UI polish guided by the new sprint roadmap.
+UX/UI sprints 1-6 are complete. The project is now in **release hardening** ahead of Google Play publication. No new product features until after release.
 
-The first priority is **Dice Roller + Skeleton-loader + Home**. Do not treat older stage documents as the current sprint plan.
+The critical path is not code — it is the 14-day Google Play closed test. The current source of truth for priorities and sprints is `docs/release-plan-google-play.md` (sprints R1-R5). Do not treat older stage documents as the current plan.
 
 Current direction:
 - DnD companion for players and DMs, not only a character sheet.
 - Local-first character management with cloud sharing/sync between players and DM.
-- Session-first gameplay UX before broad feature expansion.
+- Character sheets are edited by multiple people at once (owners + editors) — see `docs/collaborative-editing.md` for the sync model and invariants that must not break.
 
 ## Current Sprint Roadmap
-1. Sprint 1: Dice Roller + Skeleton-loader
-2. Sprint 2: Home redesign
-3. Sprint 3: Character Sheet session-first polish
-4. Sprint 4: Create Character wizard + scroll/keyboard fix
-5. Sprint 5: Spellbook polish
-6. Sprint 6: Bestiary polish
-7. Future: DM Desktop Workspace
-
-Use `docs/ux-ui-roadmap.md` as the current source of truth.
+See `docs/release-plan-google-play.md` for the authoritative R1-R5 plan (Play Console setup, collaborative-editing/security, performance/observability, EAS Update + store listing, production rollout).
 
 ## UX Principles
 - Session-first UX.

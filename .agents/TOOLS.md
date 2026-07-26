@@ -59,6 +59,12 @@ For Firebase-related tasks, inspect at least:
 This repo includes a committed `android/` project and React Native Firebase.
 Be conservative with native/plugin/version changes because Expo compatibility matters.
 
+## Committed `android/`, Prebuild, And Versions
+- `android/` is committed as a bare project, so EAS Build does not run `expo prebuild`. Editing `app.json` fields like `icon`, `splash`, `android.adaptiveIcon`, or `android.permissions` has no effect on the build by itself.
+- Every native-relevant change must be made in **both** places: `app.json` (so the config is truthful) and the matching file under `android/` (so it actually reaches the build). Mark manual native edits with `// manual: <reason>`.
+- Do not run `npx expo prebuild --clean` without an explicit instruction from the user. It will overwrite hand-edited `AndroidManifest.xml`, `build.gradle`, and `res/` files. If prebuild seems necessary, list what would be lost first and wait for confirmation.
+- `versionName` is read from `android/app/build.gradle`, not from `app.json`'s `version` field. When bumping the release version, update both files in the same change.
+
 ## Implementation Priorities
 When writing code:
 1. Prefer simplicity over abstraction.

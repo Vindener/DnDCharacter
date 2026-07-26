@@ -1,5 +1,7 @@
 # Sprint Plan
 
+Статус: історія. Поточний план — docs/release-plan-google-play.md
+
 ## Sprint 1: Dice Roller + Skeleton-loader
 
 Goal:

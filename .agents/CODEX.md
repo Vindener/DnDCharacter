@@ -11,12 +11,12 @@ This file tells Codex how to behave in this repository.
 - Report facts, not guesses.
 
 ## When Working On The Current Roadmap
-1. Prefer Sprint 1 scope first: Dice Roller and Skeleton-loader.
-2. Do not jump to DM Desktop unless explicitly requested.
+1. UX/UI sprints 1-6 are done; the project is in release hardening. Follow the R1-R5 plan in `docs/release-plan-google-play.md` instead of the old sprint order.
+2. Do not jump to DM Desktop or other new features unless explicitly requested.
 3. Do not rewrite large screens fully unless the task asks for redesign.
-4. Prefer extracting reusable components only when they are needed by the current sprint.
+4. Prefer extracting reusable components only when they are needed by the current task.
 5. Keep UI changes Android-friendly.
-6. Keep the current source of truth in `docs/ux-ui-roadmap.md`.
+6. Keep the current source of truth in `docs/release-plan-google-play.md`.
 
 ## Good Task Pattern
 1. Read the relevant files.

@@ -1,5 +1,7 @@
 # UX/UI Roadmap
 
+Статус: історія. Поточний план — docs/release-plan-google-play.md
+
 ## Current Priority Order
 1. Dice Roller + Skeleton-loader
 2. Home

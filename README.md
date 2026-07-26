@@ -108,3 +108,14 @@ All platforms production build:
 ```bash
 npx eas-cli build --platform all --profile production
 ```
+
+## Versioning
+
+`android/` is a committed bare project, so EAS Build does not run `expo prebuild`. That means the version shown in Google Play does **not** come from `app.json`.
+
+- `app.json` → `expo.version` — the config-level version, used by Expo/EAS tooling and (if referenced) `expo-constants` at runtime.
+- `android/app/build.gradle` → `defaultConfig.versionName` — the version Google Play actually displays. Because prebuild never regenerates this file, it must be bumped by hand every time.
+
+Bump both files together when releasing. If only `app.json` is updated, the store keeps showing the old `versionName` from `build.gradle`, and if `runtimeVersion` policy is `appVersion`, OTA updates can target the wrong build.
+
+`versionCode` (in `build.gradle`) is **not** edited by hand — `eas.json` sets `cli.appVersionSource: "remote"`, so EAS Build assigns and increments it automatically.

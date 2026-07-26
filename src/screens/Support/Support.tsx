@@ -9,8 +9,6 @@ const donateLinks = [
   { labelKey: 'donation.monobankJar', url: 'https://send.monobank.ua/jar/7bLHe7oo8j' },
 ];
 
-const cryptoWallets = [{ label: 'USDT (TRC20)', value: 'TC3Ad4JQJDLeiBPCXRRqkKsikFFiTdjGvq' }];
-
 export default function Support() {
   const { t } = useTranslation('support');
   const colors = useThemeStore((s) => s.colors);
@@ -89,16 +87,6 @@ export default function Support() {
               </TouchableOpacity>
             ))}
           </View>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.title}>{t('crypto.title')}</Text>
-          {cryptoWallets.map((w) => (
-            <View key={w.label} style={{ marginTop: sp(10) }}>
-              <Text style={[styles.text, { marginBottom: sp(6) }]}>{w.label}</Text>
-              <TextInput value={w.value} editable={true} selectTextOnFocus style={styles.input} />
-            </View>
-          ))}
         </View>
 
         <View style={styles.card}>

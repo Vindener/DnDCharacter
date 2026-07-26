@@ -14,14 +14,13 @@ The app is becoming a DnD companion with Player + DM collaboration, not just a c
 
 The strongest product feature is local-first character management with cloud sharing/sync between players and DM.
 
-## Current UX/UI Priority Order
-1. Dice Roller + Skeleton-loader
-2. Home
-3. Character Sheet
-4. Create Character + scroll/keyboard fix
-5. Spellbook
-6. Bestiary
-7. Later: DM Desktop Workspace
+## UX/UI Sprints 1-6: Complete
+Sprints 1-6 (Dice Roller + Skeleton-loader, Home, Character Sheet, Create Character + scroll/keyboard fix, Spellbook, Bestiary) are done. The project is now in release hardening; current priorities are the R1-R5 sprints in `docs/release-plan-google-play.md`. DM Desktop Workspace stays out of scope until after release.
+
+## Collaborative Editing Facts
+- The character sheet is edited by multiple people at the same time (owners + editors), not just by its creator. This drives sync, Firestore rules, and account-deletion requirements. Full model in `docs/collaborative-editing.md`.
+- `android/` is a committed bare project, so EAS Build does not run `expo prebuild`. Native changes must be made in `android/` directly (and mirrored in `app.json` for config accuracy); `app.json`-only edits to native-relevant fields have no effect on the build.
+- `versionName` comes from `android/app/build.gradle`, not from `app.json`'s `version` field, in this bare-project setup.
 
 ## Product Memory
 The app already includes these user-facing domains:
