@@ -1,9 +1,10 @@
-import { db, fbAuth, now, hasDoc } from '@/services/firebase';
+import { db, fbAuth, now, hasDoc, arrayUnion } from '@/services/firebase';
 import { ensureConnection } from '@/services/connections';
 import { findUserByEmail } from '@/services/users';
 import type { CharacterDto } from '@/domain/types';
 import { characterMapper } from '@/domain/mappers';
 import { LATEST_SCHEMA_VERSION, migratePayloadToLatest } from '@/domain/migrations';
+import { mapSyncPathsToFieldPaths } from '@/repositories/syncPathFieldMap';
 
 export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
 export type CharacterActorRole = 'DM' | 'Player';
@@ -260,9 +261,7 @@ function toSheetSnapshotDoc(id: string, raw: unknown): CharacterSheet {
     customSpellLists: normalizedDto.customSpellLists,
     notesBlocks: normalizedDto.notesBlocks,
     combatTemplates: normalizedDto.combatTemplates,
-    changeHistory: Array.isArray(doc.changeHistory)
-      ? (doc.changeHistory as CharacterChangeHistoryEntry[])
-      : undefined,
+    changeHistory: Array.isArray(doc.changeHistory) ? (doc.changeHistory as CharacterChangeHistoryEntry[]) : undefined,
     photoUri: normalizedDto.photoUri,
 
     createdAt: doc.createdAt,
@@ -396,14 +395,30 @@ function buildHistoryEntries(
   return out;
 }
 
-function mergeBoundedHistory(existing: unknown, additions: CharacterChangeHistoryEntry[], maxItems = 50): CharacterChangeHistoryEntry[] {
-  const base = Array.isArray(existing) ? (existing as CharacterChangeHistoryEntry[]) : [];
-  const merged = [...base, ...additions]
-    .filter((item) => item && typeof item.uid === 'string' && typeof item.tab === 'string')
-    .sort((a, b) => (a.atMs || 0) - (b.atMs || 0));
+function getValueAtPath(source: Record<string, unknown>, path: string): unknown {
+  return path.split('.').reduce<unknown>((acc, segment) => {
+    if (!isRecord(acc)) return undefined;
+    return acc[segment];
+  }, source);
+}
 
-  if (merged.length <= maxItems) return merged;
-  return merged.slice(merged.length - maxItems);
+/**
+ * Content-only payload for an EXISTING document: never carries ownerUid/owners/editors
+ * (access changes only happen through addEditorByEmail/removeEditor's own transactions)
+ * and never carries createdAt (immutable once set). See COL-1/2/3 fix plan.
+ */
+function buildContentPayload(dto: CharacterCloudDto): Record<string, unknown> {
+  const { ownerUid: _ownerUid, owners: _owners, editors: _editors, createdAt: _createdAt, ...content } = dtoToSheet(dto);
+
+  const full = {
+    ...content,
+    schemaVersion: LATEST_SCHEMA_VERSION,
+    updatedAt: now(),
+    ac: dto.ac ?? 10,
+    armorClassDetails: dto.armorClassDetails ?? dto.acDetails,
+  };
+
+  return stripUndefinedDeep(full) as Record<string, unknown>;
 }
 
 export async function upsertCharacterSheetFromLocal(
@@ -414,43 +429,59 @@ export async function upsertCharacterSheetFromLocal(
   if (!me) throw new Error('Not signed in');
 
   const ref = db.collection('characterSheets').doc(dto.id);
-
-  let existingMeta: CharacterSheet | null = null;
-  const snap = await ref.get();
-  if (hasDoc(snap)) {
-    existingMeta = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
-  }
-
-  const payload = buildCloudDocFromLocal(dto, me, existingMeta || undefined);
   const historyPaths = options?.historyPaths || [];
-  if (historyPaths.length) {
-    const atMs = Date.now();
-    const additions = buildHistoryEntries(me, historyPaths, atMs, options?.actorRole);
-    payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additions, 50);
+  const additions = historyPaths.length ? buildHistoryEntries(me, historyPaths, Date.now(), options?.actorRole) : [];
+
+  const snap = await ref.get();
+
+  if (!hasDoc(snap)) {
+    // New document: dtoToSheet already sets ownerUid/owners/editors/createdAt for `me` —
+    // this is the only place those fields are written for a brand-new sheet.
+    const payload = stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>;
+    if (additions.length) {
+      payload.changeHistory = additions;
+    }
+    await ref.set(payload);
+    return { id: dto.id, created: true };
   }
 
-  if (existingMeta) {
-    payload.owners = existingMeta.owners || [me];
-    payload.editors = existingMeta.editors || [];
-  } else {
-    payload.owners = [me];
-    payload.editors = [];
-  }
+  const fieldMap = mapSyncPathsToFieldPaths(historyPaths);
 
-  await ref.set(payload, { merge: true });
-
-  if (existingMeta) {
+  if (fieldMap.kind === 'narrow') {
+    const contentPayload = buildContentPayload(dto);
+    const patch: Record<string, unknown> = { updatedAt: now() };
+    for (const fieldPath of fieldMap.fieldPaths) {
+      const value = getValueAtPath(contentPayload, fieldPath);
+      if (value !== undefined) patch[fieldPath] = value;
+    }
+    if (additions.length) {
+      patch.changeHistory = arrayUnion(...additions);
+    }
+    await ref.update(patch);
     return { id: dto.id, updated: true };
   }
 
-  return { id: dto.id, created: true };
+  // Unknown/tab-default path set: fall back to a transactional read-modify-write so the
+  // read and write happen atomically instead of racing another client's write (COL-1).
+  await db.runTransaction(async (tx) => {
+    await tx.get(ref);
+    const payload = buildContentPayload(dto);
+    if (additions.length) {
+      payload.changeHistory = arrayUnion(...additions);
+    }
+    tx.set(ref, payload, { merge: true });
+  });
+
+  return { id: dto.id, updated: true };
 }
 
 export async function bulkUpsertFromLocal(list: CharacterDto[]) {
   for (const character of list) {
     try {
       await upsertCharacterSheetFromLocal(character);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   }
 }
 
@@ -462,13 +493,16 @@ export function subscribeCharacterSheet(id: string, cb: (doc: CharacterSheet | n
   }
 
   try {
-    return db.collection('characterSheets').doc(cleanId).onSnapshot(
-      (snap) => {
-        if (!hasDoc(snap)) return cb(null);
-        cb(toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data()));
-      },
-      () => cb(null),
-    );
+    return db
+      .collection('characterSheets')
+      .doc(cleanId)
+      .onSnapshot(
+        (snap) => {
+          if (!hasDoc(snap)) return cb(null);
+          cb(toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data()));
+        },
+        () => cb(null),
+      );
   } catch {
     cb(null);
     return () => {};
@@ -476,7 +510,10 @@ export function subscribeCharacterSheet(id: string, cb: (doc: CharacterSheet | n
 }
 
 export async function updateCharacterSheet(id: string, patch: CharacterSheetPatch) {
-  await db.collection('characterSheets').doc(id).update({ ...patch, updatedAt: now() });
+  await db
+    .collection('characterSheets')
+    .doc(id)
+    .update({ ...patch, updatedAt: now() });
 }
 
 export async function deleteCharacterSheet(id: string) {
@@ -525,9 +562,7 @@ export async function saveCharacterSheetAsNew(dto: CharacterCloudDto) {
 
 export function stripUndefinedDeep<T>(value: T): T {
   if (Array.isArray(value)) {
-    return value
-      .filter((entry) => entry !== undefined)
-      .map((entry) => stripUndefinedDeep(entry)) as unknown as T;
+    return value.filter((entry) => entry !== undefined).map((entry) => stripUndefinedDeep(entry)) as unknown as T;
   }
 
   if (value && typeof value === 'object') {
@@ -597,38 +632,9 @@ export async function fetchCharacterSheet(id: string): Promise<CharacterSheet | 
   }
 }
 
-function buildCloudDocFromLocal(dto: CharacterCloudDto, ownerUid: string, existing?: CharacterSheet) {
-  const baseMeta = existing
-    ? {
-        ownerUid: existing.ownerUid || ownerUid,
-        owners: Array.isArray(existing.owners) && existing.owners.length ? existing.owners : [ownerUid],
-        editors: Array.isArray(existing.editors) ? existing.editors : [],
-        createdAt: existing.createdAt || now(),
-      }
-    : {
-        ownerUid,
-        owners: [ownerUid],
-        editors: [] as string[],
-        createdAt: now(),
-      };
-
-  const full: CharacterSheet = {
-    ...dtoToSheet(dto),
-    ...baseMeta,
-    schemaVersion: LATEST_SCHEMA_VERSION,
-    updatedAt: now(),
-    ac: dto.ac ?? 10,
-    armorClassDetails: dto.armorClassDetails ?? dto.acDetails,
-  };
-
-  return stripUndefinedDeep(full);
-}
-
 export async function autosaveCharacter(dto: CharacterCloudDto) {
   return upsertCharacterSheetFromLocal(dto);
 }
-
-
 
 function splitChunks<T>(items: T[], size: number): T[][] {
   const out: T[][] = [];
@@ -665,10 +671,7 @@ export async function getEditorsForSheet(uids: string[]): Promise<Array<{ uid: s
   }
 }
 
-export async function upsertFromLocal(
-  dto: CharacterCloudDto,
-  options?: { historyPaths?: string[]; actorRole?: CharacterActorRole },
-) {
+export async function upsertFromLocal(dto: CharacterCloudDto, options?: { historyPaths?: string[]; actorRole?: CharacterActorRole }) {
   return upsertCharacterSheetFromLocal(dto, options);
 }
 
@@ -708,10 +711,3 @@ export const characterCloudRepository: CharacterCloudRepository = {
   removeEditor,
   getEditorsForSheet,
 };
-
-
-
-
-
-
-
