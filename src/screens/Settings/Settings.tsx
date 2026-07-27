@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Switch, Modal, TextInput, Pressable, ScrollView } from 'react-native';
+import { View, Text, Switch, Modal, TextInput, Pressable, ScrollView, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,9 @@ import type { AppLanguage } from '@/i18n/languageStorage';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 
 type SettingsNavigation = StackNavigationProp<TabStackParamList, 'Settings'>;
+
+// manual: placeholder until the Privacy Policy is hosted for Play Console (owner fills in the real URL)
+const PRIVACY_POLICY_URL = 'https://example.com/mythgate-privacy-policy';
 
 const Settings = () => {
   const { i18n, t } = useTranslation(['settings', 'common']);
@@ -57,6 +60,9 @@ const Settings = () => {
     }
   };
   const openLegalLicenses = () => navigation.navigate('LegalLicenses');
+  const openPrivacyPolicy = () => {
+    void Linking.openURL(PRIVACY_POLICY_URL);
+  };
   const handleLanguageChange = React.useCallback(
     async (language: AppLanguage) => {
       if (language === selectedLanguage) return;
@@ -166,6 +172,14 @@ const Settings = () => {
           <Text style={styles.sectionHint}>{t('settings:legal.hint')}</Text>
           <Pressable onPress={openLegalLicenses} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.actionButtonText}>{t('settings:legal.open')}</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('settings:privacyPolicy.title')}</Text>
+          <Text style={styles.sectionHint}>{t('settings:privacyPolicy.hint')}</Text>
+          <Pressable onPress={openPrivacyPolicy} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
+            <Text style={styles.actionButtonText}>{t('settings:privacyPolicy.open')}</Text>
           </Pressable>
         </View>
       </ScrollView>
