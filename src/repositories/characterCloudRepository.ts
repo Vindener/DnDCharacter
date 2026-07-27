@@ -109,6 +109,7 @@ export interface CharacterCloudRepository {
   delete: (id: string) => Promise<void>;
   addEditorByEmail: (sheetId: string, email: string) => Promise<string>;
   removeEditor: (sheetId: string, editorUid: string) => Promise<void>;
+  transferOwnership: (sheetId: string, newOwnerUid: string) => Promise<void>;
   getEditorsForSheet: (uids: string[]) => Promise<Array<{ uid: string; email: string }>>;
 }
 
@@ -520,29 +521,82 @@ export async function deleteCharacterSheet(id: string) {
   await db.collection('characterSheets').doc(id).delete();
 }
 
+function assertCallerIsOwner(data: CharacterSheet, callerUid: string, action: string): void {
+  const isCallerOwner = data.ownerUid === callerUid || (data.owners || []).includes(callerUid);
+  if (!isCallerOwner) throw new Error(`Only an owner can ${action}`);
+}
+
+/**
+ * Access-write operation: reads the sheet inside a transaction, checks the caller is
+ * an owner, and writes only ownerUid/owners/editors/updatedAt — never sheet content.
+ * See docs/collaborative-editing.md §3.1 and the P2.2 fix plan.
+ */
 export async function addEditorByEmail(sheetId: string, email: string) {
+  const me = uid();
   const toUid = await findUserByEmail(email);
   if (!toUid) throw new Error('User not found by email');
-  await ensureConnection(toUid);
+
   const ref = db.collection('characterSheets').doc(sheetId);
   await db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
     if (!hasDoc(snap)) throw new Error('Sheet not found');
     const data = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
-    const next = Array.from(new Set([...(data.editors || []), toUid]));
-    tx.update(ref, { editors: next, updatedAt: now() });
+    assertCallerIsOwner(data, me, 'add an editor');
+
+    const nextEditors = Array.from(new Set([...(data.editors || []), toUid]));
+    tx.update(ref, { editors: nextEditors, updatedAt: now() });
   });
+
+  await ensureConnection(toUid);
   return toUid;
 }
 
 export async function removeEditor(sheetId: string, editorUid: string) {
+  const me = uid();
   const ref = db.collection('characterSheets').doc(sheetId);
   await db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
-    if (!hasDoc(snap)) return;
+    if (!hasDoc(snap)) throw new Error('Sheet not found');
     const data = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
-    const next = (data.editors || []).filter((entry) => entry !== editorUid);
-    tx.update(ref, { editors: next, updatedAt: now() });
+    assertCallerIsOwner(data, me, 'remove an editor');
+
+    const nextEditors = (data.editors || []).filter((entry) => entry !== editorUid);
+    tx.update(ref, { editors: nextEditors, updatedAt: now() });
+  });
+}
+
+/**
+ * Voluntary ownership hand-off (not to be confused with the account-deletion cascade
+ * in functions/src/deleteMyAccount.ts, which has different semantics for a different
+ * reason: there the departing user is leaving the sheet entirely). Here the outgoing
+ * owner stays on the sheet as a plain editor; `newOwnerUid` must already be an editor
+ * or co-owner (promotion only, not an arbitrary uid).
+ */
+export async function transferOwnership(sheetId: string, newOwnerUid: string): Promise<void> {
+  const me = uid();
+  const ref = db.collection('characterSheets').doc(sheetId);
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!hasDoc(snap)) throw new Error('Sheet not found');
+    const data = toSheetSnapshotDoc(snap.id, snap.data?.() || snap.data());
+    assertCallerIsOwner(data, me, 'transfer ownership');
+
+    if (newOwnerUid === me) return;
+
+    const owners = data.owners || [];
+    const editors = data.editors || [];
+    const isEligible = owners.includes(newOwnerUid) || editors.includes(newOwnerUid);
+    if (!isEligible) throw new Error('New owner must already be an editor or co-owner of this sheet');
+
+    const nextOwners = Array.from(new Set([...owners.filter((entry) => entry !== me), newOwnerUid]));
+    const nextEditors = Array.from(new Set([...editors.filter((entry) => entry !== newOwnerUid), me]));
+
+    tx.update(ref, {
+      ownerUid: newOwnerUid,
+      owners: nextOwners,
+      editors: nextEditors,
+      updatedAt: now(),
+    });
   });
 }
 
@@ -653,7 +707,7 @@ export async function getEditorsForSheet(uids: string[]): Promise<Array<{ uid: s
     const usersByUid = new Map<string, { uid: string; email: string }>();
 
     for (const chunk of chunks) {
-      const snapshot = await db.collection('users').where('uid', 'in', chunk).get();
+      const snapshot = await db.collection('users').where('uid', 'in', chunk).limit(10).get();
       snapshot.docs.forEach((doc) => {
         const data = doc.data?.() || doc.data();
         const uidValue = String(data?.uid || '');
@@ -709,5 +763,6 @@ export const characterCloudRepository: CharacterCloudRepository = {
   delete: deleteById,
   addEditorByEmail,
   removeEditor,
+  transferOwnership,
   getEditorsForSheet,
 };

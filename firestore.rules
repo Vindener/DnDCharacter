@@ -5,15 +5,26 @@ service cloud.firestore {
     function uid() { return request.auth.uid; }
 
     match /users/{userId} {
-      allow read: if isSignedIn();
+      // SEC-1: single-doc get is self-only (no code path reads another user by id).
+      // list stays open (getEditorsForSheet queries where('uid','in',chunk), chunk <= 10)
+      // but capped so a plain unfiltered .get() can no longer dump the whole collection.
+      allow get: if isSignedIn() && userId == uid();
+      allow list: if isSignedIn() && request.query.limit <= 10;
       allow create, update: if isSignedIn() && userId == uid();
       allow delete: if isSignedIn() && userId == uid();
     }
 
     match /emailIndex/{emailLower} {
-      allow read: if isSignedIn();
-      allow create, update: if isSignedIn()
-        && request.resource.data.uid == uid();
+      // SEC-2: create only into an empty slot; update only if you already owned this
+      // entry. Closes the emailIndex/{victim} hijack (attacker overwriting uid).
+      allow get: if isSignedIn();
+      allow list: if false;
+      allow create: if isSignedIn()
+        && request.resource.data.uid == uid()
+        && resource == null;
+      allow update: if isSignedIn()
+        && request.resource.data.uid == uid()
+        && resource.data.uid == uid();
       allow delete: if isSignedIn() && resource.data.uid == uid();
     }
 
@@ -26,7 +37,10 @@ service cloud.firestore {
       allow create: if isSignedIn()
         && request.resource.data.fromUid == uid()
         && request.resource.data.toUid != uid();
-      allow update: if isParticipant();
+      // SEC-4: fromUid/toUid are immutable after create.
+      allow update: if isParticipant()
+        && request.resource.data.fromUid == resource.data.fromUid
+        && request.resource.data.toUid == resource.data.toUid;
       allow delete: if false;
     }
 
@@ -43,16 +57,38 @@ service cloud.firestore {
           (resource.data.editors != null && uid() in resource.data.editors)
         );
       }
+      // SEC-3 / COL-8: minimal shape guard — required keys, critical field types,
+      // and generous length/size caps. Deliberately NOT a full schema (would go
+      // stale and start rejecting legitimate client writes) and deliberately does
+      // NOT cap changeHistory (P2.1 already made arrayUnion writes unbounded on
+      // purpose; trimming is read-side, a separate COL-9 task).
+      function isValidCharacterSheetWrite() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['id', 'ownerUid', 'owners', 'editors', 'name', 'class', 'race'])
+          && d.id is string
+          && d.ownerUid is string
+          && d.owners is list && d.owners.size() > 0
+          && d.editors is list
+          && d.name is string && d.name.size() <= 200
+          && d.class is string && d.class.size() <= 100
+          && d.race is string && d.race.size() <= 100
+          && (!('inventory' in d) || (d.inventory is list && d.inventory.size() <= 500))
+          && (!('weapons' in d) || (d.weapons is list && d.weapons.size() <= 100))
+          && (!('notes' in d) || (d.notes is string && d.notes.size() <= 20000))
+          && (!('backstory' in d) || (d.backstory is string && d.backstory.size() <= 20000));
+      }
       allow get, list: if isEditor();
       allow create: if isSignedIn()
         && request.resource.data.ownerUid == uid()
         && request.resource.data.owners != null
-        && uid() in request.resource.data.owners;
-      allow update: if isOwner()
+        && uid() in request.resource.data.owners
+        && isValidCharacterSheetWrite();
+      allow update: if ( isOwner()
         || ( isEditor()
              && request.resource.data.ownerUid == resource.data.ownerUid
              && request.resource.data.owners == resource.data.owners
-             && request.resource.data.editors == resource.data.editors );
+             && request.resource.data.editors == resource.data.editors ) )
+        && isValidCharacterSheetWrite();
       allow delete: if isOwner();
     }
 
@@ -69,17 +105,29 @@ service cloud.firestore {
           (resource.data.editors != null && uid() in resource.data.editors)
         );
       }
+      // SEC-3 / COL-8: see isValidCharacterSheetWrite() above for the same rationale.
+      function isValidDmCampaignWrite() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['id', 'ownerUid', 'owners', 'editors', 'name'])
+          && d.id is string
+          && d.ownerUid is string
+          && d.owners is list && d.owners.size() > 0
+          && d.editors is list
+          && d.name is string && d.name.size() <= 200;
+      }
 
       allow get, list: if isCampaignEditor();
       allow create: if isSignedIn()
         && request.resource.data.ownerUid == uid()
         && request.resource.data.owners != null
-        && uid() in request.resource.data.owners;
-      allow update: if isCampaignOwner()
+        && uid() in request.resource.data.owners
+        && isValidDmCampaignWrite();
+      allow update: if ( isCampaignOwner()
         || ( isCampaignEditor()
              && request.resource.data.ownerUid == resource.data.ownerUid
              && request.resource.data.owners == resource.data.owners
-             && request.resource.data.editors == resource.data.editors );
+             && request.resource.data.editors == resource.data.editors ) )
+        && isValidDmCampaignWrite();
       allow delete: if isCampaignOwner();
     }
 
@@ -96,17 +144,31 @@ service cloud.firestore {
           (resource.data.editors != null && uid() in resource.data.editors)
         );
       }
+      // SEC-3 / COL-8: see isValidCharacterSheetWrite() above for the same rationale.
+      function isValidDmCampaignNoteWrite() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['id', 'ownerUid', 'owners', 'editors', 'campaignId', 'title'])
+          && d.id is string
+          && d.ownerUid is string
+          && d.owners is list && d.owners.size() > 0
+          && d.editors is list
+          && d.campaignId is string
+          && d.title is string && d.title.size() <= 200
+          && (!('content' in d) || (d.content is string && d.content.size() <= 20000));
+      }
 
       allow get, list: if isNoteEditor();
       allow create: if isSignedIn()
         && request.resource.data.ownerUid == uid()
         && request.resource.data.owners != null
-        && uid() in request.resource.data.owners;
-      allow update: if isNoteOwner()
+        && uid() in request.resource.data.owners
+        && isValidDmCampaignNoteWrite();
+      allow update: if ( isNoteOwner()
         || ( isNoteEditor()
              && request.resource.data.ownerUid == resource.data.ownerUid
              && request.resource.data.owners == resource.data.owners
-             && request.resource.data.editors == resource.data.editors );
+             && request.resource.data.editors == resource.data.editors ) )
+        && isValidDmCampaignNoteWrite();
       allow delete: if isNoteOwner();
     }
   }

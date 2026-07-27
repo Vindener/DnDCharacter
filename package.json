@@ -17,6 +17,7 @@
     "validate": "npm run typecheck && npm run lint && npm run lint:theme",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:rules": "firebase emulators:exec --project mythgatednd --only firestore \"vitest run --config vitest.rules.config.ts\"",
     "profile:manual:dev-client:android": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/manual-dev-client-android.ps1"
   },
   "dependencies": {
@@ -66,12 +67,15 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
+    "@firebase/rules-unit-testing": "^5.0.1",
     "@types/react": "~19.1.10",
     "@types/react-test-renderer": "^19.1.0",
     "@typescript-eslint/eslint-plugin": "^8.60.1",
     "@typescript-eslint/parser": "^8.60.1",
     "eslint": "^8.57.1",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "firebase": "^12.16.0",
+    "firebase-tools": "^15.24.0",
     "prettier": "^3.8.3",
     "react-test-renderer": "19.1.0",
     "typescript": "~5.9.2",

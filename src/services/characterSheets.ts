@@ -12,6 +12,7 @@ export {
   subscribeCharacterSheet,
   subscribeMySheets,
   subscribeSharedWithMe,
+  transferOwnership,
   updateCharacterSheet,
   upsertCharacterSheetFromLocal,
 } from '@/repositories/characterCloudRepository';

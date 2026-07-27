@@ -44,3 +44,9 @@ yarn-error.*
 
 # /android
 .builds/
+
+# Firebase emulator
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/

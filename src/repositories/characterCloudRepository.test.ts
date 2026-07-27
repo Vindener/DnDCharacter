@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => {
   const tx = {
     get: vi.fn(async () => ({ id: 'char-1', exists: true, data: () => ({ ownerUid: 'user-1', owners: ['user-1'], editors: [] }) })),
     set: vi.fn(async (_ref: unknown, _payload: Record<string, unknown>, _options?: unknown) => {}),
+    update: vi.fn(async (_ref: unknown, _patch: Record<string, unknown>) => {}),
   };
 
   const targetRef = {
@@ -26,6 +27,8 @@ const mocks = vi.hoisted(() => {
     doc,
     runTransaction: vi.fn(async (fn: (transaction: typeof tx) => Promise<void>) => fn(tx)),
     arrayUnion: vi.fn((...items: unknown[]) => ({ __op: 'arrayUnion', items })),
+    ensureConnection: vi.fn(async () => {}),
+    findUserByEmail: vi.fn(async (): Promise<string | null> => null),
     fbAuth: { currentUser: { uid: 'user-1' } as { uid: string } | null },
   };
 });
@@ -42,14 +45,14 @@ vi.mock('@/services/firebase', () => ({
 }));
 
 vi.mock('@/services/connections', () => ({
-  ensureConnection: vi.fn(async () => {}),
+  ensureConnection: mocks.ensureConnection,
 }));
 
 vi.mock('@/services/users', () => ({
-  findUserByEmail: vi.fn(async () => null),
+  findUserByEmail: mocks.findUserByEmail,
 }));
 
-import { upsertCharacterSheetFromLocal } from '@/repositories/characterCloudRepository';
+import { addEditorByEmail, removeEditor, transferOwnership, upsertCharacterSheetFromLocal } from '@/repositories/characterCloudRepository';
 
 const ACCESS_KEYS = ['ownerUid', 'owners', 'editors'] as const;
 
@@ -60,8 +63,14 @@ describe('characterCloudRepository', () => {
     mocks.targetRef.set.mockReset().mockResolvedValue(undefined);
     mocks.targetRef.update.mockReset().mockResolvedValue(undefined);
     mocks.runTransaction.mockClear();
+    mocks.tx.get
+      .mockReset()
+      .mockResolvedValue({ id: 'char-1', exists: true, data: () => ({ ownerUid: 'user-1', owners: ['user-1'], editors: [] }) });
     mocks.tx.set.mockClear();
+    mocks.tx.update.mockReset().mockResolvedValue(undefined);
     mocks.arrayUnion.mockClear();
+    mocks.ensureConnection.mockReset().mockResolvedValue(undefined);
+    mocks.findUserByEmail.mockReset().mockResolvedValue(null);
   });
 
   it('rejects failed upserts without creating a duplicate cloud document', async () => {
@@ -181,5 +190,136 @@ describe('characterCloudRepository', () => {
     // Neither write ever read or recombined the other client's changeHistory —
     // each call only ever unions its own freshly-built entries.
     expect(firstEntries).not.toEqual(secondEntries);
+  });
+
+  describe('access-write operations', () => {
+    const ACCESS_AND_META_KEYS = ['ownerUid', 'owners', 'editors', 'updatedAt'];
+
+    it('addEditorByEmail: an editor (not owner) is rejected before any write, and ensureConnection never fires', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'owner-1', owners: ['owner-1'], editors: ['user-1'] }),
+      });
+      mocks.findUserByEmail.mockResolvedValueOnce('new-editor');
+
+      await expect(addEditorByEmail('char-1', 'new@example.com')).rejects.toThrow('Only an owner can add an editor');
+
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+      expect(mocks.ensureConnection).not.toHaveBeenCalled();
+    });
+
+    it('addEditorByEmail: an owner can add an editor, and ensureConnection fires only after the write succeeds', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'user-1', owners: ['user-1'], editors: [] }),
+      });
+      mocks.findUserByEmail.mockResolvedValueOnce('new-editor');
+
+      const result = await addEditorByEmail('char-1', 'new@example.com');
+
+      expect(result).toBe('new-editor');
+      expect(mocks.tx.update).toHaveBeenCalledTimes(1);
+      const [, patch] = mocks.tx.update.mock.calls[0] as [unknown, Record<string, unknown>];
+      expect(patch.editors).toEqual(['new-editor']);
+      expect(Object.keys(patch).every((key) => ACCESS_AND_META_KEYS.includes(key))).toBe(true);
+      expect(mocks.ensureConnection).toHaveBeenCalledTimes(1);
+      expect(mocks.ensureConnection).toHaveBeenCalledWith('new-editor');
+    });
+
+    it('addEditorByEmail: does not call ensureConnection when the sheet does not exist', async () => {
+      mocks.tx.get.mockResolvedValueOnce({ id: 'char-1', exists: false, data: () => null });
+      mocks.findUserByEmail.mockResolvedValueOnce('new-editor');
+
+      await expect(addEditorByEmail('char-1', 'new@example.com')).rejects.toThrow('Sheet not found');
+
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+      expect(mocks.ensureConnection).not.toHaveBeenCalled();
+    });
+
+    it('removeEditor: an editor (not owner) is rejected before any write', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'owner-1', owners: ['owner-1'], editors: ['user-1', 'other-editor'] }),
+      });
+
+      await expect(removeEditor('char-1', 'other-editor')).rejects.toThrow('Only an owner can remove an editor');
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+    });
+
+    it('removeEditor: an owner can remove an editor', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'user-1', owners: ['user-1'], editors: ['editor-a', 'editor-b'] }),
+      });
+
+      await removeEditor('char-1', 'editor-a');
+
+      const [, patch] = mocks.tx.update.mock.calls[0] as [unknown, Record<string, unknown>];
+      expect(patch.editors).toEqual(['editor-b']);
+      expect(Object.keys(patch).every((key) => ACCESS_AND_META_KEYS.includes(key))).toBe(true);
+    });
+
+    it('removeEditor: throws instead of silently no-op-ing when the sheet does not exist', async () => {
+      mocks.tx.get.mockResolvedValueOnce({ id: 'char-1', exists: false, data: () => null });
+
+      await expect(removeEditor('char-1', 'editor-a')).rejects.toThrow('Sheet not found');
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+    });
+
+    it('transferOwnership: an editor (not owner) is rejected before any write', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'owner-1', owners: ['owner-1'], editors: ['user-1'] }),
+      });
+
+      await expect(transferOwnership('char-1', 'user-1')).rejects.toThrow('Only an owner can transfer ownership');
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+    });
+
+    it('transferOwnership: rejects a target who is neither an existing editor nor co-owner', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'user-1', owners: ['user-1'], editors: ['editor-a'] }),
+      });
+
+      await expect(transferOwnership('char-1', 'stranger')).rejects.toThrow(
+        'New owner must already be an editor or co-owner of this sheet',
+      );
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+    });
+
+    it('transferOwnership: promotes an existing editor, demotes the outgoing owner to editor, and leaves other participants untouched', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'user-1', owners: ['user-1', 'co-owner-z'], editors: ['editor-a', 'editor-b'] }),
+      });
+
+      await transferOwnership('char-1', 'editor-a');
+
+      const [, patch] = mocks.tx.update.mock.calls[0] as [unknown, Record<string, unknown>];
+      expect(patch.ownerUid).toBe('editor-a');
+      expect((patch.owners as string[]).sort()).toEqual(['co-owner-z', 'editor-a']);
+      expect((patch.editors as string[]).sort()).toEqual(['editor-b', 'user-1']);
+      expect(Object.keys(patch).every((key) => ACCESS_AND_META_KEYS.includes(key))).toBe(true);
+    });
+
+    it('transferOwnership: is a no-op when transferring to yourself', async () => {
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({ ownerUid: 'user-1', owners: ['user-1'], editors: [] }),
+      });
+
+      await transferOwnership('char-1', 'user-1');
+
+      expect(mocks.tx.update).not.toHaveBeenCalled();
+    });
   });
 });
