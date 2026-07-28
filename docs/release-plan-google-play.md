@@ -171,6 +171,41 @@ Play Console вимагає публічний URL для видалення а�
 | R3-9 | Дрібне: `if (__DEV__) require('expo-dev-client')`, `expo-splash-screen` замість `return null`, тюнінг `FlatList`, прибрати `console.*` | PERF-4, PERF-5, PERF-6, SEC-9 закриті |
 | R3-10 | **Подати заявку на production access** (якщо 14 днів пройшли) | Заявка відправлена; дата зафіксована |
 
+#### R3-1 додаток: як міряти старт на девайсі (startupTrace)
+
+Джерело марок — `src/shared/services/telemetry/startupTrace.ts`. Марки: `entry` → `srd-json-loaded` → `srd-parsed` → `srd-localized` (лише коли трейс увімкнено) → `app-start` → `i18n-ready` → `navigator-first-render`. Зведення друкується один раз, у момент `navigator-first-render`.
+
+**1. Зібрати release-подібний білд з увімкненим трейсом.**
+
+У DEV (`expo start`, dev-client) трейс завжди увімкнений — таблиця в Metro-консолі одразу після старту. Для release-білда трейс вимкнений за замовчуванням, вмикається змінною `EXPO_PUBLIC_STARTUP_TRACE=1` **на момент білда** (Expo вбудовує `EXPO_PUBLIC_*` у бандл під час збірки, змінна середовища після встановлення APK вже нічого не змінить).
+
+Найшвидший локальний цикл (Gradle, той самий закомічений `android/`, без EAS-черги):
+
+```bash
+EXPO_PUBLIC_STARTUP_TRACE=1 npx expo export:embed --platform android --dev false --bundle-output android/app/build/generated/assets/react/release/index.android.bundle
+cd android && ./gradlew assembleRelease
+adb install -r app/build/outputs/apk/release/app-release.apk
+```
+
+Через EAS (якщо треба саме той артефакт, що піде в Play Console): тимчасово додай `"env": { "EXPO_PUBLIC_STARTUP_TRACE": "1" }` у профіль `preview` в `eas.json`, збери (`eas build --profile preview --platform android`), встанови APK на девайс, **потім поверни `eas.json` до чистого стану** (`git checkout eas.json`) — трейс не має лишитись увімкненим у звичайних preview-білдах.
+
+**2. Запустити холодний старт і зняти показники.**
+
+```bash
+# TTID/TTFD від ОС — скільки часу від запуску процесу до першого кадру.
+# Спочатку force-stop, щоб виміряти саме ХОЛОДНИЙ старт, а не resume з фону.
+adb shell am force-stop com.vind.MythgateDND
+adb shell am start -W -n com.vind.MythgateDND/.MainActivity
+
+# Наші власні марки — console.log('[startup-trace] ...') завжди йде в logcat під тегом
+# ReactNativeJS, у DEV і в release однаково.
+adb logcat -v time -s ReactNativeJS:V | grep -i "startup-trace"
+```
+
+`adb shell am start -W` виводить `ThisTime`/`TotalTime`/`WaitTime` — це нативний відлік від запуску процесу, він завжди БІЛЬШИЙ за `entry` (наша перша марка), бо `entry` рахується вже всередині JS, після того як Hermes завантажив і почав виконувати бандл. Різниця `TotalTime − entry.sinceStartMs` ≈ нативний запуск процесу + ініціалізація Hermes до першого рядка JS — число, яке JS-марки в принципі не можуть побачити.
+
+Повторити холодний старт **5+ разів підряд** (перший прогін після встановлення APK зазвичай найповільніший через cold cache) і принести медіану, а не один замір.
+
 ---
 
 ### Спринт R4 · 17–23 серпня · «EAS Update, store listing, бренд»

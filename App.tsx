@@ -9,6 +9,7 @@ import { AuthProvider } from '@/shared/services/auth/auth';
 import Toast from 'react-native-toast-message';
 import { initI18n } from '@/i18n';
 import useThemeStore from '@/context/Theme-store';
+import { markStartup, printStartupTrace } from '@/shared/services/telemetry/startupTrace';
 
 const AppStatusBar = () => {
   const isDark = useThemeStore((s) => s.isDark);
@@ -16,7 +17,20 @@ const AppStatusBar = () => {
   return <StatusBar style={isDark ? 'light' : 'dark'} />;
 };
 
+// PERF-1: fires once after AppNavigator's sibling subtree first commits — a proxy for
+// "AppNavigator first render" that doesn't require touching anything under src/navigation.
+// This is the last of the 5 startup marks chronologically, so the one summary print lives here.
+function NavigatorRenderProbe({ children }: { children: React.ReactNode }) {
+  React.useEffect(() => {
+    markStartup('navigator-first-render');
+    printStartupTrace();
+  }, []);
+
+  return <>{children}</>;
+}
+
 export default function App() {
+  markStartup('app-start');
   const [isI18nReady, setIsI18nReady] = React.useState(false);
 
   React.useEffect(() => {
@@ -25,6 +39,7 @@ export default function App() {
         console.warn('[i18n] Failed to initialize:', error);
       })
       .finally(() => {
+        markStartup('i18n-ready');
         setIsI18nReady(true);
       });
   }, []);
@@ -38,7 +53,9 @@ export default function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
           <AppStatusBar />
-          <AppNavigator />
+          <NavigatorRenderProbe>
+            <AppNavigator />
+          </NavigatorRenderProbe>
           <Toast />
         </SafeAreaProvider>
       </GestureHandlerRootView>
