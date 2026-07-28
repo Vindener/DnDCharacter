@@ -91,6 +91,7 @@ export type CharacterSheet = {
 
   createdAt: unknown;
   updatedAt: unknown;
+  lastChangeAt?: unknown;
 };
 
 type CharacterSheetPatch = Partial<CharacterSheet>;
@@ -267,6 +268,7 @@ function toSheetSnapshotDoc(id: string, raw: unknown): CharacterSheet {
 
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
+    lastChangeAt: doc.lastChangeAt,
   };
 }
 
@@ -441,6 +443,7 @@ export async function upsertCharacterSheetFromLocal(
     const payload = stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>;
     if (additions.length) {
       payload.changeHistory = additions;
+      payload.lastChangeAt = now();
     }
     await ref.set(payload);
     return { id: dto.id, created: true };
@@ -457,6 +460,7 @@ export async function upsertCharacterSheetFromLocal(
     }
     if (additions.length) {
       patch.changeHistory = arrayUnion(...additions);
+      patch.lastChangeAt = now();
     }
     await ref.update(patch);
     return { id: dto.id, updated: true };
@@ -469,6 +473,7 @@ export async function upsertCharacterSheetFromLocal(
     const payload = buildContentPayload(dto);
     if (additions.length) {
       payload.changeHistory = arrayUnion(...additions);
+      payload.lastChangeAt = now();
     }
     tx.set(ref, payload, { merge: true });
   });

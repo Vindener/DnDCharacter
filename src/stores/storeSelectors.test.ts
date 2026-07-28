@@ -6,11 +6,7 @@ import {
   selectCharacterStoreBasics,
   type CharacterStoreSelectorState,
 } from '@/stores/selectors/characterStoreSelectors';
-import {
-  selectSyncByCharacterId,
-  selectSyncStoreActions,
-  type SyncStoreSelectorState,
-} from '@/stores/selectors/syncStoreSelectors';
+import { selectSyncByCharacterId, selectSyncStoreActions, type SyncStoreSelectorState } from '@/stores/selectors/syncStoreSelectors';
 
 const asyncNoop = vi.fn(async () => {});
 
@@ -38,6 +34,7 @@ function createSyncState(partial: Partial<SyncStoreSelectorState>): SyncStoreSel
     clearConflicts: asyncNoop,
     setSyncTransport: asyncNoop,
     markSyncError: asyncNoop,
+    recordRemoteSyncState: asyncNoop,
     ...partial,
   };
 }

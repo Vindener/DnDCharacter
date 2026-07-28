@@ -16,6 +16,7 @@ export interface SyncStore {
   setSyncTransport: (characterId: string, state: SyncTransportState, message?: string | null) => Promise<void>;
   markSyncError: (characterId: string, message: string) => Promise<void>;
   removeCharacterSync: (characterId: string) => Promise<void>;
+  recordRemoteSyncState: (characterId: string, payload: { seenHistoryEntryIds: string[]; serverSyncAtMs?: number }) => Promise<void>;
 }
 
 export { selectSyncByCharacterId, selectSyncStoreActions } from '@/stores/selectors/syncStoreSelectors';
@@ -37,6 +38,7 @@ const useSyncStore = create<SyncStore>((set, get) => {
     setSyncTransport: effects.setSyncTransport,
     markSyncError: effects.markSyncError,
     removeCharacterSync: effects.removeCharacterSync,
+    recordRemoteSyncState: effects.recordRemoteSyncState,
   };
 });
 

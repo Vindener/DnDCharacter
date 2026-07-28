@@ -2,11 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { applySyncTransition, normalizeSyncMap, type SyncTransition } from '@/services/characterSyncCoordinator';
 import type { SyncStore } from '@/stores/syncStore';
 
-type SetSyncStore = (
-  partial:
-    | Partial<SyncStore>
-    | ((state: SyncStore) => Partial<SyncStore>),
-) => void;
+type SetSyncStore = (partial: Partial<SyncStore> | ((state: SyncStore) => Partial<SyncStore>)) => void;
 
 type SyncStoreContext = {
   set: SetSyncStore;
@@ -27,6 +23,7 @@ type SyncStoreEffects = Pick<
   | 'setSyncTransport'
   | 'markSyncError'
   | 'removeCharacterSync'
+  | 'recordRemoteSyncState'
 >;
 
 const STORAGE_KEY = 'CHARACTER_SYNC_META_V1';
@@ -34,7 +31,9 @@ const STORAGE_KEY = 'CHARACTER_SYNC_META_V1';
 async function persistSyncMap(map: SyncStore['syncByCharacter']): Promise<void> {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(map));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 export function createSyncStoreEffects({ set, get }: SyncStoreContext): SyncStoreEffects {
@@ -53,7 +52,9 @@ export function createSyncStoreEffects({ set, get }: SyncStoreContext): SyncStor
         const raw = await AsyncStorage.getItem(STORAGE_KEY);
         const parsed = JSON.parse(raw || '{}');
         set({ syncByCharacter: normalizeSyncMap(parsed) });
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     ensureCharacterSync: async (characterId, hasCloud = false) => {
@@ -98,6 +99,10 @@ export function createSyncStoreEffects({ set, get }: SyncStoreContext): SyncStor
 
     removeCharacterSync: async (characterId) => {
       await applyAndPersist({ type: 'remove-character', characterId });
+    },
+
+    recordRemoteSyncState: async (characterId, payload) => {
+      await applyAndPersist({ type: 'record-remote-sync-state', characterId, ...payload });
     },
   };
 }

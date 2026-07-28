@@ -7,6 +7,8 @@ export interface CharacterSyncState {
   localRevision: number;
   cloudRevision: number;
   lastLocalChangeAt: number | null;
+  // Server time (characterSheets.lastChangeAt) of the last remote snapshot this device has
+  // processed — not the local device clock (COL-5: cross-device clock comparison bug).
   lastSyncAt: number | null;
   pendingPaths: string[];
   conflictPaths: string[];
@@ -15,6 +17,8 @@ export interface CharacterSyncState {
   transportMessage: string | null;
   lastSyncError: string | null;
   lastSyncAttemptAt: number | null;
+  // changeHistory[].id values already accounted for in remotePathsSinceLastSync — clock-independent.
+  seenHistoryEntryIds?: string[];
 }
 
 export type CharacterSyncMap = Record<string, CharacterSyncState>;

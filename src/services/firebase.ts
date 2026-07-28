@@ -10,6 +10,11 @@ export const now = () => firestore.FieldValue.serverTimestamp();
 
 export const arrayUnion = <T>(...items: T[]) => firestore.FieldValue.arrayUnion(...items);
 
+export const timestampToMillis = (value: unknown): number | undefined => {
+  const candidate = value as { toMillis?: () => number } | null | undefined;
+  return typeof candidate?.toMillis === 'function' ? candidate.toMillis() : undefined;
+};
+
 type SnapshotWithExists =
   | {
       exists?: boolean | (() => boolean);

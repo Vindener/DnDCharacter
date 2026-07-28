@@ -1,10 +1,11 @@
 import type { CharacterSyncMap, CharacterSyncState, SyncTransportState } from '@/types/Sync';
 import type { CharacterViewModel } from '@/types/Character';
-import type { CharacterActorRole } from '@/repositories/characterCloudRepository';
+import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
 import { characterCloudRepository } from '@/repositories/characterCloudRepository';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { resolveSyncStatus, collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
 import { characterMapper } from '@/domain/mappers';
+import { timestampToMillis } from '@/services/firebase';
 
 export type SyncTransitionType =
   | 'ensure'
@@ -16,7 +17,8 @@ export type SyncTransitionType =
   | 'clear-conflicts'
   | 'set-transport'
   | 'mark-sync-error'
-  | 'remove-character';
+  | 'remove-character'
+  | 'record-remote-sync-state';
 
 type TransitionBase = {
   characterId: string;
@@ -73,6 +75,15 @@ type RemoveCharacterTransition = TransitionBase & {
   type: 'remove-character';
 };
 
+// COL-5: bookkeeping-only transition — records which changeHistory entries this device has
+// already accounted for (clock-independent id diff) and the server time of the last remote
+// change it has observed. Deliberately does not touch pendingPaths/conflictPaths/status.
+type RecordRemoteSyncStateTransition = TransitionBase & {
+  type: 'record-remote-sync-state';
+  seenHistoryEntryIds: string[];
+  serverSyncAtMs?: number;
+};
+
 export type SyncTransition =
   | EnsureTransition
   | SetCloudAvailabilityTransition
@@ -83,7 +94,8 @@ export type SyncTransition =
   | ClearConflictsTransition
   | SetTransportTransition
   | MarkSyncErrorTransition
-  | RemoveCharacterTransition;
+  | RemoveCharacterTransition
+  | RecordRemoteSyncStateTransition;
 
 export type ApplySyncTransitionResult = {
   map: CharacterSyncMap;
@@ -128,6 +140,9 @@ export interface CharacterSyncUploadPort {
 export interface CharacterSyncConflictPort extends CharacterSyncUploadPort {
   markCloudDownloaded: (characterId: string) => Promise<void>;
   clearConflicts: (characterId: string) => Promise<void>;
+  // Only required for the keep-cloud resolution path (see resolveConflict below) — the other
+  // strategies never call it, so it's optional to avoid forcing every syncPort literal to supply it.
+  recordRemoteSyncState?: (characterId: string, payload: { seenHistoryEntryIds: string[]; serverSyncAtMs?: number }) => Promise<void>;
 }
 
 export type SyncToCloudArgs = {
@@ -209,6 +224,7 @@ export function buildDefaultSyncState(characterId: string, hasCloud = false): Ch
     transportMessage: null,
     lastSyncError: null,
     lastSyncAttemptAt: null,
+    seenHistoryEntryIds: [],
   };
 }
 
@@ -222,6 +238,7 @@ export function normalizeSyncState(characterId: string, raw: Partial<CharacterSy
     characterId,
     pendingPaths: cleanPaths(raw.pendingPaths),
     conflictPaths: cleanPaths(raw.conflictPaths),
+    seenHistoryEntryIds: cleanPaths(raw.seenHistoryEntryIds),
     transportState: raw.transportState || 'idle',
     transportMessage: raw.transportMessage ?? null,
     lastSyncError: raw.lastSyncError ?? null,
@@ -259,9 +276,7 @@ export function applySyncTransition(map: CharacterSyncMap, transition: SyncTrans
     return { map: nextMap };
   }
 
-  const existing = map[transition.characterId]
-    ? normalizeSyncState(transition.characterId, map[transition.characterId])
-    : null;
+  const existing = map[transition.characterId] ? normalizeSyncState(transition.characterId, map[transition.characterId]) : null;
 
   if (transition.type === 'ensure') {
     if (existing) {
@@ -368,6 +383,16 @@ export function applySyncTransition(map: CharacterSyncMap, transition: SyncTrans
       transportMessage: null,
       lastSyncError: null,
     });
+    return updateMap(map, next);
+  }
+
+  if (transition.type === 'record-remote-sync-state') {
+    const base = existing || buildDefaultSyncState(transition.characterId, true);
+    const next: CharacterSyncState = {
+      ...base,
+      seenHistoryEntryIds: transition.seenHistoryEntryIds,
+      lastSyncAt: typeof transition.serverSyncAtMs === 'number' ? transition.serverSyncAtMs : base.lastSyncAt,
+    };
     return updateMap(map, next);
   }
 
@@ -529,6 +554,41 @@ export function reconcileRemoteSnapshot(args: ReconcileRemoteSnapshotArgs): Reco
   };
 }
 
+// COL-5: entry.atMs is the writer device's own clock, so comparing it against this device's
+// lastSyncAt compares two different clocks and breaks under skew. Instead, diff changeHistory
+// against the set of entry ids this device has already accounted for — clock-independent.
+export function computeRemoteHistorySync(args: {
+  history: CharacterChangeHistoryEntry[];
+  selfUid: string;
+  seenHistoryEntryIds?: string[];
+}): { remotePathsSinceLastSync: string[]; seenHistoryEntryIds: string[] } {
+  const priorSeen = new Set(args.seenHistoryEntryIds || []);
+  const nextSeen: string[] = [];
+  const paths: string[] = [];
+
+  for (const entry of args.history) {
+    if (!entry.id) continue;
+    nextSeen.push(entry.id);
+    if (priorSeen.has(entry.id)) continue;
+    if (!entry.uid || entry.uid === args.selfUid) continue;
+    paths.push(...(entry.paths || []));
+  }
+
+  return { remotePathsSinceLastSync: paths, seenHistoryEntryIds: nextSeen };
+}
+
+// Same id-extraction as computeRemoteHistorySync, but for the raw doc fetched directly in
+// resolveConflict's keep-cloud path (not the sanitized CharacterChangeHistoryEntry[] shape).
+export function computeSeenEntryIdsFromRawHistory(rawHistory: unknown): string[] {
+  if (!Array.isArray(rawHistory)) return [];
+  const ids: string[] = [];
+  for (const entry of rawHistory) {
+    const id = entry && typeof entry === 'object' ? (entry as Record<string, unknown>).id : undefined;
+    if (typeof id === 'string' && id) ids.push(id);
+  }
+  return ids;
+}
+
 export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudResult> {
   const plan = buildUploadPlan({
     syncState: args.syncState,
@@ -539,9 +599,7 @@ export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudRes
   const fallbackCharacter = args.character;
 
   if (!args.isOnline) {
-    const defaultOfflineMessage = plan.pendingCount
-      ? `Офлайн-черга: ${plan.pendingCount} шлях(ів) очікує`
-      : 'Офлайн-черга';
+    const defaultOfflineMessage = plan.pendingCount ? `Офлайн-черга: ${plan.pendingCount} шлях(ів) очікує` : 'Офлайн-черга';
     await args.syncPort.setSyncTransport(args.character.id, 'idle', args.offlineMessage || defaultOfflineMessage);
     return {
       status: 'offline',
@@ -553,11 +611,7 @@ export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudRes
   }
 
   await args.syncPort.ensureCharacterSync(args.character.id, true);
-  await args.syncPort.setSyncTransport(
-    args.character.id,
-    args.startTransportState || 'syncing',
-    args.syncingMessage || 'Синхронізація...',
-  );
+  await args.syncPort.setSyncTransport(args.character.id, args.startTransportState || 'syncing', args.syncingMessage || 'Синхронізація...');
 
   try {
     const result = await characterCloudRepository.upsertFromLocal(characterMapper.entityToDto(args.character), {
@@ -640,6 +694,16 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
     const mapped = mapCloudCharacterToLocalDto(doc as Record<string, unknown>);
     const normalized = args.normalizeCharacter ? args.normalizeCharacter(mapped) : mapped;
 
+    // COL-5: keep-cloud is the one resolution path that never triggers a new Firestore write
+    // from this device, so no follow-up onSnapshot will bump the cursor on its own — bump it
+    // here using the doc we just fetched, or the conflicting entries stay "unseen" forever and
+    // keep re-triggering false conflicts against unrelated future remote changes.
+    const seenHistoryEntryIds = computeSeenEntryIdsFromRawHistory((doc as { changeHistory?: unknown }).changeHistory);
+    const serverSyncAtMs = timestampToMillis((doc as { lastChangeAt?: unknown }).lastChangeAt);
+    if (args.syncPort.recordRemoteSyncState) {
+      await args.syncPort.recordRemoteSyncState(normalized.id, { seenHistoryEntryIds, serverSyncAtMs });
+    }
+
     await args.syncPort.markCloudDownloaded(normalized.id);
     await args.syncPort.clearConflicts(normalized.id);
     await args.syncPort.setSyncTransport(normalized.id, 'downloading', 'Конфлікт вирішено хмарною версією');
@@ -655,4 +719,3 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
     };
   }
 }
-

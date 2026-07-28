@@ -11,6 +11,13 @@ vi.mock('@/shared/helpers/mapCloudCharacter', () => ({
   mapCloudCharacterToLocalDto: vi.fn((doc: Record<string, unknown>) => doc),
 }));
 
+vi.mock('@/services/firebase', () => ({
+  timestampToMillis: (value: unknown) => {
+    const candidate = value as { toMillis?: () => number } | null | undefined;
+    return typeof candidate?.toMillis === 'function' ? candidate.toMillis() : undefined;
+  },
+}));
+
 vi.mock('@/domain/mappers', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/domain/mappers')>();
   return {
@@ -24,10 +31,14 @@ vi.mock('@/domain/mappers', async (importOriginal) => {
 
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { characterCloudRepository } from '@/repositories/characterCloudRepository';
+import type { CharacterChangeHistoryEntry, CharacterSheet } from '@/repositories/characterCloudRepository';
 import {
   applySyncTransition,
+  computeRemoteHistorySync,
+  computeSeenEntryIdsFromRawHistory,
   normalizeSyncState,
   reconcileRemoteSnapshot,
+  resolveConflict,
   syncToCloud,
   type ReconcileRemoteSnapshotResult,
 } from '@/services/characterSyncCoordinator';
@@ -169,5 +180,130 @@ describe('characterSyncCoordinator helpers', () => {
     expect(syncPort.markSyncError).toHaveBeenCalledWith('char-sync-error', 'permission denied');
     expect(syncPort.markCloudUploaded).not.toHaveBeenCalled();
     expect(syncPort.setCloudAvailability).not.toHaveBeenCalled();
+  });
+});
+
+// COL-5: entry.atMs is the writer device's own clock. These tests use a fixed baseline instead
+// of Date.now() to prove the id-diff mechanism is correct regardless of clock skew direction.
+describe('computeRemoteHistorySync', () => {
+  const T = 1_000_000;
+
+  function entry(overrides: Partial<CharacterChangeHistoryEntry>): CharacterChangeHistoryEntry {
+    return {
+      id: 'default-id',
+      uid: 'uid-A',
+      tab: 'Combat',
+      paths: ['combat.hp.current'],
+      atMs: T,
+      ...overrides,
+    };
+  }
+
+  it('includes a remote entry whose writer clock is 10 minutes AHEAD, on first contact', () => {
+    const history = [entry({ id: 'a-1', uid: 'uid-A', atMs: T + 10 * 60_000, paths: ['combat.hp.current'] })];
+
+    const result = computeRemoteHistorySync({ history, selfUid: 'me', seenHistoryEntryIds: [] });
+
+    expect(result.remotePathsSinceLastSync).toEqual(['combat.hp.current']);
+    expect(result.seenHistoryEntryIds).toEqual(['a-1']);
+  });
+
+  it('includes a remote entry whose writer clock is 10 minutes BEHIND, on first contact', () => {
+    const history = [entry({ id: 'b-1', uid: 'uid-B', atMs: T - 10 * 60_000, paths: ['inventory.items'] })];
+
+    const result = computeRemoteHistorySync({ history, selfUid: 'me', seenHistoryEntryIds: [] });
+
+    expect(result.remotePathsSinceLastSync).toEqual(['inventory.items']);
+  });
+
+  it('does not re-include the same entry once it has been seen (no infinite reprocessing)', () => {
+    const history = [entry({ id: 'a-1', uid: 'uid-A', atMs: T + 10 * 60_000, paths: ['combat.hp.current'] })];
+
+    const first = computeRemoteHistorySync({ history, selfUid: 'me', seenHistoryEntryIds: [] });
+    const second = computeRemoteHistorySync({
+      history,
+      selfUid: 'me',
+      seenHistoryEntryIds: first.seenHistoryEntryIds,
+    });
+
+    expect(second.remotePathsSinceLastSync).toEqual([]);
+  });
+
+  it('excludes entries authored by selfUid regardless of atMs', () => {
+    const history = [entry({ id: 'self-1', uid: 'me', atMs: T + 10 * 60_000, paths: ['notes.journal'] })];
+
+    const result = computeRemoteHistorySync({ history, selfUid: 'me', seenHistoryEntryIds: [] });
+
+    expect(result.remotePathsSinceLastSync).toEqual([]);
+    expect(result.seenHistoryEntryIds).toEqual(['self-1']);
+  });
+
+  it('handles multiple writers independently in the same snapshot', () => {
+    const history = [
+      entry({ id: 'a-1', uid: 'uid-A', atMs: T - 10 * 60_000, paths: ['combat.hp.current'] }),
+      entry({ id: 'b-1', uid: 'uid-B', atMs: T + 10 * 60_000, paths: ['inventory.items'] }),
+    ];
+
+    const firstPass = computeRemoteHistorySync({ history, selfUid: 'me', seenHistoryEntryIds: [] });
+    expect(firstPass.remotePathsSinceLastSync.sort()).toEqual(['combat.hp.current', 'inventory.items']);
+
+    const historyWithNewA = [...history, entry({ id: 'a-2', uid: 'uid-A', atMs: T - 5 * 60_000, paths: ['combat.ac'] })];
+    const secondPass = computeRemoteHistorySync({
+      history: historyWithNewA,
+      selfUid: 'me',
+      seenHistoryEntryIds: firstPass.seenHistoryEntryIds,
+    });
+    expect(secondPass.remotePathsSinceLastSync).toEqual(['combat.ac']);
+  });
+});
+
+describe('computeSeenEntryIdsFromRawHistory', () => {
+  it('returns an empty array for non-array input', () => {
+    expect(computeSeenEntryIdsFromRawHistory(null)).toEqual([]);
+    expect(computeSeenEntryIdsFromRawHistory(undefined)).toEqual([]);
+    expect(computeSeenEntryIdsFromRawHistory('not-an-array')).toEqual([]);
+  });
+
+  it('ignores malformed entries and extracts valid string ids', () => {
+    const raw = [null, {}, { id: 42 }, { id: 'valid-1' }, { id: 'valid-2', uid: 'uid-A' }];
+    expect(computeSeenEntryIdsFromRawHistory(raw)).toEqual(['valid-1', 'valid-2']);
+  });
+});
+
+describe('resolveConflict keep-cloud (COL-5 cursor bump)', () => {
+  it('records seenHistoryEntryIds and serverSyncAtMs from the freshly fetched doc', async () => {
+    const serverMs = 1_700_000_000_000;
+    vi.mocked(characterCloudRepository.fetchById).mockResolvedValueOnce({
+      id: 'char-conflict',
+      changeHistory: [{ id: 'remote-1', uid: 'uid-other', tab: 'Combat', paths: ['combat.hp.current'], atMs: 1 }],
+      lastChangeAt: { toMillis: () => serverMs },
+    } as unknown as CharacterSheet);
+
+    const character = createEmptyCharacter({ id: 'char-conflict', name: 'Conflicted' });
+    const recordRemoteSyncState = vi.fn(async () => {});
+    const syncPort = {
+      ensureCharacterSync: vi.fn(async () => {}),
+      setCloudAvailability: vi.fn(async () => {}),
+      markCloudUploaded: vi.fn(async () => {}),
+      markCloudDownloaded: vi.fn(async () => {}),
+      clearConflicts: vi.fn(async () => {}),
+      setSyncTransport: vi.fn(async () => {}),
+      markSyncError: vi.fn(async () => {}),
+      recordRemoteSyncState,
+    };
+
+    const result = await resolveConflict({
+      strategy: 'keep-cloud',
+      character,
+      actorRole: 'Player',
+      syncPort,
+      isOnline: true,
+    });
+
+    expect(result.status).toBe('resolved-cloud');
+    expect(recordRemoteSyncState).toHaveBeenCalledWith('char-conflict', {
+      seenHistoryEntryIds: ['remote-1'],
+      serverSyncAtMs: serverMs,
+    });
   });
 });

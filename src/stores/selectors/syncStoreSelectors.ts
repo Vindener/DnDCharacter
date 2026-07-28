@@ -11,6 +11,7 @@ export type SyncStoreActionsSlice = {
   clearConflicts: (characterId: string) => Promise<void>;
   setSyncTransport: (characterId: string, state: SyncTransportState, message?: string | null) => Promise<void>;
   markSyncError: (characterId: string, message: string) => Promise<void>;
+  recordRemoteSyncState: (characterId: string, payload: { seenHistoryEntryIds: string[]; serverSyncAtMs?: number }) => Promise<void>;
 };
 
 export type SyncStoreSelectorState = {
@@ -18,9 +19,8 @@ export type SyncStoreSelectorState = {
 } & SyncStoreActionsSlice;
 
 export const selectSyncByCharacterId =
-  (characterId: string | null | undefined) =>
-  (state: Pick<SyncStoreSelectorState, 'syncByCharacter'>) =>
-    (characterId ? state.syncByCharacter[characterId] : undefined);
+  (characterId: string | null | undefined) => (state: Pick<SyncStoreSelectorState, 'syncByCharacter'>) =>
+    characterId ? state.syncByCharacter[characterId] : undefined;
 
 export const selectSyncStoreActions = (state: SyncStoreActionsSlice) => ({
   loadSyncMeta: state.loadSyncMeta,
@@ -33,4 +33,5 @@ export const selectSyncStoreActions = (state: SyncStoreActionsSlice) => ({
   clearConflicts: state.clearConflicts,
   setSyncTransport: state.setSyncTransport,
   markSyncError: state.markSyncError,
+  recordRemoteSyncState: state.recordRemoteSyncState,
 });

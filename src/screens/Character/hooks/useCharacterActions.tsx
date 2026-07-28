@@ -31,7 +31,7 @@ import { computeSkillBonus, skillKeys } from '@/shared/helpers/derived';
 import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
 import type { CharacterSheet } from '@/repositories/characterCloudRepository';
 import { fetchCharacterSheet, subscribeCharacterSheet } from '@/repositories/characterCloudRepository';
-import { fbAuth } from '@/services/firebase';
+import { fbAuth, timestampToMillis } from '@/services/firebase';
 import useSyncStore, { selectSyncByCharacterId, selectSyncStoreActions } from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
@@ -46,7 +46,13 @@ import {
   isNetworkOnline,
   mapRoleToHistoryActor,
 } from '@/shared/helpers/collaboration/status';
-import { buildUploadPlan, reconcileRemoteSnapshot, resolveConflict, syncToCloud } from '@/services/characterSyncCoordinator';
+import {
+  buildUploadPlan,
+  computeRemoteHistorySync,
+  reconcileRemoteSnapshot,
+  resolveConflict,
+  syncToCloud,
+} from '@/services/characterSyncCoordinator';
 import useSpellbookStore from '@/context/Spellbook-store';
 import { applySpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/domain/spellbook';
 import type { SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
@@ -55,17 +61,8 @@ import { useQuickActions } from './useQuickActions';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { getStatusToneColors } from '@/shared/styles/statusTones';
 import type { DiceRollResult } from '@/shared/services/diceRoller';
-import {
-  applyLevelChange,
-  MAX_CHARACTER_LEVEL,
-  MIN_CHARACTER_LEVEL,
-  type LevelChangeDraftValues,
-} from './levelChange';
-import {
-  getSrdClassFeaturesAtLevel,
-  getSrdProgressionFeatureNames,
-  getSrdRaceTraits,
-} from '@/domain/srd';
+import { applyLevelChange, MAX_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, type LevelChangeDraftValues } from './levelChange';
+import { getSrdClassFeaturesAtLevel, getSrdProgressionFeatureNames, getSrdRaceTraits } from '@/domain/srd';
 import { CharacterSourceBadge } from '../components/CharacterSourceBadge';
 import { isBuiltInRulesSource } from '@/shared/helpers/sourcePresentation';
 import { getLocalizedSpellFields } from '@/domain/srd/localization';
@@ -242,8 +239,7 @@ function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
       const cast = entry as Record<string, unknown>;
       const tab = String(cast.tab || 'Overview') as CharacterTab;
       if (!TAB_ORDER.includes(tab)) return null;
-      const actorRole: CharacterActorRole | undefined =
-        cast.actorRole === 'DM' || cast.actorRole === 'Player' ? cast.actorRole : undefined;
+      const actorRole: CharacterActorRole | undefined = cast.actorRole === 'DM' || cast.actorRole === 'Player' ? cast.actorRole : undefined;
       return {
         id: String(cast.id || ''),
         uid: String(cast.uid || ''),
@@ -311,6 +307,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     clearConflicts,
     setSyncTransport,
     markSyncError,
+    recordRemoteSyncState,
   } = useSyncStore(useShallow(selectSyncStoreActions));
   const roleMode = useAppRoleStore((s) => s.role);
   const userTemplates = useTrackerTemplateStore((s) => s.userTemplates);
@@ -385,13 +382,15 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const canDecreaseLevel = currentLevel > MIN_CHARACTER_LEVEL;
   const proficiency = characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level);
   const hasSkillMetadata = Boolean(characterData.skillProficiencies && Object.keys(characterData.skillProficiencies).length);
-  const passivePerception = 10 + computeSkillBonus({
-    stats: characterData.stats,
-    skill: 'perception',
-    rank: characterData.skillProficiencies?.perception,
-    proficiencyBonus: proficiency,
-    fallbackValue: characterData.skills?.perception,
-  });
+  const passivePerception =
+    10 +
+    computeSkillBonus({
+      stats: characterData.stats,
+      skill: 'perception',
+      rank: characterData.skillProficiencies?.perception,
+      proficiencyBonus: proficiency,
+      fallbackValue: characterData.skills?.perception,
+    });
   const hasHomebrew = isHomebrewCharacter(characterData);
   const notesGroups = useMemo(() => {
     return (characterData.customNotesGroups || []).slice().sort((a, b) => a.order - b.order);
@@ -405,9 +404,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     const normalizedCantrips = new Set((characterData.spells.cantrips || []).map((entry) => normalizeSpellName(entry)));
     const normalizedKnown = new Set((characterData.spells.knownSpells || []).map((entry) => normalizeSpellName(entry)));
 
-    const spellbookByName = new Map(
-      (spellbookSpells || []).map((spell) => [normalizeSpellName(spell.name), spell] as const),
-    );
+    const spellbookByName = new Map((spellbookSpells || []).map((spell) => [normalizeSpellName(spell.name), spell] as const));
 
     const collectedNames: string[] = [];
     const seen = new Set<string>();
@@ -482,40 +479,52 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const isQuickSpellAlreadyPrepared = Boolean(selectedQuickSpellKey && preparedSpellNameSet.has(selectedQuickSpellKey));
   const canAddPreparedFromQuickModal =
     preparedSpellsLimit === null || isQuickSpellAlreadyPrepared || preparedSpellsCount < preparedSpellsLimit;
-  const spellSourceLabel = useCallback((source: SpellbookSpell['source'] | 'imported') => {
-    if (isBuiltInRulesSource(source)) return null;
-    if (source === 'user-custom') return t('magic.sources.userCustom');
-    if (source === 'homebrew') return t('magic.sources.homebrew');
-    if (source === 'imported') return t('magic.sources.imported');
-    return source;
-  }, [t]);
+  const spellSourceLabel = useCallback(
+    (source: SpellbookSpell['source'] | 'imported') => {
+      if (isBuiltInRulesSource(source)) return null;
+      if (source === 'user-custom') return t('magic.sources.userCustom');
+      if (source === 'homebrew') return t('magic.sources.homebrew');
+      if (source === 'imported') return t('magic.sources.imported');
+      return source;
+    },
+    [t],
+  );
   const conflictPaths = currentSync?.conflictPaths || [];
   const syncStatusLabel = useMemo(() => getSyncDisplayStatus(currentSync, netInfo.isConnected), [currentSync, netInfo.isConnected]);
   const shareStatusLabel = useMemo(
     () => getShareDisplayStatus({ isSharedSheet, role: roleMode, isOwnedByMe }),
     [isOwnedByMe, isSharedSheet, roleMode],
   );
-  const formatSyncStatus = useCallback((status: string) => {
-    if (status === 'Synced') return t('common:status.synced');
-    if (status === 'Pending sync') return t('common:status.pendingSync');
-    if (status === 'Offline changes pending') return t('common:status.offlineChanges');
-    if (status === 'Conflict detected') return t('common:status.conflictDetected');
-    if (status === 'Local only') return t('common:status.localOnly');
-    return status;
-  }, [t]);
-  const formatShareStatus = useCallback((status: string) => {
-    if (status === 'Shared with DM') return t('common:status.sharedWithDm');
-    if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
-    return status;
-  }, [t]);
-  const formatChangeSource = useCallback((entry: { uid: string; actorRole?: string | null }) => {
-    const currentUid = fbAuth.currentUser?.uid;
-    if (currentUid && entry.uid && currentUid === entry.uid) return t('history.sources.you');
-    if (entry.actorRole === 'DM') return t('history.sources.dm');
-    if (entry.actorRole === 'Player') return t('history.sources.player');
-    if (!entry.uid) return t('history.sources.remote');
-    return t('history.sources.uid', { uid: entry.uid.slice(0, 6) });
-  }, [t]);
+  const formatSyncStatus = useCallback(
+    (status: string) => {
+      if (status === 'Synced') return t('common:status.synced');
+      if (status === 'Pending sync') return t('common:status.pendingSync');
+      if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+      if (status === 'Conflict detected') return t('common:status.conflictDetected');
+      if (status === 'Local only') return t('common:status.localOnly');
+      return status;
+    },
+    [t],
+  );
+  const formatShareStatus = useCallback(
+    (status: string) => {
+      if (status === 'Shared with DM') return t('common:status.sharedWithDm');
+      if (status === 'Shared with Player') return t('common:status.sharedWithPlayer');
+      return status;
+    },
+    [t],
+  );
+  const formatChangeSource = useCallback(
+    (entry: { uid: string; actorRole?: string | null }) => {
+      const currentUid = fbAuth.currentUser?.uid;
+      if (currentUid && entry.uid && currentUid === entry.uid) return t('history.sources.you');
+      if (entry.actorRole === 'DM') return t('history.sources.dm');
+      if (entry.actorRole === 'Player') return t('history.sources.player');
+      if (!entry.uid) return t('history.sources.remote');
+      return t('history.sources.uid', { uid: entry.uid.slice(0, 6) });
+    },
+    [t],
+  );
   const syncStatusDisplayLabel = useMemo(() => formatSyncStatus(syncStatusLabel), [formatSyncStatus, syncStatusLabel]);
   const shareStatusDisplayLabel = useMemo(
     () => (shareStatusLabel ? formatShareStatus(shareStatusLabel) : null),
@@ -626,10 +635,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       if (!exists) return;
 
       const remoteDto = ensureCharacterDefaults(mapCloudCharacterToLocalDto(doc as Record<string, unknown>));
-      const remotePathsSinceLastSync = history
-        .filter((entry) => entry.uid && entry.uid !== me)
-        .filter((entry) => (syncState?.lastSyncAt || 0) === 0 || entry.atMs > (syncState?.lastSyncAt || 0))
-        .flatMap((entry) => entry.paths || []);
+      // COL-5: entry.atMs is the writer device's own clock — comparing it against this
+      // device's lastSyncAt compared two different clocks and broke under skew. Diff against
+      // already-seen entry ids instead (clock-independent, see computeRemoteHistorySync).
+      const { remotePathsSinceLastSync, seenHistoryEntryIds } = computeRemoteHistorySync({
+        history,
+        selfUid: me,
+        seenHistoryEntryIds: syncState?.seenHistoryEntryIds,
+      });
 
       const reconciled = reconcileRemoteSnapshot({
         syncState,
@@ -646,6 +659,12 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         setSyncFeedback(t('sync.conflictNeedsReview'));
         return;
       }
+
+      // Not for 'conflict' — leave those entries "unseen" until the conflict is resolved.
+      const serverSyncAtMs = timestampToMillis(doc?.lastChangeAt);
+      recordRemoteSyncState(baseCharacter.id, { seenHistoryEntryIds, serverSyncAtMs }).catch((_error) => {
+        /* ignore cursor persist failure */
+      });
 
       if (reconciled.action === 'merge') {
         setCharacterData(reconciled.character);
@@ -672,7 +691,16 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       alive = false;
       if (typeof unsubscribe === 'function') unsubscribe();
     };
-  }, [baseCharacter.id, isCharacterMissing, markCloudDownloaded, markConflict, setCloudAvailability, setSyncTransport, updateCharacter]);
+  }, [
+    baseCharacter.id,
+    isCharacterMissing,
+    markCloudDownloaded,
+    markConflict,
+    recordRemoteSyncState,
+    setCloudAvailability,
+    setSyncTransport,
+    updateCharacter,
+  ]);
 
   useEffect(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -729,11 +757,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         }
 
         const loweredMessage = String(result.message || '').toLowerCase();
-        setSyncFeedback(
-          loweredMessage.includes('network')
-            ? t('sync.retryAfterNetworkError')
-            : t('sync.syncErrorRetry'),
-        );
+        setSyncFeedback(loweredMessage.includes('network') ? t('sync.retryAfterNetworkError') : t('sync.syncErrorRetry'));
       });
     }, 1200);
 
@@ -752,26 +776,32 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setSyncTransport,
   ]);
 
-  const patchCharacter = useCallback((patcher: (prev: CharacterViewModel) => CharacterViewModel, changedPaths?: string[]) => {
-    if (isCharacterMissing) return;
-    setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
-    const paths = changedPaths && changedPaths.length ? changedPaths : [TAB_DEFAULT_PATH[selectedTab]];
-    markLocalDraftPaths(baseCharacter.id, paths).catch((_error) => {
-      /* ignore local draft mark failure */
-    });
-  }, [baseCharacter.id, isCharacterMissing, markLocalDraftPaths, selectedTab]);
+  const patchCharacter = useCallback(
+    (patcher: (prev: CharacterViewModel) => CharacterViewModel, changedPaths?: string[]) => {
+      if (isCharacterMissing) return;
+      setCharacterData((prev) => ensureCharacterDefaults(patcher(prev)));
+      const paths = changedPaths && changedPaths.length ? changedPaths : [TAB_DEFAULT_PATH[selectedTab]];
+      markLocalDraftPaths(baseCharacter.id, paths).catch((_error) => {
+        /* ignore local draft mark failure */
+      });
+    },
+    [baseCharacter.id, isCharacterMissing, markLocalDraftPaths, selectedTab],
+  );
 
-  const openLevelChangeModal = useCallback((delta: number) => {
-    const safeCurrentLevel = clamp(Number(characterData.level) || MIN_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
-    const safeTargetLevel = clamp(safeCurrentLevel + delta, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
-    if (safeTargetLevel === safeCurrentLevel) return;
+  const openLevelChangeModal = useCallback(
+    (delta: number) => {
+      const safeCurrentLevel = clamp(Number(characterData.level) || MIN_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
+      const safeTargetLevel = clamp(safeCurrentLevel + delta, MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
+      if (safeTargetLevel === safeCurrentLevel) return;
 
-    setLevelChangeTarget(safeTargetLevel);
-    setLevelChangeDraftText(
-      buildLevelChangeDraftText(characterData, characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level)),
-    );
-    setIsLevelChangeModalVisible(true);
-  }, [characterData]);
+      setLevelChangeTarget(safeTargetLevel);
+      setLevelChangeDraftText(
+        buildLevelChangeDraftText(characterData, characterData.proficiencyBonus ?? buildProficiencyByLevel(characterData.level)),
+      );
+      setIsLevelChangeModalVisible(true);
+    },
+    [characterData],
+  );
 
   const cancelLevelChange = useCallback(() => {
     setIsLevelChangeModalVisible(false);
@@ -854,61 +884,88 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     }
   }, [baseCharacter.id, characterData.sessionMode, lastSessionCharacterId, patchCharacter, setLastSessionCharacterId]);
 
-  const setNotesGroup = useCallback((groupId: string, value: string) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customNotesGroups: (prev.customNotesGroups || []).map((group) => {
-        if (group.id !== groupId) return group;
-        return { ...group, content: value };
-      }),
-    }), ['homebrew.notes-groups']);
-  }, [patchCharacter]);
+  const setNotesGroup = useCallback(
+    (groupId: string, value: string) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customNotesGroups: (prev.customNotesGroups || []).map((group) => {
+            if (group.id !== groupId) return group;
+            return { ...group, content: value };
+          }),
+        }),
+        ['homebrew.notes-groups'],
+      );
+    },
+    [patchCharacter],
+  );
 
   const addNotesGroup = useCallback(() => {
-    patchCharacter((prev) => {
-      const nextOrder = (prev.customNotesGroups || []).length;
-      const nextGroup: CharacterCustomNotesGroup = {
-        id: `notes-group-${Date.now()}`,
-        title: t('defaults.customNotesGroup'),
-        content: '',
-        order: nextOrder,
-        origin: 'custom',
-      };
-      return {
-        ...prev,
-        customNotesGroups: [...(prev.customNotesGroups || []), nextGroup],
-      };
-    }, ['homebrew.notes-groups']);
+    patchCharacter(
+      (prev) => {
+        const nextOrder = (prev.customNotesGroups || []).length;
+        const nextGroup: CharacterCustomNotesGroup = {
+          id: `notes-group-${Date.now()}`,
+          title: t('defaults.customNotesGroup'),
+          content: '',
+          order: nextOrder,
+          origin: 'custom',
+        };
+        return {
+          ...prev,
+          customNotesGroups: [...(prev.customNotesGroups || []), nextGroup],
+        };
+      },
+      ['homebrew.notes-groups'],
+    );
   }, [patchCharacter, t]);
 
-  const updateNotesGroupMeta = useCallback((groupId: string, patch: Partial<CharacterCustomNotesGroup>) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customNotesGroups: (prev.customNotesGroups || []).map((group) => {
-        if (group.id !== groupId) return group;
-        return { ...group, ...patch };
-      }),
-    }), ['homebrew.notes-groups']);
-  }, [patchCharacter]);
+  const updateNotesGroupMeta = useCallback(
+    (groupId: string, patch: Partial<CharacterCustomNotesGroup>) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customNotesGroups: (prev.customNotesGroups || []).map((group) => {
+            if (group.id !== groupId) return group;
+            return { ...group, ...patch };
+          }),
+        }),
+        ['homebrew.notes-groups'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const removeNotesGroup = useCallback((groupId: string) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customNotesGroups: (prev.customNotesGroups || [])
-        .filter((group) => group.id !== groupId)
-        .map((group, index) => ({ ...group, order: index })),
-    }), ['homebrew.notes-groups']);
-  }, [patchCharacter]);
+  const removeNotesGroup = useCallback(
+    (groupId: string) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customNotesGroups: (prev.customNotesGroups || [])
+            .filter((group) => group.id !== groupId)
+            .map((group, index) => ({ ...group, order: index })),
+        }),
+        ['homebrew.notes-groups'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const applyHpDelta = useCallback((delta: number) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      hp: {
-        ...prev.hp,
-        current: clamp(prev.hp.current + delta, 0, prev.hp.max),
-      },
-    }), ['combat.hp']);
-  }, [patchCharacter]);
+  const applyHpDelta = useCallback(
+    (delta: number) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          hp: {
+            ...prev.hp,
+            current: clamp(prev.hp.current + delta, 0, prev.hp.max),
+          },
+        }),
+        ['combat.hp'],
+      );
+    },
+    [patchCharacter],
+  );
 
   const openHpModal = useCallback(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -920,27 +977,33 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     const nextMax = Math.max(1, parseNumber(tempMaxHp, characterData.hp.max));
     const nextCurrent = clamp(parseNumber(tempCurrentHp, characterData.hp.current), 0, nextMax);
 
-    patchCharacter((prev) => ({
-      ...prev,
-      hp: {
-        ...prev.hp,
-        max: nextMax,
-        current: nextCurrent,
-      },
-    }), ['combat.hp']);
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        hp: {
+          ...prev.hp,
+          max: nextMax,
+          current: nextCurrent,
+        },
+      }),
+      ['combat.hp'],
+    );
 
     setIsHpModalVisible(false);
   }, [characterData.hp.current, characterData.hp.max, patchCharacter, tempCurrentHp, tempMaxHp]);
 
   const saveTempHp = useCallback(() => {
     const value = Math.max(0, parseNumber(tempShieldInput, characterData.hp.temp));
-    patchCharacter((prev) => ({
-      ...prev,
-      hp: {
-        ...prev.hp,
-        temp: value,
-      },
-    }), ['combat.hp']);
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        hp: {
+          ...prev.hp,
+          temp: value,
+        },
+      }),
+      ['combat.hp'],
+    );
     setTempShieldInput('0');
     setIsTempHpModalVisible(false);
   }, [characterData.hp.temp, patchCharacter, tempShieldInput]);
@@ -948,37 +1011,40 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const applyLongRest = useCallback(() => {
     const { sides } = parseDice(characterData.hitDice || '0d0');
 
-    patchCharacter((prev) => {
-      const nextSpellSlots = { ...prev.spells.spellSlots };
-      Object.keys(nextSpellSlots).forEach((key) => {
-        const level = Number(key);
-        const slot = nextSpellSlots[level];
-        if (!slot) return;
-        nextSpellSlots[level] = { ...slot, used: 0 };
-      });
+    patchCharacter(
+      (prev) => {
+        const nextSpellSlots = { ...prev.spells.spellSlots };
+        Object.keys(nextSpellSlots).forEach((key) => {
+          const level = Number(key);
+          const slot = nextSpellSlots[level];
+          if (!slot) return;
+          nextSpellSlots[level] = { ...slot, used: 0 };
+        });
 
-      const nextResources = (prev.customResources || []).map((resource) => {
-        if (resource.resetRule === 'long-rest' || resource.resetRule === 'short-rest') {
-          return { ...resource, current: getResourceResetValue(resource) };
-        }
-        return resource;
-      });
+        const nextResources = (prev.customResources || []).map((resource) => {
+          if (resource.resetRule === 'long-rest' || resource.resetRule === 'short-rest') {
+            return { ...resource, current: getResourceResetValue(resource) };
+          }
+          return resource;
+        });
 
-      return {
-        ...prev,
-        hp: {
-          ...prev.hp,
-          current: prev.hp.max,
-          temp: 0,
-        },
-        hitDice: `${prev.level}d${sides || 6}`,
-        spells: {
-          ...prev.spells,
-          spellSlots: nextSpellSlots,
-        },
-        customResources: nextResources,
-      };
-    }, ['combat.rest', 'combat.hp', 'magic.slots', 'homebrew.resources']);
+        return {
+          ...prev,
+          hp: {
+            ...prev.hp,
+            current: prev.hp.max,
+            temp: 0,
+          },
+          hitDice: `${prev.level}d${sides || 6}`,
+          spells: {
+            ...prev.spells,
+            spellSlots: nextSpellSlots,
+          },
+          customResources: nextResources,
+        };
+      },
+      ['combat.rest', 'combat.hp', 'magic.slots', 'homebrew.resources'],
+    );
 
     setIsRestModalVisible(false);
   }, [characterData.hitDice, patchCharacter]);
@@ -998,24 +1064,27 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     const conMod = calculateModifier(characterData.stats.constitution || 10);
     const heal = rollResults.reduce((sum, result) => sum + result, 0) + conMod * used;
 
-    patchCharacter((prev) => {
-      const nextResources = (prev.customResources || []).map((resource) => {
-        if (resource.resetRule === 'short-rest') {
-          return { ...resource, current: getResourceResetValue(resource) };
-        }
-        return resource;
-      });
+    patchCharacter(
+      (prev) => {
+        const nextResources = (prev.customResources || []).map((resource) => {
+          if (resource.resetRule === 'short-rest') {
+            return { ...resource, current: getResourceResetValue(resource) };
+          }
+          return resource;
+        });
 
-      return {
-        ...prev,
-        hp: {
-          ...prev.hp,
-          current: clamp(prev.hp.current + heal, 0, prev.hp.max),
-        },
-        hitDice: `${Math.max(count - used, 0)}d${sides || 6}`,
-        customResources: nextResources,
-      };
-    }, ['combat.rest', 'combat.hp', 'homebrew.resources']);
+        return {
+          ...prev,
+          hp: {
+            ...prev.hp,
+            current: clamp(prev.hp.current + heal, 0, prev.hp.max),
+          },
+          hitDice: `${Math.max(count - used, 0)}d${sides || 6}`,
+          customResources: nextResources,
+        };
+      },
+      ['combat.rest', 'combat.hp', 'homebrew.resources'],
+    );
 
     setIsRestModalVisible(false);
   }, [characterData.hitDice, characterData.stats.constitution, patchCharacter, rollResults]);
@@ -1024,163 +1093,204 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setContextRollRequest(request);
   }, []);
 
-  const rollAbilityCheck = useCallback((label: string, baseModifier: number) => {
-    openContextRoll({
-      kind: 'ability',
-      title: `${label} Check`,
-      label,
-      baseModifier,
-    });
-  }, [openContextRoll]);
+  const rollAbilityCheck = useCallback(
+    (label: string, baseModifier: number) => {
+      openContextRoll({
+        kind: 'ability',
+        title: `${label} Check`,
+        label,
+        baseModifier,
+      });
+    },
+    [openContextRoll],
+  );
 
-  const rollSavingThrow = useCallback((label: string, baseModifier: number, proficient: boolean) => {
-    openContextRoll({
-      kind: 'saving-throw',
-      title: `${label} Save`,
-      label,
-      baseModifier,
-      proficient,
-    });
-  }, [openContextRoll]);
+  const rollSavingThrow = useCallback(
+    (label: string, baseModifier: number, proficient: boolean) => {
+      openContextRoll({
+        kind: 'saving-throw',
+        title: `${label} Save`,
+        label,
+        baseModifier,
+        proficient,
+      });
+    },
+    [openContextRoll],
+  );
 
-  const rollSkillCheck = useCallback((label: string, baseModifier: number, rank?: SkillProficiencyRank) => {
-    openContextRoll({
-      kind: 'skill',
-      title: `${label} Check`,
-      label,
-      baseModifier,
-      rank,
-    });
-  }, [openContextRoll]);
+  const rollSkillCheck = useCallback(
+    (label: string, baseModifier: number, rank?: SkillProficiencyRank) => {
+      openContextRoll({
+        kind: 'skill',
+        title: `${label} Check`,
+        label,
+        baseModifier,
+        rank,
+      });
+    },
+    [openContextRoll],
+  );
 
-  const toggleSavingThrowProficiency = useCallback((stat: keyof CharacterViewModel['savingThrows']) => {
-    patchCharacter(
-      (prev) => ({
-        ...prev,
-        savingThrows: {
-          ...prev.savingThrows,
-          [stat]: !prev.savingThrows?.[stat],
-        },
-      }),
-      ['overview.saving-throws'],
-    );
-  }, [patchCharacter]);
-
-  const cycleSkillRank = useCallback((skill: keyof CharacterViewModel['skills']) => {
-    patchCharacter(
-      (prev) => {
-        const currentRank = prev.skillProficiencies?.[skill] || 'none';
-        const nextRank = getNextSkillRank(currentRank);
-        const nextRanks = { ...(prev.skillProficiencies || {}) };
-
-        if (nextRank === 'none') {
-          delete nextRanks[skill];
-        } else {
-          nextRanks[skill] = nextRank;
-        }
-
-        const nextSkills = { ...prev.skills };
-        nextSkills[skill] = computeSkillBonus({
-          stats: prev.stats,
-          skill,
-          rank: nextRank === 'none' ? undefined : nextRank,
-          proficiencyBonus: prev.proficiencyBonus ?? buildProficiencyByLevel(prev.level),
-          fallbackValue: prev.skills?.[skill],
-        });
-
-        return {
+  const toggleSavingThrowProficiency = useCallback(
+    (stat: keyof CharacterViewModel['savingThrows']) => {
+      patchCharacter(
+        (prev) => ({
           ...prev,
-          skills: nextSkills,
-          skillProficiencies: Object.keys(nextRanks).length ? nextRanks : undefined,
-        };
-      },
-      ['overview.skills'],
-    );
-  }, [patchCharacter]);
+          savingThrows: {
+            ...prev.savingThrows,
+            [stat]: !prev.savingThrows?.[stat],
+          },
+        }),
+        ['overview.saving-throws'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const rollWeaponAttack = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
-    openContextRoll({ kind: 'weapon-attack', weapon });
-  }, [openContextRoll]);
+  const cycleSkillRank = useCallback(
+    (skill: keyof CharacterViewModel['skills']) => {
+      patchCharacter(
+        (prev) => {
+          const currentRank = prev.skillProficiencies?.[skill] || 'none';
+          const nextRank = getNextSkillRank(currentRank);
+          const nextRanks = { ...(prev.skillProficiencies || {}) };
 
-  const rollWeaponDamage = useCallback((weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
-    openContextRoll({ kind: 'weapon-damage', weapon });
-  }, [openContextRoll]);
+          if (nextRank === 'none') {
+            delete nextRanks[skill];
+          } else {
+            nextRanks[skill] = nextRank;
+          }
+
+          const nextSkills = { ...prev.skills };
+          nextSkills[skill] = computeSkillBonus({
+            stats: prev.stats,
+            skill,
+            rank: nextRank === 'none' ? undefined : nextRank,
+            proficiencyBonus: prev.proficiencyBonus ?? buildProficiencyByLevel(prev.level),
+            fallbackValue: prev.skills?.[skill],
+          });
+
+          return {
+            ...prev,
+            skills: nextSkills,
+            skillProficiencies: Object.keys(nextRanks).length ? nextRanks : undefined,
+          };
+        },
+        ['overview.skills'],
+      );
+    },
+    [patchCharacter],
+  );
+
+  const rollWeaponAttack = useCallback(
+    (weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
+      openContextRoll({ kind: 'weapon-attack', weapon });
+    },
+    [openContextRoll],
+  );
+
+  const rollWeaponDamage = useCallback(
+    (weapon: NonNullable<CharacterViewModel['weapons']>[number]) => {
+      openContextRoll({ kind: 'weapon-damage', weapon });
+    },
+    [openContextRoll],
+  );
 
   const closeWeaponRollModal = useCallback(() => {
     setContextRollRequest(null);
   }, []);
 
-  const handleContextRollResult = useCallback((result: DiceRollResult) => {
-    if (!contextRollRequest) return;
-    const details = buildDiceRollResultDetails(result, t);
+  const handleContextRollResult = useCallback(
+    (result: DiceRollResult) => {
+      if (!contextRollRequest) return;
+      const details = buildDiceRollResultDetails(result, t);
 
-    if (contextRollRequest.kind === 'ability' || contextRollRequest.kind === 'saving-throw' || contextRollRequest.kind === 'skill') {
-      setAbilityRollResult({
-        title: contextRollRequest.title,
-        details,
-      });
-    } else if (contextRollRequest.kind === 'weapon-attack') {
-      setWeaponRollResult({
-        title: t('modals.roll.hitLabel', { weapon: contextRollRequest.weapon.name || t('modals.roll.weaponFallback') }),
-        details,
-      });
-      setSpellRollResult(null);
-    } else if (contextRollRequest.kind === 'weapon-damage') {
-      setWeaponRollResult({
-        title: t('modals.roll.damageLabel', { weapon: contextRollRequest.weapon.name || t('modals.roll.weaponFallback') }),
-        details,
-      });
-      setSpellRollResult(null);
-    } else if (contextRollRequest.kind === 'spell-attack') {
-      setSpellRollResult({
-        title: t('modals.roll.spellAttackLabel', { spell: contextRollRequest.spellName }),
-        details,
-      });
-      setWeaponRollResult(null);
-    } else if (contextRollRequest.kind === 'spell-damage') {
-      setSpellRollResult({
-        title: t('modals.roll.spellDamageLabel', { spell: contextRollRequest.spellName }),
-        details: [
-          t('rollDetails.profile', { profile: contextRollRequest.profile.label }),
-          t('rollDetails.damageType', { type: contextRollRequest.profile.damageType }),
-          ...details,
-          contextRollRequest.profile.condition ? t('rollDetails.condition', { condition: contextRollRequest.profile.condition }) : '',
-        ].filter(Boolean),
-      });
-      setWeaponRollResult(null);
-    }
-  }, [contextRollRequest, t]);
+      if (contextRollRequest.kind === 'ability' || contextRollRequest.kind === 'saving-throw' || contextRollRequest.kind === 'skill') {
+        setAbilityRollResult({
+          title: contextRollRequest.title,
+          details,
+        });
+      } else if (contextRollRequest.kind === 'weapon-attack') {
+        setWeaponRollResult({
+          title: t('modals.roll.hitLabel', { weapon: contextRollRequest.weapon.name || t('modals.roll.weaponFallback') }),
+          details,
+        });
+        setSpellRollResult(null);
+      } else if (contextRollRequest.kind === 'weapon-damage') {
+        setWeaponRollResult({
+          title: t('modals.roll.damageLabel', { weapon: contextRollRequest.weapon.name || t('modals.roll.weaponFallback') }),
+          details,
+        });
+        setSpellRollResult(null);
+      } else if (contextRollRequest.kind === 'spell-attack') {
+        setSpellRollResult({
+          title: t('modals.roll.spellAttackLabel', { spell: contextRollRequest.spellName }),
+          details,
+        });
+        setWeaponRollResult(null);
+      } else if (contextRollRequest.kind === 'spell-damage') {
+        setSpellRollResult({
+          title: t('modals.roll.spellDamageLabel', { spell: contextRollRequest.spellName }),
+          details: [
+            t('rollDetails.profile', { profile: contextRollRequest.profile.label }),
+            t('rollDetails.damageType', { type: contextRollRequest.profile.damageType }),
+            ...details,
+            contextRollRequest.profile.condition ? t('rollDetails.condition', { condition: contextRollRequest.profile.condition }) : '',
+          ].filter(Boolean),
+        });
+        setWeaponRollResult(null);
+      }
+    },
+    [contextRollRequest, t],
+  );
 
-  const rollSpellAttack = useCallback((spellName: string) => {
-    const baseModifier = Number.isFinite(Number(characterData.spells.spellAttackBonus)) ? Number(characterData.spells.spellAttackBonus) : 0;
-    setIsSpellQuickModalVisible(false);
-    openContextRoll({ kind: 'spell-attack', spellName, baseModifier });
-  }, [characterData.spells.spellAttackBonus, openContextRoll]);
+  const rollSpellAttack = useCallback(
+    (spellName: string) => {
+      const baseModifier = Number.isFinite(Number(characterData.spells.spellAttackBonus))
+        ? Number(characterData.spells.spellAttackBonus)
+        : 0;
+      setIsSpellQuickModalVisible(false);
+      openContextRoll({ kind: 'spell-attack', spellName, baseModifier });
+    },
+    [characterData.spells.spellAttackBonus, openContextRoll],
+  );
 
-  const rollSpellDamage = useCallback((spellName: string, profile: SpellDamageProfile) => {
-    setIsSpellQuickModalVisible(false);
-    openContextRoll({ kind: 'spell-damage', spellName, profile });
-  }, [openContextRoll]);
+  const rollSpellDamage = useCallback(
+    (spellName: string, profile: SpellDamageProfile) => {
+      setIsSpellQuickModalVisible(false);
+      openContextRoll({ kind: 'spell-damage', spellName, profile });
+    },
+    [openContextRoll],
+  );
 
   const addCondition = useCallback(() => {
     const value = conditionInput.trim();
     if (!value) return;
 
-    patchCharacter((prev) => ({
-      ...prev,
-      conditions: [...(prev.conditions || []), value],
-    }), ['overview.conditions']);
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        conditions: [...(prev.conditions || []), value],
+      }),
+      ['overview.conditions'],
+    );
 
     setConditionInput('');
     setIsConditionModalVisible(false);
   }, [conditionInput, patchCharacter]);
 
-  const removeCondition = useCallback((index: number) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      conditions: (prev.conditions || []).filter((_, idx) => idx !== index),
-    }), ['overview.conditions']);
-  }, [patchCharacter]);
+  const removeCondition = useCallback(
+    (index: number) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          conditions: (prev.conditions || []).filter((_, idx) => idx !== index),
+        }),
+        ['overview.conditions'],
+      );
+    },
+    [patchCharacter],
+  );
 
   const addQuickSessionNote = useCallback(() => {
     const note = quickNoteInput.trim();
@@ -1273,9 +1383,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       if (nextStatus === 'prepared' && preparedSpellsLimit !== null && !alreadyPrepared && preparedSpellsCount >= preparedSpellsLimit) {
         setSpellRollResult({
           title: t('modals.spell.preparedLimitTitle'),
-          details: [
-            t('modals.spell.preparedLimitMessage', { count: preparedSpellsCount, limit: preparedSpellsLimit }),
-          ],
+          details: [t('modals.spell.preparedLimitMessage', { count: preparedSpellsCount, limit: preparedSpellsLimit })],
         });
         return;
       }
@@ -1341,41 +1449,56 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       value: '',
     };
 
-    patchCharacter((prev) => ({
-      ...prev,
-      customFields: [...(prev.customFields || []), newField],
-    }), ['homebrew.fields']);
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        customFields: [...(prev.customFields || []), newField],
+      }),
+      ['homebrew.fields'],
+    );
   }, [patchCharacter, t]);
 
-  const updateCustomField = useCallback((fieldId: string, patch: Partial<CharacterCustomField>) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customFields: (prev.customFields || []).map((field) => {
-        if (field.id !== fieldId) return field;
+  const updateCustomField = useCallback(
+    (fieldId: string, patch: Partial<CharacterCustomField>) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customFields: (prev.customFields || []).map((field) => {
+            if (field.id !== fieldId) return field;
 
-        const merged = { ...field, ...patch };
-        if (merged.type === 'number') {
-          return { ...merged, value: parseNumber(String(merged.value ?? 0), 0) };
-        }
-        if (merged.type === 'boolean') {
-          return { ...merged, value: Boolean(merged.value) };
-        }
-        if (merged.type === 'select') {
-          const options = (merged.options || []).map((option) => String(option).trim()).filter(Boolean);
-          const value = String(merged.value ?? '');
-          return { ...merged, options, value: options.includes(value) ? value : (options[0] || '') };
-        }
-        return { ...merged, value: String(merged.value ?? '') };
-      }),
-    }), ['homebrew.fields']);
-  }, [patchCharacter]);
+            const merged = { ...field, ...patch };
+            if (merged.type === 'number') {
+              return { ...merged, value: parseNumber(String(merged.value ?? 0), 0) };
+            }
+            if (merged.type === 'boolean') {
+              return { ...merged, value: Boolean(merged.value) };
+            }
+            if (merged.type === 'select') {
+              const options = (merged.options || []).map((option) => String(option).trim()).filter(Boolean);
+              const value = String(merged.value ?? '');
+              return { ...merged, options, value: options.includes(value) ? value : options[0] || '' };
+            }
+            return { ...merged, value: String(merged.value ?? '') };
+          }),
+        }),
+        ['homebrew.fields'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const removeCustomField = useCallback((fieldId: string) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customFields: (prev.customFields || []).filter((field) => field.id !== fieldId),
-    }), ['homebrew.fields']);
-  }, [patchCharacter]);
+  const removeCustomField = useCallback(
+    (fieldId: string) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customFields: (prev.customFields || []).filter((field) => field.id !== fieldId),
+        }),
+        ['homebrew.fields'],
+      );
+    },
+    [patchCharacter],
+  );
 
   const addResource = useCallback(() => {
     const resource: CharacterCustomResource = {
@@ -1386,110 +1509,167 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       resetRule: 'none',
     };
 
-    patchCharacter((prev) => ({
-      ...prev,
-      customResources: [...(prev.customResources || []), resource],
-    }), ['homebrew.resources']);
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        customResources: [...(prev.customResources || []), resource],
+      }),
+      ['homebrew.resources'],
+    );
   }, [patchCharacter, t]);
 
-  const updateResource = useCallback((resourceId: string, patch: Partial<CharacterCustomResource>) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customResources: (prev.customResources || []).map((resource) => {
-        if (resource.id !== resourceId) return resource;
-        return { ...resource, ...patch };
-      }),
-    }), ['homebrew.resources']);
-  }, [patchCharacter]);
+  const updateResource = useCallback(
+    (resourceId: string, patch: Partial<CharacterCustomResource>) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customResources: (prev.customResources || []).map((resource) => {
+            if (resource.id !== resourceId) return resource;
+            return { ...resource, ...patch };
+          }),
+        }),
+        ['homebrew.resources'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const removeResource = useCallback((resourceId: string) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customResources: (prev.customResources || []).filter((resource) => resource.id !== resourceId),
-    }), ['homebrew.resources']);
-  }, [patchCharacter]);
+  const removeResource = useCallback(
+    (resourceId: string) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customResources: (prev.customResources || []).filter((resource) => resource.id !== resourceId),
+        }),
+        ['homebrew.resources'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const saveUserTemplateFromResource = useCallback((resource: CharacterCustomResource) => {
-    addUserTemplateFromResource(resource, resource.label).catch(() => {});
-  }, [addUserTemplateFromResource]);
+  const saveUserTemplateFromResource = useCallback(
+    (resource: CharacterCustomResource) => {
+      addUserTemplateFromResource(resource, resource.label).catch(() => {});
+    },
+    [addUserTemplateFromResource],
+  );
 
-  const applyResourceTemplate = useCallback((resource: Omit<CharacterCustomResource, 'id'>) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customResources: [
-        ...(prev.customResources || []),
-        {
-          ...resource,
-          id: `resource-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
-        },
-      ],
-    }), ['homebrew.resources']);
-  }, [patchCharacter]);
+  const applyResourceTemplate = useCallback(
+    (resource: Omit<CharacterCustomResource, 'id'>) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customResources: [
+            ...(prev.customResources || []),
+            {
+              ...resource,
+              id: `resource-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
+            },
+          ],
+        }),
+        ['homebrew.resources'],
+      );
+    },
+    [patchCharacter],
+  );
 
   const addCustomSection = useCallback(() => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customSections: [
-        ...(prev.customSections || []),
-        {
-          id: `custom-section-${Date.now()}`,
-          title: t('defaults.customSection'),
-          content: '',
-        },
-      ],
-    }), ['homebrew.sections']);
+    patchCharacter(
+      (prev) => ({
+        ...prev,
+        customSections: [
+          ...(prev.customSections || []),
+          {
+            id: `custom-section-${Date.now()}`,
+            title: t('defaults.customSection'),
+            content: '',
+          },
+        ],
+      }),
+      ['homebrew.sections'],
+    );
   }, [patchCharacter, t]);
 
-  const updateCustomSection = useCallback((sectionId: string, patch: Partial<NonNullable<CharacterViewModel['customSections']>[number]>) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customSections: (prev.customSections || []).map((section) => {
-        if (section.id !== sectionId) return section;
-        return { ...section, ...patch };
-      }),
-    }), ['homebrew.sections']);
-  }, [patchCharacter]);
+  const updateCustomSection = useCallback(
+    (sectionId: string, patch: Partial<NonNullable<CharacterViewModel['customSections']>[number]>) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customSections: (prev.customSections || []).map((section) => {
+            if (section.id !== sectionId) return section;
+            return { ...section, ...patch };
+          }),
+        }),
+        ['homebrew.sections'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const removeCustomSection = useCallback((sectionId: string) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      customSections: (prev.customSections || []).filter((section) => section.id !== sectionId),
-    }), ['homebrew.sections']);
-  }, [patchCharacter]);
+  const removeCustomSection = useCallback(
+    (sectionId: string) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          customSections: (prev.customSections || []).filter((section) => section.id !== sectionId),
+        }),
+        ['homebrew.sections'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const addHomebrewEntry = useCallback((kind: CharacterHomebrewEntry['kind']) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      homebrewEntries: [
-        ...(prev.homebrewEntries || []),
-        {
-          id: `homebrew-entry-${Date.now()}`,
-          kind,
-          name: t('defaults.customEntryName', { kind }),
-          description: '',
-          tags: [],
-        },
-      ],
-    }), ['homebrew.entries']);
-  }, [patchCharacter, t]);
+  const addHomebrewEntry = useCallback(
+    (kind: CharacterHomebrewEntry['kind']) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          homebrewEntries: [
+            ...(prev.homebrewEntries || []),
+            {
+              id: `homebrew-entry-${Date.now()}`,
+              kind,
+              name: t('defaults.customEntryName', { kind }),
+              description: '',
+              tags: [],
+            },
+          ],
+        }),
+        ['homebrew.entries'],
+      );
+    },
+    [patchCharacter, t],
+  );
 
-  const updateHomebrewEntry = useCallback((entryId: string, patch: Partial<CharacterHomebrewEntry>) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      homebrewEntries: (prev.homebrewEntries || []).map((entry) => {
-        if (entry.id !== entryId) return entry;
-        if (patch.tags && !Array.isArray(patch.tags)) return entry;
-        return { ...entry, ...patch };
-      }),
-    }), ['homebrew.entries']);
-  }, [patchCharacter]);
+  const updateHomebrewEntry = useCallback(
+    (entryId: string, patch: Partial<CharacterHomebrewEntry>) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          homebrewEntries: (prev.homebrewEntries || []).map((entry) => {
+            if (entry.id !== entryId) return entry;
+            if (patch.tags && !Array.isArray(patch.tags)) return entry;
+            return { ...entry, ...patch };
+          }),
+        }),
+        ['homebrew.entries'],
+      );
+    },
+    [patchCharacter],
+  );
 
-  const removeHomebrewEntry = useCallback((entryId: string) => {
-    patchCharacter((prev) => ({
-      ...prev,
-      homebrewEntries: (prev.homebrewEntries || []).filter((entry) => entry.id !== entryId),
-    }), ['homebrew.entries']);
-  }, [patchCharacter]);
+  const removeHomebrewEntry = useCallback(
+    (entryId: string) => {
+      patchCharacter(
+        (prev) => ({
+          ...prev,
+          homebrewEntries: (prev.homebrewEntries || []).filter((entry) => entry.id !== entryId),
+        }),
+        ['homebrew.entries'],
+      );
+    },
+    [patchCharacter],
+  );
 
   const resolveConflictWithLocal = useCallback(() => {
     trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
@@ -1549,6 +1729,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         clearConflicts,
         setSyncTransport,
         markSyncError,
+        recordRemoteSyncState,
       },
       isOnline,
       normalizeCharacter: ensureCharacterDefaults,
@@ -1568,6 +1749,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     markCloudDownloaded,
     markCloudUploaded,
     markSyncError,
+    recordRemoteSyncState,
     roleMode,
     setCloudAvailability,
     setSyncTransport,
@@ -1771,23 +1953,32 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     return badges;
   }, [hasHomebrew, isCloudDoc, isOnline, shareStatusDisplayLabel, syncStatusDisplayLabel, syncStatusLabel, t]);
 
-  const hasConflictForPrefixes = useCallback((prefixes: string[]) => {
-    if (!conflictPaths.length) return false;
-    return conflictPaths.some((path) => prefixes.some((prefix) => path.startsWith(prefix)));
-  }, [conflictPaths]);
+  const hasConflictForPrefixes = useCallback(
+    (prefixes: string[]) => {
+      if (!conflictPaths.length) return false;
+      return conflictPaths.some((path) => prefixes.some((prefix) => path.startsWith(prefix)));
+    },
+    [conflictPaths],
+  );
 
-  const hasConflictForTab = useCallback((tab: CharacterTab) => {
-    return hasConflictForPrefixes([TAB_PATH_PREFIX[tab]]);
-  }, [hasConflictForPrefixes]);
+  const hasConflictForTab = useCallback(
+    (tab: CharacterTab) => {
+      return hasConflictForPrefixes([TAB_PATH_PREFIX[tab]]);
+    },
+    [hasConflictForPrefixes],
+  );
 
-  const sectionConflictLabel = useCallback((prefixes: string[]) => {
-    if (!hasConflictForPrefixes(prefixes)) return null;
-    return (
-      <View style={styles.sectionConflictBadge}>
-        <Text style={styles.sectionConflictBadgeText}>{t('badges.conflict')}</Text>
-      </View>
-    );
-  }, [hasConflictForPrefixes, styles.sectionConflictBadge, styles.sectionConflictBadgeText]);
+  const sectionConflictLabel = useCallback(
+    (prefixes: string[]) => {
+      if (!hasConflictForPrefixes(prefixes)) return null;
+      return (
+        <View style={styles.sectionConflictBadge}>
+          <Text style={styles.sectionConflictBadgeText}>{t('badges.conflict')}</Text>
+        </View>
+      );
+    },
+    [hasConflictForPrefixes, styles.sectionConflictBadge, styles.sectionConflictBadgeText],
+  );
 
   const tabHistory = useMemo(() => {
     if (!isSharedSheet) return [];
@@ -1799,61 +1990,54 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   }, [isSharedSheet, selectedTab, sharedHistory]);
 
   const latestTabChange = tabHistory[0];
-  const latestTabChangeLabel = latestTabChange
-    ? formatChangeSource(latestTabChange)
-    : null;
-  const getHistoryAuthorLabel = useCallback(
-    (entry: CharacterChangeHistoryEntry) => formatChangeSource(entry),
-    [formatChangeSource],
-  );
+  const latestTabChangeLabel = latestTabChange ? formatChangeSource(latestTabChange) : null;
+  const getHistoryAuthorLabel = useCallback((entry: CharacterChangeHistoryEntry) => formatChangeSource(entry), [formatChangeSource]);
 
   const openTab = useCallback((tab: CharacterTab) => setSelectedTab(tab), []);
   const toggleSecondary = useCallback((tab: CharacterTab) => {
     setCollapsedSecondary((prev) => ({ ...prev, [tab]: !prev[tab] }));
   }, []);
 
-  const renderBadge = useCallback((badge: SyncBadge) => {
-    const { id, label, kind } = badge;
-    const tone = getStatusToneColors(colors, kind);
-    const badgeStyle: Array<StyleProp<ViewStyle>> = [
-      styles.badge,
-      { backgroundColor: tone.background, borderColor: tone.border, borderWidth: kind === 'neutral' ? 0 : 1 },
-    ];
-    const badgeText: Array<StyleProp<TextStyle>> = [styles.badgeText, { color: tone.text }];
+  const renderBadge = useCallback(
+    (badge: SyncBadge) => {
+      const { id, label, kind } = badge;
+      const tone = getStatusToneColors(colors, kind);
+      const badgeStyle: Array<StyleProp<ViewStyle>> = [
+        styles.badge,
+        { backgroundColor: tone.background, borderColor: tone.border, borderWidth: kind === 'neutral' ? 0 : 1 },
+      ];
+      const badgeText: Array<StyleProp<TextStyle>> = [styles.badgeText, { color: tone.text }];
 
-    return (
-      <View key={id} style={badgeStyle}>
-        <Text style={badgeText}>{label}</Text>
-      </View>
-    );
-  }, [
-    colors,
-    styles.badge,
-    styles.badgeText,
-  ]);
-
-  const renderSourceBadge = useCallback((source: CharacterContentSourceRef | undefined, id: string) => {
-    return <CharacterSourceBadge source={source} id={id} styles={styles} />;
-  }, [styles]);
-
-  const renderFeatureRows = useCallback((rows: SourceFeatureRow[]) => {
-    if (!rows.length) return <Text style={styles.blockText}>{t('empty.none')}</Text>;
-    return rows.map((row) => (
-      <View key={row.id} style={styles.sourceFeatureRow}>
-        <View style={styles.sourceFeatureHeader}>
-          <Text style={styles.sourceFeatureText}>{row.text}</Text>
-          {renderSourceBadge(row.source, row.id)}
+      return (
+        <View key={id} style={badgeStyle}>
+          <Text style={badgeText}>{label}</Text>
         </View>
-      </View>
-    ));
-  }, [
-    renderSourceBadge,
-    styles.blockText,
-    styles.sourceFeatureHeader,
-    styles.sourceFeatureRow,
-    styles.sourceFeatureText,
-    t,
-  ]);
+      );
+    },
+    [colors, styles.badge, styles.badgeText],
+  );
+
+  const renderSourceBadge = useCallback(
+    (source: CharacterContentSourceRef | undefined, id: string) => {
+      return <CharacterSourceBadge source={source} id={id} styles={styles} />;
+    },
+    [styles],
+  );
+
+  const renderFeatureRows = useCallback(
+    (rows: SourceFeatureRow[]) => {
+      if (!rows.length) return <Text style={styles.blockText}>{t('empty.none')}</Text>;
+      return rows.map((row) => (
+        <View key={row.id} style={styles.sourceFeatureRow}>
+          <View style={styles.sourceFeatureHeader}>
+            <Text style={styles.sourceFeatureText}>{row.text}</Text>
+            {renderSourceBadge(row.source, row.id)}
+          </View>
+        </View>
+      ));
+    },
+    [renderSourceBadge, styles.blockText, styles.sourceFeatureHeader, styles.sourceFeatureRow, styles.sourceFeatureText, t],
+  );
 
   const renderConditionList = (emptyLabel: string) =>
     characterData.conditions?.length ? (
@@ -1976,7 +2160,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             <Text style={styles.subSectionTitle}>{t('overview.passivePerception')}</Text>
             <Text style={styles.blockText}>{passivePerception}</Text>
             <Text style={styles.subSectionTitle}>{t('overview.proficiencies')}</Text>
-            <Text style={styles.blockText}>{characterData.proficiencies.length ? characterData.proficiencies.join(', ') : t('empty.none')}</Text>
+            <Text style={styles.blockText}>
+              {characterData.proficiencies.length ? characterData.proficiencies.join(', ') : t('empty.none')}
+            </Text>
             <Text style={styles.subSectionTitle}>{t('overview.features')}</Text>
             {renderFeatureRows(sourceFeatureRows)}
             <Text style={styles.subSectionTitle}>{t('overview.conditions')}</Text>
@@ -2001,7 +2187,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
       <Text style={styles.subSectionTitle}>{t('combat.actions')}</Text>
       <Text style={styles.blockText}>
-        {characterData.combatTemplates?.actions?.length ? `• ${characterData.combatTemplates.actions.join('\n• ')}` : t('combat.noActionTemplates')}
+        {characterData.combatTemplates?.actions?.length
+          ? `• ${characterData.combatTemplates.actions.join('\n• ')}`
+          : t('combat.noActionTemplates')}
       </Text>
       <Text style={styles.subSectionTitle}>{t('combat.bonusActions')}</Text>
       <Text style={styles.blockText}>
@@ -2065,7 +2253,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         <>
           <Text style={styles.subSectionTitle}>{t('combat.deathSaves')}</Text>
           <Text style={styles.blockText}>
-            {t('combat.deathSaveCounts', { successes: characterData.deathSaves?.successes ?? 0, failures: characterData.deathSaves?.failures ?? 0 })}
+            {t('combat.deathSaveCounts', {
+              successes: characterData.deathSaves?.successes ?? 0,
+              failures: characterData.deathSaves?.failures ?? 0,
+            })}
           </Text>
           <Text style={styles.subSectionTitle}>{t('combat.conditions')}</Text>
           {renderConditionList(t('empty.noActiveCombatConditions'))}
@@ -2082,11 +2273,11 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       .filter((value) => Number.isFinite(value))
       .sort((a, b) => a - b);
     const hasCasterSetup = Boolean(
-      characterData.spells.spellcastingAbility
-        || slotLevels.length
-        || characterData.spells.cantrips.length
-        || characterData.spells.knownSpells.length
-        || characterData.spells.preparedSpells.length,
+      characterData.spells.spellcastingAbility ||
+      slotLevels.length ||
+      characterData.spells.cantrips.length ||
+      characterData.spells.knownSpells.length ||
+      characterData.spells.preparedSpells.length,
     );
     const concentration = (characterData.conditions || []).find((condition) => {
       const key = normalizeConditionKey(condition);
@@ -2126,9 +2317,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.rowValue}>{concentration || (hasCasterSetup ? t('empty.none') : t('magic.notCaster'))}</Text>
         </View>
 
-        {!hasCasterSetup ? (
-          <Text style={styles.blockTextMuted}>{t('magic.nonCasterHint')}</Text>
-        ) : null}
+        {!hasCasterSetup ? <Text style={styles.blockTextMuted}>{t('magic.nonCasterHint')}</Text> : null}
 
         <Text style={styles.subSectionTitle}>{t('magic.slots')}</Text>
         {slotLevels.length ? (
@@ -2157,18 +2346,18 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           pinnedMagicSpells.map((spell) => {
             const display = getLocalizedSpellFields(spell, i18n.language);
             return (
-            <View key={`magic-pinned-${spell.id}`} style={styles.weaponCombatCard}>
-              <View style={styles.rowLine}>
-                <Text style={styles.rowLabel}>{display.name}</Text>
-                <Text style={styles.rowValue}>
-                  {spell.level === 0 ? t('magic.cantrip') : t('magic.slotLevel', { level: spell.level })}
-                  {spellSourceLabel(spell.source) ? ` · ${spellSourceLabel(spell.source)}` : ''}
+              <View key={`magic-pinned-${spell.id}`} style={styles.weaponCombatCard}>
+                <View style={styles.rowLine}>
+                  <Text style={styles.rowLabel}>{display.name}</Text>
+                  <Text style={styles.rowValue}>
+                    {spell.level === 0 ? t('magic.cantrip') : t('magic.slotLevel', { level: spell.level })}
+                    {spellSourceLabel(spell.source) ? ` · ${spellSourceLabel(spell.source)}` : ''}
+                  </Text>
+                </View>
+                <Text style={styles.blockTextMuted}>
+                  {display.school} · {display.castingTime || '—'} · {display.range || '—'}
                 </Text>
               </View>
-              <Text style={styles.blockTextMuted}>
-                {display.school} · {display.castingTime || '—'} · {display.range || '—'}
-              </Text>
-            </View>
             );
           })
         ) : (
@@ -2198,17 +2387,15 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                     <Text style={styles.weaponActionText}>{t('modals.roll.attackD20')}</Text>
                   </Pressable>
                   <Pressable
-                    style={[
-                      styles.weaponActionButton,
-                      styles.weaponActionButtonSecondary,
-                      !defaultProfile ? { opacity: 0.45 } : null,
-                    ]}
+                    style={[styles.weaponActionButton, styles.weaponActionButtonSecondary, !defaultProfile ? { opacity: 0.45 } : null]}
                     onPress={() => defaultProfile && rollSpellDamage(spell.name, defaultProfile)}
                     android_ripple={{ color: colors.ripple }}
                     disabled={!defaultProfile}
                   >
                     <Text style={styles.weaponActionText}>
-                      {defaultProfile ? t('modals.roll.damageFormula', { formula: defaultProfile.formula }) : t('modals.roll.damageNoProfile')}
+                      {defaultProfile
+                        ? t('modals.roll.damageFormula', { formula: defaultProfile.formula })
+                        : t('modals.roll.damageNoProfile')}
                     </Text>
                   </Pressable>
                 </View>
@@ -2279,7 +2466,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       <View style={styles.rowLine}>
         <Text style={styles.rowLabel}>{t('inventory.carryingCapacity')}</Text>
         <Text style={styles.rowValue}>
-          {typeof characterData.equipment?.carryingCapacity === 'number' ? `${characterData.equipment.carryingCapacity} lb` : t('empty.notSpecified')}
+          {typeof characterData.equipment?.carryingCapacity === 'number'
+            ? `${characterData.equipment.carryingCapacity} lb`
+            : t('empty.notSpecified')}
         </Text>
       </View>
 
@@ -2287,7 +2476,8 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       {characterData.weapons?.length ? (
         characterData.weapons.map((weapon, idx) => (
           <Text key={`inventory-weapon-${weapon.name}-${idx}`} style={styles.blockText}>
-            • {weapon.name || t('combat.weaponFallback', { index: idx + 1 })} ({formatBonus(Number(weapon.attackBonus || 0))}, {weapon.damage || '1d6'})
+            • {weapon.name || t('combat.weaponFallback', { index: idx + 1 })} ({formatBonus(Number(weapon.attackBonus || 0))},{' '}
+            {weapon.damage || '1d6'})
           </Text>
         ))
       ) : (
@@ -2296,13 +2486,11 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
       <Text style={styles.subSectionTitle}>{t('inventory.equipment')}</Text>
       {characterData.inventory.length ? (
-        characterData.inventory
-          .slice(0, collapsedSecondary.Inventory ? 6 : characterData.inventory.length)
-          .map((item, idx) => (
-            <Text key={`${item}-${idx}`} style={styles.blockText}>
-              • {item}
-            </Text>
-          ))
+        characterData.inventory.slice(0, collapsedSecondary.Inventory ? 6 : characterData.inventory.length).map((item, idx) => (
+          <Text key={`${item}-${idx}`} style={styles.blockText}>
+            • {item}
+          </Text>
+        ))
       ) : (
         <Text style={styles.blockTextMuted}>{t('inventory.empty')}</Text>
       )}
@@ -2355,10 +2543,18 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.subSectionTitle}>{t('notes.quests')}</Text>
           <Text style={styles.blockText}>{characterData.notesBlocks?.quests || characterData.notesBlocks?.goals || t('empty.blank')}</Text>
           <Text style={styles.subSectionTitle}>{t('notes.alliesEnemies')}</Text>
-          <Text style={styles.blockText}>{characterData.alliesAndOrganizations || characterData.notesBlocks?.relationships || t('empty.blank')}</Text>
+          <Text style={styles.blockText}>
+            {characterData.alliesAndOrganizations || characterData.notesBlocks?.relationships || t('empty.blank')}
+          </Text>
           <Text style={styles.subSectionTitle}>{t('notes.roleplay')}</Text>
           <Text style={styles.blockText}>
-            {[characterData.traits?.personality, characterData.traits?.ideals, characterData.traits?.bonds, characterData.traits?.flaws, characterData.backstory]
+            {[
+              characterData.traits?.personality,
+              characterData.traits?.ideals,
+              characterData.traits?.bonds,
+              characterData.traits?.flaws,
+              characterData.backstory,
+            ]
               .map((entry) => String(entry || '').trim())
               .filter(Boolean)
               .join('\n') || t('empty.blank')}
@@ -2486,7 +2682,11 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         {sectionConflictLabel(['overview.identity'])}
       </View>
       <Text style={styles.editLabel}>{t('edit.identity.name')}</Text>
-      {renderTextInput(characterData.name, (next) => patchCharacter((prev) => ({ ...prev, name: next })), t('edit.identity.namePlaceholder'))}
+      {renderTextInput(
+        characterData.name,
+        (next) => patchCharacter((prev) => ({ ...prev, name: next })),
+        t('edit.identity.namePlaceholder'),
+      )}
       <Text style={styles.editLabel}>{t('edit.identity.class')}</Text>
       {renderTextInput(characterData.class, (next) => patchCharacter((prev) => ({ ...prev, class: next })), t('edit.identity.class'))}
       <Text style={styles.editLabel}>{t('edit.identity.race')}</Text>
@@ -2662,10 +2862,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       {renderTextInput(
         String(characterData.hp.current),
         (next) =>
-          patchCharacter((prev) => ({
-            ...prev,
-            hp: { ...prev.hp, current: clamp(parseNumber(next, prev.hp.current), 0, prev.hp.max) },
-          }), ['combat.hp']),
+          patchCharacter(
+            (prev) => ({
+              ...prev,
+              hp: { ...prev.hp, current: clamp(parseNumber(next, prev.hp.current), 0, prev.hp.max) },
+            }),
+            ['combat.hp'],
+          ),
         t('edit.combat.currentHp'),
         { keyboardType: 'number-pad' },
       )}
@@ -2673,13 +2876,16 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       {renderTextInput(
         String(characterData.hp.max),
         (next) =>
-          patchCharacter((prev) => {
-            const max = Math.max(1, parseNumber(next, prev.hp.max));
-            return {
-              ...prev,
-              hp: { ...prev.hp, max, current: clamp(prev.hp.current, 0, max) },
-            };
-          }, ['combat.hp']),
+          patchCharacter(
+            (prev) => {
+              const max = Math.max(1, parseNumber(next, prev.hp.max));
+              return {
+                ...prev,
+                hp: { ...prev.hp, max, current: clamp(prev.hp.current, 0, max) },
+              };
+            },
+            ['combat.hp'],
+          ),
         t('edit.combat.maxHp'),
         { keyboardType: 'number-pad' },
       )}
@@ -2687,10 +2893,13 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       {renderTextInput(
         String(characterData.hp.temp),
         (next) =>
-          patchCharacter((prev) => ({
-            ...prev,
-            hp: { ...prev.hp, temp: Math.max(0, parseNumber(next, prev.hp.temp)) },
-          }), ['combat.hp']),
+          patchCharacter(
+            (prev) => ({
+              ...prev,
+              hp: { ...prev.hp, temp: Math.max(0, parseNumber(next, prev.hp.temp)) },
+            }),
+            ['combat.hp'],
+          ),
         t('edit.combat.tempHp'),
         { keyboardType: 'number-pad' },
       )}
@@ -3017,11 +3226,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       {(characterData.weapons || []).map((weapon, index) => (
         <View key={`weapon-config-${index}`} style={styles.editCardBlock}>
           <Text style={styles.editLabel}>{t('edit.inventory.weaponName')}</Text>
-          {renderTextInput(
-            weapon.name || '',
-            (next) => updateWeaponAt(index, { name: next }),
-            t('edit.inventory.weaponNamePlaceholder'),
-          )}
+          {renderTextInput(weapon.name || '', (next) => updateWeaponAt(index, { name: next }), t('edit.inventory.weaponNamePlaceholder'))}
           <Text style={styles.editLabel}>{t('edit.inventory.attackBonus')}</Text>
           {renderTextInput(
             String(weapon.attackBonus ?? 0),
@@ -3030,12 +3235,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             { keyboardType: 'numeric' },
           )}
           <Text style={styles.editLabel}>{t('edit.inventory.damageFormula')}</Text>
-          {renderTextInput(
-            weapon.damage || '',
-            (next) => updateWeaponAt(index, { damage: next }),
-            '1d8+3',
-            { keyboardType: 'default' },
-          )}
+          {renderTextInput(weapon.damage || '', (next) => updateWeaponAt(index, { damage: next }), '1d8+3', { keyboardType: 'default' })}
           <Pressable style={styles.removeButton} onPress={() => removeWeaponAt(index)} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.removeButtonText}>{t('edit.inventory.removeWeapon')}</Text>
           </Pressable>
@@ -3119,7 +3319,9 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.editLabel}>{t('edit.notes.groupTitle')}</Text>
           {renderTextInput(group.title, (next) => updateNotesGroupMeta(group.id, { title: next }), t('edit.notes.groupTitle'))}
           <Text style={styles.editLabel}>{t('edit.notes.groupContent')}</Text>
-          {renderTextInput(group.content || '', (next) => setNotesGroup(group.id, next), t('edit.notes.groupContentPlaceholder'), { multiline: true })}
+          {renderTextInput(group.content || '', (next) => setNotesGroup(group.id, next), t('edit.notes.groupContentPlaceholder'), {
+            multiline: true,
+          })}
           {group.origin === 'custom' && (
             <Pressable style={styles.removeButton} onPress={() => removeNotesGroup(group.id)} android_ripple={{ color: colors.ripple }}>
               <Text style={styles.removeButtonText}>{t('edit.notes.removeGroup')}</Text>
@@ -3177,7 +3379,11 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
                   { multiline: true },
                 )}
                 <Text style={styles.editLabel}>{t('edit.homebrew.value')}</Text>
-                {renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), t('edit.homebrew.value'))}
+                {renderTextInput(
+                  String(field.value ?? ''),
+                  (next) => updateCustomField(field.id, { value: next }),
+                  t('edit.homebrew.value'),
+                )}
               </>
             ) : (
               renderTextInput(String(field.value ?? ''), (next) => updateCustomField(field.id, { value: next }), t('edit.homebrew.value'))
@@ -3290,9 +3496,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           <Text style={styles.editLabel}>{t('edit.homebrew.sectionTitle')}</Text>
           {renderTextInput(section.title, (next) => updateCustomSection(section.id, { title: next }), t('edit.homebrew.sectionTitle'))}
           <Text style={styles.editLabel}>{t('edit.homebrew.sectionContent')}</Text>
-          {renderTextInput(section.content, (next) => updateCustomSection(section.id, { content: next }), t('edit.homebrew.sectionContent'), {
-            multiline: true,
-          })}
+          {renderTextInput(
+            section.content,
+            (next) => updateCustomSection(section.id, { content: next }),
+            t('edit.homebrew.sectionContent'),
+            {
+              multiline: true,
+            },
+          )}
           <Pressable style={styles.removeButton} onPress={() => removeCustomSection(section.id)} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.removeButtonText}>{t('edit.homebrew.removeSection')}</Text>
           </Pressable>
@@ -3323,13 +3534,23 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
             <Text style={styles.editLabel}>{t('edit.homebrew.name')}</Text>
             {renderTextInput(entry.name, (next) => updateHomebrewEntry(entry.id, { name: next }), t('edit.homebrew.entryName'))}
             <Text style={styles.editLabel}>{t('edit.homebrew.description')}</Text>
-            {renderTextInput(entry.description, (next) => updateHomebrewEntry(entry.id, { description: next }), t('edit.homebrew.description'), {
-              multiline: true,
-            })}
+            {renderTextInput(
+              entry.description,
+              (next) => updateHomebrewEntry(entry.id, { description: next }),
+              t('edit.homebrew.description'),
+              {
+                multiline: true,
+              },
+            )}
             <Text style={styles.editLabel}>{t('edit.homebrew.tagsLines')}</Text>
-            {renderTextInput((entry.tags || []).join('\n'), (next) => updateHomebrewEntry(entry.id, { tags: parseLines(next) }), t('edit.homebrew.tagsPlaceholder'), {
-              multiline: true,
-            })}
+            {renderTextInput(
+              (entry.tags || []).join('\n'),
+              (next) => updateHomebrewEntry(entry.id, { tags: parseLines(next) }),
+              t('edit.homebrew.tagsPlaceholder'),
+              {
+                multiline: true,
+              },
+            )}
             <View style={styles.cardHeaderRow}>
               <Text style={styles.rowLabel}>{t('edit.homebrew.type', { type: entry.kind })}</Text>
               <Pressable
