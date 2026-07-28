@@ -4,8 +4,12 @@ import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/reposito
 import { characterCloudRepository } from '@/repositories/characterCloudRepository';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { resolveSyncStatus, collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
+import { classifySyncError } from '@/shared/helpers/sync/syncErrorClassification';
 import { characterMapper } from '@/domain/mappers';
 import { timestampToMillis } from '@/services/firebase';
+import { toast } from '@/shared/services/toast';
+import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
+import i18n from '@/i18n';
 
 export type SyncTransitionType =
   | 'ensure'
@@ -662,12 +666,24 @@ export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudRes
     };
   } catch (error) {
     const message = String((error as Error)?.message || 'Помилка синхронізації');
+    const classified = classifySyncError(error);
     await args.syncPort.markSyncError(args.character.id, message);
 
-    if (args.syncPort.markConflict && message.toLowerCase().includes('conflict')) {
+    if (args.syncPort.markConflict && classified.isConflict) {
       const fallbackConflictPath = args.conflictFallbackPath || 'overview.identity';
       const conflictPaths = plan.historyPaths.length ? plan.historyPaths : [fallbackConflictPath];
       await args.syncPort.markConflict(args.character.id, conflictPaths);
+    } else if (classified.severity === 'unexpected') {
+      // COL-7: expected/offline-like codes stay a silent queue (unchanged); anything else
+      // is a real write failure the user must be told about, not just a quiet state badge.
+      trackProductEvent('sync_failed', { characterId: args.character.id, code: classified.code || 'unknown' });
+
+      if (classified.code === 'firestore/permission-denied') {
+        trackProductEvent('permission_denied_on_upload', { characterId: args.character.id });
+        toast.error(i18n.t('character:sync.unexpectedErrorTitle'), i18n.t('character:sync.permissionDeniedMessage'));
+      } else {
+        toast.error(i18n.t('character:sync.unexpectedErrorTitle'), i18n.t('character:sync.unexpectedErrorMessage'));
+      }
     }
 
     return {

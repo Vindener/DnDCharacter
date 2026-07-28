@@ -18,6 +18,23 @@ vi.mock('@/services/firebase', () => ({
   },
 }));
 
+const syncTelemetryMocks = vi.hoisted(() => ({
+  toastError: vi.fn(),
+  trackProductEvent: vi.fn(),
+}));
+
+vi.mock('@/shared/services/toast', () => ({
+  toast: { error: syncTelemetryMocks.toastError, success: vi.fn(), info: vi.fn() },
+}));
+
+vi.mock('@/shared/services/telemetry/productTelemetry', () => ({
+  trackProductEvent: syncTelemetryMocks.trackProductEvent,
+}));
+
+vi.mock('@/i18n', () => ({
+  default: { t: (key: string) => key },
+}));
+
 vi.mock('@/domain/mappers', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/domain/mappers')>();
   return {
@@ -47,6 +64,12 @@ import type { CharacterSyncMap } from '@/types/Sync';
 beforeEach(() => {
   vi.clearAllMocks();
 });
+
+function firestoreError(code: string, message = 'boom'): Error {
+  const error = new Error(message);
+  (error as unknown as { code: string }).code = code;
+  return error;
+}
 
 describe('characterSyncCoordinator helpers', () => {
   it('normalizes sync state and deduplicates path lists', () => {
@@ -180,6 +203,100 @@ describe('characterSyncCoordinator helpers', () => {
     expect(syncPort.markSyncError).toHaveBeenCalledWith('char-sync-error', 'permission denied');
     expect(syncPort.markCloudUploaded).not.toHaveBeenCalled();
     expect(syncPort.setCloudAvailability).not.toHaveBeenCalled();
+  });
+
+  // COL-7 acceptance test: permission-denied must surface a visible toast + telemetry;
+  // an offline/expected failure must stay silent, same as before this change.
+  describe('COL-7 error visibility', () => {
+    function buildSyncPort() {
+      return {
+        ensureCharacterSync: vi.fn(async () => {}),
+        setCloudAvailability: vi.fn(async () => {}),
+        markCloudUploaded: vi.fn(async () => {}),
+        setSyncTransport: vi.fn(async () => {}),
+        markSyncError: vi.fn(async () => {}),
+        markConflict: vi.fn(async () => {}),
+      };
+    }
+
+    it('shows a toast and tracks sync_failed + permission_denied_on_upload for a permission-denied write', async () => {
+      vi.mocked(characterCloudRepository.upsertFromLocal).mockRejectedValueOnce(
+        firestoreError('firestore/permission-denied', 'Missing or insufficient permissions'),
+      );
+      const character = createEmptyCharacter({ id: 'char-permission', name: 'Denied' });
+      const syncPort = buildSyncPort();
+
+      const result = await syncToCloud({ character, actorRole: 'Player', syncPort, isOnline: true, fallbackPath: 'overview.identity' });
+
+      expect(result.status).toBe('error');
+      expect(syncTelemetryMocks.toastError).toHaveBeenCalledTimes(1);
+      expect(syncTelemetryMocks.trackProductEvent).toHaveBeenCalledWith('sync_failed', {
+        characterId: 'char-permission',
+        code: 'firestore/permission-denied',
+      });
+      expect(syncTelemetryMocks.trackProductEvent).toHaveBeenCalledWith('permission_denied_on_upload', { characterId: 'char-permission' });
+      expect(syncPort.markConflict).not.toHaveBeenCalled();
+    });
+
+    it('stays silent (no toast, no telemetry) for an offline-like firestore/unavailable failure, same as today', async () => {
+      vi.mocked(characterCloudRepository.upsertFromLocal).mockRejectedValueOnce(firestoreError('firestore/unavailable'));
+      const character = createEmptyCharacter({ id: 'char-unavailable', name: 'Offline-ish' });
+      const syncPort = buildSyncPort();
+
+      const result = await syncToCloud({ character, actorRole: 'Player', syncPort, isOnline: true, fallbackPath: 'overview.identity' });
+
+      expect(result.status).toBe('error');
+      expect(syncTelemetryMocks.toastError).not.toHaveBeenCalled();
+      expect(syncTelemetryMocks.trackProductEvent).not.toHaveBeenCalled();
+      expect(syncPort.markConflict).not.toHaveBeenCalled();
+    });
+
+    it('does not toast at all when the device itself is offline (isOnline: false)', async () => {
+      const character = createEmptyCharacter({ id: 'char-truly-offline', name: 'No network' });
+      const syncPort = buildSyncPort();
+
+      const result = await syncToCloud({ character, actorRole: 'Player', syncPort, isOnline: false, fallbackPath: 'overview.identity' });
+
+      expect(result.status).toBe('offline');
+      expect(characterCloudRepository.upsertFromLocal).not.toHaveBeenCalled();
+      expect(syncTelemetryMocks.toastError).not.toHaveBeenCalled();
+      expect(syncTelemetryMocks.trackProductEvent).not.toHaveBeenCalled();
+    });
+
+    it('routes firestore/aborted through markConflict by CODE, not by matching "conflict" in the message text', async () => {
+      vi.mocked(characterCloudRepository.upsertFromLocal).mockRejectedValueOnce(
+        firestoreError('firestore/aborted', 'Transaction lock timeout'),
+      );
+      const character = createEmptyCharacter({ id: 'char-aborted', name: 'Contended' });
+      const syncPort = buildSyncPort();
+
+      const result = await syncToCloud({
+        character,
+        actorRole: 'Player',
+        syncPort,
+        isOnline: true,
+        historyPaths: ['combat.hp'],
+        fallbackPath: 'overview.identity',
+      });
+
+      expect(result.status).toBe('error');
+      expect(syncPort.markConflict).toHaveBeenCalledWith('char-aborted', ['combat.hp']);
+      expect(syncTelemetryMocks.toastError).not.toHaveBeenCalled();
+      expect(syncTelemetryMocks.trackProductEvent).not.toHaveBeenCalled();
+    });
+
+    it('a message containing the word "conflict" no longer triggers markConflict when the code says otherwise', async () => {
+      vi.mocked(characterCloudRepository.upsertFromLocal).mockRejectedValueOnce(
+        firestoreError('firestore/permission-denied', 'Write blocked: conflict with security rules'),
+      );
+      const character = createEmptyCharacter({ id: 'char-fake-conflict', name: 'Not really a conflict' });
+      const syncPort = buildSyncPort();
+
+      await syncToCloud({ character, actorRole: 'Player', syncPort, isOnline: true, fallbackPath: 'overview.identity' });
+
+      expect(syncPort.markConflict).not.toHaveBeenCalled();
+      expect(syncTelemetryMocks.toastError).toHaveBeenCalledTimes(1);
+    });
   });
 });
 

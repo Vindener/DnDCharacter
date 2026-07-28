@@ -4,12 +4,11 @@ import { parseCharacter } from '@/domain/schemas';
 import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 import useSyncStore from '@/stores/syncStore';
 import type { CharacterStore } from '@/stores/characterStore';
+import { toast } from '@/shared/services/toast';
+import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
+import i18n from '@/i18n';
 
-type SetCharacterStore = (
-  partial:
-    | Partial<CharacterStore>
-    | ((state: CharacterStore) => Partial<CharacterStore>),
-) => void;
+type SetCharacterStore = (partial: Partial<CharacterStore> | ((state: CharacterStore) => Partial<CharacterStore>)) => void;
 
 type CharacterStoreContext = {
   set: SetCharacterStore;
@@ -52,7 +51,11 @@ export function createCharacterStoreEffects({ set, get }: CharacterStoreContext)
     try {
       await characterLocalRepository.saveCharacters(newCharacters);
       set({ characters: newCharacters });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (error) {
+      // REL-2/COL-7: a failed local write is character data loss — must be visible, not swallowed.
+      trackProductEvent('sync_failed', { stage: 'local-save', code: error instanceof Error ? error.name : 'unknown' });
+      toast.error(i18n.t('character:sync.localSaveFailedTitle'), i18n.t('character:sync.localSaveFailedMessage'));
+    }
   };
 
   const persistUpdatedCharacters = (updatedCharacters: CharacterEntity[]) => {
@@ -69,7 +72,9 @@ export function createCharacterStoreEffects({ set, get }: CharacterStoreContext)
           await characterLocalRepository.clearLastSessionCharacterId();
         }
         set({ lastSessionCharacterId: id || null });
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     loadCharacters: async () => {

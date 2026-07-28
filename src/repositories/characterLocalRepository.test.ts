@@ -91,7 +91,15 @@ describe('characterLocalRepository migration pipeline', () => {
         deathSaves: { successes: 0, failures: 0 },
         inventory: [],
         traits: { personality: '', ideals: '', bonds: '', flaws: '' },
-        spells: { spellcastingAbility: '', spellSaveDC: 0, spellAttackBonus: 0, spellSlots: {}, knownSpells: [], preparedSpells: [], cantrips: [] },
+        spells: {
+          spellcastingAbility: '',
+          spellSaveDC: 0,
+          spellAttackBonus: 0,
+          spellSlots: {},
+          knownSpells: [],
+          preparedSpells: [],
+          cantrips: [],
+        },
       },
     ]);
 
@@ -99,5 +107,13 @@ describe('characterLocalRepository migration pipeline', () => {
     expect(stored.schemaVersion).toBe(LATEST_SCHEMA_VERSION);
     expect(Array.isArray(stored.data)).toBe(true);
     expect(stored.data[0].schemaVersion).toBe(LATEST_SCHEMA_VERSION);
+  });
+
+  // REL-2/COL-7: saveCharacters used to swallow the AsyncStorage failure and resolve anyway,
+  // so a full character list could silently fail to persist. It must now reject.
+  it('rejects instead of silently swallowing an AsyncStorage write failure', async () => {
+    asyncStorageMock.setItem.mockRejectedValueOnce(new Error('disk full'));
+
+    await expect(characterLocalRepository.saveCharacters([])).rejects.toThrow('disk full');
   });
 });

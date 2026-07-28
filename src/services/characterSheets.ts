@@ -18,6 +18,7 @@ export {
 } from '@/repositories/characterCloudRepository';
 
 export type {
+  BulkUpsertFailure,
   CharacterActorRole,
   CharacterChangeHistoryEntry,
   CharacterCloudDto,

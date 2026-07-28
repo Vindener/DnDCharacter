@@ -73,7 +73,12 @@
     "offlineQueueActive": "Активна офлайн-черга. Відновіть з’єднання і повторіть синхронізацію.",
     "syncing": "Синхронізація...",
     "synced": "Синхронізовано",
-    "syncErrorWithMessage": "Помилка синхронізації: {{message}}"
+    "syncErrorWithMessage": "Помилка синхронізації: {{message}}",
+    "unexpectedErrorTitle": "Проблема синхронізації",
+    "unexpectedErrorMessage": "Зміну не збережено в хмарі. Спробуйте ще раз.",
+    "permissionDeniedMessage": "У вас більше немає прав редагувати цей аркуш. Попросіть власника додати вас знову.",
+    "localSaveFailedTitle": "Помилка збереження",
+    "localSaveFailedMessage": "Не вдалося зберегти зміни персонажа на цьому пристрої."
   },
   "badges": {
     "localOnly": "Лише локально",

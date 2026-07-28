@@ -1,11 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CharacterEntity } from '@/domain/types';
 import { characterMapper } from '@/domain/mappers';
-import {
-  LATEST_SCHEMA_VERSION,
-  createStorageEnvelope,
-  normalizeStorageEnvelope,
-} from '@/domain/migrations';
+import { LATEST_SCHEMA_VERSION, createStorageEnvelope, normalizeStorageEnvelope } from '@/domain/migrations';
 
 const CHARACTERS_STORAGE_KEY = 'characters';
 const LAST_SESSION_CHARACTER_ID_KEY = 'lastSessionCharacterId';
@@ -33,17 +29,16 @@ async function loadCharacters(): Promise<CharacterEntity[]> {
   }
 }
 
+// REL-2/COL-7: no longer swallows the write failure — this is the ONLY local copy of a
+// character's data, so a failed write here is data loss, not something to hide. The caller
+// (characterStoreEffects.saveCharacters) is responsible for surfacing it.
 async function saveCharacters(characters: CharacterEntity[]): Promise<void> {
-  try {
-    const canonical = (Array.isArray(characters) ? characters : [])
-      .filter(Boolean)
-      .map((entry) => ({
-        ...characterMapper.entityToDto(entry),
-        schemaVersion: LATEST_SCHEMA_VERSION,
-      }));
-    const envelope = createStorageEnvelope('character', canonical);
-    await AsyncStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(envelope));
-  } catch (_error) { /* intentionally ignored */ }
+  const canonical = (Array.isArray(characters) ? characters : []).filter(Boolean).map((entry) => ({
+    ...characterMapper.entityToDto(entry),
+    schemaVersion: LATEST_SCHEMA_VERSION,
+  }));
+  const envelope = createStorageEnvelope('character', canonical);
+  await AsyncStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(envelope));
 }
 
 async function loadLastSessionCharacterId(): Promise<string | null> {
@@ -57,13 +52,17 @@ async function loadLastSessionCharacterId(): Promise<string | null> {
 async function saveLastSessionCharacterId(id: string): Promise<void> {
   try {
     await AsyncStorage.setItem(LAST_SESSION_CHARACTER_ID_KEY, id);
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 async function clearLastSessionCharacterId(): Promise<void> {
   try {
     await AsyncStorage.removeItem(LAST_SESSION_CHARACTER_ID_KEY);
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 async function loadSharedUpdatesReviewedMap(): Promise<Record<string, number>> {
@@ -88,7 +87,9 @@ async function loadSharedUpdatesReviewedMap(): Promise<Record<string, number>> {
 async function saveSharedUpdatesReviewedMap(map: Record<string, number>): Promise<void> {
   try {
     await AsyncStorage.setItem(SHARED_UPDATES_REVIEWED_STORAGE_KEY, JSON.stringify(map || {}));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 export const characterLocalRepository: CharacterLocalRepository = {

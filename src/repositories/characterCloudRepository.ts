@@ -5,6 +5,7 @@ import type { CharacterDto } from '@/domain/types';
 import { characterMapper } from '@/domain/mappers';
 import { LATEST_SCHEMA_VERSION, migratePayloadToLatest } from '@/domain/migrations';
 import { mapSyncPathsToFieldPaths } from '@/repositories/syncPathFieldMap';
+import { classifySyncError } from '@/shared/helpers/sync/syncErrorClassification';
 
 export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
 export type CharacterActorRole = 'DM' | 'Player';
@@ -481,14 +482,27 @@ export async function upsertCharacterSheetFromLocal(
   return { id: dto.id, updated: true };
 }
 
-export async function bulkUpsertFromLocal(list: CharacterDto[]) {
+export type BulkUpsertFailure = { id: string; code: string; message: string };
+
+// COL-7: no longer swallows per-character failures — callers need the list to decide what
+// to retry or surface, instead of silently believing every character made it to the cloud.
+export async function bulkUpsertFromLocal(list: CharacterDto[]): Promise<BulkUpsertFailure[]> {
+  const failures: BulkUpsertFailure[] = [];
+
   for (const character of list) {
     try {
       await upsertCharacterSheetFromLocal(character);
-    } catch (_error) {
-      /* intentionally ignored */
+    } catch (error) {
+      const classified = classifySyncError(error);
+      failures.push({
+        id: character.id,
+        code: classified.code || 'unknown',
+        message: error instanceof Error ? error.message : String(error),
+      });
     }
   }
+
+  return failures;
 }
 
 export function subscribeCharacterSheet(id: string, cb: (doc: CharacterSheet | null) => void) {

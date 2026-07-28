@@ -73,7 +73,12 @@
     "offlineQueueActive": "Offline queue is active. Restore connection and sync again.",
     "syncing": "Syncing...",
     "synced": "Synced",
-    "syncErrorWithMessage": "Sync error: {{message}}"
+    "syncErrorWithMessage": "Sync error: {{message}}",
+    "unexpectedErrorTitle": "Sync problem",
+    "unexpectedErrorMessage": "The change wasn't saved to the cloud. Please try again.",
+    "permissionDeniedMessage": "You no longer have permission to edit this sheet. Ask the owner to add you again.",
+    "localSaveFailedTitle": "Save failed",
+    "localSaveFailedMessage": "Your character changes could not be saved on this device."
   },
   "badges": {
     "localOnly": "Local only",

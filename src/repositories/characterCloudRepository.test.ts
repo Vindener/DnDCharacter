@@ -52,7 +52,13 @@ vi.mock('@/services/users', () => ({
   findUserByEmail: mocks.findUserByEmail,
 }));
 
-import { addEditorByEmail, removeEditor, transferOwnership, upsertCharacterSheetFromLocal } from '@/repositories/characterCloudRepository';
+import {
+  addEditorByEmail,
+  bulkUpsertFromLocal,
+  removeEditor,
+  transferOwnership,
+  upsertCharacterSheetFromLocal,
+} from '@/repositories/characterCloudRepository';
 
 const ACCESS_KEYS = ['ownerUid', 'owners', 'editors'] as const;
 
@@ -320,6 +326,35 @@ describe('characterCloudRepository', () => {
       await transferOwnership('char-1', 'user-1');
 
       expect(mocks.tx.update).not.toHaveBeenCalled();
+    });
+  });
+
+  // COL-7: bulkUpsertFromLocal used to have an empty catch per character, so a failed
+  // write on character N was indistinguishable from success. It must now report failures.
+  describe('bulkUpsertFromLocal (COL-7 visibility)', () => {
+    it('returns an empty list when every character upserts successfully', async () => {
+      mocks.targetRef.get.mockResolvedValue({ id: 'char-1', exists: false, data: () => null });
+      mocks.targetRef.set.mockResolvedValue(undefined);
+
+      const failures = await bulkUpsertFromLocal([createEmptyCharacter({ id: 'char-1', name: 'Ok' })]);
+
+      expect(failures).toEqual([]);
+    });
+
+    it('collects a failure with its id and classified code instead of swallowing it, and keeps processing the rest of the list', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-a', exists: false, data: () => null });
+      const deniedError = new Error('Missing or insufficient permissions');
+      (deniedError as unknown as { code: string }).code = 'firestore/permission-denied';
+      mocks.targetRef.set.mockRejectedValueOnce(deniedError);
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-b', exists: false, data: () => null });
+      mocks.targetRef.set.mockResolvedValueOnce(undefined);
+
+      const failures = await bulkUpsertFromLocal([
+        createEmptyCharacter({ id: 'char-a', name: 'Fails' }),
+        createEmptyCharacter({ id: 'char-b', name: 'Succeeds' }),
+      ]);
+
+      expect(failures).toEqual([{ id: 'char-a', code: 'firestore/permission-denied', message: 'Missing or insufficient permissions' }]);
     });
   });
 });
