@@ -463,19 +463,37 @@ function mergeCharacterBySections(
     next.traits = remote.traits;
     next.featuresAndTraits = remote.featuresAndTraits;
     next.proficiencyBonus = remote.proficiencyBonus;
+    // COL-4: moved from the old combat bucket — the write tag is overview.session-mode,
+    // so the merge gate must match, or a pending sessionMode toggle gets silently
+    // clobbered by an unrelated combat merge.
+    next.sessionMode = remote.sessionMode;
   }
 
-  if (!pendingSections.has('combat')) {
+  if (!pendingSections.has('combat.vitals') && !pendingSections.has('combat')) {
     next.hp = remote.hp;
+    next.deathSaves = remote.deathSaves;
+  }
+
+  if (!pendingSections.has('combat.defense') && !pendingSections.has('combat')) {
     next.ac = remote.ac;
+    // COL-4: armorClassDetails was never assigned here before — a pre-existing gap
+    // where it silently never synced from remote. Belongs with ac.
+    next.armorClassDetails = remote.armorClassDetails;
     next.initiative = remote.initiative;
     next.speed = remote.speed;
     next.hitDice = remote.hitDice;
-    next.deathSaves = remote.deathSaves;
-    next.weapons = remote.weapons;
+  }
+
+  if (!pendingSections.has('combat.conditions') && !pendingSections.has('combat')) {
     next.conditions = remote.conditions;
+  }
+
+  if (!pendingSections.has('combat.weapons') && !pendingSections.has('combat')) {
+    next.weapons = remote.weapons;
+  }
+
+  if (!pendingSections.has('combat.actions') && !pendingSections.has('combat')) {
     next.combatTemplates = remote.combatTemplates;
-    next.sessionMode = remote.sessionMode;
   }
 
   if (!pendingSections.has('magic')) {
@@ -500,15 +518,24 @@ function mergeCharacterBySections(
     next.customNotesGroups = remote.customNotesGroups;
   }
 
-  if (!pendingSections.has('homebrew')) {
+  if (!pendingSections.has('homebrew.resources') && !pendingSections.has('homebrew')) {
+    next.customResources = remote.customResources;
+  }
+
+  if (!pendingSections.has('homebrew.trackers') && !pendingSections.has('homebrew')) {
+    next.customTrackers = remote.customTrackers;
+    next.customResetRules = remote.customResetRules;
+  }
+
+  if (!pendingSections.has('homebrew.fields') && !pendingSections.has('homebrew')) {
     next.characterTemplateId = remote.characterTemplateId;
     next.customFields = remote.customFields;
-    next.customTrackers = remote.customTrackers;
-    next.customSections = remote.customSections;
-    next.customResources = remote.customResources;
-    next.customResetRules = remote.customResetRules;
     next.customFeatureBlocks = remote.customFeatureBlocks;
     next.customSpellLists = remote.customSpellLists;
+  }
+
+  if (!pendingSections.has('homebrew.sections') && !pendingSections.has('homebrew')) {
+    next.customSections = remote.customSections;
     next.homebrewEntries = remote.homebrewEntries;
   }
 

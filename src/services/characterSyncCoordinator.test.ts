@@ -183,6 +183,137 @@ describe('characterSyncCoordinator helpers', () => {
   });
 });
 
+// COL-4: combat/homebrew sections were split into finer-grained sub-sections so unrelated
+// concurrent edits (e.g. DM adjusting HP while a player sets a condition) stop colliding.
+describe('mergeCharacterBySections (COL-4 granularity)', () => {
+  it('fixes the sessionMode cross-tag bug: a pending overview.session-mode change survives an unrelated combat merge', () => {
+    const local = createEmptyCharacter({ id: 'char-session', name: 'Local', sessionMode: true });
+    const remote = createEmptyCharacter({ id: 'char-session', name: 'Local', sessionMode: false, hp: { max: 10, current: 3, temp: 0 } });
+
+    const result = reconcileRemoteSnapshot({
+      localCharacter: local,
+      remoteCharacter: remote,
+      remotePathsSinceLastSync: ['combat.hp.current'],
+      syncState: { ...normalizeSyncState('char-session', null), pendingPaths: ['overview.session-mode'] },
+    }) as ReconcileRemoteSnapshotResult;
+
+    expect(result.action).toBe('merge');
+    if (result.action === 'merge') {
+      expect(result.character.sessionMode).toBe(true);
+      expect(result.character.hp.current).toBe(3);
+    }
+  });
+
+  it('fixes the conditions cross-surface bug: overview.conditions (player) vs combat.conditions (DM) now conflicts instead of silently overwriting', () => {
+    const local = createEmptyCharacter({ id: 'char-conditions', name: 'Local', conditions: ['poisoned'] });
+    const remote = createEmptyCharacter({ id: 'char-conditions', name: 'Local', conditions: ['prone'] });
+
+    const result = reconcileRemoteSnapshot({
+      localCharacter: local,
+      remoteCharacter: remote,
+      remotePathsSinceLastSync: ['combat.conditions.prone'],
+      syncState: { ...normalizeSyncState('char-conditions', null), pendingPaths: ['overview.conditions'] },
+    });
+
+    expect(result.action).toBe('conflict');
+  });
+
+  it('merges independent combat sub-sections: local weapons pending survives, remote defense and homebrew sections are pulled in', () => {
+    // combat.hp / homebrew.resources are deliberately avoided here — both are in
+    // CRITICAL_PATH_PREFIXES, which independently forces a conflict across any two
+    // sections whenever either side touches them (pre-existing, untouched behavior).
+    // This test is about proving ordinary, non-critical sub-sections merge independently.
+    const local = createEmptyCharacter({
+      id: 'char-subsections',
+      name: 'Local',
+      ac: 12,
+      weapons: [{ name: 'Local Dagger', attackBonus: 2, damage: '1d4' }],
+    });
+    const remote = createEmptyCharacter({
+      id: 'char-subsections',
+      name: 'Local',
+      ac: 16,
+      weapons: [{ name: 'Remote Sword', attackBonus: 3, damage: '1d8' }],
+      customSections: [{ id: 'section-1', title: 'Remote Section', content: 'x' }],
+    });
+
+    const result = reconcileRemoteSnapshot({
+      localCharacter: local,
+      remoteCharacter: remote,
+      remotePathsSinceLastSync: ['combat.core.ac', 'homebrew.sections.0'],
+      syncState: { ...normalizeSyncState('char-subsections', null), pendingPaths: ['combat.weapons.0'] },
+    }) as ReconcileRemoteSnapshotResult;
+
+    expect(result.action).toBe('merge');
+    if (result.action === 'merge') {
+      expect(result.character.weapons).toEqual([{ name: 'Local Dagger', attackBonus: 2, damage: '1d4' }]); // local pending kept
+      expect(result.character.ac).toBe(16); // pulled from remote
+      expect(result.character.customSections).toEqual([{ id: 'section-1', title: 'Remote Section', content: 'x' }]); // pulled from remote
+    }
+  });
+
+  it('merges independent homebrew sub-sections in both directions (fields pending locally, sections pulled from remote)', () => {
+    const local = createEmptyCharacter({
+      id: 'char-homebrew',
+      name: 'Local',
+      customFields: [{ id: 'field-1', label: 'Local Field', type: 'text', value: '' }],
+      customSections: [{ id: 'section-1', title: 'Local Section', content: 'x' }],
+    });
+    const remote = createEmptyCharacter({
+      id: 'char-homebrew',
+      name: 'Local',
+      customFields: [{ id: 'field-1', label: 'Remote Field', type: 'text', value: '' }],
+      customSections: [{ id: 'section-1', title: 'Remote Section', content: 'y' }],
+    });
+
+    const result = reconcileRemoteSnapshot({
+      localCharacter: local,
+      remoteCharacter: remote,
+      remotePathsSinceLastSync: ['homebrew.sections.0'],
+      syncState: { ...normalizeSyncState('char-homebrew', null), pendingPaths: ['homebrew.fields.0'] },
+    }) as ReconcileRemoteSnapshotResult;
+
+    expect(result.action).toBe('merge');
+    if (result.action === 'merge') {
+      expect(result.character.customFields).toEqual([{ id: 'field-1', label: 'Local Field', type: 'text', value: '' }]); // local pending kept
+      expect(result.character.customSections).toEqual([{ id: 'section-1', title: 'Remote Section', content: 'y' }]); // pulled from remote
+    }
+  });
+
+  it('preserves the legacy combat.rest fallback: a pending rest action still holds back an unrelated concurrent weapons change', () => {
+    const local = createEmptyCharacter({
+      id: 'char-rest',
+      name: 'Local',
+      hp: { max: 10, current: 10, temp: 0 },
+      hitDice: '3d8',
+      weapons: [{ name: 'Local Sword', attackBonus: 2, damage: '1d8' }],
+    });
+    const remote = createEmptyCharacter({
+      id: 'char-rest',
+      name: 'Local',
+      hp: { max: 10, current: 2, temp: 0 },
+      hitDice: '1d8',
+      weapons: [{ name: 'Remote Sword', attackBonus: 3, damage: '1d10' }],
+    });
+
+    const result = reconcileRemoteSnapshot({
+      localCharacter: local,
+      remoteCharacter: remote,
+      remotePathsSinceLastSync: ['combat.weapons.0'],
+      syncState: { ...normalizeSyncState('char-rest', null), pendingPaths: ['combat.rest', 'combat.hp'] },
+    }) as ReconcileRemoteSnapshotResult;
+
+    expect(result.action).toBe('merge');
+    if (result.action === 'merge') {
+      // combat.rest has no dedicated sub-section, so it falls back to the legacy 'combat'
+      // bucket, which (by design) also holds back combat.weapons — matching pre-refactor
+      // behavior where the whole combat section was one unit.
+      expect(result.character.hp.current).toBe(10);
+      expect(result.character.weapons).toEqual([{ name: 'Local Sword', attackBonus: 2, damage: '1d8' }]);
+    }
+  });
+});
+
 // COL-5: entry.atMs is the writer device's own clock. These tests use a fixed baseline instead
 // of Date.now() to prove the id-diff mechanism is correct regardless of clock skew direction.
 describe('computeRemoteHistorySync', () => {
