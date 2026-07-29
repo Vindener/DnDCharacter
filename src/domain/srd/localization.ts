@@ -1,7 +1,4 @@
-import spellTranslationsJson from '@/data/locales/uk/spells.json';
-import monsterTranslationsJson from '@/data/locales/uk/monsters.json';
-import canonicalSpellsJson from '@/data/srd/spells.json';
-import canonicalMonstersJson from '@/data/srd/monsters.json';
+import { loadMonstersJson, loadSpellsJson } from '@/data/srd';
 import type { SpellbookSpell } from '@/types/Spellbook';
 import type { MonsterActionDto, MonsterDto } from '@/types/Monster';
 
@@ -44,30 +41,49 @@ export type LocalizedSpellFields = Pick<
   'name' | 'school' | 'castingTime' | 'range' | 'components' | 'duration' | 'classes' | 'description' | 'higherLevels'
 >;
 
-const spellTranslations = spellTranslationsJson as SpellTranslation[];
-const monsterTranslations = monsterTranslationsJson as MonsterTranslation[];
-const spellTranslationById = new Map(spellTranslations.map((entry) => [entry.id, entry]));
-const monsterTranslationById = new Map(monsterTranslations.map((entry) => [entry.id, entry]));
+// All translation lookups below are built at most once, on first use, instead of at
+// module-evaluation time — importing this module (transitively, via any screen that
+// needs localized spell/monster text) must not force loading ~1.5 MB of uk translation
+// JSON before the first frame (PERF-1).
+let spellTranslationById: Map<string, SpellTranslation> | undefined;
+let monsterTranslationById: Map<string, MonsterTranslation> | undefined;
+let spellSchoolTranslations: Map<string, string> | undefined;
+let spellClassTranslations: Map<string, string> | undefined;
+let monsterTermTranslations: Map<string, string> | undefined;
 
-const spellSchoolTranslations = new Map<string, string>();
-const spellClassTranslations = new Map<string, string>();
-canonicalSpellsJson.forEach((spell, index) => {
-  const translation = spellTranslations[index];
-  if (!translation || translation.id !== spell.id) return;
-  spellSchoolTranslations.set(spell.school, translation.school);
-  spell.classes.forEach((className, classIndex) => {
-    spellClassTranslations.set(className, translation.classes[classIndex] || className);
+function ensureLocalizationLoaded(): void {
+  if (spellTranslationById !== undefined) return;
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy require(), see PERF-1
+  const spellTranslations = require('../../data/locales/uk/spells.json') as SpellTranslation[];
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy require(), see PERF-1
+  const monsterTranslations = require('../../data/locales/uk/monsters.json') as MonsterTranslation[];
+  const canonicalSpellsJson = loadSpellsJson() as Array<{ id: string; school: string; classes: string[] }>;
+  const canonicalMonstersJson = loadMonstersJson() as Array<{ id: string; size: string; type: string; alignment: string }>;
+
+  spellTranslationById = new Map(spellTranslations.map((entry) => [entry.id, entry]));
+  monsterTranslationById = new Map(monsterTranslations.map((entry) => [entry.id, entry]));
+
+  spellSchoolTranslations = new Map<string, string>();
+  spellClassTranslations = new Map<string, string>();
+  canonicalSpellsJson.forEach((spell, index) => {
+    const translation = spellTranslations[index];
+    if (!translation || translation.id !== spell.id) return;
+    spellSchoolTranslations!.set(spell.school, translation.school);
+    spell.classes.forEach((className, classIndex) => {
+      spellClassTranslations!.set(className, translation.classes[classIndex] || className);
+    });
   });
-});
 
-const monsterTermTranslations = new Map<string, string>();
-canonicalMonstersJson.forEach((monster, index) => {
-  const translation = monsterTranslations[index];
-  if (!translation || translation.id !== monster.id) return;
-  monsterTermTranslations.set(monster.size, translation.size);
-  monsterTermTranslations.set(monster.type, translation.type);
-  monsterTermTranslations.set(monster.alignment, translation.alignment);
-});
+  monsterTermTranslations = new Map<string, string>();
+  canonicalMonstersJson.forEach((monster, index) => {
+    const translation = monsterTranslations[index];
+    if (!translation || translation.id !== monster.id) return;
+    monsterTermTranslations!.set(monster.size, translation.size);
+    monsterTermTranslations!.set(monster.type, translation.type);
+    monsterTermTranslations!.set(monster.alignment, translation.alignment);
+  });
+}
 
 function getCanonicalId(id: string, prefix: string): string {
   return id.startsWith(prefix) ? id.slice(prefix.length) : id;
@@ -78,9 +94,9 @@ function actionsToText(actions: MonsterActionDto[]): string {
 }
 
 export function getLocalizedSpellFields(spell: SpellbookSpell, language: string): LocalizedSpellFields {
-  const translation = language === 'uk' && spell.source === 'srd-5.1'
-    ? spellTranslationById.get(getCanonicalId(spell.id, 'srd-spell-'))
-    : undefined;
+  ensureLocalizationLoaded();
+  const translation =
+    language === 'uk' && spell.source === 'srd-5.1' ? spellTranslationById!.get(getCanonicalId(spell.id, 'srd-spell-')) : undefined;
 
   if (!translation) {
     return {
@@ -125,21 +141,24 @@ export function getLocalizedSpellSearchText(spell: SpellbookSpell, language: str
 }
 
 export function getLocalizedSpellSchool(value: string, language: string): string {
-  return language === 'uk' ? spellSchoolTranslations.get(value) || value : value;
+  ensureLocalizationLoaded();
+  return language === 'uk' ? spellSchoolTranslations!.get(value) || value : value;
 }
 
 export function getLocalizedSpellClass(value: string, language: string): string {
-  return language === 'uk' ? spellClassTranslations.get(value) || value : value;
+  ensureLocalizationLoaded();
+  return language === 'uk' ? spellClassTranslations!.get(value) || value : value;
 }
 
 export function getLocalizedMonsterTerm(value: string, language: string): string {
-  return language === 'uk' ? monsterTermTranslations.get(value) || value : value;
+  ensureLocalizationLoaded();
+  return language === 'uk' ? monsterTermTranslations!.get(value) || value : value;
 }
 
 export function getLocalizedMonster(monster: MonsterDto, language: string): MonsterDto {
-  const translation = language === 'uk' && monster.source === 'srd-5.1'
-    ? monsterTranslationById.get(getCanonicalId(monster.id, 'srd-monster-'))
-    : undefined;
+  ensureLocalizationLoaded();
+  const translation =
+    language === 'uk' && monster.source === 'srd-5.1' ? monsterTranslationById!.get(getCanonicalId(monster.id, 'srd-monster-')) : undefined;
   if (!translation) return monster;
 
   return {
@@ -188,5 +207,7 @@ export function getLocalizedMonsterSearchText(monster: MonsterDto, language: str
     localized.actions,
     localized.reactions,
     localized.legendaryActions,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 }

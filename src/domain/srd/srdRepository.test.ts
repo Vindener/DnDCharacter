@@ -9,6 +9,7 @@ import {
   getSrdClassProgressions,
   getSrdClasses,
   getSrdRaces,
+  validateAllSrdCollections,
 } from './srdRepository';
 
 function expectSrdMetadata(item: { source?: unknown; license?: unknown; tags?: unknown }) {
@@ -77,11 +78,13 @@ describe('srdRepository', () => {
     getSrdSpells().forEach((spell) => {
       expectSrdMetadata(spell);
       expect(spell.description).toEqual(expect.any(String));
-      expect(spell.components).toEqual(expect.objectContaining({
-        verbal: expect.any(Boolean),
-        somatic: expect.any(Boolean),
-        material: expect.any(String),
-      }));
+      expect(spell.components).toEqual(
+        expect.objectContaining({
+          verbal: expect.any(Boolean),
+          somatic: expect.any(Boolean),
+          material: expect.any(String),
+        }),
+      );
     });
     getSrdMonsters().forEach((monster) => {
       expectSrdMetadata(monster);
@@ -93,5 +96,12 @@ describe('srdRepository', () => {
       expect(entry.title).toEqual(expect.any(String));
       expect(entry.entries).toEqual(expect.any(Array));
     });
+  });
+
+  // Runtime getSrdX() getters use a typed cast, not Zod (PERF-1) — this is the one place
+  // in `npm run test:unit` that still exercises the real Zod schemas against the real
+  // SRD JSON, mirroring what scripts/validate-srd.mjs does at build time.
+  it('validates every SRD collection against its Zod schema (build-time check, exercised here too)', () => {
+    expect(() => validateAllSrdCollections()).not.toThrow();
   });
 });

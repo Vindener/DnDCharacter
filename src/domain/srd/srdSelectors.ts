@@ -1,17 +1,5 @@
-import {
-  getClassProgression,
-  getSrdBackgroundById,
-  getSrdBackgrounds,
-  getSrdClassById,
-  getSrdClasses,
-  getSrdRaceById,
-  getSrdRaces,
-} from './srdRepository';
+import { getClassProgression, getSrdBackgroundById, getSrdClassById, getSrdClasses, getSrdRaceById, getSrdRaces } from './srdRepository';
 import type { SrdAbilityId, SrdClassFeature, SrdFeatureBase, SrdRace, SrdSubrace } from './types';
-
-export const SRD_CLASS_IDS = getSrdClasses().map((item) => item.id);
-export const SRD_RACE_IDS = getSrdRaces().map((item) => item.id);
-export const SRD_BACKGROUND_IDS = getSrdBackgrounds().map((item) => item.id);
 
 export function getSrdSubraces(raceId: string): SrdSubrace[] {
   return getSrdRaceById(raceId)?.subraces ?? [];
@@ -99,14 +87,17 @@ export function isSrdBackgroundId(value: string | undefined): value is string {
 }
 
 export function findSrdRaceByName(value: string | undefined): SrdRace | undefined {
-  const normalized = String(value || '').trim().toLowerCase();
+  const normalized = String(value || '')
+    .trim()
+    .toLowerCase();
   if (!normalized) return undefined;
   return getSrdRaces().find((race) => race.id === normalized || race.name.toLowerCase() === normalized);
 }
 
 export function findSrdClassByName(value: string | undefined) {
-  const normalized = String(value || '').trim().toLowerCase();
+  const normalized = String(value || '')
+    .trim()
+    .toLowerCase();
   if (!normalized) return undefined;
   return getSrdClasses().find((srdClass) => srdClass.id === normalized || srdClass.name.toLowerCase() === normalized);
 }
-

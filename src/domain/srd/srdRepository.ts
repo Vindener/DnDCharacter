@@ -1,4 +1,16 @@
-import { srdData } from '@/data/srd';
+import {
+  loadBackgroundsJson,
+  loadClassesJson,
+  loadClassProgressionJson,
+  loadConditionsJson,
+  loadEquipmentJson,
+  loadLanguagesJson,
+  loadMonstersJson,
+  loadRacesJson,
+  loadReferencesJson,
+  loadSkillsJson,
+  loadSpellsJson,
+} from '@/data/srd';
 import {
   parseSrdArray,
   srdBackgroundSchema,
@@ -28,48 +40,108 @@ import type {
   SrdSpell,
 } from './types';
 
-const races = parseSrdArray<SrdRace>(srdRaceSchema, srdData.races);
-const classes = parseSrdArray<SrdClass>(srdClassSchema, srdData.classes);
-const classProgressions = parseSrdArray<SrdClassProgression>(srdClassProgressionSchema, srdData.classProgression);
-const backgrounds = parseSrdArray<SrdBackground>(srdBackgroundSchema, srdData.backgrounds);
-const conditions = parseSrdArray<SrdCondition>(srdConditionSchema, srdData.conditions);
-const equipment = parseSrdArray<SrdEquipmentItem>(srdEquipmentItemSchema, srdData.equipment);
-const languages = parseSrdArray<SrdLanguage>(srdLanguageSchema, srdData.languages);
-const monsters = parseSrdArray<SrdMonster>(srdMonsterSchema, srdData.monsters);
-const references = parseSrdArray<SrdReferenceEntry>(srdReferenceEntrySchema, srdData.references);
-const skills = parseSrdArray<SrdSkill>(srdSkillSchema, srdData.skills);
-const spells = parseSrdArray<SrdSpell>(srdSpellSchema, srdData.spells);
+// Each collection is parsed at most once, on first access, instead of at module-evaluation
+// time — the JSON `require()` + typed cast only run once a consumer actually needs
+// that specific SRD table (PERF-1). Zod itself moved to build-time (see
+// validateAllSrdCollections below + scripts/validate-srd.mjs); the runtime path here is a
+// typed cast, since the source JSON is validated before it ever ships.
+
+let racesCache: SrdRace[] | undefined;
+function loadRaces(): SrdRace[] {
+  if (racesCache === undefined) racesCache = loadRacesJson() as SrdRace[];
+  return racesCache;
+}
+
+let classesCache: SrdClass[] | undefined;
+function loadClasses(): SrdClass[] {
+  if (classesCache === undefined) classesCache = loadClassesJson() as SrdClass[];
+  return classesCache;
+}
+
+let classProgressionsCache: SrdClassProgression[] | undefined;
+function loadClassProgressions(): SrdClassProgression[] {
+  if (classProgressionsCache === undefined) classProgressionsCache = loadClassProgressionJson() as SrdClassProgression[];
+  return classProgressionsCache;
+}
+
+let backgroundsCache: SrdBackground[] | undefined;
+function loadBackgrounds(): SrdBackground[] {
+  if (backgroundsCache === undefined) backgroundsCache = loadBackgroundsJson() as SrdBackground[];
+  return backgroundsCache;
+}
+
+let conditionsCache: SrdCondition[] | undefined;
+function loadConditions(): SrdCondition[] {
+  if (conditionsCache === undefined) conditionsCache = loadConditionsJson() as SrdCondition[];
+  return conditionsCache;
+}
+
+let equipmentCache: SrdEquipmentItem[] | undefined;
+function loadEquipment(): SrdEquipmentItem[] {
+  if (equipmentCache === undefined) equipmentCache = loadEquipmentJson() as SrdEquipmentItem[];
+  return equipmentCache;
+}
+
+let languagesCache: SrdLanguage[] | undefined;
+function loadLanguages(): SrdLanguage[] {
+  if (languagesCache === undefined) languagesCache = loadLanguagesJson() as SrdLanguage[];
+  return languagesCache;
+}
+
+let monstersCache: SrdMonster[] | undefined;
+function loadMonsters(): SrdMonster[] {
+  if (monstersCache === undefined) monstersCache = loadMonstersJson() as SrdMonster[];
+  return monstersCache;
+}
+
+let referencesCache: SrdReferenceEntry[] | undefined;
+function loadReferences(): SrdReferenceEntry[] {
+  if (referencesCache === undefined) referencesCache = loadReferencesJson() as SrdReferenceEntry[];
+  return referencesCache;
+}
+
+let skillsCache: SrdSkill[] | undefined;
+function loadSkills(): SrdSkill[] {
+  if (skillsCache === undefined) skillsCache = loadSkillsJson() as SrdSkill[];
+  return skillsCache;
+}
+
+let spellsCache: SrdSpell[] | undefined;
+function loadSpells(): SrdSpell[] {
+  if (spellsCache === undefined) spellsCache = loadSpellsJson() as SrdSpell[];
+  return spellsCache;
+}
 
 export function getSrdRaces(): SrdRace[] {
-  return races;
+  return loadRaces();
 }
 
 export function getSrdRaceById(id: string): SrdRace | undefined {
-  return races.find((race) => race.id === id);
+  return loadRaces().find((race) => race.id === id);
 }
 
 export function getSrdClasses(): SrdClass[] {
-  return classes;
+  return loadClasses();
 }
 
 export function getSrdClassById(id: string): SrdClass | undefined {
-  return classes.find((item) => item.id === id);
+  return loadClasses().find((item) => item.id === id);
 }
 
 export function getClassProgression(classId: string, level: number): SrdClassProgressionLevel | undefined {
-  const progression = classProgressions.find((item) => item.classId === classId);
+  const progression = loadClassProgressions().find((item) => item.classId === classId);
   return progression?.levels.find((item) => item.level === level);
 }
 
 export function getSrdClassProgressions(): SrdClassProgression[] {
-  return classProgressions;
+  return loadClassProgressions();
 }
 
 export function getAvailableSkillsForClass(classId: string): SrdSkill[] {
   const srdClass = getSrdClassById(classId);
   if (!srdClass) return [];
   const allowed = new Set<string>(srdClass.skillChoices.from);
-  return skills.filter((skill) => allowed.has(skill.id));
+  return loadSkills().filter((skill) => allowed.has(skill.id));
 }
 
 export function getStartingEquipmentForClass(classId: string) {
@@ -77,49 +149,67 @@ export function getStartingEquipmentForClass(classId: string) {
 }
 
 export function getConditions(): SrdCondition[] {
-  return conditions;
+  return loadConditions();
 }
 
 export function getEquipment(): SrdEquipmentItem[] {
-  return equipment;
+  return loadEquipment();
 }
 
 export function getSrdSpells(): SrdSpell[] {
-  return spells;
+  return loadSpells();
 }
 
 export function getSrdSpellById(id: string): SrdSpell | undefined {
-  return spells.find((spell) => spell.id === id);
+  return loadSpells().find((spell) => spell.id === id);
 }
 
 export function getSrdMonsters(): SrdMonster[] {
-  return monsters;
+  return loadMonsters();
 }
 
 export function getSrdMonsterById(id: string): SrdMonster | undefined {
-  return monsters.find((monster) => monster.id === id);
+  return loadMonsters().find((monster) => monster.id === id);
 }
 
 export function getSrdReferences(): SrdReferenceEntry[] {
-  return references;
+  return loadReferences();
 }
 
 export function getSrdReferenceById(id: string): SrdReferenceEntry | undefined {
-  return references.find((entry) => entry.id === id);
+  return loadReferences().find((entry) => entry.id === id);
 }
 
 export function getSrdBackgrounds(): SrdBackground[] {
-  return backgrounds;
+  return loadBackgrounds();
 }
 
 export function getSrdBackgroundById(id: string): SrdBackground | undefined {
-  return backgrounds.find((item) => item.id === id);
+  return loadBackgrounds().find((item) => item.id === id);
 }
 
 export function getSrdLanguages(): SrdLanguage[] {
-  return languages;
+  return loadLanguages();
 }
 
 export function getSrdSkills(): SrdSkill[] {
-  return skills;
+  return loadSkills();
+}
+
+// Build-time validation entry point (see scripts/validate-srd.mjs). Deliberately re-reads
+// the raw JSON via the same lazy loaders rather than the caches above, so this always
+// validates the actual on-disk data regardless of whether the runtime caches were
+// already populated by an earlier getSrdX() call in the same process.
+export function validateAllSrdCollections(): void {
+  parseSrdArray(srdRaceSchema, loadRacesJson());
+  parseSrdArray(srdClassSchema, loadClassesJson());
+  parseSrdArray(srdClassProgressionSchema, loadClassProgressionJson());
+  parseSrdArray(srdBackgroundSchema, loadBackgroundsJson());
+  parseSrdArray(srdConditionSchema, loadConditionsJson());
+  parseSrdArray(srdEquipmentItemSchema, loadEquipmentJson());
+  parseSrdArray(srdLanguageSchema, loadLanguagesJson());
+  parseSrdArray(srdMonsterSchema, loadMonstersJson());
+  parseSrdArray(srdReferenceEntrySchema, loadReferencesJson());
+  parseSrdArray(srdSkillSchema, loadSkillsJson());
+  parseSrdArray(srdSpellSchema, loadSpellsJson());
 }

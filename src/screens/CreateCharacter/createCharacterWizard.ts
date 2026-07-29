@@ -37,10 +37,32 @@ export type ShareTarget = 'none' | 'dm' | 'player';
 
 export const TOTAL_CREATE_CHARACTER_STEPS = 11;
 export const ABILITY_KEYS: AbilityKey[] = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-export const SRD_CLASS_OPTIONS = getSrdClasses().map((item) => item.id);
-export const CREATE_CLASS_OPTIONS = [...SRD_CLASS_OPTIONS, 'artificer'];
-export const SRD_RACE_OPTIONS = getSrdRaces().map((item) => item.id);
-export const SRD_BACKGROUND_OPTIONS = getSrdBackgrounds().map((item) => item.id);
+// Lazy + memoized: computing these at module scope (as plain consts) would force the
+// full SRD classes/races/backgrounds parse merely by importing this wizard module,
+// independent of whether the user ever opens Create Character (PERF-1).
+let srdClassOptionsCache: string[] | undefined;
+export function getSrdClassOptions(): string[] {
+  if (!srdClassOptionsCache) srdClassOptionsCache = getSrdClasses().map((item) => item.id);
+  return srdClassOptionsCache;
+}
+
+let createClassOptionsCache: string[] | undefined;
+export function getCreateClassOptions(): string[] {
+  if (!createClassOptionsCache) createClassOptionsCache = [...getSrdClassOptions(), 'artificer'];
+  return createClassOptionsCache;
+}
+
+let srdRaceOptionsCache: string[] | undefined;
+export function getSrdRaceOptions(): string[] {
+  if (!srdRaceOptionsCache) srdRaceOptionsCache = getSrdRaces().map((item) => item.id);
+  return srdRaceOptionsCache;
+}
+
+let srdBackgroundOptionsCache: string[] | undefined;
+export function getSrdBackgroundOptions(): string[] {
+  if (!srdBackgroundOptionsCache) srdBackgroundOptionsCache = getSrdBackgrounds().map((item) => item.id);
+  return srdBackgroundOptionsCache;
+}
 
 export const ABILITY_NAMES_UA: Record<AbilityKey, string> = {
   strength: 'Сила',
@@ -252,9 +274,9 @@ export interface AbilityRollResult {
 }
 
 export function createInitialDraft(): CreateCharacterDraft {
-  const selectedClass = CREATE_CLASS_OPTIONS[0] || 'fighter';
-  const raceKey = SRD_RACE_OPTIONS[0] || 'human';
-  const backgroundKey = SRD_BACKGROUND_OPTIONS[0] || 'custom';
+  const selectedClass = getCreateClassOptions()[0] || 'fighter';
+  const raceKey = getSrdRaceOptions()[0] || 'human';
+  const backgroundKey = getSrdBackgroundOptions()[0] || 'custom';
   const level = '1';
   const hitDie = getCreateClassById(selectedClass)?.hitDie ?? 8;
   const speed = getSrdRaceById(raceKey)?.speed ?? 30;
@@ -411,7 +433,7 @@ export function applyStartMethod(draft: CreateCharacterDraft, method: StartMetho
       startMethod: method,
       characterTemplateId: 'standard-5e' as CharacterTemplateId,
       useCustomRace: false,
-      selectedClass: draft.selectedClass === 'custom' ? CREATE_CLASS_OPTIONS[0] || 'fighter' : draft.selectedClass,
+      selectedClass: draft.selectedClass === 'custom' ? getCreateClassOptions()[0] || 'fighter' : draft.selectedClass,
       statMethod: draft.statMethod === 'manual' ? 'array' : draft.statMethod,
     };
     return applyDerivedDefaults(next, { forceCombat: true });
@@ -444,7 +466,9 @@ export function applyDerivedDefaults(
     weaponsText: options.forceEquipment ? selectedGear.filter((item) => looksLikeWeapon(item)).join('\n') : draft.weaponsText,
     armor: options.forceEquipment ? selectedGear.find((item) => looksLikeArmor(item)) || draft.armor : draft.armor,
     shield: options.forceEquipment ? selectedGear.some((item) => item.toLowerCase().includes('щит')) : draft.shield,
-    startingPack: options.forceEquipment ? selectedGear.filter((item) => !looksLikeWeapon(item) && !looksLikeArmor(item)).join('\n') : draft.startingPack,
+    startingPack: options.forceEquipment
+      ? selectedGear.filter((item) => !looksLikeWeapon(item) && !looksLikeArmor(item)).join('\n')
+      : draft.startingPack,
     currencyGold: draft.currencyGold || String(getSrdBackgroundById(draft.backgroundKey)?.startingGold ?? 0),
     magicEnabled: draft.magicEnabled || defaults.isCaster,
     spellcastingAbility: spellAbility,
@@ -488,10 +512,7 @@ export function deriveDraftDefaults(draft: CreateCharacterDraft): DraftDefaults 
   const defaultProficiencyBonus = proficiencyBonus(level);
   const gearDef = draft.selectedClass !== 'custom' ? getCreateStartingEquipmentForClass(draft.selectedClass) : undefined;
   const selectedGear = gearDef
-    ? [
-        ...gearDef.base,
-        ...gearDef.choices.map((choice, index) => choice.options[draft.gearSelections[index] ?? 0] || choice.options[0]),
-      ]
+    ? [...gearDef.base, ...gearDef.choices.map((choice, index) => choice.options[draft.gearSelections[index] ?? 0] || choice.options[0])]
     : [];
 
   const backgroundDef = getSrdBackgroundById(draft.backgroundKey);
@@ -627,17 +648,15 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
   if (raceLanguages.length) proficiencies.push(`Languages: ${raceLanguages.join(', ')}`);
 
   const srdRaceTraits = normalized.useCustomRace ? [] : getSrdRaceTraits(normalized.raceKey, normalized.subraceKey);
-  const classFeatureNames = normalized.selectedClass === 'custom'
-    ? []
-    : getSrdProgressionFeatureNames(normalized.selectedClass, level);
+  const classFeatureNames = normalized.selectedClass === 'custom' ? [] : getSrdProgressionFeatureNames(normalized.selectedClass, level);
   const classFeatureSummaries = (getCreateClassById(normalized.selectedClass)?.features || [])
     .filter((feature) => feature.level <= level)
     .map((feature) => `${feature.name}: ${feature.summary}`);
-  const featuresAndTraits = Array.from(new Set([
-    ...srdRaceTraits.map((trait) => `${trait.name}: ${trait.summary}`),
-    ...classFeatureNames,
-    ...classFeatureSummaries,
-  ].filter(Boolean)));
+  const featuresAndTraits = Array.from(
+    new Set(
+      [...srdRaceTraits.map((trait) => `${trait.name}: ${trait.summary}`), ...classFeatureNames, ...classFeatureSummaries].filter(Boolean),
+    ),
+  );
   const featureSources = buildFeatureSourceRefs(normalized, srdRaceTraits, classFeatureNames.length + classFeatureSummaries.length);
 
   const character = createEmptyCharacter({
@@ -680,8 +699,14 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
     spells: defaults.showMagic
       ? {
           spellcastingAbility: normalized.spellcastingAbility,
-          spellSaveDC: parseInteger(normalized.spellSaveDC, 8 + proficiency + abilityMod(defaults.finalStats[normalized.spellcastingAbility])),
-          spellAttackBonus: parseInteger(normalized.spellAttackBonus, proficiency + abilityMod(defaults.finalStats[normalized.spellcastingAbility])),
+          spellSaveDC: parseInteger(
+            normalized.spellSaveDC,
+            8 + proficiency + abilityMod(defaults.finalStats[normalized.spellcastingAbility]),
+          ),
+          spellAttackBonus: parseInteger(
+            normalized.spellAttackBonus,
+            proficiency + abilityMod(defaults.finalStats[normalized.spellcastingAbility]),
+          ),
           spellSlots: parseSpellSlots(normalized.spellSlotsText),
           cantrips: splitLines(normalized.cantripsText),
           knownSpells: splitLines(normalized.knownSpellsText),
@@ -703,7 +728,11 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
     photoUri: normalized.photoUri,
     characterTemplateId: templatePatch.characterTemplateId,
     customFields: [...templateCustomFields(normalized), ...(templatePatch.customResources.length ? [] : [])],
-    customResources: [...templatePatch.customResources, ...textToResources(normalized.customResourcesText), ...textToResources(normalized.customTrackersText)],
+    customResources: [
+      ...templatePatch.customResources,
+      ...textToResources(normalized.customResourcesText),
+      ...textToResources(normalized.customTrackersText),
+    ],
     customSections: [...(templatePatch.customSections || []), ...textToSections(normalized.customSectionsText)],
     homebrewEntries: [...templatePatch.homebrewEntries, ...textToHomebrewEntries(normalized.customAbilitiesText)],
   });
@@ -857,26 +886,27 @@ function buildFeatureSourceRefs(
   return refs;
 }
 
-function buildContentSources(
-  draft: CreateCharacterDraft,
-  featureSources: CharacterContentSourceRef[],
-): CharacterEntity['contentSources'] {
+function buildContentSources(draft: CreateCharacterDraft, featureSources: CharacterContentSourceRef[]): CharacterEntity['contentSources'] {
   const race = draft.useCustomRace
     ? customSourceRef(draft.customRace.trim() || 'Custom race')
     : srdSourceRef(draft.raceKey, getSrdRaceById(draft.raceKey)?.name || draft.raceKey);
   const subrace = draft.useCustomRace
-    ? (draft.customSubrace.trim() ? customSourceRef(draft.customSubrace.trim()) : undefined)
+    ? draft.customSubrace.trim()
+      ? customSourceRef(draft.customSubrace.trim())
+      : undefined
     : draft.subraceKey
       ? srdSourceRef(draft.subraceKey, getSrdSubraceById(draft.raceKey, draft.subraceKey)?.name || draft.subraceKey)
       : undefined;
-  const classSource = draft.selectedClass === 'custom'
-    ? customSourceRef(draft.customClassName.trim() || 'Custom class')
-    : draft.selectedClass === 'artificer'
-      ? homebrewSourceRef('artificer', 'Artificer')
-      : srdSourceRef(draft.selectedClass, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass);
-  const background = draft.backgroundKey === 'custom'
-    ? customSourceRef(draft.customBackground.trim() || 'Custom background')
-    : srdSourceRef(draft.backgroundKey, getSrdBackgroundById(draft.backgroundKey)?.name || draft.backgroundKey);
+  const classSource =
+    draft.selectedClass === 'custom'
+      ? customSourceRef(draft.customClassName.trim() || 'Custom class')
+      : draft.selectedClass === 'artificer'
+        ? homebrewSourceRef('artificer', 'Artificer')
+        : srdSourceRef(draft.selectedClass, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass);
+  const background =
+    draft.backgroundKey === 'custom'
+      ? customSourceRef(draft.customBackground.trim() || 'Custom background')
+      : srdSourceRef(draft.backgroundKey, getSrdBackgroundById(draft.backgroundKey)?.name || draft.backgroundKey);
 
   return {
     race,
@@ -884,11 +914,17 @@ function buildContentSources(
     class: classSource,
     background,
     featuresAndTraits: featureSources.length ? featureSources : undefined,
-    equipment: draft.selectedClass === 'artificer'
-      ? [homebrewSourceRef('artificer-starting-equipment', 'Artificer starting equipment')]
-      : draft.selectedClass === 'custom'
-        ? undefined
-        : [srdSourceRef(`${draft.selectedClass}-starting-equipment`, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass)],
+    equipment:
+      draft.selectedClass === 'artificer'
+        ? [homebrewSourceRef('artificer-starting-equipment', 'Artificer starting equipment')]
+        : draft.selectedClass === 'custom'
+          ? undefined
+          : [
+              srdSourceRef(
+                `${draft.selectedClass}-starting-equipment`,
+                getCreateClassById(draft.selectedClass)?.name || draft.selectedClass,
+              ),
+            ],
   };
 }
 
@@ -930,9 +966,7 @@ function textToHomebrewEntries(value: string): CharacterHomebrewEntry[] {
 
 function looksLikeWeapon(value: string): boolean {
   const lower = value.toLowerCase();
-  return ['збро', 'меч', 'сокир', 'лук', 'арбалет', 'кинджал', 'дротик', 'булава', 'рапіра', 'спис'].some((token) =>
-    lower.includes(token),
-  );
+  return ['збро', 'меч', 'сокир', 'лук', 'арбалет', 'кинджал', 'дротик', 'булава', 'рапіра', 'спис'].some((token) => lower.includes(token));
 }
 
 function looksLikeArmor(value: string): boolean {

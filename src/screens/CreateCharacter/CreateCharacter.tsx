@@ -28,12 +28,7 @@ import { createCharacterDraftRepository } from '@/repositories/createCharacterDr
 import { fbAuth } from '@/services/firebase';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 import { CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
-import {
-  getSrdBackgroundById,
-  getSrdBackgrounds,
-  getSrdRaces,
-  getSrdSubraces,
-} from '@/domain/srd';
+import { getSrdBackgroundById, getSrdBackgrounds, getSrdRaces, getSrdSubraces } from '@/domain/srd';
 import type { SrdAbilityId as AbilityKey } from '@/domain/srd';
 import { SUBCLASSES } from '@/shared/const/Subclasses';
 import { onGoogleButtonPress } from '@/shared/services/auth';
@@ -47,7 +42,7 @@ import {
   POINT_BUY_MIN,
   STANDARD_ARRAY,
   TOTAL_CREATE_CHARACTER_STEPS,
-  CREATE_CLASS_OPTIONS,
+  getCreateClassOptions,
   applyDerivedDefaults,
   applyStartMethod,
   buildCharacterFromDraft,
@@ -244,7 +239,9 @@ const CreateCharacter = (): JSX.Element => {
       setIsSigningIn(true);
       await onGoogleButtonPress();
       setAuthVersion((prev) => prev + 1);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
     setIsSigningIn(false);
   };
 
@@ -370,15 +367,14 @@ const CreateCharacter = (): JSX.Element => {
     }
   };
 
-  const footerLabel = step === TOTAL_CREATE_CHARACTER_STEPS ? (isCreating ? t('actions.creating') : t('actions.create')) : t('actions.next');
+  const footerLabel =
+    step === TOTAL_CREATE_CHARACTER_STEPS ? (isCreating ? t('actions.creating') : t('actions.create')) : t('actions.next');
   const footerAction = step === TOTAL_CREATE_CHARACTER_STEPS ? onCreate : goNext;
 
   const renderHeader = () => (
     <View style={styles.header}>
       <View style={styles.progressRow}>
-        <Text style={styles.progressText}>
-          {t('progress', { step, total: TOTAL_CREATE_CHARACTER_STEPS })}
-        </Text>
+        <Text style={styles.progressText}>{t('progress', { step, total: TOTAL_CREATE_CHARACTER_STEPS })}</Text>
         <Text style={styles.progressText}>{displayStartModeLabel()}</Text>
       </View>
       <Text style={styles.title}>{t(`steps.${step}`)}</Text>
@@ -411,7 +407,11 @@ const CreateCharacter = (): JSX.Element => {
         android_ripple={{ color: colors.ripple }}
         testID={step === TOTAL_CREATE_CHARACTER_STEPS ? 'createCharacter.submitButton' : 'createCharacter.nextButton'}
       >
-        {isCreating ? <ActivityIndicator color={colors.background} /> : <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{footerLabel}</Text>}
+        {isCreating ? (
+          <ActivityIndicator color={colors.background} />
+        ) : (
+          <Text style={[styles.navButtonText, styles.navButtonTextPrimary]}>{footerLabel}</Text>
+        )}
       </Pressable>
     </View>
   );
@@ -437,13 +437,17 @@ const CreateCharacter = (): JSX.Element => {
         <Pressable
           key={option}
           style={[styles.methodCard, draft.startMethod === option ? styles.methodCardActive : null]}
-          onPress={() => (option === 'import' ? onImport() : setDraft((prev) => localizeStartMethodDefaults(applyStartMethod(prev, option), option)))}
+          onPress={() =>
+            option === 'import' ? onImport() : setDraft((prev) => localizeStartMethodDefaults(applyStartMethod(prev, option), option))
+          }
           disabled={isImporting && option === 'import'}
           android_ripple={{ color: colors.ripple }}
           testID={`createCharacter.start.${option}`}
         >
           <Text style={styles.methodTitle}>{t(`start.options.${option}.title`)}</Text>
-          <Text style={styles.methodMeta}>{option === 'import' && isImporting ? t('actions.importing') : t(`start.options.${option}.description`)}</Text>
+          <Text style={styles.methodMeta}>
+            {option === 'import' && isImporting ? t('actions.importing') : t(`start.options.${option}.description`)}
+          </Text>
         </Pressable>
       ))}
     </View>
@@ -452,7 +456,12 @@ const CreateCharacter = (): JSX.Element => {
   const renderIdentityStep = () => (
     <View style={styles.card}>
       <Text style={styles.label}>{t('identity.name')}</Text>
-      <TextInput style={styles.input} value={draft.name} onChangeText={(value) => setTextField('name', value)} testID='createCharacter.nameInput' />
+      <TextInput
+        style={styles.input}
+        value={draft.name}
+        onChangeText={(value) => setTextField('name', value)}
+        testID='createCharacter.nameInput'
+      />
 
       <Text style={styles.label}>{t('identity.level')}</Text>
       <TextInput style={styles.input} value={draft.level} onChangeText={(value) => setTextField('level', value)} keyboardType='numeric' />
@@ -465,7 +474,11 @@ const CreateCharacter = (): JSX.Element => {
             <Text style={styles.smallButtonText}>{draft.photoUri ? t('actions.change') : t('actions.add')}</Text>
           </Pressable>
           {draft.photoUri && (
-            <Pressable style={styles.smallButton} onPress={() => updateDraft({ photoUri: undefined })} android_ripple={{ color: colors.ripple }}>
+            <Pressable
+              style={styles.smallButton}
+              onPress={() => updateDraft({ photoUri: undefined })}
+              android_ripple={{ color: colors.ripple }}
+            >
               <Text style={styles.smallButtonText}>{t('actions.remove')}</Text>
             </Pressable>
           )}
@@ -479,7 +492,12 @@ const CreateCharacter = (): JSX.Element => {
       <TextInput style={styles.input} value={draft.playerName} onChangeText={(value) => setTextField('playerName', value)} />
 
       <Text style={styles.label}>{t('identity.notes')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.notes} onChangeText={(value) => setTextField('notes', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.notes}
+        onChangeText={(value) => setTextField('notes', value)}
+        multiline
+      />
     </View>
   );
 
@@ -499,7 +517,9 @@ const CreateCharacter = (): JSX.Element => {
               updateDraft({ useCustomRace: true, customRace: draft.customRace || t('defaults.customRace') });
               return;
             }
-            setDraft((prev) => applyDerivedDefaults({ ...prev, useCustomRace: false, raceKey: value, subraceKey: '', speed: '' }, { forceCombat: true }));
+            setDraft((prev) =>
+              applyDerivedDefaults({ ...prev, useCustomRace: false, raceKey: value, subraceKey: '', speed: '' }, { forceCombat: true }),
+            );
           }}
         >
           {getSrdRaces().map((race) => (
@@ -519,8 +539,12 @@ const CreateCharacter = (): JSX.Element => {
             {!!availableSubraces.length && (
               <>
                 <Text style={styles.label}>{t('raceClass.subrace')}</Text>
-                <Picker selectedValue={draft.subraceKey} style={styles.picker} onValueChange={(value: string) => updateDraft({ subraceKey: value })}>
-                <Picker.Item label={t('raceClass.noSubrace')} value='' />
+                <Picker
+                  selectedValue={draft.subraceKey}
+                  style={styles.picker}
+                  onValueChange={(value: string) => updateDraft({ subraceKey: value })}
+                >
+                  <Picker.Item label={t('raceClass.noSubrace')} value='' />
                   {availableSubraces.map((item) => (
                     <Picker.Item key={item.id} label={t(`dnd:subraces.${item.id}`, { defaultValue: item.name })} value={item.id} />
                   ))}
@@ -553,12 +577,14 @@ const CreateCharacter = (): JSX.Element => {
             );
           }}
         >
-          {CREATE_CLASS_OPTIONS.map((key) => (
+          {getCreateClassOptions().map((key) => (
             <Picker.Item
               key={key}
-              label={key === 'artificer'
-                ? t('raceClass.homebrewClassLabel', { name: t('dnd:classes.artificer', { defaultValue: 'Artificer' }) })
-                : t(`dnd:classes.${key}`, { defaultValue: getCreateClassById(key)?.name || key })}
+              label={
+                key === 'artificer'
+                  ? t('raceClass.homebrewClassLabel', { name: t('dnd:classes.artificer', { defaultValue: 'Artificer' }) })
+                  : t(`dnd:classes.${key}`, { defaultValue: getCreateClassById(key)?.name || key })
+              }
               value={key}
             />
           ))}
@@ -567,7 +593,11 @@ const CreateCharacter = (): JSX.Element => {
         {draft.selectedClass === 'custom' ? (
           <>
             <Text style={styles.label}>{t('raceClass.customClass')}</Text>
-            <TextInput style={styles.input} value={draft.customClassName} onChangeText={(value) => setTextField('customClassName', value)} />
+            <TextInput
+              style={styles.input}
+              value={draft.customClassName}
+              onChangeText={(value) => setTextField('customClassName', value)}
+            />
             <Text style={styles.label}>{t('raceClass.customSubclass')}</Text>
             <TextInput style={styles.input} value={draft.customSubclass} onChangeText={(value) => setTextField('customSubclass', value)} />
           </>
@@ -576,7 +606,11 @@ const CreateCharacter = (): JSX.Element => {
             {!!availableSubclasses.length && (
               <>
                 <Text style={styles.label}>{t('raceClass.subclass')}</Text>
-                <Picker selectedValue={draft.subclass} style={styles.picker} onValueChange={(value: string) => updateDraft({ subclass: value })}>
+                <Picker
+                  selectedValue={draft.subclass}
+                  style={styles.picker}
+                  onValueChange={(value: string) => updateDraft({ subclass: value })}
+                >
                   <Picker.Item label={t('raceClass.noSubclass')} value='' />
                   {availableSubclasses.map((item) => (
                     <Picker.Item key={item} label={item} value={item} />
@@ -601,14 +635,22 @@ const CreateCharacter = (): JSX.Element => {
         {draft.backgroundKey === 'custom' ? (
           <>
             <Text style={styles.label}>{t('raceClass.customBackground')}</Text>
-            <TextInput style={styles.input} value={draft.customBackground} onChangeText={(value) => setTextField('customBackground', value)} />
+            <TextInput
+              style={styles.input}
+              value={draft.customBackground}
+              onChangeText={(value) => setTextField('customBackground', value)}
+            />
           </>
         ) : (
           backgroundDef && (
             <View style={styles.infoBox}>
               <Text style={styles.sectionHint}>{t('raceClass.backgroundSkills', { value: backgroundDef.skills.join(', ') })}</Text>
-              {!!backgroundDef.tools?.length && <Text style={styles.sectionHint}>{t('raceClass.backgroundTools', { value: backgroundDef.tools.join(', ') })}</Text>}
-              {!!backgroundDef.languages && <Text style={styles.sectionHint}>{t('raceClass.backgroundLanguages', { value: backgroundDef.languages })}</Text>}
+              {!!backgroundDef.tools?.length && (
+                <Text style={styles.sectionHint}>{t('raceClass.backgroundTools', { value: backgroundDef.tools.join(', ') })}</Text>
+              )}
+              {!!backgroundDef.languages && (
+                <Text style={styles.sectionHint}>{t('raceClass.backgroundLanguages', { value: backgroundDef.languages })}</Text>
+              )}
               <Text style={styles.sectionHint}>{derived.backgroundMechanics.featureText}</Text>
             </View>
           )
@@ -628,7 +670,9 @@ const CreateCharacter = (): JSX.Element => {
             android_ripple={{ color: colors.ripple }}
             testID={`createCharacter.statMethod.${method}`}
           >
-            <Text style={[styles.toggleButtonText, draft.statMethod === method ? styles.toggleButtonTextActive : null]}>{t(`stats.methods.${method}`)}</Text>
+            <Text style={[styles.toggleButtonText, draft.statMethod === method ? styles.toggleButtonTextActive : null]}>
+              {t(`stats.methods.${method}`)}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -638,13 +682,16 @@ const CreateCharacter = (): JSX.Element => {
           {t('stats.pointBuySpent', { spent: derived.pointBuySpent, budget: POINT_BUY_BUDGET })}
         </Text>
       )}
-      {draft.statMethod === 'roll' && (
-        <Text style={styles.helperText}>{t('stats.rollHint')}</Text>
-      )}
+      {draft.statMethod === 'roll' && <Text style={styles.helperText}>{t('stats.rollHint')}</Text>}
       {draft.statMethod === 'random' && (
         <View style={styles.infoBox}>
           <Text style={styles.sectionHint}>{t('stats.randomHint')}</Text>
-          <Pressable style={styles.smallButton} onPress={generateRandomStats} android_ripple={{ color: colors.ripple }} testID='createCharacter.randomStatsButton'>
+          <Pressable
+            style={styles.smallButton}
+            onPress={generateRandomStats}
+            android_ripple={{ color: colors.ripple }}
+            testID='createCharacter.randomStatsButton'
+          >
             <Text style={styles.smallButtonText}>{t('stats.regenerate')}</Text>
           </Pressable>
         </View>
@@ -678,7 +725,12 @@ const CreateCharacter = (): JSX.Element => {
           ) : draft.statMethod === 'roll' ? (
             <View style={styles.rollControl}>
               <Text style={styles.statValue}>{draft.rollStats[ability] || '—'}</Text>
-              <Pressable style={styles.smallButton} onPress={() => rollSingleStat(ability)} android_ripple={{ color: colors.ripple }} testID={`createCharacter.rollStat.${ability}`}>
+              <Pressable
+                style={styles.smallButton}
+                onPress={() => rollSingleStat(ability)}
+                android_ripple={{ color: colors.ripple }}
+                testID={`createCharacter.rollStat.${ability}`}
+              >
                 <Text style={styles.smallButtonText}>{t('stats.rollDice')}</Text>
               </Pressable>
             </View>
@@ -690,7 +742,9 @@ const CreateCharacter = (): JSX.Element => {
           ) : (
             <Text style={styles.statValue}>{STANDARD_ARRAY[ability]}</Text>
           )}
-          {draft.statMethod === 'roll' && !!draft.rollDetails[ability] && <Text style={styles.helperText}>{draft.rollDetails[ability]}</Text>}
+          {draft.statMethod === 'roll' && !!draft.rollDetails[ability] && (
+            <Text style={styles.helperText}>{draft.rollDetails[ability]}</Text>
+          )}
         </View>
       ))}
     </View>
@@ -721,7 +775,9 @@ const CreateCharacter = (): JSX.Element => {
 
   const adjustPointBuy = (ability: AbilityKey, delta: number): void => {
     const current = draft.pointBuyStats[ability];
-    updateDraft({ pointBuyStats: { ...draft.pointBuyStats, [ability]: Math.max(POINT_BUY_MIN, Math.min(POINT_BUY_MAX, current + delta)) } });
+    updateDraft({
+      pointBuyStats: { ...draft.pointBuyStats, [ability]: Math.max(POINT_BUY_MIN, Math.min(POINT_BUY_MAX, current + delta)) },
+    });
   };
 
   const renderCombatStep = () => (
@@ -736,7 +792,12 @@ const CreateCharacter = (): JSX.Element => {
       <Text style={styles.label}>{t('combat.hpMax')}</Text>
       <TextInput style={styles.input} value={draft.hpMax} onChangeText={(value) => setTextField('hpMax', value)} keyboardType='numeric' />
       <Text style={styles.label}>{t('combat.hpCurrent')}</Text>
-      <TextInput style={styles.input} value={draft.hpCurrent} onChangeText={(value) => setTextField('hpCurrent', value)} keyboardType='numeric' />
+      <TextInput
+        style={styles.input}
+        value={draft.hpCurrent}
+        onChangeText={(value) => setTextField('hpCurrent', value)}
+        keyboardType='numeric'
+      />
       <Text style={styles.label}>{t('combat.hitDice')}</Text>
       <TextInput style={styles.input} value={draft.hitDice} onChangeText={(value) => setTextField('hitDice', value)} />
       <Text style={styles.label}>{t('combat.armorClass')}</Text>
@@ -744,9 +805,19 @@ const CreateCharacter = (): JSX.Element => {
       <Text style={styles.label}>{t('combat.speed')}</Text>
       <TextInput style={styles.input} value={draft.speed} onChangeText={(value) => setTextField('speed', value)} keyboardType='numeric' />
       <Text style={styles.label}>{t('combat.initiative')}</Text>
-      <TextInput style={styles.input} value={draft.initiative} onChangeText={(value) => setTextField('initiative', value)} keyboardType='numbers-and-punctuation' />
+      <TextInput
+        style={styles.input}
+        value={draft.initiative}
+        onChangeText={(value) => setTextField('initiative', value)}
+        keyboardType='numbers-and-punctuation'
+      />
       <Text style={styles.label}>{t('combat.proficiencyBonus')}</Text>
-      <TextInput style={styles.input} value={draft.proficiencyBonus} onChangeText={(value) => setTextField('proficiencyBonus', value)} keyboardType='numeric' />
+      <TextInput
+        style={styles.input}
+        value={draft.proficiencyBonus}
+        onChangeText={(value) => setTextField('proficiencyBonus', value)}
+        keyboardType='numeric'
+      />
 
       <Text style={styles.label}>{t('combat.savingThrowProficiencies')}</Text>
       <View style={styles.chipsWrap}>
@@ -757,7 +828,9 @@ const CreateCharacter = (): JSX.Element => {
             onPress={() => updateDraft({ savingThrows: { ...draft.savingThrows, [ability]: !draft.savingThrows[ability] } })}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={[styles.chipText, draft.savingThrows[ability] ? styles.chipTextActive : null]}>{t(`dnd:abilityShort.${ability}`)}</Text>
+            <Text style={[styles.chipText, draft.savingThrows[ability] ? styles.chipTextActive : null]}>
+              {t(`dnd:abilityShort.${ability}`)}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -798,64 +871,139 @@ const CreateCharacter = (): JSX.Element => {
             ))}
             <View style={styles.infoBox}>
               {derived.selectedGear.map((item) => (
-                <Text key={item} style={styles.sectionHint}>{item}</Text>
+                <Text key={item} style={styles.sectionHint}>
+                  {item}
+                </Text>
               ))}
             </View>
           </>
         )}
 
         <Text style={styles.label}>{t('equipment.weapons')}</Text>
-        <TextInput style={[styles.input, styles.multilineInput]} value={draft.weaponsText} onChangeText={(value) => setTextField('weaponsText', value)} multiline />
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          value={draft.weaponsText}
+          onChangeText={(value) => setTextField('weaponsText', value)}
+          multiline
+        />
         <Text style={styles.label}>{t('equipment.armor')}</Text>
         <TextInput style={styles.input} value={draft.armor} onChangeText={(value) => setTextField('armor', value)} />
-        <Pressable style={[styles.toggleButton, draft.shield ? styles.toggleButtonActive : null]} onPress={() => updateDraft({ shield: !draft.shield })} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={[styles.toggleButton, draft.shield ? styles.toggleButtonActive : null]}
+          onPress={() => updateDraft({ shield: !draft.shield })}
+          android_ripple={{ color: colors.ripple }}
+        >
           <Text style={[styles.toggleButtonText, draft.shield ? styles.toggleButtonTextActive : null]}>{t('equipment.shield')}</Text>
         </Pressable>
         <Text style={styles.label}>{t('equipment.tools')}</Text>
-        <TextInput style={[styles.input, styles.multilineInput]} value={draft.toolsText} onChangeText={(value) => setTextField('toolsText', value)} multiline />
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          value={draft.toolsText}
+          onChangeText={(value) => setTextField('toolsText', value)}
+          multiline
+        />
         <View style={styles.threeColumnRow}>
           <View style={styles.column}>
             <Text style={styles.label}>{t('equipment.gold')}</Text>
-            <TextInput style={styles.input} value={draft.currencyGold} onChangeText={(value) => setTextField('currencyGold', value)} keyboardType='numeric' />
+            <TextInput
+              style={styles.input}
+              value={draft.currencyGold}
+              onChangeText={(value) => setTextField('currencyGold', value)}
+              keyboardType='numeric'
+            />
           </View>
           <View style={styles.column}>
             <Text style={styles.label}>{t('equipment.silver')}</Text>
-            <TextInput style={styles.input} value={draft.currencySilver} onChangeText={(value) => setTextField('currencySilver', value)} keyboardType='numeric' />
+            <TextInput
+              style={styles.input}
+              value={draft.currencySilver}
+              onChangeText={(value) => setTextField('currencySilver', value)}
+              keyboardType='numeric'
+            />
           </View>
           <View style={styles.column}>
             <Text style={styles.label}>{t('equipment.copper')}</Text>
-            <TextInput style={styles.input} value={draft.currencyCopper} onChangeText={(value) => setTextField('currencyCopper', value)} keyboardType='numeric' />
+            <TextInput
+              style={styles.input}
+              value={draft.currencyCopper}
+              onChangeText={(value) => setTextField('currencyCopper', value)}
+              keyboardType='numeric'
+            />
           </View>
         </View>
         <Text style={styles.label}>{t('equipment.extraStartingPack')}</Text>
-        <TextInput style={[styles.input, styles.multilineInput]} value={draft.startingPack} onChangeText={(value) => setTextField('startingPack', value)} multiline />
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          value={draft.startingPack}
+          onChangeText={(value) => setTextField('startingPack', value)}
+          multiline
+        />
       </View>
     );
   };
 
   const renderMagicStep = () => (
     <View style={styles.card}>
-      <Pressable style={[styles.toggleButton, draft.magicEnabled ? styles.toggleButtonActive : null]} onPress={() => updateDraft({ magicEnabled: !draft.magicEnabled })} android_ripple={{ color: colors.ripple }}>
+      <Pressable
+        style={[styles.toggleButton, draft.magicEnabled ? styles.toggleButtonActive : null]}
+        onPress={() => updateDraft({ magicEnabled: !draft.magicEnabled })}
+        android_ripple={{ color: colors.ripple }}
+      >
         <Text style={[styles.toggleButtonText, draft.magicEnabled ? styles.toggleButtonTextActive : null]}>{t('magic.enabled')}</Text>
       </Pressable>
       <Text style={styles.label}>{t('magic.spellcastingAbility')}</Text>
-      <Picker selectedValue={draft.spellcastingAbility} style={styles.picker} onValueChange={(value: AbilityKey) => updateDraft({ spellcastingAbility: value, spellSaveDC: '', spellAttackBonus: '' })}>
+      <Picker
+        selectedValue={draft.spellcastingAbility}
+        style={styles.picker}
+        onValueChange={(value: AbilityKey) => updateDraft({ spellcastingAbility: value, spellSaveDC: '', spellAttackBonus: '' })}
+      >
         {ABILITY_KEYS.map((ability) => (
           <Picker.Item key={ability} label={t(`dnd:abilities.${ability}`)} value={ability} />
         ))}
       </Picker>
       <Text style={styles.label}>{t('magic.spellSaveDC')}</Text>
-      <TextInput style={styles.input} value={draft.spellSaveDC} onChangeText={(value) => setTextField('spellSaveDC', value)} keyboardType='numeric' />
+      <TextInput
+        style={styles.input}
+        value={draft.spellSaveDC}
+        onChangeText={(value) => setTextField('spellSaveDC', value)}
+        keyboardType='numeric'
+      />
       <Text style={styles.label}>{t('magic.spellAttackBonus')}</Text>
-      <TextInput style={styles.input} value={draft.spellAttackBonus} onChangeText={(value) => setTextField('spellAttackBonus', value)} keyboardType='numbers-and-punctuation' />
+      <TextInput
+        style={styles.input}
+        value={draft.spellAttackBonus}
+        onChangeText={(value) => setTextField('spellAttackBonus', value)}
+        keyboardType='numbers-and-punctuation'
+      />
       <Text style={styles.label}>{t('magic.cantrips')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.cantripsText} onChangeText={(value) => setTextField('cantripsText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.cantripsText}
+        onChangeText={(value) => setTextField('cantripsText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('magic.knownSpells')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.knownSpellsText} onChangeText={(value) => setTextField('knownSpellsText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.knownSpellsText}
+        onChangeText={(value) => setTextField('knownSpellsText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('magic.preparedSpells')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.preparedSpellsText} onChangeText={(value) => setTextField('preparedSpellsText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.preparedSpellsText}
+        onChangeText={(value) => setTextField('preparedSpellsText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('magic.spellSlots')}</Text>
-      <TextInput style={styles.input} value={draft.spellSlotsText} onChangeText={(value) => setTextField('spellSlotsText', value)} placeholder='1:2, 2:1' placeholderTextColor={colors.textSecondary} />
+      <TextInput
+        style={styles.input}
+        value={draft.spellSlotsText}
+        onChangeText={(value) => setTextField('spellSlotsText', value)}
+        placeholder='1:2, 2:1'
+        placeholderTextColor={colors.textSecondary}
+      />
     </View>
   );
 
@@ -864,34 +1012,83 @@ const CreateCharacter = (): JSX.Element => {
       <Text style={styles.label}>{t('personality.alignment')}</Text>
       <TextInput style={styles.input} value={draft.alignment} onChangeText={(value) => setTextField('alignment', value)} />
       <Text style={styles.label}>{t('personality.ideals')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.ideals} onChangeText={(value) => setTextField('ideals', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.ideals}
+        onChangeText={(value) => setTextField('ideals', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('personality.bonds')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.bonds} onChangeText={(value) => setTextField('bonds', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.bonds}
+        onChangeText={(value) => setTextField('bonds', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('personality.flaws')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.flaws} onChangeText={(value) => setTextField('flaws', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.flaws}
+        onChangeText={(value) => setTextField('flaws', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('personality.backstory')}</Text>
-      <TextInput style={[styles.input, styles.largeInput]} value={draft.backstory} onChangeText={(value) => setTextField('backstory', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.largeInput]}
+        value={draft.backstory}
+        onChangeText={(value) => setTextField('backstory', value)}
+        multiline
+      />
     </View>
   );
 
   const renderHomebrewStep = () => (
     <View style={styles.card}>
       <Text style={styles.label}>{t('homebrew.template')}</Text>
-      <Picker selectedValue={draft.characterTemplateId} style={styles.picker} onValueChange={(value) => updateDraft({ characterTemplateId: value })}>
+      <Picker
+        selectedValue={draft.characterTemplateId}
+        style={styles.picker}
+        onValueChange={(value) => updateDraft({ characterTemplateId: value })}
+      >
         {CHARACTER_TEMPLATE_PRESETS.map((preset) => (
           <Picker.Item key={preset.id} label={displayTemplateTitle(preset.id)} value={preset.id} />
         ))}
       </Picker>
       <Text style={styles.label}>{t('homebrew.customFields')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customFieldsText} onChangeText={(value) => setTextField('customFieldsText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.customFieldsText}
+        onChangeText={(value) => setTextField('customFieldsText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('homebrew.customResources')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customResourcesText} onChangeText={(value) => setTextField('customResourcesText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.customResourcesText}
+        onChangeText={(value) => setTextField('customResourcesText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('homebrew.customSections')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customSectionsText} onChangeText={(value) => setTextField('customSectionsText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.customSectionsText}
+        onChangeText={(value) => setTextField('customSectionsText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('homebrew.customTrackers')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customTrackersText} onChangeText={(value) => setTextField('customTrackersText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.customTrackersText}
+        onChangeText={(value) => setTextField('customTrackersText', value)}
+        multiline
+      />
       <Text style={styles.label}>{t('homebrew.customAbilities')}</Text>
-      <TextInput style={[styles.input, styles.multilineInput]} value={draft.customAbilitiesText} onChangeText={(value) => setTextField('customAbilitiesText', value)} multiline />
+      <TextInput
+        style={[styles.input, styles.multilineInput]}
+        value={draft.customAbilitiesText}
+        onChangeText={(value) => setTextField('customAbilitiesText', value)}
+        multiline
+      />
     </View>
   );
 
@@ -904,17 +1101,25 @@ const CreateCharacter = (): JSX.Element => {
           onPress={() => updateDraft({ storageMode: 'local-only', shareTarget: 'none', inviteEmail: '' })}
           android_ripple={{ color: colors.ripple }}
         >
-          <Text style={[styles.toggleButtonText, draft.storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>{t('storage.localOnly')}</Text>
+          <Text style={[styles.toggleButtonText, draft.storageMode === 'local-only' ? styles.toggleButtonTextActive : null]}>
+            {t('storage.localOnly')}
+          </Text>
         </Pressable>
         <Pressable
-          style={[styles.toggleButton, draft.storageMode === 'local-cloud' ? styles.toggleButtonActive : null, !isOnline ? styles.navButtonDisabled : null]}
+          style={[
+            styles.toggleButton,
+            draft.storageMode === 'local-cloud' ? styles.toggleButtonActive : null,
+            !isOnline ? styles.navButtonDisabled : null,
+          ]}
           onPress={() => {
             if (isOnline) updateDraft({ storageMode: 'local-cloud' });
           }}
           disabled={!isOnline}
           android_ripple={{ color: colors.ripple }}
         >
-          <Text style={[styles.toggleButtonText, draft.storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>{t('storage.localCloud')}</Text>
+          <Text style={[styles.toggleButtonText, draft.storageMode === 'local-cloud' ? styles.toggleButtonTextActive : null]}>
+            {t('storage.localCloud')}
+          </Text>
         </Pressable>
       </View>
       {!isOnline && <Text style={styles.warningText}>{t('storage.offline')}</Text>}
@@ -928,14 +1133,20 @@ const CreateCharacter = (): JSX.Element => {
         {(['none', 'dm', 'player'] as const).map((target) => (
           <Pressable
             key={target}
-            style={[styles.toggleButton, draft.shareTarget === target ? styles.toggleButtonActive : null, draft.storageMode === 'local-only' && target !== 'none' ? styles.navButtonDisabled : null]}
+            style={[
+              styles.toggleButton,
+              draft.shareTarget === target ? styles.toggleButtonActive : null,
+              draft.storageMode === 'local-only' && target !== 'none' ? styles.navButtonDisabled : null,
+            ]}
             onPress={() => {
               if (draft.storageMode === 'local-only' && target !== 'none') return;
               updateDraft({ shareTarget: target, inviteEmail: target === 'none' ? '' : draft.inviteEmail });
             }}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={[styles.toggleButtonText, draft.shareTarget === target ? styles.toggleButtonTextActive : null]}>{t(`storage.shareTargets.${target}`)}</Text>
+            <Text style={[styles.toggleButtonText, draft.shareTarget === target ? styles.toggleButtonTextActive : null]}>
+              {t(`storage.shareTargets.${target}`)}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -967,7 +1178,14 @@ const CreateCharacter = (): JSX.Element => {
       <SummaryRow label={t('dnd:abilityShort.strength')} value={formatAbilityModifier(derived.finalStats.strength)} />
       <SummaryRow label={t('dnd:abilityShort.charisma')} value={formatAbilityModifier(derived.finalStats.charisma)} />
       <SummaryRow label={t('review.storage')} value={draft.storageMode === 'local-only' ? t('storage.local') : t('storage.cloud')} />
-      <SummaryRow label={t('review.access')} value={draft.shareTarget === 'none' ? t('storage.shareTargets.none') : `${t(`storage.shareTargets.${draft.shareTarget}`)} ${draft.inviteEmail.trim() || ''}`.trim()} />
+      <SummaryRow
+        label={t('review.access')}
+        value={
+          draft.shareTarget === 'none'
+            ? t('storage.shareTargets.none')
+            : `${t(`storage.shareTargets.${draft.shareTarget}`)} ${draft.inviteEmail.trim() || ''}`.trim()
+        }
+      />
       {derived.showMagic && <SummaryRow label={t('review.spellSaveDC')} value={draft.spellSaveDC || '—'} />}
     </View>
   );
