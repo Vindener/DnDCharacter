@@ -2,6 +2,7 @@ import { db, fbAuth, fns } from '@/services/firebase';
 import { reauthenticateWithGoogle } from '@/shared/services/auth';
 import { getEditorsForSheet } from '@/repositories/characterCloudRepository';
 import { decideCascadeAction, type CascadeAction, type CascadeOwnershipDoc } from '@/services/accountDeletionCascade';
+import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 
 export type CascadeCollection = 'characterSheets' | 'dmCampaigns' | 'dmCampaignNotes';
 
@@ -105,6 +106,9 @@ export async function requestAccountDeletion(transferSelections: TransferSelecti
   try {
     const callable = fns.httpsCallable<{ transferSelections: TransferSelections }, AccountDeletionCallableResponse>('deleteMyAccount');
     const result = await callable({ transferSelections });
+    if (result.data.status === 'success') {
+      trackProductEvent('account_deleted');
+    }
     return result.data;
   } catch (err: unknown) {
     const httpsError = err as { code?: string; message?: string };

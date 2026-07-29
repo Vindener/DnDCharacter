@@ -676,10 +676,10 @@ export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudRes
     } else if (classified.severity === 'unexpected') {
       // COL-7: expected/offline-like codes stay a silent queue (unchanged); anything else
       // is a real write failure the user must be told about, not just a quiet state badge.
-      trackProductEvent('sync_failed', { characterId: args.character.id, code: classified.code || 'unknown' });
+      trackProductEvent('sync_failed', { code: classified.code || 'unknown' });
 
       if (classified.code === 'firestore/permission-denied') {
-        trackProductEvent('permission_denied_on_upload', { characterId: args.character.id });
+        trackProductEvent('permission_denied_on_upload');
         toast.error(i18n.t('character:sync.unexpectedErrorTitle'), i18n.t('character:sync.permissionDeniedMessage'));
       } else {
         toast.error(i18n.t('character:sync.unexpectedErrorTitle'), i18n.t('character:sync.unexpectedErrorMessage'));

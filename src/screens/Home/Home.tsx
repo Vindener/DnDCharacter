@@ -136,15 +136,9 @@ const Home = () => {
     });
   }, [characters, myCloud, netInfo.isConnected, sharedCloud, syncByCharacter]);
 
-  const pendingSyncCount = useMemo(
-    () => countPendingSync(syncByCharacter, netInfo.isConnected),
-    [netInfo.isConnected, syncByCharacter],
-  );
+  const pendingSyncCount = useMemo(() => countPendingSync(syncByCharacter, netInfo.isConnected), [netInfo.isConnected, syncByCharacter]);
 
-  const conflictCount = useMemo(
-    () => countConflicts(syncByCharacter, netInfo.isConnected),
-    [netInfo.isConnected, syncByCharacter],
-  );
+  const conflictCount = useMemo(() => countConflicts(syncByCharacter, netInfo.isConnected), [netInfo.isConnected, syncByCharacter]);
 
   const storeLastSyncAt = useMemo(() => {
     const values = Object.values(syncByCharacter)
@@ -176,11 +170,14 @@ const Home = () => {
     [cloudPulseAt, conflictCount, isOnline, isSignedIn, pendingSyncCount, storeLastSyncAt],
   );
 
-  const openRootTab = React.useCallback((routeName: 'DM' | 'References', params?: Record<string, unknown>) => {
-    const parent = navigation.getParent();
-    if (!parent) return;
-    parent.dispatch(CommonActions.navigate({ name: routeName, params }));
-  }, [navigation]);
+  const openRootTab = React.useCallback(
+    (routeName: 'DM' | 'References', params?: Record<string, unknown>) => {
+      const parent = navigation.getParent();
+      if (!parent) return;
+      parent.dispatch(CommonActions.navigate({ name: routeName, params }));
+    },
+    [navigation],
+  );
 
   const quickActions = useMemo(() => {
     const createCharacter = {
@@ -244,10 +241,7 @@ const Home = () => {
     await setLastSessionCharacterId(character.id);
     setCurrentCharacterId(character.id);
     navigation.navigate('Character', { character: character.payload });
-    trackProductEvent('character_opened', {
-      characterId: character.id,
-      source: character.source,
-    });
+    trackProductEvent('character_opened', { source: character.source });
   };
 
   const continueSession = () => {
@@ -256,17 +250,16 @@ const Home = () => {
       return;
     }
 
-    trackProductEvent('session_continue', {
-      characterId: continueState.character.id,
-      role: HOME_ROLE,
-    });
+    trackProductEvent('session_continue', { role: HOME_ROLE });
     void openCharacter(continueState.character);
   };
 
   const onLogin = async () => {
     try {
       await onGoogleButtonPress();
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   };
 
   if (!charactersLoaded && !charactersLoadError) {
@@ -278,7 +271,21 @@ const Home = () => {
       <View style={styles.heroCard} testID='home.header'>
         <View style={styles.headerTopRow}>
           <View style={styles.headerTextWrap}>
-            <Text style={styles.greetingTitle}>{t('home:hero.continueGame')}</Text>
+            <Pressable
+              style={styles.heroContinueButton}
+              onPress={continueSession}
+              android_ripple={{ color: colors.ripple }}
+              testID='home.continueGameButton'
+            >
+              <Ionicons name='play-circle-outline' size={20} color={colors.onPrimary} />
+              <Text style={styles.heroContinueButtonText}>{t('home:hero.continueGame')}</Text>
+            </Pressable>
+            {continueState.character ? (
+              <Text style={styles.heroContinueInfo}>
+                {continueState.character.name} — {continueState.character.className}{' '}
+                {t('home:characters.shortLevel', { level: continueState.character.level })}
+              </Text>
+            ) : null}
             <Text style={styles.greetingMeta}>{t('home:hero.mode', { role: t('common:roles.Player'), name: userName })}</Text>
           </View>
           {providerPhoto ? <Image source={{ uri: providerPhoto }} style={styles.authAvatar} resizeMode='cover' /> : null}
@@ -310,56 +317,11 @@ const Home = () => {
         </View>
       </View>
 
-      <View style={styles.card} testID='home.continueSession'>
-        {continueState.character ? (
-          <>
-            <Text style={styles.sectionEyebrow}>{t('home:actions.continueSession')}</Text>
-            <Text style={styles.continueName}>
-              {continueState.character.name} — {continueState.character.className} {t('home:characters.shortLevel', { level: continueState.character.level })}
-            </Text>
-            <Text style={styles.continueMeta}>
-              {t('home:characters.continueMeta', {
-                current: continueState.character.hpCurrent,
-                max: continueState.character.hpMax,
-                ac: continueState.character.ac,
-                sync:
-                  continueState.character.syncStatus === 'Synced'
-                    ? t('common:status.synced')
-                    : continueState.character.badges.at(-1)
-                      ? formatBadgeLabel(continueState.character.badges.at(-1)!.kind, continueState.character.badges.at(-1)!.label)
-                      : t('common:status.localOnly'),
-              })}
-            </Text>
-            <Pressable
-              style={styles.primaryButton}
-              onPress={continueSession}
-              android_ripple={{ color: colors.ripple }}
-              testID='home.openSheetButton'
-            >
-              <Ionicons name='document-text-outline' size={18} color={colors.onPrimary} />
-              <Text style={styles.primaryButtonText}>{t('home:actions.openSheet')}</Text>
-            </Pressable>
-          </>
-        ) : (
-          <>
-            <Text style={styles.sectionEyebrow}>{t('home:empty.firstCharacterTitle')}</Text>
-            <Text style={styles.sectionHint}>{t('home:empty.firstCharacterHint')}</Text>
-            <Pressable
-              style={styles.primaryButton}
-              onPress={() => navigation.navigate('CreateCharacter')}
-              android_ripple={{ color: colors.ripple }}
-              testID='home.emptyCreateButton'
-            >
-              <Ionicons name='person-add-outline' size={18} color={colors.onPrimary} />
-              <Text style={styles.primaryButtonText}>{t('home:actions.createCharacter')}</Text>
-            </Pressable>
-          </>
-        )}
-      </View>
-
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>{t('home:sections.characters')}</Text>
-        <Text style={styles.sectionHint}>{previewList.length ? t('home:characters.readyCount', { count: previewList.length }) : t('home:characters.none')}</Text>
+        <Text style={styles.sectionHint}>
+          {previewList.length ? t('home:characters.readyCount', { count: previewList.length }) : t('home:characters.none')}
+        </Text>
       </View>
 
       {previewList.map((item) => (
@@ -385,7 +347,9 @@ const Home = () => {
           <View style={styles.characterStatsRow}>
             <View style={styles.characterStatBox}>
               <Text style={styles.characterStatLabel}>{t('home:characters.health')}</Text>
-              <Text style={styles.characterStatValue}>{item.hpCurrent}/{item.hpMax}</Text>
+              <Text style={styles.characterStatValue}>
+                {item.hpCurrent}/{item.hpMax}
+              </Text>
             </View>
             <View style={styles.characterStatBox}>
               <Text style={styles.characterStatLabel}>{t('home:characters.ac')}</Text>
@@ -442,23 +406,38 @@ const Home = () => {
       >
         <View style={styles.syncStripHeader}>
           <Ionicons
-            name={syncStrip.hasConflict ? 'alert-circle-outline' : syncStrip.hasPending ? 'cloud-upload-outline' : 'checkmark-circle-outline'}
+            name={
+              syncStrip.hasConflict ? 'alert-circle-outline' : syncStrip.hasPending ? 'cloud-upload-outline' : 'checkmark-circle-outline'
+            }
             size={20}
             color={syncStrip.hasConflict ? colors.danger : syncStrip.hasPending ? colors.warning : colors.success}
           />
           <Text style={styles.syncStripTitle}>
-            {syncStrip.hasConflict ? t('home:syncStrip.conflictTitle') : syncStrip.hasPending ? t('home:syncStrip.pendingTitle') : t('home:syncStrip.syncedTitle')}
+            {syncStrip.hasConflict
+              ? t('home:syncStrip.conflictTitle')
+              : syncStrip.hasPending
+                ? t('home:syncStrip.pendingTitle')
+                : t('home:syncStrip.syncedTitle')}
           </Text>
         </View>
         <View style={styles.syncPillRow}>
           <Text style={styles.syncPillText}>{isOnline ? t('common:status.online') : t('common:status.offline')}</Text>
           <Text style={styles.syncPillText}>{isSignedIn ? t('home:syncStrip.cloudConnected') : t('home:syncStrip.cloudNeedsLogin')}</Text>
           <Text style={styles.syncPillText}>{t('home:syncStrip.lastSync', { value: lastSyncDisplay })}</Text>
-          <Text style={styles.syncPillText}>{pendingSyncCount > 0 ? t('home:syncStrip.pending', { count: pendingSyncCount }) : t('home:syncStrip.noPending')}</Text>
-          <Text style={styles.syncPillText}>{conflictCount > 0 ? t('home:syncStrip.conflicts', { count: conflictCount }) : t('home:syncStrip.noConflicts')}</Text>
+          <Text style={styles.syncPillText}>
+            {pendingSyncCount > 0 ? t('home:syncStrip.pending', { count: pendingSyncCount }) : t('home:syncStrip.noPending')}
+          </Text>
+          <Text style={styles.syncPillText}>
+            {conflictCount > 0 ? t('home:syncStrip.conflicts', { count: conflictCount }) : t('home:syncStrip.noConflicts')}
+          </Text>
         </View>
         {!isSignedIn ? (
-          <Pressable style={styles.cloudLoginButton} onPress={onLogin} android_ripple={{ color: colors.ripple }} testID='home.cloudLoginButton'>
+          <Pressable
+            style={styles.cloudLoginButton}
+            onPress={onLogin}
+            android_ripple={{ color: colors.ripple }}
+            testID='home.cloudLoginButton'
+          >
             <Text style={styles.cloudLoginText}>{t('home:actions.cloudLogin')}</Text>
           </Pressable>
         ) : null}

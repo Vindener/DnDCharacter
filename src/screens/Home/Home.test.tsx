@@ -41,7 +41,14 @@ const mocks = vi.hoisted(() => {
     navigation,
     parent,
     netInfo: { isConnected: true },
-    authState: { user: null as null | { displayName?: string; email?: string; photoURL?: string; providerData?: Array<{ photoURL?: string; email?: string }> } },
+    authState: {
+      user: null as null | {
+        displayName?: string;
+        email?: string;
+        photoURL?: string;
+        providerData?: Array<{ photoURL?: string; email?: string }>;
+      },
+    },
     characterState: {
       characters: [],
       isLoaded: true,
@@ -165,7 +172,6 @@ describe('Home screen', () => {
     const tree = await renderHome();
 
     expect(tree.root.findByProps({ testID: 'home.emptyState' })).toBeTruthy();
-    expect(tree.root.findByProps({ testID: 'home.emptyCreateButton' })).toBeTruthy();
 
     act(() => {
       tree.unmount();
@@ -246,16 +252,39 @@ describe('Home screen', () => {
     });
   });
 
-  it('shows quick actions before continue session', async () => {
-    const tree = await renderHome();
-    const screen = tree.root.findByProps({ testID: 'home.screen' });
-    const children = React.Children.toArray(screen.props.children) as Array<React.ReactElement<{ testID?: string }>>;
-    const quickIndex = children.findIndex((child) => child.props?.testID === 'home.quickActions');
-    const continueIndex = children.findIndex((child) => child.props?.testID === 'home.continueSession');
+  it('continue game button reopens the last session character', async () => {
+    const arthas = createEmptyCharacter({
+      id: 'arthas',
+      name: 'Arthas',
+      race: 'Human',
+      class: 'Paladin',
+      level: 5,
+      hp: { current: 32, max: 42, temp: 0 },
+      ac: 18,
+      initiative: 1,
+    });
+    mocks.characterState.characters = [arthas];
+    mocks.characterState.lastSessionCharacterId = 'arthas';
 
-    expect(quickIndex).toBeGreaterThan(-1);
-    expect(continueIndex).toBeGreaterThan(-1);
-    expect(quickIndex).toBeLessThan(continueIndex);
+    const tree = await renderHome();
+
+    const info = tree.root.findByProps({ testID: 'home.continueGameButton' });
+    expect(info).toBeTruthy();
+
+    await act(async () => {
+      tree.root.findByProps({ testID: 'home.continueGameButton' }).props.onPress();
+    });
+    expect(mocks.navigation.navigate).toHaveBeenCalledWith('Character', expect.anything());
+
+    act(() => {
+      tree.unmount();
+    });
+  });
+
+  it('hides continue game button info when there is no last session character', async () => {
+    const tree = await renderHome();
+
+    expect(() => tree.root.findByProps({ testID: 'home.continueSession' })).toThrow();
 
     act(() => {
       tree.unmount();

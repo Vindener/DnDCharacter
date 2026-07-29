@@ -7,8 +7,6 @@
     "openSpellbook": "Spells",
     "openBestiary": "Bestiary",
     "openDmTools": "GM Tools",
-    "continueSession": "Continue Session",
-    "openSheet": "Open Sheet",
     "cloudLogin": "Sign in for Cloud"
   },
   "sections": {
@@ -23,8 +21,6 @@
     "characters": "You do not have any characters yet.",
     "shared": "No shared characters.",
     "cloud": "No cloud characters.",
-    "firstCharacterTitle": "Create your first character",
-    "firstCharacterHint": "Start with a local character. Sync and sharing can be enabled later.",
     "noCharactersTitle": "No characters yet",
     "noCharactersHint": "Home becomes a quick start once the first sheet exists."
   },
@@ -39,8 +35,7 @@
     "shortLevel": "Lvl. {{level}}",
     "health": "Health",
     "ac": "AC",
-    "initiative": "Initiative",
-    "continueMeta": "Health {{current}}/{{max}} · AC {{ac}} · {{sync}}"
+    "initiative": "Initiative"
   },
   "syncStrip": {
     "errorTitle": "Loading Error",

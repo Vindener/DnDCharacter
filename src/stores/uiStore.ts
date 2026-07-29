@@ -10,12 +10,15 @@ export interface UiStore {
   theme: Theme;
   colors: ThemeColors;
   coins: CustomCoin[];
+  analyticsConsentEnabled: boolean;
   toggleTheme: () => Promise<void>;
   loadTheme: () => Promise<void>;
   load: () => Promise<void>;
   add: (data: Omit<CustomCoin, 'id'>) => Promise<void>;
   remove: (id: string) => Promise<void>;
   clearAll: () => Promise<void>;
+  setAnalyticsConsent: (enabled: boolean) => Promise<void>;
+  loadAnalyticsConsent: () => Promise<void>;
 }
 
 const useUiStore = create<UiStore>((set, get) => {
@@ -26,12 +29,15 @@ const useUiStore = create<UiStore>((set, get) => {
     theme: DarkTheme,
     colors: darkColors,
     coins: [],
+    analyticsConsentEnabled: false,
     toggleTheme: effects.toggleTheme,
     loadTheme: effects.loadTheme,
     load: effects.load,
     add: effects.add,
     remove: effects.remove,
     clearAll: effects.clearAll,
+    setAnalyticsConsent: effects.setAnalyticsConsent,
+    loadAnalyticsConsent: effects.loadAnalyticsConsent,
   };
 });
 

@@ -41,11 +41,28 @@ export const getStyles = (c: ThemeColors) =>
       flex: 1,
       gap: sp(4),
     },
-    greetingTitle: {
-      color: c.text,
-      fontSize: fs(22),
-      lineHeight: fs(28),
+    heroContinueButton: {
+      alignSelf: 'flex-start',
+      minHeight: 40,
+      borderRadius: rd(8),
+      backgroundColor: c.primary,
+      paddingVertical: sp(8),
+      paddingHorizontal: sp(12),
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: sp(8),
+    },
+    heroContinueButtonText: {
+      color: c.onPrimary,
+      fontSize: fs(18),
+      lineHeight: fs(24),
       fontWeight: '800',
+    },
+    heroContinueInfo: {
+      color: c.textSecondary,
+      fontSize: fs(13),
+      lineHeight: fs(18),
+      fontWeight: '600',
     },
     greetingMeta: {
       color: c.textSecondary,
@@ -72,28 +89,10 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: fs(22),
       fontWeight: '800',
     },
-    sectionEyebrow: {
-      color: c.textSecondary,
-      fontSize: fs(12),
-      fontWeight: '800',
-      textTransform: 'uppercase',
-    },
     sectionHint: {
       color: c.textSecondary,
       fontSize: fs(12),
       lineHeight: fs(17),
-    },
-    continueName: {
-      color: c.text,
-      fontSize: fs(17),
-      lineHeight: fs(24),
-      fontWeight: '800',
-    },
-    continueMeta: {
-      color: c.textSecondary,
-      fontSize: fs(13),
-      lineHeight: fs(18),
-      fontWeight: '600',
     },
 
     primaryButton: {

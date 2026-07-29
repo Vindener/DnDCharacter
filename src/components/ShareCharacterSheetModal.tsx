@@ -2,13 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { fs, rd, sp } from '@/shared/styles/tokens';
-import {
-  addEditorByEmail,
-  characterCloudRepository,
-  removeEditor,
-  subscribeCharacterSheet,
-} from '@/repositories/characterCloudRepository';
+import { addEditorByEmail, characterCloudRepository, removeEditor, subscribeCharacterSheet } from '@/repositories/characterCloudRepository';
 import useThemeStore from '@/context/Theme-store';
+import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 
 type Props = {
   visible: boolean;
@@ -139,6 +135,8 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
     try {
       await addEditorByEmail(sheetId, email);
       setEmail('');
+      trackProductEvent('sheet_shared');
+      trackProductEvent('editor_added');
     } catch (error: unknown) {
       setError(getErrorMessage(error));
     }
@@ -147,6 +145,7 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
   async function onRemove(uid: string) {
     try {
       await removeEditor(sheetId, uid);
+      trackProductEvent('editor_removed');
     } catch (error: unknown) {
       setError(getErrorMessage(error));
     }
@@ -197,10 +196,3 @@ export default function ShareCharacterSheetModal({ visible, onClose, sheetId }: 
     </Modal>
   );
 }
-
-
-
-
-
-
-

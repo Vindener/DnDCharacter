@@ -7,8 +7,6 @@
     "openSpellbook": "Заклинання",
     "openBestiary": "Бестіарій",
     "openDmTools": "Інструменти GM",
-    "continueSession": "Продовжити сесію",
-    "openSheet": "Відкрити лист",
     "cloudLogin": "Увійти для хмари"
   },
   "sections": {
@@ -23,8 +21,6 @@
     "characters": "У тебе ще немає персонажів.",
     "shared": "Немає спільних персонажів.",
     "cloud": "Немає персонажів у хмарі.",
-    "firstCharacterTitle": "Створи першого персонажа",
-    "firstCharacterHint": "Почни з локального персонажа. Синхронізацію й шерінг можна підключити пізніше.",
     "noCharactersTitle": "Ще немає персонажів",
     "noCharactersHint": "Головна стане швидким стартом, щойно з'явиться перший лист."
   },
@@ -39,8 +35,7 @@
     "shortLevel": "Рів. {{level}}",
     "health": "Здоров'я",
     "ac": "КЗ",
-    "initiative": "Ініціатива",
-    "continueMeta": "Здоров'я {{current}}/{{max}} · КЗ {{ac}} · {{sync}}"
+    "initiative": "Ініціатива"
   },
   "syncStrip": {
     "errorTitle": "Помилка завантаження",

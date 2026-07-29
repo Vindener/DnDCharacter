@@ -33,12 +33,14 @@ export default function AppNavigator() {
   const theme = useThemeStore((s) => s.theme);
   const colors = useThemeStore((s) => s.colors);
   const loadTheme = useThemeStore((s) => s.loadTheme);
+  const loadAnalyticsConsent = useThemeStore((s) => s.loadAnalyticsConsent);
   const insets = useSafeAreaInsets();
   const bottomInset = Math.max(insets.bottom, sp(6));
 
   useEffect(() => {
     loadTheme();
-  }, [loadTheme]);
+    loadAnalyticsConsent();
+  }, [loadTheme, loadAnalyticsConsent]);
 
   function getIconName(routeName: string): keyof typeof Ionicons.glyphMap {
     switch (routeName) {
@@ -90,5 +92,3 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
-
-

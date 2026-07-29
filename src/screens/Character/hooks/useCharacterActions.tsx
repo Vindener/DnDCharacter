@@ -35,6 +35,15 @@ import { fbAuth, timestampToMillis } from '@/services/firebase';
 import useSyncStore, { selectSyncByCharacterId, selectSyncStoreActions } from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
+
+// PII rule (CLAUDE.md §8.1): conflict telemetry may only carry a low-cardinality section
+// name, never the raw field paths or character id — a dot-path like "homebrew.entries.3"
+// could leak structural detail about a specific character's content.
+function conflictSectionFromPaths(paths: string[] | undefined): string {
+  if (!paths || !paths.length) return 'unknown';
+  const sections = new Set(paths.map((path) => path.split('.')[0] || 'unknown'));
+  return sections.size === 1 ? [...sections][0] : 'multiple';
+}
 import { appendQuickSessionNote, isHomebrewCharacter } from '@/shared/helpers/homebrew';
 import { parseCharacter } from '@/domain/schemas';
 import useTrackerTemplateStore, { SYSTEM_RESOURCE_TEMPLATES } from '@/context/TrackerTemplates-store';
@@ -534,9 +543,8 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   useEffect(() => {
     if (isCharacterMissing) return;
     if (currentSync?.status === 'conflict') {
-      trackProductEvent('sync_conflict_detected', {
-        characterId: baseCharacter.id,
-        paths: currentSync.conflictPaths,
+      trackProductEvent('conflict_shown', {
+        conflict_section: conflictSectionFromPaths(currentSync.conflictPaths),
       });
     }
   }, [baseCharacter.id, currentSync?.conflictPaths, currentSync?.status, isCharacterMissing]);
@@ -1672,7 +1680,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   );
 
   const resolveConflictWithLocal = useCallback(() => {
-    trackProductEvent('sync_conflict_resolved_local', { characterId: characterData.id });
+    trackProductEvent('conflict_resolved_local', { conflict_section: conflictSectionFromPaths(currentSync?.conflictPaths) });
     void resolveConflict({
       strategy: 'keep-local',
       character: characterData,
@@ -1715,7 +1723,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   ]);
 
   const resolveConflictWithCloud = useCallback(() => {
-    trackProductEvent('sync_conflict_resolved_cloud', { characterId: characterData.id });
+    trackProductEvent('conflict_resolved_cloud', { conflict_section: conflictSectionFromPaths(currentSync?.conflictPaths) });
     void resolveConflict({
       strategy: 'keep-cloud',
       character: characterData,
@@ -1757,7 +1765,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   ]);
 
   const resolveConflictManual = useCallback(() => {
-    trackProductEvent('sync_conflict_resolved_later', { characterId: characterData.id });
+    trackProductEvent('conflict_resolved_later', { conflict_section: conflictSectionFromPaths(currentSync?.conflictPaths) });
     void resolveConflict({
       strategy: 'later',
       character: characterData,
@@ -3570,16 +3578,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     </View>
   );
 
-  const onQuickActionPress = useCallback(
-    (action: { id: string; onPress: () => void }) => {
-      trackProductEvent('quick_action_used', {
-        characterId: characterData.id,
-        actionId: action.id,
-      });
-      action.onPress();
-    },
-    [characterData.id],
-  );
+  const onQuickActionPress = useCallback((action: { id: string; onPress: () => void }) => {
+    trackProductEvent('quick_action_used', { actionId: action.id });
+    action.onPress();
+  }, []);
 
   if (isCharacterMissing) {
     return {

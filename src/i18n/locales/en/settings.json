@@ -67,5 +67,10 @@
     "title": "Privacy Policy",
     "hint": "See what data the app collects and who can see it.",
     "open": "Open Privacy Policy"
+  },
+  "analytics": {
+    "title": "Usage analytics",
+    "hint": "Anonymous stats help us improve the app: action types and sync conflicts. No email, uid, character names, or note text. Off by default.",
+    "toggle": "Allow analytics"
   }
 }

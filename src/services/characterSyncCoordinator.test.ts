@@ -231,10 +231,9 @@ describe('characterSyncCoordinator helpers', () => {
       expect(result.status).toBe('error');
       expect(syncTelemetryMocks.toastError).toHaveBeenCalledTimes(1);
       expect(syncTelemetryMocks.trackProductEvent).toHaveBeenCalledWith('sync_failed', {
-        characterId: 'char-permission',
         code: 'firestore/permission-denied',
       });
-      expect(syncTelemetryMocks.trackProductEvent).toHaveBeenCalledWith('permission_denied_on_upload', { characterId: 'char-permission' });
+      expect(syncTelemetryMocks.trackProductEvent).toHaveBeenCalledWith('permission_denied_on_upload');
       expect(syncPort.markConflict).not.toHaveBeenCalled();
     });
 

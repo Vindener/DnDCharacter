@@ -9,6 +9,7 @@ export default defineConfig({
       '@react-navigation/native': resolve(__dirname, 'src/test/mocks/react-navigation-native.ts'),
       'react-native': resolve(__dirname, 'src/test/mocks/react-native.tsx'),
       'expo-modules-core': resolve(__dirname, 'src/test/mocks/expo-modules-core.ts'),
+      '@react-native-firebase/analytics': resolve(__dirname, 'src/test/mocks/react-native-firebase-analytics.ts'),
     },
   },
   test: {

@@ -24,6 +24,8 @@ const Settings = () => {
   const navigation = useNavigation<SettingsNavigation>();
   const isDark = useThemeStore((s) => s.isDark);
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  const analyticsConsentEnabled = useThemeStore((s) => s.analyticsConsentEnabled);
+  const setAnalyticsConsent = useThemeStore((s) => s.setAnalyticsConsent);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
@@ -181,6 +183,20 @@ const Settings = () => {
           <Pressable onPress={openPrivacyPolicy} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.actionButtonText}>{t('settings:privacyPolicy.open')}</Text>
           </Pressable>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('settings:analytics.title')}</Text>
+          <Text style={styles.sectionHint}>{t('settings:analytics.hint')}</Text>
+          <View style={styles.row}>
+            <Text style={styles.label}>{t('settings:analytics.toggle')}</Text>
+            <Switch
+              value={analyticsConsentEnabled}
+              onValueChange={(value) => void setAnalyticsConsent(value)}
+              trackColor={{ false: colors.border, true: colors.primary }}
+              thumbColor={colors.onPrimary}
+            />
+          </View>
         </View>
       </ScrollView>
 
