@@ -1,6 +1,7 @@
 <resources>
-  <color name="splashscreen_background">#ffffff</color>
-  <color name="iconBackground">#ffffff</color>
+  <!-- manual: brand refresh, red EE1B24 background for Mythgate mark -->
+  <color name="splashscreen_background">#EE1B24</color>
+  <color name="iconBackground">#EE1B24</color>
   <color name="colorPrimary">#023c69</color>
   <color name="colorPrimaryDark">#ffffff</color>
 </resources>
