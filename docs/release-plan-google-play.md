@@ -214,14 +214,18 @@ adb logcat -v time -s ReactNativeJS:V | grep -i "startup-trace"
 
 | # | Задача | DoD |
 | --- | --- | --- |
-| R4-1 | `expo-updates` + `updates.*` + `runtimeVersion` у `app.json`; `channel` у `eas.json`; вручну `ENABLED=true` і метадані в `AndroidManifest.xml` (позначити `// manual:`) | — |
-| R4-2 | **Живий тест OTA**: `eas update --branch preview` → встановлений preview-білд підхоплює апдейт після рестарту | Перевірено на девайсі, не «за докою» |
-| R4-3 | Задокументувати межу OTA: тільно JS/асети; permissions, іконки в `res/`, нативні модулі = новий AAB | Абзац у цьому файлі |
+| R4-1 | ✅ `expo-updates` + `updates.*` + `runtimeVersion` (`appVersion`-політика, `"1.0.0"`) у `app.json`; `channel: "production"` у `eas.json` (лише профіль `production`); вручну `ENABLED=true` і метадані в `AndroidManifest.xml` (`// manual: EAS Update`) | Код готовий, живий тест — окремо в R4-2 |
+| R4-2 | **Живий тест OTA**: `eas update --branch <branch, змаплений на channel production>` → встановлений build підхоплює апдейт після рестарту | Перевірено на девайсі, не «за докою» |
+| R4-3 | Задокументувати межу OTA: тільно JS/асети; permissions, іконки в `res/`, нативні модулі = новий AAB | Абзац у цьому файлі + `README.md` |
 | R4-4 | Store listing: назва, short (80) і full (4000) описи **без «Dungeons & Dragons»** і логотипів Wizards, SRD/OGL атрибуція; категорія, контакти, Privacy Policy URL | Усі поля заповнені |
 | R4-5 | Data Safety: email, ім'я, user-generated content, ідентифікатори аналітики; шифрування в транзиті; **передача даних між користувачами** (спільні аркуші); посилання на видалення акаунта | Форма прийнята |
 | R4-6 | App content: content rating, target audience, ads = немає, news = ні | Заповнено |
 | R4-7 | Скріншоти (4–8, 1080×1920) + feature graphic 1024×500; реліз-нотатки uk + en | Завантажено |
 | R4-8 | Бренд, **якщо асети надійшли**: `assets/*` + `res/mipmap-*` + `drawable-*/splashscreen_logo.png`, стиснути PNG, узгодити `userInterfaceStyle` і фон сплешу (REL-6) | Іконка й сплеш оновлені в білді, не лише в `app.json` |
+
+**Межа OTA (R4-3):** `eas update` доставляє лише JS-бандл і статичні асети, завантажені через Metro/`export:embed`. Зміна `permissions`, іконок у `res/mipmap-*`/`drawable-*`, нативних модулів (нового `npm install` пакета з native-кодом) або значень у `AndroidManifest.xml`/`build.gradle` вимагає нового AAB — жоден `eas update` цього не донесе, застосунок на пристрої просто продовжить використовувати стару нативну частину.
+
+**Канали й `runtimeVersion` (R4-1, зафіксовано):** `runtimeVersion` — політика `appVersion` (буквально `app.json.version`, дублюється в `android/app/src/main/res/values/strings.xml` → `expo_runtime_version`, бо `android/` закомічений і `expo prebuild` не запускається — синхронізація завжди ручна). Один закомічений `AndroidManifest.xml` обслуговує і `preview`, і `production` EAS-профілі (обидва — release-варіант, per-профільного оверлею нема), тому канал у манифесті зафіксовано як `"production"` для обох. `eas.json` отримав `channel: "production"` лише в профілі `production` — у `preview` це поле нічого не міняло б і було б неправдивим записом. Практично це означає: `preview`-профіль лишається інструментом ручного QA нового AAB, а не окремою OTA-веткою; живий тест R4-2 варто ганяти проти каналу `production` — closed-testing трек і так є ізольованою малою аудиторією.
 
 **Специфікація для дизайнера** (щоб не було другого раунду):
 

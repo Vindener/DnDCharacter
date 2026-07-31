@@ -98,16 +98,18 @@ const Bestiary = () => {
   }, [filters.search]);
 
   const typeOptions = useMemo(
-    () => collectUnique(monsters.map((monster) => monster.type || '')).sort((a, b) =>
-      getLocalizedMonsterTerm(a, i18n.language).localeCompare(getLocalizedMonsterTerm(b, i18n.language), i18n.language),
-    ),
+    () =>
+      collectUnique(monsters.map((monster) => monster.type || '')).sort((a, b) =>
+        getLocalizedMonsterTerm(a, i18n.language).localeCompare(getLocalizedMonsterTerm(b, i18n.language), i18n.language),
+      ),
     [i18n.language, monsters],
   );
   const environmentOptions = useMemo(() => collectUnique(monsters.map((monster) => monster.environment || '')), [monsters]);
   const sizeOptions = useMemo(
-    () => collectUnique(monsters.map((monster) => monster.size || '')).sort((a, b) =>
-      getLocalizedMonsterTerm(a, i18n.language).localeCompare(getLocalizedMonsterTerm(b, i18n.language), i18n.language),
-    ),
+    () =>
+      collectUnique(monsters.map((monster) => monster.size || '')).sort((a, b) =>
+        getLocalizedMonsterTerm(a, i18n.language).localeCompare(getLocalizedMonsterTerm(b, i18n.language), i18n.language),
+      ),
     [i18n.language, monsters],
   );
   const sourceOptions = useMemo(
@@ -212,30 +214,87 @@ const Bestiary = () => {
               `cr-${item}`,
             ),
           )}
-          {renderChoiceChip(t('filters.favorites'), filters.favoritesOnly, () => patchFilters({ favoritesOnly: !filters.favoritesOnly }), 'bestiary.filter.favorites', 'favorites')}
-          {renderChoiceChip(filters.type === 'all' ? t('filters.type') : getLocalizedMonsterTerm(filters.type, i18n.language), filters.type !== 'all', () => patchFilters({ type: 'all' }), undefined, 'type-all')}
+          {renderChoiceChip(
+            t('filters.favorites'),
+            filters.favoritesOnly,
+            () => patchFilters({ favoritesOnly: !filters.favoritesOnly }),
+            'bestiary.filter.favorites',
+            'favorites',
+          )}
+          {renderChoiceChip(
+            filters.type === 'all' ? t('filters.type') : getLocalizedMonsterTerm(filters.type, i18n.language),
+            filters.type !== 'all',
+            () => patchFilters({ type: 'all' }),
+            undefined,
+            'type-all',
+          )}
           {typeOptions.map((option) =>
-            renderChoiceChip(getLocalizedMonsterTerm(option, i18n.language), filters.type === option, () => patchFilters({ type: option }), `bestiary.filter.type.${option}`, `type-${option}`),
+            renderChoiceChip(
+              getLocalizedMonsterTerm(option, i18n.language),
+              filters.type === option,
+              () => patchFilters({ type: option }),
+              `bestiary.filter.type.${option}`,
+              `type-${option}`,
+            ),
           )}
-          {renderChoiceChip(filters.environment === 'all' ? t('filters.environment') : filters.environment, filters.environment !== 'all', () => patchFilters({ environment: 'all' }), undefined, 'environment-all')}
+          {renderChoiceChip(
+            filters.environment === 'all' ? t('filters.environment') : filters.environment,
+            filters.environment !== 'all',
+            () => patchFilters({ environment: 'all' }),
+            undefined,
+            'environment-all',
+          )}
           {environmentOptions.map((option) =>
-            renderChoiceChip(option, filters.environment === option, () => patchFilters({ environment: option }), undefined, `environment-${option}`),
+            renderChoiceChip(
+              option,
+              filters.environment === option,
+              () => patchFilters({ environment: option }),
+              undefined,
+              `environment-${option}`,
+            ),
           )}
-          {renderChoiceChip(filters.size === 'all' ? t('filters.size') : getLocalizedMonsterTerm(filters.size, i18n.language), filters.size !== 'all', () => patchFilters({ size: 'all' }), undefined, 'size-all')}
-          {sizeOptions.map((option) => renderChoiceChip(getLocalizedMonsterTerm(option, i18n.language), filters.size === option, () => patchFilters({ size: option }), undefined, `size-${option}`))}
-          {renderChoiceChip(filters.source === 'all' ? t('filters.source') : filters.source, filters.source !== 'all', () => patchFilters({ source: 'all' }), undefined, 'source-all')}
-          {sourceOptions.map((option) => renderChoiceChip(
-            option,
-            filters.source === option,
-            () => patchFilters({ source: option }),
-            `bestiary.source.${option}`,
-            `source-${option}`,
-          ))}
+          {renderChoiceChip(
+            filters.size === 'all' ? t('filters.size') : getLocalizedMonsterTerm(filters.size, i18n.language),
+            filters.size !== 'all',
+            () => patchFilters({ size: 'all' }),
+            undefined,
+            'size-all',
+          )}
+          {sizeOptions.map((option) =>
+            renderChoiceChip(
+              getLocalizedMonsterTerm(option, i18n.language),
+              filters.size === option,
+              () => patchFilters({ size: option }),
+              undefined,
+              `size-${option}`,
+            ),
+          )}
+          {renderChoiceChip(
+            filters.source === 'all' ? t('filters.source') : filters.source,
+            filters.source !== 'all',
+            () => patchFilters({ source: 'all' }),
+            undefined,
+            'source-all',
+          )}
+          {sourceOptions.map((option) =>
+            renderChoiceChip(
+              option,
+              filters.source === option,
+              () => patchFilters({ source: option }),
+              `bestiary.source.${option}`,
+              `source-${option}`,
+            ),
+          )}
         </ScrollView>
         {activeFilterCount ? (
           <View style={styles.activeFiltersRow}>
             <Text style={styles.activeFiltersText}>{t('filters.active', { count: activeFilterCount })}</Text>
-            <Pressable style={styles.clearButton} onPress={clearFilters} android_ripple={{ color: colors.ripple }} testID='bestiary.clearFiltersButton'>
+            <Pressable
+              style={styles.clearButton}
+              onPress={clearFilters}
+              android_ripple={{ color: colors.ripple }}
+              testID='bestiary.clearFiltersButton'
+            >
               <Text style={styles.clearButtonText}>{t('filters.clear')}</Text>
             </Pressable>
           </View>

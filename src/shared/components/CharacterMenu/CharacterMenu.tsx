@@ -41,7 +41,14 @@ interface CharacterMenuProps {
   onSyncNow?: () => void;
 }
 
-const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCloudDoc = false, isSharedSheet = false, isOwnedByMe = true, onSyncNow }) => {
+const CharacterMenu: React.FC<CharacterMenuProps> = ({
+  character,
+  onChange,
+  isCloudDoc = false,
+  isSharedSheet = false,
+  isOwnedByMe = true,
+  onSyncNow,
+}) => {
   const { t } = useTranslation('character');
   const navigation = useNavigation<StackNavigationProp<TabStackParamList>>();
   const updateCharacter = useCharacterStore((s: CharacterStoreState) => s.updateCharacter);
@@ -113,7 +120,6 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
     }
   }, [isInitModalVisible, characterData.initiative]);
 
-
   const [shareOpen, setShareOpen] = useState(false);
   const openMenu = () => setMenuVisible(true);
 
@@ -159,25 +165,19 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       setCharacterData(syncedCharacter);
       onChange?.(syncedCharacter);
 
-      const successMessage = result.created
-        ? t('legacy.menu.savedToCloud')
-        : t('legacy.menu.updatedInCloud');
+      const successMessage = result.created ? t('legacy.menu.savedToCloud') : t('legacy.menu.updatedInCloud');
 
-      Alert.alert(
-        t('legacy.menu.successTitle'),
-        successMessage,
-        [
-          {
-            text: t('legacy.menu.ok'),
-            onPress: () => {
-              closeMenu();
-              if (targetSheetId !== character.id) {
-                navigation.navigate('Character', { character: syncedCharacter });
-              }
-            },
+      Alert.alert(t('legacy.menu.successTitle'), successMessage, [
+        {
+          text: t('legacy.menu.ok'),
+          onPress: () => {
+            closeMenu();
+            if (targetSheetId !== character.id) {
+              navigation.navigate('Character', { character: syncedCharacter });
+            }
           },
-        ],
-      );
+        },
+      ]);
     } catch (error: unknown) {
       const message = errorCodeOrMessage(error);
       if (__DEV__) console.warn('[save] failed', message);
@@ -245,10 +245,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       navigation.navigate('Home');
     } catch (error: unknown) {
       if (__DEV__) console.warn('[delete character] failed', errorCodeOrMessage(error));
-      Alert.alert(
-        t('legacy.menu.deleteErrorTitle'),
-        deleteCloud ? t('legacy.menu.deleteCloudFailed') : t('legacy.menu.deleteLocalFailed'),
-      );
+      Alert.alert(t('legacy.menu.deleteErrorTitle'), deleteCloud ? t('legacy.menu.deleteCloudFailed') : t('legacy.menu.deleteLocalFailed'));
     }
   };
 
@@ -256,30 +253,24 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
     closeMenu();
 
     if (isCharacterInCloud && isOwnedByMe) {
-      Alert.alert(
-        t('legacy.menu.deleteTitle'),
-        t('legacy.menu.deleteWithCloudMessage'),
-        [
-          { text: t('legacy.menu.cancel'), style: 'cancel' },
-          {
-            text: t('legacy.menu.deleteLocalOnly'),
-            onPress: () => void deleteCopies(false),
-          },
-          {
-            text: t('legacy.menu.deleteLocalAndCloud'),
-            style: 'destructive',
-            onPress: () => void deleteCopies(true),
-          },
-        ],
-      );
+      Alert.alert(t('legacy.menu.deleteTitle'), t('legacy.menu.deleteWithCloudMessage'), [
+        { text: t('legacy.menu.cancel'), style: 'cancel' },
+        {
+          text: t('legacy.menu.deleteLocalOnly'),
+          onPress: () => void deleteCopies(false),
+        },
+        {
+          text: t('legacy.menu.deleteLocalAndCloud'),
+          style: 'destructive',
+          onPress: () => void deleteCopies(true),
+        },
+      ]);
       return;
     }
 
     Alert.alert(
       t('legacy.menu.deleteTitle'),
-      isCharacterInCloud
-        ? t('legacy.menu.deleteSharedLocalMessage')
-        : t('legacy.menu.deleteLocalMessage'),
+      isCharacterInCloud ? t('legacy.menu.deleteSharedLocalMessage') : t('legacy.menu.deleteLocalMessage'),
       [
         { text: t('legacy.menu.cancel'), style: 'cancel' },
         {
@@ -305,7 +296,9 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         if (characterData.id) updateCharacter(characterData.id, updated);
         onChange?.(updated);
       }
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   };
 
   const removePhoto = () => {
@@ -413,11 +406,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           {t('legacy.menu.rename')}
         </MenuItem>
 
-        <MenuItem
-          textStyle={styles.destructiveMenuItemText}
-          onPress={confirmDelete}
-          accessibilityLabel={t('legacy.menu.deleteCharacter')}
-        >
+        <MenuItem textStyle={styles.destructiveMenuItemText} onPress={confirmDelete} accessibilityLabel={t('legacy.menu.deleteCharacter')}>
           {t('legacy.menu.deleteCharacter')}
         </MenuItem>
 
@@ -516,12 +505,21 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
         >
           {t('legacy.menu.share')}
         </MenuItem>
-
       </Menu>
-      <Modal isVisible={isNameModalVisible} onClose={() => setIsNameModalVisible(false)} onSubmit={handleNameChange} title={t('legacy.menu.newName')}>
+      <Modal
+        isVisible={isNameModalVisible}
+        onClose={() => setIsNameModalVisible(false)}
+        onSubmit={handleNameChange}
+        title={t('legacy.menu.newName')}
+      >
         <TextInput value={newName} onChangeText={setNewName} style={styles.tableCell} />
       </Modal>
-      <Modal isVisible={isSpeedModalVisible} onClose={() => setIsSpeedModalVisible(false)} onSubmit={handleSaveSpeed} title={t('legacy.menu.speed')}>
+      <Modal
+        isVisible={isSpeedModalVisible}
+        onClose={() => setIsSpeedModalVisible(false)}
+        onSubmit={handleSaveSpeed}
+        title={t('legacy.menu.speed')}
+      >
         <TextInput
           value={String(tempSpeed)}
           onChangeText={(t) => {
@@ -541,7 +539,12 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           keyboardType='numeric'
         />
       </Modal>
-      <Modal isVisible={isInitModalVisible} onClose={() => setIsInitModalVisible(false)} onSubmit={handleSaveInit} title={t('legacy.menu.initiative')}>
+      <Modal
+        isVisible={isInitModalVisible}
+        onClose={() => setIsInitModalVisible(false)}
+        onSubmit={handleSaveInit}
+        title={t('legacy.menu.initiative')}
+      >
         <TextInput
           value={String(tempInit)}
           onChangeText={(t) => {
@@ -551,7 +554,12 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
           keyboardType='numeric'
         />
       </Modal>
-      <Modal isVisible={isExpModalVisible} onClose={() => setIsExpModalVisible(false)} onSubmit={handleSaveExp} title={t('legacy.menu.experience')}>
+      <Modal
+        isVisible={isExpModalVisible}
+        onClose={() => setIsExpModalVisible(false)}
+        onSubmit={handleSaveExp}
+        title={t('legacy.menu.experience')}
+      >
         <Text style={styles.modalInfoText}>{t('legacy.menu.levelValue', { level: getLevelByExperience(tempExp) })}</Text>
         <Text style={styles.modalInfoText}>{t('legacy.menu.experienceValue', { experience: tempExp })}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: sp(12) }}>
@@ -596,15 +604,5 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
     </>
   );
 };
-
-
-
-
-
-
-
-
-
-
 
 export default CharacterMenu;

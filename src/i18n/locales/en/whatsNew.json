@@ -1,0 +1,9 @@
+{
+  "title": "What's new in {{version}}",
+  "intro": "A few changes worth knowing about:",
+  "items": [
+    "The character sheet now opens faster after starting the app.",
+    "Fixed minor issues in the Bestiary and Spellbook."
+  ],
+  "gotIt": "Got it"
+}

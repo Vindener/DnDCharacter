@@ -18,6 +18,7 @@ import { initI18n } from '@/i18n';
 import useThemeStore from '@/context/Theme-store';
 import { markStartup, printStartupTrace } from '@/shared/services/telemetry/startupTrace';
 import { ErrorBoundary } from '@/shared/components/ErrorBoundary/ErrorBoundary';
+import WhatsNewModal from '@/shared/components/WhatsNewModal/WhatsNewModal';
 
 // PERF-5: keep the native splash on screen until i18n is ready, instead of the JS side
 // briefly rendering `null` after the splash auto-hides (the white flash between them).
@@ -98,6 +99,7 @@ export default function App() {
               <AppNavigator />
             </NavigatorRenderProbe>
             <Toast />
+            <WhatsNewModal />
           </SafeAreaProvider>
         </GestureHandlerRootView>
       </AuthProvider>

@@ -21,6 +21,7 @@ import ukDnd from './locales/uk/dnd.json';
 import ukReferences from './locales/uk/references.json';
 import ukInitiative from './locales/uk/initiative.json';
 import ukLegal from './locales/uk/legal.json';
+import ukWhatsNew from './locales/uk/whatsNew.json';
 
 import enCommon from './locales/en/common.json';
 import enNavigation from './locales/en/navigation.json';
@@ -37,6 +38,7 @@ import enDnd from './locales/en/dnd.json';
 import enReferences from './locales/en/references.json';
 import enInitiative from './locales/en/initiative.json';
 import enLegal from './locales/en/legal.json';
+import enWhatsNew from './locales/en/whatsNew.json';
 
 export const resources = {
   uk: {
@@ -55,6 +57,7 @@ export const resources = {
     references: ukReferences,
     initiative: ukInitiative,
     legal: ukLegal,
+    whatsNew: ukWhatsNew,
   },
   en: {
     common: enCommon,
@@ -72,6 +75,7 @@ export const resources = {
     references: enReferences,
     initiative: enInitiative,
     legal: enLegal,
+    whatsNew: enWhatsNew,
   },
 } as const;
 
@@ -139,6 +143,7 @@ export async function initI18n(): Promise<void> {
       'references',
       'initiative',
       'legal',
+      'whatsNew',
     ],
     interpolation: {
       escapeValue: false,

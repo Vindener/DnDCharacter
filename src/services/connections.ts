@@ -1,7 +1,10 @@
-
 import { db, now, fbAuth } from './firebase';
 
-function uid() { const u = fbAuth.currentUser; if (!u) throw new Error('Not signed in'); return u.uid; }
+function uid() {
+  const u = fbAuth.currentUser;
+  if (!u) throw new Error('Not signed in');
+  return u.uid;
+}
 
 function errorMeta(error: unknown): { code: string; message: string } {
   if (!error || typeof error !== 'object') {
@@ -25,10 +28,7 @@ export async function ensureConnection(toUid: string) {
   let existingId: string | null = null;
 
   try {
-    const q1 = await db.collection('connections')
-      .where('fromUid', '==', me)
-      .where('toUid', '==', toUid)
-      .get();
+    const q1 = await db.collection('connections').where('fromUid', '==', me).where('toUid', '==', toUid).get();
     if (!q1.empty) existingId = q1.docs[0].id;
   } catch (error: unknown) {
     const meta = errorMeta(error);
@@ -37,10 +37,7 @@ export async function ensureConnection(toUid: string) {
 
   if (!existingId) {
     try {
-      const q2 = await db.collection('connections')
-        .where('fromUid', '==', toUid)
-        .where('toUid', '==', me)
-        .get();
+      const q2 = await db.collection('connections').where('fromUid', '==', toUid).where('toUid', '==', me).get();
       if (!q2.empty) existingId = q2.docs[0].id;
     } catch (error: unknown) {
       const meta = errorMeta(error);

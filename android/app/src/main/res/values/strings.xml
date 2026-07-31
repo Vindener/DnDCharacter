@@ -2,4 +2,6 @@
   <string name="app_name">Mythgate 5e Companion</string>
   <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
   <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <!-- manual: EAS Update — must be bumped together with app.json "version" and build.gradle versionName -->
+  <string name="expo_runtime_version" translatable="false">1.0.0</string>
 </resources>

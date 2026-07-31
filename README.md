@@ -115,7 +115,24 @@ npx eas-cli build --platform all --profile production
 
 - `app.json` → `expo.version` — the config-level version, used by Expo/EAS tooling and (if referenced) `expo-constants` at runtime.
 - `android/app/build.gradle` → `defaultConfig.versionName` — the version Google Play actually displays. Because prebuild never regenerates this file, it must be bumped by hand every time.
+- `android/app/src/main/res/values/strings.xml` → `expo_runtime_version` — the runtime version expo-updates uses to match installed builds against published OTA updates (`app.json` → `expo.runtimeVersion`, `appVersion` policy). Prebuild doesn't regenerate this either, so it must be bumped by hand too.
 
-Bump both files together when releasing. If only `app.json` is updated, the store keeps showing the old `versionName` from `build.gradle`, and if `runtimeVersion` policy is `appVersion`, OTA updates can target the wrong build.
+Bump all three together when releasing. If only `app.json` is updated, the store keeps showing the old `versionName` from `build.gradle`, and a stale `expo_runtime_version` means OTA updates silently stop reaching installed builds (the app and the update no longer report the same runtime version).
 
 `versionCode` (in `build.gradle`) is **not** edited by hand — `eas.json` sets `cli.appVersionSource: "remote"`, so EAS Build assigns and increments it automatically.
+
+## Publishing an OTA update
+
+`expo-updates` is enabled (`ENABLED=true` in `AndroidManifest.xml`) and wired to the `production` EAS Update channel. The `production` and `preview` EAS Build profiles share one committed `AndroidManifest.xml` (no per-profile overlay), so **both** bake in channel `"production"` — there is no separate `preview` OTA channel in this bare setup. `preview` builds remain useful for manual QA of a new AAB before it goes to Google Play, not as a distinct update lane.
+
+Publish a JS/asset-only update to installed builds:
+
+```bash
+npx eas-cli update --branch production
+```
+
+The installed app checks for updates on every launch (`EXPO_UPDATES_CHECK_ON_LAUNCH=ALWAYS`) without blocking the cold start (`EXPO_UPDATES_LAUNCH_WAIT_MS=0` / `fallbackToCacheTimeout: 0`), and applies a downloaded update on the **next** full app restart (not hot reload).
+
+**OTA can only ship JS and static assets.** Anything that changes `AndroidManifest.xml`, `android/app/build.gradle`, native permissions, `res/mipmap-*`/`drawable-*` icons, or adds a native module requires a new AAB — `eas update` cannot deliver any of that, and an installed build will keep running its old native layer regardless of what gets published.
+
+If an update doesn't apply after a restart, check `adb logcat | grep -i expo-updates` on the device — the most common causes are a `runtimeVersion` mismatch (device's `expo_runtime_version` vs. the published update's runtime version) or a wrong/missing channel-to-branch mapping in the EAS dashboard (`eas channel:create` / `eas channel:edit`).

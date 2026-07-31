@@ -5,7 +5,13 @@ import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import useCharacterStore from '@/context/Character-store';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName } from '@/domain/spellbook';
+import {
+  applySpellStatus,
+  collectCharacterSpellNames,
+  getCharacterSpellStatus,
+  getPreparedSpellsLimit,
+  normalizeSpellName,
+} from '@/domain/spellbook';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { formatSchemaErrors, safeParseSpellFormInput, SPELL_DAMAGE_TYPES } from '@/domain/schemas';
 import type { CharacterSpellStatus, SpellComponents, SpellDamageProfile, SpellbookSpell } from '@/types/Spellbook';
@@ -20,11 +26,7 @@ import {
 } from './spellbookFilters';
 import { getStyles } from './styles';
 import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
-import {
-  getLocalizedSpellClass,
-  getLocalizedSpellFields,
-  getLocalizedSpellSchool,
-} from '@/domain/srd/localization';
+import { getLocalizedSpellClass, getLocalizedSpellFields, getLocalizedSpellSchool } from '@/domain/srd/localization';
 
 type Props = {
   route: {
@@ -94,10 +96,10 @@ function hasCasterSetup(character: CharacterViewModel | null): boolean {
   const slotLevels = Object.keys(character.spells?.spellSlots || {});
   return Boolean(
     character.spells?.spellcastingAbility ||
-      slotLevels.length ||
-      character.spells?.cantrips?.length ||
-      character.spells?.knownSpells?.length ||
-      character.spells?.preparedSpells?.length,
+    slotLevels.length ||
+    character.spells?.cantrips?.length ||
+    character.spells?.knownSpells?.length ||
+    character.spells?.preparedSpells?.length,
   );
 }
 
@@ -482,7 +484,8 @@ const Spellbook = ({ route }: Props) => {
           <View style={styles.cardHeaderMain}>
             <Text style={styles.spellName}>{display.name}</Text>
             <Text style={styles.meta}>
-              {item.level === 0 ? t('levels.cantrip') : t('levels.level', { level: item.level })} · {display.school || t('labels.unknownSchool')}
+              {item.level === 0 ? t('levels.cantrip') : t('levels.level', { level: item.level })} ·{' '}
+              {display.school || t('labels.unknownSchool')}
             </Text>
             {sourceLabel ? (
               <View style={styles.tagRow}>
@@ -498,7 +501,11 @@ const Spellbook = ({ route }: Props) => {
               android_ripple={{ color: colors.ripple }}
               style={styles.favoriteButton}
             >
-              <MaterialCommunityIcons name={isPinned ? 'pin' : 'pin-outline'} size={20} color={isPinned ? colors.highlight : colors.textSecondary} />
+              <MaterialCommunityIcons
+                name={isPinned ? 'pin' : 'pin-outline'}
+                size={20}
+                color={isPinned ? colors.highlight : colors.textSecondary}
+              />
             </Pressable>
           ) : null}
           <Pressable
@@ -518,10 +525,18 @@ const Spellbook = ({ route }: Props) => {
         </View>
 
         <View style={styles.metadataGrid}>
-          <Text style={styles.metadataText}>{t('labels.cast')}: {display.castingTime || '—'}</Text>
-          <Text style={styles.metadataText}>{t('labels.range')}: {display.range || '—'}</Text>
-          <Text style={styles.metadataText}>{t('labels.components')}: {componentsToText(display.components, t('labels.noComponents'))}</Text>
-          <Text style={styles.metadataText}>{t('labels.duration')}: {display.duration || '—'}</Text>
+          <Text style={styles.metadataText}>
+            {t('labels.cast')}: {display.castingTime || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('labels.range')}: {display.range || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('labels.components')}: {componentsToText(display.components, t('labels.noComponents'))}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('labels.duration')}: {display.duration || '—'}
+          </Text>
         </View>
 
         <View style={styles.tagRow}>
@@ -531,12 +546,16 @@ const Spellbook = ({ route }: Props) => {
             </Text>
           </View>
           <View style={[styles.smallTag, item.ritual ? styles.smallTagActive : null]}>
-            <Text style={[styles.smallTagText, item.ritual ? styles.smallTagTextActive : null]}>{t('labels.ritual')}: {item.ritual ? t('boolean.yes') : t('boolean.no')}</Text>
+            <Text style={[styles.smallTagText, item.ritual ? styles.smallTagTextActive : null]}>
+              {t('labels.ritual')}: {item.ritual ? t('boolean.yes') : t('boolean.no')}
+            </Text>
           </View>
         </View>
 
         <View style={styles.statusLine}>
-          <Text style={styles.statusText}>{t('labels.status')}: {t(`status.${status}`)}</Text>
+          <Text style={styles.statusText}>
+            {t('labels.status')}: {t(`status.${status}`)}
+          </Text>
         </View>
 
         {renderStatusActions(item)}
@@ -551,7 +570,11 @@ const Spellbook = ({ route }: Props) => {
             <Text style={styles.cardActionText}>{isEditableSpellSource(item) ? t('actions.edit') : t('actions.copy')}</Text>
           </Pressable>
           {isEditableSpellSource(item) ? (
-            <Pressable style={styles.deleteCustomButton} onPress={() => void removeCustomSpell(item.id)} android_ripple={{ color: colors.ripple }}>
+            <Pressable
+              style={styles.deleteCustomButton}
+              onPress={() => void removeCustomSpell(item.id)}
+              android_ripple={{ color: colors.ripple }}
+            >
               <Text style={styles.deleteCustomButtonText}>{t('actions.delete')}</Text>
             </Pressable>
           ) : null}
@@ -615,8 +638,14 @@ const Spellbook = ({ route }: Props) => {
               </Text>
             </Pressable>
           ))}
-          <Pressable style={[styles.chip, classFilter !== 'all' ? styles.chipActive : null]} onPress={() => setClassFilter('all')} android_ripple={{ color: colors.ripple }}>
-            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{classFilter === 'all' ? t('filters.class') : getLocalizedSpellClass(classFilter, sortLocale)}</Text>
+          <Pressable
+            style={[styles.chip, classFilter !== 'all' ? styles.chipActive : null]}
+            onPress={() => setClassFilter('all')}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>
+              {classFilter === 'all' ? t('filters.class') : getLocalizedSpellClass(classFilter, sortLocale)}
+            </Text>
           </Pressable>
           {classOptions.map((className) => (
             <Pressable
@@ -625,11 +654,19 @@ const Spellbook = ({ route }: Props) => {
               onPress={() => setClassFilter(className)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, classFilter === className ? styles.chipTextActive : null]}>{getLocalizedSpellClass(className, sortLocale)}</Text>
+              <Text style={[styles.chipText, classFilter === className ? styles.chipTextActive : null]}>
+                {getLocalizedSpellClass(className, sortLocale)}
+              </Text>
             </Pressable>
           ))}
-          <Pressable style={[styles.chip, schoolFilter !== 'all' ? styles.chipActive : null]} onPress={() => setSchoolFilter('all')} android_ripple={{ color: colors.ripple }}>
-            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{schoolFilter === 'all' ? t('filters.school') : getLocalizedSpellSchool(schoolFilter, sortLocale)}</Text>
+          <Pressable
+            style={[styles.chip, schoolFilter !== 'all' ? styles.chipActive : null]}
+            onPress={() => setSchoolFilter('all')}
+            android_ripple={{ color: colors.ripple }}
+          >
+            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>
+              {schoolFilter === 'all' ? t('filters.school') : getLocalizedSpellSchool(schoolFilter, sortLocale)}
+            </Text>
           </Pressable>
           {schoolOptions.map((school) => (
             <Pressable
@@ -638,7 +675,9 @@ const Spellbook = ({ route }: Props) => {
               onPress={() => setSchoolFilter(school)}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={[styles.chipText, schoolFilter === school ? styles.chipTextActive : null]}>{getLocalizedSpellSchool(school, sortLocale)}</Text>
+              <Text style={[styles.chipText, schoolFilter === school ? styles.chipTextActive : null]}>
+                {getLocalizedSpellSchool(school, sortLocale)}
+              </Text>
             </Pressable>
           ))}
           {BOOLEAN_FILTERS.map((item) => (
@@ -680,8 +719,14 @@ const Spellbook = ({ route }: Props) => {
         <View style={styles.characterPickerBlock}>
           <Text style={styles.sectionLabel}>{t('characterBinding.title')}</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-            <Pressable style={[styles.chip, !selectedCharacter ? styles.chipActive : null]} onPress={() => setSelectedCharacterId('')} android_ripple={{ color: colors.ripple }}>
-              <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>{t('characterBinding.referenceOnly')}</Text>
+            <Pressable
+              style={[styles.chip, !selectedCharacter ? styles.chipActive : null]}
+              onPress={() => setSelectedCharacterId('')}
+              android_ripple={{ color: colors.ripple }}
+            >
+              <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>
+                {t('characterBinding.referenceOnly')}
+              </Text>
             </Pressable>
             {characters.map((character) => (
               <Pressable
@@ -696,8 +741,14 @@ const Spellbook = ({ route }: Props) => {
               </Pressable>
             ))}
           </ScrollView>
-          {selectedCharacter && selectedPreparedLimit !== null ? <Text style={styles.preparedInfo}>{t('characterBinding.prepared', { count: selectedPreparedCount, limit: selectedPreparedLimit })}</Text> : null}
-          {selectedCharacter && !selectedCharacterIsCaster ? <Text style={styles.preparedWarning}>{t('characterBinding.notCaster')}</Text> : null}
+          {selectedCharacter && selectedPreparedLimit !== null ? (
+            <Text style={styles.preparedInfo}>
+              {t('characterBinding.prepared', { count: selectedPreparedCount, limit: selectedPreparedLimit })}
+            </Text>
+          ) : null}
+          {selectedCharacter && !selectedCharacterIsCaster ? (
+            <Text style={styles.preparedWarning}>{t('characterBinding.notCaster')}</Text>
+          ) : null}
           {notice ? <Text style={styles.preparedWarning}>{notice}</Text> : null}
         </View>
       ) : null}
@@ -724,7 +775,11 @@ const Spellbook = ({ route }: Props) => {
         isVisible={Boolean(selectedSpell)}
         onClose={() => setSelectedSpellId(null)}
         title={selectedSpell ? getDisplaySpell(selectedSpell, sortLocale).name : t('detail.title')}
-        subtitle={selectedSpell ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(selectedSpell, sortLocale).school}` : undefined}
+        subtitle={
+          selectedSpell
+            ? `${selectedSpell.level === 0 ? t('levels.cantrip') : t('levels.level', { level: selectedSpell.level })} · ${getDisplaySpell(selectedSpell, sortLocale).school}`
+            : undefined
+        }
       >
         {selectedSpell ? (
           <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
@@ -734,69 +789,89 @@ const Spellbook = ({ route }: Props) => {
               const licenseLabel = getLicenseLabel(t, selectedSpell.license);
               return (
                 <>
-            <View style={styles.metadataGrid}>
-              <Text style={styles.metadataText}>{t('labels.castingTime')}: {display.castingTime || '—'}</Text>
-              <Text style={styles.metadataText}>{t('labels.range')}: {display.range || '—'}</Text>
-              <Text style={styles.metadataText}>{t('labels.components')}: {componentsToText(display.components, t('labels.noComponents'))}</Text>
-              <Text style={styles.metadataText}>{t('labels.duration')}: {display.duration || '—'}</Text>
-            </View>
-            <View style={styles.tagRow}>
-              {sourceLabel ? (
-                <View style={styles.sourceBadge} testID='spellbook.detailSourceBadge'>
-                  <Text style={styles.sourceBadgeText}>{sourceLabel}</Text>
-                </View>
-              ) : null}
-              <View style={[styles.smallTag, selectedSpell.concentration ? styles.smallTagActive : null]}>
-                <Text style={[styles.smallTagText, selectedSpell.concentration ? styles.smallTagTextActive : null]}>
-                  {t('labels.concentration')}: {selectedSpell.concentration ? t('boolean.yes') : t('boolean.no')}
-                </Text>
-              </View>
-              <View style={[styles.smallTag, selectedSpell.ritual ? styles.smallTagActive : null]}>
-                <Text style={[styles.smallTagText, selectedSpell.ritual ? styles.smallTagTextActive : null]}>{t('labels.ritual')}: {selectedSpell.ritual ? t('boolean.yes') : t('boolean.no')}</Text>
-              </View>
-            </View>
-            <Text style={styles.modalLabel}>{t('labels.description')}</Text>
-            <Text style={styles.description}>{display.description || t('detail.noDescription')}</Text>
-            {display.higherLevels ? (
-              <>
-                <Text style={styles.modalLabel}>{t('labels.higherLevels')}</Text>
-                <Text style={styles.description}>{display.higherLevels}</Text>
-              </>
-            ) : null}
-            <Text style={styles.modalLabel}>{t('labels.classes')}</Text>
-            <Text style={styles.description}>{display.classes.length ? display.classes.join(', ') : '—'}</Text>
-            <Text style={styles.modalLabel}>{t('labels.tags')}</Text>
-            <Text style={styles.description}>{selectedSpell.tags.length ? selectedSpell.tags.join(', ') : '—'}</Text>
-            {sourceLabel ? (
-              <>
-                <Text style={styles.modalLabel}>{t('labels.sourceMetadata')}</Text>
-                <Text style={styles.description}>
-                  {t('labels.source')}: {sourceLabel}
-                  {licenseLabel ? ` · ${t('labels.license')}: ${licenseLabel}` : ''}
-                </Text>
-              </>
-            ) : null}
-            {display.damageProfiles.length ? (
-              <View style={styles.damageBlock}>
-                {display.damageProfiles.map((damage) => (
-                  <Text key={damage.id} style={styles.damageLine}>
-                    {damage.label}: {damage.formula} {damage.damageType}
-                    {damage.condition ? ` (${damage.condition})` : ''}
-                  </Text>
-                ))}
-              </View>
-            ) : null}
+                  <View style={styles.metadataGrid}>
+                    <Text style={styles.metadataText}>
+                      {t('labels.castingTime')}: {display.castingTime || '—'}
+                    </Text>
+                    <Text style={styles.metadataText}>
+                      {t('labels.range')}: {display.range || '—'}
+                    </Text>
+                    <Text style={styles.metadataText}>
+                      {t('labels.components')}: {componentsToText(display.components, t('labels.noComponents'))}
+                    </Text>
+                    <Text style={styles.metadataText}>
+                      {t('labels.duration')}: {display.duration || '—'}
+                    </Text>
+                  </View>
+                  <View style={styles.tagRow}>
+                    {sourceLabel ? (
+                      <View style={styles.sourceBadge} testID='spellbook.detailSourceBadge'>
+                        <Text style={styles.sourceBadgeText}>{sourceLabel}</Text>
+                      </View>
+                    ) : null}
+                    <View style={[styles.smallTag, selectedSpell.concentration ? styles.smallTagActive : null]}>
+                      <Text style={[styles.smallTagText, selectedSpell.concentration ? styles.smallTagTextActive : null]}>
+                        {t('labels.concentration')}: {selectedSpell.concentration ? t('boolean.yes') : t('boolean.no')}
+                      </Text>
+                    </View>
+                    <View style={[styles.smallTag, selectedSpell.ritual ? styles.smallTagActive : null]}>
+                      <Text style={[styles.smallTagText, selectedSpell.ritual ? styles.smallTagTextActive : null]}>
+                        {t('labels.ritual')}: {selectedSpell.ritual ? t('boolean.yes') : t('boolean.no')}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={styles.modalLabel}>{t('labels.description')}</Text>
+                  <Text style={styles.description}>{display.description || t('detail.noDescription')}</Text>
+                  {display.higherLevels ? (
+                    <>
+                      <Text style={styles.modalLabel}>{t('labels.higherLevels')}</Text>
+                      <Text style={styles.description}>{display.higherLevels}</Text>
+                    </>
+                  ) : null}
+                  <Text style={styles.modalLabel}>{t('labels.classes')}</Text>
+                  <Text style={styles.description}>{display.classes.length ? display.classes.join(', ') : '—'}</Text>
+                  <Text style={styles.modalLabel}>{t('labels.tags')}</Text>
+                  <Text style={styles.description}>{selectedSpell.tags.length ? selectedSpell.tags.join(', ') : '—'}</Text>
+                  {sourceLabel ? (
+                    <>
+                      <Text style={styles.modalLabel}>{t('labels.sourceMetadata')}</Text>
+                      <Text style={styles.description}>
+                        {t('labels.source')}: {sourceLabel}
+                        {licenseLabel ? ` · ${t('labels.license')}: ${licenseLabel}` : ''}
+                      </Text>
+                    </>
+                  ) : null}
+                  {display.damageProfiles.length ? (
+                    <View style={styles.damageBlock}>
+                      {display.damageProfiles.map((damage) => (
+                        <Text key={damage.id} style={styles.damageLine}>
+                          {damage.label}: {damage.formula} {damage.damageType}
+                          {damage.condition ? ` (${damage.condition})` : ''}
+                        </Text>
+                      ))}
+                    </View>
+                  ) : null}
                 </>
               );
             })()}
             {renderStatusActions(selectedSpell)}
             <View style={styles.cardActionRow}>
-              <Pressable style={styles.cardActionButton} onPress={() => void toggleFavorite(selectedSpell.id)} android_ripple={{ color: colors.ripple }}>
+              <Pressable
+                style={styles.cardActionButton}
+                onPress={() => void toggleFavorite(selectedSpell.id)}
+                android_ripple={{ color: colors.ripple }}
+              >
                 <MaterialCommunityIcons name={favoriteSet.has(selectedSpell.id) ? 'star' : 'star-outline'} size={14} color={colors.text} />
-                <Text style={styles.cardActionText}>{favoriteSet.has(selectedSpell.id) ? t('actions.removeFavorite') : t('actions.addFavorite')}</Text>
+                <Text style={styles.cardActionText}>
+                  {favoriteSet.has(selectedSpell.id) ? t('actions.removeFavorite') : t('actions.addFavorite')}
+                </Text>
               </Pressable>
               {isDmMode ? (
-                <Pressable style={styles.cardActionButton} onPress={() => void togglePinnedSpell(selectedSpell.id)} android_ripple={{ color: colors.ripple }}>
+                <Pressable
+                  style={styles.cardActionButton}
+                  onPress={() => void togglePinnedSpell(selectedSpell.id)}
+                  android_ripple={{ color: colors.ripple }}
+                >
                   <MaterialCommunityIcons name={pinnedSet.has(selectedSpell.id) ? 'pin' : 'pin-outline'} size={14} color={colors.text} />
                   <Text style={styles.cardActionText}>{pinnedSet.has(selectedSpell.id) ? t('actions.unpin') : t('actions.pin')}</Text>
                 </Pressable>
@@ -832,35 +907,114 @@ const Spellbook = ({ route }: Props) => {
       >
         <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
           <Text style={styles.modalLabel}>{t('form.name')}</Text>
-          <TextInput value={modalName} onChangeText={setModalName} placeholder={t('form.placeholders.name')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalName}
+            onChangeText={setModalName}
+            placeholder={t('form.placeholders.name')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.level')}</Text>
-          <TextInput value={modalLevel} onChangeText={setModalLevel} keyboardType='number-pad' placeholder='1' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalLevel}
+            onChangeText={setModalLevel}
+            keyboardType='number-pad'
+            placeholder='1'
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.school')}</Text>
-          <TextInput value={modalSchool} onChangeText={setModalSchool} placeholder={t('form.placeholders.school')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalSchool}
+            onChangeText={setModalSchool}
+            placeholder={t('form.placeholders.school')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.castingTime')}</Text>
-          <TextInput value={modalCastingTime} onChangeText={setModalCastingTime} placeholder={t('defaults.castingTime')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalCastingTime}
+            onChangeText={setModalCastingTime}
+            placeholder={t('defaults.castingTime')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.range')}</Text>
-          <TextInput value={modalRange} onChangeText={setModalRange} placeholder={t('form.placeholders.range')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalRange}
+            onChangeText={setModalRange}
+            placeholder={t('form.placeholders.range')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.components')}</Text>
-          <TextInput value={modalComponents} onChangeText={setModalComponents} placeholder={t('form.placeholders.components')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalComponents}
+            onChangeText={setModalComponents}
+            placeholder={t('form.placeholders.components')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.duration')}</Text>
-          <TextInput value={modalDuration} onChangeText={setModalDuration} placeholder={t('form.placeholders.duration')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalDuration}
+            onChangeText={setModalDuration}
+            placeholder={t('form.placeholders.duration')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <View style={styles.toggleRow}>
-            <Pressable style={[styles.statusButton, modalRitual ? styles.statusButtonActive : null]} onPress={() => setModalRitual((value) => !value)} android_ripple={{ color: colors.ripple }}>
+            <Pressable
+              style={[styles.statusButton, modalRitual ? styles.statusButtonActive : null]}
+              onPress={() => setModalRitual((value) => !value)}
+              android_ripple={{ color: colors.ripple }}
+            >
               <Text style={[styles.statusButtonText, modalRitual ? styles.statusButtonTextActive : null]}>{t('labels.ritual')}</Text>
             </Pressable>
-            <Pressable style={[styles.statusButton, modalConcentration ? styles.statusButtonActive : null]} onPress={() => setModalConcentration((value) => !value)} android_ripple={{ color: colors.ripple }}>
-              <Text style={[styles.statusButtonText, modalConcentration ? styles.statusButtonTextActive : null]}>{t('labels.concentration')}</Text>
+            <Pressable
+              style={[styles.statusButton, modalConcentration ? styles.statusButtonActive : null]}
+              onPress={() => setModalConcentration((value) => !value)}
+              android_ripple={{ color: colors.ripple }}
+            >
+              <Text style={[styles.statusButtonText, modalConcentration ? styles.statusButtonTextActive : null]}>
+                {t('labels.concentration')}
+              </Text>
             </Pressable>
           </View>
           <Text style={styles.modalLabel}>{t('form.description')}</Text>
-          <TextInput value={modalDescription} onChangeText={setModalDescription} placeholder={t('form.placeholders.description')} placeholderTextColor={colors.textSecondary} style={[styles.modalInput, styles.modalInputMultiline]} multiline />
+          <TextInput
+            value={modalDescription}
+            onChangeText={setModalDescription}
+            placeholder={t('form.placeholders.description')}
+            placeholderTextColor={colors.textSecondary}
+            style={[styles.modalInput, styles.modalInputMultiline]}
+            multiline
+          />
           <Text style={styles.modalLabel}>{t('form.higherLevels')}</Text>
-          <TextInput value={modalHigherLevels} onChangeText={setModalHigherLevels} placeholder={t('form.placeholders.higherLevels')} placeholderTextColor={colors.textSecondary} style={[styles.modalInput, styles.modalInputMultiline]} multiline />
+          <TextInput
+            value={modalHigherLevels}
+            onChangeText={setModalHigherLevels}
+            placeholder={t('form.placeholders.higherLevels')}
+            placeholderTextColor={colors.textSecondary}
+            style={[styles.modalInput, styles.modalInputMultiline]}
+            multiline
+          />
           <Text style={styles.modalLabel}>{t('form.classes')}</Text>
-          <TextInput value={modalClasses} onChangeText={setModalClasses} placeholder='Wizard, Sorcerer' placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalClasses}
+            onChangeText={setModalClasses}
+            placeholder='Wizard, Sorcerer'
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.tags')}</Text>
-          <TextInput value={modalTags} onChangeText={setModalTags} placeholder={t('form.placeholders.tags')} placeholderTextColor={colors.textSecondary} style={styles.modalInput} />
+          <TextInput
+            value={modalTags}
+            onChangeText={setModalTags}
+            placeholder={t('form.placeholders.tags')}
+            placeholderTextColor={colors.textSecondary}
+            style={styles.modalInput}
+          />
           <Text style={styles.modalLabel}>{t('form.damageProfiles')}</Text>
           <TextInput
             value={modalDamageProfiles}
