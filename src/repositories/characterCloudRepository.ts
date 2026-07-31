@@ -624,11 +624,11 @@ export async function saveCharacterSheetAsNew(dto: CharacterCloudDto) {
     const ref = db.collection('characterSheets').doc();
     const content = stripUndefinedDeep(dtoToSheet(dto));
     await ref.set(content);
-    console.log('LOG  [save] create ok for id', ref.id);
+    if (__DEV__) console.log('LOG  [save] create ok for id', ref.id);
     return ref.id;
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err);
-    console.warn('WARN [save] save-as-new failed', message);
+    if (__DEV__) console.warn('WARN [save] save-as-new failed', message);
     return null;
   }
 }

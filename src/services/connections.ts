@@ -18,7 +18,7 @@ export async function ensureConnection(toUid: string) {
   const me = uid();
   if (toUid === me) return null;
 
-  console.log('[share] ensureConnection: me =', me, 'toUid =', toUid);
+  if (__DEV__) console.log('[share] ensureConnection: me =', me, 'toUid =', toUid);
 
   // 🔒 IMPORTANT: avoid 'in' queries that could touch docs we're not participant of
   // Query only docs where current user is participant to satisfy Firestore rules.
@@ -32,7 +32,7 @@ export async function ensureConnection(toUid: string) {
     if (!q1.empty) existingId = q1.docs[0].id;
   } catch (error: unknown) {
     const meta = errorMeta(error);
-    console.warn('[share] connections q1 failed', meta.code, meta.message);
+    if (__DEV__) console.warn('[share] connections q1 failed', meta.code, meta.message);
   }
 
   if (!existingId) {
@@ -44,11 +44,11 @@ export async function ensureConnection(toUid: string) {
       if (!q2.empty) existingId = q2.docs[0].id;
     } catch (error: unknown) {
       const meta = errorMeta(error);
-      console.warn('[share] connections q2 failed', meta.code, meta.message);
+      if (__DEV__) console.warn('[share] connections q2 failed', meta.code, meta.message);
     }
   }
 
-  console.log('[share] existing connection id =', existingId);
+  if (__DEV__) console.log('[share] existing connection id =', existingId);
 
   if (existingId) return existingId;
 
@@ -65,7 +65,7 @@ export async function ensureConnection(toUid: string) {
     await ref.set(doc);
   } catch (error: unknown) {
     const meta = errorMeta(error);
-    console.warn('[share] ensureConnection set failed', meta.code, meta.message);
+    if (__DEV__) console.warn('[share] ensureConnection set failed', meta.code, meta.message);
     if (meta.code !== 'permission-denied') throw error;
   }
 

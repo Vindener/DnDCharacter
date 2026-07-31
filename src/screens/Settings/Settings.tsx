@@ -74,7 +74,7 @@ const Settings = () => {
       try {
         await changeAppLanguage(language);
       } catch (error) {
-        console.warn('[i18n] Failed to change language:', error);
+        if (__DEV__) console.warn('[i18n] Failed to change language:', error);
         setSelectedLanguage(previousLanguage);
       }
     },

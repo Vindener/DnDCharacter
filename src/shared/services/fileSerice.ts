@@ -37,7 +37,7 @@ class FileService {
 
       return characterMapper.draftToEntity(jsonData);
     } catch (error) {
-      console.error('Error importing character:', error);
+      if (__DEV__) console.error('Error importing character:', error);
       return null;
     }
   }
@@ -68,7 +68,7 @@ class FileService {
 
       return jsonData;
     } catch (error) {
-      console.error('Error importing monster:', error);
+      if (__DEV__) console.error('Error importing monster:', error);
       return null;
     }
   }
@@ -109,7 +109,7 @@ class FileService {
 
       return monsters.map((m) => ({ ...m, id: m.id || Date.now().toString() }));
     } catch (error) {
-      console.error('Error importing monster book:', error);
+      if (__DEV__) console.error('Error importing monster book:', error);
       return null;
     }
   }
@@ -152,7 +152,7 @@ class FileService {
       await FileSystem.writeAsStringAsync(fileUri, jsonString, { encoding: FileSystem.EncodingType.UTF8 });
       await Sharing.shareAsync(fileUri);
     } catch (error) {
-      console.error('Error exporting character:', error);
+      if (__DEV__) console.error('Error exporting character:', error);
     }
   }
 
@@ -178,7 +178,7 @@ class FileService {
       });
       await Sharing.shareAsync(fileUri);
     } catch (error) {
-      console.error('Error exporting monster:', error);
+      if (__DEV__) console.error('Error exporting monster:', error);
     }
   }
 }

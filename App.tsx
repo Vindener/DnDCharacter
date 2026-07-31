@@ -68,7 +68,7 @@ export default function App() {
   React.useEffect(() => {
     initI18n()
       .catch((error) => {
-        console.warn('[i18n] Failed to initialize:', error);
+        if (__DEV__) console.warn('[i18n] Failed to initialize:', error);
       })
       .finally(() => {
         markStartup('i18n-ready');

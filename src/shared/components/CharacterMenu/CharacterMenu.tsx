@@ -180,7 +180,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       );
     } catch (error: unknown) {
       const message = errorCodeOrMessage(error);
-      console.warn('[save] failed', message);
+      if (__DEV__) console.warn('[save] failed', message);
       if (message === 'Not signed in') {
         Alert.alert(t('legacy.menu.authErrorTitle'), t('legacy.menu.authErrorMessage'));
       } else {
@@ -244,7 +244,7 @@ const CharacterMenu: React.FC<CharacterMenuProps> = ({ character, onChange, isCl
       closeMenu();
       navigation.navigate('Home');
     } catch (error: unknown) {
-      console.warn('[delete character] failed', errorCodeOrMessage(error));
+      if (__DEV__) console.warn('[delete character] failed', errorCodeOrMessage(error));
       Alert.alert(
         t('legacy.menu.deleteErrorTitle'),
         deleteCloud ? t('legacy.menu.deleteCloudFailed') : t('legacy.menu.deleteLocalFailed'),
