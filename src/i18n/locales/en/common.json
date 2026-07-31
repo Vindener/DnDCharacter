@@ -62,6 +62,11 @@
     "required": "This field is required",
     "invalidValue": "Invalid value"
   },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "message": "Your character data is safe on this device. You can try again.",
+    "restart": "Restart"
+  },
   "auth": {
     "googleSignIn": "Google sign-in",
     "firebaseAuth": "Firebase auth",

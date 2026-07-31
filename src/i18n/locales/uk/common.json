@@ -62,6 +62,11 @@
     "required": "Це поле обов'язкове",
     "invalidValue": "Некоректне значення"
   },
+  "errorBoundary": {
+    "title": "Щось пішло не так",
+    "message": "Дані персонажа збережені на пристрої. Спробуйте ще раз.",
+    "restart": "Перезапустити"
+  },
   "auth": {
     "googleSignIn": "Google вхід",
     "firebaseAuth": "Firebase авторизація",

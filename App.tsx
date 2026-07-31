@@ -3,18 +3,38 @@ import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import crashlytics from '@react-native-firebase/crashlytics';
 import AppNavigator from './src/navigation/AppNavigator';
 import 'expo-dev-client';
-import { AuthProvider } from '@/shared/services/auth/auth';
+import { AuthProvider, useAuth } from '@/shared/services/auth/auth';
 import Toast from 'react-native-toast-message';
 import { initI18n } from '@/i18n';
 import useThemeStore from '@/context/Theme-store';
 import { markStartup, printStartupTrace } from '@/shared/services/telemetry/startupTrace';
+import { ErrorBoundary } from '@/shared/components/ErrorBoundary/ErrorBoundary';
 
 const AppStatusBar = () => {
   const isDark = useThemeStore((s) => s.isDark);
 
   return <StatusBar style={isDark ? 'light' : 'dark'} />;
+};
+
+// REL-1 / P3.4: keeps Crashlytics' user association in sync with both auth state and the
+// user's analytics consent (CLAUDE.md §8.1) — no consent means no uid on crash reports.
+const CrashlyticsUserBinding = () => {
+  const { user } = useAuth();
+  const analyticsConsentEnabled = useThemeStore((s) => s.analyticsConsentEnabled);
+
+  React.useEffect(() => {
+    const uid = analyticsConsentEnabled && user ? user.uid : '';
+    void crashlytics()
+      .setUserId(uid)
+      .catch(() => {
+        /* intentionally ignored */
+      });
+  }, [user, analyticsConsentEnabled]);
+
+  return null;
 };
 
 // PERF-1: fires once after AppNavigator's sibling subtree first commits — a proxy for
@@ -49,16 +69,19 @@ export default function App() {
   }
 
   return (
-    <AuthProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <SafeAreaProvider>
-          <AppStatusBar />
-          <NavigatorRenderProbe>
-            <AppNavigator />
-          </NavigatorRenderProbe>
-          <Toast />
-        </SafeAreaProvider>
-      </GestureHandlerRootView>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <SafeAreaProvider>
+            <AppStatusBar />
+            <CrashlyticsUserBinding />
+            <NavigatorRenderProbe>
+              <AppNavigator />
+            </NavigatorRenderProbe>
+            <Toast />
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }

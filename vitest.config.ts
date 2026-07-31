@@ -10,6 +10,7 @@ export default defineConfig({
       'react-native': resolve(__dirname, 'src/test/mocks/react-native.tsx'),
       'expo-modules-core': resolve(__dirname, 'src/test/mocks/expo-modules-core.ts'),
       '@react-native-firebase/analytics': resolve(__dirname, 'src/test/mocks/react-native-firebase-analytics.ts'),
+      '@react-native-firebase/crashlytics': resolve(__dirname, 'src/test/mocks/react-native-firebase-crashlytics.ts'),
     },
   },
   test: {
