@@ -19,6 +19,7 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:rules": "firebase emulators:exec --project mythgatednd --only firestore \"vitest run --config vitest.rules.config.ts\"",
+    "release:check": "node scripts/release-check.mjs",
     "profile:manual:dev-client:android": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/manual-dev-client-android.ps1"
   },
   "dependencies": {

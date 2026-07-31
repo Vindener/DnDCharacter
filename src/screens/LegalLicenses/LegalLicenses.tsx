@@ -7,7 +7,8 @@ import type { ThemeColors } from '@/shared/styles/theme';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 
 const LEGAL_SOURCE_LINKS = [
-  { labelKey: 'sources.srdOglPdf', url: 'https://media.wizards.com/2016/downloads/DND/SRD-OGL_V5.1.pdf' },
+  { labelKey: 'sources.srdDocument', url: 'https://dnd.wizards.com/resources/systems-reference-document' },
+  { labelKey: 'sources.ccLicense', url: 'https://creativecommons.org/licenses/by/4.0/legalcode' },
   { labelKey: 'sources.srdFaq', url: 'https://www.dndbeyond.com/srd' },
 ];
 
@@ -23,29 +24,45 @@ const LegalLicenses = () => {
   return (
     <Screen contentStyle={styles.content}>
       <Card style={styles.card}>
-        <Text variant='title' weight='bold'>{t('title')}</Text>
-        <Text tone='secondary' style={styles.body}>{t('intro')}</Text>
+        <Text variant='title' weight='bold'>
+          {t('title')}
+        </Text>
+        <Text tone='secondary' style={styles.body}>
+          {t('intro')}
+        </Text>
       </Card>
 
       <Card style={styles.card}>
-        <Text variant='subtitle' weight='bold'>{t('sections.srd.title')}</Text>
-        <Text tone='secondary' style={styles.body}>{t('sections.srd.body')}</Text>
+        <Text variant='subtitle' weight='bold'>
+          {t('sections.srd.title')}
+        </Text>
+        <Text tone='secondary' style={styles.body}>
+          {t('sections.srd.body')}
+        </Text>
       </Card>
 
       <Card style={styles.card}>
-        <Text variant='subtitle' weight='bold'>{t('sections.productIdentity.title')}</Text>
-        <Text tone='secondary' style={styles.body}>{t('sections.productIdentity.body')}</Text>
+        <Text variant='subtitle' weight='bold'>
+          {t('sections.trademarks.title')}
+        </Text>
+        <Text tone='secondary' style={styles.body}>
+          {t('sections.trademarks.body')}
+        </Text>
       </Card>
 
       <Card style={styles.card}>
-        <Text variant='subtitle' weight='bold'>{t('sections.notice.title')}</Text>
-        <Text tone='secondary' style={styles.notice}>{t('sections.notice.ogl')}</Text>
-        <Text tone='secondary' style={styles.notice}>{t('sections.notice.srd')}</Text>
-        <Text tone='secondary' style={styles.body}>{t('sections.notice.placeholder')}</Text>
+        <Text variant='subtitle' weight='bold'>
+          {t('sections.notice.title')}
+        </Text>
+        <Text tone='secondary' style={styles.notice}>
+          {t('sections.notice.attribution')}
+        </Text>
       </Card>
 
       <Card style={styles.card}>
-        <Text variant='subtitle' weight='bold'>{t('sources.title')}</Text>
+        <Text variant='subtitle' weight='bold'>
+          {t('sources.title')}
+        </Text>
         <View style={styles.links}>
           {LEGAL_SOURCE_LINKS.map((source) => (
             <Pressable
@@ -55,7 +72,9 @@ const LegalLicenses = () => {
               onPress={() => openSource(source.url)}
               style={styles.linkButton}
             >
-              <Text weight='bold' style={styles.linkText}>{t(source.labelKey)}</Text>
+              <Text weight='bold' style={styles.linkText}>
+                {t(source.labelKey)}
+              </Text>
             </Pressable>
           ))}
         </View>

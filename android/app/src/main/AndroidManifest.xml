@@ -3,9 +3,6 @@
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  <!-- manual: RECORD_AUDIO removed for Play policy (PLY-3) — image-picker used library-only, no video/audio capture -->
-  <!-- manual: SYSTEM_ALERT_WINDOW removed for Play policy (PLY-3) — unused in release; dev overlay already declared in android/app/src/debug/AndroidManifest.xml -->
-  <!-- manual: CAMERA blocked for Play policy (PLY-3) — merged in from expo-image-picker's AAR though unused (launchImageLibraryAsync only) -->
   <uses-permission android:name="android.permission.CAMERA" tools:node="remove"/>
   <queries>
     <intent>
@@ -14,18 +11,12 @@
       <data android:scheme="https"/>
     </intent>
   </queries>
-  <!-- manual: requestLegacyExternalStorage removed for Play policy (PLY-3) — no-op on targetSdk>=30, already ignored by the OS -->
   <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="true" android:theme="@style/AppTheme" android:supportsRtl="true">
-    <!-- manual: EAS Update — android/ is committed, prebuild does not run; keep in sync with app.json expo.updates -->
     <meta-data android:name="expo.modules.updates.ENABLED" android:value="true"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0"/>
-    <!-- manual: EAS Update — literal projectId from app.json extra.eas.projectId -->
     <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://u.expo.dev/6d4ab658-1bc9-48a0-8c86-eeffa8f2a85e"/>
-    <!-- manual: EAS Update — value lives in res/values/strings.xml (expo_runtime_version) -->
     <meta-data android:name="expo.modules.updates.EXPO_RUNTIME_VERSION" android:value="@string/expo_runtime_version"/>
-    <!-- manual: EAS Update — this manifest is shared by the preview and production EAS Build profiles (both release variant, no per-profile overlay), so the channel is fixed to "production" for both; see docs/release-plan-google-play.md R4-1 -->
-    <meta-data android:name="expo.modules.updates.UPDATES_CONFIGURATION_REQUEST_HEADERS_KEY" android:value="{&quot;expo-channel-name&quot;:&quot;production&quot;}"/>
     <activity android:name=".MainActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:theme="@style/Theme.App.SplashScreen" android:exported="true" android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>

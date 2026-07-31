@@ -217,7 +217,7 @@ adb logcat -v time -s ReactNativeJS:V | grep -i "startup-trace"
 | R4-1 | ✅ `expo-updates` + `updates.*` + `runtimeVersion` (`appVersion`-політика, `"1.0.0"`) у `app.json`; `channel: "production"` у `eas.json` (лише профіль `production`); вручну `ENABLED=true` і метадані в `AndroidManifest.xml` (`// manual: EAS Update`) | Код готовий, живий тест — окремо в R4-2 |
 | R4-2 | **Живий тест OTA**: `eas update --branch <branch, змаплений на channel production>` → встановлений build підхоплює апдейт після рестарту | Перевірено на девайсі, не «за докою» |
 | R4-3 | Задокументувати межу OTA: тільно JS/асети; permissions, іконки в `res/`, нативні модулі = новий AAB | Абзац у цьому файлі + `README.md` |
-| R4-4 | Store listing: назва, short (80) і full (4000) описи **без «Dungeons & Dragons»** і логотипів Wizards, SRD/OGL атрибуція; категорія, контакти, Privacy Policy URL | Усі поля заповнені |
+| R4-4 | ✅ Store listing (чернетка `docs/store-listing.md`): назва, short (80) і full (4000) описи **без «Dungeons & Dragons»** і логотипів Wizards, SRD 5.1 (CC-BY-4.0) атрибуція («5E compatible» — дозволено ліцензією); категорія, контакти, Privacy Policy URL | Чернетка готова, фінальне заповнення Play Console — на користувачі |
 | R4-5 | Data Safety: email, ім'я, user-generated content, ідентифікатори аналітики; шифрування в транзиті; **передача даних між користувачами** (спільні аркуші); посилання на видалення акаунта | Форма прийнята |
 | R4-6 | App content: content rating, target audience, ads = немає, news = ні | Заповнено |
 | R4-7 | Скріншоти (4–8, 1080×1920) + feature graphic 1024×500; реліз-нотатки uk + en | Завантажено |
