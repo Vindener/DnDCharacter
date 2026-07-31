@@ -3,6 +3,7 @@ import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
 import crashlytics from '@react-native-firebase/crashlytics';
 import AppNavigator from './src/navigation/AppNavigator';
 // PERF-4: 'expo-dev-client' patches the release bundle's dev menu/inspector hooks in even
@@ -17,6 +18,12 @@ import { initI18n } from '@/i18n';
 import useThemeStore from '@/context/Theme-store';
 import { markStartup, printStartupTrace } from '@/shared/services/telemetry/startupTrace';
 import { ErrorBoundary } from '@/shared/components/ErrorBoundary/ErrorBoundary';
+
+// PERF-5: keep the native splash on screen until i18n is ready, instead of the JS side
+// briefly rendering `null` after the splash auto-hides (the white flash between them).
+void SplashScreen.preventAutoHideAsync().catch(() => {
+  /* intentionally ignored */
+});
 
 const AppStatusBar = () => {
   const isDark = useThemeStore((s) => s.isDark);
@@ -68,6 +75,13 @@ export default function App() {
         setIsI18nReady(true);
       });
   }, []);
+
+  React.useEffect(() => {
+    if (!isI18nReady) return;
+    void SplashScreen.hideAsync().catch(() => {
+      /* intentionally ignored */
+    });
+  }, [isI18nReady]);
 
   if (!isI18nReady) {
     return null;
