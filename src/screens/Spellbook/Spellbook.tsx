@@ -713,6 +713,10 @@ const Spellbook = ({ route }: Props) => {
           contentContainerStyle={styles.listContent}
           renderItem={renderSpellCard}
           ListEmptyComponent={<Text style={styles.empty}>{t('empty')}</Text>}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={7}
+          removeClippedSubviews
         />
       ) : null}
 

@@ -319,6 +319,10 @@ const Bestiary = () => {
         )}
         contentContainerStyle={styles.listContent}
         keyboardShouldPersistTaps='handled'
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={7}
+        removeClippedSubviews
       />
 
       <View style={styles.buttonContainer}>
