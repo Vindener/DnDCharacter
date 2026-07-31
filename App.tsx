@@ -5,7 +5,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import crashlytics from '@react-native-firebase/crashlytics';
 import AppNavigator from './src/navigation/AppNavigator';
-import 'expo-dev-client';
+// PERF-4: 'expo-dev-client' patches the release bundle's dev menu/inspector hooks in even
+// when built for production, so it's only pulled in when running in a dev build.
+if (__DEV__) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- conditional side-effect import can't be a static `import`
+  require('expo-dev-client');
+}
 import { AuthProvider, useAuth } from '@/shared/services/auth/auth';
 import Toast from 'react-native-toast-message';
 import { initI18n } from '@/i18n';
