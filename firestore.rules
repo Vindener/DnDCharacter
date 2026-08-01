@@ -131,6 +131,40 @@ service cloud.firestore {
       allow delete: if isCampaignOwner();
     }
 
+    match /dmCampaignInvites/{code} {
+      // Capability-style invite codes for campaign membership — deliberately NOT the
+      // emailIndex pattern (SEC-2): no email->uid trust hop, and list:false means codes
+      // can't be enumerated. Redemption (adding the redeemer to dmCampaigns.editors) is
+      // NOT done here — a non-member cannot self-add per the dmCampaigns update rule
+      // above, so redemption goes through the redeemCampaignInvite Cloud Function (Admin
+      // SDK, bypasses these rules). These rules only gate direct client access/writes.
+      function isValidDmCampaignInviteWrite() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['id', 'campaignId', 'role', 'createdByUid', 'createdAtMs', 'expiresAtMs', 'usedByUids'])
+          && d.id == code
+          && d.campaignId is string
+          && d.role == 'editor'
+          && d.createdByUid is string
+          && d.createdAtMs is int
+          && d.expiresAtMs is int
+          && d.usedByUids is list;
+      }
+
+      // Any signed-in user may read a specific invite by its exact (random, unguessable)
+      // code — this is the capability check. list stays disabled so codes can't be
+      // enumerated by querying the collection.
+      allow get: if isSignedIn();
+      allow list: if false;
+      allow create: if isSignedIn()
+        && request.resource.data.createdByUid == uid()
+        && get(/databases/$(database)/documents/dmCampaigns/$(request.resource.data.campaignId)).data.owners.hasAny([uid()])
+        && isValidDmCampaignInviteWrite();
+      // All mutation after creation (marking a code as used, expiring it) happens via
+      // redeemCampaignInvite (Admin SDK). No revoke/delete path yet — a client-side
+      // update/delete here would let anyone self-add to usedByUids or erase a code.
+      allow update, delete: if false;
+    }
+
     match /dmCampaignNotes/{noteId} {
       function isNoteOwner() {
         return isSignedIn() && (

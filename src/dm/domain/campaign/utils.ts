@@ -1,11 +1,15 @@
 import type { DMCampaign } from '@/dm/domain/types';
 
 export function normalizeCampaignName(name: string): string {
+  // Unicode-aware (\p{L}/\p{N} with the u flag) so non-Latin names (e.g. Ukrainian
+  // Cyrillic) keep their letters instead of being stripped down to an empty string —
+  // an empty nameNormalized used to make sanitizeCampaign/mapCloudCampaign in
+  // campaignRepository.ts treat the whole campaign as invalid and silently drop it.
   return String(name || '')
     .trim()
     .toLowerCase()
     .replace(/\s+/g, ' ')
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
     .trim();
 }
 

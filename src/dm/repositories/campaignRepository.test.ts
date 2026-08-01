@@ -8,7 +8,14 @@ const { asyncStorageMock } = vi.hoisted(() => ({
   },
 }));
 
-const { firebaseMock } = vi.hoisted(() => ({
+const { txMock } = vi.hoisted(() => ({
+  txMock: {
+    get: vi.fn(async () => ({ exists: true, data: () => ({ owners: ['dm-1'], editors: [] }) })),
+    update: vi.fn(async (_ref: unknown, _patch: Record<string, unknown>) => {}),
+  },
+}));
+
+const { firebaseMock, findUserByEmailMock, ensureConnectionMock } = vi.hoisted(() => ({
   firebaseMock: {
     fbAuth: { currentUser: null as null | { uid: string } },
     db: {
@@ -16,9 +23,13 @@ const { firebaseMock } = vi.hoisted(() => ({
         doc: vi.fn(() => ({ set: vi.fn(), get: vi.fn(), update: vi.fn(), delete: vi.fn() })),
         where: vi.fn(() => ({ onSnapshot: vi.fn() })),
       })),
+      runTransaction: vi.fn(async (fn: (tx: typeof txMock) => Promise<unknown>) => fn(txMock)),
     },
     now: vi.fn(() => ({ seconds: 0 })),
+    hasDoc: (snap: { exists?: boolean } | null | undefined) => Boolean(snap?.exists),
   },
+  findUserByEmailMock: vi.fn(async (): Promise<string | null> => null),
+  ensureConnectionMock: vi.fn(async () => {}),
 }));
 
 vi.mock('@react-native-async-storage/async-storage', () => ({
@@ -27,10 +38,20 @@ vi.mock('@react-native-async-storage/async-storage', () => ({
 
 vi.mock('@/services/firebase', () => firebaseMock);
 
+vi.mock('@/services/users', () => ({
+  findUserByEmail: findUserByEmailMock,
+}));
+
+vi.mock('@/services/connections', () => ({
+  ensureConnection: ensureConnectionMock,
+}));
+
 import {
+  addCampaignEditorByEmail,
   deleteCampaign,
   loadLocalCampaigns,
   renameCampaign,
+  subscribeAccessibleCampaigns,
   togglePinnedMonsterForCampaign,
   togglePinnedSpellForCampaign,
   updateCampaignSummary,
@@ -286,5 +307,100 @@ describe('dm/repositories/campaignRepository', () => {
     const result = await togglePinnedMonsterForCampaign('missing-campaign', 'goblin');
 
     expect(result).toBeNull();
+  });
+
+  it("a Cyrillic campaign name survives a persist/load round-trip (regression: normalizeCampaignName stripped it to '' and sanitizeCampaign dropped the whole record)", async () => {
+    asyncStorageMock.getItem.mockResolvedValueOnce(null);
+
+    await upsertCampaign({
+      id: 'campaign-cyrillic',
+      name: 'Ллала',
+      nameNormalized: 'ллала',
+      ownerUid: 'u-10',
+      owners: ['u-10'],
+      editors: [],
+      createdAtMs: 1,
+      updatedAtMs: 2,
+    });
+
+    const setItemCalls = asyncStorageMock.setItem.mock.calls;
+    const rawEnvelope = setItemCalls[setItemCalls.length - 1][1];
+    asyncStorageMock.getItem.mockResolvedValueOnce(rawEnvelope);
+
+    const reloaded = await loadLocalCampaigns();
+    expect(reloaded.map((campaign) => campaign.id)).toContain('campaign-cyrillic');
+    expect(reloaded.find((campaign) => campaign.id === 'campaign-cyrillic')?.name).toBe('Ллала');
+  });
+
+  it('subscribeAccessibleCampaigns (not signed in) re-emits after a local mutation (regression: list stayed empty after creating a campaign)', async () => {
+    let stored: string | null = null;
+    asyncStorageMock.getItem.mockImplementation(async () => stored);
+    asyncStorageMock.setItem.mockImplementation(async (_key: string, value: string) => {
+      stored = value;
+    });
+
+    const emissions: Array<{ id: string }[]> = [];
+    const unsubscribe = await subscribeAccessibleCampaigns((campaigns) => {
+      emissions.push(campaigns);
+    });
+
+    expect(emissions).toHaveLength(1);
+    expect(emissions[0]).toEqual([]);
+
+    await upsertCampaign({
+      id: 'campaign-iota',
+      name: 'Iota',
+      nameNormalized: 'iota',
+      ownerUid: 'u-9',
+      owners: ['u-9'],
+      editors: [],
+      createdAtMs: 1,
+      updatedAtMs: 2,
+    });
+
+    expect(emissions.length).toBeGreaterThanOrEqual(2);
+    expect(emissions[emissions.length - 1].map((c) => c.id)).toContain('campaign-iota');
+
+    unsubscribe();
+  });
+
+  describe('addCampaignEditorByEmail', () => {
+    it('the campaign owner adds an editor by email directly (no Cloud Function needed)', async () => {
+      firebaseMock.fbAuth.currentUser = { uid: 'dm-1' };
+      findUserByEmailMock.mockResolvedValueOnce('editor-uid');
+      txMock.get.mockResolvedValueOnce({ exists: true, data: () => ({ owners: ['dm-1'], editors: [] }) });
+
+      const result = await addCampaignEditorByEmail('campaign-1', 'friend@example.com');
+
+      expect(result).toBe('editor-uid');
+      expect(txMock.update).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ editors: ['editor-uid'] }));
+      expect(ensureConnectionMock).toHaveBeenCalledWith('editor-uid');
+    });
+
+    it('rejects when there is no account for that email', async () => {
+      firebaseMock.fbAuth.currentUser = { uid: 'dm-1' };
+      findUserByEmailMock.mockResolvedValueOnce(null);
+
+      await expect(addCampaignEditorByEmail('campaign-1', 'nobody@example.com')).rejects.toThrow('User not found by email');
+      expect(txMock.update).not.toHaveBeenCalled();
+    });
+
+    it('rejects when the caller is not the campaign owner', async () => {
+      firebaseMock.fbAuth.currentUser = { uid: 'intruder' };
+      findUserByEmailMock.mockResolvedValueOnce('editor-uid');
+      txMock.get.mockResolvedValueOnce({ exists: true, data: () => ({ owners: ['dm-1'], editors: [] }) });
+
+      await expect(addCampaignEditorByEmail('campaign-1', 'friend@example.com')).rejects.toThrow(
+        'Only the campaign owner can add an editor',
+      );
+      expect(txMock.update).not.toHaveBeenCalled();
+    });
+
+    it('rejects when not signed in', async () => {
+      firebaseMock.fbAuth.currentUser = null;
+
+      await expect(addCampaignEditorByEmail('campaign-1', 'friend@example.com')).rejects.toThrow('Not signed in');
+      expect(findUserByEmailMock).not.toHaveBeenCalled();
+    });
   });
 });

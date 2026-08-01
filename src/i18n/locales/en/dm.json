@@ -231,7 +231,18 @@
     "deleteConfirmCancel": "Cancel",
     "deleteConfirmConfirm": "Delete",
     "open": "Open",
-    "empty": "No campaigns yet. Create your first one to get started."
+    "empty": "No campaigns yet. Create your first one to get started.",
+    "redeemInviteButton": "Enter invite code",
+    "redeemInviteDisabledHint": "Temporarily unavailable — waiting on the server function to be activated.",
+    "redeemModalTitle": "Join a campaign",
+    "redeemModalHint": "Enter the code your Game Master sent you.",
+    "redeemCodePlaceholder": "Invite code",
+    "redeemErrors": {
+      "expired": "This code has expired. Ask your Game Master for a new one.",
+      "exhausted": "This code has reached its usage limit.",
+      "notFound": "Code not found. Double-check what you entered.",
+      "generic": "Could not join the campaign. Please try again."
+    }
   },
   "campaignDetail": {
     "notFound": "Campaign not found. It may have been deleted.",
@@ -242,6 +253,23 @@
     "noAddableCharacters": "All available characters are already in this campaign.",
     "attach": "Attach",
     "detach": "Detach",
+    "inviteButton": "Invite",
+    "inviteCodeDisabledHint": "Temporarily unavailable — waiting on the server function to be activated.",
+    "inviteModalTitle": "Invite an editor",
+    "inviteModalHint": "The code is valid for 7 days. Once they have it, the player enters it on the My Campaigns screen.",
+    "inviteShareMessage": "Join my Mythgate campaign! Invite code: {{code}}",
+    "shareInvite": "Share code",
+    "inviteGenericError": "Could not create the invite. Please try again.",
+    "emailInviteButton": "Add editor by email",
+    "emailInviteModalTitle": "Add editor by email",
+    "emailInviteModalHint": "Enter the email of someone who already has a Mythgate account.",
+    "emailInvitePlaceholder": "Editor's email",
+    "emailInviteSuccess": "Editor added.",
+    "emailInviteErrors": {
+      "notFound": "No user found with that email. Make sure they've already signed up in the app.",
+      "notSignedIn": "Sign in with Google to invite editors by email.",
+      "generic": "Could not add the editor. Please try again."
+    },
     "editSummary": "Edit summary",
     "saveSummary": "Save",
     "cancelEditSummary": "Cancel",

@@ -22,7 +22,11 @@ export type ProductEventName =
   | 'permission_denied_on_upload'
   | 'sync_failed'
   | 'account_deleted'
-  | 'app_crashed';
+  | 'app_crashed'
+  | 'campaign_invite_created'
+  | 'campaign_invite_redeemed'
+  | 'campaign_invite_expired_attempt'
+  | 'campaign_editor_added';
 
 // PII RULE (CLAUDE.md §8.1): payload values are types/counts only — never email, uid,
 // character/document ids, character names, or free-text (notes, backstory, etc.).

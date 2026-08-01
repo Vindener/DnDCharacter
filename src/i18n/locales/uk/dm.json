@@ -231,7 +231,18 @@
     "deleteConfirmCancel": "Скасувати",
     "deleteConfirmConfirm": "Видалити",
     "open": "Відкрити",
-    "empty": "Кампаній ще немає. Створіть першу, щоб почати."
+    "empty": "Кампаній ще немає. Створіть першу, щоб почати.",
+    "redeemInviteButton": "Ввести код запрошення",
+    "redeemInviteDisabledHint": "Тимчасово недоступно — очікує на активацію серверної функції.",
+    "redeemModalTitle": "Приєднатися до кампанії",
+    "redeemModalHint": "Введіть код, який надіслав вам майстер гри.",
+    "redeemCodePlaceholder": "Код запрошення",
+    "redeemErrors": {
+      "expired": "Термін дії коду закінчився. Попросіть майстра гри створити новий.",
+      "exhausted": "Ліміт використань цього коду вичерпано.",
+      "notFound": "Код не знайдено. Перевірте, чи правильно він введений.",
+      "generic": "Не вдалося приєднатися до кампанії. Спробуйте ще раз."
+    }
   },
   "campaignDetail": {
     "notFound": "Кампанію не знайдено. Її могли видалити.",
@@ -242,6 +253,23 @@
     "noAddableCharacters": "Усі доступні персонажі вже в цій кампанії.",
     "attach": "Прикріпити",
     "detach": "Відкріпити",
+    "inviteButton": "Запросити",
+    "inviteCodeDisabledHint": "Тимчасово недоступно — очікує на активацію серверної функції.",
+    "inviteModalTitle": "Запросити редактора",
+    "inviteModalHint": "Код дійсний 7 днів. Отримавши код, гравець вводить його на екрані «Мої кампанії».",
+    "inviteShareMessage": "Приєднуйся до моєї кампанії Mythgate! Код запрошення: {{code}}",
+    "shareInvite": "Поділитися кодом",
+    "inviteGenericError": "Не вдалося створити запрошення. Спробуйте ще раз.",
+    "emailInviteButton": "Додати редактора по email",
+    "emailInviteModalTitle": "Додати редактора по email",
+    "emailInviteModalHint": "Введіть email людини, яка вже має акаунт у Mythgate.",
+    "emailInvitePlaceholder": "Email редактора",
+    "emailInviteSuccess": "Редактора додано.",
+    "emailInviteErrors": {
+      "notFound": "Користувача з такою поштою не знайдено. Переконайтесь, що вона вже реєструвалась у застосунку.",
+      "notSignedIn": "Увійдіть через Google, щоб запрошувати редакторів по email.",
+      "generic": "Не вдалося додати редактора. Спробуйте ще раз."
+    },
     "editSummary": "Редагувати опис",
     "saveSummary": "Зберегти",
     "cancelEditSummary": "Скасувати",

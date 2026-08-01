@@ -1,6 +1,4 @@
-export type SyncPathFieldMapResult =
-  | { kind: 'narrow'; fieldPaths: string[] }
-  | { kind: 'fallback' };
+export type SyncPathFieldMapResult = { kind: 'narrow'; fieldPaths: string[] } | { kind: 'fallback' };
 
 /**
  * sync-path -> Firestore field path(s), audited call site by call site (see
@@ -38,6 +36,7 @@ const NARROW_SYNC_PATH_FIELD_MAP: Record<string, string[]> = {
   'homebrew.sections': ['customSections'],
   'homebrew.entries': ['homebrewEntries'],
   'homebrew.notes-groups': ['customNotesGroups'],
+  'overview.campaign': ['campaignId', 'campaign'],
 };
 
 function cleanPaths(paths: string[] | null | undefined): string[] {

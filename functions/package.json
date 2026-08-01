@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "serve": "npm run build && firebase emulators:start --only functions,firestore,auth",
-    "deploy": "npm run build && firebase deploy --only functions:deleteMyAccount",
+    "deploy": "npm run build && firebase deploy --only functions:deleteMyAccount,functions:createCampaignInvite,functions:redeemCampaignInvite",
     "logs": "firebase functions:log"
   },
   "dependencies": {

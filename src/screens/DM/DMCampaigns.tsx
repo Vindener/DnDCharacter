@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -19,6 +19,10 @@ import {
   updateCampaignSummary,
 } from '@/dm/repositories/campaignRepository';
 import { buildUnifiedPartyList, isCharacterInCampaign } from '@/screens/DM/adapters';
+import { Modal } from '@/shared/components/Modal/Modal';
+import { CampaignInviteError, redeemCampaignInvite } from '@/services/campaignInvite';
+
+const isDev = typeof __DEV__ !== 'undefined' && __DEV__;
 
 const DMCampaigns: React.FC = () => {
   const { t } = useTranslation(['dm', 'common']);
@@ -37,6 +41,11 @@ const DMCampaigns: React.FC = () => {
 
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameInput, setRenameInput] = useState('');
+
+  const [isRedeemModalVisible, setIsRedeemModalVisible] = useState(false);
+  const [redeemCode, setRedeemCode] = useState('');
+  const [isRedeeming, setIsRedeeming] = useState(false);
+  const [redeemError, setRedeemError] = useState('');
 
   useEffect(() => {
     let unsub = () => {};
@@ -96,9 +105,15 @@ const DMCampaigns: React.FC = () => {
     const cleanName = newName.trim();
     if (!cleanName) return;
 
-    const created = await ensureCampaignForName(cleanName);
-    if (created && newSummary.trim()) {
-      await updateCampaignSummary(created.id, { summary: newSummary.trim() });
+    if (isDev) console.log('[DMCampaigns] createCampaign: pressed with name', cleanName);
+    try {
+      const created = await ensureCampaignForName(cleanName);
+      if (isDev) console.log('[DMCampaigns] createCampaign: ensureCampaignForName returned', created?.id);
+      if (created && newSummary.trim()) {
+        await updateCampaignSummary(created.id, { summary: newSummary.trim() });
+      }
+    } catch (error) {
+      if (isDev) console.error('[DMCampaigns] createCampaign FAILED:', error);
     }
     resetCreateForm();
   };
@@ -135,6 +150,37 @@ const DMCampaigns: React.FC = () => {
 
   const openCampaign = (campaign: DMCampaign) => {
     navigation.navigate('DMCampaignDetail', { campaignId: campaign.id });
+  };
+
+  const mapRedeemErrorMessage = (code: string): string => {
+    if (code === 'invite-expired') return t('dm:campaignsList.redeemErrors.expired');
+    if (code === 'invite-exhausted') return t('dm:campaignsList.redeemErrors.exhausted');
+    if (code === 'invite-not-found' || code === 'invite-campaign-missing') return t('dm:campaignsList.redeemErrors.notFound');
+    return t('dm:campaignsList.redeemErrors.generic');
+  };
+
+  const openRedeemModal = () => {
+    setRedeemCode('');
+    setRedeemError('');
+    setIsRedeemModalVisible(true);
+  };
+
+  const closeRedeemModal = () => setIsRedeemModalVisible(false);
+
+  const submitRedeem = async () => {
+    const cleanCode = redeemCode.trim().toUpperCase();
+    if (!cleanCode) return;
+
+    setIsRedeeming(true);
+    setRedeemError('');
+    try {
+      await redeemCampaignInvite(cleanCode);
+      setIsRedeeming(false);
+      setIsRedeemModalVisible(false);
+    } catch (err) {
+      setIsRedeeming(false);
+      setRedeemError(err instanceof CampaignInviteError ? mapRedeemErrorMessage(err.message) : t('dm:campaignsList.redeemErrors.generic'));
+    }
   };
 
   return (
@@ -182,14 +228,28 @@ const DMCampaigns: React.FC = () => {
             </View>
           </>
         ) : (
-          <Pressable
-            style={styles.authButton}
-            onPress={() => setIsCreating(true)}
-            android_ripple={{ color: colors.ripple }}
-            testID='dmCampaigns.newCampaignButton'
-          >
-            <Text style={styles.authButtonText}>{t('dm:campaignsList.newCampaignButton')}</Text>
-          </Pressable>
+          <>
+            <Pressable
+              style={styles.authButton}
+              onPress={() => setIsCreating(true)}
+              android_ripple={{ color: colors.ripple }}
+              testID='dmCampaigns.newCampaignButton'
+            >
+              <Text style={styles.authButtonText}>{t('dm:campaignsList.newCampaignButton')}</Text>
+            </Pressable>
+            {/* Functional once createCampaignInvite/redeemCampaignInvite are deployed on
+                a Blaze-plan Firebase project — disabled until then. */}
+            <Pressable
+              style={[styles.authButton, { opacity: 0.45 }]}
+              disabled
+              onPress={openRedeemModal}
+              android_ripple={{ color: colors.ripple }}
+              testID='dmCampaigns.redeemInviteButton'
+            >
+              <Text style={styles.authButtonText}>{t('dm:campaignsList.redeemInviteButton')}</Text>
+            </Pressable>
+            <Text style={styles.hint}>{t('dm:campaignsList.redeemInviteDisabledHint')}</Text>
+          </>
         )}
       </View>
 
@@ -277,6 +337,29 @@ const DMCampaigns: React.FC = () => {
           <Text style={styles.hint}>{t('dm:campaignsList.empty')}</Text>
         </View>
       )}
+
+      <Modal
+        isVisible={isRedeemModalVisible}
+        onClose={closeRedeemModal}
+        onSubmit={() => {
+          void submitRedeem();
+        }}
+        title={t('dm:campaignsList.redeemModalTitle')}
+        subtitle={t('dm:campaignsList.redeemModalHint')}
+      >
+        <Text style={styles.modalLabel}>{t('dm:campaignsList.redeemCodePlaceholder')}</Text>
+        <TextInput
+          value={redeemCode}
+          onChangeText={setRedeemCode}
+          placeholder={t('dm:campaignsList.redeemCodePlaceholder')}
+          placeholderTextColor={colors.textSecondary}
+          autoCapitalize='characters'
+          style={styles.modalInput}
+          testID='dmCampaigns.redeemCodeInput'
+        />
+        {isRedeeming ? <ActivityIndicator color={colors.text} testID='dmCampaigns.redeemLoading' /> : null}
+        {!!redeemError && <Text style={styles.hint}>{redeemError}</Text>}
+      </Modal>
     </ScrollView>
   );
 };

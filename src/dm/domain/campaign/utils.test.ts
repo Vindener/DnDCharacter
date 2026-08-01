@@ -9,6 +9,13 @@ describe('dm/domain/campaign/utils', () => {
     expect(buildCampaignId('  The   Crimson!  Keep  ')).toBe('campaign-the-crimson-keep');
   });
 
+  it('keeps non-Latin letters instead of stripping them to an empty string (regression: Cyrillic campaign names were silently dropped)', () => {
+    expect(normalizeCampaignName('Ллала')).toBe('ллала');
+    expect(slugifyCampaignName('Ллала')).toBe('ллала');
+    expect(buildCampaignId('Ллала')).toBe('campaign-ллала');
+    expect(normalizeCampaignName('  Забутий   Храм!  ')).toBe('забутий храм');
+  });
+
   it('sorts by recency then by name', () => {
     const campaigns: DMCampaign[] = [
       {

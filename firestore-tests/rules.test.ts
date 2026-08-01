@@ -67,6 +67,19 @@ function validDmCampaign(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function validDmCampaignInvite(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'CODE1234',
+    campaignId: 'campaign-1',
+    role: 'editor',
+    createdByUid: 'dm-1',
+    createdAtMs: 1,
+    expiresAtMs: 2,
+    usedByUids: [],
+    ...overrides,
+  };
+}
+
 function validDmCampaignNote(overrides: Record<string, unknown> = {}) {
   return {
     id: 'note-1',
@@ -258,6 +271,92 @@ describe('firestore.rules', () => {
           .doc('note-2')
           .set(validDmCampaignNote({ id: 'note-2' })),
       );
+    });
+  });
+
+  describe('dmCampaignInvites (campaign invite codes, avoids the emailIndex/SEC-2 pattern)', () => {
+    it('the campaign owner can create a well-formed invite for their own campaign', async () => {
+      await seed((db) => db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign()));
+
+      const dm = testEnv.authenticatedContext('dm-1').firestore();
+      await assertSucceeds(dm.collection('dmCampaignInvites').doc('CODE1234').set(validDmCampaignInvite()));
+    });
+
+    it('a non-owner (editor or unrelated user) cannot create an invite for a campaign they do not own', async () => {
+      await seed((db) =>
+        db
+          .collection('dmCampaigns')
+          .doc('campaign-1')
+          .set(validDmCampaign({ editors: ['editor-1'] })),
+      );
+
+      const editor = testEnv.authenticatedContext('editor-1').firestore();
+      await assertFails(
+        editor
+          .collection('dmCampaignInvites')
+          .doc('CODE1234')
+          .set(validDmCampaignInvite({ createdByUid: 'editor-1' })),
+      );
+
+      const stranger = testEnv.authenticatedContext('stranger').firestore();
+      await assertFails(
+        stranger
+          .collection('dmCampaignInvites')
+          .doc('CODE1234')
+          .set(validDmCampaignInvite({ createdByUid: 'stranger' })),
+      );
+    });
+
+    it('rejects a malformed invite create (missing keys) even from the owner', async () => {
+      await seed((db) => db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign()));
+
+      const dm = testEnv.authenticatedContext('dm-1').firestore();
+      const malformed = { id: 'CODE1234', campaignId: 'campaign-1', createdByUid: 'dm-1' };
+      await assertFails(dm.collection('dmCampaignInvites').doc('CODE1234').set(malformed));
+    });
+
+    it('any signed-in user can get an invite by its exact known code', async () => {
+      await seed(async (db) => {
+        await db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign());
+        await db.collection('dmCampaignInvites').doc('CODE1234').set(validDmCampaignInvite());
+      });
+
+      const someone = testEnv.authenticatedContext('someone').firestore();
+      await assertSucceeds(someone.collection('dmCampaignInvites').doc('CODE1234').get());
+    });
+
+    it('listing/querying dmCampaignInvites is always rejected (no code enumeration)', async () => {
+      await seed((db) => db.collection('dmCampaignInvites').doc('CODE1234').set(validDmCampaignInvite()));
+
+      const someone = testEnv.authenticatedContext('someone').firestore();
+      await assertFails(someone.collection('dmCampaignInvites').get());
+    });
+
+    it('a direct client update (e.g. self-appending to usedByUids) is rejected — must go through redeemCampaignInvite', async () => {
+      await seed((db) => db.collection('dmCampaignInvites').doc('CODE1234').set(validDmCampaignInvite()));
+
+      const someone = testEnv.authenticatedContext('someone').firestore();
+      await assertFails(
+        someone
+          .collection('dmCampaignInvites')
+          .doc('CODE1234')
+          .update({ usedByUids: ['someone'] }),
+      );
+
+      const owner = testEnv.authenticatedContext('dm-1').firestore();
+      await assertFails(
+        owner
+          .collection('dmCampaignInvites')
+          .doc('CODE1234')
+          .update({ usedByUids: ['dm-1'] }),
+      );
+    });
+
+    it('a direct client delete is rejected, even by the invite creator', async () => {
+      await seed((db) => db.collection('dmCampaignInvites').doc('CODE1234').set(validDmCampaignInvite()));
+
+      const owner = testEnv.authenticatedContext('dm-1').firestore();
+      await assertFails(owner.collection('dmCampaignInvites').doc('CODE1234').delete());
     });
   });
 });

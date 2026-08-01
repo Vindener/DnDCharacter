@@ -57,6 +57,10 @@ describe('mapSyncPathsToFieldPaths', () => {
     expect(mapSyncPathsToFieldPaths(['inventory.equipment'])).toEqual({ kind: 'narrow', fieldPaths: [] });
   });
 
+  it('overview.campaign maps to campaignId + the legacy campaign text field (DM attach/detach)', () => {
+    expect(mapSyncPathsToFieldPaths(['overview.campaign'])).toEqual({ kind: 'narrow', fieldPaths: ['campaignId', 'campaign'] });
+  });
+
   it('falls back when a single unknown or tab-default token is present, even alongside safe ones', () => {
     expect(mapSyncPathsToFieldPaths(['overview.identity'])).toEqual({ kind: 'fallback' });
     expect(mapSyncPathsToFieldPaths(['magic.core'])).toEqual({ kind: 'fallback' });

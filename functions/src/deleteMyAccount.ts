@@ -9,6 +9,11 @@ if (!getApps().length) {
   initializeApp();
 }
 
+// dmCampaignInvites is intentionally NOT in this list: invite docs belong to the
+// campaign, not to the inviter personally. Leaving a deleted user's invites in place
+// is harmless — redeemCampaignInvite already checks the target campaign still exists
+// before granting access, and any orphaned code still expires naturally via
+// expiresAtMs. See docs/campaign-management-prompts.md / the invite-codes plan.
 const CASCADE_COLLECTIONS = ['characterSheets', 'dmCampaigns', 'dmCampaignNotes', 'dmCampaignEncounters'] as const;
 type CascadeCollectionName = (typeof CASCADE_COLLECTIONS)[number];
 

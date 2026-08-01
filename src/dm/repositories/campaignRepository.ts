@@ -9,10 +9,30 @@ import {
   sanitizeCampaignSummary,
   sortCampaignsByRecency,
 } from '@/dm/domain/campaign';
-import { db, fbAuth, now } from '@/services/firebase';
+import { db, fbAuth, hasDoc, now } from '@/services/firebase';
+import { findUserByEmail } from '@/services/users';
+import { ensureConnection } from '@/services/connections';
 import { LATEST_SCHEMA_VERSION, createStorageEnvelope, migratePayloadToLatest, normalizeStorageEnvelope } from '@/domain/migrations';
 
 const LOCAL_CAMPAIGNS_KEY = 'DM_CAMPAIGNS_V1';
+
+// __DEV__ is an RN/Metro global — undefined in the vitest/node test environment,
+// so a bare `if (isDev)` throws a ReferenceError once a test actually exercises
+// this line. The typeof guard makes the diagnostic logs below safe in both.
+const isDev = typeof __DEV__ !== 'undefined' && __DEV__;
+
+// Local-first fix: subscribeAccessibleCampaigns has no live listener for a
+// not-signed-in user (AsyncStorage doesn't push changes like Firestore onSnapshot
+// does), so without this, creating/renaming/deleting a campaign locally never
+// refreshed an already-mounted screen's campaign list. Every function below that
+// persists a local mutation calls notifyLocalCampaignsChanged() so all active
+// subscribeAccessibleCampaigns() callers re-read local storage and re-emit.
+const localCampaignsListeners = new Set<() => Promise<void>>();
+
+async function notifyLocalCampaignsChanged(): Promise<void> {
+  if (isDev) console.log('[CampaignRepo] notifyLocalCampaignsChanged: listeners =', localCampaignsListeners.size);
+  await Promise.all(Array.from(localCampaignsListeners).map((listener) => listener()));
+}
 
 function toMillis(value: unknown): number {
   if (!value || typeof value !== 'object') return 0;
@@ -28,8 +48,11 @@ function sanitizeCampaign(raw: unknown): DMCampaign | null {
   const cast = migrated as Record<string, unknown>;
   const id = String(cast.id || '');
   const name = String(cast.name || '').trim();
-  const nameNormalized = normalizeCampaignName(String(cast.nameNormalized || name));
-  if (!id || !name || !nameNormalized) return null;
+  // Defense-in-depth: nameNormalized is a search/dedup helper, not core identity — an
+  // edge case where it normalizes to '' (e.g. an emoji-only name) must never drop an
+  // otherwise-valid campaign. Fall back to the raw lowercased name instead of null-ing.
+  const nameNormalized = normalizeCampaignName(String(cast.nameNormalized || name)) || name.toLowerCase();
+  if (!id || !name) return null;
 
   const owners = Array.isArray(cast.owners) ? cast.owners.map((item) => String(item)).filter(Boolean) : [];
   const editors = Array.isArray(cast.editors) ? cast.editors.map((item) => String(item)).filter(Boolean) : [];
@@ -56,8 +79,8 @@ function mapCloudCampaign(doc: Record<string, unknown>): DMCampaign | null {
   const migrated = migratePayloadToLatest<Record<string, unknown>>('dmCampaigns', doc).data;
   const id = String(migrated.id || '');
   const name = String(migrated.name || '').trim();
-  const nameNormalized = normalizeCampaignName(String(migrated.nameNormalized || name));
-  if (!id || !name || !nameNormalized) return null;
+  const nameNormalized = normalizeCampaignName(String(migrated.nameNormalized || name)) || name.toLowerCase();
+  if (!id || !name) return null;
 
   const owners = Array.isArray(migrated.owners) ? migrated.owners.map((item) => String(item)).filter(Boolean) : [];
   const editors = Array.isArray(migrated.editors) ? migrated.editors.map((item) => String(item)).filter(Boolean) : [];
@@ -87,8 +110,9 @@ async function persistLocalCampaigns(campaigns: DMCampaign[]): Promise<void> {
     }));
     const envelope = createStorageEnvelope('dmCampaigns', canonical);
     await AsyncStorage.setItem(LOCAL_CAMPAIGNS_KEY, JSON.stringify(envelope));
-  } catch (_error) {
-    /* intentionally ignored */
+    if (isDev) console.log('[CampaignRepo] persistLocalCampaigns: wrote', canonical.length, 'campaigns');
+  } catch (error) {
+    if (isDev) console.error('[CampaignRepo] persistLocalCampaigns FAILED — write silently dropped:', error);
   }
 }
 
@@ -97,9 +121,15 @@ export async function loadLocalCampaigns(): Promise<DMCampaign[]> {
     const raw = await AsyncStorage.getItem(LOCAL_CAMPAIGNS_KEY);
     const parsed = raw ? JSON.parse(raw) : null;
     const migrated = normalizeStorageEnvelope<DMCampaign[]>('dmCampaigns', parsed, []);
-    if (!Array.isArray(migrated.data)) return [];
-    return migrated.data.map((item) => sanitizeCampaign(item)).filter((item): item is DMCampaign => Boolean(item));
-  } catch {
+    if (!Array.isArray(migrated.data)) {
+      if (isDev) console.log('[CampaignRepo] loadLocalCampaigns: no array in envelope, returning []');
+      return [];
+    }
+    const result = migrated.data.map((item) => sanitizeCampaign(item)).filter((item): item is DMCampaign => Boolean(item));
+    if (isDev) console.log('[CampaignRepo] loadLocalCampaigns: loaded', result.length, 'of', migrated.data.length, 'stored entries');
+    return result;
+  } catch (error) {
+    if (isDev) console.error('[CampaignRepo] loadLocalCampaigns FAILED — returning []:', error);
     return [];
   }
 }
@@ -159,6 +189,7 @@ function buildCloudPayload(campaign: DMCampaign): Record<string, unknown> {
 }
 
 export async function upsertCampaign(campaign: DMCampaign): Promise<DMCampaign> {
+  if (isDev) console.log('[CampaignRepo] upsertCampaign: start', { id: campaign.id, name: campaign.name });
   const current = await loadLocalCampaigns();
   const nextUpdated = campaign.updatedAtMs || Date.now();
   const normalized: DMCampaign = {
@@ -172,12 +203,14 @@ export async function upsertCampaign(campaign: DMCampaign): Promise<DMCampaign> 
 
   const merged = mergeCampaigns(current, [normalized]);
   await persistLocalCampaigns(merged);
+  await notifyLocalCampaignsChanged();
+  if (isDev) console.log('[CampaignRepo] upsertCampaign: done, local list now has', merged.length, 'campaigns');
 
   if (canCloudSync()) {
     try {
       await db.collection('dmCampaigns').doc(normalized.id).set(buildCloudPayload(normalized), { merge: true });
-    } catch (_error) {
-      /* intentionally ignored */
+    } catch (error) {
+      if (isDev) console.error('[CampaignRepo] upsertCampaign: cloud sync failed (local copy is still saved):', error);
     }
   }
 
@@ -186,20 +219,26 @@ export async function upsertCampaign(campaign: DMCampaign): Promise<DMCampaign> 
 
 export async function ensureCampaignForName(name: string): Promise<DMCampaign | null> {
   const cleanName = String(name || '').trim();
-  if (!cleanName) return null;
+  if (!cleanName) {
+    if (isDev) console.log('[CampaignRepo] ensureCampaignForName: blank name, no-op');
+    return null;
+  }
 
   const normalized = normalizeCampaignName(cleanName);
   const local = await loadLocalCampaigns();
   const existing = local.find((campaign) => campaign.nameNormalized === normalized || campaign.id === buildCampaignId(cleanName));
   if (existing) {
     if (existing.name !== cleanName) {
+      if (isDev) console.log('[CampaignRepo] ensureCampaignForName: renaming existing match', existing.id);
       const next: DMCampaign = { ...existing, name: cleanName, updatedAtMs: Date.now(), schemaVersion: LATEST_SCHEMA_VERSION };
       await upsertCampaign(next);
       return next;
     }
+    if (isDev) console.log('[CampaignRepo] ensureCampaignForName: exact existing match, returning as-is', existing.id);
     return existing;
   }
 
+  if (isDev) console.log('[CampaignRepo] ensureCampaignForName: creating new campaign for name', cleanName);
   const created = buildLocalCampaign(cleanName);
   await upsertCampaign(created);
   return created;
@@ -224,6 +263,7 @@ export async function renameCampaign(campaignId: string, name: string): Promise<
 
   const merged = mergeCampaigns(current, [next]);
   await persistLocalCampaigns(merged);
+  await notifyLocalCampaignsChanged();
 
   if (canCloudSync()) {
     try {
@@ -269,6 +309,7 @@ export async function updateCampaignSummary(
 
   const merged = mergeCampaigns(current, [next]);
   await persistLocalCampaigns(merged);
+  await notifyLocalCampaignsChanged();
 
   if (canCloudSync()) {
     try {
@@ -294,6 +335,7 @@ export async function deleteCampaign(campaignId: string): Promise<void> {
   const current = await loadLocalCampaigns();
   const remaining = current.filter((campaign) => campaign.id !== campaignId);
   await persistLocalCampaigns(remaining);
+  await notifyLocalCampaignsChanged();
 
   if (canCloudSync()) {
     try {
@@ -323,6 +365,7 @@ async function toggleCampaignPinnedId(
   const next: DMCampaign = { ...existing, [field]: nextIds, updatedAtMs: Date.now(), schemaVersion: LATEST_SCHEMA_VERSION };
   const merged = mergeCampaigns(current, [next]);
   await persistLocalCampaigns(merged);
+  await notifyLocalCampaignsChanged();
 
   if (canCloudSync()) {
     try {
@@ -346,26 +389,70 @@ export async function togglePinnedSpellForCampaign(campaignId: string, spellId: 
   return toggleCampaignPinnedId(campaignId, 'pinnedSpellIds', spellId);
 }
 
+// Mirrors src/repositories/characterCloudRepository.ts's addEditorByEmail: the campaign
+// OWNER (who already has full write rights on dmCampaigns.editors) looks up the invitee's
+// uid and adds them directly — no privileged server code needed, unlike the invite-code
+// redemption flow where a non-member would have to self-grant access.
+export async function addCampaignEditorByEmail(campaignId: string, email: string): Promise<string> {
+  const me = fbAuth.currentUser?.uid;
+  if (!me) throw new Error('Not signed in');
+
+  const toUid = await findUserByEmail(email);
+  if (!toUid) throw new Error('User not found by email');
+
+  const ref = db.collection('dmCampaigns').doc(campaignId);
+  await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!hasDoc(snap)) throw new Error('Campaign not found');
+
+    const data = (snap.data?.() || snap.data()) as Record<string, unknown>;
+    const owners = Array.isArray(data.owners) ? data.owners.map((item) => String(item)) : [];
+    if (!owners.includes(me)) throw new Error('Only the campaign owner can add an editor');
+
+    const editors = Array.isArray(data.editors) ? data.editors.map((item) => String(item)) : [];
+    const nextEditors = Array.from(new Set([...editors, toUid]));
+    tx.update(ref, { editors: nextEditors, updatedAt: now() });
+  });
+
+  await ensureConnection(toUid);
+  return toUid;
+}
+
 export function getCampaignForLink(link: CampaignLinkInput, campaigns: DMCampaign[]): DMCampaign | null {
   return resolveCampaignForLink(link, campaigns);
 }
 
 export async function subscribeAccessibleCampaigns(cb: (campaigns: DMCampaign[]) => void): Promise<() => void> {
-  const local = await loadLocalCampaigns();
-  cb(local);
-
-  const me = fbAuth.currentUser?.uid;
-  if (!me) {
-    return () => {};
-  }
-
+  let local = await loadLocalCampaigns();
   let ownersCloud: DMCampaign[] = [];
   let editorsCloud: DMCampaign[] = [];
 
-  const push = async () => {
+  const emit = () => {
     const merged = mergeCampaigns(local, ownersCloud, editorsCloud);
+    if (isDev) console.log('[CampaignRepo] subscribeAccessibleCampaigns: emitting', merged.length, 'campaigns');
     cb(merged);
-    await persistLocalCampaigns(merged);
+  };
+
+  emit();
+
+  const refreshLocal = async () => {
+    if (isDev) console.log('[CampaignRepo] subscribeAccessibleCampaigns: refreshLocal triggered');
+    local = await loadLocalCampaigns();
+    emit();
+  };
+  localCampaignsListeners.add(refreshLocal);
+
+  const me = fbAuth.currentUser?.uid;
+  if (isDev) console.log('[CampaignRepo] subscribeAccessibleCampaigns: signed in as', me || '(not signed in)');
+  if (!me) {
+    return () => {
+      localCampaignsListeners.delete(refreshLocal);
+    };
+  }
+
+  const push = async () => {
+    emit();
+    await persistLocalCampaigns(mergeCampaigns(local, ownersCloud, editorsCloud));
   };
 
   const unsubOwners = db
@@ -401,6 +488,7 @@ export async function subscribeAccessibleCampaigns(cb: (campaigns: DMCampaign[])
     );
 
   return () => {
+    localCampaignsListeners.delete(refreshLocal);
     if (typeof unsubOwners === 'function') unsubOwners();
     if (typeof unsubEditors === 'function') unsubEditors();
   };
