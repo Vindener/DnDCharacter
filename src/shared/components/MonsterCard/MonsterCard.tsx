@@ -17,8 +17,10 @@ interface MonsterCardProps {
   monster: MonsterDto;
   isPinned?: boolean;
   isFavorite?: boolean;
+  isPinnedForCampaign?: boolean;
   onTogglePin?: (monsterId: string) => void;
   onToggleFavorite?: (monsterId: string) => void;
+  onTogglePinForCampaign?: (monsterId: string) => void;
   onAddToEncounter?: (monster: MonsterDto) => void;
   onDuplicate?: (monster: MonsterDto) => void;
   cardTestID?: string;
@@ -49,8 +51,10 @@ export const MonsterCard = ({
   monster,
   isPinned = false,
   isFavorite = false,
+  isPinnedForCampaign = false,
   onTogglePin,
   onToggleFavorite,
+  onTogglePinForCampaign,
   onAddToEncounter,
   onDuplicate,
   cardTestID,
@@ -63,7 +67,13 @@ export const MonsterCard = ({
   const isSrdMonster = isBuiltInRulesSource(monster.source);
   const displayMonster = getLocalizedMonster(monster, i18n.language);
   const sourceLabel = getSourceLabel(monster, t);
-  const traitsSummary = displayMonster.normalizedTraits?.slice(0, 2).map((trait) => trait.name).join(', ') || displayMonster.traits || '';
+  const traitsSummary =
+    displayMonster.normalizedTraits
+      ?.slice(0, 2)
+      .map((trait) => trait.name)
+      .join(', ') ||
+    displayMonster.traits ||
+    '';
 
   const handleDelete = () => {
     removeMonster(monster.id);
@@ -147,6 +157,20 @@ export const MonsterCard = ({
             >
               <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={15} color={colors.text} />
               <Text style={styles.actionText}>{isPinned ? t('actions.pinned') : t('actions.pin')}</Text>
+            </Pressable>
+          )}
+          {!!onTogglePinForCampaign && (
+            <Pressable
+              style={styles.actionButton}
+              onPress={(event) => {
+                event.stopPropagation();
+                onTogglePinForCampaign(monster.id);
+              }}
+              android_ripple={{ color: colors.ripple }}
+              testID='monsterCard.pinForCampaignButton'
+            >
+              <Ionicons name={isPinnedForCampaign ? 'flag' : 'flag-outline'} size={15} color={colors.text} />
+              <Text style={styles.actionText}>{isPinnedForCampaign ? t('actions.pinnedForCampaign') : t('actions.pinForCampaign')}</Text>
             </Pressable>
           )}
           {!!onDuplicate && (

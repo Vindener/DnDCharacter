@@ -31,6 +31,8 @@ import {
   deleteCampaign,
   loadLocalCampaigns,
   renameCampaign,
+  togglePinnedMonsterForCampaign,
+  togglePinnedSpellForCampaign,
   updateCampaignSummary,
   upsertCampaign,
 } from '@/dm/repositories/campaignRepository';
@@ -215,5 +217,74 @@ describe('dm/repositories/campaignRepository', () => {
     ]);
     const rejected = await updateCampaignSummary('campaign-zeta', { partyLevelEstimate: Number.NaN });
     expect(rejected?.partyLevelEstimate).toBeUndefined();
+  });
+
+  it('togglePinnedMonsterForCampaign adds then removes a monster id without touching pinnedSpellIds', async () => {
+    mockStoredCampaigns([
+      {
+        id: 'campaign-eta',
+        name: 'Eta',
+        nameNormalized: 'eta',
+        ownerUid: 'u-7',
+        owners: ['u-7'],
+        editors: [],
+        createdAtMs: 1,
+        updatedAtMs: 2,
+        pinnedSpellIds: ['spell-1'],
+      },
+    ]);
+
+    const added = await togglePinnedMonsterForCampaign('campaign-eta', 'goblin');
+    expect(added?.pinnedMonsterIds).toEqual(['goblin']);
+    expect(added?.pinnedSpellIds).toEqual(['spell-1']);
+
+    mockStoredCampaigns([
+      {
+        id: 'campaign-eta',
+        name: 'Eta',
+        nameNormalized: 'eta',
+        ownerUid: 'u-7',
+        owners: ['u-7'],
+        editors: [],
+        createdAtMs: 1,
+        updatedAtMs: 2,
+        pinnedMonsterIds: ['goblin'],
+        pinnedSpellIds: ['spell-1'],
+      },
+    ]);
+
+    const removed = await togglePinnedMonsterForCampaign('campaign-eta', 'goblin');
+    expect(removed?.pinnedMonsterIds).toEqual([]);
+  });
+
+  it('togglePinnedSpellForCampaign caps the pinned list at 20 unique ids', async () => {
+    const existingIds = Array.from({ length: 20 }, (_, index) => `spell-${index}`);
+    mockStoredCampaigns([
+      {
+        id: 'campaign-theta',
+        name: 'Theta',
+        nameNormalized: 'theta',
+        ownerUid: 'u-8',
+        owners: ['u-8'],
+        editors: [],
+        createdAtMs: 1,
+        updatedAtMs: 2,
+        pinnedSpellIds: existingIds,
+      },
+    ]);
+
+    const result = await togglePinnedSpellForCampaign('campaign-theta', 'spell-new');
+
+    expect(result?.pinnedSpellIds).toHaveLength(20);
+    expect(result?.pinnedSpellIds).toContain('spell-new');
+    expect(result?.pinnedSpellIds).not.toContain('spell-0');
+  });
+
+  it('togglePinnedMonsterForCampaign returns null for an unknown campaign id', async () => {
+    mockStoredCampaigns([]);
+
+    const result = await togglePinnedMonsterForCampaign('missing-campaign', 'goblin');
+
+    expect(result).toBeNull();
   });
 });

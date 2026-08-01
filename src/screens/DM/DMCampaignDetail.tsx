@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import type { StackScreenProps } from '@react-navigation/stack';
+import { CommonActions } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
@@ -8,19 +9,22 @@ import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
 import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
+import useMonsterStore from '@/context/Monster-store';
+import useSpellbookStore from '@/context/Spellbook-store';
 import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import type { DMCampaign, DMCampaignEncounter } from '@/dm/domain/types';
 import { subscribeAccessibleCampaigns, updateCampaignSummary } from '@/dm/repositories/campaignRepository';
 import { subscribeCampaignEncounters, upsertCampaignEncounter } from '@/dm/repositories/campaignEncountersRepository';
 import { buildUnifiedPartyList, isCharacterInCampaign, type UnifiedPartyItem } from '@/screens/DM/adapters';
+import { PinnedReferencesList } from '@/screens/DM/PinnedReferencesList';
 import type { CharacterViewModel } from '@/types/Character';
 
 type Props = StackScreenProps<DMStackParamList, 'DMCampaignDetail'>;
 
 const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   const { campaignId } = route.params;
-  const { t } = useTranslation(['dm', 'common']);
+  const { i18n, t } = useTranslation(['dm', 'common']);
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -28,6 +32,10 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
+  const monsters = useMonsterStore((s) => s.monsters);
+  const loadMonsters = useMonsterStore((s) => s.loadMonsters);
+  const spells = useSpellbookStore((s) => s.spells);
+  const loadSpellbook = useSpellbookStore((s) => s.loadSpellbook);
 
   const [mySheets, setMySheets] = useState<Record<string, unknown>[]>([]);
   const [sharedSheets, setSharedSheets] = useState<Record<string, unknown>[]>([]);
@@ -56,6 +64,11 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
       if (typeof unsub === 'function') unsub();
     };
   }, []);
+
+  useEffect(() => {
+    void loadMonsters();
+    void loadSpellbook();
+  }, [loadMonsters, loadSpellbook]);
 
   useEffect(() => {
     if (!fbAuth.currentUser) {
@@ -92,6 +105,22 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   }, [campaignId]);
 
   const campaign = useMemo(() => campaigns.find((item) => item.id === campaignId) || null, [campaigns, campaignId]);
+
+  const campaignPinnedMonsters = useMemo(() => {
+    const ids = campaign?.pinnedMonsterIds || [];
+    return monsters.filter((monster) => ids.includes(monster.id));
+  }, [campaign, monsters]);
+
+  const campaignPinnedSpells = useMemo(() => {
+    const ids = campaign?.pinnedSpellIds || [];
+    return spells.filter((spell) => ids.includes(spell.id));
+  }, [campaign, spells]);
+
+  const openRootTab = (routeName: string, params?: Record<string, unknown>) => {
+    const parent = navigation.getParent();
+    if (!parent) return;
+    parent.dispatch(CommonActions.navigate({ name: routeName, params }));
+  };
 
   const unifiedParty = useMemo(
     () => buildUnifiedPartyList(localCharacters, mySheets, sharedSheets),
@@ -352,6 +381,18 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
       </View>
 
       <View style={styles.card}>
+        <Text style={styles.title}>{t('dm:campaignDetail.pinnedTitle')}</Text>
+        <Text style={styles.hint}>{t('dm:campaignDetail.pinnedHint')}</Text>
+        <PinnedReferencesList
+          pinnedMonsters={campaignPinnedMonsters}
+          pinnedSpells={campaignPinnedSpells}
+          language={i18n.language}
+          t={t}
+          styles={styles}
+        />
+      </View>
+
+      <View style={styles.card}>
         <Text style={styles.title}>{t('dm:campaignDetail.quickActionsTitle')}</Text>
         <View style={styles.laneGrid}>
           <Pressable
@@ -371,6 +412,24 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
           >
             <Ionicons name='rocket-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:campaignDetail.openEncounterPrep')}</Text>
+          </Pressable>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => openRootTab('References', { screen: 'List', params: { campaignId: campaign.id } })}
+            android_ripple={{ color: colors.ripple }}
+            testID='dmCampaignDetail.openBestiaryButton'
+          >
+            <Ionicons name='skull-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>{t('dm:campaignDetail.openBestiaryForCampaign')}</Text>
+          </Pressable>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => openRootTab('References', { screen: 'Spellbook', params: { mode: 'dm', campaignId: campaign.id } })}
+            android_ripple={{ color: colors.ripple }}
+            testID='dmCampaignDetail.openSpellbookButton'
+          >
+            <Ionicons name='book-outline' size={18} color={colors.text} />
+            <Text style={styles.laneButtonText}>{t('dm:campaignDetail.openSpellbookForCampaign')}</Text>
           </Pressable>
         </View>
       </View>

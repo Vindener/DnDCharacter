@@ -51,8 +51,13 @@
     "addToEncounterShort": "Encounter",
     "pinned": "Pinned",
     "pin": "Pin",
+    "pinnedForCampaign": "Pinned for campaign",
+    "pinForCampaign": "Pin for campaign",
     "duplicate": "Copy",
     "clear": "Clear"
+  },
+  "campaignContext": {
+    "hint": "Pins added here go to the campaign \"{{name}}\"."
   },
   "pinned": {
     "title": "Pinned Monsters ({{count}})",

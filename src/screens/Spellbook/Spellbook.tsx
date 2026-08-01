@@ -18,6 +18,8 @@ import type { CharacterSpellStatus, SpellComponents, SpellDamageProfile, Spellbo
 import type { CharacterViewModel } from '@/types/Character';
 import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 import { SkeletonSpellbook } from '@/shared/ui/skeleton';
+import type { DMCampaign } from '@/dm/domain/types';
+import { subscribeAccessibleCampaigns, togglePinnedSpellForCampaign } from '@/dm/repositories/campaignRepository';
 import {
   filterSpellbookSpells,
   type SpellbookBooleanFilter as BooleanFilter,
@@ -136,6 +138,7 @@ const Spellbook = ({ route }: Props) => {
   const params = route.params;
   const mode = params?.mode || 'player';
   const isDmMode = mode === 'dm';
+  const campaignId = params?.campaignId;
 
   const characters = useCharacterStore((s) => s.characters);
   const currentCharacterId = useCharacterStore((s) => s.currentCharacterId);
@@ -184,9 +187,33 @@ const Spellbook = ({ route }: Props) => {
   const [modalDamageProfiles, setModalDamageProfiles] = useState('');
   const [notice, setNotice] = useState('');
 
+  const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
+
   useEffect(() => {
     loadSpellbook().catch(() => {});
   }, [loadSpellbook]);
+
+  useEffect(() => {
+    if (!campaignId) return undefined;
+    let unsub = () => {};
+    let cancelled = false;
+
+    const run = async () => {
+      unsub = await subscribeAccessibleCampaigns((next) => {
+        if (!cancelled) setCampaigns(next);
+      });
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      if (typeof unsub === 'function') unsub();
+    };
+  }, [campaignId]);
+
+  const activeCampaign = useMemo(() => campaigns.find((item) => item.id === campaignId) || null, [campaigns, campaignId]);
+  const campaignPinnedSpellSet = useMemo(() => new Set(activeCampaign?.pinnedSpellIds || []), [activeCampaign]);
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedSearch(search), 250);
@@ -505,6 +532,20 @@ const Spellbook = ({ route }: Props) => {
                 name={isPinned ? 'pin' : 'pin-outline'}
                 size={20}
                 color={isPinned ? colors.highlight : colors.textSecondary}
+              />
+            </Pressable>
+          ) : null}
+          {campaignId ? (
+            <Pressable
+              onPress={() => void togglePinnedSpellForCampaign(campaignId, item.id)}
+              android_ripple={{ color: colors.ripple }}
+              style={styles.favoriteButton}
+              testID='spellbook.pinForCampaignButton'
+            >
+              <MaterialCommunityIcons
+                name={campaignPinnedSpellSet.has(item.id) ? 'flag' : 'flag-outline'}
+                size={20}
+                color={campaignPinnedSpellSet.has(item.id) ? colors.highlight : colors.textSecondary}
               />
             </Pressable>
           ) : null}

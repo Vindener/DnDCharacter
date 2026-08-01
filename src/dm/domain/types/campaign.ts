@@ -10,6 +10,8 @@ export interface DMCampaign {
   updatedAtMs: number;
   summary?: string;
   partyLevelEstimate?: number;
+  pinnedMonsterIds?: string[];
+  pinnedSpellIds?: string[];
 }
 
 export type CampaignLinkInput = {

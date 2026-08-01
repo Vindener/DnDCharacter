@@ -5,6 +5,7 @@ import {
   clampPartyLevelEstimate,
   normalizeCampaignName,
   resolveCampaignForLink,
+  sanitizeCampaignPinnedIds,
   sanitizeCampaignSummary,
   sortCampaignsByRecency,
 } from '@/dm/domain/campaign';
@@ -46,6 +47,8 @@ function sanitizeCampaign(raw: unknown): DMCampaign | null {
     updatedAtMs: Number(cast.updatedAtMs || 0),
     summary: sanitizeCampaignSummary(cast.summary),
     partyLevelEstimate: clampPartyLevelEstimate(cast.partyLevelEstimate),
+    pinnedMonsterIds: sanitizeCampaignPinnedIds(cast.pinnedMonsterIds),
+    pinnedSpellIds: sanitizeCampaignPinnedIds(cast.pinnedSpellIds),
   };
 }
 
@@ -71,6 +74,8 @@ function mapCloudCampaign(doc: Record<string, unknown>): DMCampaign | null {
     updatedAtMs: toMillis(migrated.updatedAt),
     summary: sanitizeCampaignSummary(migrated.summary),
     partyLevelEstimate: clampPartyLevelEstimate(migrated.partyLevelEstimate),
+    pinnedMonsterIds: sanitizeCampaignPinnedIds(migrated.pinnedMonsterIds),
+    pinnedSpellIds: sanitizeCampaignPinnedIds(migrated.pinnedSpellIds),
   };
 }
 
@@ -297,6 +302,48 @@ export async function deleteCampaign(campaignId: string): Promise<void> {
       /* intentionally ignored */
     }
   }
+}
+
+async function toggleCampaignPinnedId(
+  campaignId: string,
+  field: 'pinnedMonsterIds' | 'pinnedSpellIds',
+  itemId: string,
+): Promise<DMCampaign | null> {
+  if (!campaignId || !itemId) return null;
+
+  const current = await loadLocalCampaigns();
+  const existing = current.find((campaign) => campaign.id === campaignId);
+  if (!existing) return null;
+
+  const currentIds = existing[field] || [];
+  const nextIds = currentIds.includes(itemId)
+    ? currentIds.filter((id) => id !== itemId)
+    : sanitizeCampaignPinnedIds([...currentIds, itemId]);
+
+  const next: DMCampaign = { ...existing, [field]: nextIds, updatedAtMs: Date.now(), schemaVersion: LATEST_SCHEMA_VERSION };
+  const merged = mergeCampaigns(current, [next]);
+  await persistLocalCampaigns(merged);
+
+  if (canCloudSync()) {
+    try {
+      await db
+        .collection('dmCampaigns')
+        .doc(campaignId)
+        .update({ [field]: nextIds, updatedAt: now() });
+    } catch (_error) {
+      /* intentionally ignored */
+    }
+  }
+
+  return next;
+}
+
+export async function togglePinnedMonsterForCampaign(campaignId: string, monsterId: string): Promise<DMCampaign | null> {
+  return toggleCampaignPinnedId(campaignId, 'pinnedMonsterIds', monsterId);
+}
+
+export async function togglePinnedSpellForCampaign(campaignId: string, spellId: string): Promise<DMCampaign | null> {
+  return toggleCampaignPinnedId(campaignId, 'pinnedSpellIds', spellId);
 }
 
 export function getCampaignForLink(link: CampaignLinkInput, campaigns: DMCampaign[]): DMCampaign | null {

@@ -39,3 +39,12 @@ export function clampPartyLevelEstimate(input: unknown): number | undefined {
   if (!Number.isFinite(num)) return undefined;
   return Math.min(CAMPAIGN_PARTY_LEVEL_MAX, Math.max(CAMPAIGN_PARTY_LEVEL_MIN, Math.round(num)));
 }
+
+// Not a bottomless array in a single Firestore document — capped like other campaign-scoped lists.
+export const CAMPAIGN_PINNED_ITEMS_CAP = 20;
+
+export function sanitizeCampaignPinnedIds(input: unknown): string[] {
+  if (!Array.isArray(input)) return [];
+  const unique = Array.from(new Set(input.map((item) => String(item || '')).filter(Boolean)));
+  return unique.slice(-CAMPAIGN_PINNED_ITEMS_CAP);
+}

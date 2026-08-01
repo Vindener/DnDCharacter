@@ -246,9 +246,13 @@
     "saveSummary": "Зберегти",
     "cancelEditSummary": "Скасувати",
     "partyLevelPlaceholder": "Орієнтовний рівень партії (1-20)",
+    "pinnedTitle": "Закріплено для цієї кампанії",
+    "pinnedHint": "Монстри й закляття, закріплені саме для цієї кампанії з бестіарію та книги заклять.",
     "quickActionsTitle": "Швидкі дії",
     "openNotes": "Нотатки кампанії",
     "openEncounterPrep": "Підготовка сутички",
+    "openBestiaryForCampaign": "Відкрити бестіарій для цієї кампанії",
+    "openSpellbookForCampaign": "Відкрити книгу заклять для цієї кампанії",
     "encounterHistory": {
       "title": "Історія енкаунтерів",
       "empty": "Для цієї кампанії ще немає збережених енкаунтерів.",

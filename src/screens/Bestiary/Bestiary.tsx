@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, FlatList, TextInput, Pressable, ScrollView } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
+import type { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import useMonsterStore from '@/context/Monster-store';
@@ -14,6 +14,8 @@ import { SkeletonBestiary } from '@/shared/ui/skeleton';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
 import { getLocalizedMonsterTerm } from '@/domain/srd/localization';
+import type { DMCampaign } from '@/dm/domain/types';
+import { subscribeAccessibleCampaigns, togglePinnedMonsterForCampaign } from '@/dm/repositories/campaignRepository';
 import {
   collectUnique,
   DEFAULT_BESTIARY_FILTERS,
@@ -68,7 +70,9 @@ const createBlankMonster = (t: TFunction<'bestiary'>): MonsterDto => ({
   },
 });
 
-const Bestiary = () => {
+type Props = StackScreenProps<ReferencesStackParamList, 'List'>;
+
+const Bestiary = ({ route }: Props) => {
   const { i18n, t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const monsters = useMonsterStore((s) => s.monsters);
@@ -84,6 +88,9 @@ const Bestiary = () => {
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
+  const campaignId = route?.params?.campaignId;
+  const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
+
   const [filters, setFilters] = useState<BestiaryFilters>(DEFAULT_BESTIARY_FILTERS);
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('full');
@@ -91,6 +98,28 @@ const Bestiary = () => {
   useEffect(() => {
     void loadMonsters();
   }, [loadMonsters]);
+
+  useEffect(() => {
+    if (!campaignId) return undefined;
+    let unsub = () => {};
+    let cancelled = false;
+
+    const run = async () => {
+      unsub = await subscribeAccessibleCampaigns((next) => {
+        if (!cancelled) setCampaigns(next);
+      });
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      if (typeof unsub === 'function') unsub();
+    };
+  }, [campaignId]);
+
+  const activeCampaign = useMemo(() => campaigns.find((item) => item.id === campaignId) || null, [campaigns, campaignId]);
+  const campaignPinnedSet = useMemo(() => new Set(activeCampaign?.pinnedMonsterIds || []), [activeCampaign]);
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedSearch(filters.search), 250);
@@ -178,6 +207,11 @@ const Bestiary = () => {
         <View style={styles.headerMeta}>
           <Text style={styles.sectionTitle}>{t('title')}</Text>
           <Text style={styles.sectionHint}>{t('hint')}</Text>
+          {!!campaignId && !!activeCampaign && (
+            <Text style={styles.sectionHint} testID='bestiary.campaignContextHint'>
+              {t('campaignContext.hint', { name: activeCampaign.name })}
+            </Text>
+          )}
         </View>
         <Pressable
           style={styles.headerAction}
@@ -369,9 +403,11 @@ const Bestiary = () => {
             monster={item}
             isPinned={pinnedSet.has(item.id)}
             isFavorite={favoriteSet.has(item.id)}
+            isPinnedForCampaign={campaignId ? campaignPinnedSet.has(item.id) : undefined}
             cardTestID='bestiary.monsterCard'
             onTogglePin={(monsterId) => void togglePinnedMonster(monsterId)}
             onToggleFavorite={(monsterId) => void toggleFavoriteMonster(monsterId)}
+            onTogglePinForCampaign={campaignId ? (monsterId) => void togglePinnedMonsterForCampaign(campaignId, monsterId) : undefined}
             onAddToEncounter={addToEncounter}
             onDuplicate={duplicateMonster}
           />

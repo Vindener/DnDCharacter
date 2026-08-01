@@ -246,9 +246,13 @@
     "saveSummary": "Save",
     "cancelEditSummary": "Cancel",
     "partyLevelPlaceholder": "Estimated party level (1-20)",
+    "pinnedTitle": "Pinned for this campaign",
+    "pinnedHint": "Monsters and spells pinned specifically for this campaign from the Bestiary and Spellbook.",
     "quickActionsTitle": "Quick actions",
     "openNotes": "Campaign Notes",
     "openEncounterPrep": "Encounter Prep",
+    "openBestiaryForCampaign": "Open Bestiary for this campaign",
+    "openSpellbookForCampaign": "Open Spellbook for this campaign",
     "encounterHistory": {
       "title": "Encounter History",
       "empty": "No saved encounters for this campaign yet.",

@@ -12,7 +12,7 @@ import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 
 export type ReferencesStackParamList = {
   ReferencesHome: undefined;
-  List: undefined;
+  List: { campaignId?: string } | undefined;
   Monster: { monster: MonsterDto };
   Spellbook: SpellbookRouteParams;
 };

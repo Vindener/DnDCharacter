@@ -51,8 +51,13 @@
     "addToEncounterShort": "До сутички",
     "pinned": "Закріплено",
     "pin": "Закріпити",
+    "pinnedForCampaign": "Закріплено для кампанії",
+    "pinForCampaign": "Закріпити для кампанії",
     "duplicate": "Копія",
     "clear": "Очистити"
+  },
+  "campaignContext": {
+    "hint": "Закріплення тут додається до кампанії «{{name}}»."
   },
   "pinned": {
     "title": "Закріплені монстри ({{count}})",
