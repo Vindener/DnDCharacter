@@ -174,6 +174,7 @@ export interface CreateCharacterDraft {
   level: string;
   photoUri?: string;
   campaign: string;
+  campaignId?: string;
   playerName: string;
   notes: string;
   raceKey: string;
@@ -724,6 +725,7 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
     notes: buildNotes(normalized),
     backstory: normalized.backstory.trim() || undefined,
     campaign: normalized.campaign.trim() || undefined,
+    campaignId: normalized.campaignId || undefined,
     alliesAndOrganizations: normalized.playerName.trim() ? `Гравець: ${normalized.playerName.trim()}` : undefined,
     photoUri: normalized.photoUri,
     characterTemplateId: templatePatch.characterTemplateId,

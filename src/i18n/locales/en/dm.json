@@ -17,6 +17,7 @@
     "conflicts": "Conflicts: {{count}}",
     "role": "Role: {{role}}",
     "openPartyOverview": "Open Full Party Overview",
+    "openMyCampaigns": "My Campaigns",
     "encounterPrepTitle": "Encounter Prep",
     "encounterPrepHint": "Build an encounter from characters and the bestiary, then send it to Initiative in one flow.",
     "startEncounterPrep": "Start Encounter Prep",
@@ -130,6 +131,8 @@
     "adjustedXp": "Adjusted XP: {{xp}}",
     "xpPerPlayer": "XP per player: {{xp}}",
     "startInitiative": "Start initiative",
+    "saveToCampaign": "Save to campaign",
+    "savedToCampaign": "Saved to campaign history • {{status}}",
     "difficulties": {
       "none": "No data",
       "trivial": "Trivial",
@@ -205,6 +208,59 @@
       "local": "Local",
       "mine": "Mine",
       "shared": "Shared"
+    }
+  },
+  "campaignsList": {
+    "title": "My Campaigns",
+    "hint": "Create, rename, and delete campaigns — explicit GM management instead of always landing on the first campaign in the list.",
+    "newCampaignButton": "+ New Campaign",
+    "namePlaceholder": "Campaign name",
+    "summaryPlaceholder": "Short summary (optional)",
+    "create": "Create",
+    "cancelCreate": "Cancel",
+    "noSummary": "No summary",
+    "partyLevel": "Estimated party level: {{level}}",
+    "members": "Characters: {{count}}",
+    "rename": "Rename",
+    "renamePlaceholder": "New campaign name",
+    "saveRename": "Save name",
+    "cancelRename": "Cancel",
+    "delete": "Delete",
+    "deleteConfirmTitle": "Delete this campaign?",
+    "deleteConfirmMessage": "The campaign \"{{name}}\" will be deleted. Its notes and encounter history are not deleted.",
+    "deleteConfirmCancel": "Cancel",
+    "deleteConfirmConfirm": "Delete",
+    "open": "Open",
+    "empty": "No campaigns yet. Create your first one to get started."
+  },
+  "campaignDetail": {
+    "notFound": "Campaign not found. It may have been deleted.",
+    "membersTitle": "Members",
+    "emptyMembers": "No characters are attached to this campaign yet.",
+    "addMemberButton": "Add character",
+    "cancelAddMember": "Cancel",
+    "noAddableCharacters": "All available characters are already in this campaign.",
+    "attach": "Attach",
+    "detach": "Detach",
+    "editSummary": "Edit summary",
+    "saveSummary": "Save",
+    "cancelEditSummary": "Cancel",
+    "partyLevelPlaceholder": "Estimated party level (1-20)",
+    "quickActionsTitle": "Quick actions",
+    "openNotes": "Campaign Notes",
+    "openEncounterPrep": "Encounter Prep",
+    "encounterHistory": {
+      "title": "Encounter History",
+      "empty": "No saved encounters for this campaign yet.",
+      "status": "Status: {{status}}",
+      "counts": "Players: {{players}} • Monsters: {{monsters}}",
+      "open": "Open",
+      "markRun": "Mark as run",
+      "statuses": {
+        "planned": "Planned",
+        "run": "Run",
+        "archived": "Archived"
+      }
     }
   },
   "campaignNotes": {

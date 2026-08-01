@@ -8,6 +8,8 @@ export interface DMCampaign {
   editors: string[];
   createdAtMs: number;
   updatedAtMs: number;
+  summary?: string;
+  partyLevelEstimate?: number;
 }
 
 export type CampaignLinkInput = {

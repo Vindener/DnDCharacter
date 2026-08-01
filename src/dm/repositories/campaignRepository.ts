@@ -1,13 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CampaignLinkInput, DMCampaign } from '@/dm/domain/types';
-import { buildCampaignId, normalizeCampaignName, resolveCampaignForLink, sortCampaignsByRecency } from '@/dm/domain/campaign';
-import { db, fbAuth, now } from '@/services/firebase';
 import {
-  LATEST_SCHEMA_VERSION,
-  createStorageEnvelope,
-  migratePayloadToLatest,
-  normalizeStorageEnvelope,
-} from '@/domain/migrations';
+  buildCampaignId,
+  clampPartyLevelEstimate,
+  normalizeCampaignName,
+  resolveCampaignForLink,
+  sanitizeCampaignSummary,
+  sortCampaignsByRecency,
+} from '@/dm/domain/campaign';
+import { db, fbAuth, now } from '@/services/firebase';
+import { LATEST_SCHEMA_VERSION, createStorageEnvelope, migratePayloadToLatest, normalizeStorageEnvelope } from '@/domain/migrations';
 
 const LOCAL_CAMPAIGNS_KEY = 'DM_CAMPAIGNS_V1';
 
@@ -42,6 +44,8 @@ function sanitizeCampaign(raw: unknown): DMCampaign | null {
     editors,
     createdAtMs: Number(cast.createdAtMs || 0),
     updatedAtMs: Number(cast.updatedAtMs || 0),
+    summary: sanitizeCampaignSummary(cast.summary),
+    partyLevelEstimate: clampPartyLevelEstimate(cast.partyLevelEstimate),
   };
 }
 
@@ -65,6 +69,8 @@ function mapCloudCampaign(doc: Record<string, unknown>): DMCampaign | null {
     editors,
     createdAtMs: toMillis(migrated.createdAt),
     updatedAtMs: toMillis(migrated.updatedAt),
+    summary: sanitizeCampaignSummary(migrated.summary),
+    partyLevelEstimate: clampPartyLevelEstimate(migrated.partyLevelEstimate),
   };
 }
 
@@ -76,7 +82,9 @@ async function persistLocalCampaigns(campaigns: DMCampaign[]): Promise<void> {
     }));
     const envelope = createStorageEnvelope('dmCampaigns', canonical);
     await AsyncStorage.setItem(LOCAL_CAMPAIGNS_KEY, JSON.stringify(envelope));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 export async function loadLocalCampaigns(): Promise<DMCampaign[]> {
@@ -163,7 +171,9 @@ export async function upsertCampaign(campaign: DMCampaign): Promise<DMCampaign> 
   if (canCloudSync()) {
     try {
       await db.collection('dmCampaigns').doc(normalized.id).set(buildCloudPayload(normalized), { merge: true });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   }
 
   return normalized;
@@ -188,6 +198,105 @@ export async function ensureCampaignForName(name: string): Promise<DMCampaign | 
   const created = buildLocalCampaign(cleanName);
   await upsertCampaign(created);
   return created;
+}
+
+export async function renameCampaign(campaignId: string, name: string): Promise<DMCampaign | null> {
+  const cleanName = String(name || '').trim();
+  if (!campaignId || !cleanName) return null;
+
+  const current = await loadLocalCampaigns();
+  const existing = current.find((campaign) => campaign.id === campaignId);
+  if (!existing) return null;
+
+  const nowMs = Date.now();
+  const next: DMCampaign = {
+    ...existing,
+    schemaVersion: LATEST_SCHEMA_VERSION,
+    name: cleanName,
+    nameNormalized: normalizeCampaignName(cleanName),
+    updatedAtMs: nowMs,
+  };
+
+  const merged = mergeCampaigns(current, [next]);
+  await persistLocalCampaigns(merged);
+
+  if (canCloudSync()) {
+    try {
+      await db.collection('dmCampaigns').doc(campaignId).update({
+        name: next.name,
+        nameNormalized: next.nameNormalized,
+        updatedAt: now(),
+      });
+    } catch (_error) {
+      /* intentionally ignored */
+    }
+  }
+
+  return next;
+}
+
+export async function updateCampaignSummary(
+  campaignId: string,
+  patch: { summary?: string; partyLevelEstimate?: number },
+): Promise<DMCampaign | null> {
+  if (!campaignId) return null;
+
+  const current = await loadLocalCampaigns();
+  const existing = current.find((campaign) => campaign.id === campaignId);
+  if (!existing) return null;
+
+  const nowMs = Date.now();
+  const next: DMCampaign = {
+    ...existing,
+    schemaVersion: LATEST_SCHEMA_VERSION,
+    updatedAtMs: nowMs,
+  };
+
+  const cloudPatch: Record<string, unknown> = {};
+  if ('summary' in patch) {
+    next.summary = sanitizeCampaignSummary(patch.summary);
+    cloudPatch.summary = next.summary ?? null;
+  }
+  if ('partyLevelEstimate' in patch) {
+    next.partyLevelEstimate = clampPartyLevelEstimate(patch.partyLevelEstimate);
+    cloudPatch.partyLevelEstimate = next.partyLevelEstimate ?? null;
+  }
+
+  const merged = mergeCampaigns(current, [next]);
+  await persistLocalCampaigns(merged);
+
+  if (canCloudSync()) {
+    try {
+      await db
+        .collection('dmCampaigns')
+        .doc(campaignId)
+        .update({ ...cloudPatch, updatedAt: now() });
+    } catch (_error) {
+      /* intentionally ignored */
+    }
+  }
+
+  return next;
+}
+
+// NOTE: deleteCampaign intentionally does NOT cascade-delete this campaign's
+// dmCampaignNotes/dmCampaignEncounters. Cascading is a separate, not-yet-made
+// product decision (docs/campaign-management-prompts.md, C1) — deleting them
+// here would risk silently destroying a co-editor's notes on a shared campaign.
+export async function deleteCampaign(campaignId: string): Promise<void> {
+  if (!campaignId) return;
+
+  const current = await loadLocalCampaigns();
+  const remaining = current.filter((campaign) => campaign.id !== campaignId);
+  await persistLocalCampaigns(remaining);
+
+  if (canCloudSync()) {
+    try {
+      await db.collection('dmCampaigns').doc(campaignId).delete();
+    } catch (_error) {
+      /* intentionally ignored */
+    }
+  }
 }
 
 export function getCampaignForLink(link: CampaignLinkInput, campaigns: DMCampaign[]): DMCampaign | null {

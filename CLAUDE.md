@@ -3,6 +3,10 @@
 Інструкції для Claude Code у репозиторії `DnDCharacter` (`MythgateDND`, продукт — **Mythgate 5e Companion**).
 
 > **Фаза: RELEASE HARDENING.** UX/UI спринти 1–6 завершені. Нових продуктових фіч до релізу не додаємо.
+> **Виняток:** Campaign Management (GM Workspace, `docs/campaign-management-prompts.md`)
+> свідомо додається паралельно з release hardening за рішенням власника
+> продукту від 2026-08-01. Роботу з цієї пачки ізольовано від R1-R5;
+> вона не звільняє від Definition of Done §9.
 > **Реліз-модель змінилась:** Play Console ще не створений, тому критичний шлях — не код, а 14-денний закритий тест Google Play. Деталі й спринти — у `docs/release-plan-google-play.md`.
 > **Ключовий продуктовий факт:** аркуш персонажа редагують **кілька людей одночасно** (owner + editors). Це змінює вимоги до синхронізації, правил Firestore і видалення акаунта. Модель і інваріанти — у `docs/collaborative-editing.md`.
 
@@ -113,7 +117,8 @@ npx -p node@20.19.4 -p npm@10 npm ci --include=dev
 ## 6. Заборонено до релізу (scope freeze)
 
 - ❌ Підвищувати Expo SDK 54 → 57 / RN. `npm audit fix` пропонує `expo@57.0.8` — **не робити**, мажор за три тижні до релізу.
-- ❌ Стартувати GM Desktop Workspace та інші нові фічі.
+- ❌ Стартувати нові фічі поза Campaign Management (див. виняток вище) —
+  Campaign Management це єдиний свідомо дозволений виняток.
 - ❌ Переписувати архітектуру навігації, схему Firestore, модель даних персонажа. Точкові фікси синку — можна й потрібно, рерайт — ні.
 - ❌ Змінювати `applicationId`/`package` (`com.vind.MythgateDND`) — після публікації незмінно.
 - ❌ Комітити keystore, `credentials.json`, сервісні акаунти, `*.jks/*.p12/*.pem`.

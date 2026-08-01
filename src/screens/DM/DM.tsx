@@ -181,8 +181,7 @@ const DM: React.FC = () => {
   );
 
   const conflictCount = useMemo(
-    () =>
-      Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length,
+    () => Object.values(syncByCharacter).filter((entry) => getSyncDisplayStatus(entry, netInfo.isConnected) === 'Conflict detected').length,
     [netInfo.isConnected, syncByCharacter],
   );
 
@@ -219,10 +218,7 @@ const DM: React.FC = () => {
     [monsters, pinnedMonsterIds],
   );
 
-  const pinnedSpells = useMemo(
-    () => spells.filter((spell) => pinnedSpellIds.includes(spell.id)).slice(0, 4),
-    [pinnedSpellIds, spells],
-  );
+  const pinnedSpells = useMemo(() => spells.filter((spell) => pinnedSpellIds.includes(spell.id)).slice(0, 4), [pinnedSpellIds, spells]);
 
   const openRootTab = (routeName: string, params?: Record<string, unknown>) => {
     const parent = navigation.getParent();
@@ -263,7 +259,9 @@ const DM: React.FC = () => {
       setIsSigningIn(true);
       await onGoogleButtonPress();
       setAuthVersion((prev) => prev + 1);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
     setIsSigningIn(false);
   };
 
@@ -302,6 +300,14 @@ const DM: React.FC = () => {
         >
           <Text style={styles.authButtonText}>{t('dm:dashboard.openPartyOverview')}</Text>
         </Pressable>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => navigation.navigate('DMCampaigns')}
+          android_ripple={{ color: colors.ripple }}
+          testID='dm.myCampaignsButton'
+        >
+          <Text style={styles.authButtonText}>{t('dm:dashboard.openMyCampaigns')}</Text>
+        </Pressable>
       </View>
 
       <View style={styles.card}>
@@ -310,7 +316,11 @@ const DM: React.FC = () => {
         <View style={styles.laneGrid}>
           <Pressable
             style={styles.laneButton}
-            onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })}
+            onPress={() =>
+              campaigns.length === 1
+                ? navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0].id })
+                : navigation.navigate('DMCampaigns')
+            }
             android_ripple={{ color: colors.ripple }}
             testID='dm.encounterPrepButton'
           >
@@ -321,7 +331,11 @@ const DM: React.FC = () => {
             <Ionicons name='flame-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:dashboard.openInitiative')}</Text>
           </Pressable>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => openRootTab('References', { screen: 'List' })}
+            android_ripple={{ color: colors.ripple }}
+          >
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:dashboard.quickBestiary')}</Text>
           </Pressable>
@@ -350,28 +364,39 @@ const DM: React.FC = () => {
         {pinnedMonsters.map((monster) => {
           const display = getLocalizedMonster(monster, i18n.language);
           return (
-          <View key={`monster-${monster.id}`} style={styles.updateRow}>
-            <Text style={styles.updateTitle}>{display.name}</Text>
-            <Text style={styles.updateMeta}>
-              {t('dm:dashboard.monsterSummary', { cr: display.challenge || '—', ac: display.armorClass ?? '—', hp: display.hitPoints ?? '—' })}
-            </Text>
-          </View>
+            <View key={`monster-${monster.id}`} style={styles.updateRow}>
+              <Text style={styles.updateTitle}>{display.name}</Text>
+              <Text style={styles.updateMeta}>
+                {t('dm:dashboard.monsterSummary', {
+                  cr: display.challenge || '—',
+                  ac: display.armorClass ?? '—',
+                  hp: display.hitPoints ?? '—',
+                })}
+              </Text>
+            </View>
           );
         })}
         {pinnedSpells.map((spell) => {
           const display = getLocalizedSpellFields(spell, i18n.language);
           return (
-          <View key={`spell-${spell.id}`} style={styles.updateRow}>
-            <Text style={styles.updateTitle}>{display.name}</Text>
-            <Text style={styles.updateMeta}>
-              {t('dm:dashboard.spellSummary', { level: spell.level === 0 ? t('dm:dashboard.cantrip') : spell.level, school: display.school })}
-            </Text>
-          </View>
+            <View key={`spell-${spell.id}`} style={styles.updateRow}>
+              <Text style={styles.updateTitle}>{display.name}</Text>
+              <Text style={styles.updateMeta}>
+                {t('dm:dashboard.spellSummary', {
+                  level: spell.level === 0 ? t('dm:dashboard.cantrip') : spell.level,
+                  school: display.school,
+                })}
+              </Text>
+            </View>
           );
         })}
         {!pinnedMonsters.length && !pinnedSpells.length ? <Text style={styles.hint}>{t('dm:dashboard.noPinnedReferences')}</Text> : null}
         <View style={styles.laneGrid}>
-          <Pressable style={styles.laneButton} onPress={() => openRootTab('References', { screen: 'List' })} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => openRootTab('References', { screen: 'List' })}
+            android_ripple={{ color: colors.ripple }}
+          >
             <Ionicons name='skull-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:dashboard.quickBestiary')}</Text>
           </Pressable>
@@ -402,7 +427,9 @@ const DM: React.FC = () => {
               <Text style={styles.updateTitle}>{item.payload.name || t('common:fallbacks.character')}</Text>
               <Text style={styles.updateMeta}>{t('dm:dashboard.source', { source: formatSource(item.source) })}</Text>
               <Text style={styles.updateMeta}>{t('dm:dashboard.syncStatus', { status: formatSyncStatus(syncStatus) })}</Text>
-              {!!shareStatus && <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>}
+              {!!shareStatus && (
+                <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>
+              )}
               <View style={styles.laneGrid}>
                 <Pressable
                   style={styles.laneButton}
@@ -453,7 +480,11 @@ const DM: React.FC = () => {
         </View>
         <Pressable
           style={styles.authButton}
-          onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
+          onPress={() =>
+            campaigns.length === 1
+              ? navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0].id })
+              : navigation.navigate('DMCampaigns')
+          }
           android_ripple={{ color: colors.ripple }}
           testID='dm.campaignNotesButton'
         >
@@ -483,7 +514,9 @@ const DM: React.FC = () => {
                 <Text style={styles.updateTitle}>{String(item.name || t('common:fallbacks.character'))}</Text>
                 <Text style={styles.updateMeta}>{t('dm:dashboard.updatedAt', { value: timeLabel })}</Text>
                 <Text style={styles.updateMeta}>{t('dm:dashboard.syncStatus', { status: formatSyncStatus(syncStatus) })}</Text>
-                {!!shareStatus && <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>}
+                {!!shareStatus && (
+                  <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>
+                )}
               </View>
             );
           })
@@ -509,4 +542,3 @@ const DM: React.FC = () => {
 };
 
 export default DM;
-

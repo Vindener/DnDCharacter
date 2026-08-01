@@ -25,6 +25,8 @@ import useSyncStore from '@/context/Sync-store';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
 import { addEditorByEmail } from '@/repositories/characterCloudRepository';
 import { createCharacterDraftRepository } from '@/repositories/createCharacterDraftRepository';
+import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import type { DMCampaign } from '@/dm/domain/types';
 import { fbAuth } from '@/services/firebase';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 import { CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
@@ -133,10 +135,35 @@ const CreateCharacter = (): JSX.Element => {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
+  const [isAddingNewCampaign, setIsAddingNewCampaign] = useState(false);
 
   const isSignedIn = Boolean(fbAuth.currentUser);
   const derived = useMemo(() => deriveDraftDefaults(draft), [draft]);
   const step = draft.step;
+  const selectedCampaignId = useMemo(
+    () => campaigns.find((campaign) => campaign.name === draft.campaign)?.id || null,
+    [campaigns, draft.campaign],
+  );
+  const showNewCampaignInput = isAddingNewCampaign || (Boolean(draft.campaign.trim()) && !selectedCampaignId);
+
+  useEffect(() => {
+    let unsub = () => {};
+    let cancelled = false;
+
+    const run = async () => {
+      unsub = await subscribeAccessibleCampaigns((next) => {
+        if (!cancelled) setCampaigns(next);
+      });
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      if (typeof unsub === 'function') unsub();
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -285,7 +312,10 @@ const CreateCharacter = (): JSX.Element => {
     try {
       setIsCreating(true);
       const localId = uuid.v4();
-      const character = buildCharacterFromDraft(draft, localId);
+      const campaignName = draft.campaign.trim();
+      const campaignRecord = campaignName ? await ensureCampaignForName(campaignName) : null;
+      const draftWithCampaign = campaignRecord ? { ...draft, campaignId: campaignRecord.id } : draft;
+      const character = buildCharacterFromDraft(draftWithCampaign, localId);
       await addCharacter(character);
       await ensureCharacterSync(character.id, cloudRequested);
 
@@ -486,7 +516,46 @@ const CreateCharacter = (): JSX.Element => {
       </View>
 
       <Text style={styles.label}>{t('identity.campaign')}</Text>
-      <TextInput style={styles.input} value={draft.campaign} onChangeText={(value) => setTextField('campaign', value)} />
+      <View style={styles.chipsWrap}>
+        {campaigns.map((campaign) => {
+          const active = campaign.id === selectedCampaignId;
+          return (
+            <Pressable
+              key={campaign.id}
+              style={[styles.chip, active ? styles.chipActive : null]}
+              onPress={() => {
+                setIsAddingNewCampaign(false);
+                updateDraft({ campaign: campaign.name });
+              }}
+              android_ripple={{ color: colors.ripple }}
+              testID={`createCharacter.campaignChip.${campaign.id}`}
+            >
+              <Text style={[styles.chipText, active ? styles.chipTextActive : null]}>{campaign.name}</Text>
+            </Pressable>
+          );
+        })}
+        <Pressable
+          style={[styles.chip, showNewCampaignInput ? styles.chipActive : null]}
+          onPress={() => {
+            setIsAddingNewCampaign(true);
+            if (selectedCampaignId) updateDraft({ campaign: '' });
+          }}
+          android_ripple={{ color: colors.ripple }}
+          testID='createCharacter.newCampaignChip'
+        >
+          <Text style={[styles.chipText, showNewCampaignInput ? styles.chipTextActive : null]}>{t('identity.newCampaignChip')}</Text>
+        </Pressable>
+      </View>
+      {showNewCampaignInput && (
+        <TextInput
+          style={styles.input}
+          value={draft.campaign}
+          onChangeText={(value) => setTextField('campaign', value)}
+          placeholder={t('identity.newCampaignPlaceholder')}
+          placeholderTextColor={colors.textSecondary}
+          testID='createCharacter.newCampaignInput'
+        />
+      )}
 
       <Text style={styles.label}>{t('identity.playerName')}</Text>
       <TextInput style={styles.input} value={draft.playerName} onChangeText={(value) => setTextField('playerName', value)} />

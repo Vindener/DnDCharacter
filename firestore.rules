@@ -171,5 +171,49 @@ service cloud.firestore {
         && isValidDmCampaignNoteWrite();
       allow delete: if isNoteOwner();
     }
+
+    match /dmCampaignEncounters/{encounterId} {
+      function isEncounterOwner() {
+        return isSignedIn() && (
+          resource.data.ownerUid == uid() ||
+          (resource.data.owners != null && uid() in resource.data.owners)
+        );
+      }
+      function isEncounterEditor() {
+        return isSignedIn() && (
+          isEncounterOwner() ||
+          (resource.data.editors != null && uid() in resource.data.editors)
+        );
+      }
+      // SEC-3 / COL-8: see isValidCharacterSheetWrite() above for the same rationale.
+      // COL-9: label/players/monsters capped so a single encounter record cannot approach
+      // the 1 MiB Firestore document limit (same risk class as campaignNote title/content).
+      function isValidDmCampaignEncounterWrite() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['id', 'ownerUid', 'owners', 'editors', 'campaignId', 'label'])
+          && d.id is string
+          && d.ownerUid is string
+          && d.owners is list && d.owners.size() > 0
+          && d.editors is list
+          && d.campaignId is string
+          && d.label is string && d.label.size() <= 200
+          && (!('players' in d) || (d.players is list && d.players.size() <= 30))
+          && (!('monsters' in d) || (d.monsters is list && d.monsters.size() <= 30));
+      }
+
+      allow get, list: if isEncounterEditor();
+      allow create: if isSignedIn()
+        && request.resource.data.ownerUid == uid()
+        && request.resource.data.owners != null
+        && uid() in request.resource.data.owners
+        && isValidDmCampaignEncounterWrite();
+      allow update: if ( isEncounterOwner()
+        || ( isEncounterEditor()
+             && request.resource.data.ownerUid == resource.data.ownerUid
+             && request.resource.data.owners == resource.data.owners
+             && request.resource.data.editors == resource.data.editors ) )
+        && isValidDmCampaignEncounterWrite();
+      allow delete: if isEncounterOwner();
+    }
   }
 }

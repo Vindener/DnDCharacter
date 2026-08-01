@@ -4,6 +4,7 @@ import type { ReactTestRenderer } from 'react-test-renderer';
 import { Alert } from 'react-native';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { CharacterEntity } from '@/domain/types';
+import type { DMCampaign } from '@/dm/domain/types';
 import { createInitialDraft, type CreateCharacterDraft } from './createCharacterWizard';
 import CreateCharacter from './CreateCharacter';
 
@@ -63,11 +64,30 @@ const mocks = vi.hoisted(() => {
     })),
     netInfo: { isConnected: true, isInternetReachable: true },
     fbAuth: { currentUser: null as null | { uid: string } },
+    campaigns: {
+      list: [] as DMCampaign[],
+      ensureCampaignForName: vi.fn(async (name: string): Promise<DMCampaign> => {
+        const cleanName = name.trim();
+        const existing = mocks.campaigns.list.find((campaign) => campaign.name.trim().toLowerCase() === cleanName.toLowerCase());
+        if (existing) return existing;
+        return {
+          id: `campaign-${cleanName.toLowerCase().replace(/\s+/g, '-')}`,
+          name: cleanName,
+          nameNormalized: cleanName.toLowerCase(),
+          ownerUid: 'local',
+          owners: ['local'],
+          editors: [],
+          createdAtMs: 0,
+          updatedAtMs: 0,
+        };
+      }),
+    },
   };
 });
 
 vi.mock('react-native', () => {
-  const host = (name: string) =>
+  const host =
+    (name: string) =>
     ({ children, ...props }: { children?: React.ReactNode; [key: string]: unknown }) =>
       React.createElement(name, props, children);
   return {
@@ -125,7 +145,9 @@ vi.mock('@/context/Character-store', () => ({
 }));
 
 vi.mock('@/context/Sync-store', () => {
-  const useSyncStore = (<T,>(selector: (state: SyncStateMock) => T): T => selector(mocks.syncState)) as (<T>(selector: (state: SyncStateMock) => T) => T) & {
+  const useSyncStore = (<T,>(selector: (state: SyncStateMock) => T): T => selector(mocks.syncState)) as (<T>(
+    selector: (state: SyncStateMock) => T,
+  ) => T) & {
     getState: () => SyncStateMock;
   };
   useSyncStore.getState = () => mocks.syncState;
@@ -146,6 +168,14 @@ vi.mock('@/repositories/characterCloudRepository', () => ({
 
 vi.mock('@/services/firebase', () => ({
   fbAuth: mocks.fbAuth,
+}));
+
+vi.mock('@/dm/repositories/campaignRepository', () => ({
+  subscribeAccessibleCampaigns: async (cb: (campaigns: DMCampaign[]) => void) => {
+    cb(mocks.campaigns.list);
+    return () => {};
+  },
+  ensureCampaignForName: (name: string) => mocks.campaigns.ensureCampaignForName(name),
 }));
 
 vi.mock('@/services/characterSyncCoordinator', () => ({
@@ -171,6 +201,7 @@ beforeEach(() => {
   mocks.netInfo.isConnected = true;
   mocks.netInfo.isInternetReachable = true;
   mocks.fbAuth.currentUser = null;
+  mocks.campaigns.list = [];
 });
 
 async function renderScreen(): Promise<ReactTestRenderer> {
@@ -296,7 +327,10 @@ describe('CreateCharacter', () => {
 
     expect(mocks.navigation.navigate).not.toHaveBeenCalled();
     pressLatestAlertAction();
-    expect(mocks.navigation.navigate).toHaveBeenCalledWith('Character', expect.objectContaining({ character: expect.objectContaining({ name: 'Local Hero' }) }));
+    expect(mocks.navigation.navigate).toHaveBeenCalledWith(
+      'Character',
+      expect.objectContaining({ character: expect.objectContaining({ name: 'Local Hero' }) }),
+    );
   });
 
   it('creates a cloud shared character when signed in', async () => {
@@ -317,5 +351,50 @@ describe('CreateCharacter', () => {
     expect(mocks.syncToCloud).toHaveBeenCalledWith(expect.objectContaining({ isOnline: true }));
     expect(mocks.addEditorByEmail).toHaveBeenCalledWith('local-id', 'dm@example.com');
     expect(mocks.syncState.ensureCharacterSync).toHaveBeenCalledWith('local-id', true);
+  });
+
+  it('assigns campaignId when selecting an existing campaign', async () => {
+    mocks.campaigns.list = [
+      {
+        id: 'campaign-existing-saga',
+        name: 'The Existing Saga',
+        nameNormalized: 'the existing saga',
+        ownerUid: 'local',
+        owners: ['local'],
+        editors: [],
+        createdAtMs: 0,
+        updatedAtMs: 0,
+      },
+    ];
+    const tree = await renderScreen();
+
+    press(tree, 'createCharacter.nextButton');
+    enterName(tree, 'Chip Hero');
+    press(tree, 'createCharacter.campaignChip.campaign-existing-saga');
+    advanceToReview(tree);
+    await pressAsync(tree, 'createCharacter.submitButton');
+
+    expect(mocks.campaigns.ensureCampaignForName).toHaveBeenCalledWith('The Existing Saga');
+    expect(mocks.characterState.addCharacter).toHaveBeenCalledWith(
+      expect.objectContaining({ campaign: 'The Existing Saga', campaignId: 'campaign-existing-saga' }),
+    );
+  });
+
+  it('creates a new campaign via ensureCampaignForName and assigns its id', async () => {
+    const tree = await renderScreen();
+
+    press(tree, 'createCharacter.nextButton');
+    enterName(tree, 'Fresh Hero');
+    press(tree, 'createCharacter.newCampaignChip');
+    act(() => {
+      findByTestId(tree, 'createCharacter.newCampaignInput').props.onChangeText('Brand New Saga');
+    });
+    advanceToReview(tree);
+    await pressAsync(tree, 'createCharacter.submitButton');
+
+    expect(mocks.campaigns.ensureCampaignForName).toHaveBeenCalledWith('Brand New Saga');
+    expect(mocks.characterState.addCharacter).toHaveBeenCalledWith(
+      expect.objectContaining({ campaign: 'Brand New Saga', campaignId: 'campaign-brand-new-saga' }),
+    );
   });
 });

@@ -264,7 +264,8 @@ adb logcat -v time -s ReactNativeJS:V | grep -i "startup-trace"
 - Справжній presence із heartbeat; журнал змін у підколекцію — після 1.0
 - Розпил `useCharacterActions.tsx` (3494 рядки) і закриття 25 `exhaustive-deps` — після 1.0
 - CI workflow (REL-4) — бажано, але не блокер
-- GM Desktop Workspace
+- GM Desktop Workspace (окрім Campaign Management MVP+, див.
+  docs/campaign-management-prompts.md — свідомий виняток від 2026-08-01)
 
 ---
 

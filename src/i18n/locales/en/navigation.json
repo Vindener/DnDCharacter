@@ -20,6 +20,8 @@
   "lootGenerator": "Loot Generator",
   "dmSharedUpdates": "Shared Updates",
   "dmPartyOverview": "Party Overview",
+  "dmCampaigns": "My Campaigns",
+  "dmCampaignDetail": "Campaign Details",
   "dmQuickEdit": "GM Quick Edit",
   "dmCampaignNotes": "Campaign Notes",
   "dmEncounterPrep": "Encounter Prep"

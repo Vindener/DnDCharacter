@@ -71,6 +71,8 @@
     "level": "Рівень",
     "portrait": "Портрет",
     "campaign": "Кампанія",
+    "newCampaignChip": "+ Нова кампанія…",
+    "newCampaignPlaceholder": "Назва нової кампанії",
     "playerName": "Ім’я гравця",
     "notes": "Нотатки"
   },

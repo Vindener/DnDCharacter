@@ -6,12 +6,14 @@ import type { StackScreenProps } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, EncounterPrepMonsterSeed, InitiativeSeed } from '@/dm/domain/types';
+import type { DMCampaign, DMCampaignEncounter, EncounterPrepMonsterSeed, InitiativeSeed } from '@/dm/domain/types';
 import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
 import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import { upsertCampaignEncounter } from '@/dm/repositories/campaignEncountersRepository';
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
 import { getCharacterCampaignLabel, isCharacterInCampaign } from '@/screens/DM/adapters';
+import { fbAuth } from '@/services/firebase';
 import { rd, sp } from '@/shared/styles/tokens';
 import { getLocalizedMonster } from '@/domain/srd/localization';
 
@@ -31,14 +33,14 @@ type PlayerSourceMode = 'campaign' | 'all';
 const DIFFICULTY_KEYS: Record<string, string> = {
   'Немає даних': 'none',
   'Дуже легко': 'trivial',
-  'Легко': 'easy',
-  'Середньо': 'medium',
-  'Складно': 'hard',
-  'Смертельно': 'deadly',
+  Легко: 'easy',
+  Середньо: 'medium',
+  Складно: 'hard',
+  Смертельно: 'deadly',
 };
 
 const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
-  const { i18n, t } = useTranslation('dm');
+  const { i18n, t } = useTranslation(['dm', 'common']);
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -54,7 +56,9 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, boolean>>({});
   const [monsterSearch, setMonsterSearch] = useState('');
   const [encounterMonsters, setEncounterMonsters] = useState<EncounterMonster[]>([]);
+  const [saveStatus, setSaveStatus] = useState('');
   const consumedSeedKey = useRef('');
+  const consumedPlayerSeedKey = useRef('');
 
   useEffect(() => {
     void loadCharacters();
@@ -83,7 +87,10 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     };
   }, [selectedCampaignId]);
 
-  const selectedCampaign = useMemo(() => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null, [campaigns, selectedCampaignId]);
+  const selectedCampaign = useMemo(
+    () => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null,
+    [campaigns, selectedCampaignId],
+  );
 
   const campaignParty = useMemo(() => {
     return characters.filter((character) => isCharacterInCampaign(character, selectedCampaign));
@@ -105,7 +112,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     setSelectedPlayers((prev) => {
       const next: Record<string, boolean> = { ...prev };
       for (const player of party) {
-        next[player.id] = prev[player.id] ?? (playerSourceMode === 'campaign');
+        next[player.id] = prev[player.id] ?? playerSourceMode === 'campaign';
       }
       return next;
     });
@@ -124,50 +131,55 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     const text = monsterSearch.trim().toLowerCase();
     const list = pinnedMonsters.length ? pinnedMonsters : localizedMonsters;
     if (!text) return list.slice(0, 24);
-    return list.filter((monster) => {
-      return (
-        (monster.name || '').toLowerCase().includes(text) ||
-        (monster.type || '').toLowerCase().includes(text) ||
-        (monster.challenge || '').toLowerCase().includes(text)
-      );
-    }).slice(0, 24);
+    return list
+      .filter((monster) => {
+        return (
+          (monster.name || '').toLowerCase().includes(text) ||
+          (monster.type || '').toLowerCase().includes(text) ||
+          (monster.challenge || '').toLowerCase().includes(text)
+        );
+      })
+      .slice(0, 24);
   }, [localizedMonsters, monsterSearch, pinnedMonsters]);
 
-  const addMonsterSeed = useCallback((seed: EncounterPrepMonsterSeed) => {
-    const localizedMatch = seed.monsterId ? localizedMonsters.find((monster) => monster.id === seed.monsterId) : undefined;
-    const name = localizedMatch?.name || seed.name || t('encounterPrep.monsterFallback');
-    const challenge = seed.challenge || '0';
-    const count = Math.max(1, Number(seed.count) || 1);
+  const addMonsterSeed = useCallback(
+    (seed: EncounterPrepMonsterSeed) => {
+      const localizedMatch = seed.monsterId ? localizedMonsters.find((monster) => monster.id === seed.monsterId) : undefined;
+      const name = localizedMatch?.name || seed.name || t('encounterPrep.monsterFallback');
+      const challenge = seed.challenge || '0';
+      const count = Math.max(1, Number(seed.count) || 1);
 
-    setEncounterMonsters((prev) => {
-      const existing = prev.find((item) =>
-        seed.monsterId ? item.monsterId === seed.monsterId : item.name === name && item.challenge === challenge,
-      );
-      if (existing) {
-        return prev.map((item) =>
-          item.id === existing.id
-            ? {
-                ...item,
-                count: item.count + count,
-                hitPoints: item.hitPoints ?? seed.hitPoints,
-              }
-            : item,
+      setEncounterMonsters((prev) => {
+        const existing = prev.find((item) =>
+          seed.monsterId ? item.monsterId === seed.monsterId : item.name === name && item.challenge === challenge,
         );
-      }
+        if (existing) {
+          return prev.map((item) =>
+            item.id === existing.id
+              ? {
+                  ...item,
+                  count: item.count + count,
+                  hitPoints: item.hitPoints ?? seed.hitPoints,
+                }
+              : item,
+          );
+        }
 
-      return [
-        ...prev,
-        {
-          id: `${seed.monsterId || name}-${challenge}-${Date.now()}`,
-          monsterId: seed.monsterId,
-          name,
-          challenge,
-          count,
-          hitPoints: seed.hitPoints,
-        },
-      ];
-    });
-  }, [localizedMonsters, t]);
+        return [
+          ...prev,
+          {
+            id: `${seed.monsterId || name}-${challenge}-${Date.now()}`,
+            monsterId: seed.monsterId,
+            name,
+            challenge,
+            count,
+            hitPoints: seed.hitPoints,
+          },
+        ];
+      });
+    },
+    [localizedMonsters, t],
+  );
 
   useEffect(() => {
     const seeds = [route.params?.initialMonster, ...(route.params?.initialMonsters || [])].filter(Boolean) as EncounterPrepMonsterSeed[];
@@ -177,6 +189,21 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     seeds.forEach(addMonsterSeed);
     navigation.setParams({ initialMonster: undefined, initialMonsters: undefined });
   }, [addMonsterSeed, navigation, route.params?.initialMonster, route.params?.initialMonsters]);
+
+  useEffect(() => {
+    const ids = route.params?.initialSelectedCharacterIds;
+    const seedKey = (ids || []).join('|');
+    if (!seedKey || consumedPlayerSeedKey.current === seedKey) return;
+    consumedPlayerSeedKey.current = seedKey;
+    setSelectedPlayers((prev) => {
+      const next = { ...prev };
+      (ids || []).forEach((id) => {
+        next[id] = true;
+      });
+      return next;
+    });
+    navigation.setParams({ initialSelectedCharacterIds: undefined });
+  }, [navigation, route.params?.initialSelectedCharacterIds]);
 
   const removeMonster = (id: string) => {
     setEncounterMonsters((prev) => prev.filter((item) => item.id !== id));
@@ -192,6 +219,47 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     );
   }, [encounterMonsters, selectedParty]);
   const difficultyLabel = t(`encounterPrep.difficulties.${DIFFICULTY_KEYS[encounterResult.difficulty] || 'none'}`);
+
+  const formatSyncStatus = (status: string) => {
+    if (status === 'Synced') return t('common:status.synced');
+    if (status === 'Pending sync') return t('common:status.pendingSync');
+    if (status === 'Offline changes pending') return t('common:status.offlineChanges');
+    if (status === 'Conflict detected') return t('common:status.conflictDetected');
+    if (status === 'Local only') return t('common:status.localOnly');
+    return status;
+  };
+
+  const saveEncounterToCampaign = async () => {
+    if (!selectedCampaignId) return;
+    const me = fbAuth.currentUser?.uid || 'local';
+    const timestamp = Date.now();
+    const draft: DMCampaignEncounter = {
+      id: `encounter-${timestamp}`,
+      campaignId: selectedCampaignId,
+      label: `${selectedCampaign?.name || t('encounterPrep.title')} — ${new Date(timestamp).toLocaleString()}`,
+      players: selectedParty.map((player) => ({
+        id: `player-${player.id}`,
+        characterId: player.id,
+        name: player.name || t('encounterPrep.playerFallback'),
+        level: Number(player.level) || 1,
+        initiativeMod: Number(player.initiative) || 0,
+        selected: true,
+      })),
+      monsters: encounterMonsters.map((monster) => ({ ...monster, selected: true })),
+      difficulty: encounterResult,
+      status: 'planned',
+      ownerUid: me,
+      owners: me ? [me] : [],
+      editors: [],
+      createdAtMs: timestamp,
+      updatedAtMs: timestamp,
+      baseUpdatedAtMs: timestamp,
+      syncStatus: fbAuth.currentUser ? 'Pending sync' : 'Local only',
+    };
+
+    const saved = await upsertCampaignEncounter(draft);
+    setSaveStatus(t('encounterPrep.savedToCampaign', { status: formatSyncStatus(saved.syncStatus) }));
+  };
 
   const startInitiative = () => {
     const entries: InitiativeSeed['entries'] = [];
@@ -290,9 +358,18 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               onPress={() => setSelectedPlayers((prev) => ({ ...prev, [player.id]: !prev[player.id] }))}
               android_ripple={{ color: colors.ripple }}
             >
-              <Text style={styles.updateTitle}>{player.name || t('encounterPrep.characterFallback')} {selected ? `• ${t('encounterPrep.selected')}` : ''}</Text>
+              <Text style={styles.updateTitle}>
+                {player.name || t('encounterPrep.characterFallback')} {selected ? `• ${t('encounterPrep.selected')}` : ''}
+              </Text>
               <Text style={styles.updateMeta}>{t('encounterPrep.campaign', { campaign: campaignLabel })}</Text>
-            <Text style={styles.updateMeta}>{t('encounterPrep.playerMeta', { level: player.level || 1, initiative: player.initiative || 0, current: player.hp?.current || 0, max: player.hp?.max || 0 })}</Text>
+              <Text style={styles.updateMeta}>
+                {t('encounterPrep.playerMeta', {
+                  level: player.level || 1,
+                  initiative: player.initiative || 0,
+                  current: player.hp?.current || 0,
+                  max: player.hp?.max || 0,
+                })}
+              </Text>
             </Pressable>
           );
         })}
@@ -324,7 +401,12 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             android_ripple={{ color: colors.ripple }}
           >
             <Text style={styles.updateTitle}>{monster.name || t('encounterPrep.monsterFallback')}</Text>
-            <Text style={styles.updateMeta}>{t('encounterPrep.monsterMeta', { challenge: monster.challenge || '0', type: monster.type || t('encounterPrep.unknownType') })}</Text>
+            <Text style={styles.updateMeta}>
+              {t('encounterPrep.monsterMeta', {
+                challenge: monster.challenge || '0',
+                type: monster.type || t('encounterPrep.unknownType'),
+              })}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -335,15 +417,15 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         {encounterMonsters.map((monster) => (
           <View key={monster.id} style={styles.updateRow}>
             <Text style={styles.updateTitle}>{monster.name}</Text>
-            <Text style={styles.updateMeta}>{t('encounterPrep.rosterMeta', { challenge: monster.challenge, count: monster.count, hp: monster.hitPoints ?? '—' })}</Text>
+            <Text style={styles.updateMeta}>
+              {t('encounterPrep.rosterMeta', { challenge: monster.challenge, count: monster.count, hp: monster.hitPoints ?? '—' })}
+            </Text>
             <View style={styles.laneGrid}>
               <Pressable
                 style={styles.laneButton}
                 onPress={() => {
                   setEncounterMonsters((prev) =>
-                    prev.map((item) =>
-                      item.id === monster.id ? { ...item, count: Math.max(1, item.count - 1) } : item,
-                    ),
+                    prev.map((item) => (item.id === monster.id ? { ...item, count: Math.max(1, item.count - 1) } : item)),
                   );
                 }}
                 android_ripple={{ color: colors.ripple }}
@@ -353,9 +435,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
               <Pressable
                 style={styles.laneButton}
                 onPress={() => {
-                  setEncounterMonsters((prev) =>
-                    prev.map((item) => (item.id === monster.id ? { ...item, count: item.count + 1 } : item)),
-                  );
+                  setEncounterMonsters((prev) => prev.map((item) => (item.id === monster.id ? { ...item, count: item.count + 1 } : item)));
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
@@ -379,6 +459,18 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
           <Text style={styles.authButtonText}>{t('encounterPrep.startInitiative')}</Text>
         </Pressable>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => {
+            void saveEncounterToCampaign();
+          }}
+          disabled={!selectedCampaignId}
+          android_ripple={{ color: colors.ripple }}
+          testID='encounterPrep.saveToCampaignButton'
+        >
+          <Text style={styles.authButtonText}>{t('encounterPrep.saveToCampaign')}</Text>
+        </Pressable>
+        {!!saveStatus && <Text style={styles.hint}>{saveStatus}</Text>}
       </View>
     </ScrollView>
   );

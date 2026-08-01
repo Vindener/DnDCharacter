@@ -10,6 +10,8 @@ import DMPartyOverview from '@/screens/DM/DMPartyOverview';
 import DMQuickEdit from '@/screens/DM/DMQuickEdit';
 import DMCampaignNotes from '@/screens/DM/DMCampaignNotes';
 import DMEncounterPrep from '@/screens/DM/DMEncounterPrep';
+import DMCampaigns from '@/screens/DM/DMCampaigns';
+import DMCampaignDetail from '@/screens/DM/DMCampaignDetail';
 import Header from '@/modules/Header/Header';
 import type { EncounterPrepMonsterSeed } from '@/dm/domain/types';
 
@@ -19,9 +21,18 @@ export type DMStackParamList = {
   EncounterCalculator: undefined;
   DMSharedUpdates: undefined;
   DMPartyOverview: undefined;
+  DMCampaigns: undefined;
+  DMCampaignDetail: { campaignId: string };
   DMQuickEdit: { characterId: string };
   DMCampaignNotes: { campaignId?: string } | undefined;
-  DMEncounterPrep: { campaignId?: string; initialMonster?: EncounterPrepMonsterSeed; initialMonsters?: EncounterPrepMonsterSeed[] } | undefined;
+  DMEncounterPrep:
+    | {
+        campaignId?: string;
+        initialMonster?: EncounterPrepMonsterSeed;
+        initialMonsters?: EncounterPrepMonsterSeed[];
+        initialSelectedCharacterIds?: string[];
+      }
+    | undefined;
 };
 
 const Stack = createStackNavigator<DMStackParamList>();
@@ -45,6 +56,8 @@ export default function DMNavigator() {
       <Stack.Screen name='EncounterCalculator' component={EncounterCalculator} options={{ title: t('encounterCalculator') }} />
       <Stack.Screen name='DMSharedUpdates' component={DMSharedUpdates} options={{ title: t('dmSharedUpdates') }} />
       <Stack.Screen name='DMPartyOverview' component={DMPartyOverview} options={{ title: t('dmPartyOverview') }} />
+      <Stack.Screen name='DMCampaigns' component={DMCampaigns} options={{ title: t('dmCampaigns') }} />
+      <Stack.Screen name='DMCampaignDetail' component={DMCampaignDetail} options={{ title: t('dmCampaignDetail') }} />
       <Stack.Screen name='DMQuickEdit' component={DMQuickEdit} options={{ title: t('dmQuickEdit') }} />
       <Stack.Screen name='DMCampaignNotes' component={DMCampaignNotes} options={{ title: t('dmCampaignNotes') }} />
       <Stack.Screen name='DMEncounterPrep' component={DMEncounterPrep} options={{ title: t('dmEncounterPrep') }} />

@@ -1,6 +1,10 @@
 export type {
   CampaignLinkInput,
   DMCampaign,
+  DMCampaignEncounter,
+  DMCampaignEncounterConflictRemote,
+  DMCampaignEncounterQueueItem,
+  DMCampaignEncounterStatus,
   DMCampaignNote,
   DMCampaignNoteConflictRemote,
   DMCampaignNoteQueueItem,

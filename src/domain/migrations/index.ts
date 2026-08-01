@@ -7,6 +7,8 @@ export type MigrationKind =
   | 'dmCampaigns'
   | 'dmCampaignNotes'
   | 'dmNotesQueue'
+  | 'dmCampaignEncounters'
+  | 'dmCampaignEncountersQueue'
   | 'dmMonsters'
   | 'dmPins'
   | 'dmMonsterFavorites'
@@ -75,7 +77,7 @@ const SRD_CLASS_NAME_TO_ID: Record<string, string> = {
 
 const SRD_RACE_NAME_TO_ID: Record<string, string> = {
   dragonborn: 'dragonborn',
-  'драконороджений': 'dragonborn',
+  драконороджений: 'dragonborn',
   dwarf: 'dwarf',
   дварф: 'dwarf',
   elf: 'elf',
@@ -211,9 +213,7 @@ function normalizeLegacyFeatureEntries(rawBlocks: unknown) {
         id: `legacy-feature-${blockId}-${entryIndex}`,
         kind: 'ability',
         name: entryName,
-        description: blockTitle
-          ? `Із застарілого блоку особливостей: ${blockTitle}`
-          : 'Перенесено із застарілого блоку особливостей',
+        description: blockTitle ? `Із застарілого блоку особливостей: ${blockTitle}` : 'Перенесено із застарілого блоку особливостей',
         tags: blockTitle ? [blockTitle] : [],
       });
     });
@@ -256,11 +256,7 @@ function migrateCharacterV2toV3(payload: unknown): unknown {
   const legacySpellEntries = normalizeLegacySpellEntries(record.customSpellLists);
   const legacyFeatureEntries = normalizeLegacyFeatureEntries(record.customFeatureBlocks);
 
-  next.homebrewEntries = mergeUniqueById([
-    ...(existingEntries as Array<{ id: string }>),
-    ...legacySpellEntries,
-    ...legacyFeatureEntries,
-  ]);
+  next.homebrewEntries = mergeUniqueById([...(existingEntries as Array<{ id: string }>), ...legacySpellEntries, ...legacyFeatureEntries]);
   next.customSpellLists = [];
   next.customFeatureBlocks = [];
   next.customTrackers = [];
@@ -370,7 +366,18 @@ function ensureStringArray(payload: unknown): string[] {
 }
 
 function stampPersistedSchemaVersion(kind: MigrationKind, payload: unknown): unknown {
-  if (kind === 'appRole' || kind === 'dmPins' || kind === 'dmMonsterFavorites' || kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites' || kind === 'spellbookPins' || kind === 'spellbookNotes') {
+  if (
+    kind === 'appRole' ||
+    kind === 'dmPins' ||
+    kind === 'dmMonsterFavorites' ||
+    kind === 'dmMonsters' ||
+    kind === 'dmUserTemplates' ||
+    kind === 'dmNotesQueue' ||
+    kind === 'spellbookSpells' ||
+    kind === 'spellbookFavorites' ||
+    kind === 'spellbookPins' ||
+    kind === 'spellbookNotes'
+  ) {
     return payload;
   }
 
@@ -389,7 +396,18 @@ function migrateKindV1toV2(kind: MigrationKind, payload: unknown): unknown {
   if (kind === 'character') return migrateCharacterV1toV2(payload);
   if (kind === 'dmPins' || kind === 'dmMonsterFavorites' || kind === 'spellbookPins') return ensureStringArray(payload);
   if (kind === 'appRole') return normalizeAppRole(payload);
-  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites' || kind === 'spellbookNotes') {
+  if (
+    kind === 'dmMonsters' ||
+    kind === 'dmUserTemplates' ||
+    kind === 'dmCampaigns' ||
+    kind === 'dmCampaignNotes' ||
+    kind === 'dmNotesQueue' ||
+    kind === 'dmCampaignEncounters' ||
+    kind === 'dmCampaignEncountersQueue' ||
+    kind === 'spellbookSpells' ||
+    kind === 'spellbookFavorites' ||
+    kind === 'spellbookNotes'
+  ) {
     return payload;
   }
   return payload;
@@ -399,7 +417,18 @@ function migrateKindV2toV3(kind: MigrationKind, payload: unknown): unknown {
   if (kind === 'character') return migrateCharacterV2toV3(payload);
   if (kind === 'dmPins' || kind === 'dmMonsterFavorites' || kind === 'spellbookPins') return ensureStringArray(payload);
   if (kind === 'appRole') return normalizeAppRole(payload);
-  if (kind === 'dmMonsters' || kind === 'dmUserTemplates' || kind === 'dmCampaigns' || kind === 'dmCampaignNotes' || kind === 'dmNotesQueue' || kind === 'spellbookSpells' || kind === 'spellbookFavorites' || kind === 'spellbookNotes') {
+  if (
+    kind === 'dmMonsters' ||
+    kind === 'dmUserTemplates' ||
+    kind === 'dmCampaigns' ||
+    kind === 'dmCampaignNotes' ||
+    kind === 'dmNotesQueue' ||
+    kind === 'dmCampaignEncounters' ||
+    kind === 'dmCampaignEncountersQueue' ||
+    kind === 'spellbookSpells' ||
+    kind === 'spellbookFavorites' ||
+    kind === 'spellbookNotes'
+  ) {
     return payload;
   }
   return payload;

@@ -17,6 +17,7 @@
     "conflicts": "Конфлікти: {{count}}",
     "role": "Роль: {{role}}",
     "openPartyOverview": "Відкрити повний огляд групи",
+    "openMyCampaigns": "Мої кампанії",
     "encounterPrepTitle": "Підготовка сутички",
     "encounterPrepHint": "Зберіть склад сутички з персонажів та бестіарію і передайте в Ініціативу одним потоком.",
     "startEncounterPrep": "Почати підготовку сутички",
@@ -130,6 +131,8 @@
     "adjustedXp": "Скоригований досвід: {{xp}}",
     "xpPerPlayer": "Досвід на гравця: {{xp}}",
     "startInitiative": "Почати ініціативу",
+    "saveToCampaign": "Зберегти в кампанію",
+    "savedToCampaign": "Збережено в історію кампанії • {{status}}",
     "difficulties": {
       "none": "Немає даних",
       "trivial": "Дуже легко",
@@ -205,6 +208,59 @@
       "local": "Локальні",
       "mine": "Мої",
       "shared": "Спільні"
+    }
+  },
+  "campaignsList": {
+    "title": "Мої кампанії",
+    "hint": "Створюйте, перейменовуйте та видаляйте кампанії — GM-керування без прив'язки до першої кампанії в списку.",
+    "newCampaignButton": "+ Нова кампанія",
+    "namePlaceholder": "Назва кампанії",
+    "summaryPlaceholder": "Короткий опис (необов'язково)",
+    "create": "Створити",
+    "cancelCreate": "Скасувати",
+    "noSummary": "Без опису",
+    "partyLevel": "Орієнтовний рівень партії: {{level}}",
+    "members": "Персонажів: {{count}}",
+    "rename": "Перейменувати",
+    "renamePlaceholder": "Нова назва кампанії",
+    "saveRename": "Зберегти назву",
+    "cancelRename": "Скасувати",
+    "delete": "Видалити",
+    "deleteConfirmTitle": "Видалити кампанію?",
+    "deleteConfirmMessage": "Кампанія «{{name}}» буде видалена. Нотатки та історія енкаунтерів кампанії не видаляються.",
+    "deleteConfirmCancel": "Скасувати",
+    "deleteConfirmConfirm": "Видалити",
+    "open": "Відкрити",
+    "empty": "Кампаній ще немає. Створіть першу, щоб почати."
+  },
+  "campaignDetail": {
+    "notFound": "Кампанію не знайдено. Її могли видалити.",
+    "membersTitle": "Учасники",
+    "emptyMembers": "До цієї кампанії ще не прикріплено персонажів.",
+    "addMemberButton": "Додати персонажа",
+    "cancelAddMember": "Скасувати",
+    "noAddableCharacters": "Усі доступні персонажі вже в цій кампанії.",
+    "attach": "Прикріпити",
+    "detach": "Відкріпити",
+    "editSummary": "Редагувати опис",
+    "saveSummary": "Зберегти",
+    "cancelEditSummary": "Скасувати",
+    "partyLevelPlaceholder": "Орієнтовний рівень партії (1-20)",
+    "quickActionsTitle": "Швидкі дії",
+    "openNotes": "Нотатки кампанії",
+    "openEncounterPrep": "Підготовка сутички",
+    "encounterHistory": {
+      "title": "Історія енкаунтерів",
+      "empty": "Для цієї кампанії ще немає збережених енкаунтерів.",
+      "status": "Статус: {{status}}",
+      "counts": "Гравців: {{players}} • Монстрів: {{monsters}}",
+      "open": "Відкрити",
+      "markRun": "Позначити як проведений",
+      "statuses": {
+        "planned": "Заплановано",
+        "run": "Проведено",
+        "archived": "В архіві"
+      }
     }
   },
   "campaignNotes": {

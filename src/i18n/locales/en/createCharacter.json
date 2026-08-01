@@ -71,6 +71,8 @@
     "level": "Level",
     "portrait": "Portrait",
     "campaign": "Campaign",
+    "newCampaignChip": "+ New campaign…",
+    "newCampaignPlaceholder": "New campaign name",
     "playerName": "Player name",
     "notes": "Notes"
   },

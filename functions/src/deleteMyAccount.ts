@@ -9,7 +9,7 @@ if (!getApps().length) {
   initializeApp();
 }
 
-const CASCADE_COLLECTIONS = ['characterSheets', 'dmCampaigns', 'dmCampaignNotes'] as const;
+const CASCADE_COLLECTIONS = ['characterSheets', 'dmCampaigns', 'dmCampaignNotes', 'dmCampaignEncounters'] as const;
 type CascadeCollectionName = (typeof CASCADE_COLLECTIONS)[number];
 
 export type DeleteMyAccountRequest = {
@@ -91,7 +91,7 @@ async function planConnectionOps(db: Firestore, myUid: string): Promise<WriteOp[
 const BATCH_CHUNK_SIZE = 450;
 
 /**
- * Removes every trace of `myUid` from characterSheets/dmCampaigns/dmCampaignNotes
+ * Removes every trace of `myUid` from characterSheets/dmCampaigns/dmCampaignNotes/dmCampaignEncounters
  * (per the COL-10 owner/editor table), connections, emailIndex and users.
  * Writes are chunked into Firestore's 500-op batch limit; each chunk commits
  * atomically, but a very large fan-out (500+ owned/shared docs) is not

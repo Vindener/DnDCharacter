@@ -21,3 +21,21 @@ export function buildCampaignId(name: string): string {
 export function sortCampaignsByRecency(items: DMCampaign[]): DMCampaign[] {
   return [...items].sort((a, b) => b.updatedAtMs - a.updatedAtMs || a.name.localeCompare(b.name));
 }
+
+const CAMPAIGN_SUMMARY_MAX_LENGTH = 500;
+const CAMPAIGN_PARTY_LEVEL_MIN = 1;
+const CAMPAIGN_PARTY_LEVEL_MAX = 20;
+
+export function sanitizeCampaignSummary(input: unknown): string | undefined {
+  if (input == null) return undefined;
+  const trimmed = String(input).trim();
+  if (!trimmed) return undefined;
+  return trimmed.slice(0, CAMPAIGN_SUMMARY_MAX_LENGTH);
+}
+
+export function clampPartyLevelEstimate(input: unknown): number | undefined {
+  if (input == null) return undefined;
+  const num = Number(input);
+  if (!Number.isFinite(num)) return undefined;
+  return Math.min(CAMPAIGN_PARTY_LEVEL_MAX, Math.max(CAMPAIGN_PARTY_LEVEL_MIN, Math.round(num)));
+}
