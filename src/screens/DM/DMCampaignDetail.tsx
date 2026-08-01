@@ -37,6 +37,7 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   const localCharacters = useCharacterStore((s) => s.characters);
   const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
+  const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const ensureCharacterSync = useSyncStore((s) => s.ensureCharacterSync);
   const setCloudAvailability = useSyncStore((s) => s.setCloudAvailability);
@@ -287,6 +288,24 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
+  const openCharacter = async (character: CharacterViewModel) => {
+    const local = await ensureLocalCharacter(character);
+    setCurrentCharacterId(local.id);
+    const root = navigation.getParent();
+    if (!root) return;
+    root.dispatch(
+      CommonActions.navigate({
+        name: 'Heroes',
+        params: { screen: 'Character', params: { character: local } },
+      }),
+    );
+  };
+
+  const openQuickEdit = async (character: CharacterViewModel) => {
+    const local = await ensureLocalCharacter(character);
+    navigation.navigate('DMQuickEdit', { characterId: local.id });
+  };
+
   const startEditingSummary = () => {
     if (!campaign) return;
     setSummaryInput(campaign.summary || '');
@@ -433,6 +452,28 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
               })}
             </Text>
             <View style={styles.laneGrid}>
+              <Pressable
+                style={styles.laneButton}
+                onPress={() => {
+                  void openCharacter(item.payload);
+                }}
+                android_ripple={{ color: colors.ripple }}
+                testID={`dmCampaignDetail.openCharacter.${item.id}`}
+              >
+                <Ionicons name='link-outline' size={18} color={colors.text} />
+                <Text style={styles.laneButtonText}>{t('dm:partyOverview.openLiveCopy')}</Text>
+              </Pressable>
+              <Pressable
+                style={styles.laneButton}
+                onPress={() => {
+                  void openQuickEdit(item.payload);
+                }}
+                android_ripple={{ color: colors.ripple }}
+                testID={`dmCampaignDetail.quickEdit.${item.id}`}
+              >
+                <Ionicons name='create-outline' size={18} color={colors.text} />
+                <Text style={styles.laneButtonText}>{t('dm:partyOverview.quickEdit')}</Text>
+              </Pressable>
               <Pressable
                 style={styles.laneButton}
                 onPress={() => {

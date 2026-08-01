@@ -27,6 +27,7 @@ const mocks = vi.hoisted(() => {
     doc,
     runTransaction: vi.fn(async (fn: (transaction: typeof tx) => Promise<void>) => fn(tx)),
     arrayUnion: vi.fn((...items: unknown[]) => ({ __op: 'arrayUnion', items })),
+    deleteField: vi.fn(() => ({ __op: 'deleteField' })),
     ensureConnection: vi.fn(async () => {}),
     findUserByEmail: vi.fn(async (): Promise<string | null> => null),
     fbAuth: { currentUser: { uid: 'user-1' } as { uid: string } | null },
@@ -42,6 +43,7 @@ vi.mock('@/services/firebase', () => ({
   now: () => 'server-now',
   hasDoc: (snap: { exists?: boolean } | null | undefined) => Boolean(snap?.exists),
   arrayUnion: mocks.arrayUnion,
+  deleteField: mocks.deleteField,
 }));
 
 vi.mock('@/services/connections', () => ({
@@ -118,6 +120,19 @@ describe('characterCloudRepository', () => {
     for (const key of ACCESS_KEYS) {
       expect(patch).not.toHaveProperty(key);
     }
+  });
+
+  it('clears campaignId server-side with deleteField() when detaching, instead of skipping it', async () => {
+    mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({ campaignId: 'campaign-1' }) });
+
+    await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', campaignId: undefined, campaign: '' }), {
+      historyPaths: ['overview.campaign'],
+    });
+
+    expect(mocks.targetRef.update).toHaveBeenCalledTimes(1);
+    const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+    expect(patch.campaignId).toEqual({ __op: 'deleteField' });
+    expect(mocks.deleteField).toHaveBeenCalled();
   });
 
   it('falls back to a transaction for an unknown/tab-default sync-path, never touching owners/editors/ownerUid', async () => {

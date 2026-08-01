@@ -1,4 +1,4 @@
-import { db, fbAuth, now, hasDoc, arrayUnion } from '@/services/firebase';
+import { db, fbAuth, now, hasDoc, arrayUnion, deleteField } from '@/services/firebase';
 import { ensureConnection } from '@/services/connections';
 import { findUserByEmail } from '@/services/users';
 import type { CharacterDto } from '@/domain/types';
@@ -457,7 +457,11 @@ export async function upsertCharacterSheetFromLocal(
     const patch: Record<string, unknown> = { updatedAt: now() };
     for (const fieldPath of fieldMap.fieldPaths) {
       const value = getValueAtPath(contentPayload, fieldPath);
-      if (value !== undefined) patch[fieldPath] = value;
+      // A field explicitly declared by historyPaths that resolves to undefined means the
+      // caller cleared it locally (e.g. detaching a character sets campaignId back to
+      // undefined) — it must be deleted server-side, not silently skipped, or the stale
+      // cloud value keeps winning on the next onSnapshot read.
+      patch[fieldPath] = value === undefined ? deleteField() : value;
     }
     if (additions.length) {
       patch.changeHistory = arrayUnion(...additions);
