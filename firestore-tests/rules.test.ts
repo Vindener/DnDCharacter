@@ -80,6 +80,18 @@ function validDmCampaignInvite(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function validDmCampaignInitiative(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'campaign-1',
+    campaignId: 'campaign-1',
+    ownerUid: 'dm-1',
+    round: 1,
+    combatants: [],
+    updatedAtMs: 1,
+    ...overrides,
+  };
+}
+
 function validDmCampaignNote(overrides: Record<string, unknown> = {}) {
   return {
     id: 'note-1',
@@ -357,6 +369,88 @@ describe('firestore.rules', () => {
 
       const owner = testEnv.authenticatedContext('dm-1').firestore();
       await assertFails(owner.collection('dmCampaignInvites').doc('CODE1234').delete());
+    });
+  });
+
+  describe('dmCampaignInitiative (live shared initiative tracker, owner-only write, cross-doc get())', () => {
+    it('the campaign owner can create/update/delete their own tracker', async () => {
+      await seed((db) => db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign()));
+
+      const dm = testEnv.authenticatedContext('dm-1').firestore();
+      await assertSucceeds(dm.collection('dmCampaignInitiative').doc('campaign-1').set(validDmCampaignInitiative()));
+      await assertSucceeds(dm.collection('dmCampaignInitiative').doc('campaign-1').update({ round: 2, updatedAtMs: 2 }));
+      await assertSucceeds(dm.collection('dmCampaignInitiative').doc('campaign-1').delete());
+    });
+
+    it('a non-owner editor of the campaign can read the tracker but cannot create/update/delete it', async () => {
+      await seed(async (db) => {
+        await db
+          .collection('dmCampaigns')
+          .doc('campaign-1')
+          .set(validDmCampaign({ editors: ['editor-1'] }));
+        await db.collection('dmCampaignInitiative').doc('campaign-1').set(validDmCampaignInitiative());
+      });
+
+      const editor = testEnv.authenticatedContext('editor-1').firestore();
+      await assertSucceeds(editor.collection('dmCampaignInitiative').doc('campaign-1').get());
+      await assertFails(
+        editor
+          .collection('dmCampaignInitiative')
+          .doc('campaign-1')
+          .set(validDmCampaignInitiative({ ownerUid: 'editor-1' })),
+      );
+      await assertFails(editor.collection('dmCampaignInitiative').doc('campaign-1').update({ round: 2 }));
+      await assertFails(editor.collection('dmCampaignInitiative').doc('campaign-1').delete());
+    });
+
+    it('a stranger (not on the campaign at all) cannot even read the tracker', async () => {
+      await seed(async (db) => {
+        await db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign());
+        await db.collection('dmCampaignInitiative').doc('campaign-1').set(validDmCampaignInitiative());
+      });
+
+      const stranger = testEnv.authenticatedContext('stranger').firestore();
+      await assertFails(stranger.collection('dmCampaignInitiative').doc('campaign-1').get());
+    });
+
+    it('rejects a malformed tracker create (missing keys) even from the owner', async () => {
+      await seed((db) => db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign()));
+
+      const dm = testEnv.authenticatedContext('dm-1').firestore();
+      const malformed = { id: 'campaign-1', campaignId: 'campaign-1', ownerUid: 'dm-1' };
+      await assertFails(dm.collection('dmCampaignInitiative').doc('campaign-1').set(malformed));
+    });
+
+    it('listing/querying dmCampaignInitiative is always rejected', async () => {
+      await seed(async (db) => {
+        await db.collection('dmCampaigns').doc('campaign-1').set(validDmCampaign());
+        await db.collection('dmCampaignInitiative').doc('campaign-1').set(validDmCampaignInitiative());
+      });
+
+      const dm = testEnv.authenticatedContext('dm-1').firestore();
+      await assertFails(dm.collection('dmCampaignInitiative').get());
+    });
+
+    it('a player added to the campaign after the tracker was created gets read access immediately, with no write to the tracker itself', async () => {
+      await seed(async (db) => {
+        await db
+          .collection('dmCampaigns')
+          .doc('campaign-1')
+          .set(validDmCampaign({ editors: [] }));
+        await db.collection('dmCampaignInitiative').doc('campaign-1').set(validDmCampaignInitiative());
+      });
+
+      const newEditor = testEnv.authenticatedContext('new-editor').firestore();
+      await assertFails(newEditor.collection('dmCampaignInitiative').doc('campaign-1').get());
+
+      await seed((db) =>
+        db
+          .collection('dmCampaigns')
+          .doc('campaign-1')
+          .update({ editors: ['new-editor'] }),
+      );
+
+      await assertSucceeds(newEditor.collection('dmCampaignInitiative').doc('campaign-1').get());
     });
   });
 });

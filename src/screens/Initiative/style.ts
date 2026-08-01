@@ -94,7 +94,32 @@ export const getStyles = (c: ThemeColors) =>
       color: c.text,
       fontSize: fs(16),
     },
+
+    emptyState: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: sp(64),
+      paddingHorizontal: sp(24),
+    },
+    emptyStateText: {
+      marginTop: sp(12),
+      color: c.textSecondary,
+      fontSize: fs(15),
+      textAlign: 'center',
+    },
+
+    localModeBanner: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      backgroundColor: c.card,
+      borderRadius: rd(10),
+      padding: sp(12),
+      marginBottom: sp(12),
+    },
+    localModeBannerText: {
+      flex: 1,
+      marginLeft: sp(8),
+      color: c.textSecondary,
+      fontSize: fs(13),
+    },
   });
-
-
-

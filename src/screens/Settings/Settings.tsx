@@ -13,6 +13,9 @@ import DeleteAccountModal from '@/screens/Settings/DeleteAccountModal';
 import { changeAppLanguage, getCurrentLanguage } from '@/i18n';
 import type { AppLanguage } from '@/i18n/languageStorage';
 import type { TabStackParamList } from '@/navigation/TabNavigator';
+import useDmSettingsStore from '@/context/DmSettings-store';
+import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
+import type { DMCampaign } from '@/dm/domain/types';
 
 type SettingsNavigation = StackNavigationProp<TabStackParamList, 'Settings'>;
 
@@ -42,6 +45,33 @@ const Settings = () => {
   React.useEffect(() => {
     setSelectedLanguage(getCurrentLanguage());
   }, [i18n.language]);
+
+  const [campaigns, setCampaigns] = React.useState<DMCampaign[]>([]);
+  const defaultCampaignId = useDmSettingsStore((s) => s.defaultCampaignId);
+  const setDefaultCampaignId = useDmSettingsStore((s) => s.setDefaultCampaignId);
+  const loadDefaultCampaignId = useDmSettingsStore((s) => s.loadDefaultCampaignId);
+
+  React.useEffect(() => {
+    void loadDefaultCampaignId();
+  }, [loadDefaultCampaignId]);
+
+  React.useEffect(() => {
+    let unsub = () => {};
+    let cancelled = false;
+
+    const run = async () => {
+      unsub = await subscribeAccessibleCampaigns((next) => {
+        if (!cancelled) setCampaigns(next);
+      });
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+      if (typeof unsub === 'function') unsub();
+    };
+  }, []);
 
   const openModal = () => {
     setName('');
@@ -184,6 +214,49 @@ const Settings = () => {
             <Text style={styles.actionButtonText}>{t('settings:privacyPolicy.open')}</Text>
           </Pressable>
         </View>
+
+        {campaigns.length > 0 && (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>{t('settings:defaultCampaign.title')}</Text>
+            <Text style={styles.sectionHint}>{t('settings:defaultCampaign.hint')}</Text>
+            <View style={styles.languageRow}>
+              <Pressable
+                accessibilityRole='button'
+                accessibilityState={{ selected: !defaultCampaignId }}
+                android_ripple={{ color: colors.ripple }}
+                onPress={() => void setDefaultCampaignId(null)}
+                style={({ pressed }) => [
+                  styles.languageButton,
+                  !defaultCampaignId ? styles.languageButtonActive : null,
+                  pressed ? styles.languageButtonPressed : null,
+                ]}
+              >
+                <Text style={[styles.languageButtonText, !defaultCampaignId ? styles.languageButtonTextActive : null]}>
+                  {t('settings:defaultCampaign.none')}
+                </Text>
+              </Pressable>
+              {campaigns.map((campaign) => {
+                const isActive = defaultCampaignId === campaign.id;
+                return (
+                  <Pressable
+                    key={campaign.id}
+                    accessibilityRole='button'
+                    accessibilityState={{ selected: isActive }}
+                    android_ripple={{ color: colors.ripple }}
+                    onPress={() => void setDefaultCampaignId(campaign.id)}
+                    style={({ pressed }) => [
+                      styles.languageButton,
+                      isActive ? styles.languageButtonActive : null,
+                      pressed ? styles.languageButtonPressed : null,
+                    ]}
+                  >
+                    <Text style={[styles.languageButtonText, isActive ? styles.languageButtonTextActive : null]}>{campaign.name}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+        )}
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('settings:analytics.title')}</Text>

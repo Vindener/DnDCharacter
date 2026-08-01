@@ -72,5 +72,10 @@
     "title": "Usage analytics",
     "hint": "Anonymous stats help us improve the app: action types and sync conflicts. No email, uid, character names, or note text. Off by default.",
     "toggle": "Allow analytics"
+  },
+  "defaultCampaign": {
+    "title": "Default campaign",
+    "hint": "Used for the Initiative tab and other DM screens when no campaign is passed in directly.",
+    "none": "None (always ask)"
   }
 }

@@ -6,6 +6,7 @@ import { characterMapper } from '@/domain/mappers';
 import { LATEST_SCHEMA_VERSION, migratePayloadToLatest } from '@/domain/migrations';
 import { mapSyncPathsToFieldPaths } from '@/repositories/syncPathFieldMap';
 import { classifySyncError } from '@/shared/helpers/sync/syncErrorClassification';
+import { stripUndefinedDeep } from '@/shared/helpers/stripUndefinedDeep';
 
 export type CharacterTabKey = 'Overview' | 'Combat' | 'Magic' | 'Inventory' | 'Notes' | 'Homebrew';
 export type CharacterActorRole = 'DM' | 'Player';
@@ -637,22 +638,7 @@ export async function saveCharacterSheetAsNew(dto: CharacterCloudDto) {
   }
 }
 
-export function stripUndefinedDeep<T>(value: T): T {
-  if (Array.isArray(value)) {
-    return value.filter((entry) => entry !== undefined).map((entry) => stripUndefinedDeep(entry)) as unknown as T;
-  }
-
-  if (value && typeof value === 'object') {
-    const out: Record<string, unknown> = {};
-    for (const [key, nested] of Object.entries(value as Record<string, unknown>)) {
-      if (nested === undefined) continue;
-      out[key] = stripUndefinedDeep(nested);
-    }
-    return out as T;
-  }
-
-  return value;
-}
+export { stripUndefinedDeep };
 
 export function subscribeMySheets(cb: (list: CharacterSheet[]) => void) {
   try {

@@ -21,6 +21,7 @@ import {
 } from '@/dm/repositories/campaignNotesRepository';
 import { fbAuth } from '@/services/firebase';
 import useAppRoleStore from '@/context/AppRole-store';
+import useDmSettingsStore from '@/context/DmSettings-store';
 import { getShareDisplayStatus, isNetworkOnline } from '@/shared/helpers/collaboration/status';
 
 type Props = StackScreenProps<DMStackParamList, 'DMCampaignNotes'>;
@@ -33,6 +34,12 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState(route.params?.campaignId || '');
+  const defaultCampaignId = useDmSettingsStore((s) => s.defaultCampaignId);
+  const loadDefaultCampaignId = useDmSettingsStore((s) => s.loadDefaultCampaignId);
+
+  useEffect(() => {
+    void loadDefaultCampaignId();
+  }, [loadDefaultCampaignId]);
   const [notes, setNotes] = useState<DMCampaignNote[]>([]);
   const [titleInput, setTitleInput] = useState('');
   const [contentInput, setContentInput] = useState('');
@@ -52,7 +59,8 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
         if (selectedCampaignId) return;
         if (next.length) {
-          setSelectedCampaignId(next[0].id);
+          const preferred = defaultCampaignId ? next.find((campaign) => campaign.id === defaultCampaignId) : undefined;
+          setSelectedCampaignId((preferred || next[0]).id);
           return;
         }
 
@@ -68,7 +76,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
       cancelled = true;
       if (typeof unsub === 'function') unsub();
     };
-  }, [selectedCampaignId, t]);
+  }, [defaultCampaignId, selectedCampaignId, t]);
 
   useEffect(() => {
     if (!selectedCampaignId) {

@@ -9,11 +9,13 @@ export type MigrationKind =
   | 'dmNotesQueue'
   | 'dmCampaignEncounters'
   | 'dmCampaignEncountersQueue'
+  | 'dmCampaignInitiative'
   | 'dmMonsters'
   | 'dmPins'
   | 'dmMonsterFavorites'
   | 'dmUserTemplates'
   | 'appRole'
+  | 'dmDefaultCampaign'
   | 'spellbookSpells'
   | 'spellbookFavorites'
   | 'spellbookPins'
@@ -368,6 +370,7 @@ function ensureStringArray(payload: unknown): string[] {
 function stampPersistedSchemaVersion(kind: MigrationKind, payload: unknown): unknown {
   if (
     kind === 'appRole' ||
+    kind === 'dmDefaultCampaign' ||
     kind === 'dmPins' ||
     kind === 'dmMonsterFavorites' ||
     kind === 'dmMonsters' ||

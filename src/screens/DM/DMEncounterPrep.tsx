@@ -6,16 +6,20 @@ import type { StackScreenProps } from '@react-navigation/stack';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, DMCampaignEncounter, EncounterPrepMonsterSeed, InitiativeSeed } from '@/dm/domain/types';
+import type { DMCampaign, DMCampaignEncounter, EncounterPrepMonsterSeed } from '@/dm/domain/types';
 import { evaluateEncounterDifficulty } from '@/dm/domain/encounter';
+import { rollInitiativeFor, sortByInitiative } from '@/dm/domain/initiative';
 import { subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import { upsertCampaignEncounter } from '@/dm/repositories/campaignEncountersRepository';
+import { startCampaignInitiative } from '@/dm/repositories/campaignInitiativeRepository';
 import useCharacterStore from '@/context/Character-store';
 import useMonsterStore from '@/context/Monster-store';
+import useDmSettingsStore from '@/context/DmSettings-store';
 import { getCharacterCampaignLabel, isCharacterInCampaign } from '@/screens/DM/adapters';
 import { fbAuth } from '@/services/firebase';
 import { rd, sp } from '@/shared/styles/tokens';
 import { getLocalizedMonster } from '@/domain/srd/localization';
+import { abilityMod } from '@/shared/helpers/combat';
 
 type Props = StackScreenProps<DMStackParamList, 'DMEncounterPrep'>;
 
@@ -26,6 +30,7 @@ type EncounterMonster = {
   challenge: string;
   count: number;
   hitPoints?: number;
+  dexMod?: number;
 };
 
 type PlayerSourceMode = 'campaign' | 'all';
@@ -52,6 +57,12 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
 
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState(route.params?.campaignId || '');
+  const defaultCampaignId = useDmSettingsStore((s) => s.defaultCampaignId);
+  const loadDefaultCampaignId = useDmSettingsStore((s) => s.loadDefaultCampaignId);
+
+  useEffect(() => {
+    void loadDefaultCampaignId();
+  }, [loadDefaultCampaignId]);
   const [playerSourceMode, setPlayerSourceMode] = useState<PlayerSourceMode>('campaign');
   const [selectedPlayers, setSelectedPlayers] = useState<Record<string, boolean>>({});
   const [monsterSearch, setMonsterSearch] = useState('');
@@ -74,7 +85,8 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         if (cancelled) return;
         setCampaigns(next);
         if (!selectedCampaignId && next.length) {
-          setSelectedCampaignId(next[0].id);
+          const preferred = defaultCampaignId ? next.find((campaign) => campaign.id === defaultCampaignId) : undefined;
+          setSelectedCampaignId((preferred || next[0]).id);
         }
       });
     };
@@ -85,7 +97,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       cancelled = true;
       if (typeof unsub === 'function') unsub();
     };
-  }, [selectedCampaignId]);
+  }, [defaultCampaignId, selectedCampaignId]);
 
   const selectedCampaign = useMemo(
     () => campaigns.find((campaign) => campaign.id === selectedCampaignId) || null,
@@ -148,6 +160,9 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
       const name = localizedMatch?.name || seed.name || t('encounterPrep.monsterFallback');
       const challenge = seed.challenge || '0';
       const count = Math.max(1, Number(seed.count) || 1);
+      // Undefined (no SRD/homebrew match, e.g. a hand-typed monster) rolls initiative with
+      // modifier 0 — there is no other DEX source available for an unmatched monster.
+      const dexMod = localizedMatch ? abilityMod(localizedMatch.stats.dexterity) : undefined;
 
       setEncounterMonsters((prev) => {
         const existing = prev.find((item) =>
@@ -160,6 +175,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
                   ...item,
                   count: item.count + count,
                   hitPoints: item.hitPoints ?? seed.hitPoints,
+                  dexMod: item.dexMod ?? dexMod,
                 }
               : item,
           );
@@ -174,6 +190,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
             challenge,
             count,
             hitPoints: seed.hitPoints,
+            dexMod,
           },
         ];
       });
@@ -261,50 +278,58 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     setSaveStatus(t('encounterPrep.savedToCampaign', { status: formatSyncStatus(saved.syncStatus) }));
   };
 
-  const startInitiative = () => {
-    const entries: InitiativeSeed['entries'] = [];
+  const startInitiative = async () => {
+    if (!selectedCampaignId) return;
 
-    selectedParty.forEach((player) => {
-      entries.push({
+    const rolledPlayers = selectedParty.map((player) => {
+      const mod = Number(player.initiative) || 0;
+      const { total } = rollInitiativeFor(mod, player.name);
+      return {
         id: `player-${player.id}`,
         name: player.name || t('encounterPrep.playerFallback'),
-        roll: '',
-        hits: String(player.hp?.current || 0),
-      });
+        source: 'player' as const,
+        characterId: player.id,
+        roll: total,
+        initiativeMod: mod,
+        hpCurrent: player.hp?.current || 0,
+        hpMax: player.hp?.max,
+        conditions: [],
+        defeated: false,
+        order: 0,
+      };
     });
 
-    encounterMonsters.forEach((monster) => {
-      for (let index = 0; index < Math.max(1, monster.count); index += 1) {
-        entries.push({
+    const rolledMonsters = encounterMonsters.flatMap((monster) =>
+      Array.from({ length: Math.max(1, monster.count) }, (_unused, index) => {
+        const mod = monster.dexMod ?? 0;
+        const { total } = rollInitiativeFor(mod, monster.name);
+        return {
           id: `monster-${monster.id}-${index}`,
           name: monster.name || t('encounterPrep.monsterFallback'),
-          roll: '',
-          hits: monster.hitPoints ? String(monster.hitPoints) : '',
-        });
-      }
-    });
+          source: 'monster' as const,
+          monsterId: monster.monsterId,
+          roll: total,
+          initiativeMod: mod,
+          hpCurrent: monster.hitPoints ?? 0,
+          hpMax: monster.hitPoints,
+          conditions: [],
+          defeated: false,
+          order: 0,
+        };
+      }),
+    );
+
+    const combatants = sortByInitiative([...rolledPlayers, ...rolledMonsters]);
+    if (!combatants.length) return;
+
+    await startCampaignInitiative(selectedCampaignId, combatants);
 
     const root = navigation.getParent();
     if (!root) return;
-    if (!entries.length) {
-      root.dispatch(
-        CommonActions.navigate({
-          name: 'Initiative',
-        }),
-      );
-      return;
-    }
-
-    const seed: InitiativeSeed = {
-      source: 'dm-encounter-prep',
-      campaignId: selectedCampaignId || 'no-campaign',
-      entries,
-    };
-
     root.dispatch(
       CommonActions.navigate({
         name: 'Initiative',
-        params: { seed },
+        params: { campaignId: selectedCampaignId },
       }),
     );
   };
@@ -456,7 +481,14 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         <Text style={styles.updateMeta}>{t('encounterPrep.adjustedXp', { xp: encounterResult.adjustedXP })}</Text>
         <Text style={styles.updateMeta}>{t('encounterPrep.xpPerPlayer', { xp: encounterResult.xpPerPlayer })}</Text>
 
-        <Pressable style={styles.authButton} onPress={startInitiative} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => {
+            void startInitiative();
+          }}
+          disabled={!selectedCampaignId}
+          android_ripple={{ color: colors.ripple }}
+        >
           <Text style={styles.authButtonText}>{t('encounterPrep.startInitiative')}</Text>
         </Pressable>
         <Pressable

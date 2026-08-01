@@ -15,12 +15,11 @@ import type { DMStackParamList } from '@/navigation/DMNavigator';
 import ReferencesNavigator from '@/navigation/ReferencesNavigator';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import Support from '@/screens/Support/Support';
-import type { InitiativeSeed } from '@/dm/domain/types';
 import { sp } from '@/shared/styles/tokens';
 
 export type AppStackParamList = {
   Heroes: NavigatorScreenParams<TabStackParamList> | undefined;
-  Initiative: { seed?: InitiativeSeed } | undefined;
+  Initiative: { campaignId?: string } | undefined;
   DM: NavigatorScreenParams<DMStackParamList> | undefined;
   References: NavigatorScreenParams<ReferencesStackParamList> | undefined;
   Support: undefined;

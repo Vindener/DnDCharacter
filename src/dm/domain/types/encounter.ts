@@ -21,6 +21,7 @@ export interface EncounterPrepMonster {
   challenge: string;
   count: number;
   hitPoints?: number;
+  dexMod?: number;
   selected: boolean;
 }
 
@@ -36,19 +37,6 @@ export interface EncounterPrepDraft {
   campaignId: string;
   players: EncounterPrepPlayer[];
   monsters: EncounterPrepMonster[];
-}
-
-export interface InitiativeSeedItem {
-  id: string;
-  name: string;
-  roll: string;
-  hits?: string;
-}
-
-export interface InitiativeSeed {
-  source: 'dm-encounter-prep';
-  campaignId: string;
-  entries: InitiativeSeedItem[];
 }
 
 export interface EncounterDifficultyResult {

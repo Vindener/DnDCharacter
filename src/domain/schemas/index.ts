@@ -40,6 +40,7 @@ export {
   parseCampaignEncounterQueueItem,
   safeParseCampaignEncounter,
 } from './campaignEncounter.schema';
+export { campaignInitiativeSchema, parseCampaignInitiative, safeParseCampaignInitiative } from './campaignInitiative.schema';
 export {
   createCharacterWizardSchema,
   parseCreateCharacterWizard,

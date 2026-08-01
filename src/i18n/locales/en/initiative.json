@@ -18,5 +18,18 @@
     "empty": "No heroes created",
     "fallbackName": "Unnamed",
     "fallbackLevel": "Level ?"
+  },
+  "emptyState": "Nothing here yet. Add a row or a hero from the list below to start tracking initiative.",
+  "localModeHint": "This is a local, device-only tracker. For every campaign member to see the shared initiative, start a fight in DM ▸ Encounter Prep or pick a default campaign in Settings.",
+  "campaign": {
+    "title": "Campaign initiative",
+    "round": "Round {{round}}",
+    "readOnlyHint": "Read-only — the game master is in control.",
+    "nextTurn": "Next turn",
+    "endCombat": "End combat",
+    "empty": "No active combat for this campaign yet. Start one from Encounter Prep.",
+    "emptyCombatants": "No one is left in this combat. End combat or bring participants back.",
+    "rollLine": "Roll {{roll}} (mod {{mod}})",
+    "remove": "Remove from combat"
   }
 }

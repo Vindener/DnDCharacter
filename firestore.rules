@@ -250,5 +250,53 @@ service cloud.firestore {
         && isValidDmCampaignEncounterWrite();
       allow delete: if isEncounterOwner();
     }
+
+    match /dmCampaignInitiative/{campaignId} {
+      // Single active tracker per campaign, doc id === campaignId. Unlike the collections
+      // above, this doc does NOT carry its own owners/editors array — it cross-references
+      // dmCampaigns/{campaignId} directly (same get() precedent as dmCampaignInvites above),
+      // so a player added to the campaign later is instantly visible here with no resync.
+      function campaignDoc() {
+        return get(/databases/$(database)/documents/dmCampaigns/$(campaignId)).data;
+      }
+      function isCampaignOwnerOf(doc) {
+        return isSignedIn() && doc.owners != null && uid() in doc.owners;
+      }
+      function isCampaignEditorOf(doc) {
+        return isSignedIn() && (isCampaignOwnerOf(doc) || (doc.editors != null && uid() in doc.editors));
+      }
+
+      // SEC-3 / COL-8 style shape guard; COL-9 style cap on combatants.
+      function isValidDmCampaignInitiativeWrite() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['id', 'campaignId', 'ownerUid', 'round', 'combatants', 'updatedAtMs'])
+          && d.id == campaignId
+          && d.campaignId == campaignId
+          && d.ownerUid is string
+          && d.round is int && d.round >= 0
+          && d.combatants is list && d.combatants.size() <= 40
+          && d.updatedAtMs is int;
+      }
+
+      // Every current owner/editor of the parent campaign may read the live tracker —
+      // the app itself renders a read-only view for non-owners, but the requirement is
+      // that all campaign members can see the active encounter.
+      allow get: if isSignedIn() && isCampaignEditorOf(campaignDoc());
+      // doc id === campaignId is always fetched directly; no query pattern exists, so
+      // list stays closed (same no-enumeration posture as dmCampaignInvites above).
+      allow list: if false;
+
+      // Only the campaign OWNER (the GM) may write — editors get read-only access here,
+      // unlike dmCampaignNotes/dmCampaignEncounters where editors can also write content.
+      allow create: if isSignedIn()
+        && request.resource.data.ownerUid == uid()
+        && isCampaignOwnerOf(campaignDoc())
+        && isValidDmCampaignInitiativeWrite();
+      allow update: if isSignedIn()
+        && isCampaignOwnerOf(campaignDoc())
+        && request.resource.data.campaignId == resource.data.campaignId
+        && isValidDmCampaignInitiativeWrite();
+      allow delete: if isSignedIn() && isCampaignOwnerOf(campaignDoc());
+    }
   }
 }

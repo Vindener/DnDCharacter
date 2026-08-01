@@ -20,6 +20,7 @@ import { buildUnifiedPartyList, isCharacterInCampaign, type UnifiedPartyItem } f
 import { PinnedReferencesList } from '@/screens/DM/PinnedReferencesList';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { createCampaignInvite } from '@/services/campaignInvite';
+import { useCampaignOwnership } from '@/dm/hooks/useCampaignOwnership';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 import { trackProductEvent } from '@/shared/services/telemetry/productTelemetry';
 import type { CharacterViewModel } from '@/types/Character';
@@ -161,8 +162,7 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
 
   const formatSource = (source: UnifiedPartyItem['source']) => t(`dm:partyOverview.sources.${source}`);
 
-  const myUid = fbAuth.currentUser?.uid || '';
-  const isOwner = Boolean(campaign && campaign.owners.includes(myUid));
+  const { isOwner } = useCampaignOwnership(campaign);
 
   const openInviteModal = async () => {
     if (!campaign) return;
