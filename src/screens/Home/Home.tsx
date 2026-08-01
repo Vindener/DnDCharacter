@@ -244,6 +244,14 @@ const Home = () => {
     trackProductEvent('character_opened', { source: character.source });
   };
 
+  const onLogin = async () => {
+    try {
+      await onGoogleButtonPress();
+    } catch (_error) {
+      /* intentionally ignored */
+    }
+  };
+
   const continueSession = () => {
     if (!continueState.character) {
       navigation.navigate('CreateCharacter');
@@ -254,13 +262,19 @@ const Home = () => {
     void openCharacter(continueState.character);
   };
 
-  const onLogin = async () => {
-    try {
-      await onGoogleButtonPress();
-    } catch (_error) {
-      /* intentionally ignored */
-    }
-  };
+  const heroButton = isSignedIn
+    ? {
+        testID: 'home.continueGameButton',
+        icon: 'play-circle-outline' as const,
+        label: t('home:hero.continueGame'),
+        onPress: continueSession,
+      }
+    : {
+        testID: 'home.continueGameButton',
+        icon: 'logo-google' as const,
+        label: t('home:hero.signInToPlay'),
+        onPress: () => void onLogin(),
+      };
 
   if (!charactersLoaded && !charactersLoadError) {
     return <SkeletonHome />;
@@ -273,20 +287,22 @@ const Home = () => {
           <View style={styles.headerTextWrap}>
             <Pressable
               style={styles.heroContinueButton}
-              onPress={continueSession}
+              onPress={heroButton.onPress}
               android_ripple={{ color: colors.ripple }}
-              testID='home.continueGameButton'
+              testID={heroButton.testID}
             >
-              <Ionicons name='play-circle-outline' size={20} color={colors.onPrimary} />
-              <Text style={styles.heroContinueButtonText}>{t('home:hero.continueGame')}</Text>
+              <Ionicons name={heroButton.icon} size={20} color={colors.onPrimary} />
+              <Text style={styles.heroContinueButtonText}>{heroButton.label}</Text>
             </Pressable>
-            {continueState.character ? (
+            {isSignedIn && continueState.character ? (
               <Text style={styles.heroContinueInfo}>
                 {continueState.character.name} — {continueState.character.className}{' '}
                 {t('home:characters.shortLevel', { level: continueState.character.level })}
               </Text>
             ) : null}
-            <Text style={styles.greetingMeta}>{t('home:hero.mode', { role: t('common:roles.Player'), name: userName })}</Text>
+            {isSignedIn ? (
+              <Text style={styles.greetingMeta}>{t('home:hero.mode', { role: t('common:roles.Player'), name: userName })}</Text>
+            ) : null}
           </View>
           {providerPhoto ? <Image source={{ uri: providerPhoto }} style={styles.authAvatar} resizeMode='cover' /> : null}
         </View>

@@ -26,10 +26,11 @@
   },
   "hero": {
     "continueGame": "Продовжити гру",
+    "signInToPlay": "Увійти через Google",
     "mode": "Режим: {{role}} · {{name}}"
   },
   "characters": {
-    "readyCount": "{{count}} готово до гри",
+    "readyCount": "{{count}} / 10 готово до гри",
     "none": "Немає персонажів",
     "level": "Рівень {{level}}",
     "shortLevel": "Рів. {{level}}",

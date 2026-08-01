@@ -1,4 +1,5 @@
 import React from 'react';
+import { vi } from 'vitest';
 
 type MockProps = {
   children?: React.ReactNode;
@@ -46,6 +47,10 @@ export const Pressable = createHost('Pressable');
 export const TouchableOpacity = createHost('TouchableOpacity');
 export const Modal = createHost('Modal');
 export const Image = createHost('Image');
+
+export const Alert = {
+  alert: vi.fn(),
+};
 
 export const StyleSheet = {
   create: <T extends Record<string, unknown>>(styles: T): T => styles,

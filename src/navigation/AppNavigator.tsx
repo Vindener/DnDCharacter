@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import type { NavigatorScreenParams } from '@react-navigation/native';
+import type { NavigationState, NavigatorScreenParams } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +42,22 @@ export default function AppNavigator() {
     loadAnalyticsConsent();
   }, [loadTheme, loadAnalyticsConsent]);
 
+  const isDark = useThemeStore((s) => s.isDark);
+  const navigationStateRef = useRef<NavigationState | undefined>(undefined);
+  const previousIsDark = useRef(isDark);
+  // Android/New Architecture doesn't repaint rounded, solid-background Pressables on a
+  // colors-only style change — remounting the navigation tree on theme toggle forces a
+  // real repaint everywhere. We restore the captured nav state so this doesn't also
+  // reset the user's current screen back to the initial route.
+  const [containerKey, setContainerKey] = useState(0);
+
+  useEffect(() => {
+    if (previousIsDark.current !== isDark) {
+      previousIsDark.current = isDark;
+      setContainerKey((value) => value + 1);
+    }
+  }, [isDark]);
+
   function getIconName(routeName: string): keyof typeof Ionicons.glyphMap {
     switch (routeName) {
       case 'Library':
@@ -62,7 +78,14 @@ export default function AppNavigator() {
   }
 
   return (
-    <NavigationContainer theme={theme}>
+    <NavigationContainer
+      key={containerKey}
+      theme={theme}
+      initialState={navigationStateRef.current}
+      onStateChange={(state) => {
+        navigationStateRef.current = state;
+      }}
+    >
       <Stack.Navigator
         id={undefined}
         screenOptions={({ route }) => ({

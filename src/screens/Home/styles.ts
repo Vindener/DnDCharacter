@@ -42,7 +42,7 @@ export const getStyles = (c: ThemeColors) =>
       gap: sp(4),
     },
     heroContinueButton: {
-      alignSelf: 'flex-start',
+      alignSelf: 'stretch',
       minHeight: 40,
       borderRadius: rd(8),
       backgroundColor: c.primary,
@@ -50,6 +50,7 @@ export const getStyles = (c: ThemeColors) =>
       paddingHorizontal: sp(12),
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
       gap: sp(8),
     },
     heroContinueButtonText: {

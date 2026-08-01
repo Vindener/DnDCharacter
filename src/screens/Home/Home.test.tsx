@@ -2,6 +2,7 @@ import React from 'react';
 import { act, create } from 'react-test-renderer';
 import type { ReactTestRenderer } from 'react-test-renderer';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { onGoogleButtonPress } from '@/shared/services/auth/index';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import type { CharacterViewModel } from '@/types/Character';
 import Home from './Home';
@@ -145,6 +146,7 @@ beforeEach(() => {
   mocks.syncState.loadSyncMeta.mockClear();
   mocks.syncState.ensureCharacterSync.mockClear();
   mocks.syncState.setCloudAvailability.mockClear();
+  vi.mocked(onGoogleButtonPress).mockClear();
 });
 
 async function renderHome(): Promise<ReactTestRenderer> {
@@ -252,7 +254,7 @@ describe('Home screen', () => {
     });
   });
 
-  it('continue game button reopens the last session character', async () => {
+  it('continue game button reopens the last session character when signed in', async () => {
     const arthas = createEmptyCharacter({
       id: 'arthas',
       name: 'Arthas',
@@ -265,16 +267,48 @@ describe('Home screen', () => {
     });
     mocks.characterState.characters = [arthas];
     mocks.characterState.lastSessionCharacterId = 'arthas';
+    mocks.authState.user = { displayName: 'Arthas Player', email: 'arthas@example.com' };
 
     const tree = await renderHome();
 
-    const info = tree.root.findByProps({ testID: 'home.continueGameButton' });
-    expect(info).toBeTruthy();
+    const button = tree.root.findByProps({ testID: 'home.continueGameButton' });
+    expect(button).toBeTruthy();
 
     await act(async () => {
-      tree.root.findByProps({ testID: 'home.continueGameButton' }).props.onPress();
+      button.props.onPress();
     });
     expect(mocks.navigation.navigate).toHaveBeenCalledWith('Character', expect.anything());
+
+    act(() => {
+      tree.unmount();
+    });
+  });
+
+  it('replaces continue game with a Google sign-in button when signed out', async () => {
+    const arthas = createEmptyCharacter({
+      id: 'arthas',
+      name: 'Arthas',
+      race: 'Human',
+      class: 'Paladin',
+      level: 5,
+      hp: { current: 32, max: 42, temp: 0 },
+      ac: 18,
+      initiative: 1,
+    });
+    mocks.characterState.characters = [arthas];
+    mocks.characterState.lastSessionCharacterId = 'arthas';
+    mocks.authState.user = null;
+
+    const tree = await renderHome();
+
+    const button = tree.root.findByProps({ testID: 'home.continueGameButton' });
+
+    await act(async () => {
+      button.props.onPress();
+    });
+
+    expect(mocks.navigation.navigate).not.toHaveBeenCalledWith('Character', expect.anything());
+    expect(onGoogleButtonPress).toHaveBeenCalledTimes(1);
 
     act(() => {
       tree.unmount();

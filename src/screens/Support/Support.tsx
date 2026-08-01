@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 
-const donateLinks = [
-  { labelKey: 'donation.privatBank', url: 'http://www.privat24.ua/send/3bi8n' },
-  { labelKey: 'donation.monobankJar', url: 'https://send.monobank.ua/jar/7bLHe7oo8j' },
-];
+const donationUrl = 'https://t.me/mythgatednd/12';
 
 export default function Support() {
   const { t } = useTranslation('support');
@@ -19,16 +16,6 @@ export default function Support() {
       card: { backgroundColor: colors.card, borderRadius: rd(12), padding: sp(16), borderWidth: 1, borderColor: colors.border },
       title: { fontSize: fs(18), fontWeight: '600' as const, color: colors.text, marginBottom: sp(8) },
       text: { color: colors.textSecondary, lineHeight: 20 },
-      row: { flexDirection: 'row' as const, flexWrap: 'wrap' as const, gap: sp(8), marginTop: sp(12) },
-      pill: {
-        paddingVertical: sp(10),
-        paddingHorizontal: sp(14),
-        borderRadius: rd(999),
-        borderWidth: 1,
-        borderColor: colors.border,
-        backgroundColor: colors.inputBackground,
-      },
-      pillText: { color: colors.text },
       input: {
         borderWidth: 1,
         borderColor: colors.border,
@@ -73,6 +60,8 @@ export default function Support() {
   const openTelegram = () => openUrl('https://t.me/mythgatednd?direct');
   const openTelegramNews = () => openUrl('https://t.me/mythgatednd');
 
+  const openDonation = () => openUrl(donationUrl);
+
   return (
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -80,13 +69,9 @@ export default function Support() {
           <Text style={styles.title}>{t('sections.donation')}</Text>
           <Text style={{ color: colors.warning, fontWeight: '600' as const }}>{t('donation.warning')}</Text>
           <Text style={styles.text}>{t('donation.description')}</Text>
-          <View style={styles.row}>
-            {donateLinks.map((d) => (
-              <TouchableOpacity key={d.url} onPress={() => openUrl(d.url)} style={styles.pill}>
-                <Text style={styles.pillText}>{t(d.labelKey)}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <TouchableOpacity onPress={openDonation} style={styles.btn}>
+            <Text style={styles.btnText}>{t('donation.cta')}</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.card}>
