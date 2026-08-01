@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { getStyles } from '@/screens/DM/style';
 import type { DMStackParamList } from '@/navigation/DMNavigator';
-import type { DMCampaign, DMCampaignNote } from '@/dm/domain/types';
+import type { DMCampaign, DMCampaignNote, DMCampaignNoteKind } from '@/dm/domain/types';
 import { ensureCampaignForName, subscribeAccessibleCampaigns } from '@/dm/repositories/campaignRepository';
 import { formatSchemaErrors, safeParseCampaignNoteFormInput } from '@/domain/schemas';
 import { rd, sp } from '@/shared/styles/tokens';
@@ -38,10 +38,8 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   const [contentInput, setContentInput] = useState('');
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   const [statusText, setStatusText] = useState(t('dm:campaignNotes.ready'));
-
-
-
-
+  const [kindInput, setKindInput] = useState<DMCampaignNoteKind>('note');
+  const [kindFilter, setKindFilter] = useState<'all' | DMCampaignNoteKind>('all');
 
   useEffect(() => {
     let unsub = () => {};
@@ -102,7 +100,15 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
     [campaigns, selectedCampaignId],
   );
 
-  const recent = useMemo(() => notes.slice().sort((a, b) => b.updatedAtMs - a.updatedAtMs).slice(0, 5), [notes]);
+  const recent = useMemo(
+    () =>
+      notes
+        .filter((note) => kindFilter === 'all' || (note.kind || 'note') === kindFilter)
+        .slice()
+        .sort((a, b) => b.updatedAtMs - a.updatedAtMs)
+        .slice(0, 5),
+    [kindFilter, notes],
+  );
 
   const mergeNoteIntoList = (list: DMCampaignNote[], note: DMCampaignNote): DMCampaignNote[] => {
     const next = [...list.filter((item) => item.id !== note.id), note];
@@ -113,12 +119,14 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
     setActiveNoteId(null);
     setTitleInput('');
     setContentInput('');
+    setKindInput('note');
   };
 
   const openNote = (note: DMCampaignNote) => {
     setActiveNoteId(note.id);
     setTitleInput(note.title);
     setContentInput(note.content);
+    setKindInput(note.kind || 'note');
   };
 
   const saveNote = async () => {
@@ -155,6 +163,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
       ...base,
       title,
       content,
+      kind: kindInput,
     });
 
     // Show saved note immediately in the list, without waiting for subscription roundtrip.
@@ -169,7 +178,8 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   };
 
   const resolveConflict = async (note: DMCampaignNote, strategy: 'keep-local' | 'keep-cloud' | 'merge-manual') => {
-    const mergedContent = strategy === 'merge-manual' ? `${note.content}\n\n--- remote ---\n${note.conflictRemote?.content || ''}` : undefined;
+    const mergedContent =
+      strategy === 'merge-manual' ? `${note.content}\n\n--- remote ---\n${note.conflictRemote?.content || ''}` : undefined;
     const resolved = await resolveCampaignNoteConflict(note.id, strategy, mergedContent);
     if (resolved) {
       setNotes((prev) => mergeNoteIntoList(prev, resolved));
@@ -223,33 +233,74 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           })}
         </View>
 
-        <Pressable style={styles.authButton} onPress={() => { void syncNow(); }} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.authButton}
+          onPress={() => {
+            void syncNow();
+          }}
+          android_ripple={{ color: colors.ripple }}
+        >
           <Text style={styles.authButtonText}>{t('dm:campaignNotes.syncNow')}</Text>
         </Pressable>
       </View>
 
       <View style={styles.card}>
         <Text style={styles.title}>
-          {activeNoteId ? t('dm:campaignNotes.editTitle') : t('dm:campaignNotes.newTitle')} {selectedCampaign ? `• ${selectedCampaign.name}` : ''}
+          {activeNoteId ? t('dm:campaignNotes.editTitle') : t('dm:campaignNotes.newTitle')}{' '}
+          {selectedCampaign ? `• ${selectedCampaign.name}` : ''}
         </Text>
+        <View style={styles.statsRow}>
+          {(['note', 'session', 'loot'] as const).map((kind) => (
+            <Pressable
+              key={kind}
+              style={[styles.statChip, kindInput === kind ? { borderColor: colors.text } : null]}
+              onPress={() => setKindInput(kind)}
+              android_ripple={{ color: colors.ripple }}
+              testID={`campaignNotes.kindInput.${kind}`}
+            >
+              <Text style={styles.statChipText}>{t(`dm:campaignNotes.kind.${kind}`)}</Text>
+            </Pressable>
+          ))}
+        </View>
         <TextInput
           value={titleInput}
           onChangeText={setTitleInput}
           placeholder={t('dm:campaignNotes.titlePlaceholder')}
           placeholderTextColor={colors.textSecondary}
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, marginBottom: sp(10) }}
+          style={{
+            borderWidth: 1,
+            borderColor: colors.border,
+            borderRadius: rd(8),
+            padding: sp(10),
+            color: colors.text,
+            marginBottom: sp(10),
+          }}
         />
         <TextInput
           value={contentInput}
           onChangeText={setContentInput}
-          placeholder={t('dm:campaignNotes.contentPlaceholder')}
+          placeholder={kindInput === 'loot' ? t('dm:campaignNotes.kind.lootPlaceholder') : t('dm:campaignNotes.contentPlaceholder')}
           placeholderTextColor={colors.textSecondary}
           multiline
-          style={{ borderWidth: 1, borderColor: colors.border, borderRadius: rd(8), padding: sp(10), color: colors.text, minHeight: 120, textAlignVertical: 'top' }}
+          style={{
+            borderWidth: 1,
+            borderColor: colors.border,
+            borderRadius: rd(8),
+            padding: sp(10),
+            color: colors.text,
+            minHeight: 120,
+            textAlignVertical: 'top',
+          }}
         />
 
         <View style={styles.laneGrid}>
-          <Pressable style={styles.laneButton} onPress={() => { void saveNote(); }} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.laneButton}
+            onPress={() => {
+              void saveNote();
+            }}
+            android_ripple={{ color: colors.ripple }}
+          >
             <Ionicons name='save-outline' size={18} color={colors.text} />
             <Text style={styles.laneButtonText}>{t('dm:campaignNotes.save')}</Text>
           </Pressable>
@@ -264,12 +315,23 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 
       <View style={styles.card}>
         <Text style={styles.title}>{t('dm:campaignNotes.recentChanges')}</Text>
+        <View style={styles.statsRow}>
+          {(['all', 'note', 'session', 'loot'] as const).map((kind) => (
+            <Pressable
+              key={kind}
+              style={[styles.statChip, kindFilter === kind ? { borderColor: colors.text } : null]}
+              onPress={() => setKindFilter(kind)}
+              android_ripple={{ color: colors.ripple }}
+              testID={`campaignNotes.kindFilter.${kind}`}
+            >
+              <Text style={styles.statChipText}>{t(`dm:campaignNotes.kind.filter.${kind}`)}</Text>
+            </Pressable>
+          ))}
+        </View>
         {!recent.length && <Text style={styles.hint}>{t('dm:campaignNotes.empty')}</Text>}
         {recent.map((note) => {
           const displaySyncStatus =
-            note.syncStatus === 'Pending sync' && !isNetworkOnline(netInfo.isConnected)
-              ? 'Offline changes pending'
-              : note.syncStatus;
+            note.syncStatus === 'Pending sync' && !isNetworkOnline(netInfo.isConnected) ? 'Offline changes pending' : note.syncStatus;
           const shareStatus = getShareDisplayStatus({
             isSharedSheet: note.editors.length > 0,
             role: roleMode,
@@ -279,21 +341,42 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           return (
             <View key={note.id} style={styles.updateRow}>
               <Text style={styles.updateTitle}>{note.title || t('dm:campaignNotes.untitled')}</Text>
+              <Text style={styles.updateMeta}>{t(`dm:campaignNotes.kind.${note.kind || 'note'}`)}</Text>
               <Text style={styles.updateMeta}>{t('dm:campaignNotes.updated', { value: new Date(note.updatedAtMs).toLocaleString() })}</Text>
               <Text style={styles.updateMeta}>{t('dm:campaignNotes.syncStatus', { status: formatSyncStatus(displaySyncStatus) })}</Text>
-              {!!shareStatus && <Text style={styles.updateMeta}>{t('dm:campaignNotes.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>}
+              {!!shareStatus && (
+                <Text style={styles.updateMeta}>{t('dm:campaignNotes.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>
+              )}
 
               {!!note.content && <Text style={styles.updateMeta}>{note.content.slice(0, 140)}</Text>}
 
               {note.syncStatus === 'Conflict detected' && note.conflictRemote && (
                 <View style={styles.laneGrid}>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-local'); }} android_ripple={{ color: colors.ripple }}>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => {
+                      void resolveConflict(note, 'keep-local');
+                    }}
+                    android_ripple={{ color: colors.ripple }}
+                  >
                     <Text style={styles.laneButtonText}>{t('dm:campaignNotes.keepLocal')}</Text>
                   </Pressable>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'keep-cloud'); }} android_ripple={{ color: colors.ripple }}>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => {
+                      void resolveConflict(note, 'keep-cloud');
+                    }}
+                    android_ripple={{ color: colors.ripple }}
+                  >
                     <Text style={styles.laneButtonText}>{t('dm:campaignNotes.keepCloud')}</Text>
                   </Pressable>
-                  <Pressable style={styles.laneButton} onPress={() => { void resolveConflict(note, 'merge-manual'); }} android_ripple={{ color: colors.ripple }}>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => {
+                      void resolveConflict(note, 'merge-manual');
+                    }}
+                    android_ripple={{ color: colors.ripple }}
+                  >
                     <Text style={styles.laneButtonText}>{t('dm:campaignNotes.mergeManual')}</Text>
                   </Pressable>
                 </View>
@@ -326,8 +409,3 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
 };
 
 export default DMCampaignNotes;
-
-
-
-
-

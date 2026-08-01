@@ -7,6 +7,7 @@ export type {
   DMCampaignEncounterStatus,
   DMCampaignNote,
   DMCampaignNoteConflictRemote,
+  DMCampaignNoteKind,
   DMCampaignNoteQueueItem,
   DMCampaignNoteSyncState,
   DMNoteSyncDisplayStatus,

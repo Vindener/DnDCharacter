@@ -291,6 +291,18 @@
     "queueFlushed": "Sync queue cleared",
     "conflictResolved": "Conflict resolved: {{strategy}}",
     "validationFallback": "Fill in the note title or content.",
+    "kind": {
+      "note": "Note",
+      "session": "Session",
+      "loot": "Loot",
+      "lootPlaceholder": "Example: 2x Potion of Healing, 15 gp, +1 Dagger",
+      "filter": {
+        "all": "All",
+        "note": "Notes",
+        "session": "Sessions",
+        "loot": "Loot"
+      }
+    },
     "statuses": {
       "pendingSync": "Sync pending",
       "localOnly": "Local only",

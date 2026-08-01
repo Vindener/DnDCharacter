@@ -154,7 +154,8 @@ service cloud.firestore {
           && d.editors is list
           && d.campaignId is string
           && d.title is string && d.title.size() <= 200
-          && (!('content' in d) || (d.content is string && d.content.size() <= 20000));
+          && (!('content' in d) || (d.content is string && d.content.size() <= 20000))
+          && (!('kind' in d) || d.kind in ['note', 'session', 'loot']);
       }
 
       allow get, list: if isNoteEditor();

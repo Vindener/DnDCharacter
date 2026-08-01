@@ -291,6 +291,18 @@
     "queueFlushed": "Чергу синхронізації очищено",
     "conflictResolved": "Конфлікт вирішено: {{strategy}}",
     "validationFallback": "Заповніть заголовок або вміст нотатки.",
+    "kind": {
+      "note": "Нотатка",
+      "session": "Сесія",
+      "loot": "Лут",
+      "lootPlaceholder": "Приклад: 2x Potion of Healing, 15 gp, +1 Dagger",
+      "filter": {
+        "all": "Усі",
+        "note": "Нотатки",
+        "session": "Сесії",
+        "loot": "Лут"
+      }
+    },
     "statuses": {
       "pendingSync": "Очікує синхронізації",
       "localOnly": "Лише локально",

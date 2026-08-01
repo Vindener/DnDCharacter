@@ -2,6 +2,7 @@ import { z } from 'zod';
 import type {
   DMCampaignNote,
   DMCampaignNoteConflictRemote,
+  DMCampaignNoteKind,
   DMCampaignNoteQueueItem,
   DMNoteSyncDisplayStatus,
 } from '@/domain/types';
@@ -20,6 +21,14 @@ function selectSyncStatus(value: unknown): DMNoteSyncDisplayStatus {
   const raw = toTrimmedString(value);
   if (NOTE_SYNC_STATUS.includes(raw as DMNoteSyncDisplayStatus)) return raw as DMNoteSyncDisplayStatus;
   return 'Local only';
+}
+
+const NOTE_KINDS: DMCampaignNoteKind[] = ['note', 'session', 'loot'];
+
+function selectKind(value: unknown): DMCampaignNoteKind {
+  const raw = toTrimmedString(value);
+  if (NOTE_KINDS.includes(raw as DMCampaignNoteKind)) return raw as DMCampaignNoteKind;
+  return 'note';
 }
 
 function parseConflictRemote(raw: unknown): DMCampaignNoteConflictRemote | undefined {
@@ -48,6 +57,7 @@ function normalizeCampaignNotePayload(raw: unknown): DMCampaignNote {
     campaignId: toTrimmedString(cast.campaignId),
     title: toString(cast.title, '').trim(),
     content: toString(cast.content, ''),
+    kind: selectKind(cast.kind),
     ownerUid: me,
     owners: owners.length ? owners : [me],
     editors: toStringArray(cast.editors, { dedupe: true }),
@@ -83,9 +93,7 @@ export const campaignNoteConflictRemoteSchema: z.ZodType<DMCampaignNoteConflictR
 
 export const campaignNoteSchema: z.ZodType<DMCampaignNote> = z.any().transform((value) => normalizeCampaignNotePayload(value));
 
-export const campaignNoteQueueItemSchema: z.ZodType<DMCampaignNoteQueueItem | null> = z
-  .any()
-  .transform((value) => parseQueueItem(value));
+export const campaignNoteQueueItemSchema: z.ZodType<DMCampaignNoteQueueItem | null> = z.any().transform((value) => parseQueueItem(value));
 
 export const campaignNoteFormSchema = z
   .any()

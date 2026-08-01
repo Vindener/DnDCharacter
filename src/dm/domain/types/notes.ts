@@ -1,9 +1,4 @@
-export type DMNoteSyncDisplayStatus =
-  | 'Local only'
-  | 'Synced'
-  | 'Pending sync'
-  | 'Offline changes pending'
-  | 'Conflict detected';
+export type DMNoteSyncDisplayStatus = 'Local only' | 'Synced' | 'Pending sync' | 'Offline changes pending' | 'Conflict detected';
 
 export interface DMCampaignNoteConflictRemote {
   title: string;
@@ -11,12 +6,15 @@ export interface DMCampaignNoteConflictRemote {
   updatedAtMs: number;
 }
 
+export type DMCampaignNoteKind = 'note' | 'session' | 'loot';
+
 export interface DMCampaignNote {
   schemaVersion?: number;
   id: string;
   campaignId: string;
   title: string;
   content: string;
+  kind?: DMCampaignNoteKind;
   ownerUid: string;
   owners: string[];
   editors: string[];
