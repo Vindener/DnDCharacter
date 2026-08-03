@@ -17,13 +17,9 @@
     "title": "Feedback",
     "telegramNews": "Telegram News Channel",
     "messagePlaceholder": "Write your ideas, bugs, or requests...",
-    "emailPlaceholder": "Email (optional)",
-    "sendEmail": "Send Email",
     "telegramDirect": "Message on Telegram",
     "emptyTitle": "Message Required",
-    "emptyMessage": "Write a few words",
-    "emailSubject": "Feedback for Mythgate 5e Companion",
-    "emailLabel": "Email"
+    "emptyMessage": "Write a few words"
   },
   "errors": {
     "openLinkTitle": "Error",

@@ -1,0 +1,18 @@
+{
+  "development": {
+    "title": "The app is still in development",
+    "body": "Mythgate 5e Companion is actively being developed — some features may change or have rough edges. If something looks broken, letting us know through Support really helps the project.",
+    "action": "Got it"
+  },
+  "analytics": {
+    "title": "Share anonymous usage data",
+    "body": "We can collect anonymous usage statistics (no email, uid, character names, or note text) to find bugs and improve the app. Allow it?",
+    "accept": "Yes, allow it",
+    "decline": "No, thanks"
+  },
+  "thanks": {
+    "title": "Thank you!",
+    "body": "Thanks for helping the project grow. You can change this choice anytime in Settings.",
+    "action": "OK"
+  }
+}

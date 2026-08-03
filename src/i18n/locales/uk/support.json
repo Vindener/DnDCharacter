@@ -17,13 +17,9 @@
     "title": "Зворотній зв'язок",
     "telegramNews": "Канал новин в Telegram",
     "messagePlaceholder": "Напиши свої ідеї, баги або побажання...",
-    "emailPlaceholder": "Ел. пошта (за бажанням)",
-    "sendEmail": "Надіслати лист",
     "telegramDirect": "Написати в Telegram",
     "emptyTitle": "Заповни повідомлення",
-    "emptyMessage": "Напиши кілька слів",
-    "emailSubject": "Відгук щодо Mythgate 5e Companion",
-    "emailLabel": "Email"
+    "emptyMessage": "Напиши кілька слів"
   },
   "errors": {
     "openLinkTitle": "Помилка",

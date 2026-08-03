@@ -5,6 +5,10 @@ import useThemeStore from '@/context/Theme-store';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 
 const donationUrl = 'https://t.me/mythgatednd/12';
+const telegramChannelUrl = 'https://t.me/mythgatednd';
+// A personal-account chat, unlike a group/channel, honors Telegram's undocumented
+// but universally-supported `?text=` param and prefills the composer with it.
+const telegramContactUrl = 'https://t.me/arbuzka_baza';
 
 export default function Support() {
   const { t } = useTranslation('support');
@@ -41,7 +45,6 @@ export default function Support() {
   );
 
   const [feedback, setFeedback] = useState('');
-  const [email, setEmail] = useState('');
 
   const openUrl = async (url: string) => {
     const can = await Linking.canOpenURL(url);
@@ -49,16 +52,13 @@ export default function Support() {
     Linking.openURL(url);
   };
 
-  const sendFeedback = () => {
-    if (!feedback.trim()) return Alert.alert(t('feedback.emptyTitle'), t('feedback.emptyMessage'));
-    const subject = encodeURIComponent(t('feedback.emailSubject'));
-    const body = encodeURIComponent(`${feedback}\n\n${t('feedback.emailLabel')}: ${email || '-'}`);
-    const mailto = `mailto:vindener12@gmail.com?subject=${subject}&body=${body}`;
-    openUrl(mailto);
+  const sendFeedbackToTelegram = () => {
+    const message = feedback.trim();
+    if (!message) return Alert.alert(t('feedback.emptyTitle'), t('feedback.emptyMessage'));
+    openUrl(`${telegramContactUrl}?text=${encodeURIComponent(message)}`);
   };
 
-  const openTelegram = () => openUrl('https://t.me/mythgatednd?direct');
-  const openTelegramNews = () => openUrl('https://t.me/mythgatednd');
+  const openTelegramNews = () => openUrl(telegramChannelUrl);
 
   const openDonation = () => openUrl(donationUrl);
 
@@ -87,18 +87,7 @@ export default function Support() {
             placeholderTextColor={colors.textSecondary}
             style={[styles.input, { minHeight: 100, textAlignVertical: 'top' }]}
           />
-          <TextInput
-            value={email}
-            onChangeText={setEmail}
-            keyboardType='email-address'
-            placeholder={t('feedback.emailPlaceholder')}
-            placeholderTextColor={colors.textSecondary}
-            style={styles.input}
-          />
-          <TouchableOpacity onPress={sendFeedback} style={styles.btn}>
-            <Text style={styles.btnText}>{t('feedback.sendEmail')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={openTelegram} style={styles.btn}>
+          <TouchableOpacity onPress={sendFeedbackToTelegram} style={styles.btn}>
             <Text style={styles.btnText}>{t('feedback.telegramDirect')}</Text>
           </TouchableOpacity>
         </View>
