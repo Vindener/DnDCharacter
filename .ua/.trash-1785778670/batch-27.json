@@ -1,0 +1,50 @@
+{
+  "nodes": [
+    {
+      "id": "config:src/shared/mock/Elara_Moonshadow.json",
+      "type": "config",
+      "name": "Elara_Moonshadow.json",
+      "filePath": "src/shared/mock/Elara_Moonshadow.json",
+      "summary": "Мок-дані повного аркуша персонажа (Elara Moonshadow) з характеристиками, навичками, інвентарем, зброєю, заклинаннями та бекстрі — використовується як тестовий/демонстраційний персонаж для розробки й перевірки UI аркуша.",
+      "tags": ["mock-data", "character-sheet", "fixture", "configuration", "dnd-data"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/shared/mock/defaultCharacter.json",
+      "type": "config",
+      "name": "defaultCharacter.json",
+      "filePath": "src/shared/mock/defaultCharacter.json",
+      "summary": "Мінімальний мок-набір даних персонажа за замовчуванням (клас, раса, рівень, характеристики, hp, інвентар) для швидких тестів або початкового стану аркуша.",
+      "tags": ["mock-data", "character-sheet", "fixture", "configuration", "dnd-data"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/shared/mock/defaultCharacter2.json",
+      "type": "config",
+      "name": "defaultCharacter2.json",
+      "filePath": "src/shared/mock/defaultCharacter2.json",
+      "summary": "Розширений мок персонажа (друга варіація) з навичками, спорядженням, зброєю, заклинаннями та примітками — альтернативний тестовий фікстур для аркуша персонажа.",
+      "tags": ["mock-data", "character-sheet", "fixture", "configuration", "dnd-data"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/shared/mock/demon-lord-001.json",
+      "type": "config",
+      "name": "demon-lord-001.json",
+      "filePath": "src/shared/mock/demon-lord-001.json",
+      "summary": "Мок-дані одного монстра (демон-лорд) зі статами, класом складності, діями та фото — тестовий фікстур для картки монстра/бестіарію.",
+      "tags": ["mock-data", "bestiary", "fixture", "configuration", "dnd-data"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/shared/mock/monsterBook.json",
+      "type": "config",
+      "name": "monsterBook.json",
+      "filePath": "src/shared/mock/monsterBook.json",
+      "summary": "Мок-колекція монстрів (наприклад, гоблін) з повними статблоками — тестові дані для екрана бестіарію.",
+      "tags": ["mock-data", "bestiary", "fixture", "configuration", "dnd-data"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": []
+}

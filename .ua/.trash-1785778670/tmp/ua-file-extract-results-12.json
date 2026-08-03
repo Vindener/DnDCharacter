@@ -1,0 +1,3979 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 19,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 19,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 19,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "scripts/validate-srd.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 13,
+      "nonEmptyLines": 12,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/mappers/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 4,
+      "exports": [
+        {
+          "name": "characterMapper",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "homebrewMapper",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "spellMapper",
+          "line": 5,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/spellbook/characterSpellAdapter.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 201,
+      "nonEmptyLines": 173,
+      "functions": [
+        {
+          "name": "normalizeSpellName",
+          "startLine": 8,
+          "endLine": 12,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "normalizeClassKey",
+          "startLine": 19,
+          "endLine": 29,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "normalizeAbilityKey",
+          "startLine": 31,
+          "endLine": 53,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "resolveSpellcastingAbility",
+          "startLine": 55,
+          "endLine": 62,
+          "params": [
+            "character"
+          ]
+        },
+        {
+          "name": "getPreparedSpellsLimit",
+          "startLine": 64,
+          "endLine": 83,
+          "params": [
+            "character"
+          ]
+        },
+        {
+          "name": "hasSpell",
+          "startLine": 85,
+          "endLine": 88,
+          "params": [
+            "list",
+            "name"
+          ]
+        },
+        {
+          "name": "addUniqueSpell",
+          "startLine": 90,
+          "endLine": 95,
+          "params": [
+            "list",
+            "spellName"
+          ]
+        },
+        {
+          "name": "removeSpell",
+          "startLine": 97,
+          "endLine": 100,
+          "params": [
+            "list",
+            "spellName"
+          ]
+        },
+        {
+          "name": "collectCharacterSpellNames",
+          "startLine": 102,
+          "endLine": 112,
+          "params": [
+            "character"
+          ]
+        },
+        {
+          "name": "getCharacterSpellStatus",
+          "startLine": 114,
+          "endLine": 120,
+          "params": [
+            "character",
+            "spellName"
+          ]
+        },
+        {
+          "name": "applySpellStatus",
+          "startLine": 122,
+          "endLine": 201,
+          "params": [
+            "character",
+            "spellName",
+            "status",
+            "options"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "normalizeSpellName",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "getPreparedSpellsLimit",
+          "line": 64,
+          "isDefault": false
+        },
+        {
+          "name": "collectCharacterSpellNames",
+          "line": 102,
+          "isDefault": false
+        },
+        {
+          "name": "getCharacterSpellStatus",
+          "line": 114,
+          "isDefault": false
+        },
+        {
+          "name": "applySpellStatus",
+          "line": 122,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "normalizeSpellName",
+          "callee": "String(value || '')\n    .trim()\n    .toLowerCase",
+          "lineNumber": 9
+        },
+        {
+          "caller": "normalizeSpellName",
+          "callee": "String(value || '')\n    .trim",
+          "lineNumber": 9
+        },
+        {
+          "caller": "normalizeSpellName",
+          "callee": "String",
+          "lineNumber": 9
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "String(value || '').trim().toLowerCase",
+          "lineNumber": 20
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "String(value || '').trim",
+          "lineNumber": 20
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "String",
+          "lineNumber": 20
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "Object.entries",
+          "lineNumber": 24
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "String(uaLabel || '').trim().toLowerCase",
+          "lineNumber": 25
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "String(uaLabel || '').trim",
+          "lineNumber": 25
+        },
+        {
+          "caller": "normalizeClassKey",
+          "callee": "String",
+          "lineNumber": 25
+        },
+        {
+          "caller": "normalizeAbilityKey",
+          "callee": "String(value || '')\n    .trim()\n    .toLowerCase",
+          "lineNumber": 32
+        },
+        {
+          "caller": "normalizeAbilityKey",
+          "callee": "String(value || '')\n    .trim",
+          "lineNumber": 32
+        },
+        {
+          "caller": "normalizeAbilityKey",
+          "callee": "String",
+          "lineNumber": 32
+        },
+        {
+          "caller": "resolveSpellcastingAbility",
+          "callee": "normalizeAbilityKey",
+          "lineNumber": 56
+        },
+        {
+          "caller": "resolveSpellcastingAbility",
+          "callee": "normalizeClassKey",
+          "lineNumber": 59
+        },
+        {
+          "caller": "resolveSpellcastingAbility",
+          "callee": "normalizeAbilityKey",
+          "lineNumber": 61
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "normalizeClassKey",
+          "lineNumber": 66
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "resolveSpellcastingAbility",
+          "lineNumber": 67
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "Number",
+          "lineNumber": 70
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "calculateModifier",
+          "lineNumber": 71
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "Math.max",
+          "lineNumber": 72
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "Number",
+          "lineNumber": 72
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "PREPARED_FULL_CASTER_CLASSES.has",
+          "lineNumber": 74
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "Math.max",
+          "lineNumber": 75
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "PREPARED_HALF_CASTER_CLASSES.has",
+          "lineNumber": 78
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "Math.max",
+          "lineNumber": 79
+        },
+        {
+          "caller": "getPreparedSpellsLimit",
+          "callee": "Math.floor",
+          "lineNumber": 79
+        },
+        {
+          "caller": "hasSpell",
+          "callee": "normalizeSpellName",
+          "lineNumber": 86
+        },
+        {
+          "caller": "hasSpell",
+          "callee": "list.some",
+          "lineNumber": 87
+        },
+        {
+          "caller": "hasSpell",
+          "callee": "normalizeSpellName",
+          "lineNumber": 87
+        },
+        {
+          "caller": "addUniqueSpell",
+          "callee": "String(spellName || '').trim",
+          "lineNumber": 91
+        },
+        {
+          "caller": "addUniqueSpell",
+          "callee": "String",
+          "lineNumber": 91
+        },
+        {
+          "caller": "addUniqueSpell",
+          "callee": "hasSpell",
+          "lineNumber": 93
+        },
+        {
+          "caller": "removeSpell",
+          "callee": "normalizeSpellName",
+          "lineNumber": 98
+        },
+        {
+          "caller": "removeSpell",
+          "callee": "list.filter",
+          "lineNumber": 99
+        },
+        {
+          "caller": "removeSpell",
+          "callee": "normalizeSpellName",
+          "lineNumber": 99
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "[...(character.spells?.knownSpells || []), ...(character.spells?.preparedSpells || []), ...(character.spells?.cantrips || [])].forEach",
+          "lineNumber": 105
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "String(name || '').trim",
+          "lineNumber": 106
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "String",
+          "lineNumber": 106
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "normalizeSpellName",
+          "lineNumber": 108
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "names.has",
+          "lineNumber": 109
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "names.set",
+          "lineNumber": 109
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "Array.from",
+          "lineNumber": 111
+        },
+        {
+          "caller": "collectCharacterSpellNames",
+          "callee": "names.values",
+          "lineNumber": 111
+        },
+        {
+          "caller": "getCharacterSpellStatus",
+          "callee": "hasSpell",
+          "lineNumber": 116
+        },
+        {
+          "caller": "getCharacterSpellStatus",
+          "callee": "hasSpell",
+          "lineNumber": 117
+        },
+        {
+          "caller": "getCharacterSpellStatus",
+          "callee": "hasSpell",
+          "lineNumber": 118
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "String(spellName || '').trim",
+          "lineNumber": 128
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "String",
+          "lineNumber": 128
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "Math.max",
+          "lineNumber": 134
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "hasSpell",
+          "lineNumber": 135
+        },
+        {
+          "caller": "resetToAvailable",
+          "callee": "removeSpell",
+          "lineNumber": 138
+        },
+        {
+          "caller": "resetToAvailable",
+          "callee": "removeSpell",
+          "lineNumber": 139
+        },
+        {
+          "caller": "resetToAvailable",
+          "callee": "removeSpell",
+          "lineNumber": 140
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "resetToAvailable",
+          "lineNumber": 144
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "spellMapper.draftToEntity",
+          "lineNumber": 148
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "resetToAvailable",
+          "lineNumber": 157
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "spellMapper.draftToEntity",
+          "lineNumber": 161
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "addUniqueSpell",
+          "lineNumber": 163
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "resetToAvailable",
+          "lineNumber": 172
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "spellMapper.draftToEntity",
+          "lineNumber": 179
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "addUniqueSpell",
+          "lineNumber": 181
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "addUniqueSpell",
+          "lineNumber": 182
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "resetToAvailable",
+          "lineNumber": 189
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "spellMapper.draftToEntity",
+          "lineNumber": 193
+        },
+        {
+          "caller": "applySpellStatus",
+          "callee": "addUniqueSpell",
+          "lineNumber": 197
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 5,
+        "functionCount": 11,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/spellbook/spellCloudRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 8,
+      "nonEmptyLines": 7,
+      "functions": [
+        {
+          "name": "createSpellCloudRepository",
+          "startLine": 3,
+          "endLine": 8,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "createSpellCloudRepository",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/spellbook/spellLocalRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 197,
+      "nonEmptyLines": 172,
+      "functions": [
+        {
+          "name": "parseStoredValue",
+          "startLine": 15,
+          "endLine": 22,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "sortSpells",
+          "startLine": 24,
+          "endLine": 26,
+          "params": [
+            "spells"
+          ]
+        },
+        {
+          "name": "buildSeedSpells",
+          "startLine": 28,
+          "endLine": 30,
+          "params": []
+        },
+        {
+          "name": "mergeStoredWithSeed",
+          "startLine": 32,
+          "endLine": 43,
+          "params": [
+            "stored",
+            "seed"
+          ]
+        },
+        {
+          "name": "buildLegacyIdMap",
+          "startLine": 45,
+          "endLine": 52,
+          "params": [
+            "stored",
+            "spells"
+          ]
+        },
+        {
+          "name": "remapKnownIds",
+          "startLine": 54,
+          "endLine": 58,
+          "params": [
+            "rawIds",
+            "knownIds",
+            "legacyIdMap"
+          ]
+        },
+        {
+          "name": "saveSpells",
+          "startLine": 60,
+          "endLine": 66,
+          "params": [
+            "spells"
+          ]
+        },
+        {
+          "name": "saveFavoriteSpellIds",
+          "startLine": 68,
+          "endLine": 77,
+          "params": [
+            "favoriteSpellIds"
+          ]
+        },
+        {
+          "name": "savePinnedSpellIds",
+          "startLine": 79,
+          "endLine": 88,
+          "params": [
+            "pinnedSpellIds"
+          ]
+        },
+        {
+          "name": "saveSpellNotesById",
+          "startLine": 90,
+          "endLine": 99,
+          "params": [
+            "spellNotesById"
+          ]
+        },
+        {
+          "name": "loadSpellbookState",
+          "startLine": 101,
+          "endLine": 187,
+          "params": []
+        },
+        {
+          "name": "createSpellLocalRepository",
+          "startLine": 189,
+          "endLine": 197,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "createSpellLocalRepository",
+          "line": 189,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parseStoredValue",
+          "callee": "JSON.parse",
+          "lineNumber": 18
+        },
+        {
+          "caller": "sortSpells",
+          "callee": "[...spells].sort",
+          "lineNumber": 25
+        },
+        {
+          "caller": "sortSpells",
+          "callee": "a.name.localeCompare",
+          "lineNumber": 25
+        },
+        {
+          "caller": "buildSeedSpells",
+          "callee": "sortSpells",
+          "lineNumber": 29
+        },
+        {
+          "caller": "buildSeedSpells",
+          "callee": "getSrdSpells().map(srdSpellToSpellbookSpell).filter",
+          "lineNumber": 29
+        },
+        {
+          "caller": "buildSeedSpells",
+          "callee": "getSrdSpells().map",
+          "lineNumber": 29
+        },
+        {
+          "caller": "buildSeedSpells",
+          "callee": "getSrdSpells",
+          "lineNumber": 29
+        },
+        {
+          "caller": "buildSeedSpells",
+          "callee": "Boolean",
+          "lineNumber": 29
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "stored.filter",
+          "lineNumber": 33
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "seed.map",
+          "lineNumber": 34
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "normalizeSpellName",
+          "lineNumber": 34
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "stored.filter",
+          "lineNumber": 35
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "existingByName.has",
+          "lineNumber": 35
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "normalizeSpellName",
+          "lineNumber": 35
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "mergedStored.map",
+          "lineNumber": 37
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "normalizeSpellName",
+          "lineNumber": 37
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "seed.filter",
+          "lineNumber": 38
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "mergedByName.has",
+          "lineNumber": 38
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "normalizeSpellName",
+          "lineNumber": 38
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "sortSpells",
+          "lineNumber": 40
+        },
+        {
+          "caller": "mergeStoredWithSeed",
+          "callee": "sortSpells",
+          "lineNumber": 42
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "spells.map",
+          "lineNumber": 46
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "normalizeSpellName",
+          "lineNumber": 46
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "stored\n      .map((spell) => [spell.id, byName.get(normalizeSpellName(spell.name))] as const)\n      .filter",
+          "lineNumber": 48
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "stored\n      .map",
+          "lineNumber": 48
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "byName.get",
+          "lineNumber": 49
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "normalizeSpellName",
+          "lineNumber": 49
+        },
+        {
+          "caller": "buildLegacyIdMap",
+          "callee": "Boolean",
+          "lineNumber": 50
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "Array.from",
+          "lineNumber": 55
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "rawIds\n    .map((id) => (knownIds.has(id) ? id : legacyIdMap.get(id)))\n    .filter",
+          "lineNumber": 55
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "rawIds\n    .map",
+          "lineNumber": 55
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "knownIds.has",
+          "lineNumber": 56
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "legacyIdMap.get",
+          "lineNumber": 56
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "Boolean",
+          "lineNumber": 57
+        },
+        {
+          "caller": "remapKnownIds",
+          "callee": "knownIds.has",
+          "lineNumber": 57
+        },
+        {
+          "caller": "saveSpells",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 62
+        },
+        {
+          "caller": "saveSpells",
+          "callee": "JSON.stringify",
+          "lineNumber": 62
+        },
+        {
+          "caller": "saveSpells",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 62
+        },
+        {
+          "caller": "saveFavoriteSpellIds",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 70
+        },
+        {
+          "caller": "saveFavoriteSpellIds",
+          "callee": "JSON.stringify",
+          "lineNumber": 72
+        },
+        {
+          "caller": "saveFavoriteSpellIds",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 72
+        },
+        {
+          "caller": "savePinnedSpellIds",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 81
+        },
+        {
+          "caller": "savePinnedSpellIds",
+          "callee": "JSON.stringify",
+          "lineNumber": 83
+        },
+        {
+          "caller": "savePinnedSpellIds",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 83
+        },
+        {
+          "caller": "saveSpellNotesById",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 92
+        },
+        {
+          "caller": "saveSpellNotesById",
+          "callee": "JSON.stringify",
+          "lineNumber": 94
+        },
+        {
+          "caller": "saveSpellNotesById",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 94
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Promise.all",
+          "lineNumber": 103
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 104
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 105
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 106
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 107
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "parseStoredValue",
+          "lineNumber": 110
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "parseStoredValue",
+          "lineNumber": 111
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "parseStoredValue",
+          "lineNumber": 112
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "parseStoredValue",
+          "lineNumber": 113
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 115
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 116
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 117
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 118
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Array.isArray",
+          "lineNumber": 120
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "spellsEnvelope.data\n          .map((item, index) => spellMapper.normalizeStoredSpellbookSpell(item, index))\n          .filter",
+          "lineNumber": 121
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "spellsEnvelope.data\n          .map",
+          "lineNumber": 121
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "spellMapper.normalizeStoredSpellbookSpell",
+          "lineNumber": 122
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Boolean",
+          "lineNumber": 123
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "buildSeedSpells",
+          "lineNumber": 126
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "mergeStoredWithSeed",
+          "lineNumber": 127
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "spells.map",
+          "lineNumber": 129
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "buildLegacyIdMap",
+          "lineNumber": 130
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Array.isArray",
+          "lineNumber": 131
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "favoriteEnvelope.data.map",
+          "lineNumber": 131
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "String",
+          "lineNumber": 131
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "remapKnownIds",
+          "lineNumber": 132
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Array.isArray",
+          "lineNumber": 133
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "pinsEnvelope.data.map",
+          "lineNumber": 133
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "String",
+          "lineNumber": 133
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "remapKnownIds",
+          "lineNumber": 134
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.fromEntries",
+          "lineNumber": 136
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.entries(rawNotesById)\n        .map(([id, value]) => [knownIds.has(id) ? id : legacyIdMap.get(id), value] as const)\n        .filter((entry): entry is readonly [string, unknown] => Boolean(entry[0]) && knownIds.has(entry[0]) && Boolean(String(entry[1] || '').trim()))\n        .map",
+          "lineNumber": 137
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.entries(rawNotesById)\n        .map(([id, value]) => [knownIds.has(id) ? id : legacyIdMap.get(id), value] as const)\n        .filter",
+          "lineNumber": 137
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.entries(rawNotesById)\n        .map",
+          "lineNumber": 137
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.entries",
+          "lineNumber": 137
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "knownIds.has",
+          "lineNumber": 138
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "legacyIdMap.get",
+          "lineNumber": 138
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Boolean",
+          "lineNumber": 139
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "knownIds.has",
+          "lineNumber": 139
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Boolean",
+          "lineNumber": 139
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "String(entry[1] || '').trim",
+          "lineNumber": 139
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "String",
+          "lineNumber": 139
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "String(value).trim",
+          "lineNumber": 140
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "String",
+          "lineNumber": 140
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.keys",
+          "lineNumber": 160
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "Object.keys",
+          "lineNumber": 160
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "saveSpells",
+          "lineNumber": 163
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "saveFavoriteSpellIds",
+          "lineNumber": 167
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "savePinnedSpellIds",
+          "lineNumber": 171
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "saveSpellNotesById",
+          "lineNumber": 175
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "buildSeedSpells",
+          "lineNumber": 180
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "saveSpells",
+          "lineNumber": 181
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "saveFavoriteSpellIds",
+          "lineNumber": 182
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "savePinnedSpellIds",
+          "lineNumber": 183
+        },
+        {
+          "caller": "loadSpellbookState",
+          "callee": "saveSpellNotesById",
+          "lineNumber": 184
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 12,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/spellbook/spellRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 266,
+      "nonEmptyLines": 228,
+      "functions": [
+        {
+          "name": "toDamageProfiles",
+          "startLine": 46,
+          "endLine": 50,
+          "params": [
+            "input"
+          ]
+        },
+        {
+          "name": "normalizeInputComponents",
+          "startLine": 52,
+          "endLine": 55,
+          "params": [
+            "value",
+            "fallback"
+          ]
+        },
+        {
+          "name": "normalizeInputClasses",
+          "startLine": 57,
+          "endLine": 60,
+          "params": [
+            "value",
+            "fallback"
+          ]
+        },
+        {
+          "name": "safePush",
+          "startLine": 62,
+          "endLine": 68,
+          "params": [
+            "cloudRepository",
+            "state"
+          ]
+        },
+        {
+          "name": "mergeCloudState",
+          "startLine": 70,
+          "endLine": 72,
+          "params": [
+            "localState",
+            "_cloudState"
+          ]
+        },
+        {
+          "name": "isEditableSpell",
+          "startLine": 74,
+          "endLine": 76,
+          "params": [
+            "spell"
+          ]
+        },
+        {
+          "name": "createSpellRepository",
+          "startLine": 78,
+          "endLine": 266,
+          "params": [
+            "options"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "createSpellRepository",
+          "line": 78,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "toDamageProfiles",
+          "callee": "spellMapper.normalizeSpellbookDamageProfiles",
+          "lineNumber": 49
+        },
+        {
+          "caller": "safePush",
+          "callee": "cloudRepository.pushSpellbookState",
+          "lineNumber": 64
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "createSpellLocalRepository",
+          "lineNumber": 79
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "createSpellCloudRepository",
+          "lineNumber": 80
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.loadSpellbookState",
+          "lineNumber": 84
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "cloudRepository.pullSpellbookState",
+          "lineNumber": 88
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "mergeCloudState",
+          "lineNumber": 93
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "parseSpellUpsertInput",
+          "lineNumber": 97
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(normalizedInput.name || '').trim",
+          "lineNumber": 98
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 98
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizeSpellName",
+          "lineNumber": 101
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentSpells.find",
+          "lineNumber": 104
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentSpells.find",
+          "lineNumber": 106
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizeSpellName",
+          "lineNumber": 107
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "isEditableSpell",
+          "lineNumber": 109
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "isEditableSpell",
+          "lineNumber": 112
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Date.now",
+          "lineNumber": 113
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "spellMapper.spellbookMapper.draftToEntity",
+          "lineNumber": 114
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "uuid.v4",
+          "lineNumber": 116
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(normalizedInput.school || existing.school || 'Власне').trim",
+          "lineNumber": 121
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 121
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizeInputComponents",
+          "lineNumber": 124
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(normalizedInput.description || existing.description || '').trim",
+          "lineNumber": 126
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 126
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizeInputClasses",
+          "lineNumber": 128
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Array.isArray",
+          "lineNumber": 129
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizedInput.tags.map((tag) => String(tag || '').trim()).filter",
+          "lineNumber": 130
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizedInput.tags.map",
+          "lineNumber": 130
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(tag || '').trim",
+          "lineNumber": 130
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 130
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "toDamageProfiles",
+          "lineNumber": 134
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveSpells",
+          "lineNumber": 144
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "safePush",
+          "lineNumber": 145
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "spellMapper.spellbookMapper.draftToEntity",
+          "lineNumber": 149
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(normalizedInput.school || existing.school || 'Універсальна').trim",
+          "lineNumber": 153
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 153
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizeInputComponents",
+          "lineNumber": 156
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(normalizedInput.description || existing.description || '').trim",
+          "lineNumber": 158
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 158
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizeInputClasses",
+          "lineNumber": 160
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Array.isArray",
+          "lineNumber": 161
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizedInput.tags.map((tag) => String(tag || '').trim()).filter",
+          "lineNumber": 162
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "normalizedInput.tags.map",
+          "lineNumber": 162
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(tag || '').trim",
+          "lineNumber": 162
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 162
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "toDamageProfiles",
+          "lineNumber": 166
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Date.now",
+          "lineNumber": 167
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentSpells.map",
+          "lineNumber": 172
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveSpells",
+          "lineNumber": 175
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "safePush",
+          "lineNumber": 176
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "spellMapper.spellbookInputToEntity",
+          "lineNumber": 180
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "uuid.v4",
+          "lineNumber": 183
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveSpells",
+          "lineNumber": 191
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "safePush",
+          "lineNumber": 192
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentState.spells.find",
+          "lineNumber": 197
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "isEditableSpell",
+          "lineNumber": 198
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentState.spells.filter",
+          "lineNumber": 201
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentState.favoriteSpellIds.filter",
+          "lineNumber": 202
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "currentState.pinnedSpellIds.filter",
+          "lineNumber": 203
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Object.fromEntries",
+          "lineNumber": 204
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Object.entries(currentState.spellNotesById).filter",
+          "lineNumber": 204
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Object.entries",
+          "lineNumber": 204
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "Promise.all",
+          "lineNumber": 207
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveSpells",
+          "lineNumber": 208
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveFavoriteSpellIds",
+          "lineNumber": 209
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.savePinnedSpellIds",
+          "lineNumber": 210
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveSpellNotesById",
+          "lineNumber": 211
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "safePush",
+          "lineNumber": 213
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "current.includes",
+          "lineNumber": 219
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "current.filter",
+          "lineNumber": 220
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveFavoriteSpellIds",
+          "lineNumber": 228
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "safePush",
+          "lineNumber": 229
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "current.includes",
+          "lineNumber": 235
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "current.filter",
+          "lineNumber": 236
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.savePinnedSpellIds",
+          "lineNumber": 244
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String(note || '').trim",
+          "lineNumber": 249
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "String",
+          "lineNumber": 249
+        },
+        {
+          "caller": "createSpellRepository",
+          "callee": "localRepository.saveSpellNotesById",
+          "lineNumber": 262
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/spellbook/spellbookEntity.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 69,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/adapters.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 69,
+      "nonEmptyLines": 66,
+      "functions": [
+        {
+          "name": "actionListToText",
+          "startLine": 5,
+          "endLine": 7,
+          "params": [
+            "actions"
+          ]
+        },
+        {
+          "name": "srdSpellToSpellbookSpell",
+          "startLine": 9,
+          "endLine": 31,
+          "params": [
+            "spell"
+          ]
+        },
+        {
+          "name": "srdMonsterToMonsterDto",
+          "startLine": 33,
+          "endLine": 69,
+          "params": [
+            "monster"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "srdSpellToSpellbookSpell",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "srdMonsterToMonsterDto",
+          "line": 33,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "actionListToText",
+          "callee": "actions.map((action) => `${action.name}. ${action.description}`.trim()).join",
+          "lineNumber": 6
+        },
+        {
+          "caller": "actionListToText",
+          "callee": "actions.map",
+          "lineNumber": 6
+        },
+        {
+          "caller": "actionListToText",
+          "callee": "`${action.name}. ${action.description}`.trim",
+          "lineNumber": 6
+        },
+        {
+          "caller": "srdMonsterToMonsterDto",
+          "callee": "actionListToText",
+          "lineNumber": 58
+        },
+        {
+          "caller": "srdMonsterToMonsterDto",
+          "callee": "actionListToText",
+          "lineNumber": 59
+        },
+        {
+          "caller": "srdMonsterToMonsterDto",
+          "callee": "actionListToText",
+          "lineNumber": 60
+        },
+        {
+          "caller": "srdMonsterToMonsterDto",
+          "callee": "actionListToText",
+          "lineNumber": 61
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/localization.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 58,
+      "nonEmptyLines": 50,
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/schemas.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 190,
+      "nonEmptyLines": 171,
+      "functions": [
+        {
+          "name": "parseSrdArray",
+          "startLine": 188,
+          "endLine": 190,
+          "params": [
+            "schema",
+            "value"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "srdRaceSchema",
+          "line": 65,
+          "isDefault": false
+        },
+        {
+          "name": "srdClassSchema",
+          "line": 74,
+          "isDefault": false
+        },
+        {
+          "name": "srdClassProgressionSchema",
+          "line": 91,
+          "isDefault": false
+        },
+        {
+          "name": "srdEquipmentItemSchema",
+          "line": 100,
+          "isDefault": false
+        },
+        {
+          "name": "srdConditionSchema",
+          "line": 104,
+          "isDefault": false
+        },
+        {
+          "name": "srdSpellSchema",
+          "line": 106,
+          "isDefault": false
+        },
+        {
+          "name": "srdMonsterSchema",
+          "line": 129,
+          "isDefault": false
+        },
+        {
+          "name": "srdReferenceEntrySchema",
+          "line": 161,
+          "isDefault": false
+        },
+        {
+          "name": "srdSkillSchema",
+          "line": 171,
+          "isDefault": false
+        },
+        {
+          "name": "srdLanguageSchema",
+          "line": 175,
+          "isDefault": false
+        },
+        {
+          "name": "srdBackgroundSchema",
+          "line": 179,
+          "isDefault": false
+        },
+        {
+          "name": "parseSrdArray",
+          "line": 188,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parseSrdArray",
+          "callee": "z.array(schema).parse",
+          "lineNumber": 189
+        },
+        {
+          "caller": "parseSrdArray",
+          "callee": "z.array",
+          "lineNumber": 189
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 12,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/srdRepository.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 107,
+      "nonEmptyLines": 98,
+      "functions": [
+        {
+          "name": "expectSrdMetadata",
+          "startLine": 15,
+          "endLine": 20,
+          "params": [
+            "item"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect(item.source).toBe",
+          "lineNumber": 16
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect",
+          "lineNumber": 16
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect(item.license).toBe",
+          "lineNumber": 17
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect",
+          "lineNumber": 17
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect(Array.isArray(item.tags)).toBe",
+          "lineNumber": 18
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect",
+          "lineNumber": 18
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "Array.isArray",
+          "lineNumber": 18
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect((item.tags as string[]).length).toBeGreaterThan",
+          "lineNumber": 19
+        },
+        {
+          "caller": "expectSrdMetadata",
+          "callee": "expect",
+          "lineNumber": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/srdRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 215,
+      "nonEmptyLines": 182,
+      "functions": [
+        {
+          "name": "loadRaces",
+          "startLine": 50,
+          "endLine": 53,
+          "params": []
+        },
+        {
+          "name": "loadClasses",
+          "startLine": 56,
+          "endLine": 59,
+          "params": []
+        },
+        {
+          "name": "loadClassProgressions",
+          "startLine": 62,
+          "endLine": 65,
+          "params": []
+        },
+        {
+          "name": "loadBackgrounds",
+          "startLine": 68,
+          "endLine": 71,
+          "params": []
+        },
+        {
+          "name": "loadConditions",
+          "startLine": 74,
+          "endLine": 77,
+          "params": []
+        },
+        {
+          "name": "loadEquipment",
+          "startLine": 80,
+          "endLine": 83,
+          "params": []
+        },
+        {
+          "name": "loadLanguages",
+          "startLine": 86,
+          "endLine": 89,
+          "params": []
+        },
+        {
+          "name": "loadMonsters",
+          "startLine": 92,
+          "endLine": 95,
+          "params": []
+        },
+        {
+          "name": "loadReferences",
+          "startLine": 98,
+          "endLine": 101,
+          "params": []
+        },
+        {
+          "name": "loadSkills",
+          "startLine": 104,
+          "endLine": 107,
+          "params": []
+        },
+        {
+          "name": "loadSpells",
+          "startLine": 110,
+          "endLine": 113,
+          "params": []
+        },
+        {
+          "name": "getSrdRaces",
+          "startLine": 115,
+          "endLine": 117,
+          "params": []
+        },
+        {
+          "name": "getSrdRaceById",
+          "startLine": 119,
+          "endLine": 121,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "getSrdClasses",
+          "startLine": 123,
+          "endLine": 125,
+          "params": []
+        },
+        {
+          "name": "getSrdClassById",
+          "startLine": 127,
+          "endLine": 129,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "getClassProgression",
+          "startLine": 131,
+          "endLine": 134,
+          "params": [
+            "classId",
+            "level"
+          ]
+        },
+        {
+          "name": "getSrdClassProgressions",
+          "startLine": 136,
+          "endLine": 138,
+          "params": []
+        },
+        {
+          "name": "getAvailableSkillsForClass",
+          "startLine": 140,
+          "endLine": 145,
+          "params": [
+            "classId"
+          ]
+        },
+        {
+          "name": "getStartingEquipmentForClass",
+          "startLine": 147,
+          "endLine": 149,
+          "params": [
+            "classId"
+          ]
+        },
+        {
+          "name": "getConditions",
+          "startLine": 151,
+          "endLine": 153,
+          "params": []
+        },
+        {
+          "name": "getEquipment",
+          "startLine": 155,
+          "endLine": 157,
+          "params": []
+        },
+        {
+          "name": "getSrdSpells",
+          "startLine": 159,
+          "endLine": 161,
+          "params": []
+        },
+        {
+          "name": "getSrdSpellById",
+          "startLine": 163,
+          "endLine": 165,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "getSrdMonsters",
+          "startLine": 167,
+          "endLine": 169,
+          "params": []
+        },
+        {
+          "name": "getSrdMonsterById",
+          "startLine": 171,
+          "endLine": 173,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "getSrdReferences",
+          "startLine": 175,
+          "endLine": 177,
+          "params": []
+        },
+        {
+          "name": "getSrdReferenceById",
+          "startLine": 179,
+          "endLine": 181,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "getSrdBackgrounds",
+          "startLine": 183,
+          "endLine": 185,
+          "params": []
+        },
+        {
+          "name": "getSrdBackgroundById",
+          "startLine": 187,
+          "endLine": 189,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "getSrdLanguages",
+          "startLine": 191,
+          "endLine": 193,
+          "params": []
+        },
+        {
+          "name": "getSrdSkills",
+          "startLine": 195,
+          "endLine": 197,
+          "params": []
+        },
+        {
+          "name": "validateAllSrdCollections",
+          "startLine": 203,
+          "endLine": 215,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "getSrdRaces",
+          "line": 115,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceById",
+          "line": 119,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdClasses",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdClassById",
+          "line": 127,
+          "isDefault": false
+        },
+        {
+          "name": "getClassProgression",
+          "line": 131,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdClassProgressions",
+          "line": 136,
+          "isDefault": false
+        },
+        {
+          "name": "getAvailableSkillsForClass",
+          "line": 140,
+          "isDefault": false
+        },
+        {
+          "name": "getStartingEquipmentForClass",
+          "line": 147,
+          "isDefault": false
+        },
+        {
+          "name": "getConditions",
+          "line": 151,
+          "isDefault": false
+        },
+        {
+          "name": "getEquipment",
+          "line": 155,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdSpells",
+          "line": 159,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdSpellById",
+          "line": 163,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdMonsters",
+          "line": 167,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdMonsterById",
+          "line": 171,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdReferences",
+          "line": 175,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdReferenceById",
+          "line": 179,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdBackgrounds",
+          "line": 183,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdBackgroundById",
+          "line": 187,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdLanguages",
+          "line": 191,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdSkills",
+          "line": 195,
+          "isDefault": false
+        },
+        {
+          "name": "validateAllSrdCollections",
+          "line": 203,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "loadRaces",
+          "callee": "loadRacesJson",
+          "lineNumber": 51
+        },
+        {
+          "caller": "loadClasses",
+          "callee": "loadClassesJson",
+          "lineNumber": 57
+        },
+        {
+          "caller": "loadClassProgressions",
+          "callee": "loadClassProgressionJson",
+          "lineNumber": 63
+        },
+        {
+          "caller": "loadBackgrounds",
+          "callee": "loadBackgroundsJson",
+          "lineNumber": 69
+        },
+        {
+          "caller": "loadConditions",
+          "callee": "loadConditionsJson",
+          "lineNumber": 75
+        },
+        {
+          "caller": "loadEquipment",
+          "callee": "loadEquipmentJson",
+          "lineNumber": 81
+        },
+        {
+          "caller": "loadLanguages",
+          "callee": "loadLanguagesJson",
+          "lineNumber": 87
+        },
+        {
+          "caller": "loadMonsters",
+          "callee": "loadMonstersJson",
+          "lineNumber": 93
+        },
+        {
+          "caller": "loadReferences",
+          "callee": "loadReferencesJson",
+          "lineNumber": 99
+        },
+        {
+          "caller": "loadSkills",
+          "callee": "loadSkillsJson",
+          "lineNumber": 105
+        },
+        {
+          "caller": "loadSpells",
+          "callee": "loadSpellsJson",
+          "lineNumber": 111
+        },
+        {
+          "caller": "getSrdRaces",
+          "callee": "loadRaces",
+          "lineNumber": 116
+        },
+        {
+          "caller": "getSrdRaceById",
+          "callee": "loadRaces().find",
+          "lineNumber": 120
+        },
+        {
+          "caller": "getSrdRaceById",
+          "callee": "loadRaces",
+          "lineNumber": 120
+        },
+        {
+          "caller": "getSrdClasses",
+          "callee": "loadClasses",
+          "lineNumber": 124
+        },
+        {
+          "caller": "getSrdClassById",
+          "callee": "loadClasses().find",
+          "lineNumber": 128
+        },
+        {
+          "caller": "getSrdClassById",
+          "callee": "loadClasses",
+          "lineNumber": 128
+        },
+        {
+          "caller": "getClassProgression",
+          "callee": "loadClassProgressions().find",
+          "lineNumber": 132
+        },
+        {
+          "caller": "getClassProgression",
+          "callee": "loadClassProgressions",
+          "lineNumber": 132
+        },
+        {
+          "caller": "getClassProgression",
+          "callee": "progression?.levels.find",
+          "lineNumber": 133
+        },
+        {
+          "caller": "getSrdClassProgressions",
+          "callee": "loadClassProgressions",
+          "lineNumber": 137
+        },
+        {
+          "caller": "getAvailableSkillsForClass",
+          "callee": "getSrdClassById",
+          "lineNumber": 141
+        },
+        {
+          "caller": "getAvailableSkillsForClass",
+          "callee": "loadSkills().filter",
+          "lineNumber": 144
+        },
+        {
+          "caller": "getAvailableSkillsForClass",
+          "callee": "loadSkills",
+          "lineNumber": 144
+        },
+        {
+          "caller": "getAvailableSkillsForClass",
+          "callee": "allowed.has",
+          "lineNumber": 144
+        },
+        {
+          "caller": "getStartingEquipmentForClass",
+          "callee": "getSrdClassById",
+          "lineNumber": 148
+        },
+        {
+          "caller": "getConditions",
+          "callee": "loadConditions",
+          "lineNumber": 152
+        },
+        {
+          "caller": "getEquipment",
+          "callee": "loadEquipment",
+          "lineNumber": 156
+        },
+        {
+          "caller": "getSrdSpells",
+          "callee": "loadSpells",
+          "lineNumber": 160
+        },
+        {
+          "caller": "getSrdSpellById",
+          "callee": "loadSpells().find",
+          "lineNumber": 164
+        },
+        {
+          "caller": "getSrdSpellById",
+          "callee": "loadSpells",
+          "lineNumber": 164
+        },
+        {
+          "caller": "getSrdMonsters",
+          "callee": "loadMonsters",
+          "lineNumber": 168
+        },
+        {
+          "caller": "getSrdMonsterById",
+          "callee": "loadMonsters().find",
+          "lineNumber": 172
+        },
+        {
+          "caller": "getSrdMonsterById",
+          "callee": "loadMonsters",
+          "lineNumber": 172
+        },
+        {
+          "caller": "getSrdReferences",
+          "callee": "loadReferences",
+          "lineNumber": 176
+        },
+        {
+          "caller": "getSrdReferenceById",
+          "callee": "loadReferences().find",
+          "lineNumber": 180
+        },
+        {
+          "caller": "getSrdReferenceById",
+          "callee": "loadReferences",
+          "lineNumber": 180
+        },
+        {
+          "caller": "getSrdBackgrounds",
+          "callee": "loadBackgrounds",
+          "lineNumber": 184
+        },
+        {
+          "caller": "getSrdBackgroundById",
+          "callee": "loadBackgrounds().find",
+          "lineNumber": 188
+        },
+        {
+          "caller": "getSrdBackgroundById",
+          "callee": "loadBackgrounds",
+          "lineNumber": 188
+        },
+        {
+          "caller": "getSrdLanguages",
+          "callee": "loadLanguages",
+          "lineNumber": 192
+        },
+        {
+          "caller": "getSrdSkills",
+          "callee": "loadSkills",
+          "lineNumber": 196
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 204
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadRacesJson",
+          "lineNumber": 204
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 205
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadClassesJson",
+          "lineNumber": 205
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 206
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadClassProgressionJson",
+          "lineNumber": 206
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 207
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadBackgroundsJson",
+          "lineNumber": 207
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 208
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadConditionsJson",
+          "lineNumber": 208
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 209
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadEquipmentJson",
+          "lineNumber": 209
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 210
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadLanguagesJson",
+          "lineNumber": 210
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 211
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadMonstersJson",
+          "lineNumber": 211
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 212
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadReferencesJson",
+          "lineNumber": 212
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 213
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadSkillsJson",
+          "lineNumber": 213
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "parseSrdArray",
+          "lineNumber": 214
+        },
+        {
+          "caller": "validateAllSrdCollections",
+          "callee": "loadSpellsJson",
+          "lineNumber": 214
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 21,
+        "functionCount": 32,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/srdSelectors.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 103,
+      "nonEmptyLines": 85,
+      "functions": [
+        {
+          "name": "getSrdSubraces",
+          "startLine": 4,
+          "endLine": 6,
+          "params": [
+            "raceId"
+          ]
+        },
+        {
+          "name": "getSrdSubraceById",
+          "startLine": 8,
+          "endLine": 10,
+          "params": [
+            "raceId",
+            "subraceId"
+          ]
+        },
+        {
+          "name": "getSrdRaceSpeed",
+          "startLine": 12,
+          "endLine": 14,
+          "params": [
+            "raceId"
+          ]
+        },
+        {
+          "name": "getSrdRaceAbilityIncreases",
+          "startLine": 16,
+          "endLine": 23,
+          "params": [
+            "raceId",
+            "subraceId"
+          ]
+        },
+        {
+          "name": "getSrdRaceFlexibleIncrease",
+          "startLine": 25,
+          "endLine": 29,
+          "params": [
+            "raceId",
+            "subraceId"
+          ]
+        },
+        {
+          "name": "getSrdRaceTraits",
+          "startLine": 31,
+          "endLine": 36,
+          "params": [
+            "raceId",
+            "subraceId"
+          ]
+        },
+        {
+          "name": "getSrdRaceLanguages",
+          "startLine": 38,
+          "endLine": 43,
+          "params": [
+            "raceId",
+            "subraceId"
+          ]
+        },
+        {
+          "name": "getSrdClassFeaturesAtLevel",
+          "startLine": 45,
+          "endLine": 50,
+          "params": [
+            "classId",
+            "level"
+          ]
+        },
+        {
+          "name": "getSrdProgressionFeatureNames",
+          "startLine": 52,
+          "endLine": 59,
+          "params": [
+            "classId",
+            "level"
+          ]
+        },
+        {
+          "name": "getSrdClassDisplayName",
+          "startLine": 61,
+          "endLine": 63,
+          "params": [
+            "classId"
+          ]
+        },
+        {
+          "name": "getSrdRaceDisplayName",
+          "startLine": 65,
+          "endLine": 67,
+          "params": [
+            "raceId"
+          ]
+        },
+        {
+          "name": "getSrdSubraceDisplayName",
+          "startLine": 69,
+          "endLine": 71,
+          "params": [
+            "raceId",
+            "subraceId"
+          ]
+        },
+        {
+          "name": "getSrdBackgroundDisplayName",
+          "startLine": 73,
+          "endLine": 75,
+          "params": [
+            "backgroundId"
+          ]
+        },
+        {
+          "name": "isSrdRaceId",
+          "startLine": 77,
+          "endLine": 79,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "isSrdClassId",
+          "startLine": 81,
+          "endLine": 83,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "isSrdBackgroundId",
+          "startLine": 85,
+          "endLine": 87,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "findSrdRaceByName",
+          "startLine": 89,
+          "endLine": 95,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "findSrdClassByName",
+          "startLine": 97,
+          "endLine": 103,
+          "params": [
+            "value"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "getSrdSubraces",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdSubraceById",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceSpeed",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceAbilityIncreases",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceFlexibleIncrease",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceTraits",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceLanguages",
+          "line": 38,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdClassFeaturesAtLevel",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdProgressionFeatureNames",
+          "line": 52,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdClassDisplayName",
+          "line": 61,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdRaceDisplayName",
+          "line": 65,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdSubraceDisplayName",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "getSrdBackgroundDisplayName",
+          "line": 73,
+          "isDefault": false
+        },
+        {
+          "name": "isSrdRaceId",
+          "line": 77,
+          "isDefault": false
+        },
+        {
+          "name": "isSrdClassId",
+          "line": 81,
+          "isDefault": false
+        },
+        {
+          "name": "isSrdBackgroundId",
+          "line": 85,
+          "isDefault": false
+        },
+        {
+          "name": "findSrdRaceByName",
+          "line": 89,
+          "isDefault": false
+        },
+        {
+          "name": "findSrdClassByName",
+          "line": 97,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getSrdSubraces",
+          "callee": "getSrdRaceById",
+          "lineNumber": 5
+        },
+        {
+          "caller": "getSrdSubraceById",
+          "callee": "getSrdSubraces(raceId).find",
+          "lineNumber": 9
+        },
+        {
+          "caller": "getSrdSubraceById",
+          "callee": "getSrdSubraces",
+          "lineNumber": 9
+        },
+        {
+          "caller": "getSrdRaceSpeed",
+          "callee": "getSrdRaceById",
+          "lineNumber": 13
+        },
+        {
+          "caller": "getSrdRaceAbilityIncreases",
+          "callee": "getSrdRaceById",
+          "lineNumber": 17
+        },
+        {
+          "caller": "getSrdRaceAbilityIncreases",
+          "callee": "getSrdSubraceById",
+          "lineNumber": 18
+        },
+        {
+          "caller": "getSrdRaceFlexibleIncrease",
+          "callee": "getSrdRaceById",
+          "lineNumber": 26
+        },
+        {
+          "caller": "getSrdRaceFlexibleIncrease",
+          "callee": "getSrdSubraceById",
+          "lineNumber": 27
+        },
+        {
+          "caller": "getSrdRaceTraits",
+          "callee": "getSrdRaceById",
+          "lineNumber": 33
+        },
+        {
+          "caller": "getSrdRaceTraits",
+          "callee": "getSrdSubraceById",
+          "lineNumber": 34
+        },
+        {
+          "caller": "getSrdRaceLanguages",
+          "callee": "getSrdRaceById",
+          "lineNumber": 40
+        },
+        {
+          "caller": "getSrdRaceLanguages",
+          "callee": "getSrdSubraceById",
+          "lineNumber": 41
+        },
+        {
+          "caller": "getSrdClassFeaturesAtLevel",
+          "callee": "getSrdClassById",
+          "lineNumber": 47
+        },
+        {
+          "caller": "getSrdClassFeaturesAtLevel",
+          "callee": "srdClass.features.filter",
+          "lineNumber": 49
+        },
+        {
+          "caller": "getSrdProgressionFeatureNames",
+          "callee": "names.push",
+          "lineNumber": 56
+        },
+        {
+          "caller": "getSrdProgressionFeatureNames",
+          "callee": "getClassProgression",
+          "lineNumber": 56
+        },
+        {
+          "caller": "getSrdProgressionFeatureNames",
+          "callee": "Array.from",
+          "lineNumber": 58
+        },
+        {
+          "caller": "getSrdProgressionFeatureNames",
+          "callee": "names.filter",
+          "lineNumber": 58
+        },
+        {
+          "caller": "getSrdClassDisplayName",
+          "callee": "getSrdClassById",
+          "lineNumber": 62
+        },
+        {
+          "caller": "getSrdRaceDisplayName",
+          "callee": "getSrdRaceById",
+          "lineNumber": 66
+        },
+        {
+          "caller": "getSrdSubraceDisplayName",
+          "callee": "getSrdSubraceById",
+          "lineNumber": 70
+        },
+        {
+          "caller": "getSrdBackgroundDisplayName",
+          "callee": "getSrdBackgroundById",
+          "lineNumber": 74
+        },
+        {
+          "caller": "isSrdRaceId",
+          "callee": "Boolean",
+          "lineNumber": 78
+        },
+        {
+          "caller": "isSrdRaceId",
+          "callee": "getSrdRaceById",
+          "lineNumber": 78
+        },
+        {
+          "caller": "isSrdClassId",
+          "callee": "Boolean",
+          "lineNumber": 82
+        },
+        {
+          "caller": "isSrdClassId",
+          "callee": "getSrdClassById",
+          "lineNumber": 82
+        },
+        {
+          "caller": "isSrdBackgroundId",
+          "callee": "Boolean",
+          "lineNumber": 86
+        },
+        {
+          "caller": "isSrdBackgroundId",
+          "callee": "getSrdBackgroundById",
+          "lineNumber": 86
+        },
+        {
+          "caller": "findSrdRaceByName",
+          "callee": "String(value || '')\r\n    .trim()\r\n    .toLowerCase",
+          "lineNumber": 90
+        },
+        {
+          "caller": "findSrdRaceByName",
+          "callee": "String(value || '')\r\n    .trim",
+          "lineNumber": 90
+        },
+        {
+          "caller": "findSrdRaceByName",
+          "callee": "String",
+          "lineNumber": 90
+        },
+        {
+          "caller": "findSrdRaceByName",
+          "callee": "getSrdRaces().find",
+          "lineNumber": 94
+        },
+        {
+          "caller": "findSrdRaceByName",
+          "callee": "getSrdRaces",
+          "lineNumber": 94
+        },
+        {
+          "caller": "findSrdRaceByName",
+          "callee": "race.name.toLowerCase",
+          "lineNumber": 94
+        },
+        {
+          "caller": "findSrdClassByName",
+          "callee": "String(value || '')\r\n    .trim()\r\n    .toLowerCase",
+          "lineNumber": 98
+        },
+        {
+          "caller": "findSrdClassByName",
+          "callee": "String(value || '')\r\n    .trim",
+          "lineNumber": 98
+        },
+        {
+          "caller": "findSrdClassByName",
+          "callee": "String",
+          "lineNumber": 98
+        },
+        {
+          "caller": "findSrdClassByName",
+          "callee": "getSrdClasses().find",
+          "lineNumber": 102
+        },
+        {
+          "caller": "findSrdClassByName",
+          "callee": "getSrdClasses",
+          "lineNumber": 102
+        },
+        {
+          "caller": "findSrdClassByName",
+          "callee": "srdClass.name.toLowerCase",
+          "lineNumber": 102
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 18,
+        "functionCount": 18,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/srd/types.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 173,
+      "nonEmptyLines": 149,
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/types/sourceMetadata.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 13,
+      "nonEmptyLines": 11,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/services/storeEffects/dmStoreEffects.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 184,
+      "nonEmptyLines": 158,
+      "functions": [
+        {
+          "name": "createHarness",
+          "startLine": 31,
+          "endLine": 67,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "set",
+          "callee": "partial",
+          "lineNumber": 57
+        },
+        {
+          "caller": "createHarness",
+          "callee": "createDmStoreEffects",
+          "lineNumber": 62
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/services/storeEffects/dmStoreEffects.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 292,
+      "nonEmptyLines": 260,
+      "functions": [
+        {
+          "name": "persistUserTemplates",
+          "startLine": 46,
+          "endLine": 51,
+          "params": [
+            "templates"
+          ]
+        },
+        {
+          "name": "normalizeRole",
+          "startLine": 53,
+          "endLine": 56,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "parseStoredValue",
+          "startLine": 59,
+          "endLine": 66,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "isSrdMonster",
+          "startLine": 68,
+          "endLine": 70,
+          "params": [
+            "monster"
+          ]
+        },
+        {
+          "name": "normalizeCustomMonster",
+          "startLine": 72,
+          "endLine": 80,
+          "params": [
+            "monster"
+          ]
+        },
+        {
+          "name": "getSrdMonsterSeed",
+          "startLine": 82,
+          "endLine": 84,
+          "params": []
+        },
+        {
+          "name": "mergeMonstersWithSrd",
+          "startLine": 86,
+          "endLine": 97,
+          "params": [
+            "stored"
+          ]
+        },
+        {
+          "name": "persistableMonsters",
+          "startLine": 99,
+          "endLine": 101,
+          "params": [
+            "monsters"
+          ]
+        },
+        {
+          "name": "createDmStoreEffects",
+          "startLine": 102,
+          "endLine": 291,
+          "params": [
+            "{ set, get }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "createDmStoreEffects",
+          "line": 102,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "persistUserTemplates",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 48
+        },
+        {
+          "caller": "persistUserTemplates",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 49
+        },
+        {
+          "caller": "persistUserTemplates",
+          "callee": "JSON.stringify",
+          "lineNumber": 49
+        },
+        {
+          "caller": "parseStoredValue",
+          "callee": "JSON.parse",
+          "lineNumber": 62
+        },
+        {
+          "caller": "normalizeCustomMonster",
+          "callee": "isSrdMonster",
+          "lineNumber": 73
+        },
+        {
+          "caller": "getSrdMonsterSeed",
+          "callee": "getSrdMonsters().map",
+          "lineNumber": 83
+        },
+        {
+          "caller": "getSrdMonsterSeed",
+          "callee": "getSrdMonsters",
+          "lineNumber": 83
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "getSrdMonsterSeed",
+          "lineNumber": 87
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "srdMonsters.map",
+          "lineNumber": 88
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "monster.name.trim().toLowerCase",
+          "lineNumber": 88
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "monster.name.trim",
+          "lineNumber": 88
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "stored\n    .filter((monster) => !isSrdMonster(monster))\n    .map(normalizeCustomMonster)\n    .filter",
+          "lineNumber": 89
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "stored\n    .filter((monster) => !isSrdMonster(monster))\n    .map",
+          "lineNumber": 89
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "stored\n    .filter",
+          "lineNumber": 89
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "isSrdMonster",
+          "lineNumber": 90
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "custom.map",
+          "lineNumber": 93
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "srdMonsters.filter",
+          "lineNumber": 94
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "customIds.has",
+          "lineNumber": 94
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "custom.filter",
+          "lineNumber": 95
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "srdNames.has",
+          "lineNumber": 95
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "monster.name.trim().toLowerCase",
+          "lineNumber": 95
+        },
+        {
+          "caller": "mergeMonstersWithSrd",
+          "callee": "monster.name.trim",
+          "lineNumber": 95
+        },
+        {
+          "caller": "persistableMonsters",
+          "callee": "monsters.filter",
+          "lineNumber": 100
+        },
+        {
+          "caller": "persistableMonsters",
+          "callee": "isSrdMonster",
+          "lineNumber": 100
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "mergeMonstersWithSrd",
+          "lineNumber": 105
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "get",
+          "lineNumber": 106
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "get",
+          "lineNumber": 107
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "existingPins.filter",
+          "lineNumber": 108
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "mergedMonsters.some",
+          "lineNumber": 108
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "existingFavorites.filter",
+          "lineNumber": 109
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "mergedMonsters.some",
+          "lineNumber": 109
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 110
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "JSON.stringify",
+          "lineNumber": 110
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 110
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "persistableMonsters",
+          "lineNumber": 110
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 111
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "JSON.stringify",
+          "lineNumber": 111
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 111
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 112
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "JSON.stringify",
+          "lineNumber": 112
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 112
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "set",
+          "lineNumber": 113
+        },
+        {
+          "caller": "saveMonsters",
+          "callee": "set",
+          "lineNumber": 115
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 122
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "parseStoredValue",
+          "lineNumber": 123
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 124
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Array.isArray",
+          "lineNumber": 125
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "monstersMigrated.data.filter",
+          "lineNumber": 125
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "mergeMonstersWithSrd",
+          "lineNumber": 126
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 128
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "parseStoredValue",
+          "lineNumber": 129
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 130
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Array.isArray",
+          "lineNumber": 131
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "pinsMigrated.data.filter",
+          "lineNumber": 131
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "validPins.filter",
+          "lineNumber": 132
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "mergedMonsters.some",
+          "lineNumber": 132
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 133
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "parseStoredValue",
+          "lineNumber": 134
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 135
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Array.isArray",
+          "lineNumber": 136
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "favoritesMigrated.data.filter",
+          "lineNumber": 136
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "validFavorites.filter",
+          "lineNumber": 137
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "mergedMonsters.some",
+          "lineNumber": 137
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 138
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 146
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 153
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeCustomMonster",
+          "lineNumber": 154
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "uuid.v4",
+          "lineNumber": 154
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "monsters.some",
+          "lineNumber": 155
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "saveMonsters",
+          "lineNumber": 157
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 161
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "newMonsters\n          .map((monster) => normalizeCustomMonster({ ...monster, id: monster.id || uuid.v4() } as MonsterDto))\n          .filter",
+          "lineNumber": 164
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "newMonsters\n          .map",
+          "lineNumber": 164
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeCustomMonster",
+          "lineNumber": 165
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "uuid.v4",
+          "lineNumber": 165
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "monsters.some",
+          "lineNumber": 166
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "saveMonsters",
+          "lineNumber": 168
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get().monsters.find",
+          "lineNumber": 172
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 172
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "isSrdMonster",
+          "lineNumber": 173
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get().monsters.map",
+          "lineNumber": 174
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 174
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeCustomMonster",
+          "lineNumber": 174
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "saveMonsters",
+          "lineNumber": 175
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get().monsters.find",
+          "lineNumber": 179
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 179
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "isSrdMonster",
+          "lineNumber": 180
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get().monsters.filter",
+          "lineNumber": 181
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 181
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "saveMonsters",
+          "lineNumber": 182
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 186
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "currentPins.includes",
+          "lineNumber": 187
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "currentPins.filter",
+          "lineNumber": 187
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 189
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "JSON.stringify",
+          "lineNumber": 189
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 189
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 190
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 195
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "currentFavorites.includes",
+          "lineNumber": 196
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "currentFavorites.filter",
+          "lineNumber": 197
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 200
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "JSON.stringify",
+          "lineNumber": 200
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 200
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 201
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 207
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "JSON.stringify",
+          "lineNumber": 207
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 207
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 208
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 213
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 215
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "JSON.stringify",
+          "lineNumber": 215
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 215
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 221
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "parseStoredValue",
+          "lineNumber": 222
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 223
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 224
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeRole",
+          "lineNumber": 224
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 230
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "parseStoredValue",
+          "lineNumber": 231
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 232
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Array.isArray",
+          "lineNumber": 233
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 234
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "migrated.data\n          .map((entry: unknown, index: number) => {\n            const cast = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};\n            const resource = cast.resource && typeof cast.resource === 'object' ? (cast.resource as Record<string, unknown>) : {};\n\n            return {\n              id: String(cast.id || `user-template-${index}`),\n              name: String(cast.name || `Шаблон ${index + 1}`),\n              source: 'user' as const,\n              resource: {\n                label: String(resource.label || 'Ресурс'),\n                current: Math.max(0, Number(resource.current) || 0),\n                max: typeof resource.max === 'number' ? Math.max(0, resource.max) : undefined,\n                resetRule: String(resource.resetRule || 'none') as CharacterCustomResource['resetRule'],\n                visibility: resource.visibility as CharacterCustomResource['visibility'],\n                color: typeof resource.color === 'string' ? resource.color : undefined,\n              },\n            };\n          })\n          .slice",
+          "lineNumber": 238
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "migrated.data\n          .map",
+          "lineNumber": 238
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "String",
+          "lineNumber": 244
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "String",
+          "lineNumber": 245
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "String",
+          "lineNumber": 248
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Math.max",
+          "lineNumber": 249
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Number",
+          "lineNumber": 249
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Math.max",
+          "lineNumber": 250
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "String",
+          "lineNumber": 251
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 259
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 261
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 266
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Date.now",
+          "lineNumber": 268
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "(name || resource.label || 'Власний шаблон').trim",
+          "lineNumber": 269
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Math.max",
+          "lineNumber": 273
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Number",
+          "lineNumber": 273
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "Math.max",
+          "lineNumber": 274
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "[next, ...current].slice",
+          "lineNumber": 280
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 281
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "persistUserTemplates",
+          "lineNumber": 282
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get().userTemplates.filter",
+          "lineNumber": 286
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "get",
+          "lineNumber": 286
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "set",
+          "lineNumber": 287
+        },
+        {
+          "caller": "createDmStoreEffects",
+          "callee": "persistUserTemplates",
+          "lineNumber": 288
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 1,
+        "functionCount": 9,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/CharacterClass.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 32,
+      "nonEmptyLines": 31,
+      "exports": [
+        {
+          "name": "CLASS_TRANSLATIONS",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CLASS_OPTIONS",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/stores/dmStore.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 61,
+      "nonEmptyLines": 56,
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

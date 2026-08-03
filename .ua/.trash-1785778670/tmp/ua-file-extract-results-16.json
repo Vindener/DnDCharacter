@@ -1,0 +1,482 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 3,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 3,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 3,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "functions/src/accountDeletionCascade.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 33,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "functions/src/accountDeletionCascade.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 50,
+      "nonEmptyLines": 44,
+      "functions": [
+        {
+          "name": "decideCascadeAction",
+          "startLine": 23,
+          "endLine": 50,
+          "params": [
+            "doc",
+            "myUid",
+            "chosenNewOwnerUid"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "decideCascadeAction",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "decideCascadeAction",
+          "callee": "owners.includes",
+          "lineNumber": 30
+        },
+        {
+          "caller": "decideCascadeAction",
+          "callee": "editors.includes",
+          "lineNumber": 31
+        },
+        {
+          "caller": "decideCascadeAction",
+          "callee": "owners.filter",
+          "lineNumber": 34
+        },
+        {
+          "caller": "decideCascadeAction",
+          "callee": "editors.includes",
+          "lineNumber": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "functions/src/deleteMyAccount.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 167,
+      "nonEmptyLines": 146,
+      "functions": [
+        {
+          "name": "toOwnershipDoc",
+          "startLine": 30,
+          "endLine": 36,
+          "params": [
+            "data"
+          ]
+        },
+        {
+          "name": "planCollectionOps",
+          "startLine": 38,
+          "endLine": 79,
+          "params": [
+            "db",
+            "collectionName",
+            "myUid",
+            "transferSelections"
+          ]
+        },
+        {
+          "name": "planConnectionOps",
+          "startLine": 81,
+          "endLine": 94,
+          "params": [
+            "db",
+            "myUid"
+          ]
+        },
+        {
+          "name": "runAccountDeletionCascade",
+          "startLine": 105,
+          "endLine": 137,
+          "params": [
+            "db",
+            "myUid",
+            "transferSelections"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "runAccountDeletionCascade",
+          "line": 105,
+          "isDefault": false
+        },
+        {
+          "name": "deleteMyAccount",
+          "line": 139,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "String",
+          "lineNumber": 32
+        },
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "Array.isArray",
+          "lineNumber": 33
+        },
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "data.owners.map",
+          "lineNumber": 33
+        },
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "String",
+          "lineNumber": 33
+        },
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "Array.isArray",
+          "lineNumber": 34
+        },
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "data.editors.map",
+          "lineNumber": 34
+        },
+        {
+          "caller": "toOwnershipDoc",
+          "callee": "String",
+          "lineNumber": 34
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "Promise.all",
+          "lineNumber": 44
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection(collectionName).where('owners', 'array-contains', myUid).get",
+          "lineNumber": 45
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection(collectionName).where",
+          "lineNumber": 45
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection",
+          "lineNumber": 45
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection(collectionName).where('editors', 'array-contains', myUid).get",
+          "lineNumber": 46
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection(collectionName).where",
+          "lineNumber": 46
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection",
+          "lineNumber": 46
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ownedSnap.docs.forEach",
+          "lineNumber": 50
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "docsById.set",
+          "lineNumber": 50
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "doc.data",
+          "lineNumber": 50
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "editedSnap.docs.forEach",
+          "lineNumber": 51
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "docsById.has",
+          "lineNumber": 52
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "docsById.set",
+          "lineNumber": 52
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "doc.data",
+          "lineNumber": 52
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "toOwnershipDoc",
+          "lineNumber": 57
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "decideCascadeAction",
+          "lineNumber": 59
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection(collectionName).doc",
+          "lineNumber": 60
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "db.collection",
+          "lineNumber": 60
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ops.push",
+          "lineNumber": 63
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ownershipDoc.owners.filter",
+          "lineNumber": 65
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "nextOwners.includes",
+          "lineNumber": 66
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "nextOwners.push",
+          "lineNumber": 66
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ownershipDoc.editors.filter",
+          "lineNumber": 67
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ops.push",
+          "lineNumber": 68
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ownershipDoc.owners.filter",
+          "lineNumber": 70
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ops.push",
+          "lineNumber": 73
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ops.push",
+          "lineNumber": 75
+        },
+        {
+          "caller": "planCollectionOps",
+          "callee": "ownershipDoc.editors.filter",
+          "lineNumber": 75
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "Promise.all",
+          "lineNumber": 82
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "db.collection('connections').where('fromUid', '==', myUid).get",
+          "lineNumber": 83
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "db.collection('connections').where",
+          "lineNumber": 83
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "db.collection",
+          "lineNumber": 83
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "db.collection('connections').where('toUid', '==', myUid).get",
+          "lineNumber": 84
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "db.collection('connections').where",
+          "lineNumber": 84
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "db.collection",
+          "lineNumber": 84
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "[...fromSnap.docs, ...toSnap.docs].forEach",
+          "lineNumber": 88
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "seen.has",
+          "lineNumber": 89
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "seen.add",
+          "lineNumber": 90
+        },
+        {
+          "caller": "planConnectionOps",
+          "callee": "ops.push",
+          "lineNumber": 91
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "ops.push",
+          "lineNumber": 113
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "planCollectionOps",
+          "lineNumber": 113
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "ops.push",
+          "lineNumber": 115
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "planConnectionOps",
+          "lineNumber": 115
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "db.collection('users').doc",
+          "lineNumber": 117
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "db.collection",
+          "lineNumber": 117
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "userRef.get",
+          "lineNumber": 118
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "String",
+          "lineNumber": 119
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "userSnap.data",
+          "lineNumber": 119
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "db.collection('emailIndex').doc",
+          "lineNumber": 121
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "db.collection",
+          "lineNumber": 121
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "emailIndexRef.get",
+          "lineNumber": 122
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "emailIndexSnap.data",
+          "lineNumber": 123
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "ops.push",
+          "lineNumber": 124
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "ops.push",
+          "lineNumber": 127
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "db.batch",
+          "lineNumber": 130
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "ops.slice",
+          "lineNumber": 131
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "batch.delete",
+          "lineNumber": 132
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "batch.update",
+          "lineNumber": 133
+        },
+        {
+          "caller": "runAccountDeletionCascade",
+          "callee": "batch.commit",
+          "lineNumber": 135
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "config:android/app/src/main/res/values/colors.xml",
+      "type": "config",
+      "name": "colors.xml",
+      "filePath": "android/app/src/main/res/values/colors.xml",
+      "summary": "Визначає колірні ресурси Android для екрана заставки та основної теми застосунку — фірмовий червоний колір EE1B24 для сплеш-скрину та іконки, а також синій colorPrimary.",
+      "tags": ["configuration", "android-resources", "colors", "branding"],
+      "complexity": "simple",
+      "languageNotes": "Значення colorPrimaryDark (#ffffff) навмисно біле — узгоджено з нативним ручним фіксом бренд-кольору поза Expo-конфігом (позначено коментарем `manual:`)."
+    },
+    {
+      "id": "config:android/app/src/main/res/values/strings.xml",
+      "type": "config",
+      "name": "strings.xml",
+      "filePath": "android/app/src/main/res/values/strings.xml",
+      "summary": "Визначає рядкові ресурси Android: назву застосунку («Mythgate 5e Companion»), параметри Expo splash screen (режим масштабування, прозорість статус-бару) та поточну runtime-версію Expo Updates.",
+      "tags": ["configuration", "android-resources", "strings", "expo"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/main/res/values/styles.xml",
+      "type": "config",
+      "name": "styles.xml",
+      "filePath": "android/app/src/main/res/values/styles.xml",
+      "summary": "Визначає нативні Android-теми AppTheme та Theme.App.SplashScreen: колір статус-бару, фон вікна для заставки та відключення примусового edge-to-edge на API 35 через windowOptOutEdgeToEdgeEnforcement.",
+      "tags": ["configuration", "android-resources", "theme", "splashscreen"],
+      "complexity": "simple",
+      "languageNotes": "windowOptOutEdgeToEdgeEnforcement (tools:targetApi=\"35\") стосується саме проблеми edge-to-edge на targetSdk 36, описаної в CLAUDE.md §8.5 — для API 35 opt-out ще діє, але для Android 15+/targetSdk 36 системний edge-to-edge все одно вмикається незалежно від цього флага."
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:android/app/src/main/res/values/styles.xml",
+      "target": "config:android/app/src/main/res/values/colors.xml",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "nodes": [
+    {
+      "id": "file:functions/src/accountDeletionCascade.ts",
+      "type": "file",
+      "name": "accountDeletionCascade.ts",
+      "filePath": "functions/src/accountDeletionCascade.ts",
+      "summary": "Чиста функція прийняття рішень для видалення акаунта: визначає, що робити з документом (характер/кампанія тощо), коли власник чи редактор іде з нього — видалити, передати ownership, прибрати з owners або з editors. Логіка навмисно продубльована зі src/services/accountDeletionCascade.ts, бо Cloud Functions — окремий Node-рантайм без доступу до src/.",
+      "tags": ["cloud-functions", "account-deletion", "ownership", "utility", "collaborative-editing"],
+      "complexity": "simple",
+      "languageNotes": "Дискримінований union `CascadeAction` (за полем `type`) чітко типізує 5 можливих наслідків без класів чи винятків — гарний приклад чистої, легко тестованої функції прийняття рішень."
+    },
+    {
+      "id": "function:functions/src/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "function",
+      "name": "decideCascadeAction",
+      "filePath": "functions/src/accountDeletionCascade.ts",
+      "lineRange": [23, 50],
+      "summary": "Реалізує таблицю COL-10: одноосібний власник без редакторів -> delete; одноосібний власник з редакторами -> передача ownership обраному чи першому редактору; один із кількох власників -> прибрати з owners; лише редактор -> прибрати з editors; інакше -> noop.",
+      "tags": ["business-logic", "ownership", "pure-function", "collaborative-editing"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:functions/src/deleteMyAccount.ts",
+      "type": "file",
+      "name": "deleteMyAccount.ts",
+      "filePath": "functions/src/deleteMyAccount.ts",
+      "summary": "Firebase Callable Function `deleteMyAccount`: для облікового запису, що видаляється, будує пакетні (batched) операції видалення/оновлення по characterSheets, dmCampaigns, dmCampaignNotes, dmCampaignEncounters, connections, emailIndex і users згідно з decideCascadeAction, а потім видаляє користувача з Firebase Auth.",
+      "tags": ["cloud-functions", "api-handler", "account-deletion", "firestore", "collaborative-editing"],
+      "complexity": "complex",
+      "languageNotes": "Записи розбиваються на чанки по BATCH_CHUNK_SIZE=450 через ліміт Firestore у 500 операцій на batch; для дуже великого fan-out (500+ документів) весь каскад не є атомарним end-to-end — задокументовано прямо в коментарі перед runAccountDeletionCascade."
+    },
+    {
+      "id": "function:functions/src/deleteMyAccount.ts:toOwnershipDoc",
+      "type": "function",
+      "name": "toOwnershipDoc",
+      "filePath": "functions/src/deleteMyAccount.ts",
+      "lineRange": [30, 36],
+      "summary": "Нормалізує сирі дані документа Firestore у типізований CascadeOwnershipDoc (ownerUid, owners[], editors[]) із захистом від відсутніх чи некоректних полів.",
+      "tags": ["data-mapping", "validation", "firestore", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:functions/src/deleteMyAccount.ts:planCollectionOps",
+      "type": "function",
+      "name": "planCollectionOps",
+      "filePath": "functions/src/deleteMyAccount.ts",
+      "lineRange": [38, 79],
+      "summary": "Для однієї колекції (characterSheets/dmCampaigns/...) знаходить усі документи, де користувач є owner або editor, застосовує decideCascadeAction до кожного і формує список WriteOp (delete/update) для подальшого пакетного коміту.",
+      "tags": ["business-logic", "firestore", "ownership", "batch-processing"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:functions/src/deleteMyAccount.ts:planConnectionOps",
+      "type": "function",
+      "name": "planConnectionOps",
+      "filePath": "functions/src/deleteMyAccount.ts",
+      "lineRange": [81, 94],
+      "summary": "Знаходить усі документи колекції connections, де користувач фігурує як fromUid або toUid, і формує операції їх видалення без дублікатів.",
+      "tags": ["firestore", "batch-processing", "utility"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:functions/src/deleteMyAccount.ts:runAccountDeletionCascade",
+      "type": "function",
+      "name": "runAccountDeletionCascade",
+      "filePath": "functions/src/deleteMyAccount.ts",
+      "lineRange": [105, 137],
+      "summary": "Оркеструє повний каскад видалення акаунта: збирає операції по всіх CASCADE_COLLECTIONS та connections, додає видалення emailIndex-запису (якщо він належить цьому uid) і документа users, потім комітить усе пакетами по BATCH_CHUNK_SIZE.",
+      "tags": ["orchestration", "account-deletion", "firestore", "collaborative-editing"],
+      "complexity": "complex",
+      "languageNotes": "Реалізує інваріант §5.7 з CLAUDE.md: видалення акаунта не видаляє чужі дані — інші власники/редактори лишаються, документ видаляється повністю лише коли не залишилось нікого."
+    },
+    {
+      "id": "function:functions/src/deleteMyAccount.ts:deleteMyAccount",
+      "type": "function",
+      "name": "deleteMyAccount",
+      "filePath": "functions/src/deleteMyAccount.ts",
+      "lineRange": [139, 167],
+      "summary": "Точка входу Callable Function: перевіряє автентифікацію, викликає runAccountDeletionCascade у Firestore, а потім getAuth().deleteUser; якщо крок Firestore падає — нічого не змінено, якщо падає лише видалення в Auth — повертає статус 'partial'.",
+      "tags": ["api-handler", "entry-point", "authentication", "error-handling"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:functions/src/accountDeletionCascade.test.ts",
+      "type": "file",
+      "name": "accountDeletionCascade.test.ts",
+      "filePath": "functions/src/accountDeletionCascade.test.ts",
+      "summary": "Unit-тести (vitest) для decideCascadeAction у Cloud Functions-пакеті: перевіряють усі п'ять гілок каскаду (delete, transferOwnership із дефолтним і явно обраним редактором, removeFromOwners, removeFromEditors, noop).",
+      "tags": ["test", "unit-test", "ownership", "collaborative-editing"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:functions/src/accountDeletionCascade.ts",
+      "target": "function:functions/src/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/accountDeletionCascade.ts",
+      "target": "function:functions/src/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:toOwnershipDoc",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:planCollectionOps",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:planConnectionOps",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:runAccountDeletionCascade",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:deleteMyAccount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:runAccountDeletionCascade",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "function:functions/src/deleteMyAccount.ts:deleteMyAccount",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:functions/src/deleteMyAccount.ts",
+      "target": "file:functions/src/accountDeletionCascade.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:functions/src/deleteMyAccount.ts:planCollectionOps",
+      "target": "function:functions/src/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:functions/src/deleteMyAccount.ts:planCollectionOps",
+      "target": "function:functions/src/deleteMyAccount.ts:toOwnershipDoc",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:functions/src/deleteMyAccount.ts:runAccountDeletionCascade",
+      "target": "function:functions/src/deleteMyAccount.ts:planCollectionOps",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:functions/src/deleteMyAccount.ts:runAccountDeletionCascade",
+      "target": "function:functions/src/deleteMyAccount.ts:planConnectionOps",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:functions/src/deleteMyAccount.ts:deleteMyAccount",
+      "target": "function:functions/src/deleteMyAccount.ts:runAccountDeletionCascade",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:functions/src/accountDeletionCascade.ts",
+      "target": "file:functions/src/accountDeletionCascade.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:functions/src/accountDeletionCascade.test.ts",
+      "target": "file:functions/src/accountDeletionCascade.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

@@ -1,0 +1,506 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 8,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 8,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 8
+    }
+  },
+  "results": [
+    {
+      "path": ".agents/AGENT.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 84,
+      "nonEmptyLines": 66,
+      "sections": [
+        {
+          "heading": "AGENT.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Role",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Current Product Focus",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Current Sprint Roadmap",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "UX Principles",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "DnD Product Principles",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "Do Not Break",
+          "level": 2,
+          "line": 38
+        },
+        {
+          "heading": "Coding Rules",
+          "level": 2,
+          "line": 46
+        },
+        {
+          "heading": "Validation",
+          "level": 2,
+          "line": 54
+        },
+        {
+          "heading": "EAS Build / Lockfile Rule",
+          "level": 2,
+          "line": 65
+        },
+        {
+          "heading": "Output Expectations",
+          "level": 2,
+          "line": 79
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 11
+      }
+    },
+    {
+      "path": ".agents/CHECKLIST.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 45,
+      "nonEmptyLines": 39,
+      "sections": [
+        {
+          "heading": "CHECKLIST.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Before UX/UI Changes",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Loading States",
+          "level": 2,
+          "line": 11
+        },
+        {
+          "heading": "DnD Correctness",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "Mobile Usability",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Before Finishing",
+          "level": 2,
+          "line": 33
+        },
+        {
+          "heading": "In The Final Report",
+          "level": 2,
+          "line": 40
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": ".agents/CODEX.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 59,
+      "nonEmptyLines": 50,
+      "sections": [
+        {
+          "heading": "CODEX.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Codex-Specific Execution Guide",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Default Posture",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "When Working On The Current Roadmap",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "Good Task Pattern",
+          "level": 2,
+          "line": 21
+        },
+        {
+          "heading": "Dependency / EAS Builds",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "For UI Tasks",
+          "level": 2,
+          "line": 36
+        },
+        {
+          "heading": "For Data/Cloud Tasks",
+          "level": 2,
+          "line": 44
+        },
+        {
+          "heading": "For Refactors",
+          "level": 2,
+          "line": 50
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    },
+    {
+      "path": ".agents/MEMORY.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 76,
+      "nonEmptyLines": 65,
+      "sections": [
+        {
+          "heading": "MEMORY.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Stable Repository Memory",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Current Product Direction",
+          "level": 2,
+          "line": 12
+        },
+        {
+          "heading": "UX/UI Sprints 1-6: Complete",
+          "level": 2,
+          "line": 17
+        },
+        {
+          "heading": "Collaborative Editing Facts",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "Product Memory",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "Product Identity",
+          "level": 2,
+          "line": 36
+        },
+        {
+          "heading": "Key Product Principles",
+          "level": 2,
+          "line": 44
+        },
+        {
+          "heading": "Architectural Memory",
+          "level": 2,
+          "line": 53
+        },
+        {
+          "heading": "Tooling Facts",
+          "level": 2,
+          "line": 61
+        },
+        {
+          "heading": "Working Assumptions For Future Tasks",
+          "level": 2,
+          "line": 71
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 11
+      }
+    },
+    {
+      "path": ".agents/REPO_MAP.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 75,
+      "nonEmptyLines": 60,
+      "sections": [
+        {
+          "heading": "REPO_MAP.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "High-Level Map",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Current Roadmap Areas",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "Dice",
+          "level": 3,
+          "line": 18
+        },
+        {
+          "heading": "Home",
+          "level": 3,
+          "line": 22
+        },
+        {
+          "heading": "Character",
+          "level": 3,
+          "line": 25
+        },
+        {
+          "heading": "Create Character",
+          "level": 3,
+          "line": 29
+        },
+        {
+          "heading": "Spellbook",
+          "level": 3,
+          "line": 33
+        },
+        {
+          "heading": "Bestiary",
+          "level": 3,
+          "line": 37
+        },
+        {
+          "heading": "Shared UI",
+          "level": 3,
+          "line": 41
+        },
+        {
+          "heading": "Important Flows",
+          "level": 2,
+          "line": 52
+        },
+        {
+          "heading": "High-Impact Files",
+          "level": 2,
+          "line": 66
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 12
+      }
+    },
+    {
+      "path": ".agents/TOOLS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 74,
+      "nonEmptyLines": 63,
+      "sections": [
+        {
+          "heading": "TOOLS.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Tooling Policy For Codex",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Package And Dependency Rules",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Reliable Project Commands",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Validation Strategy",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "Useful Repo Inspection Commands",
+          "level": 2,
+          "line": 38
+        },
+        {
+          "heading": "Editing Strategy With Tools",
+          "level": 2,
+          "line": 45
+        },
+        {
+          "heading": "Native Caution",
+          "level": 2,
+          "line": 58
+        },
+        {
+          "heading": "Committed `android/`, Prebuild, And Versions",
+          "level": 2,
+          "line": 62
+        },
+        {
+          "heading": "Implementation Priorities",
+          "level": 2,
+          "line": 68
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": ".agents/USER.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 26,
+      "nonEmptyLines": 22,
+      "sections": [
+        {
+          "heading": "USER.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "User Collaboration Preferences",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Current Product Preference",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "How Codex Should Present Results",
+          "level": 2,
+          "line": 16
+        },
+        {
+          "heading": "Communication Style",
+          "level": 2,
+          "line": 22
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": ".agents/openai.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 47,
+      "nonEmptyLines": 41,
+      "sections": [
+        {
+          "heading": "interface",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "instructions",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "context",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "agent",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "instructions",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 43
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    }
+  ]
+}

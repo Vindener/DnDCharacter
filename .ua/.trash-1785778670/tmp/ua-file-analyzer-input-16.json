@@ -1,0 +1,17 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "functions/src/accountDeletionCascade.test.ts", "language": "typescript", "sizeLines": 39, "fileCategory": "code"},
+    {"path": "functions/src/accountDeletionCascade.ts", "language": "typescript", "sizeLines": 50, "fileCategory": "code"},
+    {"path": "functions/src/deleteMyAccount.ts", "language": "typescript", "sizeLines": 167, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "functions/src/accountDeletionCascade.test.ts": [
+      "functions/src/accountDeletionCascade.ts"
+    ],
+    "functions/src/accountDeletionCascade.ts": [],
+    "functions/src/deleteMyAccount.ts": [
+      "functions/src/accountDeletionCascade.ts"
+    ]
+  }
+}

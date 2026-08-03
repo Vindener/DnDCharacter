@@ -1,0 +1,16 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "src/dm/domain/types/encounter.ts", "language": "typescript", "sizeLines": 75, "fileCategory": "code"},
+    {"path": "src/dm/domain/types/encounterHistory.ts", "language": "typescript", "sizeLines": 38, "fileCategory": "code"},
+    {"path": "src/dm/domain/types/notes.ts", "language": "typescript", "sizeLines": 46, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "src/dm/domain/types/encounter.ts": [],
+    "src/dm/domain/types/encounterHistory.ts": [
+      "src/dm/domain/types/encounter.ts",
+      "src/dm/domain/types/notes.ts"
+    ],
+    "src/dm/domain/types/notes.ts": []
+  }
+}

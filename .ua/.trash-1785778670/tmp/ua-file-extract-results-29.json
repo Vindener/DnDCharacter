@@ -1,0 +1,379 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 9,
+  "filesSkipped": [
+    "android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+    "android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+    "android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp",
+    "android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+    "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+    "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp",
+    "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+    "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+    "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp",
+    "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+    "android/app/src/main/res/values-night/colors.xml",
+    "android/gradle/wrapper/gradle-wrapper.jar",
+    "android/gradle/wrapper/gradle-wrapper.properties",
+    "android/gradlew",
+    "firestore.rules",
+    "scripts/manual-dev-client-android.ps1"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 9,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "firestore-tests/rules.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 456,
+      "nonEmptyLines": 380,
+      "functions": [
+        {
+          "name": "seed",
+          "startLine": 38,
+          "endLine": 42,
+          "params": [
+            "fn"
+          ]
+        },
+        {
+          "name": "validCharacterSheet",
+          "startLine": 44,
+          "endLine": 57,
+          "params": [
+            "overrides"
+          ]
+        },
+        {
+          "name": "validDmCampaign",
+          "startLine": 59,
+          "endLine": 68,
+          "params": [
+            "overrides"
+          ]
+        },
+        {
+          "name": "validDmCampaignInvite",
+          "startLine": 70,
+          "endLine": 81,
+          "params": [
+            "overrides"
+          ]
+        },
+        {
+          "name": "validDmCampaignInitiative",
+          "startLine": 83,
+          "endLine": 93,
+          "params": [
+            "overrides"
+          ]
+        },
+        {
+          "name": "validDmCampaignNote",
+          "startLine": 95,
+          "endLine": 105,
+          "params": [
+            "overrides"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "seed",
+          "callee": "testEnv.withSecurityRulesDisabled",
+          "lineNumber": 39
+        },
+        {
+          "caller": "seed",
+          "callee": "fn",
+          "lineNumber": 40
+        },
+        {
+          "caller": "seed",
+          "callee": "ctx.firestore",
+          "lineNumber": 40
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 6,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "functions/src/createCampaignInvite.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 95,
+      "nonEmptyLines": 80,
+      "functions": [
+        {
+          "name": "generateInviteCode",
+          "startLine": 27,
+          "endLine": 33,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "createCampaignInvite",
+          "line": 35,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "generateInviteCode",
+          "callee": "randomInt",
+          "lineNumber": 30
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "functions/src/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 3,
+      "nonEmptyLines": 3,
+      "exports": [
+        {
+          "name": "deleteMyAccount",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "createCampaignInvite",
+          "line": 2,
+          "isDefault": false
+        },
+        {
+          "name": "redeemCampaignInvite",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "functions/src/redeemCampaignInvite.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 90,
+      "nonEmptyLines": 77,
+      "exports": [
+        {
+          "name": "redeemCampaignInvite",
+          "line": 19,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "functions/vitest.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 8,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "metro.config.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 3,
+      "nonEmptyLines": 2,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/lint-theme.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 58,
+      "nonEmptyLines": 49,
+      "functions": [
+        {
+          "name": "walk",
+          "startLine": 13,
+          "endLine": 27,
+          "params": [
+            "dir"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "walk",
+          "callee": "fs.readdirSync",
+          "lineNumber": 14
+        },
+        {
+          "caller": "walk",
+          "callee": "path.join",
+          "lineNumber": 17
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.isDirectory",
+          "lineNumber": 18
+        },
+        {
+          "caller": "walk",
+          "callee": "files.push",
+          "lineNumber": 19
+        },
+        {
+          "caller": "walk",
+          "callee": "walk",
+          "lineNumber": 19
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.isFile",
+          "lineNumber": 22
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.name.endsWith",
+          "lineNumber": 22
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.name.endsWith",
+          "lineNumber": 22
+        },
+        {
+          "caller": "walk",
+          "callee": "files.push",
+          "lineNumber": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/lint-ui-tokens.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 60,
+      "nonEmptyLines": 49,
+      "functions": [
+        {
+          "name": "walk",
+          "startLine": 12,
+          "endLine": 28,
+          "params": [
+            "dir"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "walk",
+          "callee": "fs.readdirSync",
+          "lineNumber": 13
+        },
+        {
+          "caller": "walk",
+          "callee": "path.join",
+          "lineNumber": 17
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.isDirectory",
+          "lineNumber": 18
+        },
+        {
+          "caller": "walk",
+          "callee": "files.push",
+          "lineNumber": 19
+        },
+        {
+          "caller": "walk",
+          "callee": "walk",
+          "lineNumber": 19
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.isFile",
+          "lineNumber": 22
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.name.endsWith",
+          "lineNumber": 22
+        },
+        {
+          "caller": "walk",
+          "callee": "entry.name.endsWith",
+          "lineNumber": 22
+        },
+        {
+          "caller": "walk",
+          "callee": "files.push",
+          "lineNumber": 23
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/release-check.mjs",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 25,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

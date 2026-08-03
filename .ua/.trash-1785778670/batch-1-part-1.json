@@ -1,0 +1,1422 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/context/AppRole-store.ts",
+      "type": "file",
+      "name": "AppRole-store.ts",
+      "filePath": "src/context/AppRole-store.ts",
+      "summary": "Односторядковий реекспорт-барель Zustand-стору ролі застосунку (GM/гравець) із `src/stores` для сумісності зі старими імпортами через `src/context`.",
+      "tags": [
+        "barrel",
+        "state-management",
+        "zustand",
+        "re-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/context/DmSettings-store.ts",
+      "type": "file",
+      "name": "DmSettings-store.ts",
+      "filePath": "src/context/DmSettings-store.ts",
+      "summary": "Реекспорт-барель Zustand-стору налаштувань DM (Dungeon Master) із `src/stores` для сумісності з імпортами через `src/context`.",
+      "tags": [
+        "barrel",
+        "state-management",
+        "zustand",
+        "re-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/context/Spellbook-store.ts",
+      "type": "file",
+      "name": "Spellbook-store.ts",
+      "filePath": "src/context/Spellbook-store.ts",
+      "summary": "Реекспорт-барель Zustand-стору книги заклинань із `src/stores` для сумісності з імпортами через `src/context`.",
+      "tags": [
+        "barrel",
+        "state-management",
+        "zustand",
+        "re-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/context/Sync-store.ts",
+      "type": "file",
+      "name": "Sync-store.ts",
+      "filePath": "src/context/Sync-store.ts",
+      "summary": "Реекспорт-барель Zustand-стору стану синхронізації персонажів, разом із селекторами `selectSyncByCharacterId` та `selectSyncStoreActions`, для сумісності з імпортами через `src/context`.",
+      "tags": [
+        "barrel",
+        "state-management",
+        "zustand",
+        "re-export",
+        "sync"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/campaign/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/domain/campaign/index.ts",
+      "summary": "Барель домену кампанії DM: реекспортує утиліти нормалізації назв, побудови id, сортування та функції прив’язки кампанії (`linking.ts`, `utils.ts`).",
+      "tags": [
+        "barrel",
+        "entry-point",
+        "campaign",
+        "domain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/campaign/linking.test.ts",
+      "type": "file",
+      "name": "linking.test.ts",
+      "filePath": "src/dm/domain/campaign/linking.test.ts",
+      "summary": "Юніт-тести для `resolveCampaignForLink` і `buildLegacyCampaignFallbackId` — перевіряють резолюцію кампанії персонажа за id/legacy-fallback.",
+      "tags": [
+        "test",
+        "campaign",
+        "domain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/campaign/linking.ts",
+      "type": "file",
+      "name": "linking.ts",
+      "filePath": "src/dm/domain/campaign/linking.ts",
+      "summary": "Логіка прив’язки персонажа до кампанії DM: пошук кампанії за посиланням та побудова резервного (legacy) id кампанії за назвою.",
+      "tags": [
+        "domain",
+        "campaign",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/campaign/utils.test.ts",
+      "type": "file",
+      "name": "utils.test.ts",
+      "filePath": "src/dm/domain/campaign/utils.test.ts",
+      "summary": "Юніт-тести для утиліт домену кампанії: нормалізація назви, slug, сортування, санітизація резюме та закріплених id.",
+      "tags": [
+        "test",
+        "campaign",
+        "domain"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/dm/domain/campaign/utils.ts",
+      "type": "file",
+      "name": "utils.ts",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "summary": "Чисті утиліти домену кампанії DM: нормалізація й slug назви, побудова id кампанії, сортування за останньою активністю, санітизація резюме, обмеження рівня партії та списку закріплених елементів.",
+      "tags": [
+        "utility",
+        "domain",
+        "campaign",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/dm/domain/encounter/calculator.ts",
+      "type": "file",
+      "name": "calculator.ts",
+      "filePath": "src/dm/domain/encounter/calculator.ts",
+      "summary": "Калькулятор складності бойової сутички D&D 5e: таблиці порогів складності за рівнем, таблиця XP за challenge rating, множник монстрів залежно від їх кількості та розміру партії, підсумкова оцінка складності.",
+      "tags": [
+        "domain",
+        "encounter",
+        "calculator",
+        "srd"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/dm/domain/initiative/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/domain/initiative/index.ts",
+      "summary": "Барель домену ініціативи: реекспортує `rollInitiativeFor` та `sortByInitiative` з `roll.ts` (реалізація в іншому файлі проєкту).",
+      "tags": [
+        "barrel",
+        "entry-point",
+        "initiative",
+        "domain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/initiative/roll.test.ts",
+      "type": "file",
+      "name": "roll.test.ts",
+      "filePath": "src/dm/domain/initiative/roll.test.ts",
+      "summary": "Юніт-тести для кидків ініціативи та сортування бійців; містить фабрику тестових даних `combatant`.",
+      "tags": [
+        "test",
+        "initiative",
+        "domain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/notes/conflict.test.ts",
+      "type": "file",
+      "name": "conflict.test.ts",
+      "filePath": "src/dm/domain/notes/conflict.test.ts",
+      "summary": "Юніт-тести для виявлення конфліктів нотаток кампанії та побудови їх \"remote\"-знімка для порівняння.",
+      "tags": [
+        "test",
+        "notes",
+        "domain",
+        "collaboration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/notes/conflict.ts",
+      "type": "file",
+      "name": "conflict.ts",
+      "filePath": "src/dm/domain/notes/conflict.ts",
+      "summary": "Домен конфліктів нотаток кампанії: константи статусів синхронізації (`NOTE_SYNC_STATUS`), перевірка наявності конфлікту (`hasConflict`) та побудова \"remote\"-знімка нотатки для порівняльного вирішення конфлікту.",
+      "tags": [
+        "domain",
+        "notes",
+        "collaboration",
+        "sync"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/notes/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/domain/notes/index.ts",
+      "summary": "Барель домену нотаток кампанії: реекспортує статуси синхронізації та функції виявлення/побудови конфліктів із `conflict.ts`.",
+      "tags": [
+        "barrel",
+        "entry-point",
+        "notes",
+        "domain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/types/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/domain/types/index.ts",
+      "summary": "Спільні TypeScript-типи домену DM (кампанії, ініціатива, нотатки, енкаунтери) — файл лише типів без рантайм-експортів.",
+      "tags": [
+        "type-definition",
+        "domain",
+        "dm"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "type": "file",
+      "name": "useCampaignOwnership.ts",
+      "filePath": "src/dm/hooks/useCampaignOwnership.ts",
+      "summary": "Хук, що визначає, чи поточний користувач є власником (owner) переданої кампанії DM, на основі масиву `owners`.",
+      "tags": [
+        "hook",
+        "campaign",
+        "ownership",
+        "collaboration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "type": "file",
+      "name": "campaignEncountersRepository.test.ts",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.test.ts",
+      "summary": "Юніт-тести репозиторію енкаунтерів кампанії: локальне сховище, чергу офлайн-операцій та вирішення конфліктів; містить фабрику `buildEncounter` та сідер конфліктного стану.",
+      "tags": [
+        "test",
+        "encounter",
+        "repository",
+        "sync"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "type": "file",
+      "name": "campaignEncountersRepository.ts",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "summary": "Репозиторій енкаунтерів кампанії DM з локально-першою моделлю: AsyncStorage-кеш, черга офлайн-операцій, мапінг Firestore-документів, побудова payload для хмари, підписка на зміни (`onSnapshot`), рольовий контроль доступу (`canAccessByRole`) та вирішення конфліктів синхронізації.",
+      "tags": [
+        "repository",
+        "sync",
+        "firestore",
+        "offline-first",
+        "encounter",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "type": "file",
+      "name": "campaignInitiativeRepository.test.ts",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "summary": "Юніт-тести репозиторію трекера ініціативи кампанії: локальне сховище та синхронізація з хмарою; містить фабрику `buildCombatants`.",
+      "tags": [
+        "test",
+        "initiative",
+        "repository",
+        "sync"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/linking.ts:resolveCampaignForLink",
+      "type": "function",
+      "name": "resolveCampaignForLink",
+      "filePath": "src/dm/domain/campaign/linking.ts",
+      "lineRange": [
+        4,
+        13
+      ],
+      "summary": "Шукає кампанію зі списку за посиланням (спершу за id, потім за нормалізованою назвою) для прив’язки персонажа до кампанії.",
+      "tags": [
+        "domain",
+        "campaign",
+        "resolver"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/linking.ts:buildLegacyCampaignFallbackId",
+      "type": "function",
+      "name": "buildLegacyCampaignFallbackId",
+      "filePath": "src/dm/domain/campaign/linking.ts",
+      "lineRange": [
+        15,
+        18
+      ],
+      "summary": "Будує резервний (legacy) ідентифікатор кампанії на основі нормалізованої назви, коли явного id ще не існує.",
+      "tags": [
+        "domain",
+        "campaign",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:normalizeCampaignName",
+      "type": "function",
+      "name": "normalizeCampaignName",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        3,
+        14
+      ],
+      "summary": "Нормалізує назву кампанії: обрізає пробіли, приводить до нижнього регістру, прибирає зайві символи для стабільного порівняння назв.",
+      "tags": [
+        "utility",
+        "campaign",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:slugifyCampaignName",
+      "type": "function",
+      "name": "slugifyCampaignName",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        16,
+        19
+      ],
+      "summary": "Перетворює нормалізовану назву кампанії на slug, придатний для використання в ідентифікаторі.",
+      "tags": [
+        "utility",
+        "campaign"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:buildCampaignId",
+      "type": "function",
+      "name": "buildCampaignId",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        21,
+        23
+      ],
+      "summary": "Формує ідентифікатор кампанії на основі slug-у назви.",
+      "tags": [
+        "utility",
+        "campaign",
+        "factory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:sortCampaignsByRecency",
+      "type": "function",
+      "name": "sortCampaignsByRecency",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        25,
+        27
+      ],
+      "summary": "Сортує список кампаній за останньою активністю, з фолбеком на алфавітне сортування за назвою.",
+      "tags": [
+        "utility",
+        "campaign",
+        "sorting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:sanitizeCampaignSummary",
+      "type": "function",
+      "name": "sanitizeCampaignSummary",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        33,
+        38
+      ],
+      "summary": "Очищає та обрізає текст резюме кампанії до безпечної довжини перед збереженням.",
+      "tags": [
+        "utility",
+        "campaign",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:clampPartyLevelEstimate",
+      "type": "function",
+      "name": "clampPartyLevelEstimate",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        40,
+        45
+      ],
+      "summary": "Обмежує оцінку рівня партії у допустимому діапазоні (1–20) та округлює до цілого числа.",
+      "tags": [
+        "utility",
+        "campaign",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/campaign/utils.ts:sanitizeCampaignPinnedIds",
+      "type": "function",
+      "name": "sanitizeCampaignPinnedIds",
+      "filePath": "src/dm/domain/campaign/utils.ts",
+      "lineRange": [
+        50,
+        54
+      ],
+      "summary": "Санітизує список закріплених id (монстрів/заклинань), прибираючи дублікати і обмежуючи кількість капом `CAMPAIGN_PINNED_ITEMS_CAP`.",
+      "tags": [
+        "utility",
+        "campaign",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/encounter/calculator.ts:getMonsterMultiplier",
+      "type": "function",
+      "name": "getMonsterMultiplier",
+      "filePath": "src/dm/domain/encounter/calculator.ts",
+      "lineRange": [
+        68,
+        96
+      ],
+      "summary": "Визначає множник складності XP залежно від кількості монстрів у сутичці та розміру партії гравців (правила D&D 5e DMG).",
+      "tags": [
+        "domain",
+        "encounter",
+        "calculator",
+        "srd"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/domain/encounter/calculator.ts:evaluateEncounterDifficulty",
+      "type": "function",
+      "name": "evaluateEncounterDifficulty",
+      "filePath": "src/dm/domain/encounter/calculator.ts",
+      "lineRange": [
+        98,
+        148
+      ],
+      "summary": "Обчислює підсумкову складність бойової сутички (easy/medium/hard/deadly) на основі порогів XP партії, сумарного XP монстрів та множника кількості монстрів.",
+      "tags": [
+        "domain",
+        "encounter",
+        "calculator",
+        "srd"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/domain/initiative/roll.test.ts:combatant",
+      "type": "function",
+      "name": "combatant",
+      "filePath": "src/dm/domain/initiative/roll.test.ts",
+      "lineRange": [
+        5,
+        18
+      ],
+      "summary": "Тестова фабрика, що будує об’єкт бійця (combatant) із дефолтними полями та можливістю перевизначення для тестів ініціативи.",
+      "tags": [
+        "test",
+        "test-factory",
+        "initiative"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/notes/conflict.ts:hasConflict",
+      "type": "function",
+      "name": "hasConflict",
+      "filePath": "src/dm/domain/notes/conflict.ts",
+      "lineRange": [
+        11,
+        13
+      ],
+      "summary": "Перевіряє, чи нотатка кампанії перебуває у стані конфлікту синхронізації.",
+      "tags": [
+        "domain",
+        "notes",
+        "collaboration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/domain/notes/conflict.ts:buildConflictRemote",
+      "type": "function",
+      "name": "buildConflictRemote",
+      "filePath": "src/dm/domain/notes/conflict.ts",
+      "lineRange": [
+        15,
+        21
+      ],
+      "summary": "Будує \"remote\"-знімок нотатки (заголовок, вміст, час оновлення) для показу користувачу під час вирішення конфлікту редагування.",
+      "tags": [
+        "domain",
+        "notes",
+        "collaboration",
+        "conflict-resolution"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/hooks/useCampaignOwnership.ts:useCampaignOwnership",
+      "type": "function",
+      "name": "useCampaignOwnership",
+      "filePath": "src/dm/hooks/useCampaignOwnership.ts",
+      "lineRange": [
+        4,
+        7
+      ],
+      "summary": "Хук, що повертає, чи є поточний автентифікований користувач власником (owner) переданої кампанії DM.",
+      "tags": [
+        "hook",
+        "campaign",
+        "ownership",
+        "collaboration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.test.ts:buildEncounter",
+      "type": "function",
+      "name": "buildEncounter",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.test.ts",
+      "lineRange": [
+        51,
+        69
+      ],
+      "summary": "Тестова фабрика енкаунтера кампанії з дефолтними полями для юніт-тестів репозиторію.",
+      "tags": [
+        "test",
+        "test-factory",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:sanitizeEncounter",
+      "type": "function",
+      "name": "sanitizeEncounter",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        18,
+        30
+      ],
+      "summary": "Мігрує та валідує сирі дані енкаунтера зі сховища до останньої схеми, повертаючи `null` при невалідних даних.",
+      "tags": [
+        "validation",
+        "migration",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:mapCloudEncounter",
+      "type": "function",
+      "name": "mapCloudEncounter",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        32,
+        60
+      ],
+      "summary": "Перетворює Firestore-документ енкаунтера на локальну модель `DMCampaignEncounter`, мігруючи схему та нормалізуючи owners/editors.",
+      "tags": [
+        "mapper",
+        "firestore",
+        "encounter"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:loadQueue",
+      "type": "function",
+      "name": "loadQueue",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        62,
+        74
+      ],
+      "summary": "Завантажує чергу відкладених офлайн-операцій над енкаунтерами з AsyncStorage.",
+      "tags": [
+        "offline-first",
+        "queue",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:enqueue",
+      "type": "function",
+      "name": "enqueue",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        85,
+        96
+      ],
+      "summary": "Додає операцію (upsert/delete) над енкаунтером до черги офлайн-синхронізації, замінюючи попередню операцію для того ж id.",
+      "tags": [
+        "offline-first",
+        "queue",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:loadLocalCampaignEncounters",
+      "type": "function",
+      "name": "loadLocalCampaignEncounters",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        98,
+        111
+      ],
+      "summary": "Завантажує та санітизує всі локально збережені енкаунтери кампаній з AsyncStorage.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:persistLocalCampaignEncounters",
+      "type": "function",
+      "name": "persistLocalCampaignEncounters",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        113,
+        124
+      ],
+      "summary": "Зберігає повний список локальних енкаунтерів кампаній у AsyncStorage у вигляді версійованого конверта сховища.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:buildCloudPayload",
+      "type": "function",
+      "name": "buildCloudPayload",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        154,
+        179
+      ],
+      "summary": "Формує payload енкаунтера для запису у Firestore, зберігаючи серверний час та поля власності.",
+      "tags": [
+        "firestore",
+        "mapper",
+        "encounter"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:syncUpsertEncounter",
+      "type": "function",
+      "name": "syncUpsertEncounter",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        181,
+        217
+      ],
+      "summary": "Синхронізує локальний енкаунтер із Firestore: читає поточний хмарний стан, порівнює версії й записує оновлений документ.",
+      "tags": [
+        "sync",
+        "firestore",
+        "encounter"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:mergeRemoteIntoLocal",
+      "type": "function",
+      "name": "mergeRemoteIntoLocal",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        219,
+        262
+      ],
+      "summary": "Зливає вхідні зміни з Firestore-підписки в локальний список енкаунтерів кампанії за id, зберігаючи найновіші дані.",
+      "tags": [
+        "sync",
+        "conflict-resolution",
+        "encounter"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:subscribeCampaignEncounters",
+      "type": "function",
+      "name": "subscribeCampaignEncounters",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        264,
+        302
+      ],
+      "summary": "Підписується на зміни енкаунтерів кампанії в реальному часі через Firestore `onSnapshot`, з рольовою фільтрацією доступу та злиттям у локальне сховище.",
+      "tags": [
+        "sync",
+        "firestore",
+        "realtime",
+        "encounter",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:upsertCampaignEncounter",
+      "type": "function",
+      "name": "upsertCampaignEncounter",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        309,
+        355
+      ],
+      "summary": "Створює або оновлює енкаунтер кампанії: валідує вхідні дані, зберігає локально та за можливості синхронізує з хмарою, або ставить у чергу офлайн-операцій.",
+      "tags": [
+        "repository",
+        "sync",
+        "offline-first",
+        "encounter"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:deleteCampaignEncounter",
+      "type": "function",
+      "name": "deleteCampaignEncounter",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        357,
+        370
+      ],
+      "summary": "Видаляє енкаунтер локально та з хмари (або ставить видалення в чергу, якщо немає мережі).",
+      "tags": [
+        "repository",
+        "sync",
+        "offline-first",
+        "encounter"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:flushCampaignEncountersQueue",
+      "type": "function",
+      "name": "flushCampaignEncountersQueue",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        372,
+        400
+      ],
+      "summary": "Обробляє чергу відкладених офлайн-операцій над енкаунтерами після відновлення мережі, застосовуючи їх до Firestore.",
+      "tags": [
+        "sync",
+        "offline-first",
+        "queue",
+        "encounter"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignEncountersRepository.ts:resolveCampaignEncounterConflict",
+      "type": "function",
+      "name": "resolveCampaignEncounterConflict",
+      "filePath": "src/dm/repositories/campaignEncountersRepository.ts",
+      "lineRange": [
+        405,
+        492
+      ],
+      "summary": "Вирішує конфлікт синхронізації енкаунтера за вибраною стратегією (локальна/хмарна версія), оновлюючи локальний та хмарний стан і чергу.",
+      "tags": [
+        "conflict-resolution",
+        "sync",
+        "encounter",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.test.ts:buildCombatants",
+      "type": "function",
+      "name": "buildCombatants",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "lineRange": [
+        52,
+        77
+      ],
+      "summary": "Тестова фабрика, що генерує список бійців для юніт-тестів трекера ініціативи кампанії.",
+      "tags": [
+        "test",
+        "test-factory",
+        "initiative"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/dm/domain/campaign/linking.test.ts",
+      "target": "file:src/dm/domain/campaign/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.test.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "file:src/dm/domain/campaign/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.test.ts",
+      "target": "file:src/dm/domain/campaign/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.test.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/encounter/calculator.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/initiative/roll.test.ts",
+      "target": "file:src/dm/domain/initiative/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/initiative/roll.test.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.test.ts",
+      "target": "file:src/dm/domain/notes/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.test.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "target": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "target": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "function:src/dm/domain/campaign/linking.ts:resolveCampaignForLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "function:src/dm/domain/campaign/linking.ts:buildLegacyCampaignFallbackId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:normalizeCampaignName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:slugifyCampaignName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:buildCampaignId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:sortCampaignsByRecency",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:sanitizeCampaignSummary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:clampPartyLevelEstimate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:sanitizeCampaignPinnedIds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/encounter/calculator.ts",
+      "target": "function:src/dm/domain/encounter/calculator.ts:getMonsterMultiplier",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/encounter/calculator.ts",
+      "target": "function:src/dm/domain/encounter/calculator.ts:evaluateEncounterDifficulty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/initiative/roll.test.ts",
+      "target": "function:src/dm/domain/initiative/roll.test.ts:combatant",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.ts",
+      "target": "function:src/dm/domain/notes/conflict.ts:hasConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.ts",
+      "target": "function:src/dm/domain/notes/conflict.ts:buildConflictRemote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "target": "function:src/dm/hooks/useCampaignOwnership.ts:useCampaignOwnership",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.test.ts:buildEncounter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:sanitizeEncounter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:mapCloudEncounter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:loadQueue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:enqueue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:loadLocalCampaignEncounters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:persistLocalCampaignEncounters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:buildCloudPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:syncUpsertEncounter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:mergeRemoteIntoLocal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:subscribeCampaignEncounters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:upsertCampaignEncounter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:deleteCampaignEncounter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:flushCampaignEncountersQueue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:resolveCampaignEncounterConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.test.ts:buildCombatants",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "function:src/dm/domain/campaign/linking.ts:resolveCampaignForLink",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "function:src/dm/domain/campaign/linking.ts:buildLegacyCampaignFallbackId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:normalizeCampaignName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:slugifyCampaignName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:buildCampaignId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:sortCampaignsByRecency",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:sanitizeCampaignSummary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:clampPartyLevelEstimate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "function:src/dm/domain/campaign/utils.ts:sanitizeCampaignPinnedIds",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/encounter/calculator.ts",
+      "target": "function:src/dm/domain/encounter/calculator.ts:getMonsterMultiplier",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/encounter/calculator.ts",
+      "target": "function:src/dm/domain/encounter/calculator.ts:evaluateEncounterDifficulty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.ts",
+      "target": "function:src/dm/domain/notes/conflict.ts:hasConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.ts",
+      "target": "function:src/dm/domain/notes/conflict.ts:buildConflictRemote",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "target": "function:src/dm/hooks/useCampaignOwnership.ts:useCampaignOwnership",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:loadLocalCampaignEncounters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:subscribeCampaignEncounters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:upsertCampaignEncounter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:deleteCampaignEncounter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:flushCampaignEncountersQueue",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "function:src/dm/repositories/campaignEncountersRepository.ts:resolveCampaignEncounterConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/linking.ts",
+      "target": "file:src/dm/domain/campaign/linking.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/dm/domain/campaign/utils.ts",
+      "target": "file:src/dm/domain/campaign/utils.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/dm/domain/notes/conflict.ts",
+      "target": "file:src/dm/domain/notes/conflict.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "target": "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/dm/domain/initiative/index.ts",
+      "target": "file:src/dm/domain/initiative/roll.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "function:src/dm/domain/campaign/linking.ts:resolveCampaignForLink",
+      "target": "function:src/dm/domain/campaign/utils.ts:normalizeCampaignName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/dm/domain/campaign/linking.ts:buildLegacyCampaignFallbackId",
+      "target": "function:src/dm/domain/campaign/utils.ts:normalizeCampaignName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/domain/campaign/index.ts",
+      "target": "file:src/dm/domain/campaign/utils.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/dm/domain/campaign/index.ts",
+      "target": "file:src/dm/domain/campaign/linking.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/dm/domain/notes/index.ts",
+      "target": "file:src/dm/domain/notes/conflict.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

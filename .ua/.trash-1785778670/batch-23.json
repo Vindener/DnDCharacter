@@ -1,0 +1,62 @@
+{
+  "nodes": [
+    {
+      "id": "document:functions/README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "functions/README.md",
+      "summary": "Документація окремого пакета Cloud Functions: описує єдину callable-функцію deleteMyAccount (каскад видалення акаунта PLY-1/COL-10), передумови в Firebase Console, локальний запуск, тестування через емулятор і деплой.",
+      "tags": ["documentation", "cloud-functions", "account-deletion", "firebase", "deployment"],
+      "complexity": "moderate",
+      "languageNotes": "Явно підкреслює, що functions/ — не частина кореневого npm workspace: має власні package.json, tsconfig.json і node_modules, виключений з кореневого tsc і test:unit."
+    },
+    {
+      "id": "config:functions/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "functions/package.json",
+      "summary": "Маніфест npm-пакета Cloud Functions (mythgate-5e-companion-functions): скрипти build/serve/deploy/logs, залежності firebase-admin і firebase-functions, Node 20 як цільовий рантайм.",
+      "tags": ["configuration", "cloud-functions", "build-system", "dependencies", "firebase"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:functions/tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "functions/tsconfig.json",
+      "summary": "Конфігурація TypeScript-компілятора для пакета Cloud Functions: strict-режим, ціль ES2022, компіляція з src/ у lib/, з винятком тестових файлів (*.test.ts).",
+      "tags": ["configuration", "typescript", "build-system", "strict-mode"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:functions/README.md",
+      "target": "file:functions/src/accountDeletionCascade.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:functions/README.md",
+      "target": "file:functions/src/deleteMyAccount.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:functions/package.json",
+      "target": "file:functions/src/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:functions/tsconfig.json",
+      "target": "file:functions/src/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

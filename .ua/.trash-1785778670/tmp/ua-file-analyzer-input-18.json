@@ -1,0 +1,23 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": ".agents/AGENT.md", "language": "markdown", "sizeLines": 84, "fileCategory": "docs"},
+    {"path": ".agents/CHECKLIST.md", "language": "markdown", "sizeLines": 45, "fileCategory": "docs"},
+    {"path": ".agents/CODEX.md", "language": "markdown", "sizeLines": 59, "fileCategory": "docs"},
+    {"path": ".agents/MEMORY.md", "language": "markdown", "sizeLines": 76, "fileCategory": "docs"},
+    {"path": ".agents/REPO_MAP.md", "language": "markdown", "sizeLines": 75, "fileCategory": "docs"},
+    {"path": ".agents/TOOLS.md", "language": "markdown", "sizeLines": 74, "fileCategory": "docs"},
+    {"path": ".agents/USER.md", "language": "markdown", "sizeLines": 26, "fileCategory": "docs"},
+    {"path": ".agents/openai.yaml", "language": "yaml", "sizeLines": 47, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    ".agents/AGENT.md": [],
+    ".agents/CHECKLIST.md": [],
+    ".agents/CODEX.md": [],
+    ".agents/MEMORY.md": [],
+    ".agents/REPO_MAP.md": [],
+    ".agents/TOOLS.md": [],
+    ".agents/USER.md": [],
+    ".agents/openai.yaml": []
+  }
+}

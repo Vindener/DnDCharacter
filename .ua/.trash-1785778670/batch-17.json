@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/dm/domain/types/encounter.ts",
+      "type": "file",
+      "name": "encounter.ts",
+      "filePath": "src/dm/domain/types/encounter.ts",
+      "summary": "Типи домену для підготовки бойових зіткнень DM: гравці/монстри чернетки енкаунтера, поріг складності (easy/medium/hard/deadly), результат розрахунку складності (XP, множник) та шаблон ресурсу трекера (HP, кулдауни).",
+      "tags": ["type-definition", "dm", "encounter", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/types/encounterHistory.ts",
+      "type": "file",
+      "name": "encounterHistory.ts",
+      "filePath": "src/dm/domain/types/encounterHistory.ts",
+      "summary": "Типи для збережених у кампанії енкаунтерів (`DMCampaignEncounter`) та черги офлайн-операцій над ними, включно з полями спільного редагування (owners/editors, syncStatus, conflictRemote).",
+      "tags": ["type-definition", "collaborative-editing", "dm", "sync"],
+      "complexity": "simple",
+      "languageNotes": "Поля owners/editors/conflictRemote/syncStatus повторюють інваріанти спільного редагування з docs/collaborative-editing.md — узгоджено з рештою кампанійних сутностей (нотатки)."
+    },
+    {
+      "id": "file:src/dm/domain/types/notes.ts",
+      "type": "file",
+      "name": "notes.ts",
+      "filePath": "src/dm/domain/types/notes.ts",
+      "summary": "Типи для нотаток DM у кампанії (`DMCampaignNote`), статусів синхронізації (`DMNoteSyncDisplayStatus`), конфліктів злиття та черги офлайн-операцій зі станом синку по кожній нотатці.",
+      "tags": ["type-definition", "collaborative-editing", "dm", "sync"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/dm/domain/types/encounterHistory.ts",
+      "target": "file:src/dm/domain/types/encounter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/domain/types/encounterHistory.ts",
+      "target": "file:src/dm/domain/types/notes.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

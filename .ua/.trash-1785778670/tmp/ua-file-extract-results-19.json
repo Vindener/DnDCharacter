@@ -1,0 +1,434 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 9,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 9,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 9
+    }
+  },
+  "results": [
+    {
+      "path": ".env",
+      "language": "config",
+      "fileCategory": "config",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "definitions": [
+        {
+          "name": "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 1,
+          "endLine": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "definitionCount": 1
+      }
+    },
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 240,
+      "nonEmptyLines": 174,
+      "sections": [
+        {
+          "heading": "CLAUDE.md",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Джерела істини",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "2. Факти про проєкт (перевірено 2026-07-26)",
+          "level": 2,
+          "line": 32
+        },
+        {
+          "heading": "Базова лінія якості (реально запускалося)",
+          "level": 3,
+          "line": 43
+        },
+        {
+          "heading": "3. Робоча дисципліна",
+          "level": 2,
+          "line": 56
+        },
+        {
+          "heading": "4. КРИТИЧНО: закомічений `android/`, версії та prebuild",
+          "level": 2,
+          "line": 76
+        },
+        {
+          "heading": "Правило версій (тут легко зламати OTA)",
+          "level": 3,
+          "line": 84
+        },
+        {
+          "heading": "Правило локфайлу (не змінювати)",
+          "level": 3,
+          "line": 91
+        },
+        {
+          "heading": "5. Інваріанти спільного редагування (порушувати не можна)",
+          "level": 2,
+          "line": 102
+        },
+        {
+          "heading": "6. Заборонено до релізу (scope freeze)",
+          "level": 2,
+          "line": 117
+        },
+        {
+          "heading": "7. Пріоритети",
+          "level": 2,
+          "line": 130
+        },
+        {
+          "heading": "8. Правила по темах",
+          "level": 2,
+          "line": 142
+        },
+        {
+          "heading": "8.1 Analytics / Crashlytics",
+          "level": 3,
+          "line": 144
+        },
+        {
+          "heading": "8.2 EAS Update",
+          "level": 3,
+          "line": 154
+        },
+        {
+          "heading": "8.3 Логотип і бренд (чекаємо дизайнера)",
+          "level": 3,
+          "line": 166
+        },
+        {
+          "heading": "8.4 Безпека",
+          "level": 3,
+          "line": 176
+        },
+        {
+          "heading": "8.5 Оптимізація",
+          "level": 3,
+          "line": 185
+        },
+        {
+          "heading": "9. Definition of Done",
+          "level": 2,
+          "line": 209
+        },
+        {
+          "heading": "10. Формат звіту",
+          "level": 2,
+          "line": 221
+        },
+        {
+          "heading": "11. Синхронізація з Codex (`.agents/`)",
+          "level": 2,
+          "line": 233
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 20
+      }
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 138,
+      "nonEmptyLines": 88,
+      "sections": [
+        {
+          "heading": "Mythgate 5e Companion React Native Project",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Product Docs",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Development",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Build Commands",
+          "level": 2,
+          "line": 24
+        },
+        {
+          "heading": "Local dev build",
+          "level": 3,
+          "line": 26
+        },
+        {
+          "heading": "EAS development builds",
+          "level": 3,
+          "line": 40
+        },
+        {
+          "heading": "EAS lockfile note",
+          "level": 3,
+          "line": 62
+        },
+        {
+          "heading": "EAS release builds",
+          "level": 3,
+          "line": 92
+        },
+        {
+          "heading": "Versioning",
+          "level": 2,
+          "line": 112
+        },
+        {
+          "heading": "Publishing an OTA update",
+          "level": 2,
+          "line": 124
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": "app.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 54,
+      "nonEmptyLines": 54,
+      "sections": [
+        {
+          "heading": "expo",
+          "level": 1,
+          "line": 2
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "eas.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 28,
+      "nonEmptyLines": 28,
+      "sections": [
+        {
+          "heading": "cli",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "build",
+          "level": 1,
+          "line": 6
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 2
+      }
+    },
+    {
+      "path": "firebase.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 24,
+      "nonEmptyLines": 24,
+      "sections": [
+        {
+          "heading": "firestore",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "functions",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "emulators",
+          "level": 1,
+          "line": 13
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "google-services.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 71,
+      "nonEmptyLines": 71,
+      "sections": [
+        {
+          "heading": "project_info",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "client",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "configuration_version",
+          "level": 1,
+          "line": 70
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 127,
+      "nonEmptyLines": 127,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "license",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "main",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "scripts",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 73
+        },
+        {
+          "heading": "expo",
+          "level": 1,
+          "line": 42
+        },
+        {
+          "heading": "overrides",
+          "level": 1,
+          "line": 103
+        },
+        {
+          "heading": "private",
+          "level": 1,
+          "line": 126
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 23,
+      "nonEmptyLines": 23,
+      "sections": [
+        {
+          "heading": "extends",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "compilerOptions",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "include",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "exclude",
+          "level": 1,
+          "line": 22
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    }
+  ]
+}

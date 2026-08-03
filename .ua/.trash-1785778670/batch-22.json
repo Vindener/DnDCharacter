@@ -1,0 +1,327 @@
+{
+  "nodes": [
+    {
+      "id": "document:docs/audit-2026-07.md",
+      "type": "document",
+      "name": "audit-2026-07.md",
+      "filePath": "docs/audit-2026-07.md",
+      "summary": "Детальний реєстр знахідок перед релізом (35 розділів) із категоріями PLY/SEC/COL/PERF/REL — блокери публікації, дірки безпеки Firestore, проблеми спільного редагування, продуктивність холодного старту та код-здоров'я, кожна знахідка з конкретними файлами й рядками.",
+      "tags": ["audit", "release-blockers", "security", "performance", "documentation"],
+      "complexity": "complex",
+      "languageNotes": "Джерело задач для release-plan-google-play.md і claude-code-prompts.md — кожен пункт має код виду PLY-9, SEC-2, COL-4 тощо, за яким на нього посилаються інші документи."
+    },
+    {
+      "id": "document:docs/campaign-management-prompts.md",
+      "type": "document",
+      "name": "campaign-management-prompts.md",
+      "filePath": "docs/campaign-management-prompts.md",
+      "summary": "Набір готових промтів для Claude Code зі свідомо дозволеним винятком зі scope freeze — Campaign Management (GM Workspace): розширення домену кампанії, roster, picker, історія енкаунтерів, session/loot log, запрошення редактора через код.",
+      "tags": ["prompts", "campaign-management", "gm-workspace", "feature-exception", "documentation"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:docs/claude-code-prompts.md",
+      "type": "document",
+      "name": "claude-code-prompts.md",
+      "filePath": "docs/claude-code-prompts.md",
+      "summary": "Основний набір промтів для Claude Code, структурований за спринтами R1–R5 (допуск до релізу, спільне редагування й безпека, продуктивність, EAS Update/бренд, фінальний реліз) — кожен промт прив'язаний до конкретних кодів знахідок з аудиту.",
+      "tags": ["prompts", "release-sprints", "checklist", "documentation", "workflow"],
+      "complexity": "complex",
+      "languageNotes": "Найбільший документ у пачці (1069 рядків, 34 секції); частина промтів позначена 🚧 GATE як критичні контрольні точки."
+    },
+    {
+      "id": "document:docs/collaborative-editing.md",
+      "type": "document",
+      "name": "collaborative-editing.md",
+      "filePath": "docs/collaborative-editing.md",
+      "summary": "Аудит поточної реалізації спільного редагування аркуша персонажа (знахідки COL-1…COL-10: read-modify-write без транзакції, перезапис changeHistory, stale-read прав) і цільова модель мінімум для 1.0 з тест-планом.",
+      "tags": ["collaborative-editing", "firestore", "data-model", "documentation", "invariants"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/dnd-product-guidelines.md",
+      "type": "document",
+      "name": "dnd-product-guidelines.md",
+      "filePath": "docs/dnd-product-guidelines.md",
+      "summary": "Продуктові гайдлайни за темою D&D 5e: основний ігровий цикл, кидки кубиків, аркуш персонажа, створення персонажа, довідник заклинань і бестіарій.",
+      "tags": ["product-guidelines", "dnd-5e", "documentation", "domain-knowledge"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/loading-states-and-skeleton.md",
+      "type": "document",
+      "name": "loading-states-and-skeleton.md",
+      "filePath": "docs/loading-states-and-skeleton.md",
+      "summary": "Стандарт станів завантаження й skeleton-екранів для головних екранів (Home, Character Sheet, Spellbook, Bestiary) з глобальними правилами та нотатками щодо реалізації.",
+      "tags": ["ui-kit", "loading-states", "skeleton", "documentation", "design-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/privacy-policy.en.md",
+      "type": "document",
+      "name": "privacy-policy.en.md",
+      "filePath": "docs/privacy-policy.en.md",
+      "summary": "Англомовна політика конфіденційності Mythgate 5e Companion: що працює локально без акаунта, що збирається при вході через Google, зберігання аркушів персонажів, треті сторони й видалення акаунта.",
+      "tags": ["privacy-policy", "legal", "compliance", "documentation", "google-play"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/privacy-policy.uk.md",
+      "type": "document",
+      "name": "privacy-policy.uk.md",
+      "filePath": "docs/privacy-policy.uk.md",
+      "summary": "Українська версія політики конфіденційності Mythgate 5e Companion — ідентична за структурою англійській версії: локальний режим, дані Google-входу, зберігання аркушів персонажів, треті сторони й видалення акаунта.",
+      "tags": ["privacy-policy", "legal", "compliance", "documentation", "google-play"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:docs/product-collaboration-stage-4.md",
+      "type": "document",
+      "name": "product-collaboration-stage-4.md",
+      "filePath": "docs/product-collaboration-stage-4.md",
+      "summary": "Історичний опис Stage 4 продуктової дорожньої карти — хмарна співпраця (cloud collaboration) як флагманська фіча, обсяг реалізованого й нотатки щодо даних/інтерфейсу.",
+      "tags": ["product-history", "collaboration", "roadmap", "documentation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/product-dm-experience-stage-5.md",
+      "type": "document",
+      "name": "product-dm-experience-stage-5.md",
+      "filePath": "docs/product-dm-experience-stage-5.md",
+      "summary": "Історичний опис Stage 5 — редизайн досвіду ведучого (GM-first Mode): обсяг реалізованого, модель доступу Firestore для DM-функцій і припущення, ухвалені на етапі.",
+      "tags": ["product-history", "gm-experience", "roadmap", "documentation", "firestore"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/product-foundation-stage-1.md",
+      "type": "document",
+      "name": "product-foundation-stage-1.md",
+      "filePath": "docs/product-foundation-stage-1.md",
+      "summary": "Історичний фундаментальний документ Stage 1: позиціонування продукту, продуктові принципи, модель ролей і можливостей, основні користувацькі флоу, модель зберігання/синку та цільова логічна схема даних персонажа.",
+      "tags": ["product-history", "product-foundation", "roadmap", "documentation", "data-model"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:docs/product-homebrew-stage-3.md",
+      "type": "document",
+      "name": "product-homebrew-stage-3.md",
+      "filePath": "docs/product-homebrew-stage-3.md",
+      "summary": "Історичний опис Stage 3 — homebrew-first система: порядок етапів, обсяг реалізованого, UX-рішення та нотатки щодо даних і синку для кастомного контенту.",
+      "tags": ["product-history", "homebrew", "roadmap", "documentation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/product-redesign-stage-2.md",
+      "type": "document",
+      "name": "product-redesign-stage-2.md",
+      "filePath": "docs/product-redesign-stage-2.md",
+      "summary": "Історичний опис Stage 2 — редизайн досвіду персонажа: UX-рішення для Play Mode/Edit Mode та поекранний UI/UX план (Home, Character Sheet, Create Character, GM, Bestiary).",
+      "tags": ["product-history", "redesign", "roadmap", "documentation", "ux"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/release-checklist-1.0.0.md",
+      "type": "document",
+      "name": "release-checklist-1.0.0.md",
+      "filePath": "docs/release-checklist-1.0.0.md",
+      "summary": "Реліз-чекліст версії 1.0.0: автоматичні перевірки командами, ручні сценарії на одному й двох пристроях (два акаунти), кроки в Play Console/Firebase Console і підсумок за групами перевірок.",
+      "tags": ["release-checklist", "qa", "documentation", "google-play"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/release-plan-google-play.md",
+      "type": "document",
+      "name": "release-plan-google-play.md",
+      "filePath": "docs/release-plan-google-play.md",
+      "summary": "Актуальний план релізу в Google Play зі спринтами R1–R5 (допуск/блокери, спільне редагування й безпека, продуктивність, EAS Update/бренд, production access), що замінює sprint-plan.md і ux-ui-roadmap.md як джерело істини.",
+      "tags": ["release-plan", "google-play", "sprints", "documentation", "source-of-truth"],
+      "complexity": "complex",
+      "languageNotes": "Згідно з CLAUDE.md це головне джерело поточних пріоритетів; критичний шлях релізу — не код, а 14-денний закритий тест Google Play."
+    },
+    {
+      "id": "document:docs/sprint-plan.md",
+      "type": "document",
+      "name": "sprint-plan.md",
+      "filePath": "docs/sprint-plan.md",
+      "summary": "Історичний спринт-план UX/UI (спринти 1–6: Dice Roller/Skeleton, Home, Character Sheet, Create Character, Spellbook, Bestiary, плюс майбутній GM Desktop Workspace) — замінений release-plan-google-play.md.",
+      "tags": ["product-history", "sprint-plan", "roadmap", "documentation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/store-listing.md",
+      "type": "document",
+      "name": "store-listing.md",
+      "filePath": "docs/store-listing.md",
+      "summary": "Чернетка тексту для Google Play Store Listing: назва застосунку, короткий і повний опис (UK/EN), реліз-нотатки для 1.0.0, чернетки Content Rating і Data Safety.",
+      "tags": ["store-listing", "google-play", "marketing-copy", "documentation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/ui-kit.md",
+      "type": "document",
+      "name": "ui-kit.md",
+      "filePath": "docs/ui-kit.md",
+      "summary": "Довідник UI-кіту й дизайн-токенів: хелпери токенів (sp/fs/rd/typography), типографіка, базові UI-компоненти, обмеження (guardrails) і правила щодо skeleton UI.",
+      "tags": ["ui-kit", "design-tokens", "design-system", "documentation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/ux-ui-roadmap.md",
+      "type": "document",
+      "name": "ux-ui-roadmap.md",
+      "filePath": "docs/ux-ui-roadmap.md",
+      "summary": "Історична UX/UI дорожня карта з пріоритетом екранів (Dice Roller, Home, Character Sheet, Create Character, Spellbook, Bestiary) і напрямом продукту — замінена release-plan-google-play.md.",
+      "tags": ["product-history", "ux-ui-roadmap", "roadmap", "documentation"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:docs/release-plan-google-play.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/release-plan-google-play.md",
+      "target": "document:docs/audit-2026-07.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/release-plan-google-play.md",
+      "target": "document:docs/sprint-plan.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/release-plan-google-play.md",
+      "target": "document:docs/ux-ui-roadmap.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/claude-code-prompts.md",
+      "target": "document:docs/release-plan-google-play.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/claude-code-prompts.md",
+      "target": "document:docs/audit-2026-07.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/claude-code-prompts.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/campaign-management-prompts.md",
+      "target": "document:docs/release-plan-google-play.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/campaign-management-prompts.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/audit-2026-07.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/privacy-policy.en.md",
+      "target": "document:docs/privacy-policy.uk.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/store-listing.md",
+      "target": "document:docs/release-plan-google-play.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/store-listing.md",
+      "target": "document:docs/audit-2026-07.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/release-checklist-1.0.0.md",
+      "target": "document:docs/release-plan-google-play.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/release-checklist-1.0.0.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/sprint-plan.md",
+      "target": "document:docs/ux-ui-roadmap.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/product-foundation-stage-1.md",
+      "target": "document:docs/product-redesign-stage-2.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/product-redesign-stage-2.md",
+      "target": "document:docs/product-homebrew-stage-3.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/product-homebrew-stage-3.md",
+      "target": "document:docs/product-collaboration-stage-4.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/product-collaboration-stage-4.md",
+      "target": "document:docs/product-dm-experience-stage-5.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/ui-kit.md",
+      "target": "document:docs/loading-states-and-skeleton.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "nodes": [
+    {
+      "id": "config:src/i18n/locales/uk/bestiary.json",
+      "type": "config",
+      "name": "bestiary.json",
+      "filePath": "src/i18n/locales/uk/bestiary.json",
+      "summary": "Українська локалізація екрана бестіарію: заголовок, пошук, фільтри, режими перегляду, ліцензії джерел, контекст кампанії та закріплені монстри.",
+      "tags": ["localization", "i18n", "ukrainian", "bestiary", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/character.json",
+      "type": "config",
+      "name": "character.json",
+      "filePath": "src/i18n/locales/uk/character.json",
+      "summary": "Найбільший українськомовний словник аркуша персонажа: вкладки (бойові дії, магія, інвентар, нотатки, домашні правила), синхронізація з хмарою, конфлікти редагування, історія змін, легасі-поля та модалки.",
+      "tags": ["localization", "i18n", "ukrainian", "character-sheet", "collaborative-editing"],
+      "complexity": "complex",
+      "languageNotes": "Найбільший і найдетальніший файл локалізації в проєкті — окремо описує стани синхронізації (`sync`, `conflict`, `history`), що відображає складність спільного редагування аркуша кількома користувачами."
+    },
+    {
+      "id": "config:src/i18n/locales/uk/common.json",
+      "type": "config",
+      "name": "common.json",
+      "filePath": "src/i18n/locales/uk/common.json",
+      "summary": "Спільні українські рядки, що використовуються по всьому застосунку: дії, стани, статуси, ролі користувачів, повідомлення валідації та текст ErrorBoundary.",
+      "tags": ["localization", "i18n", "ukrainian", "shared", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/createCharacter.json",
+      "type": "config",
+      "name": "createCharacter.json",
+      "filePath": "src/i18n/locales/uk/createCharacter.json",
+      "summary": "Українська локалізація майстра створення персонажа: покроковий прогрес (особистість, раса/клас, характеристики, бойові параметри, спорядження, магія, домашні правила, огляд і шаблони).",
+      "tags": ["localization", "i18n", "ukrainian", "create-character", "wizard"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/dice.json",
+      "type": "config",
+      "name": "dice.json",
+      "filePath": "src/i18n/locales/uk/dice.json",
+      "summary": "Українські рядки для екрана кидків костей: заголовок, режими, перемикачі, підказки для порожнього стану та повідомлення про помилки.",
+      "tags": ["localization", "i18n", "ukrainian", "dice-roller", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/dm.json",
+      "type": "config",
+      "name": "dm.json",
+      "filePath": "src/i18n/locales/uk/dm.json",
+      "summary": "Українська локалізація майстер-панелі (GM Workspace): дашборд, швидке редагування, підготовка сутичок, спільні оновлення, огляд партії, список і деталі кампаній, калькулятор сутички та генератор луту.",
+      "tags": ["localization", "i18n", "ukrainian", "dm-workspace", "campaign-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/dnd.json",
+      "type": "config",
+      "name": "dnd.json",
+      "filePath": "src/i18n/locales/uk/dnd.json",
+      "summary": "Українські назви базових термінів D&D 5e: характеристики, класи, раси, підраси, передісторії, школи магії та навички.",
+      "tags": ["localization", "i18n", "ukrainian", "dnd-rules", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/firstLaunch.json",
+      "type": "config",
+      "name": "firstLaunch.json",
+      "filePath": "src/i18n/locales/uk/firstLaunch.json",
+      "summary": "Українські рядки модального вікна першого запуску застосунку: стан розробки, згода на аналітику та подяка користувачу.",
+      "tags": ["localization", "i18n", "ukrainian", "first-launch", "onboarding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/home.json",
+      "type": "config",
+      "name": "home.json",
+      "filePath": "src/i18n/locales/uk/home.json",
+      "summary": "Українська локалізація головного екрана: заголовок, дії, секції, порожній стан, героєвий блок і смужка стану синхронізації.",
+      "tags": ["localization", "i18n", "ukrainian", "home-screen", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/initiative.json",
+      "type": "config",
+      "name": "initiative.json",
+      "filePath": "src/i18n/locales/uk/initiative.json",
+      "summary": "Українські рядки екрана трекера ініціативи: заголовок, підказки, вибір героя, порожній стан, локальний режим і контекст кампанії.",
+      "tags": ["localization", "i18n", "ukrainian", "initiative-tracker", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/legal.json",
+      "type": "config",
+      "name": "legal.json",
+      "filePath": "src/i18n/locales/uk/legal.json",
+      "summary": "Українська локалізація екрана правової інформації та ліцензій: заголовок, вступ, розділи й джерела.",
+      "tags": ["localization", "i18n", "ukrainian", "legal", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/navigation.json",
+      "type": "config",
+      "name": "navigation.json",
+      "filePath": "src/i18n/locales/uk/navigation.json",
+      "summary": "Українські підписи для навігації й вкладок усіх екранів застосунку: герої, ініціатива, майстер-панель, довідники, підтримка, налаштування, аркуш персонажа, книга заклять, бестіарій та екрани DM.",
+      "tags": ["localization", "i18n", "ukrainian", "navigation", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/references.json",
+      "type": "config",
+      "name": "references.json",
+      "filePath": "src/i18n/locales/uk/references.json",
+      "summary": "Українська локалізація екрана довідників SRD: заголовок, підказки, статус \"скоро\", перелік записів і сам SRD-контент.",
+      "tags": ["localization", "i18n", "ukrainian", "references", "srd"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/settings.json",
+      "type": "config",
+      "name": "settings.json",
+      "filePath": "src/i18n/locales/uk/settings.json",
+      "summary": "Українська локалізація екрана налаштувань: вигляд, обліковий запис, мова, власні монети, бестіарій, правова інформація, політика приватності, аналітика та кампанія за замовчуванням.",
+      "tags": ["localization", "i18n", "ukrainian", "settings", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/spellbook.json",
+      "type": "config",
+      "name": "spellbook.json",
+      "filePath": "src/i18n/locales/uk/spellbook.json",
+      "summary": "Українська локалізація книги заклять: вкладки, пошук, фільтри за рівнем/школою, ліцензії джерел, прив'язка до персонажа, нотатки майстра, форма редагування закляття та стани помилок.",
+      "tags": ["localization", "i18n", "ukrainian", "spellbook", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/support.json",
+      "type": "config",
+      "name": "support.json",
+      "filePath": "src/i18n/locales/uk/support.json",
+      "summary": "Українська локалізація екрана підтримки проєкту: секції, донати, криптовалютні реквізити, форма зворотного зв'язку та помилки.",
+      "tags": ["localization", "i18n", "ukrainian", "support", "donation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/uk/whatsNew.json",
+      "type": "config",
+      "name": "whatsNew.json",
+      "filePath": "src/i18n/locales/uk/whatsNew.json",
+      "summary": "Українські рядки модального вікна \"Що нового\": заголовок, вступ, перелік змін і кнопка підтвердження.",
+      "tags": ["localization", "i18n", "ukrainian", "whats-new", "configuration"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:src/i18n/locales/uk/bestiary.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/character.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/common.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/createCharacter.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/dice.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/dm.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/dnd.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/firstLaunch.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/home.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/initiative.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/legal.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/navigation.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/references.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/settings.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/spellbook.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/support.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/uk/whatsNew.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

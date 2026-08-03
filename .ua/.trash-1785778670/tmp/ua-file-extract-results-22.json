@@ -1,0 +1,1647 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 19,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 19,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 19
+    }
+  },
+  "results": [
+    {
+      "path": "docs/audit-2026-07.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 279,
+      "nonEmptyLines": 190,
+      "sections": [
+        {
+          "heading": "Детальний аудит перед релізом — Mythgate 5e Companion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "0. Що вже в добрій формі",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "1. Блокери публікації (PLY)",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "PLY-9 · Критично · Play Console не створений — це і є критичний шлях",
+          "level": 3,
+          "line": 31
+        },
+        {
+          "heading": "PLY-1 · Критично · Немає видалення акаунта (складніше через спільні аркуші)",
+          "level": 3,
+          "line": 43
+        },
+        {
+          "heading": "PLY-2 · Критично · Немає Privacy Policy",
+          "level": 3,
+          "line": 51
+        },
+        {
+          "heading": "PLY-3 · Критично · Зайві та чутливі permissions",
+          "level": 3,
+          "line": 55
+        },
+        {
+          "heading": "PLY-4 · Критично · Реліз підписується debug-keystore",
+          "level": 3,
+          "line": 61
+        },
+        {
+          "heading": "PLY-5 · Високий · Донати й крипта на екрані підтримки",
+          "level": 3,
+          "line": 65
+        },
+        {
+          "heading": "PLY-6 · Високий · Версіонування: `versionName` живе в gradle, не в `app.json`",
+          "level": 3,
+          "line": 69
+        },
+        {
+          "heading": "PLY-7 · Високий · Edge-to-edge тепер обов'язковий (targetSdk підтверджено = 36)",
+          "level": 3,
+          "line": 78
+        },
+        {
+          "heading": "PLY-8 · Середній · Trademark у store listing",
+          "level": 3,
+          "line": 88
+        },
+        {
+          "heading": "2. Безпека (SEC)",
+          "level": 2,
+          "line": 94
+        },
+        {
+          "heading": "SEC-1 · Високий · Будь-який авторизований читає всю колекцію `users`",
+          "level": 3,
+          "line": 96
+        },
+        {
+          "heading": "SEC-2 · Критично · Захоплення `emailIndex` (найсерйозніше)",
+          "level": 3,
+          "line": 102
+        },
+        {
+          "heading": "SEC-3 · Високий · Немає валідації форми документів при create/update",
+          "level": 3,
+          "line": 112
+        },
+        {
+          "heading": "SEC-4 · Середній · `connections`: `update: if isParticipant()` без immutability",
+          "level": 3,
+          "line": 115
+        },
+        {
+          "heading": "SEC-5 · Високий · `users` має `allow delete: if false`",
+          "level": 3,
+          "line": 118
+        },
+        {
+          "heading": "SEC-6 · Високий · Мертвий код звертається до колекцій без правил",
+          "level": 3,
+          "line": 121
+        },
+        {
+          "heading": "SEC-7 · Середній · Уразливості залежностей — ЧАСТКОВО ЗАКРИТО 2026-07-31",
+          "level": 3,
+          "line": 124
+        },
+        {
+          "heading": "SEC-8 · Середній · Секрети й ключі в репозиторії",
+          "level": 3,
+          "line": 153
+        },
+        {
+          "heading": "SEC-9 · Низький · 27 `console.*` у прод-коді",
+          "level": 3,
+          "line": 156
+        },
+        {
+          "heading": "3. Спільне редагування (COL) — новий розділ v2",
+          "level": 2,
+          "line": 161
+        },
+        {
+          "heading": "4. Продуктивність (PERF)",
+          "level": 2,
+          "line": 182
+        },
+        {
+          "heading": "PERF-1 · Високий · Холодний старт: ~2.7 МБ JSON + Zod до першого кадру",
+          "level": 3,
+          "line": 184
+        },
+        {
+          "heading": "PERF-2 · Високий · R8/ProGuard і shrinkResources вимкнені",
+          "level": 3,
+          "line": 196
+        },
+        {
+          "heading": "PERF-3 · Середній · Невикористані залежності",
+          "level": 3,
+          "line": 199
+        },
+        {
+          "heading": "PERF-4 · Низький · `App.tsx:7` — `import 'expo-dev-client'` безумовний",
+          "level": 3,
+          "line": 203
+        },
+        {
+          "heading": "PERF-5 · Середній · Біла пауза на старті",
+          "level": 3,
+          "line": 206
+        },
+        {
+          "heading": "PERF-6 · Середній · `FlatList` без тюнінгу на найдовших списках",
+          "level": 3,
+          "line": 209
+        },
+        {
+          "heading": "PERF-7 · Низький · Іконки 497 КБ ×3",
+          "level": 3,
+          "line": 212
+        },
+        {
+          "heading": "PERF-8 · Середній · Кількість підписок Firestore (новий у v2)",
+          "level": 3,
+          "line": 215
+        },
+        {
+          "heading": "5. Надійність і код-здоров'я (REL)",
+          "level": 2,
+          "line": 220
+        },
+        {
+          "heading": "6. EAS Update і Analytics — поточний стан",
+          "level": 2,
+          "line": 234
+        },
+        {
+          "heading": "7. Зведений список за пріоритетом",
+          "level": 2,
+          "line": 242
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 35
+      }
+    },
+    {
+      "path": "docs/campaign-management-prompts.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 564,
+      "nonEmptyLines": 467,
+      "sections": [
+        {
+          "heading": "Промти для Claude Code: Campaign Management (GM Workspace)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "⚠️ Свідомий виняток із release freeze",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Архітектурні рішення, ухвалені заздалегідь",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "Як цим користуватися",
+          "level": 2,
+          "line": 50
+        },
+        {
+          "heading": "Спринт C · Campaign Management (GM Workspace)",
+          "level": 2,
+          "line": 62
+        },
+        {
+          "heading": "C0 · Зафіксувати свідомий виняток у документах 🚧 GATE",
+          "level": 3,
+          "line": 64
+        },
+        {
+          "heading": "C1 · Розширення домену кампанії: rename/delete/summary + тести",
+          "level": 3,
+          "line": 103
+        },
+        {
+          "heading": "C2 · Екран «Мої кампанії» (список / створення / перейменування / видалення)",
+          "level": 3,
+          "line": 147
+        },
+        {
+          "heading": "C3 · Деталі кампанії: явний roster (прив'язка/відв'язка персонажів)",
+          "level": 3,
+          "line": 199
+        },
+        {
+          "heading": "C4 · Явний picker кампанії в майстрі персонажа",
+          "level": 3,
+          "line": 248
+        },
+        {
+          "heading": "C5 · Історія енкаунтерів кампанії (нова синхронізована сутність) 🚧 GATE",
+          "level": 3,
+          "line": 293
+        },
+        {
+          "heading": "C6 · Session log і loot log як теги нотаток кампанії",
+          "level": 3,
+          "line": 368
+        },
+        {
+          "heading": "C7 (P2, опційно) · Прикріплені монстри/заклинання per-кампанія",
+          "level": 3,
+          "line": 409
+        },
+        {
+          "heading": "C8 · Запрошення редактора в кампанію через код запрошення 🚧 GATE",
+          "level": 3,
+          "line": 442
+        },
+        {
+          "heading": "Що навмисно НЕ входить у цю пачку",
+          "level": 2,
+          "line": 519
+        },
+        {
+          "heading": "👤 Що зробити тільки тобі",
+          "level": 2,
+          "line": 535
+        },
+        {
+          "heading": "Універсальний хвіст для будь-якого промту з цієї пачки",
+          "level": 2,
+          "line": 553
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 17
+      }
+    },
+    {
+      "path": "docs/claude-code-prompts.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 1069,
+      "nonEmptyLines": 852,
+      "sections": [
+        {
+          "heading": "Промти для Claude Code: спринти R1–R5",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Як цим користуватися",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Спринт 0 · Підготовка",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "P0.1 · Встановити документи і синхронізувати агентські інструкції",
+          "level": 3,
+          "line": 21
+        },
+        {
+          "heading": "P0.2 · Видалити мертвий Firestore-код (SEC-6)",
+          "level": 3,
+          "line": 60
+        },
+        {
+          "heading": "Спринт R1 · Допуск до релізу",
+          "level": 2,
+          "line": 89
+        },
+        {
+          "heading": "P1.1 · Версії 1.0.0 (R1-3, PLY-6)",
+          "level": 3,
+          "line": 91
+        },
+        {
+          "heading": "P1.2 · Чистка permissions і невикористаних пакетів (R1-6, R1-7, PLY-3, PERF-3) 🚧 GATE",
+          "level": 3,
+          "line": 122
+        },
+        {
+          "heading": "P1.3 · Видалення акаунта з коректним каскадом (R1-4, PLY-1, COL-10, SEC-5) 🚧 GATE",
+          "level": 3,
+          "line": 172
+        },
+        {
+          "heading": "P1.4 · Privacy Policy (R1-5, PLY-2)",
+          "level": 3,
+          "line": 228
+        },
+        {
+          "heading": "Спринт R2 · Спільне редагування і безпека",
+          "level": 2,
+          "line": 270
+        },
+        {
+          "heading": "P2.1 · Кореневий фікс запису: COL-1 + COL-2 + COL-3 🚧 GATE ← найважливіший промт усього релізу",
+          "level": 3,
+          "line": 272
+        },
+        {
+          "heading": "P2.2 · Операції зі складом доступу окремою транзакцією (R2-2, COL-3)",
+          "level": 3,
+          "line": 344
+        },
+        {
+          "heading": "P2.3 · Правила Firestore + тести в емуляторі (R2-3, R2-4, SEC-1…SEC-4, COL-8) 🚧 GATE",
+          "level": 3,
+          "line": 380
+        },
+        {
+          "heading": "P2.4 · Серверний час у журналі та lastSyncAt (R2-5, COL-5)",
+          "level": 3,
+          "line": 436
+        },
+        {
+          "heading": "P2.5 · Дрібніші секції синку (R2-6, COL-4)",
+          "level": 3,
+          "line": 477
+        },
+        {
+          "heading": "P2.6 · Видимі помилки синку (R2-7, COL-7, REL-2)",
+          "level": 3,
+          "line": 517
+        },
+        {
+          "heading": "Спринт R3 · Продуктивність і спостережуваність",
+          "level": 2,
+          "line": 558
+        },
+        {
+          "heading": "P3.1 · Інструментація холодного старту (R3-1, PERF-1)",
+          "level": 3,
+          "line": 560
+        },
+        {
+          "heading": "P3.2 · Ліниве SRD + Zod у build-time (R3-2, R3-3, PERF-1) 🚧 GATE",
+          "level": 3,
+          "line": 597
+        },
+        {
+          "heading": "P3.3 · Firebase Analytics + згода (R3-4)",
+          "level": 3,
+          "line": 643
+        },
+        {
+          "heading": "P3.4 · Crashlytics + root ErrorBoundary (R3-5, REL-1)",
+          "level": 3,
+          "line": 688
+        },
+        {
+          "heading": "P3.5 · Закрити транзитивні CVE через overrides (R3-6, SEC-7)",
+          "level": 3,
+          "line": 718
+        },
+        {
+          "heading": "P3.6 · Увімкнути R8/ProGuard і shrinkResources (R3-7, PERF-2) 🚧 GATE",
+          "level": 3,
+          "line": 752
+        },
+        {
+          "heading": "P3.7 · Edge-to-edge на Android 15/16 (R3-8, PLY-7)",
+          "level": 3,
+          "line": 794
+        },
+        {
+          "heading": "P3.8 · Дрібні перфоманс-фікси пакетом (R3-9, PERF-4…PERF-6, SEC-9)",
+          "level": 3,
+          "line": 832
+        },
+        {
+          "heading": "Спринт R4 · EAS Update, store listing, бренд",
+          "level": 2,
+          "line": 870
+        },
+        {
+          "heading": "P4.1 · EAS Update (R4-1…R4-3) 🚧 GATE",
+          "level": 3,
+          "line": 872
+        },
+        {
+          "heading": "P4.2 · Тексти для Play Console (R4-4, R4-6, PLY-8)",
+          "level": 3,
+          "line": 917
+        },
+        {
+          "heading": "P4.3 · Заміна бренду (R4-8) — запускати ТІЛЬКИ коли дизайнер віддав асети",
+          "level": 3,
+          "line": 957
+        },
+        {
+          "heading": "Спринт R5 · Реліз",
+          "level": 2,
+          "line": 996
+        },
+        {
+          "heading": "P5.1 · Підготувати регресійний прогін (R5-1)",
+          "level": 3,
+          "line": 998
+        },
+        {
+          "heading": "👤 Що Claude Code зробити не може — тільки ти",
+          "level": 2,
+          "line": 1029
+        },
+        {
+          "heading": "Універсальний хвіст для будь-якого промту",
+          "level": 2,
+          "line": 1053
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 34
+      }
+    },
+    {
+      "path": "docs/collaborative-editing.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 258,
+      "nonEmptyLines": 178,
+      "sections": [
+        {
+          "heading": "Спільне редагування аркуша персонажа: аудит і цільова модель",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Що вже реалізовано (і зроблено непогано)",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "2. Знахідки (COL-*)",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "COL-1 · Критично · Read-modify-write без транзакції → тиха втрата чужих змін",
+          "level": 3,
+          "line": 31
+        },
+        {
+          "heading": "COL-2 · Критично · `changeHistory` перезаписується → ламається виявлення віддалених змін",
+          "level": 3,
+          "line": 54
+        },
+        {
+          "heading": "COL-3 · Критично · `owners`/`editors` пишуться зі stale-read",
+          "level": 3,
+          "line": 78
+        },
+        {
+          "heading": "COL-4 · Високий · Секційна гранулярність надто груба для бою",
+          "level": 3,
+          "line": 98
+        },
+        {
+          "heading": "COL-5 · Виправлено · Порівняння часу на клієнтських годинниках",
+          "level": 3,
+          "line": 122
+        },
+        {
+          "heading": "COL-6 · Середній · Немає presence — не видно, хто зараз в аркуші",
+          "level": 3,
+          "line": 151
+        },
+        {
+          "heading": "COL-7 · Середній · Помилки шляху синку глушаться",
+          "level": 3,
+          "line": 163
+        },
+        {
+          "heading": "COL-8 · Середній · Правила не валідують те, що пишуть редактори",
+          "level": 3,
+          "line": 175
+        },
+        {
+          "heading": "COL-9 · Середній · Ризик 1 MiB на документ",
+          "level": 3,
+          "line": 183
+        },
+        {
+          "heading": "COL-10 · Високий · Видалення акаунта при спільних аркушах",
+          "level": 3,
+          "line": 191
+        },
+        {
+          "heading": "3. Цільова модель (мінімум для 1.0)",
+          "level": 2,
+          "line": 212
+        },
+        {
+          "heading": "4. Тест-план (без нього не вважати зробленим)",
+          "level": 2,
+          "line": 231
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 15
+      }
+    },
+    {
+      "path": "docs/dnd-product-guidelines.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 81,
+      "nonEmptyLines": 70,
+      "sections": [
+        {
+          "heading": "5e Product Guidelines",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Core 5e Loop",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Dice",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Character Sheet",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "Create Character",
+          "level": 2,
+          "line": 37
+        },
+        {
+          "heading": "Spellbook",
+          "level": 2,
+          "line": 53
+        },
+        {
+          "heading": "Bestiary",
+          "level": 2,
+          "line": 68
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/loading-states-and-skeleton.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 53,
+      "nonEmptyLines": 42,
+      "sections": [
+        {
+          "heading": "Loading States and Skeleton",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Purpose",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Global Rules",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Screens",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Home",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "Character Sheet",
+          "level": 3,
+          "line": 24
+        },
+        {
+          "heading": "Spellbook",
+          "level": 3,
+          "line": 31
+        },
+        {
+          "heading": "Bestiary",
+          "level": 3,
+          "line": 37
+        },
+        {
+          "heading": "Implementation Notes",
+          "level": 2,
+          "line": 43
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    },
+    {
+      "path": "docs/privacy-policy.en.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 58,
+      "nonEmptyLines": 33,
+      "sections": [
+        {
+          "heading": "Mythgate 5e Companion Privacy Policy",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. What works locally, without an account",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "2. What is collected when you sign in with Google",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "3. Character sheets: what is stored and who sees it",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "4. Third parties",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "5. Account deletion",
+          "level": 2,
+          "line": 41
+        },
+        {
+          "heading": "6. Contact",
+          "level": 2,
+          "line": 56
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/privacy-policy.uk.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 58,
+      "nonEmptyLines": 33,
+      "sections": [
+        {
+          "heading": "Політика конфіденційності Mythgate 5e Companion",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Що працює без акаунта, локально на пристрої",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "2. Що збирається, якщо ви входите через Google",
+          "level": 2,
+          "line": 13
+        },
+        {
+          "heading": "3. Аркуш персонажа: що зберігається і хто це бачить",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "4. Треті сторони",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "5. Видалення акаунта",
+          "level": 2,
+          "line": 41
+        },
+        {
+          "heading": "6. Контакти",
+          "level": 2,
+          "line": 56
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/product-collaboration-stage-4.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 77,
+      "nonEmptyLines": 60,
+      "sections": [
+        {
+          "heading": "Stage 4: Cloud Collaboration as Flagship",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Goal",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Scope Delivered",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "Data / Interface Notes",
+          "level": 2,
+          "line": 60
+        },
+        {
+          "heading": "Historical Acceptance Signals",
+          "level": 2,
+          "line": 68
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "docs/product-dm-experience-stage-5.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 111,
+      "nonEmptyLines": 88,
+      "sections": [
+        {
+          "heading": "Stage 5: GM Experience Redesign (GM-first Mode)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Goal",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Scope Delivered",
+          "level": 2,
+          "line": 26
+        },
+        {
+          "heading": "Data and Interface Notes",
+          "level": 2,
+          "line": 74
+        },
+        {
+          "heading": "Firestore Access Model",
+          "level": 2,
+          "line": 85
+        },
+        {
+          "heading": "Historical Acceptance Signals",
+          "level": 2,
+          "line": 95
+        },
+        {
+          "heading": "Assumptions",
+          "level": 2,
+          "line": 107
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/product-foundation-stage-1.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 288,
+      "nonEmptyLines": 204,
+      "sections": [
+        {
+          "heading": "Stage 1: Product Foundation / UX Foundation",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. Updated Positioning",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Product Pillars",
+          "level": 3,
+          "line": 19
+        },
+        {
+          "heading": "2. Product Principles For Redesign",
+          "level": 2,
+          "line": 35
+        },
+        {
+          "heading": "3. Roles and Capability Model",
+          "level": 2,
+          "line": 58
+        },
+        {
+          "heading": "Roles",
+          "level": 3,
+          "line": 60
+        },
+        {
+          "heading": "Capability Matrix",
+          "level": 3,
+          "line": 66
+        },
+        {
+          "heading": "4. Main User Flows",
+          "level": 2,
+          "line": 77
+        },
+        {
+          "heading": "Flow A: Quick Session Use (Play Mode)",
+          "level": 3,
+          "line": 79
+        },
+        {
+          "heading": "Flow B: Between-session Edit (Edit Mode)",
+          "level": 3,
+          "line": 90
+        },
+        {
+          "heading": "Flow C: GM Edits Player Sheet",
+          "level": 3,
+          "line": 101
+        },
+        {
+          "heading": "Flow D: Player Edits, GM Sees Updates",
+          "level": 3,
+          "line": 112
+        },
+        {
+          "heading": "Flow E: Offline Local Use",
+          "level": 3,
+          "line": 123
+        },
+        {
+          "heading": "5. Storage and Sync Model",
+          "level": 2,
+          "line": 134
+        },
+        {
+          "heading": "Canonical Layers",
+          "level": 3,
+          "line": 136
+        },
+        {
+          "heading": "Sync Status (visible to user)",
+          "level": 3,
+          "line": 149
+        },
+        {
+          "heading": "Conflict/Merge Policy",
+          "level": 3,
+          "line": 157
+        },
+        {
+          "heading": "6. Character Data Structure (Target Logical Schema)",
+          "level": 2,
+          "line": 171
+        },
+        {
+          "heading": "6.1 Core System Data",
+          "level": 3,
+          "line": 173
+        },
+        {
+          "heading": "6.2 Combat Data",
+          "level": 3,
+          "line": 179
+        },
+        {
+          "heading": "6.3 Magic Data",
+          "level": 3,
+          "line": 186
+        },
+        {
+          "heading": "6.4 Inventory Data",
+          "level": 3,
+          "line": 193
+        },
+        {
+          "heading": "6.5 Notes / Journal",
+          "level": 3,
+          "line": 198
+        },
+        {
+          "heading": "6.6 Homebrew Extensions",
+          "level": 3,
+          "line": 203
+        },
+        {
+          "heading": "6.7 Custom Trackers",
+          "level": 3,
+          "line": 211
+        },
+        {
+          "heading": "7. Session Mode Structure",
+          "level": 2,
+          "line": 216
+        },
+        {
+          "heading": "Play Mode (Session UI)",
+          "level": 3,
+          "line": 218
+        },
+        {
+          "heading": "Edit Mode (Configuration UI)",
+          "level": 3,
+          "line": 226
+        },
+        {
+          "heading": "8. GM Workspace Structure",
+          "level": 2,
+          "line": 232
+        },
+        {
+          "heading": "9. Historical Stage 1 Deliverables (Definition of Done)",
+          "level": 2,
+          "line": 244
+        },
+        {
+          "heading": "10. Notes For Implementation (Stage 2+)",
+          "level": 2,
+          "line": 256
+        },
+        {
+          "heading": "11. Stage 1 Implementation Status (2026-03-29)",
+          "level": 2,
+          "line": 265
+        },
+        {
+          "heading": "12. Cross-stage Note (2026-03-29)",
+          "level": 2,
+          "line": 283
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 33
+      }
+    },
+    {
+      "path": "docs/product-homebrew-stage-3.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 105,
+      "nonEmptyLines": 81,
+      "sections": [
+        {
+          "heading": "Stage 3: Homebrew-first System",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Goal",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Stage Order",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "Scope Delivered In This Iteration",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "UX Decisions",
+          "level": 2,
+          "line": 65
+        },
+        {
+          "heading": "Data & Sync Notes",
+          "level": 2,
+          "line": 79
+        },
+        {
+          "heading": "Historical Definition Of Done For Stage 3",
+          "level": 2,
+          "line": 89
+        },
+        {
+          "heading": "Assumptions / Defaults",
+          "level": 2,
+          "line": 101
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "docs/product-redesign-stage-2.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 168,
+      "nonEmptyLines": 124,
+      "sections": [
+        {
+          "heading": "Stage 2: Redesign Character Experience",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Goal",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "Scope Delivered In This Iteration",
+          "level": 2,
+          "line": 24
+        },
+        {
+          "heading": "UX Decisions (Character)",
+          "level": 2,
+          "line": 56
+        },
+        {
+          "heading": "Play Mode",
+          "level": 3,
+          "line": 58
+        },
+        {
+          "heading": "Edit Mode",
+          "level": 3,
+          "line": 71
+        },
+        {
+          "heading": "UI/UX Plan By Screens (A–E)",
+          "level": 2,
+          "line": 81
+        },
+        {
+          "heading": "A. Home",
+          "level": 3,
+          "line": 83
+        },
+        {
+          "heading": "B. Character Sheet",
+          "level": 3,
+          "line": 100
+        },
+        {
+          "heading": "C. Create Character",
+          "level": 3,
+          "line": 109
+        },
+        {
+          "heading": "D. GM",
+          "level": 3,
+          "line": 120
+        },
+        {
+          "heading": "E. Bestiary",
+          "level": 3,
+          "line": 132
+        },
+        {
+          "heading": "Historical Definition Of Done For Stage 2",
+          "level": 2,
+          "line": 142
+        },
+        {
+          "heading": "Next Step",
+          "level": 2,
+          "line": 153
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 14
+      }
+    },
+    {
+      "path": "docs/release-checklist-1.0.0.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 125,
+      "nonEmptyLines": 91,
+      "sections": [
+        {
+          "heading": "Реліз-чекліст 1.0.0",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "(а) Автоматично командами",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "(б) Вручну — один пристрій",
+          "level": 2,
+          "line": 45
+        },
+        {
+          "heading": "(в) Вручну — два пристрої, два акаунти",
+          "level": 2,
+          "line": 74
+        },
+        {
+          "heading": "(г) Play Console / Firebase Console",
+          "level": 2,
+          "line": 91
+        },
+        {
+          "heading": "Коротко: що перевіряти після кожного OTA-апдейту",
+          "level": 2,
+          "line": 98
+        },
+        {
+          "heading": "Підсумок за групами",
+          "level": 2,
+          "line": 117
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "docs/release-plan-google-play.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 324,
+      "nonEmptyLines": 243,
+      "sections": [
+        {
+          "heading": "План релізу в Google Play і спринти R1–R5",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "0. Перерахунок дати: чому «середина серпня» треба розділити на дві дати",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "Арифметика від сьогодні (26 липня)",
+          "level": 3,
+          "line": 25
+        },
+        {
+          "heading": "Що я пропоную зафіксувати",
+          "level": 3,
+          "line": 37
+        },
+        {
+          "heading": "Дії на найближчі 72 години (усе інше може чекати)",
+          "level": 3,
+          "line": 46
+        },
+        {
+          "heading": "1. Версії та артефакти",
+          "level": 2,
+          "line": 55
+        },
+        {
+          "heading": "2. Спринти",
+          "level": 2,
+          "line": 70
+        },
+        {
+          "heading": "Спринт R1 · 27 липня – 2 серпня · «Допуск: Play Console + блокери»",
+          "level": 3,
+          "line": 76
+        },
+        {
+          "heading": "R1-4 додаток: текст веб-сторінки запиту на видалення акаунта",
+          "level": 4,
+          "line": 90
+        },
+        {
+          "heading": "Спринт R2 · 3–9 серпня · «Спільне редагування і безпека» ← найважливіший технічно",
+          "level": 3,
+          "line": 138
+        },
+        {
+          "heading": "Спринт R3 · 10–16 серпня · «Продуктивність і спостережуваність»",
+          "level": 3,
+          "line": 157
+        },
+        {
+          "heading": "R3-1 додаток: як міряти старт на девайсі (startupTrace)",
+          "level": 4,
+          "line": 174
+        },
+        {
+          "heading": "Спринт R4 · 17–23 серпня · «EAS Update, store listing, бренд»",
+          "level": 3,
+          "line": 211
+        },
+        {
+          "heading": "Спринт R5 · 24 серпня – … · «Production access і реліз»",
+          "level": 3,
+          "line": 246
+        },
+        {
+          "heading": "3. Що навмисно НЕ входить у 1.0",
+          "level": 2,
+          "line": 258
+        },
+        {
+          "heading": "4. Регресійний чекліст перед фінальним AAB",
+          "level": 2,
+          "line": 272
+        },
+        {
+          "heading": "5. Rollback",
+          "level": 2,
+          "line": 314
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 17
+      }
+    },
+    {
+      "path": "docs/sprint-plan.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 155,
+      "nonEmptyLines": 120,
+      "sections": [
+        {
+          "heading": "Sprint Plan",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Sprint 1: Dice Roller + Skeleton-loader",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "Sprint 2: Home",
+          "level": 2,
+          "line": 32
+        },
+        {
+          "heading": "Sprint 3: Character Sheet",
+          "level": 2,
+          "line": 54
+        },
+        {
+          "heading": "Sprint 4: Create Character + Scroll/Keyboard Fix",
+          "level": 2,
+          "line": 76
+        },
+        {
+          "heading": "Sprint 5: Spellbook",
+          "level": 2,
+          "line": 98
+        },
+        {
+          "heading": "Sprint 6: Bestiary",
+          "level": 2,
+          "line": 120
+        },
+        {
+          "heading": "Future Sprint: GM Desktop Workspace",
+          "level": 2,
+          "line": 142
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "docs/store-listing.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 163,
+      "nonEmptyLines": 109,
+      "sections": [
+        {
+          "heading": "Store Listing — чернетка (Google Play)",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. App name (ліміт 30 символів)",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "2. Short description (ліміт 80 символів)",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "UK",
+          "level": 3,
+          "line": 24
+        },
+        {
+          "heading": "EN",
+          "level": 3,
+          "line": 32
+        },
+        {
+          "heading": "3. Full description (ліміт 4000 символів)",
+          "level": 2,
+          "line": 42
+        },
+        {
+          "heading": "UK — **3110 символів**",
+          "level": 3,
+          "line": 44
+        },
+        {
+          "heading": "EN — **2982 characters**",
+          "level": 3,
+          "line": 65
+        },
+        {
+          "heading": "4. Реліз-нотатки для 1.0.0",
+          "level": 2,
+          "line": 88
+        },
+        {
+          "heading": "UK — **353 символи**",
+          "level": 3,
+          "line": 92
+        },
+        {
+          "heading": "EN — **323 characters**",
+          "level": 3,
+          "line": 96
+        },
+        {
+          "heading": "5. Чернетка Content Rating (IARC-анкета)",
+          "level": 2,
+          "line": 102
+        },
+        {
+          "heading": "6. Чернетка Data Safety",
+          "level": 2,
+          "line": 121
+        },
+        {
+          "heading": "7. Що підготувати самостійно (не текст, не код)",
+          "level": 2,
+          "line": 142
+        },
+        {
+          "heading": "8. Джерела фактів",
+          "level": 2,
+          "line": 150
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 15
+      }
+    },
+    {
+      "path": "docs/ui-kit.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 93,
+      "nonEmptyLines": 67,
+      "sections": [
+        {
+          "heading": "UI Kit and Design Tokens",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Purpose",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "Token Helpers",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "Typography",
+          "level": 2,
+          "line": 30
+        },
+        {
+          "heading": "Base UI Components",
+          "level": 2,
+          "line": 46
+        },
+        {
+          "heading": "Guardrails",
+          "level": 2,
+          "line": 63
+        },
+        {
+          "heading": "Skeleton UI",
+          "level": 2,
+          "line": 73
+        },
+        {
+          "heading": "Allowed and Disallowed",
+          "level": 2,
+          "line": 83
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "docs/ux-ui-roadmap.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 82,
+      "nonEmptyLines": 68,
+      "sections": [
+        {
+          "heading": "UX/UI Roadmap",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Current Priority Order",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "Product Direction",
+          "level": 2,
+          "line": 14
+        },
+        {
+          "heading": "UX Principles",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "Screen Priorities",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "Dice Roller",
+          "level": 3,
+          "line": 31
+        },
+        {
+          "heading": "Home",
+          "level": 3,
+          "line": 44
+        },
+        {
+          "heading": "Character Sheet",
+          "level": 3,
+          "line": 52
+        },
+        {
+          "heading": "Create Character",
+          "level": 3,
+          "line": 59
+        },
+        {
+          "heading": "Spellbook",
+          "level": 3,
+          "line": 66
+        },
+        {
+          "heading": "Bestiary",
+          "level": 3,
+          "line": 74
+        },
+        {
+          "heading": "Future: GM Desktop Workspace",
+          "level": 3,
+          "line": 80
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 12
+      }
+    }
+  ]
+}

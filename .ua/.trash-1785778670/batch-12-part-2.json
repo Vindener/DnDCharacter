@@ -1,0 +1,287 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/domain/srd/srdRepository.test.ts",
+      "type": "file",
+      "name": "srdRepository.test.ts",
+      "filePath": "src/domain/srd/srdRepository.test.ts",
+      "summary": "Тести репозиторію SRD: перевіряють, що геттери повертають дані з коректними метаданими джерела (source, license, tags) для кожної колекції.",
+      "tags": ["test", "srd", "repository"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/domain/srd/srdRepository.ts",
+      "type": "file",
+      "name": "srdRepository.ts",
+      "filePath": "src/domain/srd/srdRepository.ts",
+      "summary": "Центральний репозиторій статичних SRD-даних (System Reference Document): ліниво підвантажує й кешує JSON-колекції (раси, класи, заклинання, монстри тощо) і надає типізовані геттери та функцію build-time валідації всіх колекцій через Zod.",
+      "tags": ["repository", "srd", "data-access", "singleton"],
+      "complexity": "moderate",
+      "languageNotes": "Рантайм-геттери використовують типізований каст замість Zod-валідації заради продуктивності (PERF-1/P3.2) — сама валідація винесена у build-time скрипт scripts/validate-srd.mjs."
+    },
+    {
+      "id": "function:src/domain/srd/srdRepository.ts:getClassProgression",
+      "type": "function",
+      "name": "getClassProgression",
+      "filePath": "src/domain/srd/srdRepository.ts",
+      "lineRange": [131, 134],
+      "summary": "Знаходить прогресію конкретного класу на заданому рівні серед завантажених SRD-даних прогресії класів.",
+      "tags": ["srd", "lookup", "class-progression"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdRepository.ts:getAvailableSkillsForClass",
+      "type": "function",
+      "name": "getAvailableSkillsForClass",
+      "filePath": "src/domain/srd/srdRepository.ts",
+      "lineRange": [140, 145],
+      "summary": "Повертає список навичок, доступних для вибору класом, на основі переліку дозволених навичок класу.",
+      "tags": ["srd", "lookup", "skills"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdRepository.ts:validateAllSrdCollections",
+      "type": "function",
+      "name": "validateAllSrdCollections",
+      "filePath": "src/domain/srd/srdRepository.ts",
+      "lineRange": [203, 215],
+      "summary": "Build-time функція, що прогонює всі 11 сирих SRD JSON-колекцій через відповідні Zod-схеми й кидає помилку при першому порушенні структури — викликається зі scripts/validate-srd.mjs.",
+      "tags": ["validation", "build-time", "srd"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/domain/srd/srdSelectors.ts",
+      "type": "file",
+      "name": "srdSelectors.ts",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "summary": "Селектори високого рівня над SRD-репозиторієм: похідні дані про раси/підраси (швидкість, збільшення характеристик, риси, мови), фічі класу за рівнем та пошук раси/класу за назвою.",
+      "tags": ["selector", "srd", "domain"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:getSrdRaceAbilityIncreases",
+      "type": "function",
+      "name": "getSrdRaceAbilityIncreases",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [16, 23],
+      "summary": "Повертає збільшення характеристик для раси або підраси, враховуючи перевизначення значень підрасою.",
+      "tags": ["srd", "race", "abilities"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:getSrdRaceFlexibleIncrease",
+      "type": "function",
+      "name": "getSrdRaceFlexibleIncrease",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [25, 29],
+      "summary": "Повертає гнучке збільшення характеристики раси чи підраси, якщо воно передбачене (наприклад, для варіанту Людини).",
+      "tags": ["srd", "race", "abilities"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:getSrdRaceTraits",
+      "type": "function",
+      "name": "getSrdRaceTraits",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [31, 36],
+      "summary": "Повертає список расових рис персонажа з урахуванням додаткових рис підраси.",
+      "tags": ["srd", "race", "traits"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:getSrdRaceLanguages",
+      "type": "function",
+      "name": "getSrdRaceLanguages",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [38, 43],
+      "summary": "Повертає список мов, доступних расі, з урахуванням додаткових мов підраси.",
+      "tags": ["srd", "race", "languages"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:getSrdClassFeaturesAtLevel",
+      "type": "function",
+      "name": "getSrdClassFeaturesAtLevel",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [45, 50],
+      "summary": "Фільтрує базові фічі класу, доступні персонажу на вказаному рівні або нижче.",
+      "tags": ["srd", "class", "features"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:getSrdProgressionFeatureNames",
+      "type": "function",
+      "name": "getSrdProgressionFeatureNames",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [52, 59],
+      "summary": "Збирає унікальні назви фіч класу на заданому рівні, комбінуючи дані прогресії класу з базовими фічами класу.",
+      "tags": ["srd", "class", "features"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:findSrdRaceByName",
+      "type": "function",
+      "name": "findSrdRaceByName",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [89, 95],
+      "summary": "Шукає SRD-расу за назвою без урахування регістру та зайвих пробілів.",
+      "tags": ["srd", "race", "lookup"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/srd/srdSelectors.ts:findSrdClassByName",
+      "type": "function",
+      "name": "findSrdClassByName",
+      "filePath": "src/domain/srd/srdSelectors.ts",
+      "lineRange": [97, 103],
+      "summary": "Шукає SRD-клас за назвою без урахування регістру та зайвих пробілів.",
+      "tags": ["srd", "class", "lookup"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/domain/srd/types.ts",
+      "type": "file",
+      "name": "types.ts",
+      "filePath": "src/domain/srd/types.ts",
+      "summary": "Типи домену SRD: описують структури раси, класу, прогресії класу, спорядження, стану, заклинання, монстра, довідникового запису, навички, мови та передісторії з метаданими джерела.",
+      "tags": ["type-definition", "srd", "domain-model"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/domain/types/sourceMetadata.ts",
+      "type": "file",
+      "name": "sourceMetadata.ts",
+      "filePath": "src/domain/types/sourceMetadata.ts",
+      "summary": "Базові типи метаданих джерела контенту (ContentSource, ContentLicense), що використовуються для позначення походження SRD- та користувацького контенту (монстри, заклинання) у всьому домені.",
+      "tags": ["type-definition", "metadata", "shared"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/services/storeEffects/dmStoreEffects.test.ts",
+      "type": "file",
+      "name": "dmStoreEffects.test.ts",
+      "filePath": "src/services/storeEffects/dmStoreEffects.test.ts",
+      "summary": "Тести side-effect шару DM-стору: перевіряють завантаження/збереження монстрів, злиття з SRD-насінням, керування закріпленими й обраними монстрами та шаблонами ресурсів через заглушку AsyncStorage.",
+      "tags": ["test", "dm", "store"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/services/storeEffects/dmStoreEffects.test.ts:createHarness",
+      "type": "function",
+      "name": "createHarness",
+      "filePath": "src/services/storeEffects/dmStoreEffects.test.ts",
+      "lineRange": [31, 67],
+      "summary": "Створює тестовий стенд із zustand-подібними set/get та фейковим AsyncStorage для ізольованого тестування side-effect функцій DM-стору.",
+      "tags": ["test-helper", "mock", "dm"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/services/storeEffects/dmStoreEffects.ts",
+      "type": "file",
+      "name": "dmStoreEffects.ts",
+      "filePath": "src/services/storeEffects/dmStoreEffects.ts",
+      "summary": "Side-effect шар DM-стору (Zustand): завантаження й збереження монстрів бестіарію зі злиттям із SRD-набором, керування закріпленими/обраними монстрами, роллю застосунку та користувацькими шаблонами ресурсів через AsyncStorage.",
+      "tags": ["store", "zustand", "side-effects", "dm"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/services/storeEffects/dmStoreEffects.ts:mergeMonstersWithSrd",
+      "type": "function",
+      "name": "mergeMonstersWithSrd",
+      "filePath": "src/services/storeEffects/dmStoreEffects.ts",
+      "lineRange": [86, 97],
+      "summary": "Зливає користувацьких монстрів зі збереженого стану з базовим набором SRD-монстрів, зберігаючи кастомні правки й уникаючи дублікатів за нормалізованою назвою.",
+      "tags": ["merge", "dm", "srd"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/services/storeEffects/dmStoreEffects.ts:createDmStoreEffects",
+      "type": "function",
+      "name": "createDmStoreEffects",
+      "filePath": "src/services/storeEffects/dmStoreEffects.ts",
+      "lineRange": [102, 291],
+      "summary": "Фабрика side-effect функцій DM-стору Zustand: інкапсулює всю логіку роботи з AsyncStorage для монстрів бестіарію, ролі застосунку та користувацьких шаблонів ресурсів DM.",
+      "tags": ["store", "factory", "dm"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/shared/const/CharacterClass.ts",
+      "type": "file",
+      "name": "CharacterClass.ts",
+      "filePath": "src/shared/const/CharacterClass.ts",
+      "summary": "Константи класів персонажа: переклади назв класів D&D 5e українською (CLASS_TRANSLATIONS) і готовий список опцій класів для вибору у формах (CLASS_OPTIONS).",
+      "tags": ["constants", "localization", "character"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/stores/dmStore.ts",
+      "type": "file",
+      "name": "dmStore.ts",
+      "filePath": "src/stores/dmStore.ts",
+      "summary": "Zustand-стор DM-інструментів: тримає список монстрів бестіарію, закріплені й обрані монстри, роль застосунку та користувацькі шаблони ресурсів, делегуючи всю логіку side-effects у dmStoreEffects.",
+      "tags": ["store", "zustand", "dm", "state-management"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    { "source": "file:src/domain/srd/srdRepository.test.ts", "target": "file:src/domain/srd/srdRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "file:src/data/srd/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "file:src/domain/srd/schemas.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "file:src/domain/srd/types.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "file:src/domain/srd/srdRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "file:src/domain/srd/types.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/types.ts", "target": "file:src/domain/types/sourceMetadata.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/types.ts", "target": "file:src/types/Skills.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/srd/types.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.test.ts", "target": "file:src/services/storeEffects/dmStoreEffects.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.test.ts", "target": "file:src/stores/dmStore.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/domain/srd/adapters.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/domain/srd/srdRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/stores/dmStore.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/types/Monster.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/dmStore.ts", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/dmStore.ts", "target": "file:src/services/storeEffects/dmStoreEffects.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/dmStore.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/dmStore.ts", "target": "file:src/types/Monster.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/dmStore.ts", "target": "file:src/types/Product.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "function:src/domain/srd/srdRepository.ts:getClassProgression", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "function:src/domain/srd/srdRepository.ts:getAvailableSkillsForClass", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "function:src/domain/srd/srdRepository.ts:validateAllSrdCollections", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceAbilityIncreases", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceFlexibleIncrease", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceTraits", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceLanguages", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdClassFeaturesAtLevel", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdProgressionFeatureNames", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:findSrdRaceByName", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:findSrdClassByName", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.test.ts", "target": "function:src/services/storeEffects/dmStoreEffects.test.ts:createHarness", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "function:src/services/storeEffects/dmStoreEffects.ts:mergeMonstersWithSrd", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "function:src/services/storeEffects/dmStoreEffects.ts:createDmStoreEffects", "type": "contains", "direction": "forward", "weight": 1.0 },
+
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "function:src/domain/srd/srdRepository.ts:getClassProgression", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "function:src/domain/srd/srdRepository.ts:getAvailableSkillsForClass", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "function:src/domain/srd/srdRepository.ts:validateAllSrdCollections", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceAbilityIncreases", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceFlexibleIncrease", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceTraits", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdRaceLanguages", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdClassFeaturesAtLevel", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:getSrdProgressionFeatureNames", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:findSrdRaceByName", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/domain/srd/srdSelectors.ts", "target": "function:src/domain/srd/srdSelectors.ts:findSrdClassByName", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "function:src/services/storeEffects/dmStoreEffects.ts:createDmStoreEffects", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "function:src/domain/srd/srdRepository.ts:validateAllSrdCollections", "target": "function:src/domain/srd/schemas.ts:parseSrdArray", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/domain/srd/srdSelectors.ts:getSrdProgressionFeatureNames", "target": "function:src/domain/srd/srdRepository.ts:getClassProgression", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/services/storeEffects/dmStoreEffects.ts:createDmStoreEffects", "target": "function:src/services/storeEffects/dmStoreEffects.ts:mergeMonstersWithSrd", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/services/storeEffects/dmStoreEffects.test.ts:createHarness", "target": "function:src/services/storeEffects/dmStoreEffects.ts:createDmStoreEffects", "type": "calls", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/services/storeEffects/dmStoreEffects.ts", "target": "file:src/services/storeEffects/dmStoreEffects.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+    { "source": "file:src/domain/srd/srdRepository.ts", "target": "file:src/domain/srd/srdRepository.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 }
+  ]
+}

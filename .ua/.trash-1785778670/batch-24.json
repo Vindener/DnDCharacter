@@ -1,0 +1,201 @@
+{
+  "nodes": [
+    {
+      "id": "config:src/data/srd/abilities.json",
+      "type": "config",
+      "name": "abilities.json",
+      "filePath": "src/data/srd/abilities.json",
+      "summary": "Довідкові дані SRD 5.1: шість базових характеристик персонажа (Сила, Спритність, Статура, Інтелект, Мудрість, Харизма) з поділом на фізичні та ментальні.",
+      "tags": ["srd-дані", "довідкові-дані", "характеристики", "d&d-5e", "статичні-дані"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/data/srd/backgrounds.json",
+      "type": "config",
+      "name": "backgrounds.json",
+      "filePath": "src/data/srd/backgrounds.json",
+      "summary": "Довідкові дані SRD 5.1 для передісторій персонажа (наразі лише Acolyte) з навичками, стартовим спорядженням і фоновою рисою.",
+      "tags": ["srd-дані", "передісторії", "довідкові-дані", "d&d-5e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/data/srd/classProgression.json",
+      "type": "config",
+      "name": "classProgression.json",
+      "filePath": "src/data/srd/classProgression.json",
+      "summary": "Таблиці прогресії по рівнях (1–20) для всіх 12 базових класів SRD 5.1: бонус вправності та перелік фіч на кожному рівні.",
+      "tags": ["srd-дані", "прогресія-класу", "довідкові-дані", "d&d-5e"],
+      "complexity": "moderate",
+      "languageNotes": "Мало рядків (19), але дуже щільні дані — кожен запис класу містить масив із 20 рівнів; складність визначена за обсягом вкладеної інформації, а не за кількістю рядків."
+    },
+    {
+      "id": "config:src/data/srd/classes.json",
+      "type": "config",
+      "name": "classes.json",
+      "filePath": "src/data/srd/classes.json",
+      "summary": "Повні визначення 12 базових класів SRD 5.1: кістка хітів, рятівні кидки, володіння зброєю/обладунками, вибір навичок, стартове спорядження та фічі 1-го рівня.",
+      "tags": ["srd-дані", "класи", "довідкові-дані", "d&d-5e"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/data/srd/conditions.json",
+      "type": "config",
+      "name": "conditions.json",
+      "filePath": "src/data/srd/conditions.json",
+      "summary": "Довідкові дані SRD 5.1 щодо 15 бойових станів (осліплений, приголомшений, паралізований тощо) з описом механічного ефекту кожного.",
+      "tags": ["srd-дані", "стани", "довідкові-дані", "d&d-5e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/data/srd/equipment.json",
+      "type": "config",
+      "name": "equipment.json",
+      "filePath": "src/data/srd/equipment.json",
+      "summary": "Каталог базового спорядження SRD 5.1: зброя, обладунки та спорядження для пригод з категоріями й тегами.",
+      "tags": ["srd-дані", "спорядження", "довідкові-дані", "d&d-5e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/data/srd/languages.json",
+      "type": "config",
+      "name": "languages.json",
+      "filePath": "src/data/srd/languages.json",
+      "summary": "Довідковий перелік 16 мов SRD 5.1, поділених на стандартні та екзотичні.",
+      "tags": ["srd-дані", "мови", "довідкові-дані", "d&d-5e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/data/srd/monsters.json",
+      "type": "config",
+      "name": "monsters.json",
+      "filePath": "src/data/srd/monsters.json",
+      "summary": "Великий бестіарій SRD 5.1 — 317 монстрів із повними статблоками (характеристики, рятівні кидки, навички, опір/вразливість/імунітет до урону, дії, реакції, легендарні дії).",
+      "tags": ["srd-дані", "бестіарій", "монстри", "d&d-5e", "великий-набір-даних"],
+      "complexity": "complex",
+      "languageNotes": "Найбільший файл даних у проєкті (~20 тис. рядків); за документацією проєкту завантажується лише через типізований лоадер у src/data/srd/index.ts, статичний імпорт і парсинг усіх колекцій на топ-левелі впливають на холодний старт застосунку."
+    },
+    {
+      "id": "config:src/data/srd/races.json",
+      "type": "config",
+      "name": "races.json",
+      "filePath": "src/data/srd/races.json",
+      "summary": "Довідкові дані SRD 5.1 для 9 базових рас персонажа: швидкість, збільшення характеристик, мови, расові риси та підраси.",
+      "tags": ["srd-дані", "раси", "довідкові-дані", "d&d-5e"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/data/srd/references.json",
+      "type": "config",
+      "name": "references.json",
+      "filePath": "src/data/srd/references.json",
+      "summary": "Довідкові статті правил SRD 5.1 (стани, бойові дії, відпочинок, перевірки характеристик тощо) для розділу довідника у застосунку.",
+      "tags": ["srd-дані", "правила", "довідник", "d&d-5e"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/data/srd/skills.json",
+      "type": "config",
+      "name": "skills.json",
+      "filePath": "src/data/srd/skills.json",
+      "summary": "Довідковий перелік 18 навичок SRD 5.1 із прив'язкою кожної навички до відповідної базової характеристики.",
+      "tags": ["srd-дані", "навички", "довідкові-дані", "d&d-5e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/data/srd/spells.json",
+      "type": "config",
+      "name": "spells.json",
+      "filePath": "src/data/srd/spells.json",
+      "summary": "Великий довідник заклинань SRD 5.1 — 319 заклинань з рівнем, школою, часом накладання, компонентами, тривалістю та описом для всіх класів-заклинателів.",
+      "tags": ["srd-дані", "заклинання", "d&d-5e", "великий-набір-даних"],
+      "complexity": "complex",
+      "languageNotes": "Другий за розміром файл даних (~10 тис. рядків); разом із monsters.json дає ~2.7 МБ JSON, що завантажується та валідується Zod-схемами до першого кадру застосунку."
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:src/data/srd/abilities.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/backgrounds.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/classProgression.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/classes.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/conditions.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/equipment.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/languages.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/monsters.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/races.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/references.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/skills.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/data/srd/spells.json",
+      "target": "file:src/data/srd/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+[
+  {
+    "order": 1,
+    "title": "Огляд проєкту",
+    "description": "README.md знайомить із Mythgate 5e Companion — застосунком-компаньйоном для D&D 5e на React Native/Expo з хмарною синхронізацією через Firebase. Тут перелічені посилання на продуктову документацію, команди розробки (npm install, npm run android) та важливе застереження: проєкт використовує нативні модулі `@react-native-firebase/*` і не працює в Expo Go, лише через Dev Client. Це відправна точка для розуміння, чому архітектура застосунку особлива.",
+    "nodeIds": ["document:README.md"]
+  },
+  {
+    "order": 2,
+    "title": "Точка входу застосунку",
+    "description": "index.js реєструє кореневий компонент через registerRootComponent і заздалегідь \"прогріває\" SRD-дані та трасування запуску. App.tsx — сам кореневий компонент: він ініціалізує i18n, синхронізує тему статус-бару, підключає Crashlytics до автентифікованого користувача і рендерить AppNavigator лише після готовності перекладів і приховання splash screen. Разом ці два файли — перше, що виконується при старті програми.",
+    "nodeIds": ["file:index.js", "file:App.tsx"],
+    "languageLesson": "Expo використовує `registerRootComponent` замість стандартного `AppRegistry.registerComponent` — це обгортка, яка додатково налаштовує кореневий View під Expo-специфічні вимоги (наприклад, обробку помилок і hot reload)."
+  },
+  {
+    "order": 3,
+    "title": "Навігаційна структура",
+    "description": "AppNavigator.tsx будує кореневий стек навігації, підвантажує тему й згоду на аналітику, а потім рендерить нижню панель вкладок разом зі стеком DM Workspace та довідковими екранами. TabNavigator.tsx визначає самі вкладки — Дім, Персонаж, Створення персонажа, Заклинання, Кубики, Налаштування. Це карта того, як користувач переміщується між усіма модулями, які ми розглянемо далі.",
+    "nodeIds": ["file:src/navigation/AppNavigator.tsx", "file:src/navigation/TabNavigator.tsx"]
+  },
+  {
+    "order": 4,
+    "title": "Дизайн-система та тема",
+    "description": "tokens.ts — це центральна система дизайн-токенів (spacing, radius, typography) з резолверами sp()/rd()/fs(), обов'язковими до використання в усьому UI-коді проєкту (це правило зафіксоване навіть у CLAUDE.md). theme.ts визначає кольорові теми, а Theme-store.ts — Zustand-стор, що перемикає світлу/темну тему. tokens.ts має найвищий fan-in у всьому графі (60 залежних файлів) — буквально кожен екран проходить через нього.",
+    "nodeIds": ["file:src/shared/styles/tokens.ts", "file:src/shared/styles/theme.ts", "file:src/context/Theme-store.ts"],
+    "languageLesson": "Патерн token-резолверів (sp/rd/fs замість сирих числових значень у стилях) дозволяє масштабувати весь UI одним коефіцієнтом і уникати \"магічних чисел\" у StyleSheet — це навмисне архітектурне обмеження проєкту."
+  },
+  {
+    "order": 5,
+    "title": "Локалізація (i18next)",
+    "description": "src/i18n/index.ts ініціалізує i18next, підключаючи всі локалізаційні неймспейси українською й англійською, визначає мову пристрою та збережену користувачем мову. Це другий за важливістю \"хребтовий\" файл після App.tsx — від нього залежать 42 інших файли, оскільки практично кожен екран використовує переклади.",
+    "nodeIds": ["file:src/i18n/index.ts"],
+    "languageLesson": "i18next будує неймспейси окремими JSON-файлами на мову (en/character.json, uk/character.json тощо), що дозволяє лениво довантажувати лише потрібні розділи перекладу замість одного величезного словника."
+  },
+  {
+    "order": 6,
+    "title": "Доменна модель персонажа",
+    "description": "types/Character.ts — бар'єльний файл, що реекспортує основні типи персонажа (CharacterEntity, CharacterDto, CharacterViewModel, CharacterDraft) з доменного шару. domain/types/index.ts збирає типи персонажа, DM-кампаній і синхронізації в одну точку імпорту, а domain/schemas/index.ts — це Zod-схеми, які валідують ці ж структури в рантаймі. Разом вони формують словник, яким розмовляє весь застосунок — від UI до Firestore.",
+    "nodeIds": ["file:src/types/Character.ts", "file:src/domain/types/index.ts", "file:src/domain/schemas/index.ts"],
+    "languageLesson": "Zod-схеми (domain/schemas) і TypeScript-типи (domain/types) навмисно тримають окремо: схема валідує дані в рантаймі (наприклад, дані з Firestore), тоді як типи існують лише на етапі компіляції. Це поширений TS-патерн \"parse, don't validate\"."
+  },
+  {
+    "order": 7,
+    "title": "Локальне збереження і міграції",
+    "description": "domain/migrations/index.ts — центральний движок версіонування схем локального сховища: він послідовно мігрує payload персонажа та інших сутностей DM від версії 1 до поточної версії 4, обгортаючи дані у VersionedStorageEnvelope. characterLocalRepository.ts використовує ці міграції, щоб офлайн-перший AsyncStorage-репозиторій міг читати дані персонажів, збережені навіть старими версіями застосунку. Це те, що дозволяє створювати й редагувати персонажа повністю офлайн і без логіну — ключова продуктова вимога з CLAUDE.md.",
+    "nodeIds": ["file:src/domain/migrations/index.ts", "file:src/repositories/characterLocalRepository.ts"]
+  },
+  {
+    "order": 8,
+    "title": "Стор персонажа й головний ігровий хук",
+    "description": "characterStore.ts — Zustand-стор персонажів, який делегує побічні ефекти (завантаження, збереження, оновлення полів) окремому модулю ефектів; Character-store.ts у src/context — це лише реекспорт-барель для сумісності зі старими імпортами. useCharacterActions.tsx — це центральний хук головного ігрового екрана: 3717 рядків, що керують усім станом аркуша, хмарною синхронізацією, історією змін, кидками кубиків, рівнями, спорядженням і заклинаннями. CLAUDE.md прямо забороняє \"розпилювати\" цей файл до релізу через ризик регресій.",
+    "nodeIds": ["file:src/stores/characterStore.ts", "file:src/context/Character-store.ts", "file:src/screens/Character/hooks/useCharacterActions.tsx"],
+    "languageLesson": "Барель-реекспорти (`src/context/*` → `src/stores/*`) — типовий прийом для поступової міграції коду без ламання існуючих імпортів: стара точка входу лишається робочою, поки весь код не переведуть на нову."
+  },
+  {
+    "order": 9,
+    "title": "Хмарна синхронізація і спільне редагування",
+    "description": "firebase.ts — точка ініціалізації Firebase, що реекспортує auth/firestore/functions та хелпери на кшталт serverTimestamp і arrayUnion. characterCloudRepository.ts — ключовий файл інваріантів спільного редагування: upsert/підписки/передача власності/керування редакторами аркуша персонажа. characterSyncCoordinator.ts — ядро логіки синку: переходи стану, побудова плану завантаження, посекційний merge локальних і хмарних змін та вирішення конфліктів. Це найважливіший архітектурний факт проєкту — аркуш персонажа редагують кілька людей одночасно (owner + editors), і ці три файли реалізують саме цю модель.",
+    "nodeIds": ["file:src/services/firebase.ts", "file:src/repositories/characterCloudRepository.ts", "file:src/services/characterSyncCoordinator.ts"],
+    "languageLesson": "Посекційний merge (замість read-modify-write усього документа) — свідоме архітектурне рішення: секції аркуша (combat, spells, equipment) синхронізуються незалежно, зменшуючи ймовірність конфлікту між двома редакторами, що правлять різні частини персонажа одночасно."
+  },
+  {
+    "order": 10,
+    "title": "Правила безпеки Firestore і модель редакторів",
+    "description": "firestore.rules визначає головні правила безпеки для колекцій users, emailIndex, characterSheets, dmCampaigns та інших — саме тут реалізована модель кількох редакторів (owners[]/editors[]) через guard-функції валідації. docs/collaborative-editing.md — це аудит поточної реалізації (знахідки COL-1…COL-10, наприклад read-modify-write без транзакції чи перезапис changeHistory) і цільова модель мінімум для версії 1.0. Разом вони пояснюють, чому Firestore-репозиторій із Кроку 9 побудований саме так, а не інакше.",
+    "nodeIds": ["file:firestore.rules", "document:docs/collaborative-editing.md"]
+  },
+  {
+    "order": 11,
+    "title": "DM / Campaign Management модуль",
+    "description": "src/dm — це ізольований пакет для GM Workspace, свідомо виділений як виняток release-hardening фази. dm/domain/types/index.ts описує спільні типи домену (кампанії, ініціатива, нотатки, енкаунтери) — файл із 38 залежними файлами, майже такий же важливий, як основна доменна модель персонажа. campaignRepository.ts — центральний репозиторій кампаній із локальним сховищем, CRUD-операціями та запрошенням редактора за email. DMNavigator.tsx і DM.tsx формують вхід у весь цей підрозділ застосунку — власний стек навігації й головний екран зі списком кампаній.",
+    "nodeIds": ["file:src/dm/domain/types/index.ts", "file:src/dm/repositories/campaignRepository.ts", "file:src/navigation/DMNavigator.tsx", "file:src/screens/DM/DM.tsx"]
+  },
+  {
+    "order": 12,
+    "title": "SRD-контент: бестіарій і книга заклинань",
+    "description": "data/srd/index.ts — бар'єльний модуль, що лінивими обгортками над require() завантажує всі JSON-набори SRD 5e (раси, класи, монстри, заклинання) і реекспортує метадані. domain/srd/localization.ts надає локалізовані (укр/англ) поля та текст пошуку для заклять і монстрів, лениво довантажуючи переклади. Це статичний ігровий контент, на якому побудовані екрани Бестіарію та Спелбука — окремий шар даних поза Firebase.",
+    "nodeIds": ["file:src/data/srd/index.ts", "file:src/domain/srd/localization.ts"],
+    "languageLesson": "Лінива обгортка над `require()` (замість статичного `import` на топ-рівні) відкладає парсинг важких JSON-файлів (сотні кілобайт) до першого реального звернення — це саме той компроміс продуктивності холодного старту, який описаний у CLAUDE.md §8.5."
+  },
+  {
+    "order": 13,
+    "title": "Firebase Cloud Functions",
+    "description": "functions/src/index.ts — точка входу окремого бекенд-воркспейсу з власним package.json/tsconfig, що реекспортує deleteMyAccount, createCampaignInvite та redeemCampaignInvite як розгортувані Cloud Functions. functions/README.md документує єдину каскадну функцію видалення акаунта (важливу через інваріант із CLAUDE.md: видалення акаунта не повинно видаляти чужі дані, якщо є інші власники/редактори) та передумови розгортання. Це серверна половина спільного редагування й керування запрошеннями, доповнення до клієнтських репозиторіїв з Кроку 9.",
+    "nodeIds": ["file:functions/src/index.ts", "document:functions/README.md"]
+  },
+  {
+    "order": 14,
+    "title": "Android-збірка та конфігурація застосунку",
+    "description": "app.json визначає Expo-конфігурацію застосунку — назву, версію, runtimeVersion, плагіни Firebase/Google Sign-In, bundle identifier com.vind.MythgateDND. android/app/build.gradle — Gradle-конфігурація нативного модуля: entry file, Hermes, підписання збірки, прапорці ProGuard/shrinkResources. eas.json визначає профілі збірки EAS CLI. Особливість цього проєкту — android/ закомічений у репозиторій як bare-проєкт, тому EAS Build не виконує prebuild: кожну нативну зміну потрібно дублювати в обох місцях одночасно.",
+    "nodeIds": ["config:app.json", "config:android/app/build.gradle", "config:eas.json"],
+    "languageLesson": "У звичайному Expo-проєкті `app.json` — єдине джерело істини для нативної конфігурації, і `prebuild` щоразу генерує `android/`/`ios/` заново. Тут же `android/` закомічений (bare-workflow), тому `app.json` і нативні файли можуть розійтися, якщо змінювати лише один із них."
+  },
+  {
+    "order": 15,
+    "title": "План релізу та робочі інструкції",
+    "description": "docs/release-plan-google-play.md — актуальний план релізу в Google Play зі спринтами R1–R5 (допуск, спільне редагування й безпека, продуктивність, EAS Update/бренд, production access), що замінив старіші sprint-plan.md і ux-ui-roadmap.md. CLAUDE.md — робочі інструкції для Claude Code в репозиторії: фаза release hardening, критичні правила щодо android/, інваріанти спільного редагування та Definition of Done. Ці два документи завершують тур: вони пояснюють, чому проєкт зараз перебуває саме в такому стані і які обмеження діють на будь-яку подальшу роботу над ним.",
+    "nodeIds": ["document:docs/release-plan-google-play.md", "document:CLAUDE.md"]
+  }
+]

@@ -1,0 +1,366 @@
+{
+  "nodes": [
+    {
+      "id": "config:src/data/locales/uk/monsters.json",
+      "type": "config",
+      "name": "monsters.json",
+      "filePath": "src/data/locales/uk/monsters.json",
+      "summary": "Українська локалізація бестіарію SRD — плаский масив об'єктів монстрів (назва, тип, характеристики, атаки, опис) українською мовою, який споживає модуль локалізації для відображення бестіарію.",
+      "tags": ["localization", "srd-data", "monsters", "configuration"],
+      "complexity": "complex",
+      "languageNotes": "Величезний JSON-масив (13402 рядки, ~843 КБ за даними аудиту) — один зі статичних імпортів, що навантажують холодний старт додатку; кандидат на лінивий require() замість топ-левел імпорту."
+    },
+    {
+      "id": "config:src/data/locales/uk/spells.json",
+      "type": "config",
+      "name": "spells.json",
+      "filePath": "src/data/locales/uk/spells.json",
+      "summary": "Українська локалізація заклинань SRD — масив об'єктів заклинань (школа, час накладання, дистанція, компоненти, опис) українською мовою для Spellbook.",
+      "tags": ["localization", "srd-data", "spells", "configuration"],
+      "complexity": "complex",
+      "languageNotes": "Великий JSON-масив (4927 рядків, ~628 КБ) — частина проблеми холодного старту разом із monsters.json та англомовними SRD-файлами."
+    },
+    {
+      "id": "file:src/dm/boundary.test.ts",
+      "type": "file",
+      "name": "boundary.test.ts",
+      "filePath": "src/dm/boundary.test.ts",
+      "summary": "Архітектурний fitness-тест: сканує src/dm/domain та src/dm/repositories і перевіряє, що там немає заборонених імпортів Character-специфічних типів/сторів (@/types/Character, dmStore, characterStore, character-репозиторій), а також що екрани src/screens/Character не тягнуть застарілий dmStore.",
+      "tags": ["test", "architecture-boundary", "fitness-function", "dm-domain"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/boundary.test.ts:collectFiles",
+      "type": "function",
+      "name": "collectFiles",
+      "filePath": "src/dm/boundary.test.ts",
+      "lineRange": [5, 21],
+      "summary": "Рекурсивно обходить каталог і повертає список усіх файлів .ts/.tsx — допоміжна функція для тесту меж домену.",
+      "tags": ["utility", "test-helper", "filesystem"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/boundary.test.ts:extractImports",
+      "type": "function",
+      "name": "extractImports",
+      "filePath": "src/dm/boundary.test.ts",
+      "lineRange": [23, 32],
+      "summary": "Витягує шляхи імпортів (from-import та side-effect import) з тексту вихідного коду за допомогою регулярних виразів.",
+      "tags": ["utility", "test-helper", "regex"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/domain/index.ts",
+      "summary": "Барель-файл домену DM Workspace — ре-експортує типи та бізнес-логіку з підмодулів types, campaign, notes, encounter, initiative в єдину точку входу.",
+      "tags": ["barrel", "dm-domain", "entry-point", "re-export"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/types/campaign.ts",
+      "type": "file",
+      "name": "campaign.ts",
+      "filePath": "src/dm/domain/types/campaign.ts",
+      "summary": "Типи кампанії DM Workspace: DMCampaign (owners/editors, назва, оцінка рівня партії, закріплені монстри/заклинання) та CampaignLinkInput для прив'язки персонажа до кампанії за id або назвою.",
+      "tags": ["type-definition", "dm-domain", "campaign", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/types/campaignInvite.ts",
+      "type": "file",
+      "name": "campaignInvite.ts",
+      "filePath": "src/dm/domain/types/campaignInvite.ts",
+      "summary": "Тип DMCampaignInvite — запрошення в кампанію з роллю 'editor', лічильником використань (maxUses/usedByUids) і терміном дії; основа функціоналу campaign invite/redeem.",
+      "tags": ["type-definition", "dm-domain", "invite", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/types/initiative.ts",
+      "type": "file",
+      "name": "initiative.ts",
+      "filePath": "src/dm/domain/types/initiative.ts",
+      "summary": "Типи трекера ініціативи бою: InitiativeCombatant (гравець/монстр, hp, умови, порядок ходу) та InitiativeTracker з раундом, активним комбатантом і статусом синхронізації.",
+      "tags": ["type-definition", "dm-domain", "initiative-tracker", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/repositories/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/repositories/index.ts",
+      "summary": "Барель-файл репозиторіїв DM Workspace — ре-експортує campaignRepository, campaignNotesRepository, monsterRepository, appRoleRepository, trackerTemplatesRepository.",
+      "tags": ["barrel", "repository", "dm-domain", "firestore"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/domain/spellbook/boundary.test.ts",
+      "type": "file",
+      "name": "boundary.test.ts",
+      "filePath": "src/domain/spellbook/boundary.test.ts",
+      "summary": "Архітектурний fitness-тест для src/domain/spellbook: забороняє імпорти з UI/store шарів (@/screens, @/components, @/context, @/stores) і залежності react-native, з єдиним дозволеним винятком — spellLocalRepository.ts може імпортувати @react-native-async-storage/async-storage.",
+      "tags": ["test", "architecture-boundary", "fitness-function", "spellbook-domain"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/domain/spellbook/boundary.test.ts:collectFiles",
+      "type": "function",
+      "name": "collectFiles",
+      "filePath": "src/domain/spellbook/boundary.test.ts",
+      "lineRange": [5, 21],
+      "summary": "Рекурсивно обходить каталог і повертає список файлів .ts/.tsx — допоміжна функція для тесту меж домену spellbook.",
+      "tags": ["utility", "test-helper", "filesystem"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/domain/spellbook/boundary.test.ts:extractImports",
+      "type": "function",
+      "name": "extractImports",
+      "filePath": "src/domain/spellbook/boundary.test.ts",
+      "lineRange": [23, 32],
+      "summary": "Витягує шляхи імпортів з тексту вихідного коду за допомогою регулярних виразів (from-import і side-effect import).",
+      "tags": ["utility", "test-helper", "regex"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/domain/types/dm.ts",
+      "type": "file",
+      "name": "dm.ts",
+      "filePath": "src/domain/types/dm.ts",
+      "summary": "Публічний барель типів домену DM Workspace — ре-експортує 24 типи (кампанії, енкаунтери, нотатки, трекер ініціативи, шаблони ресурсів) з src/dm/domain/types як стабільний контракт для UI-шару.",
+      "tags": ["type-definition", "barrel", "dm-domain", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/domain/types/spellbook.ts",
+      "type": "file",
+      "name": "spellbook.ts",
+      "filePath": "src/domain/types/spellbook.ts",
+      "summary": "Публічний барель типів Spellbook — ре-експортує CharacterSpellStatus, SpellbookSpell, SpellComponents, SpellDamageProfile та інші типи з domain/spellbook/spellbookEntity.",
+      "tags": ["type-definition", "barrel", "spellbook", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/domain/types/sync.ts",
+      "type": "file",
+      "name": "sync.ts",
+      "filePath": "src/domain/types/sync.ts",
+      "summary": "Типи стану синхронізації персонажа: SyncStatus, TransportState та CharacterSyncState (локальна/хмарна ревізія, конфліктні шляхи, час останньої синхронізації) для відображення статусу спільного редагування в UI.",
+      "tags": ["type-definition", "sync", "collaborative-editing", "data-model"],
+      "complexity": "simple",
+      "languageNotes": "Коментарі в коді прямо позначають lastSyncAt як серверний час (не клієнтський Date.now()) — свідомий захист від COL-5, бага порівняння годинників різних пристроїв."
+    },
+    {
+      "id": "file:src/screens/Support/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/screens/Support/index.ts",
+      "summary": "Барель-файл екрана підтримки — ре-експортує default-компонент Support.",
+      "tags": ["barrel", "entry-point", "screen"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/services/characterSheets.ts",
+      "type": "file",
+      "name": "characterSheets.ts",
+      "filePath": "src/services/characterSheets.ts",
+      "summary": "Фасад сервісу аркушів персонажів — ре-експортує весь публічний API characterCloudRepository (upsertCharacterSheetFromLocal, subscribeCharacterSheet, addEditorByEmail, transferOwnership тощо) і типи CharacterSheet/CharacterChangeHistoryEntry для решти застосунку.",
+      "tags": ["barrel", "service", "firestore", "collaborative-editing"],
+      "complexity": "simple",
+      "languageNotes": "Це саме та точка входу, через яку весь код у застосунку торкається спільного редагування аркуша персонажа (owners/editors, changeHistory) — інваріанти з CLAUDE.md §5 стосуються repositories/characterCloudRepository.ts, який тут реекспортується."
+    },
+    {
+      "id": "file:src/shared/components/Loader/style.ts",
+      "type": "file",
+      "name": "style.ts",
+      "filePath": "src/shared/components/Loader/style.ts",
+      "summary": "Порожній файл стилів компонента Loader (заглушка без вмісту).",
+      "tags": ["stub", "component-style", "loader"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/Backgrounds.ts",
+      "type": "file",
+      "name": "Backgrounds.ts",
+      "filePath": "src/shared/const/Backgrounds.ts",
+      "summary": "Статичні дані передісторій персонажа D&D 5e (BACKGROUNDS) та похідний список опцій вибору (BACKGROUND_OPTIONS) для форми створення персонажа.",
+      "tags": ["constants", "srd-data", "character-creation", "data-model"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/const/ClassStartingGear.ts",
+      "type": "file",
+      "name": "ClassStartingGear.ts",
+      "filePath": "src/shared/const/ClassStartingGear.ts",
+      "summary": "Таблиця стартового спорядження за класами персонажа (CLASS_GEAR) — використовується при створенні персонажа для підбору початкового інвентаря.",
+      "tags": ["constants", "srd-data", "character-creation", "data-model"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/const/DiceOptions.ts",
+      "type": "file",
+      "name": "DiceOptions.ts",
+      "filePath": "src/shared/const/DiceOptions.ts",
+      "summary": "Список доступних варіантів кубиків (DICE_OPTIONS: 1d4…1d20) для селекторів кидків.",
+      "tags": ["constants", "dice", "ui-data"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/Races.ts",
+      "type": "file",
+      "name": "Races.ts",
+      "filePath": "src/shared/const/Races.ts",
+      "summary": "Статичні дані рас персонажа D&D 5e (RACES), похідний список опцій вибору раси (RACE_OPTIONS) та функція SUBRACE_OPTIONS для отримання підрас за ключем раси.",
+      "tags": ["constants", "srd-data", "character-creation", "data-model"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/const/Races.ts:SUBRACE_OPTIONS",
+      "type": "function",
+      "name": "SUBRACE_OPTIONS",
+      "filePath": "src/shared/const/Races.ts",
+      "lineRange": [154, 158],
+      "summary": "Повертає масив ключів підрас для заданої раси (raceKey) на основі об'єкта RACES — використовується для динамічного заповнення селектора підраси.",
+      "tags": ["utility", "srd-data", "character-creation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/SubclassDetails.ts",
+      "type": "file",
+      "name": "SubclassDetails.ts",
+      "filePath": "src/shared/const/SubclassDetails.ts",
+      "summary": "Статичні дані деталей підкласів персонажа (SUBCLASS_DETAILS) для екранів вибору класу/підкласу при створенні персонажа.",
+      "tags": ["constants", "srd-data", "character-creation", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/encounter.ts",
+      "type": "file",
+      "name": "encounter.ts",
+      "filePath": "src/shared/const/encounter.ts",
+      "summary": "Барель для UI-шару, що ре-експортує таблиці CHALLENGE_XP/DIFFICULTY_THRESHOLDS та функцію evaluateEncounterDifficulty з домену src/dm/domain/encounter разом із пов'язаними типами енкаунтера.",
+      "tags": ["barrel", "encounter", "dm-domain", "constants"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/spellbook.ts",
+      "type": "file",
+      "name": "spellbook.ts",
+      "filePath": "src/shared/helpers/spellbook.ts",
+      "summary": "Барель для UI-шару, що ре-експортує хелпери applySpellStatus, collectCharacterSpellNames, getCharacterSpellStatus, getPreparedSpellsLimit, normalizeSpellName з домену src/domain/spellbook.",
+      "tags": ["barrel", "spellbook", "utility", "re-export"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/styles/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/shared/styles/index.ts",
+      "summary": "Барель UI-токенів — ре-експортує кольори теми (darkColors/lightColors), дизайн-токени (sp, rd, fs, typography) та хук useDesignTokens з theme.ts і tokens.ts; обов'язкова точка входу для UI-стилізації згідно з правилами проєкту.",
+      "tags": ["barrel", "design-tokens", "theme", "ui-kit"],
+      "complexity": "simple",
+      "languageNotes": "Це саме ті токени (sp(), fs(), rd(), typography()), використання яких обов'язкове за правилом CLAUDE.md §3.6 замість сирих числових літералів у стилях."
+    },
+    {
+      "id": "file:src/test/mocks/expo-modules-core.ts",
+      "type": "file",
+      "name": "expo-modules-core.ts",
+      "filePath": "src/test/mocks/expo-modules-core.ts",
+      "summary": "Тестовий мок модуля expo-modules-core — надає детермінований uuid.v4(), що завжди повертає 'test-uuid', для стабільних юніт-тестів.",
+      "tags": ["test", "mock", "expo", "test-helper"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/test/mocks/react-native-firebase-analytics.ts",
+      "type": "file",
+      "name": "react-native-firebase-analytics.ts",
+      "filePath": "src/test/mocks/react-native-firebase-analytics.ts",
+      "summary": "Тестовий стаб @react-native-firebase/analytics для vitest (Node-середовище без нативних біндингів) — імітує лише logEvent і setAnalyticsCollectionEnabled, які реально викликає productTelemetry.ts.",
+      "tags": ["test", "mock", "analytics", "firebase"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/test/mocks/react-native-firebase-analytics.ts:analytics",
+      "type": "function",
+      "name": "analytics",
+      "filePath": "src/test/mocks/react-native-firebase-analytics.ts",
+      "lineRange": [4, 9],
+      "summary": "Фабрична функція-стаб, що повертає об'єкт з асинхронними no-op методами logEvent і setAnalyticsCollectionEnabled; експортується як default замість реального Firebase Analytics у тестах.",
+      "tags": ["mock", "test-helper", "analytics", "factory"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/dm/boundary.test.ts",
+      "target": "function:src/dm/boundary.test.ts:collectFiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/dm/boundary.test.ts",
+      "target": "function:src/dm/boundary.test.ts:extractImports",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/spellbook/boundary.test.ts",
+      "target": "function:src/domain/spellbook/boundary.test.ts:collectFiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/spellbook/boundary.test.ts",
+      "target": "function:src/domain/spellbook/boundary.test.ts:extractImports",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/const/Races.ts",
+      "target": "function:src/shared/const/Races.ts:SUBRACE_OPTIONS",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/const/Races.ts",
+      "target": "function:src/shared/const/Races.ts:SUBRACE_OPTIONS",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/test/mocks/react-native-firebase-analytics.ts",
+      "target": "function:src/test/mocks/react-native-firebase-analytics.ts:analytics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/test/mocks/react-native-firebase-analytics.ts",
+      "target": "function:src/test/mocks/react-native-firebase-analytics.ts:analytics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:src/data/locales/uk/monsters.json",
+      "target": "file:src/domain/srd/localization.ts",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:src/data/locales/uk/spells.json",
+      "target": "file:src/domain/srd/localization.ts",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

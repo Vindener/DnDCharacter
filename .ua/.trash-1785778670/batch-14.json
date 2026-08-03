@@ -1,0 +1,434 @@
+{
+  "nodes": [
+    {
+      "id": "file:App.tsx",
+      "type": "file",
+      "name": "App.tsx",
+      "filePath": "App.tsx",
+      "summary": "Кореневий компонент застосунку: ініціалізує i18n, синхронізує тему статус-бару, прив'язує Crashlytics до автентифікованого користувача та рендерить AppNavigator після готовності перекладів і приховання splash screen.",
+      "tags": ["entry-point", "root-component", "i18n", "crashlytics"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:index.js",
+      "type": "file",
+      "name": "index.js",
+      "filePath": "index.js",
+      "summary": "Точка входу Expo/React Native: реєструє кореневий компонент App та імпортує SRD-дані й трасування запуску для попереднього прогріву перед першим рендером.",
+      "tags": ["entry-point", "bootstrap", "expo"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/data/srd/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/data/srd/index.ts",
+      "summary": "Барел-модуль, що лінивими функціями-обгортками над require() завантажує всі JSON-набори SRD 5e (раси, класи, монстри, заклинання тощо) і реекспортує метадані SRD.",
+      "tags": ["barrel", "data-loader", "srd", "lazy-loading"],
+      "complexity": "moderate",
+      "languageNotes": "Кожен завантажувач — окрема функція-обгортка над require(), щоб великі JSON (наприклад, monsters.json, spells.json) підвантажувались лише за фактичного звернення, а не одразу при імпорті модуля."
+    },
+    {
+      "id": "file:src/data/srd/metadata.ts",
+      "type": "file",
+      "name": "metadata.ts",
+      "filePath": "src/data/srd/metadata.ts",
+      "summary": "Експортує константу SRD_METADATA з версією/ідентифікатором набору даних Systems Reference Document, яку використовують завантажувачі та валідація SRD.",
+      "tags": ["data-model", "constant", "srd"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/repositories/firstLaunchRepository.ts",
+      "type": "file",
+      "name": "firstLaunchRepository.ts",
+      "filePath": "src/repositories/firstLaunchRepository.ts",
+      "summary": "Репозиторій AsyncStorage для прапорця 'користувач вже бачив вступний екран', що керує показом онбордингу при першому запуску застосунку.",
+      "tags": ["repository", "async-storage", "first-launch"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/repositories/whatsNewRepository.ts",
+      "type": "file",
+      "name": "whatsNewRepository.ts",
+      "filePath": "src/repositories/whatsNewRepository.ts",
+      "summary": "Репозиторій AsyncStorage для версії, при якій користувач востаннє бачив модалку 'Що нового', що визначає потребу показу релізних нотаток.",
+      "tags": ["repository", "async-storage", "versioning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx",
+      "type": "file",
+      "name": "ErrorBoundary.test.tsx",
+      "filePath": "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx",
+      "summary": "Юніт-тести для ErrorBoundary: перевіряють коректний рендер дочірніх компонентів без помилок і показ фолбек-екрана з можливістю перезапуску при падінні дочірнього компонента (тестовий компонент Bomb).",
+      "tags": ["test", "error-boundary", "unit-test"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "type": "file",
+      "name": "ErrorBoundary.tsx",
+      "filePath": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "summary": "Кореневий React error boundary: перехоплює необроблені помилки рендеру, логує їх у Crashlytics і продуктову телеметрію, показує локалізований фолбек-екран із кнопкою перезапуску.",
+      "tags": ["error-boundary", "crashlytics", "telemetry", "resilience"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "type": "file",
+      "name": "FirstLaunchModals.tsx",
+      "filePath": "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "summary": "Багатокрокова послідовність модалок першого запуску (вітання → згода на аналітику), що зберігає прапорець завершення онбордингу та вибір користувача щодо збору аналітики.",
+      "tags": ["modal", "onboarding", "first-launch", "consent"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/FirstLaunchModals/style.ts",
+      "type": "file",
+      "name": "style.ts",
+      "filePath": "src/shared/components/FirstLaunchModals/style.ts",
+      "summary": "Стилі для модалок першого запуску, побудовані на спільних дизайн-токенах spacing/radius застосунку.",
+      "tags": ["styles", "design-tokens", "modal"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "type": "file",
+      "name": "WhatsNewModal.tsx",
+      "filePath": "src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "summary": "Модалка 'Що нового', що показує список змін поточної версії один раз, звіряючись зі збереженою у whatsNewRepository версією.",
+      "tags": ["modal", "release-notes", "versioning"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/WhatsNewModal/style.ts",
+      "type": "file",
+      "name": "style.ts",
+      "filePath": "src/shared/components/WhatsNewModal/style.ts",
+      "summary": "Стилі для модалки 'Що нового' на основі спільних дизайн-токенів застосунку.",
+      "tags": ["styles", "design-tokens", "modal"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/services/auth/auth.tsx",
+      "type": "file",
+      "name": "auth.tsx",
+      "filePath": "src/shared/services/auth/auth.tsx",
+      "summary": "Провайдер автентифікації Firebase: підписується на onAuthStateChanged і надає стан користувача та завантаження через React Context і хук useAuth.",
+      "tags": ["auth", "firebase", "context", "hook"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/services/telemetry/startupTrace.test.ts",
+      "type": "file",
+      "name": "startupTrace.test.ts",
+      "filePath": "src/shared/services/telemetry/startupTrace.test.ts",
+      "summary": "Тести для утиліти трасування холодного старту: перевіряють поведінку markStartup/printStartupTrace у dev- та prod-режимах через мокінг глобального __DEV__.",
+      "tags": ["test", "telemetry", "startup-performance"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/services/telemetry/startupTrace.ts",
+      "type": "file",
+      "name": "startupTrace.ts",
+      "filePath": "src/shared/services/telemetry/startupTrace.ts",
+      "summary": "Легка утиліта вимірювання холодного старту застосунку: фіксує позначки часу від старту бандла до готовності навігатора й виводить таблицю трасування лише в dev-режимі.",
+      "tags": ["telemetry", "performance", "cold-start", "dev-tooling"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/ui/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/shared/ui/index.ts",
+      "summary": "Барел UI-кіту застосунку: реекспортує базові примітиви (Text, Button, Card, Input, Chip, Section, Screen), skeleton-компоненти для станів завантаження та типи їхніх пропсів для єдиної точки імпорту.",
+      "tags": ["barrel", "ui-kit", "design-system", "component-library"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:App.tsx:CrashlyticsUserBinding",
+      "type": "function",
+      "name": "CrashlyticsUserBinding",
+      "filePath": "App.tsx",
+      "lineRange": [38, 52],
+      "summary": "Синхронізує ідентифікатор поточного користувача з Crashlytics при зміні стану автентифікації, щоб краш-звіти можна було прив'язати до конкретного акаунта.",
+      "tags": ["crashlytics", "auth", "side-effect"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:App.tsx:NavigatorRenderProbe",
+      "type": "function",
+      "name": "NavigatorRenderProbe",
+      "filePath": "App.tsx",
+      "lineRange": [57, 64],
+      "summary": "Допоміжний компонент-обгортка, що фіксує момент рендеру навігатора й друкує таблицю трасування холодного старту в dev-режимі.",
+      "tags": ["telemetry", "startup-performance", "wrapper"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:App.tsx:App",
+      "type": "function",
+      "name": "App",
+      "filePath": "App.tsx",
+      "lineRange": [66, 110],
+      "summary": "Головний компонент застосунку: ініціалізує i18n перед першим рендером, ховає splash screen після готовності перекладів і монтує AppNavigator у структурі провайдерів (тема, автентифікація, error boundary).",
+      "tags": ["entry-point", "root-component", "i18n"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/repositories/firstLaunchRepository.ts:getHasSeenFirstLaunchIntro",
+      "type": "function",
+      "name": "getHasSeenFirstLaunchIntro",
+      "filePath": "src/repositories/firstLaunchRepository.ts",
+      "lineRange": [5, 11],
+      "summary": "Читає з AsyncStorage прапорець, чи користувач вже переглянув вступні модалки першого запуску.",
+      "tags": ["async-storage", "first-launch"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/repositories/firstLaunchRepository.ts:setHasSeenFirstLaunchIntro",
+      "type": "function",
+      "name": "setHasSeenFirstLaunchIntro",
+      "filePath": "src/repositories/firstLaunchRepository.ts",
+      "lineRange": [13, 19],
+      "summary": "Записує в AsyncStorage прапорець завершення онбордингу першого запуску.",
+      "tags": ["async-storage", "first-launch"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/repositories/whatsNewRepository.ts:getLastSeenWhatsNewVersion",
+      "type": "function",
+      "name": "getLastSeenWhatsNewVersion",
+      "filePath": "src/repositories/whatsNewRepository.ts",
+      "lineRange": [5, 11],
+      "summary": "Читає з AsyncStorage версію застосунку, для якої користувач востаннє бачив модалку 'Що нового'.",
+      "tags": ["async-storage", "versioning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/repositories/whatsNewRepository.ts:setLastSeenWhatsNewVersion",
+      "type": "function",
+      "name": "setLastSeenWhatsNewVersion",
+      "filePath": "src/repositories/whatsNewRepository.ts",
+      "lineRange": [13, 19],
+      "summary": "Зберігає в AsyncStorage поточну версію застосунку як переглянуту в модалці 'Що нового'.",
+      "tags": ["async-storage", "versioning"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorFallback",
+      "type": "function",
+      "name": "ErrorFallback",
+      "filePath": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "lineRange": [22, 43],
+      "summary": "Локалізований UI фолбеку помилки: показує заголовок, опис і кнопку перезапуску, стилізовані відповідно до поточної теми застосунку.",
+      "tags": ["error-boundary", "fallback-ui", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorBoundary",
+      "type": "class",
+      "name": "ErrorBoundary",
+      "filePath": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "lineRange": [53, 81],
+      "summary": "React class-компонент error boundary: перехоплює помилки рендеру дочірнього дерева, логує їх у Crashlytics та продуктову телеметрію, дозволяє перезапуск через зміну ключа рендеру.",
+      "tags": ["error-boundary", "crashlytics", "class-component", "resilience"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx:FirstLaunchModals",
+      "type": "function",
+      "name": "FirstLaunchModals",
+      "filePath": "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "lineRange": [15, 86],
+      "summary": "Керує покроковим сценарієм модалок першого запуску (вітання, згода на аналітику), зберігаючи прогрес через firstLaunchRepository та фіксуючи згоду на аналітику.",
+      "tags": ["onboarding", "modal", "consent", "state-machine"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/WhatsNewModal/WhatsNewModal.tsx:WhatsNewModal",
+      "type": "function",
+      "name": "WhatsNewModal",
+      "filePath": "src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "lineRange": [11, 66],
+      "summary": "Перевіряє, чи змінилась версія застосунку відносно збереженої, і за потреби показує модалку зі списком новинок поточного релізу.",
+      "tags": ["modal", "release-notes", "versioning"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/services/auth/auth.tsx:AuthProvider",
+      "type": "function",
+      "name": "AuthProvider",
+      "filePath": "src/shared/services/auth/auth.tsx",
+      "lineRange": [11, 25],
+      "summary": "React Context-провайдер, що підписується на Firebase onAuthStateChanged і надає дочірнім компонентам поточного користувача та стан завантаження автентифікації.",
+      "tags": ["auth", "firebase", "context-provider"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/services/auth/auth.tsx:useAuth",
+      "type": "function",
+      "name": "useAuth",
+      "filePath": "src/shared/services/auth/auth.tsx",
+      "lineRange": [27, 29],
+      "summary": "Хук для доступу до контексту автентифікації (поточний користувач, стан завантаження) з будь-якого компонента дерева.",
+      "tags": ["hook", "auth", "context"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/services/telemetry/startupTrace.ts:isStartupTraceEnabled",
+      "type": "function",
+      "name": "isStartupTraceEnabled",
+      "filePath": "src/shared/services/telemetry/startupTrace.ts",
+      "lineRange": [21, 23],
+      "summary": "Визначає, чи увімкнене трасування холодного старту (активне лише в dev-режимі).",
+      "tags": ["telemetry", "dev-tooling"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/services/telemetry/startupTrace.ts:markStartup",
+      "type": "function",
+      "name": "markStartup",
+      "filePath": "src/shared/services/telemetry/startupTrace.ts",
+      "lineRange": [36, 44],
+      "summary": "Фіксує іменовану позначку часу відносно старту бандла, уникаючи дублікатів для того самого імені мітки.",
+      "tags": ["telemetry", "performance", "cold-start"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/services/telemetry/startupTrace.ts:getStartupMarks",
+      "type": "function",
+      "name": "getStartupMarks",
+      "filePath": "src/shared/services/telemetry/startupTrace.ts",
+      "lineRange": [46, 48],
+      "summary": "Повертає накопичений масив зафіксованих міток трасування холодного старту.",
+      "tags": ["telemetry", "performance"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/services/telemetry/startupTrace.ts:resetStartupTraceForTests",
+      "type": "function",
+      "name": "resetStartupTraceForTests",
+      "filePath": "src/shared/services/telemetry/startupTrace.ts",
+      "lineRange": [51, 55],
+      "summary": "Скидає внутрішній стан трасування холодного старту (мітки й набір побачених імен) — призначено для ізоляції тестів.",
+      "tags": ["telemetry", "test-utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/services/telemetry/startupTrace.ts:printStartupTrace",
+      "type": "function",
+      "name": "printStartupTrace",
+      "filePath": "src/shared/services/telemetry/startupTrace.ts",
+      "lineRange": [57, 77],
+      "summary": "Виводить у консоль (лише в dev-режимі) таблицю зафіксованих міток холодного старту з дельтами часу між ними.",
+      "tags": ["telemetry", "dev-tooling", "performance"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    { "source": "file:App.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/i18n/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/navigation/AppNavigator.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/shared/services/auth/auth.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:App.tsx", "target": "file:src/shared/services/telemetry/startupTrace.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:index.js", "target": "file:App.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:index.js", "target": "file:src/data/srd/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:index.js", "target": "file:src/domain/srd/localization.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:index.js", "target": "file:src/domain/srd/srdRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:index.js", "target": "file:src/shared/services/telemetry/startupTrace.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/abilities.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/backgrounds.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/classProgression.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/classes.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/conditions.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/equipment.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/languages.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/metadata.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/monsters.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/races.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/references.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/skills.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/data/srd/index.ts", "target": "file:src/data/srd/spells.json", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx", "target": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "file:src/i18n/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "file:src/shared/components/ErrorBoundary/style.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "file:src/repositories/firstLaunchRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "file:src/shared/components/FirstLaunchModals/style.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/components/FirstLaunchModals/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "target": "file:src/repositories/whatsNewRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "target": "file:src/shared/components/WhatsNewModal/style.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/components/WhatsNewModal/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/shared/services/telemetry/startupTrace.test.ts", "target": "file:src/shared/services/telemetry/startupTrace.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:App.tsx", "target": "function:App.tsx:CrashlyticsUserBinding", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:App.tsx", "target": "function:App.tsx:NavigatorRenderProbe", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:App.tsx", "target": "function:App.tsx:App", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/repositories/firstLaunchRepository.ts", "target": "function:src/repositories/firstLaunchRepository.ts:getHasSeenFirstLaunchIntro", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/repositories/firstLaunchRepository.ts", "target": "function:src/repositories/firstLaunchRepository.ts:setHasSeenFirstLaunchIntro", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/repositories/whatsNewRepository.ts", "target": "function:src/repositories/whatsNewRepository.ts:getLastSeenWhatsNewVersion", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/repositories/whatsNewRepository.ts", "target": "function:src/repositories/whatsNewRepository.ts:setLastSeenWhatsNewVersion", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "function:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorFallback", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "class:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorBoundary", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "function:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx:FirstLaunchModals", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "target": "function:src/shared/components/WhatsNewModal/WhatsNewModal.tsx:WhatsNewModal", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/auth/auth.tsx", "target": "function:src/shared/services/auth/auth.tsx:AuthProvider", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/auth/auth.tsx", "target": "function:src/shared/services/auth/auth.tsx:useAuth", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:isStartupTraceEnabled", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:markStartup", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:getStartupMarks", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:resetStartupTraceForTests", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:printStartupTrace", "type": "contains", "direction": "forward", "weight": 1.0 },
+
+    { "source": "file:App.tsx", "target": "function:App.tsx:App", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/repositories/firstLaunchRepository.ts", "target": "function:src/repositories/firstLaunchRepository.ts:getHasSeenFirstLaunchIntro", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/repositories/firstLaunchRepository.ts", "target": "function:src/repositories/firstLaunchRepository.ts:setHasSeenFirstLaunchIntro", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/repositories/whatsNewRepository.ts", "target": "function:src/repositories/whatsNewRepository.ts:getLastSeenWhatsNewVersion", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/repositories/whatsNewRepository.ts", "target": "function:src/repositories/whatsNewRepository.ts:setLastSeenWhatsNewVersion", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "class:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorBoundary", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "target": "function:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx:FirstLaunchModals", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "target": "function:src/shared/components/WhatsNewModal/WhatsNewModal.tsx:WhatsNewModal", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/auth/auth.tsx", "target": "function:src/shared/services/auth/auth.tsx:AuthProvider", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/auth/auth.tsx", "target": "function:src/shared/services/auth/auth.tsx:useAuth", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:isStartupTraceEnabled", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:markStartup", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:getStartupMarks", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:resetStartupTraceForTests", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "function:src/shared/services/telemetry/startupTrace.ts:printStartupTrace", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "function:App.tsx:CrashlyticsUserBinding", "target": "function:src/shared/services/auth/auth.tsx:useAuth", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:App.tsx:NavigatorRenderProbe", "target": "function:src/shared/services/telemetry/startupTrace.ts:markStartup", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:App.tsx:NavigatorRenderProbe", "target": "function:src/shared/services/telemetry/startupTrace.ts:printStartupTrace", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:App.tsx:App", "target": "function:src/shared/services/telemetry/startupTrace.ts:markStartup", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:App.tsx:App", "target": "function:src/i18n/index.ts:initI18n", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorFallback", "target": "function:src/shared/components/ErrorBoundary/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "class:src/shared/components/ErrorBoundary/ErrorBoundary.tsx:ErrorBoundary", "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx:FirstLaunchModals", "target": "function:src/repositories/firstLaunchRepository.ts:getHasSeenFirstLaunchIntro", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx:FirstLaunchModals", "target": "function:src/repositories/firstLaunchRepository.ts:setHasSeenFirstLaunchIntro", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/components/WhatsNewModal/WhatsNewModal.tsx:WhatsNewModal", "target": "function:src/repositories/whatsNewRepository.ts:getLastSeenWhatsNewVersion", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/components/WhatsNewModal/WhatsNewModal.tsx:WhatsNewModal", "target": "function:src/repositories/whatsNewRepository.ts:setLastSeenWhatsNewVersion", "type": "calls", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "target": "file:src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+    { "source": "file:src/shared/services/telemetry/startupTrace.ts", "target": "file:src/shared/services/telemetry/startupTrace.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 }
+  ]
+}

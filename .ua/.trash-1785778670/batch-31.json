@@ -1,0 +1,122 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/test/mocks/react-native-firebase-crashlytics.ts",
+      "type": "file",
+      "name": "react-native-firebase-crashlytics.ts",
+      "filePath": "src/test/mocks/react-native-firebase-crashlytics.ts",
+      "summary": "Тестовий мок нативного модуля @react-native-firebase/crashlytics для vitest — Node-середовище не підтримує нативні біндинги, тому мок відтворює лише методи recordError і setUserId, які реально викликаються в ErrorBoundary.tsx та App.tsx.",
+      "tags": ["test", "mock", "firebase", "crashlytics", "stub"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/test/mocks/react-native-firebase-crashlytics.ts:crashlytics",
+      "type": "function",
+      "name": "crashlytics",
+      "filePath": "src/test/mocks/react-native-firebase-crashlytics.ts",
+      "lineRange": [4, 9],
+      "summary": "Фабрична функція-мок, що повертає об'єкт із заглушками recordError та setUserId замість реального Crashlytics SDK.",
+      "tags": ["mock", "factory", "test"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/test/mocks/react-native.tsx",
+      "type": "file",
+      "name": "react-native.tsx",
+      "filePath": "src/test/mocks/react-native.tsx",
+      "summary": "Легкий мок модуля react-native для vitest: підмінює базові компоненти (View, Text, ScrollView, Pressable, Modal тощо), StyleSheet, Animated та Platform спрощеними реалізаціями на основі React.createElement, щоб юніт-тести працювали без нативного рантайму.",
+      "tags": ["test", "mock", "react-native", "stub", "ui"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:src/test/mocks/react-native.tsx:AnimatedValue",
+      "type": "class",
+      "name": "AnimatedValue",
+      "filePath": "src/test/mocks/react-native.tsx",
+      "lineRange": [17, 31],
+      "summary": "Мок класу Animated.Value з мінімальною поведінкою — зберігання числового значення, setValue та interpolate, що повертає this — достатньою для тестів, які торкаються Animated API.",
+      "tags": ["mock", "animation", "test"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/DM.ts",
+      "type": "file",
+      "name": "DM.ts",
+      "filePath": "src/types/DM.ts",
+      "summary": "Файл типів-барель, що реекспортує типи домену DM Workspace (кампанії, нотатки та їхній стан синхронізації, шаблони енкаунтерів, ресурсні шаблони) з @/dm/domain/types для зручного імпорту в модулях DM.",
+      "tags": ["type-definition", "barrel", "dm", "types"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/SourceMetadata.ts",
+      "type": "file",
+      "name": "SourceMetadata.ts",
+      "filePath": "src/types/SourceMetadata.ts",
+      "summary": "Однорядковий файл-реекспорт типів метаданих джерела контенту (ContentLicense, ContentSource, SourceMetadata) з @/domain/types/sourceMetadata.",
+      "tags": ["type-definition", "barrel", "metadata"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:vitest.config.ts",
+      "type": "file",
+      "name": "vitest.config.ts",
+      "filePath": "vitest.config.ts",
+      "summary": "Основна конфігурація vitest для юніт-тестів: підключає плагін tsconfig-paths і через alias підміняє react-native, react-navigation/native, expo-modules-core та Firebase-модулі (analytics, crashlytics) тестовими моками, обмежуючи область тестів файлами src/**/*.test.ts(x).",
+      "tags": ["configuration", "test-setup", "vitest", "mocking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:vitest.rules.config.ts",
+      "type": "file",
+      "name": "vitest.rules.config.ts",
+      "filePath": "vitest.rules.config.ts",
+      "summary": "Окрема конфігурація vitest для тестів правил Firestore (firestore-tests/**/*.test.ts) із node-середовищем і збільшеними таймаутами тесту та хука (20с) для взаємодії з емулятором Firestore.",
+      "tags": ["configuration", "test-setup", "vitest", "firestore-rules"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/test/mocks/react-native-firebase-crashlytics.ts",
+      "target": "function:src/test/mocks/react-native-firebase-crashlytics.ts:crashlytics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/test/mocks/react-native-firebase-crashlytics.ts",
+      "target": "function:src/test/mocks/react-native-firebase-crashlytics.ts:crashlytics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/test/mocks/react-native.tsx",
+      "target": "class:src/test/mocks/react-native.tsx:AnimatedValue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:vitest.config.ts",
+      "target": "file:src/test/mocks/react-native.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:vitest.config.ts",
+      "target": "file:src/test/mocks/react-native-firebase-crashlytics.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:vitest.config.ts",
+      "target": "file:vitest.rules.config.ts",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

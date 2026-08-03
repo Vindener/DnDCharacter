@@ -1,0 +1,1441 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 16,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 16,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 16,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "App.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 110,
+      "nonEmptyLines": 97,
+      "functions": [
+        {
+          "name": "AppStatusBar",
+          "startLine": 30,
+          "endLine": 34,
+          "params": []
+        },
+        {
+          "name": "CrashlyticsUserBinding",
+          "startLine": 38,
+          "endLine": 52,
+          "params": []
+        },
+        {
+          "name": "NavigatorRenderProbe",
+          "startLine": 57,
+          "endLine": 64,
+          "params": [
+            "{ children }"
+          ]
+        },
+        {
+          "name": "App",
+          "startLine": 66,
+          "endLine": 110,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "line": 66,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AppStatusBar",
+          "callee": "useThemeStore",
+          "lineNumber": 31
+        },
+        {
+          "caller": "CrashlyticsUserBinding",
+          "callee": "useAuth",
+          "lineNumber": 39
+        },
+        {
+          "caller": "CrashlyticsUserBinding",
+          "callee": "useThemeStore",
+          "lineNumber": 40
+        },
+        {
+          "caller": "CrashlyticsUserBinding",
+          "callee": "React.useEffect",
+          "lineNumber": 42
+        },
+        {
+          "caller": "CrashlyticsUserBinding",
+          "callee": "crashlytics()\r\n      .setUserId(uid)\r\n      .catch",
+          "lineNumber": 44
+        },
+        {
+          "caller": "CrashlyticsUserBinding",
+          "callee": "crashlytics()\r\n      .setUserId",
+          "lineNumber": 44
+        },
+        {
+          "caller": "CrashlyticsUserBinding",
+          "callee": "crashlytics",
+          "lineNumber": 44
+        },
+        {
+          "caller": "NavigatorRenderProbe",
+          "callee": "React.useEffect",
+          "lineNumber": 58
+        },
+        {
+          "caller": "NavigatorRenderProbe",
+          "callee": "markStartup",
+          "lineNumber": 59
+        },
+        {
+          "caller": "NavigatorRenderProbe",
+          "callee": "printStartupTrace",
+          "lineNumber": 60
+        },
+        {
+          "caller": "App",
+          "callee": "markStartup",
+          "lineNumber": 67
+        },
+        {
+          "caller": "App",
+          "callee": "React.useState",
+          "lineNumber": 68
+        },
+        {
+          "caller": "App",
+          "callee": "React.useEffect",
+          "lineNumber": 70
+        },
+        {
+          "caller": "App",
+          "callee": "initI18n()\r\n      .catch((error) => {\r\n        if (__DEV__) console.warn('[i18n] Failed to initialize:', error);\r\n      })\r\n      .finally",
+          "lineNumber": 71
+        },
+        {
+          "caller": "App",
+          "callee": "initI18n()\r\n      .catch",
+          "lineNumber": 71
+        },
+        {
+          "caller": "App",
+          "callee": "initI18n",
+          "lineNumber": 71
+        },
+        {
+          "caller": "App",
+          "callee": "console.warn",
+          "lineNumber": 73
+        },
+        {
+          "caller": "App",
+          "callee": "markStartup",
+          "lineNumber": 76
+        },
+        {
+          "caller": "App",
+          "callee": "setIsI18nReady",
+          "lineNumber": 77
+        },
+        {
+          "caller": "App",
+          "callee": "React.useEffect",
+          "lineNumber": 81
+        },
+        {
+          "caller": "App",
+          "callee": "SplashScreen.hideAsync().catch",
+          "lineNumber": 83
+        },
+        {
+          "caller": "App",
+          "callee": "SplashScreen.hideAsync",
+          "lineNumber": 83
+        }
+      ],
+      "metrics": {
+        "importCount": 8,
+        "exportCount": 1,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "index.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 33,
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/data/srd/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 45,
+      "nonEmptyLines": 43,
+      "functions": [
+        {
+          "name": "loadAbilitiesJson",
+          "startLine": 7,
+          "endLine": 9,
+          "params": []
+        },
+        {
+          "name": "loadBackgroundsJson",
+          "startLine": 10,
+          "endLine": 12,
+          "params": []
+        },
+        {
+          "name": "loadClassesJson",
+          "startLine": 13,
+          "endLine": 15,
+          "params": []
+        },
+        {
+          "name": "loadClassProgressionJson",
+          "startLine": 16,
+          "endLine": 18,
+          "params": []
+        },
+        {
+          "name": "loadConditionsJson",
+          "startLine": 19,
+          "endLine": 21,
+          "params": []
+        },
+        {
+          "name": "loadEquipmentJson",
+          "startLine": 22,
+          "endLine": 24,
+          "params": []
+        },
+        {
+          "name": "loadLanguagesJson",
+          "startLine": 25,
+          "endLine": 27,
+          "params": []
+        },
+        {
+          "name": "loadMonstersJson",
+          "startLine": 28,
+          "endLine": 30,
+          "params": []
+        },
+        {
+          "name": "loadRacesJson",
+          "startLine": 31,
+          "endLine": 33,
+          "params": []
+        },
+        {
+          "name": "loadReferencesJson",
+          "startLine": 34,
+          "endLine": 36,
+          "params": []
+        },
+        {
+          "name": "loadSkillsJson",
+          "startLine": 37,
+          "endLine": 39,
+          "params": []
+        },
+        {
+          "name": "loadSpellsJson",
+          "startLine": 40,
+          "endLine": 42,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "loadAbilitiesJson",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "loadBackgroundsJson",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "loadClassesJson",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "loadClassProgressionJson",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "loadConditionsJson",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "loadEquipmentJson",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "loadLanguagesJson",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "loadMonstersJson",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "loadRacesJson",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "loadReferencesJson",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "loadSkillsJson",
+          "line": 37,
+          "isDefault": false
+        },
+        {
+          "name": "loadSpellsJson",
+          "line": 40,
+          "isDefault": false
+        },
+        {
+          "name": "SRD_METADATA",
+          "line": 45,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "loadAbilitiesJson",
+          "callee": "require",
+          "lineNumber": 8
+        },
+        {
+          "caller": "loadBackgroundsJson",
+          "callee": "require",
+          "lineNumber": 11
+        },
+        {
+          "caller": "loadClassesJson",
+          "callee": "require",
+          "lineNumber": 14
+        },
+        {
+          "caller": "loadClassProgressionJson",
+          "callee": "require",
+          "lineNumber": 17
+        },
+        {
+          "caller": "loadConditionsJson",
+          "callee": "require",
+          "lineNumber": 20
+        },
+        {
+          "caller": "loadEquipmentJson",
+          "callee": "require",
+          "lineNumber": 23
+        },
+        {
+          "caller": "loadLanguagesJson",
+          "callee": "require",
+          "lineNumber": 26
+        },
+        {
+          "caller": "loadMonstersJson",
+          "callee": "require",
+          "lineNumber": 29
+        },
+        {
+          "caller": "loadRacesJson",
+          "callee": "require",
+          "lineNumber": 32
+        },
+        {
+          "caller": "loadReferencesJson",
+          "callee": "require",
+          "lineNumber": 35
+        },
+        {
+          "caller": "loadSkillsJson",
+          "callee": "require",
+          "lineNumber": 38
+        },
+        {
+          "caller": "loadSpellsJson",
+          "callee": "require",
+          "lineNumber": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 13,
+        "exportCount": 13,
+        "functionCount": 12,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/data/srd/metadata.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 8,
+      "nonEmptyLines": 7,
+      "exports": [
+        {
+          "name": "SRD_METADATA",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/repositories/firstLaunchRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 16,
+      "functions": [
+        {
+          "name": "getHasSeenFirstLaunchIntro",
+          "startLine": 5,
+          "endLine": 11,
+          "params": []
+        },
+        {
+          "name": "setHasSeenFirstLaunchIntro",
+          "startLine": 13,
+          "endLine": 19,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "getHasSeenFirstLaunchIntro",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "setHasSeenFirstLaunchIntro",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getHasSeenFirstLaunchIntro",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 7
+        },
+        {
+          "caller": "setHasSeenFirstLaunchIntro",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 15
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/repositories/whatsNewRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 16,
+      "functions": [
+        {
+          "name": "getLastSeenWhatsNewVersion",
+          "startLine": 5,
+          "endLine": 11,
+          "params": []
+        },
+        {
+          "name": "setLastSeenWhatsNewVersion",
+          "startLine": 13,
+          "endLine": 19,
+          "params": [
+            "version"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "getLastSeenWhatsNewVersion",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "setLastSeenWhatsNewVersion",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getLastSeenWhatsNewVersion",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 7
+        },
+        {
+          "caller": "setLastSeenWhatsNewVersion",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 15
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 118,
+      "nonEmptyLines": 95,
+      "functions": [
+        {
+          "name": "Bomb",
+          "startLine": 41,
+          "endLine": 46,
+          "params": []
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 83,
+      "nonEmptyLines": 69,
+      "functions": [
+        {
+          "name": "translate",
+          "startLine": 14,
+          "endLine": 16,
+          "params": [
+            "key",
+            "defaultValue"
+          ]
+        },
+        {
+          "name": "ErrorFallback",
+          "startLine": 22,
+          "endLine": 43,
+          "params": [
+            "{ onRestart }"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ErrorBoundary",
+          "startLine": 53,
+          "endLine": 81,
+          "methods": [
+            "getDerivedStateFromError",
+            "componentDidCatch",
+            "render"
+          ],
+          "properties": [
+            "state",
+            "handleRestart"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ErrorBoundary",
+          "line": 53,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "translate",
+          "callee": "i18n.t",
+          "lineNumber": 15
+        },
+        {
+          "caller": "ErrorFallback",
+          "callee": "useThemeStore",
+          "lineNumber": 23
+        },
+        {
+          "caller": "ErrorFallback",
+          "callee": "getStyles",
+          "lineNumber": 24
+        },
+        {
+          "caller": "ErrorFallback",
+          "callee": "translate",
+          "lineNumber": 29
+        },
+        {
+          "caller": "ErrorFallback",
+          "callee": "translate",
+          "lineNumber": 32
+        },
+        {
+          "caller": "ErrorFallback",
+          "callee": "translate",
+          "lineNumber": 35
+        },
+        {
+          "caller": "componentDidCatch",
+          "callee": "crashlytics().recordError",
+          "lineNumber": 62
+        },
+        {
+          "caller": "componentDidCatch",
+          "callee": "crashlytics",
+          "lineNumber": 62
+        },
+        {
+          "caller": "componentDidCatch",
+          "callee": "trackProductEvent",
+          "lineNumber": 67
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 1,
+        "functionCount": 2,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 88,
+      "nonEmptyLines": 75,
+      "functions": [
+        {
+          "name": "FirstLaunchModals",
+          "startLine": 15,
+          "endLine": 86,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "useTranslation",
+          "lineNumber": 16
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "React.useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "useThemeStore",
+          "lineNumber": 18
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "React.useEffect",
+          "lineNumber": 20
+        },
+        {
+          "caller": "checkFirstLaunch",
+          "callee": "getHasSeenFirstLaunchIntro",
+          "lineNumber": 24
+        },
+        {
+          "caller": "checkFirstLaunch",
+          "callee": "setStep",
+          "lineNumber": 25
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "checkFirstLaunch",
+          "lineNumber": 28
+        },
+        {
+          "caller": "finish",
+          "callee": "setStep",
+          "lineNumber": 36
+        },
+        {
+          "caller": "finish",
+          "callee": "setHasSeenFirstLaunchIntro",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleConsent",
+          "callee": "setAnalyticsConsent",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleConsent",
+          "callee": "setStep",
+          "lineNumber": 43
+        },
+        {
+          "caller": "handleConsent",
+          "callee": "finish",
+          "lineNumber": 45
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 51
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "setStep",
+          "lineNumber": 51
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 53
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 55
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "setStep",
+          "lineNumber": 55
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 62
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "handleConsent",
+          "lineNumber": 62
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 64
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 67
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "handleConsent",
+          "lineNumber": 67
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 68
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "handleConsent",
+          "lineNumber": 68
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 76
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 78
+        },
+        {
+          "caller": "FirstLaunchModals",
+          "callee": "t",
+          "lineNumber": 80
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/FirstLaunchModals/style.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 18,
+      "nonEmptyLines": 17,
+      "exports": [
+        {
+          "name": "styles",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 68,
+      "nonEmptyLines": 56,
+      "functions": [
+        {
+          "name": "WhatsNewModal",
+          "startLine": 11,
+          "endLine": 66,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "WhatsNewModal",
+          "callee": "useTranslation",
+          "lineNumber": 12
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "React.useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "React.useState",
+          "lineNumber": 14
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "React.useEffect",
+          "lineNumber": 16
+        },
+        {
+          "caller": "checkForUpdate",
+          "callee": "getLastSeenWhatsNewVersion",
+          "lineNumber": 23
+        },
+        {
+          "caller": "checkForUpdate",
+          "callee": "setLastSeenWhatsNewVersion",
+          "lineNumber": 27
+        },
+        {
+          "caller": "checkForUpdate",
+          "callee": "setVersion",
+          "lineNumber": 32
+        },
+        {
+          "caller": "checkForUpdate",
+          "callee": "setIsVisible",
+          "lineNumber": 33
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "checkForUpdate",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleAcknowledge",
+          "callee": "setIsVisible",
+          "lineNumber": 45
+        },
+        {
+          "caller": "handleAcknowledge",
+          "callee": "setLastSeenWhatsNewVersion",
+          "lineNumber": 46
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "t",
+          "lineNumber": 49
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "Array.isArray",
+          "lineNumber": 50
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "t",
+          "lineNumber": 53
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "t",
+          "lineNumber": 55
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "itemList.map",
+          "lineNumber": 57
+        },
+        {
+          "caller": "WhatsNewModal",
+          "callee": "t",
+          "lineNumber": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/WhatsNewModal/style.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 13,
+      "exports": [
+        {
+          "name": "styles",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/services/auth/auth.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 29,
+      "nonEmptyLines": 23,
+      "functions": [
+        {
+          "name": "AuthProvider",
+          "startLine": 11,
+          "endLine": 25,
+          "params": [
+            "{ children }"
+          ]
+        },
+        {
+          "name": "useAuth",
+          "startLine": 27,
+          "endLine": 29,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "AuthProvider",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "useAuth",
+          "line": 27,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AuthProvider",
+          "callee": "useState",
+          "lineNumber": 12
+        },
+        {
+          "caller": "AuthProvider",
+          "callee": "useState",
+          "lineNumber": 13
+        },
+        {
+          "caller": "AuthProvider",
+          "callee": "useEffect",
+          "lineNumber": 15
+        },
+        {
+          "caller": "AuthProvider",
+          "callee": "auth().onAuthStateChanged",
+          "lineNumber": 17
+        },
+        {
+          "caller": "AuthProvider",
+          "callee": "auth",
+          "lineNumber": 17
+        },
+        {
+          "caller": "AuthProvider",
+          "callee": "setUser",
+          "lineNumber": 18
+        },
+        {
+          "caller": "AuthProvider",
+          "callee": "setLoading",
+          "lineNumber": 19
+        },
+        {
+          "caller": "useAuth",
+          "callee": "useContext",
+          "lineNumber": 28
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/services/telemetry/startupTrace.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 141,
+      "nonEmptyLines": 114,
+      "functions": [
+        {
+          "name": "setDev",
+          "startLine": 12,
+          "endLine": 18,
+          "params": [
+            "value"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "setDev",
+          "callee": "vi.unstubAllGlobals",
+          "lineNumber": 14
+        },
+        {
+          "caller": "setDev",
+          "callee": "vi.stubGlobal",
+          "lineNumber": 17
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/services/telemetry/startupTrace.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 77,
+      "nonEmptyLines": 65,
+      "functions": [
+        {
+          "name": "isDev",
+          "startLine": 17,
+          "endLine": 19,
+          "params": []
+        },
+        {
+          "name": "isStartupTraceEnabled",
+          "startLine": 21,
+          "endLine": 23,
+          "params": []
+        },
+        {
+          "name": "getBundleStartMs",
+          "startLine": 25,
+          "endLine": 28,
+          "params": []
+        },
+        {
+          "name": "markStartup",
+          "startLine": 36,
+          "endLine": 44,
+          "params": [
+            "name"
+          ]
+        },
+        {
+          "name": "getStartupMarks",
+          "startLine": 46,
+          "endLine": 48,
+          "params": []
+        },
+        {
+          "name": "resetStartupTraceForTests",
+          "startLine": 51,
+          "endLine": 55,
+          "params": []
+        },
+        {
+          "name": "printStartupTrace",
+          "startLine": 57,
+          "endLine": 77,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "isStartupTraceEnabled",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "markStartup",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "getStartupMarks",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "resetStartupTraceForTests",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "printStartupTrace",
+          "line": 57,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "isDev",
+          "callee": "Boolean",
+          "lineNumber": 18
+        },
+        {
+          "caller": "isStartupTraceEnabled",
+          "callee": "isDev",
+          "lineNumber": 22
+        },
+        {
+          "caller": "markStartup",
+          "callee": "isStartupTraceEnabled",
+          "lineNumber": 37
+        },
+        {
+          "caller": "markStartup",
+          "callee": "seenNames.has",
+          "lineNumber": 37
+        },
+        {
+          "caller": "markStartup",
+          "callee": "seenNames.add",
+          "lineNumber": 38
+        },
+        {
+          "caller": "markStartup",
+          "callee": "Date.now",
+          "lineNumber": 40
+        },
+        {
+          "caller": "markStartup",
+          "callee": "getBundleStartMs",
+          "lineNumber": 41
+        },
+        {
+          "caller": "markStartup",
+          "callee": "marks.push",
+          "lineNumber": 43
+        },
+        {
+          "caller": "resetStartupTraceForTests",
+          "callee": "seenNames.clear",
+          "lineNumber": 53
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "isStartupTraceEnabled",
+          "lineNumber": 58
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "isDev",
+          "lineNumber": 60
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "console.table",
+          "lineNumber": 61
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "marks.map",
+          "lineNumber": 62
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "console.log",
+          "lineNumber": 73
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "marks.forEach",
+          "lineNumber": 74
+        },
+        {
+          "caller": "printStartupTrace",
+          "callee": "console.log",
+          "lineNumber": 75
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/ui/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 34,
+      "nonEmptyLines": 33,
+      "exports": [
+        {
+          "name": "Text",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "Button",
+          "line": 2,
+          "isDefault": false
+        },
+        {
+          "name": "Card",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "Input",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "Chip",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "Section",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "Screen",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonBestiary",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonBox",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonCard",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonCharacterCard",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonCharacterSheet",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonCircle",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonHome",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonList",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonMonsterCard",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonSpellbook",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonSpellCard",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SkeletonText",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "resolveButtonVariant",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "resolveCardVariant",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "resolveTextStyleVariant",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "TextProps",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "TextTone",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "ButtonProps",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "ButtonVariant",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "ButtonSize",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "CardProps",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "CardVariant",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "InputProps",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "InputSize",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "ChipProps",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "ChipTone",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "ChipSize",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "SectionProps",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "ScreenProps",
+          "line": 34,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 36,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

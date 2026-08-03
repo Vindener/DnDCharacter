@@ -1,0 +1,1260 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 17,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 17,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 17
+    }
+  },
+  "results": [
+    {
+      "path": "src/i18n/locales/en/bestiary.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 148,
+      "nonEmptyLines": 148,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "hint",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "search",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "filters",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "modes",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "labels",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "sources",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "licenses",
+          "level": 1,
+          "line": 40
+        },
+        {
+          "heading": "empty",
+          "level": 1,
+          "line": 44
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 48
+        },
+        {
+          "heading": "campaignContext",
+          "level": 1,
+          "line": 59
+        },
+        {
+          "heading": "pinned",
+          "level": 1,
+          "line": 52
+        },
+        {
+          "heading": "quick",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "errors",
+          "level": 1,
+          "line": 71
+        },
+        {
+          "heading": "defaults",
+          "level": 1,
+          "line": 74
+        },
+        {
+          "heading": "detail",
+          "level": 1,
+          "line": 82
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 16
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/character.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 616,
+      "nonEmptyLines": 616,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "modes",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "tabs",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "empty",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "header",
+          "level": 1,
+          "line": 30
+        },
+        {
+          "heading": "summary",
+          "level": 1,
+          "line": 37
+        },
+        {
+          "heading": "quickActions",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "sync",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "badges",
+          "level": 1,
+          "line": 83
+        },
+        {
+          "heading": "conflict",
+          "level": 1,
+          "line": 89
+        },
+        {
+          "heading": "history",
+          "level": 1,
+          "line": 99
+        },
+        {
+          "heading": "overview",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "combat",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "magic",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "inventory",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "notes",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "homebrew",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "boolean",
+          "level": 1,
+          "line": 199
+        },
+        {
+          "heading": "defaults",
+          "level": 1,
+          "line": 203
+        },
+        {
+          "heading": "edit",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "legacy",
+          "level": 1,
+          "line": 323
+        },
+        {
+          "heading": "skillRanks",
+          "level": 1,
+          "line": 506
+        },
+        {
+          "heading": "rollDetails",
+          "level": 1,
+          "line": 513
+        },
+        {
+          "heading": "conditions",
+          "level": 1,
+          "line": 122
+        },
+        {
+          "heading": "modals",
+          "level": 1,
+          "line": 544
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 26
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/common.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 86,
+      "nonEmptyLines": 86,
+      "sections": [
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "states",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "status",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "roles",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "fallbacks",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "validation",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "errorBoundary",
+          "level": 1,
+          "line": 65
+        },
+        {
+          "heading": "auth",
+          "level": 1,
+          "line": 70
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/createCharacter.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 204,
+      "nonEmptyLines": 204,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "progress",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "steps",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "alerts",
+          "level": 1,
+          "line": 30
+        },
+        {
+          "heading": "draft",
+          "level": 1,
+          "line": 45
+        },
+        {
+          "heading": "start",
+          "level": 1,
+          "line": 48
+        },
+        {
+          "heading": "identity",
+          "level": 1,
+          "line": 69
+        },
+        {
+          "heading": "raceClass",
+          "level": 1,
+          "line": 79
+        },
+        {
+          "heading": "stats",
+          "level": 1,
+          "line": 100
+        },
+        {
+          "heading": "combat",
+          "level": 1,
+          "line": 115
+        },
+        {
+          "heading": "equipment",
+          "level": 1,
+          "line": 130
+        },
+        {
+          "heading": "magic",
+          "level": 1,
+          "line": 141
+        },
+        {
+          "heading": "personality",
+          "level": 1,
+          "line": 151
+        },
+        {
+          "heading": "homebrew",
+          "level": 1,
+          "line": 158
+        },
+        {
+          "heading": "storage",
+          "level": 1,
+          "line": 166
+        },
+        {
+          "heading": "review",
+          "level": 1,
+          "line": 182
+        },
+        {
+          "heading": "templates",
+          "level": 1,
+          "line": 190
+        },
+        {
+          "heading": "defaults",
+          "level": 1,
+          "line": 199
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 19
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/dice.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 56,
+      "nonEmptyLines": 56,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "subtitle",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "labels",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "modes",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "toggles",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "empty",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "errors",
+          "level": 1,
+          "line": 53
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/dm.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 373,
+      "nonEmptyLines": 373,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "sections",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "dashboard",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "quickEdit",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "encounterPrep",
+          "level": 1,
+          "line": 104
+        },
+        {
+          "heading": "sharedUpdates",
+          "level": 1,
+          "line": 145
+        },
+        {
+          "heading": "partyOverview",
+          "level": 1,
+          "line": 192
+        },
+        {
+          "heading": "campaignsList",
+          "level": 1,
+          "line": 213
+        },
+        {
+          "heading": "campaignDetail",
+          "level": 1,
+          "line": 247
+        },
+        {
+          "heading": "campaignNotes",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "encounterCalculator",
+          "level": 1,
+          "line": 350
+        },
+        {
+          "heading": "lootGenerator",
+          "level": 1,
+          "line": 370
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 12
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/dnd.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 85,
+      "nonEmptyLines": 85,
+      "sections": [
+        {
+          "heading": "abilities",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "abilityShort",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "classes",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "races",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "subraces",
+          "level": 1,
+          "line": 45
+        },
+        {
+          "heading": "backgrounds",
+          "level": 1,
+          "line": 52
+        },
+        {
+          "heading": "schools",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "skills",
+          "level": 1,
+          "line": 65
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/firstLaunch.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 18,
+      "nonEmptyLines": 18,
+      "sections": [
+        {
+          "heading": "development",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "analytics",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "thanks",
+          "level": 1,
+          "line": 13
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/home.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 54,
+      "nonEmptyLines": 54,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "subtitle",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "sections",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "empty",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "hero",
+          "level": 1,
+          "line": 27
+        },
+        {
+          "heading": "characters",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "syncStrip",
+          "level": 1,
+          "line": 41
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/initiative.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 37,
+      "nonEmptyLines": 37,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "placeholders",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "heroPicker",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "emptyState",
+          "level": 1,
+          "line": 24
+        },
+        {
+          "heading": "localModeHint",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "campaign",
+          "level": 1,
+          "line": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/legal.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 24,
+      "nonEmptyLines": 24,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "intro",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "sections",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "sources",
+          "level": 1,
+          "line": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/navigation.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 28,
+      "nonEmptyLines": 28,
+      "sections": [
+        {
+          "heading": "heroes",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "initiative",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "dm",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "dmHome",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "references",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "support",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "supportProject",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "home",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "settings",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "legalLicenses",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "diceRoller",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "dice",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "characterSheet",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "createCharacter",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "spellbook",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "bestiary",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "monster",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "encounterCalculator",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "lootGenerator",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "dmSharedUpdates",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "dmPartyOverview",
+          "level": 1,
+          "line": 22
+        },
+        {
+          "heading": "dmCampaigns",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "dmCampaignDetail",
+          "level": 1,
+          "line": 24
+        },
+        {
+          "heading": "dmQuickEdit",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "dmCampaignNotes",
+          "level": 1,
+          "line": 26
+        },
+        {
+          "heading": "dmEncounterPrep",
+          "level": 1,
+          "line": 27
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 26
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/references.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 100,
+      "nonEmptyLines": 100,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "hint",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "soon",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "entries",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "srd",
+          "level": 1,
+          "line": 31
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/settings.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 81,
+      "nonEmptyLines": 81,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "appearance",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "account",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "language",
+          "level": 1,
+          "line": 39
+        },
+        {
+          "heading": "customCoins",
+          "level": 1,
+          "line": 45
+        },
+        {
+          "heading": "bestiary",
+          "level": 1,
+          "line": 56
+        },
+        {
+          "heading": "legal",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "privacyPolicy",
+          "level": 1,
+          "line": 66
+        },
+        {
+          "heading": "analytics",
+          "level": 1,
+          "line": 71
+        },
+        {
+          "heading": "defaultCampaign",
+          "level": 1,
+          "line": 76
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/spellbook.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 211,
+      "nonEmptyLines": 211,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "hint",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "offlineBanner",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "tabs",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "search",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "filters",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "boolean",
+          "level": 1,
+          "line": 26
+        },
+        {
+          "heading": "levels",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "status",
+          "level": 1,
+          "line": 35
+        },
+        {
+          "heading": "sources",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "licenses",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "labels",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "actions",
+          "level": 1,
+          "line": 69
+        },
+        {
+          "heading": "characterBinding",
+          "level": 1,
+          "line": 80
+        },
+        {
+          "heading": "characterActions",
+          "level": 1,
+          "line": 87
+        },
+        {
+          "heading": "detail",
+          "level": 1,
+          "line": 91
+        },
+        {
+          "heading": "dmNotes",
+          "level": 1,
+          "line": 95
+        },
+        {
+          "heading": "form",
+          "level": 1,
+          "line": 100
+        },
+        {
+          "heading": "defaults",
+          "level": 1,
+          "line": 131
+        },
+        {
+          "heading": "seedSpells",
+          "level": 1,
+          "line": 137
+        },
+        {
+          "heading": "notices",
+          "level": 1,
+          "line": 203
+        },
+        {
+          "heading": "errors",
+          "level": 1,
+          "line": 206
+        },
+        {
+          "heading": "pinnedHint",
+          "level": 1,
+          "line": 209
+        },
+        {
+          "heading": "empty",
+          "level": 1,
+          "line": 210
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 24
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/support.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 28,
+      "nonEmptyLines": 28,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "sections",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "donation",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "crypto",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "feedback",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "errors",
+          "level": 1,
+          "line": 24
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 6
+      }
+    },
+    {
+      "path": "src/i18n/locales/en/whatsNew.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 9,
+      "nonEmptyLines": 9,
+      "sections": [
+        {
+          "heading": "title",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "intro",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "items",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "gotIt",
+          "level": 1,
+          "line": 8
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    }
+  ]
+}

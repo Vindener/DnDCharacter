@@ -1,0 +1,13 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "android/app/src/main/res/values/colors.xml", "language": "xml", "sizeLines": 6, "fileCategory": "config"},
+    {"path": "android/app/src/main/res/values/strings.xml", "language": "xml", "sizeLines": 5, "fileCategory": "config"},
+    {"path": "android/app/src/main/res/values/styles.xml", "language": "xml", "sizeLines": 12, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    "android/app/src/main/res/values/colors.xml": [],
+    "android/app/src/main/res/values/strings.xml": [],
+    "android/app/src/main/res/values/styles.xml": []
+  }
+}

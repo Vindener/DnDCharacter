@@ -1,0 +1,308 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 6,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 6,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 6,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/test/mocks/react-native-firebase-crashlytics.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 10,
+      "functions": [
+        {
+          "name": "crashlytics",
+          "startLine": 4,
+          "endLine": 9,
+          "params": []
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/test/mocks/react-native.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 62,
+      "functions": [
+        {
+          "name": "createHost",
+          "startLine": 11,
+          "endLine": 15,
+          "params": [
+            "name"
+          ]
+        },
+        {
+          "name": "createAnimation",
+          "startLine": 33,
+          "endLine": 40,
+          "params": []
+        }
+      ],
+      "classes": [
+        {
+          "name": "AnimatedValue",
+          "startLine": 17,
+          "endLine": 31,
+          "methods": [
+            "constructor",
+            "setValue",
+            "interpolate"
+          ],
+          "properties": [
+            "value"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "View",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "Text",
+          "line": 43,
+          "isDefault": false
+        },
+        {
+          "name": "ScrollView",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "TextInput",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "Pressable",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "TouchableOpacity",
+          "line": 47,
+          "isDefault": false
+        },
+        {
+          "name": "Modal",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "Image",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "Alert",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "StyleSheet",
+          "line": 55,
+          "isDefault": false
+        },
+        {
+          "name": "Animated",
+          "line": 60,
+          "isDefault": false
+        },
+        {
+          "name": "Easing",
+          "line": 68,
+          "isDefault": false
+        },
+        {
+          "name": "Platform",
+          "line": 72,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "createHost",
+          "callee": "React.createElement",
+          "lineNumber": 13
+        },
+        {
+          "caller": "createAnimation",
+          "callee": "callback",
+          "lineNumber": 36
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 13,
+        "functionCount": 2,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "src/types/DM.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "nonEmptyLines": 17,
+      "exports": [
+        {
+          "name": "CampaignLinkInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaign",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNote",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteConflictRemote",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteQueueItem",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteSyncState",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMNoteSyncDisplayStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterDifficultyResult",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterMonsterInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPlayerInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPrepDraft",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPrepMonster",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPrepPlayer",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "ResourceTemplate",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "TrackerTemplateResource",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 15,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/types/SourceMetadata.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "exports": [
+        {
+          "name": "ContentLicense",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "ContentSource",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "SourceMetadata",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "vitest.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 20,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "vitest.rules.config.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 10,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

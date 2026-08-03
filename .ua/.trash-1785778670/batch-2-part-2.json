@@ -1,0 +1,404 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/screens/Monster/Monster.tsx",
+      "type": "file",
+      "name": "Monster.tsx",
+      "filePath": "src/screens/Monster/Monster.tsx",
+      "summary": "Екран перегляду й редагування монстра: показує та дозволяє редагувати статистику, дії, реакції й легендарні дії, з підтримкою фото, закріплення/обраного, дублювання, експорту та додавання до сутички.",
+      "tags": ["screen", "monster", "editor", "form"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/screens/Monster/Monster.tsx:CollapsibleTextBlock",
+      "type": "function",
+      "name": "CollapsibleTextBlock",
+      "filePath": "src/screens/Monster/Monster.tsx",
+      "lineRange": [95, 133],
+      "summary": "Компонент, що показує скорочений превʼю тексту з можливістю розгорнути повний вміст (наприклад, для довгих описів дій монстра).",
+      "tags": ["component", "collapsible", "ui"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/screens/Monster/Monster.tsx:Monster",
+      "type": "function",
+      "name": "Monster",
+      "filePath": "src/screens/Monster/Monster.tsx",
+      "lineRange": [135, 506],
+      "summary": "Головний компонент екрана монстра: керує локалізованими даними, режимом редагування, полями статистики, фото, закріпленням/обраним і діями (дублювання, експорт, додавання до сутички).",
+      "tags": ["screen", "monster", "state-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/Spellbook/Spellbook.tsx",
+      "type": "file",
+      "name": "Spellbook.tsx",
+      "filePath": "src/screens/Spellbook/Spellbook.tsx",
+      "summary": "Найбільший екран застосунку: книга заклять з фільтрами (рівень, клас, школа, ритуал, концентрація), підготовкою/вивченням заклять для обраного персонажа, підтримкою кампаній DM, нотатками й редактором власних заклять.",
+      "tags": ["screen", "spellbook", "filter", "dm"],
+      "complexity": "complex",
+      "languageNotes": "Компонент на 1076 рядків з понад 30 useState — кандидат на подальший рефакторинг/розбиття, але за CLAUDE.md великі екрани поза задачею не переписуються без прямого запиту."
+    },
+    {
+      "id": "function:src/screens/Spellbook/Spellbook.tsx:hasCasterSetup",
+      "type": "function",
+      "name": "hasCasterSetup",
+      "filePath": "src/screens/Spellbook/Spellbook.tsx",
+      "lineRange": [96, 106],
+      "summary": "Перевіряє, чи персонаж має налаштовану систему заклинача (рівень, здатність, слоти заклять тощо).",
+      "tags": ["utility", "character", "spellbook"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Spellbook/Spellbook.tsx:buildImportedSpell",
+      "type": "function",
+      "name": "buildImportedSpell",
+      "filePath": "src/screens/Spellbook/Spellbook.tsx",
+      "lineRange": [108, 131],
+      "summary": "Створює тимчасовий обʼєкт закляття для заклять персонажа, яких немає у книзі заклять, щоб їх можна було відобразити й позначити статус.",
+      "tags": ["factory", "spellbook", "character"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook",
+      "type": "function",
+      "name": "Spellbook",
+      "filePath": "src/screens/Spellbook/Spellbook.tsx",
+      "lineRange": [133, 1074],
+      "summary": "Головний компонент екрана книги заклять: обирає персонажа, підписується на кампанії DM, фільтрує заклять, керує підготовкою/вивченням заклять і модальними вікнами створення/редагування власних заклять.",
+      "tags": ["screen", "spellbook", "state-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/Spellbook/spellbookFilters.test.ts",
+      "type": "file",
+      "name": "spellbookFilters.test.ts",
+      "filePath": "src/screens/Spellbook/spellbookFilters.test.ts",
+      "summary": "Тести чистої функції фільтрації заклять книги: перевірка вкладок (all/prepared/known/favorites/custom) та комбінацій фільтрів.",
+      "tags": ["test", "spellbook", "filter"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/screens/Spellbook/spellbookFilters.test.ts:baseSpell",
+      "type": "function",
+      "name": "baseSpell",
+      "filePath": "src/screens/Spellbook/spellbookFilters.test.ts",
+      "lineRange": [6, 27],
+      "summary": "Тестова фабрика, що будує базовий обʼєкт закляття-фікстуру з можливістю перевизначити окремі поля.",
+      "tags": ["test-helper", "fixture", "spellbook"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Spellbook/spellbookFilters.test.ts:run",
+      "type": "function",
+      "name": "run",
+      "filePath": "src/screens/Spellbook/spellbookFilters.test.ts",
+      "lineRange": [47, 64],
+      "summary": "Допоміжна функція тесту, що викликає `filterSpellbookSpells` з переданими параметрами та повертає імена відфільтрованих заклять.",
+      "tags": ["test-helper", "spellbook", "filter"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/Spellbook/spellbookFilters.ts",
+      "type": "file",
+      "name": "spellbookFilters.ts",
+      "filePath": "src/screens/Spellbook/spellbookFilters.ts",
+      "summary": "Чиста функція фільтрації заклять книги за вкладкою, пошуком, рівнем, класом, школою, ритуалом і концентрацією, з урахуванням статусу закляття персонажа й локалізованого пошуку.",
+      "tags": ["utility", "spellbook", "filter"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/screens/Spellbook/spellbookFilters.ts:filterSpellbookSpells",
+      "type": "function",
+      "name": "filterSpellbookSpells",
+      "filePath": "src/screens/Spellbook/spellbookFilters.ts",
+      "lineRange": [38, 89],
+      "summary": "Фільтрує та сортує список заклять книги за вкладкою, текстовим пошуком (з урахуванням локалізації) і всіма активними фільтрами, закріплені заклять йдуть першими.",
+      "tags": ["filter", "spellbook", "search"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/Support/Support.tsx",
+      "type": "file",
+      "name": "Support.tsx",
+      "filePath": "src/screens/Support/Support.tsx",
+      "summary": "Екран підтримки застосунку з інформацією для користувачів (контакти, посилання тощо), оформлений відповідно до поточної теми.",
+      "tags": ["screen", "support", "static-content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Support/Support.tsx:Support",
+      "type": "function",
+      "name": "Support",
+      "filePath": "src/screens/Support/Support.tsx",
+      "lineRange": [13, 97],
+      "summary": "Рендерить екран підтримки з локалізованим текстом і посиланнями, застосовуючи кольори поточної теми.",
+      "tags": ["screen", "support", "component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/services/storeEffects/spellbookStoreEffects.ts",
+      "type": "file",
+      "name": "spellbookStoreEffects.ts",
+      "filePath": "src/services/storeEffects/spellbookStoreEffects.ts",
+      "summary": "Фабрика side-ефектів для Zustand-стору книги заклять: завантаження, додавання/видалення власних заклять, перемикання обраного/закріпленого й оновлення нотаток, з автоматичним перезавантаженням стану після кожної дії.",
+      "tags": ["store-effects", "spellbook", "zustand", "service"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/services/storeEffects/spellbookStoreEffects.ts:createSpellbookStoreEffects",
+      "type": "function",
+      "name": "createSpellbookStoreEffects",
+      "filePath": "src/services/storeEffects/spellbookStoreEffects.ts",
+      "lineRange": [20, 133],
+      "summary": "Створює обʼєкт дій стору книги заклять (loadSpellbook, upsertCustomSpell, removeCustomSpell, toggleFavorite, togglePinnedSpell, updateSpellNote), що делегують роботу репозиторію заклять і оновлюють стан Zustand через `set`/`get`.",
+      "tags": ["store-effects", "spellbook", "zustand"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/MonsterCard/MonsterCard.tsx",
+      "type": "file",
+      "name": "MonsterCard.tsx",
+      "filePath": "src/shared/components/MonsterCard/MonsterCard.tsx",
+      "summary": "Картка монстра для списків бестіарію: показує ключову інформацію (мета-рядок, головна атака, джерело) і кнопки закріплення, обраного, закріплення для кампанії, додавання до сутички, дублювання й видалення.",
+      "tags": ["component", "monster", "card", "bestiary"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/MonsterCard/MonsterCard.tsx:MonsterCard",
+      "type": "function",
+      "name": "MonsterCard",
+      "filePath": "src/shared/components/MonsterCard/MonsterCard.tsx",
+      "lineRange": [50, 215],
+      "summary": "Рендерить картку монстра з локалізованими даними та керує діями над карткою: закріплення, обране, додавання до сутички, дублювання й видалення з підтвердженням.",
+      "tags": ["component", "monster", "card"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/const/SpellbookSeed.ts",
+      "type": "file",
+      "name": "SpellbookSeed.ts",
+      "filePath": "src/shared/const/SpellbookSeed.ts",
+      "summary": "Статичний початковий набір заклять SRD (699 рядків даних) для книги заклять за замовчуванням, з допоміжними функціями визначення класів заклинача та додавання метаданих джерела.",
+      "tags": ["data", "spellbook", "seed", "srd"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/shared/const/SpellbookSeed.ts:withMetadata",
+      "type": "function",
+      "name": "withMetadata",
+      "filePath": "src/shared/const/SpellbookSeed.ts",
+      "lineRange": [126, 140],
+      "summary": "Доповнює обʼєкт закляття метаданими джерела та ліцензії й визначеними класами заклинача перед додаванням до початкового набору.",
+      "tags": ["factory", "spellbook", "metadata"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/sourcePresentation.test.ts",
+      "type": "file",
+      "name": "sourcePresentation.test.ts",
+      "filePath": "src/shared/helpers/sourcePresentation.test.ts",
+      "summary": "Тести допоміжних функцій визначення вбудованого джерела правил і потреби показувати метадані джерела.",
+      "tags": ["test", "source-metadata", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/sourcePresentation.ts",
+      "type": "file",
+      "name": "sourcePresentation.ts",
+      "filePath": "src/shared/helpers/sourcePresentation.ts",
+      "summary": "Дві крихітні утиліти, що визначають, чи джерело контенту (монстра/закляття) є вбудованим правилом SRD, і чи варто показувати метадані джерела в інтерфейсі.",
+      "tags": ["utility", "source-metadata", "monster", "spellbook"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/sourcePresentation.ts:isBuiltInRulesSource",
+      "type": "function",
+      "name": "isBuiltInRulesSource",
+      "filePath": "src/shared/helpers/sourcePresentation.ts",
+      "lineRange": [1, 3],
+      "summary": "Перевіряє, чи вказане джерело є одним із вбудованих джерел правил SRD застосунку.",
+      "tags": ["utility", "source-metadata"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/sourcePresentation.ts:shouldDisplaySourceMetadata",
+      "type": "function",
+      "name": "shouldDisplaySourceMetadata",
+      "filePath": "src/shared/helpers/sourcePresentation.ts",
+      "lineRange": [5, 7],
+      "summary": "Визначає, чи потрібно показувати мітку джерела в інтерфейсі — тільки для контенту, що не є вбудованим правилом.",
+      "tags": ["utility", "source-metadata"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/services/fileSerice.ts",
+      "type": "file",
+      "name": "fileSerice.ts",
+      "filePath": "src/shared/services/fileSerice.ts",
+      "summary": "Сервіс імпорту/експорту файлів персонажів, монстрів і книг монстрів (JSON) через DocumentPicker/FileSystem/Sharing, з мапінгом даних у доменні сутності.",
+      "tags": ["service", "file-import-export", "monster", "character"],
+      "complexity": "moderate",
+      "languageNotes": "Назва файлу містить друкарську помилку (`fileSerice` замість `fileService`) — історична, змінювати поза задачею не варто (мінімальний діф)."
+    },
+    {
+      "id": "class:src/shared/services/fileSerice.ts:FileService",
+      "type": "class",
+      "name": "FileService",
+      "filePath": "src/shared/services/fileSerice.ts",
+      "lineRange": [9, 184],
+      "summary": "Клас-сервіс зі статичними методами імпорту персонажа/монстра/книги монстрів з файлу та експорту персонажа/монстра у файл з подальшим шарингом.",
+      "tags": ["service", "file-import-export", "monster", "character"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/stores/monsterStore.ts",
+      "type": "file",
+      "name": "monsterStore.ts",
+      "filePath": "src/stores/monsterStore.ts",
+      "summary": "Zustand-стор монстрів бестіарію: зберігає список монстрів, закріплені й обрані ID, делегуючи завантаження/збереження репозиторію монстрів.",
+      "tags": ["zustand", "store", "monster", "state-management"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/stores/spellbookStore.ts",
+      "type": "file",
+      "name": "spellbookStore.ts",
+      "filePath": "src/stores/spellbookStore.ts",
+      "summary": "Zustand-стор книги заклять, що делегує всю бізнес-логіку фабриці side-ефектів `createSpellbookStoreEffects`.",
+      "tags": ["zustand", "store", "spellbook", "state-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Monster.ts",
+      "type": "file",
+      "name": "Monster.ts",
+      "filePath": "src/types/Monster.ts",
+      "summary": "Типи TypeScript для сутності монстра (статистика, дії, реакції, легендарні дії, метадані джерела), що використовуються у бестіарії, репозиторіях і сторах.",
+      "tags": ["type-definition", "monster", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Spellbook.ts",
+      "type": "file",
+      "name": "Spellbook.ts",
+      "filePath": "src/types/Spellbook.ts",
+      "summary": "Типи TypeScript для книги заклять: закляття, компоненти, профілі шкоди, джерело, статус закляття персонажа та вхідні дані для upsert-операцій.",
+      "tags": ["type-definition", "spellbook", "data-model"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/context/Monster-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/domain/srd/localization.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/navigation/ReferencesNavigator.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/screens/Monster/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/shared/components/TextInput/TextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/shared/helpers/sourcePresentation.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/shared/services/fileSerice.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/types/Monster.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/context/Spellbook-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/dm/repositories/campaignRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/domain/spellbook/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/domain/srd/localization.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/navigation/sharedTypes.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/screens/Spellbook/spellbookFilters.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/screens/Spellbook/styles.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/shared/helpers/sourcePresentation.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/shared/ui/skeleton/index.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "file:src/types/Spellbook.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/screens/Spellbook/spellbookFilters.test.ts", "target": "file:src/screens/Spellbook/spellbookFilters.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.test.ts", "target": "file:src/shared/helpers/createEmptyCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.test.ts", "target": "file:src/types/Spellbook.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "file:src/domain/spellbook/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "file:src/domain/srd/localization.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "file:src/types/Spellbook.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/screens/Support/Support.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/screens/Support/Support.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/services/storeEffects/spellbookStoreEffects.ts", "target": "file:src/domain/spellbook/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/services/storeEffects/spellbookStoreEffects.ts", "target": "file:src/stores/spellbookStore.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/context/Monster-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/domain/srd/localization.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/navigation/ReferencesNavigator.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/shared/components/MonsterCard/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/shared/helpers/sourcePresentation.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "file:src/types/Monster.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/const/SpellbookSeed.ts", "target": "file:src/types/Spellbook.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/helpers/sourcePresentation.test.ts", "target": "file:src/shared/helpers/sourcePresentation.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/services/fileSerice.ts", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/services/fileSerice.ts", "target": "file:src/domain/mappers/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/services/fileSerice.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/services/fileSerice.ts", "target": "file:src/types/Monster.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/stores/monsterStore.ts", "target": "file:src/dm/repositories/monsterRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/stores/monsterStore.ts", "target": "file:src/types/Monster.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/stores/spellbookStore.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/stores/spellbookStore.ts", "target": "file:src/services/storeEffects/spellbookStoreEffects.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/types/Monster.ts", "target": "file:src/domain/types/sourceMetadata.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "function:src/screens/Monster/Monster.tsx:CollapsibleTextBlock", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "function:src/screens/Monster/Monster.tsx:Monster", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "function:src/screens/Spellbook/Spellbook.tsx:hasCasterSetup", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "function:src/screens/Spellbook/Spellbook.tsx:buildImportedSpell", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.test.ts", "target": "function:src/screens/Spellbook/spellbookFilters.test.ts:baseSpell", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.test.ts", "target": "function:src/screens/Spellbook/spellbookFilters.test.ts:run", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "function:src/screens/Spellbook/spellbookFilters.ts:filterSpellbookSpells", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/screens/Support/Support.tsx", "target": "function:src/screens/Support/Support.tsx:Support", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/services/storeEffects/spellbookStoreEffects.ts", "target": "function:src/services/storeEffects/spellbookStoreEffects.ts:createSpellbookStoreEffects", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "function:src/shared/components/MonsterCard/MonsterCard.tsx:MonsterCard", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/const/SpellbookSeed.ts", "target": "function:src/shared/const/SpellbookSeed.ts:withMetadata", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/helpers/sourcePresentation.ts", "target": "function:src/shared/helpers/sourcePresentation.ts:isBuiltInRulesSource", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/helpers/sourcePresentation.ts", "target": "function:src/shared/helpers/sourcePresentation.ts:shouldDisplaySourceMetadata", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/services/fileSerice.ts", "target": "class:src/shared/services/fileSerice.ts:FileService", "type": "contains", "direction": "forward", "weight": 1.0},
+
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "function:src/screens/Monster/Monster.tsx:Monster", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/screens/Spellbook/Spellbook.tsx", "target": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "function:src/screens/Spellbook/spellbookFilters.ts:filterSpellbookSpells", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/screens/Support/Support.tsx", "target": "function:src/screens/Support/Support.tsx:Support", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/services/storeEffects/spellbookStoreEffects.ts", "target": "function:src/services/storeEffects/spellbookStoreEffects.ts:createSpellbookStoreEffects", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/MonsterCard/MonsterCard.tsx", "target": "function:src/shared/components/MonsterCard/MonsterCard.tsx:MonsterCard", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/helpers/sourcePresentation.ts", "target": "function:src/shared/helpers/sourcePresentation.ts:isBuiltInRulesSource", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/helpers/sourcePresentation.ts", "target": "function:src/shared/helpers/sourcePresentation.ts:shouldDisplaySourceMetadata", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "function:src/screens/Monster/Monster.tsx:Monster", "target": "function:src/domain/srd/localization.ts:getLocalizedMonster", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Monster/Monster.tsx:Monster", "target": "function:src/shared/helpers/sourcePresentation.ts:shouldDisplaySourceMetadata", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Monster/Monster.tsx:Monster", "target": "function:src/shared/helpers/sourcePresentation.ts:isBuiltInRulesSource", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Monster/Monster.tsx:Monster", "target": "class:src/shared/services/fileSerice.ts:FileService", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/MonsterCard/MonsterCard.tsx:MonsterCard", "target": "function:src/domain/srd/localization.ts:getLocalizedMonster", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/MonsterCard/MonsterCard.tsx:MonsterCard", "target": "function:src/shared/helpers/sourcePresentation.ts:shouldDisplaySourceMetadata", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "target": "function:src/screens/Spellbook/spellbookFilters.ts:filterSpellbookSpells", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "target": "function:src/domain/srd/localization.ts:getLocalizedSpellFields", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "target": "function:src/domain/srd/localization.ts:getLocalizedSpellClass", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "target": "function:src/domain/srd/localization.ts:getLocalizedSpellSchool", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "target": "function:src/domain/srd/localization.ts:getLocalizedSpellSearchText", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/Spellbook.tsx:Spellbook", "target": "function:src/shared/helpers/sourcePresentation.ts:shouldDisplaySourceMetadata", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/spellbookFilters.ts:filterSpellbookSpells", "target": "function:src/domain/srd/localization.ts:getLocalizedSpellSearchText", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/screens/Spellbook/spellbookFilters.ts:filterSpellbookSpells", "target": "function:src/domain/srd/localization.ts:getLocalizedSpellFields", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:src/screens/Monster/Monster.tsx", "target": "file:src/screens/Monster/Monster.test.tsx", "type": "tested_by", "direction": "forward", "weight": 0.5},
+    {"source": "file:src/screens/Spellbook/spellbookFilters.ts", "target": "file:src/screens/Spellbook/spellbookFilters.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
+    {"source": "file:src/shared/helpers/sourcePresentation.ts", "target": "file:src/shared/helpers/sourcePresentation.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5}
+  ]
+}

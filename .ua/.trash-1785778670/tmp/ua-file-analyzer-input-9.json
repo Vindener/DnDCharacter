@@ -1,0 +1,166 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "src/components/ShareCharacterSheetModal.tsx", "language": "typescript", "sizeLines": 198, "fileCategory": "code"},
+    {"path": "src/context/Character-store.ts", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
+    {"path": "src/context/Theme-store.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
+    {"path": "src/dm/domain/encounter/calculator.test.ts", "language": "typescript", "sizeLines": 48, "fileCategory": "code"},
+    {"path": "src/dm/domain/encounter/index.ts", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
+    {"path": "src/screens/Character/components/CharacterSourceBadge.test.tsx", "language": "typescript", "sizeLines": 59, "fileCategory": "code"},
+    {"path": "src/screens/Character/components/CharacterSourceBadge.tsx", "language": "typescript", "sizeLines": 39, "fileCategory": "code"},
+    {"path": "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "language": "typescript", "sizeLines": 268, "fileCategory": "code"},
+    {"path": "src/screens/DM/adapters/unifiedParty.ts", "language": "typescript", "sizeLines": 34, "fileCategory": "code"},
+    {"path": "src/screens/Initiative/LocalInitiativeBoard.tsx", "language": "typescript", "sizeLines": 299, "fileCategory": "code"},
+    {"path": "src/services/characterDeletion.test.ts", "language": "typescript", "sizeLines": 56, "fileCategory": "code"},
+    {"path": "src/services/characterDeletion.ts", "language": "typescript", "sizeLines": 19, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterCard/CharacterCard.tsx", "language": "typescript", "sizeLines": 77, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterMenu/CharacterMenu.tsx", "language": "typescript", "sizeLines": 608, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterOverview/CharacterOverview.tsx", "language": "typescript", "sizeLines": 30, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterStats/CharacterStats.tsx", "language": "typescript", "sizeLines": 66, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx", "language": "typescript", "sizeLines": 66, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx", "language": "typescript", "sizeLines": 36, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx", "language": "typescript", "sizeLines": 64, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx", "language": "typescript", "sizeLines": 165, "fileCategory": "code"},
+    {"path": "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx", "language": "typescript", "sizeLines": 176, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "src/components/ShareCharacterSheetModal.tsx": [
+      "src/context/Theme-store.ts",
+      "src/repositories/characterCloudRepository.ts",
+      "src/shared/services/telemetry/productTelemetry.ts",
+      "src/shared/styles/tokens.ts"
+    ],
+    "src/context/Character-store.ts": [],
+    "src/context/Theme-store.ts": [],
+    "src/dm/domain/encounter/calculator.test.ts": [
+      "src/dm/domain/encounter/index.ts"
+    ],
+    "src/dm/domain/encounter/index.ts": [],
+    "src/screens/Character/components/CharacterSourceBadge.test.tsx": [
+      "src/screens/Character/components/CharacterSourceBadge.tsx",
+      "src/types/Character.ts"
+    ],
+    "src/screens/Character/components/CharacterSourceBadge.tsx": [
+      "src/shared/helpers/sourcePresentation.ts",
+      "src/types/Character.ts"
+    ],
+    "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Monster-store.ts",
+      "src/context/Theme-store.ts",
+      "src/dm/domain/encounter/index.ts",
+      "src/domain/srd/localization.ts",
+      "src/screens/DM/EncounterCalculator/style.ts",
+      "src/shared/components/Modal/Modal.tsx",
+      "src/shared/components/TextInput/TextInput.tsx",
+      "src/shared/styles/tokens.ts"
+    ],
+    "src/screens/DM/adapters/unifiedParty.ts": [
+      "src/shared/helpers/mapCloudCharacter.ts",
+      "src/types/Character.ts"
+    ],
+    "src/screens/Initiative/LocalInitiativeBoard.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/screens/DM/style.ts",
+      "src/screens/DiceRoller/DiceRoller.tsx",
+      "src/screens/Initiative/style.ts",
+      "src/shared/components/Modal/Modal.tsx",
+      "src/shared/components/TextInput/TextInput.tsx",
+      "src/shared/services/diceRoller.ts",
+      "src/shared/styles/tokens.ts"
+    ],
+    "src/services/characterDeletion.test.ts": [
+      "src/services/characterDeletion.ts"
+    ],
+    "src/services/characterDeletion.ts": [],
+    "src/shared/components/CharacterCard/CharacterCard.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/navigation/TabNavigator.tsx",
+      "src/repositories/characterCloudRepository.ts",
+      "src/shared/components/CharacterCard/style.ts",
+      "src/types/Character.ts"
+    ],
+    "src/shared/components/CharacterMenu/CharacterMenu.tsx": [
+      "src/components/ShareCharacterSheetModal.tsx",
+      "src/context/Character-store.ts",
+      "src/context/Sync-store.ts",
+      "src/context/Theme-store.ts",
+      "src/navigation/TabNavigator.tsx",
+      "src/repositories/characterCloudRepository.ts",
+      "src/services/characterDeletion.ts",
+      "src/services/characterSyncCoordinator.ts",
+      "src/shared/components/CharacterMenu/style.ts",
+      "src/shared/components/Modal/Modal.tsx",
+      "src/shared/components/TextInput/TextInput.tsx",
+      "src/shared/const/experience.ts",
+      "src/shared/styles/tokens.ts",
+      "src/types/Character.ts"
+    ],
+    "src/shared/components/CharacterOverview/CharacterOverview.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterOverview/style.ts"
+    ],
+    "src/shared/components/CharacterStats/CharacterStats.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
+      "src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx",
+      "src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx",
+      "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
+      "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "src/shared/components/CharacterStats/style.ts",
+      "src/shared/const/CharacterTabs.ts",
+      "src/types/Character.ts"
+    ],
+    "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx": [
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "src/shared/components/TextInput/TextInput.tsx",
+      "src/shared/const/attributes.ts",
+      "src/shared/helpers/calculateModifier.ts"
+    ],
+    "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
+      "src/shared/components/CharacterStats/Tabs/style.ts",
+      "src/shared/const/attributes.ts",
+      "src/types/Character.ts"
+    ],
+    "src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterStats/Tabs/style.ts",
+      "src/shared/components/TextInput/MultiTextInput.tsx",
+      "src/types/Character.ts"
+    ],
+    "src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/CustomCoins-store.ts",
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterStats/Tabs/style.ts",
+      "src/shared/styles/tokens.ts",
+      "src/types/Character.ts"
+    ],
+    "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/shared/components/CharacterStats/Tabs/style.ts",
+      "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "src/shared/components/TextInput/TextInput.tsx",
+      "src/shared/styles/tokens.ts",
+      "src/types/Character.ts",
+      "src/types/DeathSaves.ts",
+      "src/types/HitPoints.ts"
+    ]
+  }
+}

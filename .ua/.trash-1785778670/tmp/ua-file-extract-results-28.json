@@ -1,0 +1,429 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [
+    ".firebaserc",
+    ".npmrc",
+    ".ua/.understandignore",
+    "android/app/build.gradle",
+    "android/app/debug.keystore",
+    "android/app/proguard-rules.pro",
+    "android/app/src/androidTest/AndroidManifest.xml",
+    "android/app/src/debug/AndroidManifest.xml",
+    "android/app/src/main/AndroidManifest.xml",
+    "android/app/src/main/res/drawable/ic_launcher_background.xml",
+    "android/app/src/main/res/drawable/rn_edit_text_material.xml",
+    "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+    "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+    "android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+    "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+    "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+    "android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+    "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 7,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 2,
+      "failed": 0,
+      "skipped": 5
+    }
+  },
+  "results": [
+    {
+      "path": ".agents/skills/create-android-component/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 40,
+      "nonEmptyLines": 35,
+      "sections": [
+        {
+          "heading": "Skill: create-android-component",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "Goal",
+          "level": 2,
+          "line": 8
+        },
+        {
+          "heading": "Rules",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Expected output",
+          "level": 2,
+          "line": 27
+        },
+        {
+          "heading": "Repo-specific guidance",
+          "level": 2,
+          "line": 35
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": ".claude/settings.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 5,
+      "nonEmptyLines": 5,
+      "sections": [
+        {
+          "heading": "enabledPlugins",
+          "level": 1,
+          "line": 2
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": ".github/instructions/mobile-rn-standards.instructions.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 60,
+      "nonEmptyLines": 44,
+      "sections": [
+        {
+          "heading": "DnDCharacter Mobile Standards",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "Scope",
+          "level": 2,
+          "line": 10
+        },
+        {
+          "heading": "TypeScript Rules",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "Component and UI Rules",
+          "level": 2,
+          "line": 21
+        },
+        {
+          "heading": "Navigation and Screen Rules",
+          "level": 2,
+          "line": 28
+        },
+        {
+          "heading": "Styling Rules",
+          "level": 2,
+          "line": 33
+        },
+        {
+          "heading": "Zustand and State Rules",
+          "level": 2,
+          "line": 40
+        },
+        {
+          "heading": "Firebase/Firestore Service Rules",
+          "level": 2,
+          "line": 46
+        },
+        {
+          "heading": "Consistency Rules",
+          "level": 2,
+          "line": 54
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "sections": [
+        {
+          "heading": "outputLanguage",
+          "level": 1,
+          "line": 1
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "android/app/google-services.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 71,
+      "nonEmptyLines": 71,
+      "sections": [
+        {
+          "heading": "project_info",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "client",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "configuration_version",
+          "level": 1,
+          "line": 70
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "language": "kotlin",
+      "fileCategory": "code",
+      "totalLines": 61,
+      "nonEmptyLines": 53,
+      "functions": [
+        {
+          "name": "onCreate",
+          "startLine": 14,
+          "endLine": 20,
+          "params": [
+            "savedInstanceState"
+          ]
+        },
+        {
+          "name": "getMainComponentName",
+          "startLine": 26,
+          "endLine": 26,
+          "params": []
+        },
+        {
+          "name": "createReactActivityDelegate",
+          "startLine": 32,
+          "endLine": 41,
+          "params": []
+        },
+        {
+          "name": "invokeDefaultOnBackPressed",
+          "startLine": 48,
+          "endLine": 60,
+          "params": []
+        }
+      ],
+      "classes": [
+        {
+          "name": "MainActivity",
+          "startLine": 13,
+          "endLine": 61,
+          "methods": [
+            "onCreate",
+            "getMainComponentName",
+            "createReactActivityDelegate",
+            "invokeDefaultOnBackPressed"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "onCreate",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "getMainComponentName",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "createReactActivityDelegate",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "invokeDefaultOnBackPressed",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "MainActivity",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "onCreate",
+          "callee": "setTheme",
+          "lineNumber": 18
+        },
+        {
+          "caller": "onCreate",
+          "callee": "onCreate",
+          "lineNumber": 19
+        },
+        {
+          "caller": "createReactActivityDelegate",
+          "callee": "ReactActivityDelegateWrapper",
+          "lineNumber": 33
+        },
+        {
+          "caller": "invokeDefaultOnBackPressed",
+          "callee": "invokeDefaultOnBackPressed",
+          "lineNumber": 52
+        },
+        {
+          "caller": "invokeDefaultOnBackPressed",
+          "callee": "invokeDefaultOnBackPressed",
+          "lineNumber": 59
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 4,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "language": "kotlin",
+      "fileCategory": "code",
+      "totalLines": 57,
+      "nonEmptyLines": 46,
+      "functions": [
+        {
+          "name": "onCreate",
+          "startLine": 43,
+          "endLine": 51,
+          "params": []
+        },
+        {
+          "name": "onConfigurationChanged",
+          "startLine": 53,
+          "endLine": 56,
+          "params": [
+            "newConfig"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "MainApplication",
+          "startLine": 19,
+          "endLine": 57,
+          "methods": [
+            "onCreate",
+            "onConfigurationChanged"
+          ],
+          "properties": [
+            "reactNativeHost",
+            "reactHost"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "reactNativeHost",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "reactHost",
+          "line": 40,
+          "isDefault": false
+        },
+        {
+          "name": "onCreate",
+          "line": 43,
+          "isDefault": false
+        },
+        {
+          "name": "onConfigurationChanged",
+          "line": 53,
+          "isDefault": false
+        },
+        {
+          "name": "MainApplication",
+          "line": 19,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getPackages",
+          "callee": "PackageList",
+          "lineNumber": 25
+        },
+        {
+          "caller": "onCreate",
+          "callee": "onCreate",
+          "lineNumber": 44
+        },
+        {
+          "caller": "onCreate",
+          "callee": "init",
+          "lineNumber": 45
+        },
+        {
+          "caller": "onCreate",
+          "callee": "load",
+          "lineNumber": 48
+        },
+        {
+          "caller": "onCreate",
+          "callee": "onApplicationCreate",
+          "lineNumber": 50
+        },
+        {
+          "caller": "onConfigurationChanged",
+          "callee": "onConfigurationChanged",
+          "lineNumber": 54
+        },
+        {
+          "caller": "onConfigurationChanged",
+          "callee": "onConfigurationChanged",
+          "lineNumber": 55
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 2,
+        "classCount": 1
+      }
+    }
+  ]
+}

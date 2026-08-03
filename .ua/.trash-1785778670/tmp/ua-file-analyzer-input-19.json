@@ -1,0 +1,25 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": ".env", "language": "config", "sizeLines": 0, "fileCategory": "config"},
+    {"path": "CLAUDE.md", "language": "markdown", "sizeLines": 240, "fileCategory": "docs"},
+    {"path": "README.md", "language": "markdown", "sizeLines": 138, "fileCategory": "docs"},
+    {"path": "app.json", "language": "json", "sizeLines": 54, "fileCategory": "config"},
+    {"path": "eas.json", "language": "json", "sizeLines": 28, "fileCategory": "config"},
+    {"path": "firebase.json", "language": "json", "sizeLines": 24, "fileCategory": "config"},
+    {"path": "google-services.json", "language": "json", "sizeLines": 70, "fileCategory": "config"},
+    {"path": "package.json", "language": "json", "sizeLines": 127, "fileCategory": "config"},
+    {"path": "tsconfig.json", "language": "json", "sizeLines": 23, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    ".env": [],
+    "CLAUDE.md": [],
+    "README.md": [],
+    "app.json": [],
+    "eas.json": [],
+    "firebase.json": [],
+    "google-services.json": [],
+    "package.json": [],
+    "tsconfig.json": []
+  }
+}

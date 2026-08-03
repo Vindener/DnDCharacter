@@ -1,0 +1,4538 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 21,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 21,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 21,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/components/ShareCharacterSheetModal.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 198,
+      "nonEmptyLines": 182,
+      "functions": [
+        {
+          "name": "ShareCharacterSheetModal",
+          "startLine": 15,
+          "endLine": 198,
+          "params": [
+            "{ visible, onClose, sheetId }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ShareCharacterSheetModal",
+          "line": 15,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "useTranslation",
+          "lineNumber": 16
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "useThemeStore",
+          "lineNumber": 17
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "React.useMemo",
+          "lineNumber": 18
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "StyleSheet.create",
+          "lineNumber": 20
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 25
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "rd",
+          "lineNumber": 29
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 30
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "fs",
+          "lineNumber": 36
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 38
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 42
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 47
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "rd",
+          "lineNumber": 48
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 49
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 55
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "rd",
+          "lineNumber": 56
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 58
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 67
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 73
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 85
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "sp",
+          "lineNumber": 93
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "useState",
+          "lineNumber": 99
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "useState",
+          "lineNumber": 100
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "useState",
+          "lineNumber": 101
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "useEffect",
+          "lineNumber": 103
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "subscribeCharacterSheet",
+          "lineNumber": 106
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "setEditors",
+          "lineNumber": 111
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "characterCloudRepository.getEditorsForSheet",
+          "lineNumber": 116
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "setEditors",
+          "lineNumber": 117
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "setEditors",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "uids.map",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "unsub",
+          "lineNumber": 124
+        },
+        {
+          "caller": "getErrorMessage",
+          "callee": "String",
+          "lineNumber": 130
+        },
+        {
+          "caller": "onShare",
+          "callee": "setError",
+          "lineNumber": 134
+        },
+        {
+          "caller": "onShare",
+          "callee": "addEditorByEmail",
+          "lineNumber": 136
+        },
+        {
+          "caller": "onShare",
+          "callee": "setEmail",
+          "lineNumber": 137
+        },
+        {
+          "caller": "onShare",
+          "callee": "trackProductEvent",
+          "lineNumber": 138
+        },
+        {
+          "caller": "onShare",
+          "callee": "trackProductEvent",
+          "lineNumber": 139
+        },
+        {
+          "caller": "onShare",
+          "callee": "setError",
+          "lineNumber": 141
+        },
+        {
+          "caller": "onShare",
+          "callee": "getErrorMessage",
+          "lineNumber": 141
+        },
+        {
+          "caller": "onRemove",
+          "callee": "removeEditor",
+          "lineNumber": 147
+        },
+        {
+          "caller": "onRemove",
+          "callee": "trackProductEvent",
+          "lineNumber": 148
+        },
+        {
+          "caller": "onRemove",
+          "callee": "setError",
+          "lineNumber": 150
+        },
+        {
+          "caller": "onRemove",
+          "callee": "getErrorMessage",
+          "lineNumber": 150
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 158
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 160
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 173
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 176
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "onRemove",
+          "lineNumber": 183
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 184
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 188
+        },
+        {
+          "caller": "ShareCharacterSheetModal",
+          "callee": "t",
+          "lineNumber": 192
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/context/Character-store.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 6,
+      "exports": [
+        {
+          "name": "default",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "selectActiveCharacter",
+          "line": 2,
+          "isDefault": false
+        },
+        {
+          "name": "selectCharacterStoreActions",
+          "line": 2,
+          "isDefault": false
+        },
+        {
+          "name": "selectCharacterStoreBasics",
+          "line": 2,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/context/Theme-store.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "exports": [
+        {
+          "name": "default",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/domain/encounter/calculator.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 48,
+      "nonEmptyLines": 41,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/domain/encounter/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 6,
+      "exports": [
+        {
+          "name": "DIFFICULTY_THRESHOLDS",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CHALLENGE_XP",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "getMonsterMultiplier",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "evaluateEncounterDifficulty",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/screens/Character/components/CharacterSourceBadge.test.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 59,
+      "nonEmptyLines": 51,
+      "functions": [
+        {
+          "name": "renderBadge",
+          "startLine": 35,
+          "endLine": 41,
+          "params": [
+            "source"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "host",
+          "callee": "React.createElement",
+          "lineNumber": 12
+        },
+        {
+          "caller": "renderBadge",
+          "callee": "act",
+          "lineNumber": 37
+        },
+        {
+          "caller": "renderBadge",
+          "callee": "create",
+          "lineNumber": 38
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/screens/Character/components/CharacterSourceBadge.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 35,
+      "functions": [
+        {
+          "name": "getCharacterSourceBadgeLabel",
+          "startLine": 17,
+          "endLine": 27,
+          "params": [
+            "source",
+            "t"
+          ]
+        },
+        {
+          "name": "CharacterSourceBadge",
+          "startLine": 29,
+          "endLine": 39,
+          "params": [
+            "{ source, id, styles }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "getCharacterSourceBadgeLabel",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterSourceBadge",
+          "line": 29,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getCharacterSourceBadgeLabel",
+          "callee": "isBuiltInRulesSource",
+          "lineNumber": 22
+        },
+        {
+          "caller": "getCharacterSourceBadgeLabel",
+          "callee": "isBuiltInRulesSource",
+          "lineNumber": 22
+        },
+        {
+          "caller": "getCharacterSourceBadgeLabel",
+          "callee": "t",
+          "lineNumber": 23
+        },
+        {
+          "caller": "getCharacterSourceBadgeLabel",
+          "callee": "t",
+          "lineNumber": 24
+        },
+        {
+          "caller": "getCharacterSourceBadgeLabel",
+          "callee": "t",
+          "lineNumber": 25
+        },
+        {
+          "caller": "CharacterSourceBadge",
+          "callee": "useTranslation",
+          "lineNumber": 30
+        },
+        {
+          "caller": "CharacterSourceBadge",
+          "callee": "getCharacterSourceBadgeLabel",
+          "lineNumber": 31
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 268,
+      "nonEmptyLines": 226,
+      "functions": [
+        {
+          "name": "uid",
+          "startLine": 29,
+          "endLine": 29,
+          "params": []
+        },
+        {
+          "name": "EncounterCalculator",
+          "startLine": 39,
+          "endLine": 254,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "uid",
+          "callee": "Math.random().toString(36).slice",
+          "lineNumber": 29
+        },
+        {
+          "caller": "uid",
+          "callee": "Math.random().toString",
+          "lineNumber": 29
+        },
+        {
+          "caller": "uid",
+          "callee": "Math.random",
+          "lineNumber": 29
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useTranslation",
+          "lineNumber": 40
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useThemeStore",
+          "lineNumber": 41
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useMemo",
+          "lineNumber": 42
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "getStyles",
+          "lineNumber": 42
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useCharacterStore",
+          "lineNumber": 44
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useCharacterStore",
+          "lineNumber": 45
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useMonsterStore",
+          "lineNumber": 47
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useMemo",
+          "lineNumber": 48
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "monstersStore.map",
+          "lineNumber": 49
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "getLocalizedMonster",
+          "lineNumber": 49
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useMonsterStore",
+          "lineNumber": 52
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useFocusEffect",
+          "lineNumber": 54
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "React.useCallback",
+          "lineNumber": 55
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "loadMonsters",
+          "lineNumber": 56
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "loadCharacters",
+          "lineNumber": 57
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useState",
+          "lineNumber": 61
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "uid",
+          "lineNumber": 61
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useState",
+          "lineNumber": 62
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "uid",
+          "lineNumber": 62
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useState",
+          "lineNumber": 64
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useState",
+          "lineNumber": 65
+        },
+        {
+          "caller": "addPlayer",
+          "callee": "setPlayers",
+          "lineNumber": 67
+        },
+        {
+          "caller": "addPlayer",
+          "callee": "uid",
+          "lineNumber": 67
+        },
+        {
+          "caller": "removePlayer",
+          "callee": "setPlayers",
+          "lineNumber": 68
+        },
+        {
+          "caller": "removePlayer",
+          "callee": "p.filter",
+          "lineNumber": 68
+        },
+        {
+          "caller": "updatePlayer",
+          "callee": "setPlayers",
+          "lineNumber": 70
+        },
+        {
+          "caller": "updatePlayer",
+          "callee": "p.map",
+          "lineNumber": 70
+        },
+        {
+          "caller": "addMonster",
+          "callee": "setMonsters",
+          "lineNumber": 72
+        },
+        {
+          "caller": "addMonster",
+          "callee": "uid",
+          "lineNumber": 72
+        },
+        {
+          "caller": "removeMonster",
+          "callee": "setMonsters",
+          "lineNumber": 73
+        },
+        {
+          "caller": "removeMonster",
+          "callee": "m.filter",
+          "lineNumber": 73
+        },
+        {
+          "caller": "updateMonster",
+          "callee": "setMonsters",
+          "lineNumber": 75
+        },
+        {
+          "caller": "updateMonster",
+          "callee": "m.map",
+          "lineNumber": 75
+        },
+        {
+          "caller": "pickHero",
+          "callee": "characters.find",
+          "lineNumber": 78
+        },
+        {
+          "caller": "pickHero",
+          "callee": "setPlayers",
+          "lineNumber": 80
+        },
+        {
+          "caller": "pickHero",
+          "callee": "uid",
+          "lineNumber": 80
+        },
+        {
+          "caller": "pickHero",
+          "callee": "String",
+          "lineNumber": 80
+        },
+        {
+          "caller": "pickHero",
+          "callee": "setHeroesModal",
+          "lineNumber": 81
+        },
+        {
+          "caller": "pickMonster",
+          "callee": "localizedMonsters.find",
+          "lineNumber": 85
+        },
+        {
+          "caller": "pickMonster",
+          "callee": "setMonsters",
+          "lineNumber": 87
+        },
+        {
+          "caller": "pickMonster",
+          "callee": "uid",
+          "lineNumber": 87
+        },
+        {
+          "caller": "pickMonster",
+          "callee": "setBestiaryModal",
+          "lineNumber": 88
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "useMemo",
+          "lineNumber": 91
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Math.max",
+          "lineNumber": 94
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Math.min",
+          "lineNumber": 94
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Number",
+          "lineNumber": 94
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Math.max",
+          "lineNumber": 95
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Number",
+          "lineNumber": 95
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "playerInputs.push",
+          "lineNumber": 97
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "monsters.map",
+          "lineNumber": 101
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "String",
+          "lineNumber": 102
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Math.max",
+          "lineNumber": 103
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "Number",
+          "lineNumber": 103
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "evaluateEncounterDifficulty",
+          "lineNumber": 106
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 117
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 121
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "players.map",
+          "lineNumber": 123
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "updatePlayer",
+          "lineNumber": 128
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 129
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 130
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "updatePlayer",
+          "lineNumber": 135
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 136
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 137
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "removePlayer",
+          "lineNumber": 139
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 148
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "setHeroesModal",
+          "lineNumber": 153
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 155
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 159
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 159
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "monsters.map",
+          "lineNumber": 161
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "updateMonster",
+          "lineNumber": 165
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 166
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 167
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "updateMonster",
+          "lineNumber": 171
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 173
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "updateMonster",
+          "lineNumber": 178
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 179
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 180
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "removeMonster",
+          "lineNumber": 182
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 191
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "setBestiaryModal",
+          "lineNumber": 196
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 198
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 203
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 205
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 209
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "setHeroesModal",
+          "lineNumber": 209
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 212
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "characters.map",
+          "lineNumber": 214
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "pickHero",
+          "lineNumber": 217
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 218
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 221
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "fs",
+          "lineNumber": 221
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 221
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 222
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "fs",
+          "lineNumber": 222
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 223
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 231
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "setBestiaryModal",
+          "lineNumber": 231
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 234
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "localizedMonsters.map",
+          "lineNumber": 236
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "pickMonster",
+          "lineNumber": 239
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 240
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 243
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "fs",
+          "lineNumber": 243
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "t",
+          "lineNumber": 243
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "sp",
+          "lineNumber": 245
+        },
+        {
+          "caller": "EncounterCalculator",
+          "callee": "fs",
+          "lineNumber": 245
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/screens/DM/adapters/unifiedParty.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 34,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "buildUnifiedPartyList",
+          "startLine": 12,
+          "endLine": 34,
+          "params": [
+            "localCharacters",
+            "mySheets",
+            "sharedSheets"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "buildUnifiedPartyList",
+          "line": 12,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "localCharacters.forEach",
+          "lineNumber": 19
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "byId.set",
+          "lineNumber": 20
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "mySheets.forEach",
+          "lineNumber": 23
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "mapCloudCharacterToLocalDto",
+          "lineNumber": 24
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "byId.set",
+          "lineNumber": 25
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "sharedSheets.forEach",
+          "lineNumber": 28
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "mapCloudCharacterToLocalDto",
+          "lineNumber": 29
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "byId.set",
+          "lineNumber": 30
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "Array.from(byId.values()).sort",
+          "lineNumber": 33
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "Array.from",
+          "lineNumber": 33
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "byId.values",
+          "lineNumber": 33
+        },
+        {
+          "caller": "buildUnifiedPartyList",
+          "callee": "(a.payload.name || '').localeCompare",
+          "lineNumber": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 299,
+      "nonEmptyLines": 265,
+      "functions": [
+        {
+          "name": "LocalInitiativeBoard",
+          "startLine": 30,
+          "endLine": 297,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useTranslation",
+          "lineNumber": 31
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useThemeStore",
+          "lineNumber": 32
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "getInitiativeStyles",
+          "lineNumber": 33
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "getDmStyles",
+          "lineNumber": 34
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "Date.now().toString",
+          "lineNumber": 36
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "Date.now",
+          "lineNumber": 36
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useState",
+          "lineNumber": 37
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useState",
+          "lineNumber": 39
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCharacterStore",
+          "lineNumber": 41
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCharacterStore",
+          "lineNumber": 42
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useState",
+          "lineNumber": 44
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useState",
+          "lineNumber": 46
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useRef",
+          "lineNumber": 47
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useFocusEffect",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "React.useCallback",
+          "lineNumber": 50
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "loadCharacters",
+          "lineNumber": 51
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 55
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "characters.find",
+          "lineNumber": 57
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setItems",
+          "lineNumber": 59
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "Date.now",
+          "lineNumber": 59
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 59
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setHeroPickerVisible",
+          "lineNumber": 60
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 65
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setItems",
+          "lineNumber": 66
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "Date.now",
+          "lineNumber": 66
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 69
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setItems",
+          "lineNumber": 70
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "prev.filter",
+          "lineNumber": 70
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 73
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setItems",
+          "lineNumber": 74
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "prev.map",
+          "lineNumber": 74
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 77
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setItems",
+          "lineNumber": 78
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "prev.map",
+          "lineNumber": 78
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 84
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useMemo",
+          "lineNumber": 88
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 90
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "handleChangeById",
+          "lineNumber": 92
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "String",
+          "lineNumber": 92
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setRollingItemId",
+          "lineNumber": 94
+        },
+        {
+          "caller": "toNonNegativeInt",
+          "callee": "raw.replace",
+          "lineNumber": 98
+        },
+        {
+          "caller": "toNonNegativeInt",
+          "callee": "String",
+          "lineNumber": 100
+        },
+        {
+          "caller": "toNonNegativeInt",
+          "callee": "parseInt",
+          "lineNumber": 100
+        },
+        {
+          "caller": "toNonNegativeInt",
+          "callee": "isNaN",
+          "lineNumber": 101
+        },
+        {
+          "caller": "toNonNegativeInt",
+          "callee": "Number",
+          "lineNumber": 101
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 104
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "useCallback",
+          "lineNumber": 106
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "getIndex",
+          "lineNumber": 108
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "items.findIndex",
+          "lineNumber": 109
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "drag",
+          "lineNumber": 120
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 131
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "handleChangeById",
+          "lineNumber": 132
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setEditingId",
+          "lineNumber": 133
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setEditingId",
+          "lineNumber": 134
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 143
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "handleChangeById",
+          "lineNumber": 145
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setEditingId",
+          "lineNumber": 146
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setEditingId",
+          "lineNumber": 147
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setRollingItemId",
+          "lineNumber": 153
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 154
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 165
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "handleChangeById",
+          "lineNumber": 167
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "toNonNegativeInt",
+          "lineNumber": 167
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setEditingId",
+          "lineNumber": 168
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setEditingId",
+          "lineNumber": 169
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "toggleDefeated",
+          "lineNumber": 179
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 183
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 183
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "handleRemove",
+          "lineNumber": 193
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 197
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 234
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 235
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 239
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setHeroPickerVisible",
+          "lineNumber": 244
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 245
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 248
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setHitsEnabled",
+          "lineNumber": 253
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 258
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setItems",
+          "lineNumber": 268
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "sp",
+          "lineNumber": 270
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "sp",
+          "lineNumber": 270
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 274
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 278
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "setHeroPickerVisible",
+          "lineNumber": 278
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 280
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "characters.map",
+          "lineNumber": 281
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "addHeroToInitiative",
+          "lineNumber": 282
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 284
+        },
+        {
+          "caller": "LocalInitiativeBoard",
+          "callee": "t",
+          "lineNumber": 286
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/services/characterDeletion.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 56,
+      "nonEmptyLines": 47,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/services/characterDeletion.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 17,
+      "functions": [
+        {
+          "name": "deleteCharacterCopies",
+          "startLine": 8,
+          "endLine": 19,
+          "params": [
+            "{\n  characterId,\n  deleteCloud,\n  deleteCloudCopy,\n  deleteLocalCopy,\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "deleteCharacterCopies",
+          "line": 8,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "deleteCharacterCopies",
+          "callee": "deleteCloudCopy",
+          "lineNumber": 15
+        },
+        {
+          "caller": "deleteCharacterCopies",
+          "callee": "deleteLocalCopy",
+          "lineNumber": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterCard/CharacterCard.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 77,
+      "nonEmptyLines": 66,
+      "functions": [
+        {
+          "name": "CharacterCard",
+          "startLine": 20,
+          "endLine": 74,
+          "params": [
+            "{ character }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "CharacterCard",
+          "line": 20,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "CharacterCard",
+          "callee": "useTranslation",
+          "lineNumber": 21
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "useNavigation",
+          "lineNumber": 22
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "useCharacterStore",
+          "lineNumber": 23
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "useThemeStore",
+          "lineNumber": 24
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "React.useMemo",
+          "lineNumber": 25
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "getStyles",
+          "lineNumber": 25
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "useCharacterStore",
+          "lineNumber": 26
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "useEffect",
+          "lineNumber": 30
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "subscribeCharacterSheet",
+          "lineNumber": 31
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "setIsShared",
+          "lineNumber": 32
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "Array.isArray",
+          "lineNumber": 32
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "unsub",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handlePress",
+          "callee": "setCurrentCharacterId",
+          "lineNumber": 40
+        },
+        {
+          "caller": "handlePress",
+          "callee": "navigation.navigate",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "deleteCharacterSheet",
+          "lineNumber": 46
+        },
+        {
+          "caller": "handleDelete",
+          "callee": "removeCharacter",
+          "lineNumber": 50
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "t",
+          "lineNumber": 62
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "t",
+          "lineNumber": 65
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "t",
+          "lineNumber": 65
+        },
+        {
+          "caller": "CharacterCard",
+          "callee": "t",
+          "lineNumber": 67
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 608,
+      "nonEmptyLines": 556,
+      "functions": [
+        {
+          "name": "errorCodeOrMessage",
+          "startLine": 26,
+          "endLine": 33,
+          "params": [
+            "error"
+          ]
+        },
+        {
+          "name": "CharacterMenu",
+          "startLine": 44,
+          "endLine": 606,
+          "params": [
+            "{\r\n  character,\r\n  onChange,\r\n  isCloudDoc = false,\r\n  isSharedSheet = false,\r\n  isOwnedByMe = true,\r\n  onSyncNow,\r\n}"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "errorCodeOrMessage",
+          "callee": "String",
+          "lineNumber": 27
+        },
+        {
+          "caller": "errorCodeOrMessage",
+          "callee": "String",
+          "lineNumber": 32
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useTranslation",
+          "lineNumber": 52
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useNavigation",
+          "lineNumber": 53
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useCharacterStore",
+          "lineNumber": 54
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useCharacterStore",
+          "lineNumber": 55
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useCharacterStore",
+          "lineNumber": 56
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useCharacterStore",
+          "lineNumber": 57
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 58
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 59
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 60
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 61
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 62
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 63
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useSyncStore",
+          "lineNumber": 64
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useThemeStore",
+          "lineNumber": 65
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "React.useMemo",
+          "lineNumber": 66
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "getStyles",
+          "lineNumber": 66
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 67
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 68
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 69
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 70
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 71
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 72
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 73
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 74
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 75
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 76
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 77
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 78
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 79
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Boolean",
+          "lineNumber": 80
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useEffect",
+          "lineNumber": 82
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setCharacterData",
+          "lineNumber": 83
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 84
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempExp",
+          "lineNumber": 85
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 85
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 86
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempSpeed",
+          "lineNumber": 87
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 87
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 88
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempAc",
+          "lineNumber": 89
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 89
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 90
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempInit",
+          "lineNumber": 91
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 91
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useEffect",
+          "lineNumber": 94
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 96
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempExp",
+          "lineNumber": 97
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 97
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setExpDelta",
+          "lineNumber": 98
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useEffect",
+          "lineNumber": 102
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 104
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempSpeed",
+          "lineNumber": 105
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 105
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useEffect",
+          "lineNumber": 109
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 111
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempAc",
+          "lineNumber": 112
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 112
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useEffect",
+          "lineNumber": 116
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number",
+          "lineNumber": 118
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempInit",
+          "lineNumber": 119
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "Number.isFinite",
+          "lineNumber": 119
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "useState",
+          "lineNumber": 123
+        },
+        {
+          "caller": "openMenu",
+          "callee": "setMenuVisible",
+          "lineNumber": 124
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "syncToCloud",
+          "lineNumber": 131
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "useSyncStore.getState",
+          "lineNumber": 133
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 144
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 145
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 150
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "updateCharacter",
+          "lineNumber": 157
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "removeCharacterSync",
+          "lineNumber": 158
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "ensureCharacterSync",
+          "lineNumber": 159
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "ensureCharacterSync",
+          "lineNumber": 163
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "setCurrentCharacterId",
+          "lineNumber": 164
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "setCharacterData",
+          "lineNumber": 165
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "onChange",
+          "lineNumber": 166
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 168
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 168
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "Alert.alert",
+          "lineNumber": 170
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 170
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 172
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "closeMenu",
+          "lineNumber": 174
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "navigation.navigate",
+          "lineNumber": 176
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "errorCodeOrMessage",
+          "lineNumber": 182
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "console.warn",
+          "lineNumber": 183
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "Alert.alert",
+          "lineNumber": 185
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 185
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 185
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "Alert.alert",
+          "lineNumber": 187
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 187
+        },
+        {
+          "caller": "onSaveToCloud",
+          "callee": "t",
+          "lineNumber": 187
+        },
+        {
+          "caller": "closeMenu",
+          "callee": "setMenuVisible",
+          "lineNumber": 191
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 194
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 194
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "String",
+          "lineNumber": 197
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "uuid.v4",
+          "lineNumber": 197
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 198
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "addCharacter",
+          "lineNumber": 201
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "ensureCharacterSync",
+          "lineNumber": 202
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "setCurrentCharacterId",
+          "lineNumber": 203
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "Alert.alert",
+          "lineNumber": 205
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 206
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "t",
+          "lineNumber": 210
+        },
+        {
+          "caller": "createDetachedCopy",
+          "callee": "navigation.navigate",
+          "lineNumber": 211
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "Alert.alert",
+          "lineNumber": 219
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "t",
+          "lineNumber": 219
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "t",
+          "lineNumber": 219
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "onSyncNow",
+          "lineNumber": 223
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "Alert.alert",
+          "lineNumber": 224
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "t",
+          "lineNumber": 224
+        },
+        {
+          "caller": "openSharedLiveCopy",
+          "callee": "t",
+          "lineNumber": 224
+        },
+        {
+          "caller": "openShareModal",
+          "callee": "Alert.alert",
+          "lineNumber": 229
+        },
+        {
+          "caller": "openShareModal",
+          "callee": "t",
+          "lineNumber": 229
+        },
+        {
+          "caller": "openShareModal",
+          "callee": "t",
+          "lineNumber": 229
+        },
+        {
+          "caller": "openShareModal",
+          "callee": "setShareOpen",
+          "lineNumber": 233
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "deleteCharacterCopies",
+          "lineNumber": 238
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "closeMenu",
+          "lineNumber": 244
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "navigation.navigate",
+          "lineNumber": 245
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "console.warn",
+          "lineNumber": 247
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "errorCodeOrMessage",
+          "lineNumber": 247
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "Alert.alert",
+          "lineNumber": 248
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "t",
+          "lineNumber": 248
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "t",
+          "lineNumber": 248
+        },
+        {
+          "caller": "deleteCopies",
+          "callee": "t",
+          "lineNumber": 248
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "closeMenu",
+          "lineNumber": 253
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "Alert.alert",
+          "lineNumber": 256
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 256
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 256
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 257
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 259
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "deleteCopies",
+          "lineNumber": 260
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 263
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "deleteCopies",
+          "lineNumber": 265
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "Alert.alert",
+          "lineNumber": 271
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 272
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 273
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 273
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 275
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "t",
+          "lineNumber": 277
+        },
+        {
+          "caller": "confirmDelete",
+          "callee": "deleteCopies",
+          "lineNumber": 279
+        },
+        {
+          "caller": "pickPhoto",
+          "callee": "ImagePicker.launchImageLibraryAsync",
+          "lineNumber": 287
+        },
+        {
+          "caller": "pickPhoto",
+          "callee": "setCharacterData",
+          "lineNumber": 295
+        },
+        {
+          "caller": "pickPhoto",
+          "callee": "updateCharacter",
+          "lineNumber": 296
+        },
+        {
+          "caller": "pickPhoto",
+          "callee": "onChange",
+          "lineNumber": 297
+        },
+        {
+          "caller": "removePhoto",
+          "callee": "setCharacterData",
+          "lineNumber": 306
+        },
+        {
+          "caller": "removePhoto",
+          "callee": "updateCharacter",
+          "lineNumber": 307
+        },
+        {
+          "caller": "removePhoto",
+          "callee": "onChange",
+          "lineNumber": 308
+        },
+        {
+          "caller": "renameCharacter",
+          "callee": "setNewName",
+          "lineNumber": 312
+        },
+        {
+          "caller": "renameCharacter",
+          "callee": "setIsNameModalVisible",
+          "lineNumber": 313
+        },
+        {
+          "caller": "handleNameChange",
+          "callee": "newName.trim",
+          "lineNumber": 317
+        },
+        {
+          "caller": "handleNameChange",
+          "callee": "setCharacterData",
+          "lineNumber": 319
+        },
+        {
+          "caller": "handleNameChange",
+          "callee": "updateCharacter",
+          "lineNumber": 320
+        },
+        {
+          "caller": "handleNameChange",
+          "callee": "onChange",
+          "lineNumber": 321
+        },
+        {
+          "caller": "handleNameChange",
+          "callee": "setIsNameModalVisible",
+          "lineNumber": 322
+        },
+        {
+          "caller": "adjustExp",
+          "callee": "setTempExp",
+          "lineNumber": 326
+        },
+        {
+          "caller": "adjustExp",
+          "callee": "Math.max",
+          "lineNumber": 326
+        },
+        {
+          "caller": "applyInputDelta",
+          "callee": "Number",
+          "lineNumber": 330
+        },
+        {
+          "caller": "applyInputDelta",
+          "callee": "Number.isFinite",
+          "lineNumber": 331
+        },
+        {
+          "caller": "applyInputDelta",
+          "callee": "adjustExp",
+          "lineNumber": 332
+        },
+        {
+          "caller": "applyInputDelta",
+          "callee": "setExpDelta",
+          "lineNumber": 333
+        },
+        {
+          "caller": "handleSaveExp",
+          "callee": "getLevelByExperience",
+          "lineNumber": 337
+        },
+        {
+          "caller": "handleSaveExp",
+          "callee": "setCharacterData",
+          "lineNumber": 339
+        },
+        {
+          "caller": "handleSaveExp",
+          "callee": "updateCharacter",
+          "lineNumber": 340
+        },
+        {
+          "caller": "handleSaveExp",
+          "callee": "onChange",
+          "lineNumber": 341
+        },
+        {
+          "caller": "handleSaveExp",
+          "callee": "setIsExpModalVisible",
+          "lineNumber": 342
+        },
+        {
+          "caller": "handleSaveExp",
+          "callee": "setExpDelta",
+          "lineNumber": 343
+        },
+        {
+          "caller": "handleSaveSpeed",
+          "callee": "Math.max",
+          "lineNumber": 347
+        },
+        {
+          "caller": "handleSaveSpeed",
+          "callee": "setCharacterData",
+          "lineNumber": 349
+        },
+        {
+          "caller": "handleSaveSpeed",
+          "callee": "updateCharacter",
+          "lineNumber": 350
+        },
+        {
+          "caller": "handleSaveSpeed",
+          "callee": "onChange",
+          "lineNumber": 351
+        },
+        {
+          "caller": "handleSaveSpeed",
+          "callee": "setIsSpeedModalVisible",
+          "lineNumber": 352
+        },
+        {
+          "caller": "handleSaveAc",
+          "callee": "Math.min",
+          "lineNumber": 356
+        },
+        {
+          "caller": "handleSaveAc",
+          "callee": "Math.max",
+          "lineNumber": 356
+        },
+        {
+          "caller": "handleSaveAc",
+          "callee": "setCharacterData",
+          "lineNumber": 358
+        },
+        {
+          "caller": "handleSaveAc",
+          "callee": "updateCharacter",
+          "lineNumber": 359
+        },
+        {
+          "caller": "handleSaveAc",
+          "callee": "onChange",
+          "lineNumber": 360
+        },
+        {
+          "caller": "handleSaveAc",
+          "callee": "setIsAcModalVisible",
+          "lineNumber": 361
+        },
+        {
+          "caller": "handleSaveInit",
+          "callee": "Math.max",
+          "lineNumber": 365
+        },
+        {
+          "caller": "handleSaveInit",
+          "callee": "setCharacterData",
+          "lineNumber": 367
+        },
+        {
+          "caller": "handleSaveInit",
+          "callee": "updateCharacter",
+          "lineNumber": 368
+        },
+        {
+          "caller": "handleSaveInit",
+          "callee": "onChange",
+          "lineNumber": 369
+        },
+        {
+          "caller": "handleSaveInit",
+          "callee": "setIsInitModalVisible",
+          "lineNumber": 370
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 382
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "pickPhoto",
+          "lineNumber": 383
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 386
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 392
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "removePhoto",
+          "lineNumber": 393
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 396
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 402
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "renameCharacter",
+          "lineNumber": 403
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 406
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 409
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 410
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 418
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsExpModalVisible",
+          "lineNumber": 419
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 422
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 428
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsSpeedModalVisible",
+          "lineNumber": 429
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 432
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 438
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsAcModalVisible",
+          "lineNumber": 439
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 442
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 448
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsInitModalVisible",
+          "lineNumber": 449
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 452
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 458
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 458
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 463
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "onSyncNow",
+          "lineNumber": 464
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 467
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 472
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "openSharedLiveCopy",
+          "lineNumber": 473
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 476
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 481
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "createDetachedCopy",
+          "lineNumber": 482
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 485
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 491
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "createDetachedCopy",
+          "lineNumber": 492
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 495
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "closeMenu",
+          "lineNumber": 502
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "openShareModal",
+          "lineNumber": 503
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 506
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsNameModalVisible",
+          "lineNumber": 511
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 513
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsSpeedModalVisible",
+          "lineNumber": 519
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 521
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "String",
+          "lineNumber": 524
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "parseInt",
+          "lineNumber": 526
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempSpeed",
+          "lineNumber": 527
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "isNaN",
+          "lineNumber": 527
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsAcModalVisible",
+          "lineNumber": 532
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 532
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "String",
+          "lineNumber": 534
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "parseInt",
+          "lineNumber": 536
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempAc",
+          "lineNumber": 537
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "isNaN",
+          "lineNumber": 537
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsInitModalVisible",
+          "lineNumber": 544
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 546
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "String",
+          "lineNumber": 549
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "parseInt",
+          "lineNumber": 551
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setTempInit",
+          "lineNumber": 552
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "isNaN",
+          "lineNumber": 552
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setIsExpModalVisible",
+          "lineNumber": 559
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 561
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 563
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "getLevelByExperience",
+          "lineNumber": 563
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 564
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "sp",
+          "lineNumber": 565
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "sp",
+          "lineNumber": 566
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "applyInputDelta",
+          "lineNumber": 567
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "applyInputDelta",
+          "lineNumber": 570
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "sp",
+          "lineNumber": 574
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "adjustExp",
+          "lineNumber": 575
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "adjustExp",
+          "lineNumber": 578
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "EXPERIENCE_TABLE.map",
+          "lineNumber": 583
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "getLevelByExperience",
+          "lineNumber": 587
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "t",
+          "lineNumber": 590
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "getLevelByExperience",
+          "lineNumber": 594
+        },
+        {
+          "caller": "CharacterMenu",
+          "callee": "setShareOpen",
+          "lineNumber": 603
+        }
+      ],
+      "metrics": {
+        "importCount": 14,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterOverview/CharacterOverview.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 30,
+      "nonEmptyLines": 27,
+      "functions": [
+        {
+          "name": "CharacterOverview",
+          "startLine": 8,
+          "endLine": 28,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "CharacterOverview",
+          "callee": "useTranslation",
+          "lineNumber": 9
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "useCharacterStore",
+          "lineNumber": 10
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "useCharacterStore",
+          "lineNumber": 11
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "s.characters.find",
+          "lineNumber": 11
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "useThemeStore",
+          "lineNumber": 12
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "React.useMemo",
+          "lineNumber": 13
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "getStyles",
+          "lineNumber": 13
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "t",
+          "lineNumber": 19
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "t",
+          "lineNumber": 20
+        },
+        {
+          "caller": "CharacterOverview",
+          "callee": "t",
+          "lineNumber": 24
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 66,
+      "nonEmptyLines": 59,
+      "functions": [
+        {
+          "name": "CharacterStats",
+          "startLine": 26,
+          "endLine": 64,
+          "params": [
+            "{ character }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "CharacterStats",
+          "callee": "useTranslation",
+          "lineNumber": 27
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "useState",
+          "lineNumber": 28
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "useThemeStore",
+          "lineNumber": 29
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "React.useMemo",
+          "lineNumber": 30
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "getStyles",
+          "lineNumber": 30
+        },
+        {
+          "caller": "handleTabChange",
+          "callee": "setSelectedTab",
+          "lineNumber": 33
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "handleTabChange",
+          "lineNumber": 39
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 40
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 41
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 42
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 43
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 44
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 45
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 46
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 47
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 48
+        },
+        {
+          "caller": "CharacterStats",
+          "callee": "t",
+          "lineNumber": 49
+        }
+      ],
+      "metrics": {
+        "importCount": 15,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 66,
+      "nonEmptyLines": 59,
+      "functions": [
+        {
+          "name": "AttributesItem",
+          "startLine": 17,
+          "endLine": 66,
+          "params": [
+            "{ label, value, statKey, onChange }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "AttributesItem",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AttributesItem",
+          "callee": "useState",
+          "lineNumber": 18
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "useState",
+          "lineNumber": 19
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "calculateModifier",
+          "lineNumber": 19
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "useState",
+          "lineNumber": 20
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "useThemeStore",
+          "lineNumber": 21
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "React.useMemo",
+          "lineNumber": 22
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "getStyles",
+          "lineNumber": 22
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "useEffect",
+          "lineNumber": 24
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "setInputValue",
+          "lineNumber": 25
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "setModifier",
+          "lineNumber": 26
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "calculateModifier",
+          "lineNumber": 26
+        },
+        {
+          "caller": "rollD20WithModifier",
+          "callee": "Math.floor",
+          "lineNumber": 30
+        },
+        {
+          "caller": "rollD20WithModifier",
+          "callee": "Math.random",
+          "lineNumber": 30
+        },
+        {
+          "caller": "rollD20WithModifier",
+          "callee": "Math.abs",
+          "lineNumber": 31
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "setInputValue",
+          "lineNumber": 36
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "parseInt",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "isNaN",
+          "lineNumber": 38
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "setModifier",
+          "lineNumber": 39
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "calculateModifier",
+          "lineNumber": 39
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "setModifier",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "calculateModifier",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "parseInt",
+          "lineNumber": 46
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "isNaN",
+          "lineNumber": 47
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "onChange",
+          "lineNumber": 48
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "setInputValue",
+          "lineNumber": 50
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "setModifier",
+          "lineNumber": 51
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "calculateModifier",
+          "lineNumber": 51
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "setIsVisible",
+          "lineNumber": 60
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "setIsVisible",
+          "lineNumber": 63
+        },
+        {
+          "caller": "AttributesItem",
+          "callee": "rollD20WithModifier",
+          "lineNumber": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 36,
+      "nonEmptyLines": 29,
+      "functions": [
+        {
+          "name": "Attributes",
+          "startLine": 15,
+          "endLine": 33,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Attributes",
+          "callee": "useCharacterStore",
+          "lineNumber": 16
+        },
+        {
+          "caller": "Attributes",
+          "callee": "useThemeStore",
+          "lineNumber": 17
+        },
+        {
+          "caller": "Attributes",
+          "callee": "React.useMemo",
+          "lineNumber": 18
+        },
+        {
+          "caller": "Attributes",
+          "callee": "getStyles",
+          "lineNumber": 18
+        },
+        {
+          "caller": "handleChange",
+          "callee": "updateCharacterAttribute",
+          "lineNumber": 21
+        },
+        {
+          "caller": "Attributes",
+          "callee": "attributes.map",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 64,
+      "nonEmptyLines": 55,
+      "functions": [
+        {
+          "name": "BackStory",
+          "startLine": 14,
+          "endLine": 62,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "BackStory",
+          "callee": "useTranslation",
+          "lineNumber": 15
+        },
+        {
+          "caller": "BackStory",
+          "callee": "useCharacterStore",
+          "lineNumber": 16
+        },
+        {
+          "caller": "BackStory",
+          "callee": "useCharacterStore",
+          "lineNumber": 17
+        },
+        {
+          "caller": "BackStory",
+          "callee": "useCharacterStore",
+          "lineNumber": 18
+        },
+        {
+          "caller": "BackStory",
+          "callee": "useCharacterStore",
+          "lineNumber": 19
+        },
+        {
+          "caller": "BackStory",
+          "callee": "s.characters.find",
+          "lineNumber": 19
+        },
+        {
+          "caller": "BackStory",
+          "callee": "useThemeStore",
+          "lineNumber": 20
+        },
+        {
+          "caller": "BackStory",
+          "callee": "React.useMemo",
+          "lineNumber": 21
+        },
+        {
+          "caller": "BackStory",
+          "callee": "getStyles",
+          "lineNumber": 21
+        },
+        {
+          "caller": "handleChangeCampaign",
+          "callee": "updateCharacterCampaign",
+          "lineNumber": 24
+        },
+        {
+          "caller": "handleChangeBackstory",
+          "callee": "updateCharacterBackstory",
+          "lineNumber": 28
+        },
+        {
+          "caller": "handleChangeAlliesAndOrganizations",
+          "callee": "updateCharacterAlliesAndOrganizations",
+          "lineNumber": 32
+        },
+        {
+          "caller": "BackStory",
+          "callee": "t",
+          "lineNumber": 37
+        },
+        {
+          "caller": "BackStory",
+          "callee": "t",
+          "lineNumber": 42
+        },
+        {
+          "caller": "BackStory",
+          "callee": "t",
+          "lineNumber": 45
+        },
+        {
+          "caller": "BackStory",
+          "callee": "t",
+          "lineNumber": 50
+        },
+        {
+          "caller": "BackStory",
+          "callee": "t",
+          "lineNumber": 53
+        },
+        {
+          "caller": "BackStory",
+          "callee": "t",
+          "lineNumber": 58
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 165,
+      "nonEmptyLines": 146,
+      "functions": [
+        {
+          "name": "clampToNonNegativeInt",
+          "startLine": 15,
+          "endLine": 18,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "Coins",
+          "startLine": 20,
+          "endLine": 161,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "clampToNonNegativeInt",
+          "callee": "Math.max",
+          "lineNumber": 16
+        },
+        {
+          "caller": "clampToNonNegativeInt",
+          "callee": "parseInt",
+          "lineNumber": 16
+        },
+        {
+          "caller": "clampToNonNegativeInt",
+          "callee": "String(value ?? '0').replace",
+          "lineNumber": 16
+        },
+        {
+          "caller": "clampToNonNegativeInt",
+          "callee": "String",
+          "lineNumber": 16
+        },
+        {
+          "caller": "Coins",
+          "callee": "useTranslation",
+          "lineNumber": 21
+        },
+        {
+          "caller": "Coins",
+          "callee": "useThemeStore",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Coins",
+          "callee": "useMemo",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Coins",
+          "callee": "getStyles",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Coins",
+          "callee": "useMemo",
+          "lineNumber": 24
+        },
+        {
+          "caller": "Coins",
+          "callee": "StyleSheet.create",
+          "lineNumber": 26
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 27
+        },
+        {
+          "caller": "Coins",
+          "callee": "fs",
+          "lineNumber": 28
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 30
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 31
+        },
+        {
+          "caller": "Coins",
+          "callee": "rd",
+          "lineNumber": 32
+        },
+        {
+          "caller": "Coins",
+          "callee": "fs",
+          "lineNumber": 40
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 44
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 45
+        },
+        {
+          "caller": "Coins",
+          "callee": "rd",
+          "lineNumber": 46
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 53
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 54
+        },
+        {
+          "caller": "Coins",
+          "callee": "sp",
+          "lineNumber": 54
+        },
+        {
+          "caller": "Coins",
+          "callee": "fs",
+          "lineNumber": 54
+        },
+        {
+          "caller": "Coins",
+          "callee": "useCharacterStore",
+          "lineNumber": 60
+        },
+        {
+          "caller": "Coins",
+          "callee": "useCustomCoinsStore",
+          "lineNumber": 61
+        },
+        {
+          "caller": "Coins",
+          "callee": "useEffect",
+          "lineNumber": 63
+        },
+        {
+          "caller": "Coins",
+          "callee": "load",
+          "lineNumber": 63
+        },
+        {
+          "caller": "Coins",
+          "callee": "useState",
+          "lineNumber": 66
+        },
+        {
+          "caller": "Coins",
+          "callee": "useState",
+          "lineNumber": 67
+        },
+        {
+          "caller": "Coins",
+          "callee": "useState",
+          "lineNumber": 68
+        },
+        {
+          "caller": "Coins",
+          "callee": "useState",
+          "lineNumber": 71
+        },
+        {
+          "caller": "Coins",
+          "callee": "useEffect",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Coins",
+          "callee": "setGold",
+          "lineNumber": 75
+        },
+        {
+          "caller": "Coins",
+          "callee": "setSilver",
+          "lineNumber": 76
+        },
+        {
+          "caller": "Coins",
+          "callee": "setCopper",
+          "lineNumber": 77
+        },
+        {
+          "caller": "Coins",
+          "callee": "setCustomMap",
+          "lineNumber": 83
+        },
+        {
+          "caller": "Coins",
+          "callee": "JSON.stringify",
+          "lineNumber": 84
+        },
+        {
+          "caller": "Coins",
+          "callee": "JSON.stringify",
+          "lineNumber": 84
+        },
+        {
+          "caller": "Coins",
+          "callee": "customCoinsList.map",
+          "lineNumber": 84
+        },
+        {
+          "caller": "commitBuiltIn",
+          "callee": "updateCharacterCoins",
+          "lineNumber": 87
+        },
+        {
+          "caller": "commitCustom",
+          "callee": "updateCharacterCustomCoins",
+          "lineNumber": 90
+        },
+        {
+          "caller": "updateGold",
+          "callee": "clampToNonNegativeInt",
+          "lineNumber": 94
+        },
+        {
+          "caller": "updateGold",
+          "callee": "setGold",
+          "lineNumber": 95
+        },
+        {
+          "caller": "updateGold",
+          "callee": "commitBuiltIn",
+          "lineNumber": 96
+        },
+        {
+          "caller": "updateSilver",
+          "callee": "clampToNonNegativeInt",
+          "lineNumber": 99
+        },
+        {
+          "caller": "updateSilver",
+          "callee": "setSilver",
+          "lineNumber": 100
+        },
+        {
+          "caller": "updateSilver",
+          "callee": "commitBuiltIn",
+          "lineNumber": 101
+        },
+        {
+          "caller": "updateCopper",
+          "callee": "clampToNonNegativeInt",
+          "lineNumber": 104
+        },
+        {
+          "caller": "updateCopper",
+          "callee": "setCopper",
+          "lineNumber": 105
+        },
+        {
+          "caller": "updateCopper",
+          "callee": "commitBuiltIn",
+          "lineNumber": 106
+        },
+        {
+          "caller": "updateCustomValue",
+          "callee": "clampToNonNegativeInt",
+          "lineNumber": 110
+        },
+        {
+          "caller": "updateCustomValue",
+          "callee": "setCustomMap",
+          "lineNumber": 112
+        },
+        {
+          "caller": "updateCustomValue",
+          "callee": "commitCustom",
+          "lineNumber": 113
+        },
+        {
+          "caller": "Row",
+          "callee": "onChange",
+          "lineNumber": 119
+        },
+        {
+          "caller": "Row",
+          "callee": "Math.max",
+          "lineNumber": 119
+        },
+        {
+          "caller": "Row",
+          "callee": "String",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Row",
+          "callee": "onChange",
+          "lineNumber": 125
+        },
+        {
+          "caller": "Row",
+          "callee": "clampToNonNegativeInt",
+          "lineNumber": 125
+        },
+        {
+          "caller": "Row",
+          "callee": "onChange",
+          "lineNumber": 128
+        },
+        {
+          "caller": "Row",
+          "callee": "Math.max",
+          "lineNumber": 128
+        },
+        {
+          "caller": "Coins",
+          "callee": "t",
+          "lineNumber": 136
+        },
+        {
+          "caller": "Coins",
+          "callee": "t",
+          "lineNumber": 138
+        },
+        {
+          "caller": "Coins",
+          "callee": "t",
+          "lineNumber": 139
+        },
+        {
+          "caller": "Coins",
+          "callee": "t",
+          "lineNumber": 140
+        },
+        {
+          "caller": "Coins",
+          "callee": "t",
+          "lineNumber": 143
+        },
+        {
+          "caller": "Coins",
+          "callee": "t",
+          "lineNumber": 145
+        },
+        {
+          "caller": "Coins",
+          "callee": "updateCustomValue",
+          "lineNumber": 154
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 176,
+      "nonEmptyLines": 156,
+      "functions": [
+        {
+          "name": "Combat",
+          "startLine": 22,
+          "endLine": 172,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Combat",
+          "callee": "useTranslation",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Combat",
+          "callee": "useCharacterStore",
+          "lineNumber": 24
+        },
+        {
+          "caller": "Combat",
+          "callee": "useCharacterStore",
+          "lineNumber": 25
+        },
+        {
+          "caller": "Combat",
+          "callee": "s.characters.find",
+          "lineNumber": 25
+        },
+        {
+          "caller": "Combat",
+          "callee": "useThemeStore",
+          "lineNumber": 26
+        },
+        {
+          "caller": "Combat",
+          "callee": "React.useMemo",
+          "lineNumber": 27
+        },
+        {
+          "caller": "Combat",
+          "callee": "getStyles",
+          "lineNumber": 27
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 29
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 30
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 31
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 32
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 33
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 34
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 35
+        },
+        {
+          "caller": "Combat",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "rollD20",
+          "callee": "Math.floor",
+          "lineNumber": 39
+        },
+        {
+          "caller": "rollD20",
+          "callee": "Math.random",
+          "lineNumber": 39
+        },
+        {
+          "caller": "Combat",
+          "callee": "useEffect",
+          "lineNumber": 43
+        },
+        {
+          "caller": "Combat",
+          "callee": "setInitiative",
+          "lineNumber": 45
+        },
+        {
+          "caller": "Combat",
+          "callee": "setSpeed",
+          "lineNumber": 46
+        },
+        {
+          "caller": "Combat",
+          "callee": "setAc",
+          "lineNumber": 47
+        },
+        {
+          "caller": "Combat",
+          "callee": "setArmorDetails",
+          "lineNumber": 48
+        },
+        {
+          "caller": "Combat",
+          "callee": "setHitDice",
+          "lineNumber": 49
+        },
+        {
+          "caller": "Combat",
+          "callee": "setHp",
+          "lineNumber": 50
+        },
+        {
+          "caller": "Combat",
+          "callee": "setDeathSaves",
+          "lineNumber": 51
+        },
+        {
+          "caller": "updateField",
+          "callee": "updateCharacter",
+          "lineNumber": 56
+        },
+        {
+          "caller": "handleInitiativeChange",
+          "callee": "parseInt",
+          "lineNumber": 60
+        },
+        {
+          "caller": "handleInitiativeChange",
+          "callee": "setInitiative",
+          "lineNumber": 61
+        },
+        {
+          "caller": "handleInitiativeChange",
+          "callee": "isNaN",
+          "lineNumber": 61
+        },
+        {
+          "caller": "handleInitiativeChange",
+          "callee": "updateField",
+          "lineNumber": 62
+        },
+        {
+          "caller": "handleInitiativeChange",
+          "callee": "isNaN",
+          "lineNumber": 62
+        },
+        {
+          "caller": "handleSpeedChange",
+          "callee": "parseInt",
+          "lineNumber": 66
+        },
+        {
+          "caller": "handleSpeedChange",
+          "callee": "setSpeed",
+          "lineNumber": 67
+        },
+        {
+          "caller": "handleSpeedChange",
+          "callee": "isNaN",
+          "lineNumber": 67
+        },
+        {
+          "caller": "handleSpeedChange",
+          "callee": "updateField",
+          "lineNumber": 68
+        },
+        {
+          "caller": "handleSpeedChange",
+          "callee": "isNaN",
+          "lineNumber": 68
+        },
+        {
+          "caller": "handleAcChange",
+          "callee": "parseInt",
+          "lineNumber": 72
+        },
+        {
+          "caller": "handleAcChange",
+          "callee": "setAc",
+          "lineNumber": 73
+        },
+        {
+          "caller": "handleAcChange",
+          "callee": "isNaN",
+          "lineNumber": 73
+        },
+        {
+          "caller": "handleAcChange",
+          "callee": "updateField",
+          "lineNumber": 74
+        },
+        {
+          "caller": "handleAcChange",
+          "callee": "isNaN",
+          "lineNumber": 74
+        },
+        {
+          "caller": "handleArmorDetailsChange",
+          "callee": "setArmorDetails",
+          "lineNumber": 78
+        },
+        {
+          "caller": "handleArmorDetailsChange",
+          "callee": "updateField",
+          "lineNumber": 79
+        },
+        {
+          "caller": "handleHitDiceChange",
+          "callee": "setHitDice",
+          "lineNumber": 83
+        },
+        {
+          "caller": "handleHitDiceChange",
+          "callee": "updateField",
+          "lineNumber": 84
+        },
+        {
+          "caller": "handleHpChange",
+          "callee": "parseInt",
+          "lineNumber": 88
+        },
+        {
+          "caller": "handleHpChange",
+          "callee": "isNaN",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handleHpChange",
+          "callee": "setHp",
+          "lineNumber": 90
+        },
+        {
+          "caller": "handleHpChange",
+          "callee": "updateField",
+          "lineNumber": 91
+        },
+        {
+          "caller": "updateDeathSaves",
+          "callee": "setDeathSaves",
+          "lineNumber": 96
+        },
+        {
+          "caller": "updateDeathSaves",
+          "callee": "updateField",
+          "lineNumber": 97
+        },
+        {
+          "caller": "handleSuccessPress",
+          "callee": "updateDeathSaves",
+          "lineNumber": 103
+        },
+        {
+          "caller": "handleFailurePress",
+          "callee": "updateDeathSaves",
+          "lineNumber": 109
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 115
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 119
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 123
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 127
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 131
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 134
+        },
+        {
+          "caller": "Combat",
+          "callee": "sp",
+          "lineNumber": 135
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 136
+        },
+        {
+          "caller": "Combat",
+          "callee": "handleHpChange",
+          "lineNumber": 137
+        },
+        {
+          "caller": "Combat",
+          "callee": "sp",
+          "lineNumber": 139
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 140
+        },
+        {
+          "caller": "Combat",
+          "callee": "handleHpChange",
+          "lineNumber": 141
+        },
+        {
+          "caller": "Combat",
+          "callee": "sp",
+          "lineNumber": 143
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 144
+        },
+        {
+          "caller": "Combat",
+          "callee": "handleHpChange",
+          "lineNumber": 145
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 147
+        },
+        {
+          "caller": "Combat",
+          "callee": "sp",
+          "lineNumber": 148
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 149
+        },
+        {
+          "caller": "Combat",
+          "callee": "[0, 1, 2].map",
+          "lineNumber": 150
+        },
+        {
+          "caller": "Combat",
+          "callee": "handleSuccessPress",
+          "lineNumber": 151
+        },
+        {
+          "caller": "Combat",
+          "callee": "setIsVisible",
+          "lineNumber": 157
+        },
+        {
+          "caller": "Combat",
+          "callee": "sp",
+          "lineNumber": 161
+        },
+        {
+          "caller": "Combat",
+          "callee": "t",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Combat",
+          "callee": "[0, 1, 2].map",
+          "lineNumber": 163
+        },
+        {
+          "caller": "Combat",
+          "callee": "handleFailurePress",
+          "lineNumber": 164
+        },
+        {
+          "caller": "Combat",
+          "callee": "setIsVisible",
+          "lineNumber": 169
+        },
+        {
+          "caller": "Combat",
+          "callee": "rollD20",
+          "lineNumber": 169
+        }
+      ],
+      "metrics": {
+        "importCount": 9,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

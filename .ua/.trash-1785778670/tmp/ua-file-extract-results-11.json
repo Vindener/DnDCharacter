@@ -1,0 +1,2501 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 20,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 20,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 20,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 108,
+      "nonEmptyLines": 92,
+      "functions": [
+        {
+          "name": "Inventory",
+          "startLine": 18,
+          "endLine": 102,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Inventory",
+          "callee": "useTranslation",
+          "lineNumber": 19
+        },
+        {
+          "caller": "Inventory",
+          "callee": "useCharacterStore",
+          "lineNumber": 20
+        },
+        {
+          "caller": "Inventory",
+          "callee": "useCharacterStore",
+          "lineNumber": 21
+        },
+        {
+          "caller": "Inventory",
+          "callee": "s.characters.find",
+          "lineNumber": 21
+        },
+        {
+          "caller": "Inventory",
+          "callee": "useCharacterStore",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Inventory",
+          "callee": "useThemeStore",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Inventory",
+          "callee": "React.useMemo",
+          "lineNumber": 24
+        },
+        {
+          "caller": "Inventory",
+          "callee": "getStyles",
+          "lineNumber": 24
+        },
+        {
+          "caller": "Inventory",
+          "callee": "useState",
+          "lineNumber": 26
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "(text || '').trim().toLowerCase",
+          "lineNumber": 29
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "(text || '').trim",
+          "lineNumber": 29
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "WEAPONS_DB.find",
+          "lineNumber": 32
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "w.name.toLowerCase",
+          "lineNumber": 32
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "updateCharacterWeapons",
+          "lineNumber": 36
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "Alert.alert",
+          "lineNumber": 37
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "t",
+          "lineNumber": 37
+        },
+        {
+          "caller": "autoMoveIfWeapon",
+          "callee": "t",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleAddItem",
+          "callee": "setItems",
+          "lineNumber": 42
+        },
+        {
+          "caller": "handleChangeItem",
+          "callee": "autoMoveIfWeapon",
+          "lineNumber": 49
+        },
+        {
+          "caller": "handleChangeItem",
+          "callee": "newItems.splice",
+          "lineNumber": 50
+        },
+        {
+          "caller": "handleChangeItem",
+          "callee": "setItems",
+          "lineNumber": 52
+        },
+        {
+          "caller": "handleChangeItem",
+          "callee": "updateCharacterInventory",
+          "lineNumber": 53
+        },
+        {
+          "caller": "handleDeleteItem",
+          "callee": "newItems.splice",
+          "lineNumber": 58
+        },
+        {
+          "caller": "handleDeleteItem",
+          "callee": "setItems",
+          "lineNumber": 59
+        },
+        {
+          "caller": "handleDeleteItem",
+          "callee": "updateCharacterInventory",
+          "lineNumber": 60
+        },
+        {
+          "caller": "Inventory",
+          "callee": "t",
+          "lineNumber": 67
+        },
+        {
+          "caller": "Inventory",
+          "callee": "idx.toString",
+          "lineNumber": 71
+        },
+        {
+          "caller": "Inventory",
+          "callee": "sp",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Inventory",
+          "callee": "handleChangeItem",
+          "lineNumber": 79
+        },
+        {
+          "caller": "Inventory",
+          "callee": "t",
+          "lineNumber": 80
+        },
+        {
+          "caller": "Inventory",
+          "callee": "handleDeleteItem",
+          "lineNumber": 82
+        },
+        {
+          "caller": "Inventory",
+          "callee": "sp",
+          "lineNumber": 82
+        },
+        {
+          "caller": "Inventory",
+          "callee": "sp",
+          "lineNumber": 92
+        },
+        {
+          "caller": "Inventory",
+          "callee": "sp",
+          "lineNumber": 98
+        },
+        {
+          "caller": "Inventory",
+          "callee": "fs",
+          "lineNumber": 98
+        },
+        {
+          "caller": "Inventory",
+          "callee": "t",
+          "lineNumber": 98
+        }
+      ],
+      "metrics": {
+        "importCount": 8,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 41,
+      "nonEmptyLines": 35,
+      "functions": [
+        {
+          "name": "Notes",
+          "startLine": 14,
+          "endLine": 38,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Notes",
+          "callee": "useTranslation",
+          "lineNumber": 15
+        },
+        {
+          "caller": "Notes",
+          "callee": "useCharacterStore",
+          "lineNumber": 16
+        },
+        {
+          "caller": "Notes",
+          "callee": "useCharacterStore",
+          "lineNumber": 17
+        },
+        {
+          "caller": "Notes",
+          "callee": "s.characters.find",
+          "lineNumber": 17
+        },
+        {
+          "caller": "Notes",
+          "callee": "useThemeStore",
+          "lineNumber": 18
+        },
+        {
+          "caller": "Notes",
+          "callee": "React.useMemo",
+          "lineNumber": 19
+        },
+        {
+          "caller": "Notes",
+          "callee": "getStyles",
+          "lineNumber": 19
+        },
+        {
+          "caller": "handleChange",
+          "callee": "updateCharacterNotes",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Notes",
+          "callee": "t",
+          "lineNumber": 27
+        },
+        {
+          "caller": "Notes",
+          "callee": "t",
+          "lineNumber": 31
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 42,
+      "nonEmptyLines": 36,
+      "functions": [
+        {
+          "name": "Proficiencies",
+          "startLine": 14,
+          "endLine": 40,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Proficiencies",
+          "callee": "useTranslation",
+          "lineNumber": 15
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "useCharacterStore",
+          "lineNumber": 16
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "useCharacterStore",
+          "lineNumber": 17
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "s.characters.find",
+          "lineNumber": 17
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "useThemeStore",
+          "lineNumber": 18
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "React.useMemo",
+          "lineNumber": 19
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "getStyles",
+          "lineNumber": 19
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "(character?.proficiencies || []).join",
+          "lineNumber": 21
+        },
+        {
+          "caller": "handleChange",
+          "callee": "text.split('\\n').filter",
+          "lineNumber": 24
+        },
+        {
+          "caller": "handleChange",
+          "callee": "text.split",
+          "lineNumber": 24
+        },
+        {
+          "caller": "handleChange",
+          "callee": "line.trim",
+          "lineNumber": 24
+        },
+        {
+          "caller": "handleChange",
+          "callee": "updateCharacterProficiencies",
+          "lineNumber": 25
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "t",
+          "lineNumber": 30
+        },
+        {
+          "caller": "Proficiencies",
+          "callee": "t",
+          "lineNumber": 35
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 58,
+      "nonEmptyLines": 51,
+      "functions": [
+        {
+          "name": "SkillItem",
+          "startLine": 15,
+          "endLine": 58,
+          "params": [
+            "{ label, value, skillKey, onChange }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SkillItem",
+          "line": 15,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SkillItem",
+          "callee": "useState",
+          "lineNumber": 16
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "useState",
+          "lineNumber": 17
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "useThemeStore",
+          "lineNumber": 18
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "React.useMemo",
+          "lineNumber": 19
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "getStyles",
+          "lineNumber": 19
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "useEffect",
+          "lineNumber": 21
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "setInputValue",
+          "lineNumber": 22
+        },
+        {
+          "caller": "rollD20WithModifier",
+          "callee": "Math.floor",
+          "lineNumber": 26
+        },
+        {
+          "caller": "rollD20WithModifier",
+          "callee": "Math.random",
+          "lineNumber": 26
+        },
+        {
+          "caller": "rollD20WithModifier",
+          "callee": "Math.abs",
+          "lineNumber": 27
+        },
+        {
+          "caller": "handleTextChange",
+          "callee": "setInputValue",
+          "lineNumber": 32
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "parseInt",
+          "lineNumber": 36
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "isNaN",
+          "lineNumber": 37
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "onChange",
+          "lineNumber": 38
+        },
+        {
+          "caller": "handleBlur",
+          "callee": "setInputValue",
+          "lineNumber": 40
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "setIsVisible",
+          "lineNumber": 48
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "setIsVisible",
+          "lineNumber": 53
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "rollD20WithModifier",
+          "lineNumber": 54
+        },
+        {
+          "caller": "SkillItem",
+          "callee": "parseInt",
+          "lineNumber": 54
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 91,
+      "nonEmptyLines": 80,
+      "functions": [
+        {
+          "name": "normalizeSkills",
+          "startLine": 35,
+          "endLine": 56,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "Skills",
+          "startLine": 58,
+          "endLine": 87,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Skills",
+          "callee": "useCharacterStore",
+          "lineNumber": 59
+        },
+        {
+          "caller": "Skills",
+          "callee": "useCharacterStore",
+          "lineNumber": 60
+        },
+        {
+          "caller": "Skills",
+          "callee": "s.characters.find",
+          "lineNumber": 60
+        },
+        {
+          "caller": "Skills",
+          "callee": "useThemeStore",
+          "lineNumber": 61
+        },
+        {
+          "caller": "Skills",
+          "callee": "React.useMemo",
+          "lineNumber": 62
+        },
+        {
+          "caller": "Skills",
+          "callee": "getStyles",
+          "lineNumber": 62
+        },
+        {
+          "caller": "Skills",
+          "callee": "useState",
+          "lineNumber": 64
+        },
+        {
+          "caller": "Skills",
+          "callee": "normalizeSkills",
+          "lineNumber": 64
+        },
+        {
+          "caller": "Skills",
+          "callee": "useEffect",
+          "lineNumber": 66
+        },
+        {
+          "caller": "Skills",
+          "callee": "setSkills",
+          "lineNumber": 67
+        },
+        {
+          "caller": "Skills",
+          "callee": "normalizeSkills",
+          "lineNumber": 67
+        },
+        {
+          "caller": "handleChange",
+          "callee": "setSkills",
+          "lineNumber": 76
+        },
+        {
+          "caller": "handleChange",
+          "callee": "updateCharacterSkills",
+          "lineNumber": 77
+        },
+        {
+          "caller": "Skills",
+          "callee": "SKILLS_LIST.map",
+          "lineNumber": 82
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 174,
+      "nonEmptyLines": 149,
+      "functions": [
+        {
+          "name": "Spells",
+          "startLine": 27,
+          "endLine": 169,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Spells",
+          "callee": "useTranslation",
+          "lineNumber": 28
+        },
+        {
+          "caller": "Spells",
+          "callee": "useCharacterStore",
+          "lineNumber": 29
+        },
+        {
+          "caller": "Spells",
+          "callee": "useCharacterStore",
+          "lineNumber": 30
+        },
+        {
+          "caller": "Spells",
+          "callee": "s.characters.find",
+          "lineNumber": 30
+        },
+        {
+          "caller": "Spells",
+          "callee": "useThemeStore",
+          "lineNumber": 31
+        },
+        {
+          "caller": "Spells",
+          "callee": "React.useMemo",
+          "lineNumber": 32
+        },
+        {
+          "caller": "Spells",
+          "callee": "getStyles",
+          "lineNumber": 32
+        },
+        {
+          "caller": "Spells",
+          "callee": "useState",
+          "lineNumber": 34
+        },
+        {
+          "caller": "Spells",
+          "callee": "useState",
+          "lineNumber": 35
+        },
+        {
+          "caller": "Spells",
+          "callee": "(character?.spells?.knownSpells || []).join",
+          "lineNumber": 35
+        },
+        {
+          "caller": "Spells",
+          "callee": "useState",
+          "lineNumber": 36
+        },
+        {
+          "caller": "Spells",
+          "callee": "(character?.spells?.preparedSpells || []).join",
+          "lineNumber": 36
+        },
+        {
+          "caller": "Spells",
+          "callee": "useState",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Spells",
+          "callee": "(character?.spells?.cantrips || []).join",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Spells",
+          "callee": "useEffect",
+          "lineNumber": 39
+        },
+        {
+          "caller": "Spells",
+          "callee": "setSpells",
+          "lineNumber": 41
+        },
+        {
+          "caller": "Spells",
+          "callee": "setKnownSpellsText",
+          "lineNumber": 42
+        },
+        {
+          "caller": "Spells",
+          "callee": "(character.spells?.knownSpells || []).join",
+          "lineNumber": 42
+        },
+        {
+          "caller": "Spells",
+          "callee": "setPreparedSpellsText",
+          "lineNumber": 43
+        },
+        {
+          "caller": "Spells",
+          "callee": "(character.spells?.preparedSpells || []).join",
+          "lineNumber": 43
+        },
+        {
+          "caller": "Spells",
+          "callee": "setCantripsText",
+          "lineNumber": 44
+        },
+        {
+          "caller": "Spells",
+          "callee": "(character.spells?.cantrips || []).join",
+          "lineNumber": 44
+        },
+        {
+          "caller": "updateSpells",
+          "callee": "setSpells",
+          "lineNumber": 48
+        },
+        {
+          "caller": "updateSpells",
+          "callee": "updateCharacterSpells",
+          "lineNumber": 49
+        },
+        {
+          "caller": "handleAbilityChange",
+          "callee": "updateSpells",
+          "lineNumber": 53
+        },
+        {
+          "caller": "handleSaveDCChange",
+          "callee": "parseInt",
+          "lineNumber": 57
+        },
+        {
+          "caller": "handleSaveDCChange",
+          "callee": "updateSpells",
+          "lineNumber": 58
+        },
+        {
+          "caller": "handleSaveDCChange",
+          "callee": "isNaN",
+          "lineNumber": 58
+        },
+        {
+          "caller": "handleAttackBonusChange",
+          "callee": "parseInt",
+          "lineNumber": 62
+        },
+        {
+          "caller": "handleAttackBonusChange",
+          "callee": "updateSpells",
+          "lineNumber": 63
+        },
+        {
+          "caller": "handleAttackBonusChange",
+          "callee": "isNaN",
+          "lineNumber": 63
+        },
+        {
+          "caller": "handleSlotChange",
+          "callee": "parseInt",
+          "lineNumber": 67
+        },
+        {
+          "caller": "handleSlotChange",
+          "callee": "isNaN",
+          "lineNumber": 71
+        },
+        {
+          "caller": "handleSlotChange",
+          "callee": "updateSpells",
+          "lineNumber": 73
+        },
+        {
+          "caller": "handleAddSlot",
+          "callee": "Object.keys(spells.spellSlots).map",
+          "lineNumber": 77
+        },
+        {
+          "caller": "handleAddSlot",
+          "callee": "Object.keys",
+          "lineNumber": 77
+        },
+        {
+          "caller": "handleAddSlot",
+          "callee": "parseInt",
+          "lineNumber": 77
+        },
+        {
+          "caller": "handleAddSlot",
+          "callee": "Math.max",
+          "lineNumber": 78
+        },
+        {
+          "caller": "handleAddSlot",
+          "callee": "updateSpells",
+          "lineNumber": 84
+        },
+        {
+          "caller": "handleKnownSpellsChange",
+          "callee": "setKnownSpellsText",
+          "lineNumber": 88
+        },
+        {
+          "caller": "handleKnownSpellsChange",
+          "callee": "text.split('\\n').filter",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handleKnownSpellsChange",
+          "callee": "text.split",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handleKnownSpellsChange",
+          "callee": "l.trim",
+          "lineNumber": 89
+        },
+        {
+          "caller": "handleKnownSpellsChange",
+          "callee": "updateSpells",
+          "lineNumber": 90
+        },
+        {
+          "caller": "handlePreparedSpellsChange",
+          "callee": "setPreparedSpellsText",
+          "lineNumber": 94
+        },
+        {
+          "caller": "handlePreparedSpellsChange",
+          "callee": "text.split('\\n').filter",
+          "lineNumber": 95
+        },
+        {
+          "caller": "handlePreparedSpellsChange",
+          "callee": "text.split",
+          "lineNumber": 95
+        },
+        {
+          "caller": "handlePreparedSpellsChange",
+          "callee": "l.trim",
+          "lineNumber": 95
+        },
+        {
+          "caller": "handlePreparedSpellsChange",
+          "callee": "updateSpells",
+          "lineNumber": 96
+        },
+        {
+          "caller": "handleCantripsChange",
+          "callee": "setCantripsText",
+          "lineNumber": 100
+        },
+        {
+          "caller": "handleCantripsChange",
+          "callee": "text.split('\\n').filter",
+          "lineNumber": 101
+        },
+        {
+          "caller": "handleCantripsChange",
+          "callee": "text.split",
+          "lineNumber": 101
+        },
+        {
+          "caller": "handleCantripsChange",
+          "callee": "l.trim",
+          "lineNumber": 101
+        },
+        {
+          "caller": "handleCantripsChange",
+          "callee": "updateSpells",
+          "lineNumber": 102
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 108
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 113
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 118
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 122
+        },
+        {
+          "caller": "Spells",
+          "callee": "Object.keys(spells.spellSlots)\n        .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))\n        .map",
+          "lineNumber": 123
+        },
+        {
+          "caller": "Spells",
+          "callee": "Object.keys(spells.spellSlots)\n        .sort",
+          "lineNumber": 123
+        },
+        {
+          "caller": "Spells",
+          "callee": "Object.keys",
+          "lineNumber": 123
+        },
+        {
+          "caller": "Spells",
+          "callee": "parseInt",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Spells",
+          "callee": "parseInt",
+          "lineNumber": 124
+        },
+        {
+          "caller": "Spells",
+          "callee": "sp",
+          "lineNumber": 126
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 129
+        },
+        {
+          "caller": "Spells",
+          "callee": "handleSlotChange",
+          "lineNumber": 133
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 137
+        },
+        {
+          "caller": "Spells",
+          "callee": "handleSlotChange",
+          "lineNumber": 138
+        },
+        {
+          "caller": "Spells",
+          "callee": "Object.keys(spells.spellSlots).includes",
+          "lineNumber": 142
+        },
+        {
+          "caller": "Spells",
+          "callee": "Object.keys",
+          "lineNumber": 142
+        },
+        {
+          "caller": "Spells",
+          "callee": "sp",
+          "lineNumber": 145
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 145
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 149
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 154
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 157
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 165
+        },
+        {
+          "caller": "Spells",
+          "callee": "t",
+          "lineNumber": 166
+        }
+      ],
+      "metrics": {
+        "importCount": 7,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 66,
+      "nonEmptyLines": 57,
+      "functions": [
+        {
+          "name": "Traits",
+          "startLine": 15,
+          "endLine": 64,
+          "params": [
+            "{ data }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Traits",
+          "callee": "useTranslation",
+          "lineNumber": 16
+        },
+        {
+          "caller": "Traits",
+          "callee": "useCharacterStore",
+          "lineNumber": 17
+        },
+        {
+          "caller": "Traits",
+          "callee": "useCharacterStore",
+          "lineNumber": 18
+        },
+        {
+          "caller": "Traits",
+          "callee": "s.characters.find",
+          "lineNumber": 18
+        },
+        {
+          "caller": "Traits",
+          "callee": "useThemeStore",
+          "lineNumber": 19
+        },
+        {
+          "caller": "Traits",
+          "callee": "React.useMemo",
+          "lineNumber": 20
+        },
+        {
+          "caller": "Traits",
+          "callee": "getStyles",
+          "lineNumber": 20
+        },
+        {
+          "caller": "handleChange",
+          "callee": "updateCharacterTraits",
+          "lineNumber": 26
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 31
+        },
+        {
+          "caller": "Traits",
+          "callee": "handleChange",
+          "lineNumber": 35
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 36
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 39
+        },
+        {
+          "caller": "Traits",
+          "callee": "handleChange",
+          "lineNumber": 43
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 44
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 47
+        },
+        {
+          "caller": "Traits",
+          "callee": "handleChange",
+          "lineNumber": 51
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 52
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 55
+        },
+        {
+          "caller": "Traits",
+          "callee": "handleChange",
+          "lineNumber": 59
+        },
+        {
+          "caller": "Traits",
+          "callee": "t",
+          "lineNumber": 60
+        }
+      ],
+      "metrics": {
+        "importCount": 6,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 338,
+      "nonEmptyLines": 309,
+      "functions": [
+        {
+          "name": "randInt",
+          "startLine": 9,
+          "endLine": 9,
+          "params": [
+            "min",
+            "max"
+          ]
+        },
+        {
+          "name": "parseDice",
+          "startLine": 11,
+          "endLine": 16,
+          "params": [
+            "expr"
+          ]
+        },
+        {
+          "name": "rollDice",
+          "startLine": 18,
+          "endLine": 24,
+          "params": [
+            "expr"
+          ]
+        },
+        {
+          "name": "Weapons",
+          "startLine": 32,
+          "endLine": 335,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "randInt",
+          "callee": "Math.floor",
+          "lineNumber": 9
+        },
+        {
+          "caller": "randInt",
+          "callee": "Math.random",
+          "lineNumber": 9
+        },
+        {
+          "caller": "parseDice",
+          "callee": "String(expr).trim().toLowerCase().match",
+          "lineNumber": 13
+        },
+        {
+          "caller": "parseDice",
+          "callee": "String(expr).trim().toLowerCase",
+          "lineNumber": 13
+        },
+        {
+          "caller": "parseDice",
+          "callee": "String(expr).trim",
+          "lineNumber": 13
+        },
+        {
+          "caller": "parseDice",
+          "callee": "String",
+          "lineNumber": 13
+        },
+        {
+          "caller": "parseDice",
+          "callee": "parseInt",
+          "lineNumber": 15
+        },
+        {
+          "caller": "parseDice",
+          "callee": "parseInt",
+          "lineNumber": 15
+        },
+        {
+          "caller": "rollDice",
+          "callee": "parseDice",
+          "lineNumber": 19
+        },
+        {
+          "caller": "rollDice",
+          "callee": "rolls.push",
+          "lineNumber": 21
+        },
+        {
+          "caller": "rollDice",
+          "callee": "randInt",
+          "lineNumber": 21
+        },
+        {
+          "caller": "rollDice",
+          "callee": "rolls.reduce",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useTranslation",
+          "lineNumber": 33
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useThemeStore",
+          "lineNumber": 34
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useMemo",
+          "lineNumber": 35
+        },
+        {
+          "caller": "Weapons",
+          "callee": "StyleSheet.create",
+          "lineNumber": 37
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 39
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 42
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 43
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 44
+        },
+        {
+          "caller": "Weapons",
+          "callee": "fs",
+          "lineNumber": 57
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 64
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 69
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 72
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 77
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 78
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 83
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 84
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 90
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 91
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 99
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 104
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 105
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 106
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 117
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 122
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 126
+        },
+        {
+          "caller": "Weapons",
+          "callee": "fs",
+          "lineNumber": 135
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 142
+        },
+        {
+          "caller": "Weapons",
+          "callee": "rd",
+          "lineNumber": 144
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 145
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useCharacterStore",
+          "lineNumber": 154
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useCharacterStore",
+          "lineNumber": 155
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useCharacterStore",
+          "lineNumber": 156
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useMemo",
+          "lineNumber": 158
+        },
+        {
+          "caller": "Weapons",
+          "callee": "characters.find",
+          "lineNumber": 158
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useMemo",
+          "lineNumber": 159
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useState",
+          "lineNumber": 161
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useState",
+          "lineNumber": 162
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useState",
+          "lineNumber": 163
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useState",
+          "lineNumber": 164
+        },
+        {
+          "caller": "Weapons",
+          "callee": "useState",
+          "lineNumber": 165
+        },
+        {
+          "caller": "updateWeapons",
+          "callee": "updateCharacterWeapons",
+          "lineNumber": 169
+        },
+        {
+          "caller": "handleAddWeapon",
+          "callee": "updateWeapons",
+          "lineNumber": 173
+        },
+        {
+          "caller": "handleRemoveWeapon",
+          "callee": "safeWeapons.filter",
+          "lineNumber": 177
+        },
+        {
+          "caller": "handleRemoveWeapon",
+          "callee": "updateWeapons",
+          "lineNumber": 178
+        },
+        {
+          "caller": "patchWeapon",
+          "callee": "safeWeapons.slice",
+          "lineNumber": 182
+        },
+        {
+          "caller": "patchWeapon",
+          "callee": "updateWeapons",
+          "lineNumber": 184
+        },
+        {
+          "caller": "openAttackModal",
+          "callee": "setRollResult",
+          "lineNumber": 188
+        },
+        {
+          "caller": "openAttackModal",
+          "callee": "setModalOpen",
+          "lineNumber": 189
+        },
+        {
+          "caller": "openDamageModal",
+          "callee": "setRollResult",
+          "lineNumber": 193
+        },
+        {
+          "caller": "openDamageModal",
+          "callee": "setModalOpen",
+          "lineNumber": 194
+        },
+        {
+          "caller": "closeModal",
+          "callee": "setModalOpen",
+          "lineNumber": 197
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "randInt",
+          "lineNumber": 200
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "Number",
+          "lineNumber": 201
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "Number",
+          "lineNumber": 202
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "t",
+          "lineNumber": 204
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "t",
+          "lineNumber": 205
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "t",
+          "lineNumber": 206
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "t",
+          "lineNumber": 207
+        },
+        {
+          "caller": "doAttackRoll",
+          "callee": "setRollResult",
+          "lineNumber": 208
+        },
+        {
+          "caller": "doDamageRoll",
+          "callee": "rollDice",
+          "lineNumber": 214
+        },
+        {
+          "caller": "doDamageRoll",
+          "callee": "Number",
+          "lineNumber": 215
+        },
+        {
+          "caller": "doDamageRoll",
+          "callee": "t",
+          "lineNumber": 217
+        },
+        {
+          "caller": "doDamageRoll",
+          "callee": "rolls.join",
+          "lineNumber": 217
+        },
+        {
+          "caller": "doDamageRoll",
+          "callee": "setRollResult",
+          "lineNumber": 218
+        },
+        {
+          "caller": "Weapons",
+          "callee": "safeWeapons.map",
+          "lineNumber": 224
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 227
+        },
+        {
+          "caller": "Weapons",
+          "callee": "handleRemoveWeapon",
+          "lineNumber": 228
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 229
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 233
+        },
+        {
+          "caller": "Weapons",
+          "callee": "patchWeapon",
+          "lineNumber": 237
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 238
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 242
+        },
+        {
+          "caller": "Weapons",
+          "callee": "patchWeapon",
+          "lineNumber": 246
+        },
+        {
+          "caller": "Weapons",
+          "callee": "openAttackModal",
+          "lineNumber": 252
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 253
+        },
+        {
+          "caller": "Weapons",
+          "callee": "openDamageModal",
+          "lineNumber": 255
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 256
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 263
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 273
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 278
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 279
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 285
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 288
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 298
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 299
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 303
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 304
+        },
+        {
+          "caller": "Weapons",
+          "callee": "doDamageRoll",
+          "lineNumber": 316
+        },
+        {
+          "caller": "Weapons",
+          "callee": "sp",
+          "lineNumber": 318
+        },
+        {
+          "caller": "Weapons",
+          "callee": "t",
+          "lineNumber": 320
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 0,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/style.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 36,
+      "nonEmptyLines": 33,
+      "functions": [
+        {
+          "name": "getStyles",
+          "startLine": 5,
+          "endLine": 34,
+          "params": [
+            "c"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "getStyles",
+          "line": 5,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "getStyles",
+          "callee": "StyleSheet.create",
+          "lineNumber": 6
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 7
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 7
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 8
+        },
+        {
+          "caller": "getStyles",
+          "callee": "fs",
+          "lineNumber": 9
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 13
+        },
+        {
+          "caller": "getStyles",
+          "callee": "rd",
+          "lineNumber": 14
+        },
+        {
+          "caller": "getStyles",
+          "callee": "fs",
+          "lineNumber": 18
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 18
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 21
+        },
+        {
+          "caller": "getStyles",
+          "callee": "rd",
+          "lineNumber": 22
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 23
+        },
+        {
+          "caller": "getStyles",
+          "callee": "fs",
+          "lineNumber": 25
+        },
+        {
+          "caller": "getStyles",
+          "callee": "sp",
+          "lineNumber": 29
+        },
+        {
+          "caller": "getStyles",
+          "callee": "rd",
+          "lineNumber": 30
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/Loader/Loader.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 60,
+      "nonEmptyLines": 52,
+      "functions": [
+        {
+          "name": "Loader",
+          "startLine": 8,
+          "endLine": 50,
+          "params": []
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Loader",
+          "callee": "useThemeStore",
+          "lineNumber": 9
+        },
+        {
+          "caller": "Loader",
+          "callee": "React.useRef",
+          "lineNumber": 10
+        },
+        {
+          "caller": "Loader",
+          "callee": "React.useEffect",
+          "lineNumber": 12
+        },
+        {
+          "caller": "Loader",
+          "callee": "Animated.sequence",
+          "lineNumber": 13
+        },
+        {
+          "caller": "Loader",
+          "callee": "Animated.timing",
+          "lineNumber": 14
+        },
+        {
+          "caller": "Loader",
+          "callee": "Animated.timing",
+          "lineNumber": 20
+        },
+        {
+          "caller": "Loader",
+          "callee": "Animated.loop(animate).start",
+          "lineNumber": 28
+        },
+        {
+          "caller": "Loader",
+          "callee": "Animated.loop",
+          "lineNumber": 28
+        },
+        {
+          "caller": "Loader",
+          "callee": "animation.interpolate",
+          "lineNumber": 31
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/Modal/Modal.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 59,
+      "nonEmptyLines": 55,
+      "functions": [
+        {
+          "name": "Modal",
+          "startLine": 18,
+          "endLine": 59,
+          "params": [
+            "{ title, subtitle, onSubmit, onClose, scrollToTopSignal = 0, children, isVisible }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "Modal",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "Modal",
+          "callee": "useTranslation",
+          "lineNumber": 19
+        },
+        {
+          "caller": "Modal",
+          "callee": "useThemeStore",
+          "lineNumber": 20
+        },
+        {
+          "caller": "Modal",
+          "callee": "React.useMemo",
+          "lineNumber": 21
+        },
+        {
+          "caller": "Modal",
+          "callee": "getStyles",
+          "lineNumber": 21
+        },
+        {
+          "caller": "Modal",
+          "callee": "React.useRef",
+          "lineNumber": 22
+        },
+        {
+          "caller": "Modal",
+          "callee": "React.useEffect",
+          "lineNumber": 24
+        },
+        {
+          "caller": "Modal",
+          "callee": "scrollRef.current?.scrollTo",
+          "lineNumber": 26
+        },
+        {
+          "caller": "Modal",
+          "callee": "t",
+          "lineNumber": 51
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 64,
+      "functions": [
+        {
+          "name": "RollResultModal",
+          "startLine": 21,
+          "endLine": 73,
+          "params": [
+            "{ isVisible, onClose, roll }"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "RollResultModal",
+          "line": 21,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "RollResultModal",
+          "callee": "useTranslation",
+          "lineNumber": 22
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "useState",
+          "lineNumber": 23
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "useState",
+          "lineNumber": 24
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "useThemeStore",
+          "lineNumber": 26
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "React.useMemo",
+          "lineNumber": 27
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "getStyles",
+          "lineNumber": 27
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "useEffect",
+          "lineNumber": 29
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "roll",
+          "lineNumber": 31
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "setResult",
+          "lineNumber": 32
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "setPreviousResult",
+          "lineNumber": 33
+        },
+        {
+          "caller": "handleReroll",
+          "callee": "setPreviousResult",
+          "lineNumber": 39
+        },
+        {
+          "caller": "handleReroll",
+          "callee": "setResult",
+          "lineNumber": 41
+        },
+        {
+          "caller": "handleReroll",
+          "callee": "roll",
+          "lineNumber": 41
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "t",
+          "lineNumber": 50
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "t",
+          "lineNumber": 51
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "t",
+          "lineNumber": 54
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "t",
+          "lineNumber": 59
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "t",
+          "lineNumber": 61
+        },
+        {
+          "caller": "RollResultModal",
+          "callee": "t",
+          "lineNumber": 67
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/TextInput/MultiTextInput.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 76,
+      "nonEmptyLines": 69,
+      "functions": [
+        {
+          "name": "MultiTextInput",
+          "startLine": 22,
+          "endLine": 73,
+          "params": [
+            "{\n  containerStyle,\n  style,\n  initialHeight = 140,\n  minHeight = 80,\n  maxHeight = 480,\n  onSizeChange,\n  ...props\n}"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MultiTextInput",
+          "line": 22,
+          "isDefault": true
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "MultiTextInput",
+          "callee": "useThemeStore",
+          "lineNumber": 31
+        },
+        {
+          "caller": "MultiTextInput",
+          "callee": "useState",
+          "lineNumber": 32
+        },
+        {
+          "caller": "handleContentSizeChange",
+          "callee": "Math.min",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleContentSizeChange",
+          "callee": "Math.max",
+          "lineNumber": 35
+        },
+        {
+          "caller": "handleContentSizeChange",
+          "callee": "setHeight",
+          "lineNumber": 36
+        },
+        {
+          "caller": "handleContentSizeChange",
+          "callee": "onSizeChange",
+          "lineNumber": 37
+        },
+        {
+          "caller": "MultiTextInput",
+          "callee": "rd",
+          "lineNumber": 49
+        },
+        {
+          "caller": "MultiTextInput",
+          "callee": "sp",
+          "lineNumber": 62
+        },
+        {
+          "caller": "MultiTextInput",
+          "callee": "sp",
+          "lineNumber": 63
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/TextInput/TextInput.tsx",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 35,
+      "nonEmptyLines": 28,
+      "functions": [
+        {
+          "name": "createStyles",
+          "startLine": 15,
+          "endLine": 22,
+          "params": []
+        },
+        {
+          "name": "TextInput",
+          "startLine": 24,
+          "endLine": 33,
+          "params": [
+            "{ style, unstyled = false, ...rest }"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "createStyles",
+          "callee": "StyleSheet.create",
+          "lineNumber": 16
+        },
+        {
+          "caller": "createStyles",
+          "callee": "rd",
+          "lineNumber": 18
+        },
+        {
+          "caller": "TextInput",
+          "callee": "useThemeStore",
+          "lineNumber": 25
+        },
+        {
+          "caller": "TextInput",
+          "callee": "React.useMemo",
+          "lineNumber": 26
+        },
+        {
+          "caller": "TextInput",
+          "callee": "createStyles",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/TextInput/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 2,
+      "nonEmptyLines": 2,
+      "exports": [
+        {
+          "name": "TextInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "MultiTextInput",
+          "line": 2,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/CharacterTabs.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 11,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/SkillsTab.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 20,
+      "exports": [
+        {
+          "name": "SKILL_NAMES",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/attributes.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 18,
+      "nonEmptyLines": 14,
+      "exports": [
+        {
+          "name": "attributes",
+          "line": 10,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/experience.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 36,
+      "nonEmptyLines": 34,
+      "functions": [
+        {
+          "name": "getLevelByExperience",
+          "startLine": 29,
+          "endLine": 36,
+          "params": [
+            "exp"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EXPERIENCE_TABLE",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "getLevelByExperience",
+          "line": 29,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/types/Character.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 27,
+      "nonEmptyLines": 27,
+      "exports": [
+        {
+          "name": "CharacterCombatTemplates",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterContentOrigin",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterContentSourceRef",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterContentSources",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomFeatureBlock",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomField",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomNotesGroup",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomResetRule",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomResource",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomSection",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCustomSpellList",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterDraft",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterDto",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterEquipment",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterEntity",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterHomebrewEntry",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterNotesBlocks",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterTemplateId",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterTracker",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterViewModel",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "CustomFieldType",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "HomebrewEntryKind",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "SkillProficiencyRank",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "TrackerResetRule",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "TrackerVisibility",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 25,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

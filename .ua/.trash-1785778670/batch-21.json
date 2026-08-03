@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "id": "config:android/build.gradle",
+      "type": "config",
+      "name": "build.gradle",
+      "filePath": "android/build.gradle",
+      "summary": "Кореневий Gradle build-файл bare Android-проєкту: підключає плагіни Google Services, Firebase Crashlytics, React Native та Kotlin, і додає репозиторій React Native Android до всіх підпроєктів.",
+      "tags": ["configuration", "build-system", "android", "gradle", "infrastructure"],
+      "complexity": "simple",
+      "languageNotes": "Ручний коментар `// manual: ...` біля Crashlytics classpath відповідає правилу CLAUDE.md — android/ закомічений, тому native-зміни треба дублювати вручну, бо EAS prebuild тут не запускається."
+    },
+    {
+      "id": "config:android/gradle.properties",
+      "type": "config",
+      "name": "gradle.properties",
+      "filePath": "android/gradle.properties",
+      "summary": "Проєктні налаштування Gradle для Android-збірки: пам'ять JVM-демона, вибір архітектур React Native, увімкнення New Architecture та Hermes, а також прапорці Expo (webp, edge-to-edge, packaging).",
+      "tags": ["configuration", "android", "build-system", "hermes", "new-architecture"],
+      "complexity": "simple",
+      "languageNotes": "`newArchEnabled=true` і `hermesEnabled=true` збігаються з фактами з CLAUDE.md; `expo.edgeToEdgeEnabled=false` тут не впливає на Android 15+/targetSdk 36, де edge-to-edge вмикається системно незалежно від прапорця."
+    },
+    {
+      "id": "file:android/gradlew.bat",
+      "type": "file",
+      "name": "gradlew.bat",
+      "filePath": "android/gradlew.bat",
+      "summary": "Стандартний Gradle Wrapper batch-скрипт для Windows: знаходить java.exe через JAVA_HOME, формує classpath з gradle-wrapper.jar і запускає GradleWrapperMain з переданими аргументами.",
+      "tags": ["build-system", "wrapper-script", "windows", "android", "boilerplate"],
+      "complexity": "simple",
+      "languageNotes": "Автогенерований шаблон Gradle Wrapper без користувацької логіки — мітки (:execute, :fail, :mainEnd) керують потоком виконання batch-файлу, а не є функціями застосунку."
+    },
+    {
+      "id": "config:android/settings.gradle",
+      "type": "config",
+      "name": "settings.gradle",
+      "filePath": "android/settings.gradle",
+      "summary": "Кореневий Gradle settings-файл: підключає React Native та Expo Gradle-плагіни через includeBuild, вмикає автолінкінг Expo-модулів і оголошує модуль `:app` для проєкту MythgateDND.",
+      "tags": ["configuration", "build-system", "android", "gradle", "autolinking"],
+      "complexity": "simple",
+      "languageNotes": "`expoAutolinking.useExpoVersionCatalog()` — саме той механізм, через який реальні Android-версії (minSdk/compileSdk/targetSdk 36) успадковуються з react-native/gradle/libs.versions.toml, як зазначено в CLAUDE.md §2."
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:android/gradlew.bat",
+      "target": "config:android/build.gradle",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:android/gradlew.bat",
+      "target": "config:android/settings.gradle",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/settings.gradle",
+      "target": "config:android/build.gradle",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:android/gradle.properties",
+      "target": "config:android/build.gradle",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

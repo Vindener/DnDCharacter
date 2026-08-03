@@ -1,0 +1,1055 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 25,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 23,
+      "failed": 0,
+      "skipped": 2
+    }
+  },
+  "results": [
+    {
+      "path": "src/data/locales/uk/monsters.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 13402,
+      "nonEmptyLines": 13402,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": "src/data/locales/uk/spells.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 4927,
+      "nonEmptyLines": 4927,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": "src/dm/boundary.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 82,
+      "nonEmptyLines": 69,
+      "functions": [
+        {
+          "name": "collectFiles",
+          "startLine": 5,
+          "endLine": 21,
+          "params": [
+            "dir"
+          ]
+        },
+        {
+          "name": "extractImports",
+          "startLine": 23,
+          "endLine": 32,
+          "params": [
+            "code"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "collectFiles",
+          "callee": "readdirSync",
+          "lineNumber": 6
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "join",
+          "lineNumber": 10
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "statSync",
+          "lineNumber": 11
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "stats.isDirectory",
+          "lineNumber": 12
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "files.push",
+          "lineNumber": 13
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "collectFiles",
+          "lineNumber": 13
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "fullPath.endsWith",
+          "lineNumber": 16
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "fullPath.endsWith",
+          "lineNumber": 16
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "files.push",
+          "lineNumber": 17
+        },
+        {
+          "caller": "extractImports",
+          "callee": "code.matchAll",
+          "lineNumber": 28
+        },
+        {
+          "caller": "extractImports",
+          "callee": "imports.push",
+          "lineNumber": 28
+        },
+        {
+          "caller": "extractImports",
+          "callee": "code.matchAll",
+          "lineNumber": 29
+        },
+        {
+          "caller": "extractImports",
+          "callee": "imports.push",
+          "lineNumber": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/domain/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 5,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/domain/types/campaign.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 20,
+      "nonEmptyLines": 19,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/domain/types/campaignInvite.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 10,
+      "nonEmptyLines": 10,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/domain/types/initiative.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 33,
+      "nonEmptyLines": 30,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/repositories/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 5,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/spellbook/boundary.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 68,
+      "nonEmptyLines": 55,
+      "functions": [
+        {
+          "name": "collectFiles",
+          "startLine": 5,
+          "endLine": 21,
+          "params": [
+            "dir"
+          ]
+        },
+        {
+          "name": "extractImports",
+          "startLine": 23,
+          "endLine": 32,
+          "params": [
+            "code"
+          ]
+        },
+        {
+          "name": "isAllowedInfraDependency",
+          "startLine": 34,
+          "endLine": 37,
+          "params": [
+            "filePath",
+            "importedPath"
+          ]
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "collectFiles",
+          "callee": "readdirSync",
+          "lineNumber": 6
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "join",
+          "lineNumber": 10
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "statSync",
+          "lineNumber": 11
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "stats.isDirectory",
+          "lineNumber": 12
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "files.push",
+          "lineNumber": 13
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "collectFiles",
+          "lineNumber": 13
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "fullPath.endsWith",
+          "lineNumber": 16
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "fullPath.endsWith",
+          "lineNumber": 16
+        },
+        {
+          "caller": "collectFiles",
+          "callee": "files.push",
+          "lineNumber": 17
+        },
+        {
+          "caller": "extractImports",
+          "callee": "code.matchAll",
+          "lineNumber": 28
+        },
+        {
+          "caller": "extractImports",
+          "callee": "imports.push",
+          "lineNumber": 28
+        },
+        {
+          "caller": "extractImports",
+          "callee": "code.matchAll",
+          "lineNumber": 29
+        },
+        {
+          "caller": "extractImports",
+          "callee": "imports.push",
+          "lineNumber": 29
+        },
+        {
+          "caller": "isAllowedInfraDependency",
+          "callee": "filePath.endsWith",
+          "lineNumber": 35
+        },
+        {
+          "caller": "isAllowedInfraDependency",
+          "callee": "join",
+          "lineNumber": 35
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/types/dm.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 26,
+      "nonEmptyLines": 26,
+      "exports": [
+        {
+          "name": "CampaignLinkInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaign",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignEncounter",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignEncounterConflictRemote",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignEncounterQueueItem",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignEncounterStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNote",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteConflictRemote",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteKind",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteQueueItem",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMCampaignNoteSyncState",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DMNoteSyncDisplayStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterDifficultyResult",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterMonsterInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPlayerInput",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPrepDraft",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPrepMonster",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPrepPlayer",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "InitiativeCombatant",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "InitiativeCombatantSource",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "InitiativeTracker",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "InitiativeTrackerSyncStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "ResourceTemplate",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "TrackerTemplateResource",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 24,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/types/spellbook.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 9,
+      "exports": [
+        {
+          "name": "CharacterSpellStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "Dnd5DamageType",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "SpellbookSource",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "SpellbookSpell",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "SpellComponents",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "SpellDamageProfile",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "UpsertSpellbookSpellInput",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 7,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/domain/types/sync.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 24,
+      "nonEmptyLines": 22,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/screens/Support/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "exports": [
+        {
+          "name": "default",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/services/characterSheets.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 27,
+      "nonEmptyLines": 26,
+      "exports": [
+        {
+          "name": "addEditorByEmail",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "autosaveCharacter",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "bulkUpsertFromLocal",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "characterCloudRepository",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "deleteCharacterSheet",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "fetchCharacterSheet",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "getEditorsForSheet",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "removeEditor",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "saveCharacterSheetAsNew",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "stripUndefinedDeep",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "subscribeCharacterSheet",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "subscribeMySheets",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "subscribeSharedWithMe",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "transferOwnership",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "updateCharacterSheet",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "upsertCharacterSheetFromLocal",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "BulkUpsertFailure",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterActorRole",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterChangeHistoryEntry",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterCloudDto",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterSheet",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "CharacterTabKey",
+          "line": 20,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 22,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/components/Loader/style.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 0,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/Backgrounds.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 54,
+      "nonEmptyLines": 52,
+      "exports": [
+        {
+          "name": "BACKGROUNDS",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "BACKGROUND_OPTIONS",
+          "line": 54,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/ClassStartingGear.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 107,
+      "nonEmptyLines": 105,
+      "exports": [
+        {
+          "name": "CLASS_GEAR",
+          "line": 7,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/DiceOptions.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "exports": [
+        {
+          "name": "DICE_OPTIONS",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/Races.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 158,
+      "nonEmptyLines": 153,
+      "functions": [
+        {
+          "name": "SUBRACE_OPTIONS",
+          "startLine": 154,
+          "endLine": 158,
+          "params": [
+            "raceKey"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "RACES",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "RACE_OPTIONS",
+          "line": 152,
+          "isDefault": false
+        },
+        {
+          "name": "SUBRACE_OPTIONS",
+          "line": 154,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SUBRACE_OPTIONS",
+          "callee": "Object.keys",
+          "lineNumber": 157
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/SubclassDetails.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 38,
+      "exports": [
+        {
+          "name": "SUBCLASS_DETAILS",
+          "line": 7,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/const/encounter.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 13,
+      "nonEmptyLines": 12,
+      "exports": [
+        {
+          "name": "CHALLENGE_XP",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DIFFICULTY_THRESHOLDS",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "evaluateEncounterDifficulty",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "getMonsterMultiplier",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "DifficultyThreshold",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterDifficultyResult",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterMonsterInput",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "EncounterPlayerInput",
+          "line": 8,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 8,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/helpers/spellbook.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 7,
+      "exports": [
+        {
+          "name": "applySpellStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "collectCharacterSpellNames",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "getCharacterSpellStatus",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "getPreparedSpellsLimit",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "normalizeSpellName",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/shared/styles/index.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 21,
+      "exports": [
+        {
+          "name": "darkColors",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "lightColors",
+          "line": 1,
+          "isDefault": false
+        },
+        {
+          "name": "ThemeColors",
+          "line": 2,
+          "isDefault": false
+        },
+        {
+          "name": "designTokens",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "sp",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "rd",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "fs",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "space",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "radius",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "fontSize",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "typography",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "DesignTokens",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "SpacingToken",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "RadiusToken",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "FontSizeToken",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "TypographyVariant",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "TypographyWeightToken",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "useDesignTokens",
+          "line": 21,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 18,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/test/mocks/expo-modules-core.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 5,
+      "exports": [
+        {
+          "name": "uuid",
+          "line": 1,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/test/mocks/react-native-firebase-analytics.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 10,
+      "functions": [
+        {
+          "name": "analytics",
+          "startLine": 4,
+          "endLine": 9,
+          "params": []
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "functions/README.md", "language": "markdown", "sizeLines": 117, "fileCategory": "docs"},
+    {"path": "functions/package.json", "language": "json", "sizeLines": 28, "fileCategory": "config"},
+    {"path": "functions/tsconfig.json", "language": "json", "sizeLines": 19, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    "functions/README.md": [],
+    "functions/package.json": [],
+    "functions/tsconfig.json": []
+  }
+}

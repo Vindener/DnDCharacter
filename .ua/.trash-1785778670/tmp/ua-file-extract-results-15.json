@@ -1,0 +1,312 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 6,
+  "filesSkipped": [],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 6,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 6,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": [
+    {
+      "path": "src/dm/repositories/appRoleRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 30,
+      "nonEmptyLines": 25,
+      "functions": [
+        {
+          "name": "parseStoredValue",
+          "startLine": 7,
+          "endLine": 14,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "normalizeRole",
+          "startLine": 16,
+          "endLine": 19,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "loadAppRole",
+          "startLine": 21,
+          "endLine": 26,
+          "params": []
+        },
+        {
+          "name": "persistAppRole",
+          "startLine": 28,
+          "endLine": 30,
+          "params": [
+            "role"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "loadAppRole",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "persistAppRole",
+          "line": 28,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parseStoredValue",
+          "callee": "JSON.parse",
+          "lineNumber": 10
+        },
+        {
+          "caller": "loadAppRole",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 22
+        },
+        {
+          "caller": "loadAppRole",
+          "callee": "parseStoredValue",
+          "lineNumber": 23
+        },
+        {
+          "caller": "loadAppRole",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 24
+        },
+        {
+          "caller": "loadAppRole",
+          "callee": "normalizeRole",
+          "lineNumber": 25
+        },
+        {
+          "caller": "persistAppRole",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 29
+        },
+        {
+          "caller": "persistAppRole",
+          "callee": "JSON.stringify",
+          "lineNumber": 29
+        },
+        {
+          "caller": "persistAppRole",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/repositories/storageRepositories.test.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 79,
+      "nonEmptyLines": 66,
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/dm/repositories/trackerTemplatesRepository.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 49,
+      "nonEmptyLines": 43,
+      "functions": [
+        {
+          "name": "parseStoredValue",
+          "startLine": 7,
+          "endLine": 14,
+          "params": [
+            "raw"
+          ]
+        },
+        {
+          "name": "loadTrackerTemplates",
+          "startLine": 16,
+          "endLine": 42,
+          "params": []
+        },
+        {
+          "name": "persistTrackerTemplates",
+          "startLine": 44,
+          "endLine": 49,
+          "params": [
+            "templates"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "loadTrackerTemplates",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "persistTrackerTemplates",
+          "line": 44,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parseStoredValue",
+          "callee": "JSON.parse",
+          "lineNumber": 10
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "AsyncStorage.getItem",
+          "lineNumber": 17
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "parseStoredValue",
+          "lineNumber": 18
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "normalizeStorageEnvelope",
+          "lineNumber": 19
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "Array.isArray",
+          "lineNumber": 20
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "migrated.data\n    .map((entry: unknown, index: number) => {\n      const cast = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};\n      const resource = cast.resource && typeof cast.resource === 'object' ? (cast.resource as Record<string, unknown>) : {};\n\n      return {\n        id: String(cast.id || `user-template-${index}`),\n        name: String(cast.name || `Шаблон ${index + 1}`),\n        source: 'user' as const,\n        resource: {\n          label: String(resource.label || 'Ресурс'),\n          current: Math.max(0, Number(resource.current) || 0),\n          max: typeof resource.max === 'number' ? Math.max(0, resource.max) : undefined,\n          resetRule: (String(resource.resetRule || 'none') as ResourceTemplate['resource']['resetRule']),\n          visibility: resource.visibility as ResourceTemplate['resource']['visibility'],\n          color: typeof resource.color === 'string' ? resource.color : undefined,\n        },\n      } satisfies ResourceTemplate;\n    })\n    .slice",
+          "lineNumber": 22
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "migrated.data\n    .map",
+          "lineNumber": 22
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "String",
+          "lineNumber": 28
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "String",
+          "lineNumber": 29
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "String",
+          "lineNumber": 32
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "Math.max",
+          "lineNumber": 33
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "Number",
+          "lineNumber": 33
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "Math.max",
+          "lineNumber": 34
+        },
+        {
+          "caller": "loadTrackerTemplates",
+          "callee": "String",
+          "lineNumber": 35
+        },
+        {
+          "caller": "persistTrackerTemplates",
+          "callee": "AsyncStorage.setItem",
+          "lineNumber": 45
+        },
+        {
+          "caller": "persistTrackerTemplates",
+          "callee": "JSON.stringify",
+          "lineNumber": 47
+        },
+        {
+          "caller": "persistTrackerTemplates",
+          "callee": "createStorageEnvelope",
+          "lineNumber": 47
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 2,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/stores/appRoleStore.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 29,
+      "nonEmptyLines": 24,
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/stores/trackerTemplatesStore.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 60,
+      "nonEmptyLines": 53,
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "src/types/Product.ts",
+      "language": "typescript",
+      "fileCategory": "code",
+      "totalLines": 3,
+      "nonEmptyLines": 2,
+      "exports": [
+        {
+          "name": "APP_ROLES",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

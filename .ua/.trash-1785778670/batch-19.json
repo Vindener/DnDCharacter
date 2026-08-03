@@ -1,0 +1,146 @@
+{
+  "nodes": [
+    {
+      "id": "config:.env",
+      "type": "config",
+      "name": ".env",
+      "filePath": ".env",
+      "summary": "Файл змінних середовища з єдиним публічним ключем `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`, який використовується для налаштування Google Sign-In у клієнті.",
+      "tags": ["configuration", "environment", "google-signin", "secrets"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "Робочі інструкції для Claude Code в цьому репозиторії: фаза release hardening, факти про проєкт, дисципліна розробки, критичні правила щодо закомміченого `android/`, інваріанти спільного редагування, заборони до релізу, пріоритети спринтів R1–R5 та Definition of Done.",
+      "tags": ["documentation", "entry-point", "release-process", "guidelines"],
+      "complexity": "complex",
+      "languageNotes": "Документ структурований 20 заголовками (11 розділів верхнього рівня), що описують джерела істини, обмеження релізу та інваріанти синхронізації Firestore."
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Основний README проєкту Mythgate 5e Companion: посилання на продуктову документацію, інструкції з розробки, команди локальної та EAS-збірки, версіонування та публікацію OTA-оновлень.",
+      "tags": ["documentation", "entry-point", "build-system", "overview"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:app.json",
+      "type": "config",
+      "name": "app.json",
+      "filePath": "app.json",
+      "summary": "Конфігурація Expo-додатка: назва, slug, версія та runtimeVersion 1.0.0, налаштування Firebase/Google Sign-In плагінів, іконки, спліш-скрін, bundle identifier iOS/Android (`com.vind.MythgateDND`) та параметри EAS Update.",
+      "tags": ["configuration", "expo", "mobile", "deployment"],
+      "complexity": "simple",
+      "languageNotes": "Оскільки `android/` закомічений у репозиторії, зміни тут не впливають на нативну збірку без дублювання правок у `android/`."
+    },
+    {
+      "id": "config:eas.json",
+      "type": "config",
+      "name": "eas.json",
+      "filePath": "eas.json",
+      "summary": "Конфігурація EAS CLI та профілів збірки (build) для Expo Application Services, що визначає параметри розробницьких, preview та production білдів.",
+      "tags": ["configuration", "eas", "build-system", "deployment"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:firebase.json",
+      "type": "config",
+      "name": "firebase.json",
+      "filePath": "firebase.json",
+      "summary": "Конфігурація Firebase CLI: розташування правил Firestore, налаштування Cloud Functions та параметри локальних емуляторів для тестування.",
+      "tags": ["configuration", "firebase", "database", "infrastructure"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:google-services.json",
+      "type": "config",
+      "name": "google-services.json",
+      "filePath": "google-services.json",
+      "summary": "Згенерований Google/Firebase конфігураційний файл для Android-клієнта (project_info, client, API-ключі), що прив'язує додаток до проєкту Firebase.",
+      "tags": ["configuration", "firebase", "android", "google-services"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "Маніфест npm-пакета проєкту: скрипти для запуску, лінтингу, тестування та релізних перевірок, залежності на Expo SDK 54/React Native 0.81/React 19, Firebase, Zustand, а також overrides для усунення вразливостей у транзитивних пакетах.",
+      "tags": ["configuration", "build-system", "dependencies", "npm"],
+      "complexity": "moderate",
+      "languageNotes": "Секція `overrides` фіксує патч-версії транзитивних залежностей (tar, ws, undici, protobufjs тощо) для закриття відомих CVE без підняття мажорних версій."
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "Конфігурація компілятора TypeScript, що розширює базовий пресет Expo та визначає `compilerOptions`, включені й виключені шляхи для проєкту.",
+      "tags": ["configuration", "typescript", "build-system"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:app.json",
+      "target": "config:google-services.json",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:eas.json",
+      "target": "config:app.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:package.json",
+      "target": "config:tsconfig.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "config:package.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "config:eas.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "config:app.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "config:firebase.json",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:.env",
+      "target": "config:app.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

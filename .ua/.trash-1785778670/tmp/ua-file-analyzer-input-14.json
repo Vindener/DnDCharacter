@@ -1,0 +1,93 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "App.tsx", "language": "typescript", "sizeLines": 110, "fileCategory": "code"},
+    {"path": "index.js", "language": "javascript", "sizeLines": 39, "fileCategory": "code"},
+    {"path": "src/data/srd/index.ts", "language": "typescript", "sizeLines": 45, "fileCategory": "code"},
+    {"path": "src/data/srd/metadata.ts", "language": "typescript", "sizeLines": 8, "fileCategory": "code"},
+    {"path": "src/repositories/firstLaunchRepository.ts", "language": "typescript", "sizeLines": 19, "fileCategory": "code"},
+    {"path": "src/repositories/whatsNewRepository.ts", "language": "typescript", "sizeLines": 19, "fileCategory": "code"},
+    {"path": "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx", "language": "typescript", "sizeLines": 118, "fileCategory": "code"},
+    {"path": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx", "language": "typescript", "sizeLines": 83, "fileCategory": "code"},
+    {"path": "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx", "language": "typescript", "sizeLines": 88, "fileCategory": "code"},
+    {"path": "src/shared/components/FirstLaunchModals/style.ts", "language": "typescript", "sizeLines": 18, "fileCategory": "code"},
+    {"path": "src/shared/components/WhatsNewModal/WhatsNewModal.tsx", "language": "typescript", "sizeLines": 68, "fileCategory": "code"},
+    {"path": "src/shared/components/WhatsNewModal/style.ts", "language": "typescript", "sizeLines": 14, "fileCategory": "code"},
+    {"path": "src/shared/services/auth/auth.tsx", "language": "typescript", "sizeLines": 29, "fileCategory": "code"},
+    {"path": "src/shared/services/telemetry/startupTrace.test.ts", "language": "typescript", "sizeLines": 141, "fileCategory": "code"},
+    {"path": "src/shared/services/telemetry/startupTrace.ts", "language": "typescript", "sizeLines": 77, "fileCategory": "code"},
+    {"path": "src/shared/ui/index.ts", "language": "typescript", "sizeLines": 34, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "App.tsx": [
+      "src/context/Theme-store.ts",
+      "src/i18n/index.ts",
+      "src/navigation/AppNavigator.tsx",
+      "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "src/shared/services/auth/auth.tsx",
+      "src/shared/services/telemetry/startupTrace.ts"
+    ],
+    "index.js": [
+      "App.tsx",
+      "src/data/srd/index.ts",
+      "src/domain/srd/localization.ts",
+      "src/domain/srd/srdRepository.ts",
+      "src/shared/services/telemetry/startupTrace.ts"
+    ],
+    "src/data/srd/index.ts": [
+      "src/data/srd/abilities.json",
+      "src/data/srd/backgrounds.json",
+      "src/data/srd/classProgression.json",
+      "src/data/srd/classes.json",
+      "src/data/srd/conditions.json",
+      "src/data/srd/equipment.json",
+      "src/data/srd/languages.json",
+      "src/data/srd/metadata.ts",
+      "src/data/srd/monsters.json",
+      "src/data/srd/races.json",
+      "src/data/srd/references.json",
+      "src/data/srd/skills.json",
+      "src/data/srd/spells.json"
+    ],
+    "src/data/srd/metadata.ts": [],
+    "src/repositories/firstLaunchRepository.ts": [],
+    "src/repositories/whatsNewRepository.ts": [],
+    "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx": [
+      "src/shared/components/ErrorBoundary/ErrorBoundary.tsx"
+    ],
+    "src/shared/components/ErrorBoundary/ErrorBoundary.tsx": [
+      "src/context/Theme-store.ts",
+      "src/i18n/index.ts",
+      "src/shared/components/ErrorBoundary/style.ts",
+      "src/shared/services/telemetry/productTelemetry.ts",
+      "src/shared/ui/index.ts"
+    ],
+    "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx": [
+      "src/context/Theme-store.ts",
+      "src/repositories/firstLaunchRepository.ts",
+      "src/shared/components/FirstLaunchModals/style.ts",
+      "src/shared/components/Modal/Modal.tsx",
+      "src/shared/ui/index.ts"
+    ],
+    "src/shared/components/FirstLaunchModals/style.ts": [
+      "src/shared/styles/tokens.ts"
+    ],
+    "src/shared/components/WhatsNewModal/WhatsNewModal.tsx": [
+      "src/repositories/whatsNewRepository.ts",
+      "src/shared/components/Modal/Modal.tsx",
+      "src/shared/components/WhatsNewModal/style.ts",
+      "src/shared/ui/index.ts"
+    ],
+    "src/shared/components/WhatsNewModal/style.ts": [
+      "src/shared/styles/tokens.ts"
+    ],
+    "src/shared/services/auth/auth.tsx": [],
+    "src/shared/services/telemetry/startupTrace.test.ts": [
+      "src/shared/services/telemetry/startupTrace.ts"
+    ],
+    "src/shared/services/telemetry/startupTrace.ts": [],
+    "src/shared/ui/index.ts": []
+  }
+}

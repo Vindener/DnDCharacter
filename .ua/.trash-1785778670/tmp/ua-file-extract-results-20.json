@@ -1,0 +1,21 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 0,
+  "filesSkipped": [
+    "android/app/src/main/res/values/colors.xml",
+    "android/app/src/main/res/values/strings.xml",
+    "android/app/src/main/res/values/styles.xml"
+  ],
+  "analysisOutcomes": {
+    "structure": {
+      "succeeded": 0,
+      "failed": 0
+    },
+    "callGraph": {
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "results": []
+}

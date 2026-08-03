@@ -1,0 +1,420 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/domain/types/character.ts",
+      "type": "file",
+      "name": "character.ts",
+      "filePath": "src/domain/types/character.ts",
+      "summary": "Визначає основну модель персонажа D&D (CharacterModelBase) та повний набір типів для кастомних секцій, трекерів, джерел контенту й похідних варіантів (Entity/Dto/Draft/ViewModel).",
+      "tags": ["type-definition", "data-model", "character", "domain"],
+      "complexity": "complex",
+      "languageNotes": "Похідні типи CharacterDraft і CharacterViewModel будуються з єдиної CharacterModelBase через Omit/Partial, щоб уникнути дублювання полів."
+    },
+    {
+      "id": "file:src/screens/Character/hooks/levelChange.test.ts",
+      "type": "file",
+      "name": "levelChange.test.ts",
+      "filePath": "src/screens/Character/hooks/levelChange.test.ts",
+      "summary": "Юніт-тести логіки зміни рівня персонажа — перевіряють коректність нової кістки хітів, статів і похідних значень при підвищенні/пониженні рівня.",
+      "tags": ["test", "unit-test", "character-progression"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/Character/hooks/levelChange.ts",
+      "type": "file",
+      "name": "levelChange.ts",
+      "filePath": "src/screens/Character/hooks/levelChange.ts",
+      "summary": "Обчислює безпечні значення персонажа (стати, кістка хітів, HP, AC, ініціатива, бонус майстерності) при зміні рівня, застосовуючи межі MIN/MAX рівня та округлення.",
+      "tags": ["business-logic", "character-progression", "utility", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/const/WeaponsDb.ts",
+      "type": "file",
+      "name": "WeaponsDb.ts",
+      "filePath": "src/shared/const/WeaponsDb.ts",
+      "summary": "Статична довідкова база холодної/дальньої зброї SRD з пошуком за нормалізованою назвою чи псевдонімом.",
+      "tags": ["static-data", "lookup", "utility", "weapons"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/derived.test.ts",
+      "type": "file",
+      "name": "derived.test.ts",
+      "filePath": "src/shared/helpers/derived.test.ts",
+      "summary": "Юніт-тести похідних характеристик персонажа — перевіряють бонус навички залежно від рангу проф. та модифікатора здібності.",
+      "tags": ["test", "unit-test", "character-stats"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/derived.ts",
+      "type": "file",
+      "name": "derived.ts",
+      "filePath": "src/shared/helpers/derived.ts",
+      "summary": "Центральний модуль обчислення похідних характеристик персонажа — модифікатори здібностей, бонуси навичок, клас броні, очки здоров'я за класом та швидкість пересування.",
+      "tags": ["business-logic", "character-stats", "utility", "calculation"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/shared/helpers/dice.ts",
+      "type": "file",
+      "name": "dice.ts",
+      "filePath": "src/shared/helpers/dice.ts",
+      "summary": "Легкі утиліти для парсингу нотації кісток (напр. \"2d6\") та симуляції кидка кісток.",
+      "tags": ["utility", "dice", "rng"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/gear.ts",
+      "type": "file",
+      "name": "gear.ts",
+      "filePath": "src/shared/helpers/gear.ts",
+      "summary": "Об'єднує список спорядження персонажа в масиви зброї (збагаченої метаданими урону) та звичайних предметів, додаючи їх до персонажа.",
+      "tags": ["utility", "inventory", "character"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/helpers/weapons.ts",
+      "type": "file",
+      "name": "weapons.ts",
+      "filePath": "src/shared/helpers/weapons.ts",
+      "summary": "Розділяє список спорядження на розпізнану зброю та інші предмети на основі бази зброї.",
+      "tags": ["utility", "inventory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/stores/characterStore.ts",
+      "type": "file",
+      "name": "characterStore.ts",
+      "filePath": "src/stores/characterStore.ts",
+      "summary": "Zustand-стор персонажів застосунку — делегує побічні ефекти (завантаження, збереження, оновлення полів) окремому модулю ефектів і реекспортує селектори стору.",
+      "tags": ["state-management", "store", "zustand", "character"],
+      "complexity": "moderate",
+      "languageNotes": "Фабрика createCharacterStoreEffects інʼєктується у create() Zustand, відокремлюючи чисту форму стану від побічних ефектів (AsyncStorage/Firebase)."
+    },
+    {
+      "id": "file:src/types/DeathSaves.ts",
+      "type": "file",
+      "name": "DeathSaves.ts",
+      "filePath": "src/types/DeathSaves.ts",
+      "summary": "Тип рятівних кидків від смерті (успіхи/невдачі) для трекінгу стану персонажа при 0 очках здоров'я.",
+      "tags": ["type-definition", "data-model", "combat"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/HitPoints.ts",
+      "type": "file",
+      "name": "HitPoints.ts",
+      "filePath": "src/types/HitPoints.ts",
+      "summary": "Тип очок здоров'я персонажа — максимум, поточне значення та тимчасові очки здоров'я.",
+      "tags": ["type-definition", "data-model", "combat"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/SavingThrows.ts",
+      "type": "file",
+      "name": "SavingThrows.ts",
+      "filePath": "src/types/SavingThrows.ts",
+      "summary": "Тип рятівних кидків персонажа за шістьма характеристиками (наявність переваги за кожною).",
+      "tags": ["type-definition", "data-model", "character"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Skills.ts",
+      "type": "file",
+      "name": "Skills.ts",
+      "filePath": "src/types/Skills.ts",
+      "summary": "Тип числових бонусів усіх 18 навичок персонажа за правилами D&D 5e.",
+      "tags": ["type-definition", "data-model", "skills"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/SpellSlots.ts",
+      "type": "file",
+      "name": "SpellSlots.ts",
+      "filePath": "src/types/SpellSlots.ts",
+      "summary": "Тип індексованого за рівнем заклинання об'єкта слотів заклинань (максимум/використано).",
+      "tags": ["type-definition", "data-model", "spells"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Spells.ts",
+      "type": "file",
+      "name": "Spells.ts",
+      "filePath": "src/types/Spells.ts",
+      "summary": "Тип магічних характеристик персонажа — здатність до заклинань, DC, слоти заклинань, відомі/підготовлені заклинання та кантрипи.",
+      "tags": ["type-definition", "data-model", "spells"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Stats.ts",
+      "type": "file",
+      "name": "Stats.ts",
+      "filePath": "src/types/Stats.ts",
+      "summary": "Тип шести базових характеристик персонажа (сила, спритність, статура, інтелект, мудрість, харизма).",
+      "tags": ["type-definition", "data-model", "character"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Traits.ts",
+      "type": "file",
+      "name": "Traits.ts",
+      "filePath": "src/types/Traits.ts",
+      "summary": "Тип рис характеру персонажа — особистість, ідеали, прив'язаності та вади.",
+      "tags": ["type-definition", "data-model", "roleplay"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Weapon.ts",
+      "type": "file",
+      "name": "Weapon.ts",
+      "filePath": "src/types/Weapon.ts",
+      "summary": "Тип екземпляра зброї персонажа з назвою, бонусом атаки та значенням урону.",
+      "tags": ["type-definition", "data-model", "weapons"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Character/hooks/levelChange.ts:normalizeStats",
+      "type": "function",
+      "name": "normalizeStats",
+      "filePath": "src/screens/Character/hooks/levelChange.ts",
+      "lineRange": [42, 51],
+      "summary": "Округлює й обмежує знизу (мінімум 1) усі шість характеристик персонажа перед застосуванням зміни рівня.",
+      "tags": ["utility", "validation", "character-stats"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice",
+      "type": "function",
+      "name": "buildNextHitDice",
+      "filePath": "src/screens/Character/hooks/levelChange.ts",
+      "lineRange": [53, 62],
+      "summary": "Обчислює нову нотацію кісток хітів при зміні рівня, додаючи або віднімаючи кубики відповідно до дельти рівнів.",
+      "tags": ["business-logic", "character-progression", "dice"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange",
+      "type": "function",
+      "name": "applyLevelChange",
+      "filePath": "src/screens/Character/hooks/levelChange.ts",
+      "lineRange": [64, 87],
+      "summary": "Головна функція застосування зміни рівня персонажа — обчислює новий рівень, кістку хітів, стати, HP, AC, ініціативу та бонус майстерності з безпечними межами.",
+      "tags": ["business-logic", "character-progression", "entry-point"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/const/WeaponsDb.ts:findWeapon",
+      "type": "function",
+      "name": "findWeapon",
+      "filePath": "src/shared/const/WeaponsDb.ts",
+      "lineRange": [20, 24],
+      "summary": "Шукає запис зброї в базі за назвою або одним із псевдонімів після нормалізації рядка.",
+      "tags": ["lookup", "utility", "weapons"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/const/WeaponsDb.ts:isWeaponName",
+      "type": "function",
+      "name": "isWeaponName",
+      "filePath": "src/shared/const/WeaponsDb.ts",
+      "lineRange": [26, 26],
+      "summary": "Перевіряє, чи відповідає переданий рядок назві відомої зброї в базі.",
+      "tags": ["utility", "weapons", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:abilityMod",
+      "type": "function",
+      "name": "abilityMod",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [5, 5],
+      "summary": "Обчислює модифікатор здібності D&D 5e за формулою floor((score-10)/2).",
+      "tags": ["calculation", "character-stats", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:computeSkills",
+      "type": "function",
+      "name": "computeSkills",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [70, 78],
+      "summary": "Обчислює підсумкові значення всіх навичок персонажа на основі нормалізованих характеристик і карти прив'язки навичок до здібностей.",
+      "tags": ["calculation", "character-stats", "skills"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus",
+      "type": "function",
+      "name": "getSkillProficiencyBonus",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [80, 85],
+      "summary": "Повертає частку бонусу майстерності залежно від рангу проф. навички (немає/половина/проф./експертиза).",
+      "tags": ["calculation", "skills", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:computeSkillBonus",
+      "type": "function",
+      "name": "computeSkillBonus",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [87, 99],
+      "summary": "Обчислює повний бонус конкретної навички, комбінуючи модифікатор здібності та бонус майстерності відповідно до рангу.",
+      "tags": ["calculation", "skills", "character-stats"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:computeAC",
+      "type": "function",
+      "name": "computeAC",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [101, 118],
+      "summary": "Обчислює клас броні персонажа з урахуванням особливостей класу (напр. Ченця, Варвара) та відповідних модифікаторів здібностей.",
+      "tags": ["calculation", "combat", "character-stats"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:getHitDieForClass",
+      "type": "function",
+      "name": "getHitDieForClass",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [120, 138],
+      "summary": "Повертає розмір кістки хітів (d6-d12), що відповідає ігровому класу персонажа за правилами SRD.",
+      "tags": ["lookup", "character-stats", "combat"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:computeHP",
+      "type": "function",
+      "name": "computeHP",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [140, 150],
+      "summary": "Обчислює максимальні очки здоров'я персонажа на основі рівня, класу та модифікатора Статури.",
+      "tags": ["calculation", "combat", "character-stats"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/helpers/derived.ts:computeSpeed",
+      "type": "function",
+      "name": "computeSpeed",
+      "filePath": "src/shared/helpers/derived.ts",
+      "lineRange": [152, 156],
+      "summary": "Визначає швидкість пересування персонажа, віддаючи перевагу швидкості раси над стандартною.",
+      "tags": ["calculation", "character-stats"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/dice.ts:parseDice",
+      "type": "function",
+      "name": "parseDice",
+      "filePath": "src/shared/helpers/dice.ts",
+      "lineRange": [1, 5],
+      "summary": "Розбирає рядкову нотацію кісток (напр. \"2d6\") на кількість кубиків і кількість граней.",
+      "tags": ["utility", "dice", "parsing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/dice.ts:rollDice",
+      "type": "function",
+      "name": "rollDice",
+      "filePath": "src/shared/helpers/dice.ts",
+      "lineRange": [7, 13],
+      "summary": "Симулює кидок вказаної кількості кісток заданої грановості та повертає суму результатів.",
+      "tags": ["utility", "dice", "rng"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter",
+      "type": "function",
+      "name": "mergeGearIntoCharacter",
+      "filePath": "src/shared/helpers/gear.ts",
+      "lineRange": [6, 21],
+      "summary": "Розподіляє спорядження на зброю й предмети, збагачує зброю метаданими урону з бази зброї та додає їх до персонажа.",
+      "tags": ["business-logic", "inventory", "character"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems",
+      "type": "function",
+      "name": "splitGearIntoWeaponsAndItems",
+      "filePath": "src/shared/helpers/weapons.ts",
+      "lineRange": [3, 11],
+      "summary": "Розділяє масив назв спорядження на розпізнану зброю та решту предметів за допомогою бази зброї.",
+      "tags": ["utility", "inventory"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/DeathSaves.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/HitPoints.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/SavingThrows.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Skills.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Spells.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Traits.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/hooks/levelChange.test.ts", "target": "file:src/screens/Character/hooks/levelChange.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/shared/helpers/dice.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/types/HitPoints.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/derived.test.ts", "target": "file:src/shared/helpers/derived.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/types/Skills.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/shared/const/WeaponsDb.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/shared/helpers/weapons.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/shared/helpers/weapons.ts", "target": "file:src/shared/const/WeaponsDb.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/characterStore.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/characterStore.ts", "target": "file:src/services/storeEffects/characterStoreEffects.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/characterStore.ts", "target": "file:src/shared/const/attributes.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/characterStore.ts", "target": "file:src/types/Spells.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/characterStore.ts", "target": "file:src/types/Traits.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/stores/characterStore.ts", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/types/Spells.ts", "target": "file:src/types/SpellSlots.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:normalizeStats", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:findWeapon", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:abilityMod", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkills", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkillBonus", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeAC", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getHitDieForClass", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeHP", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSpeed", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:parseDice", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:rollDice", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/gear.ts", "target": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/shared/helpers/weapons.ts", "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "type": "contains", "direction": "forward", "weight": 1.0 },
+
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:findWeapon", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:abilityMod", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkills", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkillBonus", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeAC", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getHitDieForClass", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeHP", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSpeed", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:parseDice", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:rollDice", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/gear.ts", "target": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/shared/helpers/weapons.ts", "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "target": "function:src/shared/const/WeaponsDb.ts:findWeapon", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice", "target": "function:src/shared/helpers/dice.ts:parseDice", "type": "calls", "direction": "forward", "weight": 0.8 },
+
+    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/screens/Character/hooks/levelChange.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/shared/helpers/derived.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 }
+  ]
+}

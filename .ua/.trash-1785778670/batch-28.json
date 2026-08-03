@@ -1,0 +1,441 @@
+{
+  "nodes": [
+    {
+      "id": "document:.agents/skills/create-android-component/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".agents/skills/create-android-component/SKILL.md",
+      "summary": "Навичка Codex/Claude для створення React Native компонентів і екранів під Android UX: функціональні компоненти, TypeScript без any, Pressable, StyleSheet, токени теми, і правильне розміщення файлів у src/screens, src/shared/components або src/modules.",
+      "tags": ["documentation", "coding-standards", "react-native", "android", "component-guidelines"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.claude/settings.json",
+      "type": "config",
+      "name": "settings.json",
+      "filePath": ".claude/settings.json",
+      "summary": "Локальні налаштування Claude Code для репозиторію, що вмикають плагін understand-anything.",
+      "tags": ["configuration", "claude-code", "tooling", "plugin"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.firebaserc",
+      "type": "file",
+      "name": ".firebaserc",
+      "filePath": ".firebaserc",
+      "summary": "Конфігурація Firebase CLI, яка прив'язує локальний репозиторій до Firebase-проєкту mythgatednd за замовчуванням.",
+      "tags": ["configuration", "firebase", "project-alias"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/instructions/mobile-rn-standards.instructions.md",
+      "type": "document",
+      "name": "mobile-rn-standards.instructions.md",
+      "filePath": ".github/instructions/mobile-rn-standards.instructions.md",
+      "summary": "Чинні код-стандарти для React Native/TypeScript: правила типізації, компонентів, навігації, стилів (sp/fs/rd), Zustand-стору та сервісів Firebase/Firestore.",
+      "tags": ["documentation", "coding-standards", "react-native", "typescript", "firebase"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:.npmrc",
+      "type": "file",
+      "name": ".npmrc",
+      "filePath": ".npmrc",
+      "summary": "Налаштування npm, яке вмикає legacy-peer-deps для сумісності залежностей у монорепо Expo/React Native.",
+      "tags": ["configuration", "npm", "dependency-management"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.ua/.understandignore",
+      "type": "file",
+      "name": ".understandignore",
+      "filePath": ".ua/.understandignore",
+      "summary": "Список патернів (у стилі .gitignore) для виключення файлів і директорій з аналізу Understand-Anything; більшість правил закоментовані як підказки, а не активні виключення.",
+      "tags": ["configuration", "tooling", "ignore-rules", "understand-anything"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:.ua/config.json",
+      "type": "config",
+      "name": "config.json",
+      "filePath": ".ua/config.json",
+      "summary": "Мінімальний конфіг Understand-Anything, що задає мову вихідного контенту для аналізу репозиторію.",
+      "tags": ["configuration", "tooling", "understand-anything", "localization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/build.gradle",
+      "type": "config",
+      "name": "build.gradle",
+      "filePath": "android/app/build.gradle",
+      "summary": "Gradle-конфігурація модуля app для React Native/Expo Android-збірки: визначення entry file, Hermes і кодогенерації, підписання debug-збірки через debug.keystore, прапорці ProGuard/shrinkResources і плагіни google-services та crashlytics.",
+      "tags": ["configuration", "android", "gradle", "build-system", "firebase"],
+      "complexity": "complex",
+      "languageNotes": "Gradle DSL (Groovy) з умовним копіюванням google-services.json з кореня монорепо в android/app, якщо його там ще немає — наслідок закомміченого android/ без автоматичного prebuild."
+    },
+    {
+      "id": "file:android/app/debug.keystore",
+      "type": "file",
+      "name": "debug.keystore",
+      "filePath": "android/app/debug.keystore",
+      "summary": "Двійковий debug-keystore для підписання Android-збірок під час розробки; використовується в build.gradle як storeFile для debug signingConfig.",
+      "tags": ["android", "signing", "keystore", "binary-asset", "debug-build"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/google-services.json",
+      "type": "config",
+      "name": "google-services.json",
+      "filePath": "android/app/google-services.json",
+      "summary": "Конфігурація Firebase для Android-клієнта (project_id mythgatednd, package com.vind.MythgateDND): OAuth-клієнти для Google Sign-In і API-ключ Firebase Android SDK.",
+      "tags": ["configuration", "firebase", "google-services", "android", "oauth"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:android/app/proguard-rules.pro",
+      "type": "file",
+      "name": "proguard-rules.pro",
+      "filePath": "android/app/proguard-rules.pro",
+      "summary": "Проєктні правила ProGuard/R8, що зберігають класи react-native-reanimated і TurboModule від видалення при мінімізації релізної збірки.",
+      "tags": ["android", "proguard", "r8", "build-configuration", "minification"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/androidTest/AndroidManifest.xml",
+      "type": "config",
+      "name": "AndroidManifest.xml",
+      "filePath": "android/app/src/androidTest/AndroidManifest.xml",
+      "summary": "Маніфест для інструментальних Android-тестів, що оголошує допоміжні Activity з AndroidX Test (InstrumentationActivityInvoker) як exported.",
+      "tags": ["android", "manifest", "instrumented-tests", "test-configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/debug/AndroidManifest.xml",
+      "type": "config",
+      "name": "AndroidManifest.xml",
+      "filePath": "android/app/src/debug/AndroidManifest.xml",
+      "summary": "Маніфест варіанту debug, який дозволяє cleartext-трафік і додає дозвіл SYSTEM_ALERT_WINDOW лише для debug-збірок.",
+      "tags": ["android", "manifest", "debug-build", "networking", "permissions"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/main/AndroidManifest.xml",
+      "type": "config",
+      "name": "AndroidManifest.xml",
+      "filePath": "android/app/src/main/AndroidManifest.xml",
+      "summary": "Основний Android-маніфест застосунку Mythgate: дозволи (INTERNET, READ/WRITE_EXTERNAL_STORAGE, VIBRATE, CAMERA видалено), deep-link схема exp+dndcharacter, конфігурація Expo Updates (runtime version, канал оновлень) і оголошення MainApplication/MainActivity.",
+      "tags": ["android", "manifest", "permissions", "deep-linking", "expo-updates"],
+      "complexity": "moderate",
+      "languageNotes": "Маніфест уже містить активну конфігурацію expo-modules-updates (ENABLED=true, EXPO_UPDATE_URL, runtime version) для EAS Update."
+    },
+    {
+      "id": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "type": "file",
+      "name": "MainActivity.kt",
+      "filePath": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "summary": "Головна нативна Activity Android-застосунку на базі ReactActivity: задає ім'я React-компонента, delegate з підтримкою Fabric (New Architecture) і сумісну обробку back-press.",
+      "tags": ["android", "kotlin", "entry-point", "react-native", "activity"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:MainActivity",
+      "type": "class",
+      "name": "MainActivity",
+      "filePath": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "lineRange": [13, 61],
+      "summary": "Клас нативної Activity, що успадковує ReactActivity: налаштовує тему перед super.onCreate, повертає ім'я головного React-компонента та створює delegate активності з увімкненою Fabric (New Architecture).",
+      "tags": ["android", "kotlin", "activity", "react-native", "entry-point"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:createReactActivityDelegate",
+      "type": "function",
+      "name": "createReactActivityDelegate",
+      "filePath": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "lineRange": [32, 41],
+      "summary": "Створює ReactActivityDelegateWrapper, що вмикає New Architecture (Fabric) для цієї Activity.",
+      "tags": ["android", "kotlin", "factory", "react-native", "fabric"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:invokeDefaultOnBackPressed",
+      "type": "function",
+      "name": "invokeDefaultOnBackPressed",
+      "filePath": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "lineRange": [48, 60],
+      "summary": "Реалізує сумісну з Android 12+ поведінку системної кнопки 'назад' для не-Fabric компонентів.",
+      "tags": ["android", "kotlin", "event-handler", "back-navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "type": "file",
+      "name": "MainApplication.kt",
+      "filePath": "android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "summary": "Клас Application, що ініціалізує React Native хост (ReactNativeHost/ReactHost), реєструє автолінковані пакети та завантажує SoLoader і New Architecture Entry Point при старті процесу.",
+      "tags": ["android", "kotlin", "entry-point", "react-native", "application"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt:MainApplication",
+      "type": "class",
+      "name": "MainApplication",
+      "filePath": "android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "lineRange": [19, 57],
+      "summary": "Application-клас, що реалізує ReactApplication/ReactHost: конфігурує список пакетів через PackageList, викликає SoLoader.init та завантаження ReactNativeHost для New Architecture.",
+      "tags": ["android", "kotlin", "application", "react-native", "bootstrap"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "type": "config",
+      "name": "ic_launcher_background.xml",
+      "filePath": "android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "summary": "Layer-list drawable для сплеш-екрана: фоновий колір splashscreen_background і растровий логотип splashscreen_logo по центру.",
+      "tags": ["android", "drawable", "splash-screen", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/main/res/drawable/rn_edit_text_material.xml",
+      "type": "config",
+      "name": "rn_edit_text_material.xml",
+      "filePath": "android/app/src/main/res/drawable/rn_edit_text_material.xml",
+      "summary": "Стандартний drawable React Native для текстових полів Material (копія abc_edit_text_material) з обхідним рішенням проти NullPointerException при певних станах фокусу/натискання.",
+      "tags": ["android", "drawable", "react-native", "text-input", "workaround"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "type": "config",
+      "name": "ic_launcher.xml",
+      "filePath": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "summary": "Adaptive icon (API 26+) для основної іконки застосунку: фон iconBackground і передній план ic_launcher_foreground.",
+      "tags": ["android", "adaptive-icon", "app-icon", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "type": "config",
+      "name": "ic_launcher_round.xml",
+      "filePath": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "summary": "Adaptive icon (API 26+) для круглого варіанта іконки застосунку з тим самим фоном і передньоплановим зображенням, що й основна іконка.",
+      "tags": ["android", "adaptive-icon", "app-icon", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "type": "file",
+      "name": "ic_launcher.webp",
+      "filePath": "android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "summary": "Растрове зображення (легасі, не-адаптивна іконка) застосунку для щільності hdpi.",
+      "tags": ["android", "app-icon", "binary-asset", "hdpi", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "type": "file",
+      "name": "ic_launcher_foreground.webp",
+      "filePath": "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "summary": "Передньоплановий шар adaptive-іконки застосунку для щільності hdpi, використовується в ic_launcher.xml і ic_launcher_round.xml.",
+      "tags": ["android", "adaptive-icon", "binary-asset", "hdpi", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "type": "file",
+      "name": "ic_launcher_round.webp",
+      "filePath": "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "summary": "Растрове зображення (легасі, не-адаптивна іконка) круглого варіанта іконки застосунку для щільності hdpi.",
+      "tags": ["android", "app-icon", "binary-asset", "hdpi", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "type": "file",
+      "name": "ic_launcher.webp",
+      "filePath": "android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "summary": "Растрове зображення (легасі, не-адаптивна іконка) застосунку для щільності mdpi.",
+      "tags": ["android", "app-icon", "binary-asset", "mdpi", "branding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "type": "file",
+      "name": "ic_launcher_foreground.webp",
+      "filePath": "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "summary": "Передньоплановий шар adaptive-іконки застосунку для щільності mdpi.",
+      "tags": ["android", "adaptive-icon", "binary-asset", "mdpi", "branding"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "target": "class:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:MainActivity",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "target": "function:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:createReactActivityDelegate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "target": "function:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:invokeDefaultOnBackPressed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "target": "class:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt:MainApplication",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "target": "class:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:MainActivity",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "target": "function:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:createReactActivityDelegate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "target": "function:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt:invokeDefaultOnBackPressed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "target": "class:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt:MainApplication",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:android/app/build.gradle",
+      "target": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/build.gradle",
+      "target": "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/AndroidManifest.xml",
+      "target": "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/AndroidManifest.xml",
+      "target": "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/build.gradle",
+      "target": "file:android/app/proguard-rules.pro",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/build.gradle",
+      "target": "file:android/app/debug.keystore",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/build.gradle",
+      "target": "config:android/app/google-services.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/AndroidManifest.xml",
+      "target": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/AndroidManifest.xml",
+      "target": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "target": "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "target": "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "target": "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "target": "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:.firebaserc",
+      "target": "config:android/app/google-services.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:android/app/src/androidTest/AndroidManifest.xml",
+      "target": "config:android/app/src/main/AndroidManifest.xml",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:android/app/src/debug/AndroidManifest.xml",
+      "target": "config:android/app/src/main/AndroidManifest.xml",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

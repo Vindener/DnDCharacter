@@ -1,0 +1,3164 @@
+{
+  "scriptCompleted": true,
+  "contentDigest": "a2f6d007598f453d86afaecf3ab8d66f3592b6d10a9dc596983bddd4aff4cde2",
+  "files": [
+    {
+      "path": ".agents/AGENT.md",
+      "language": "markdown",
+      "sizeLines": 84,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/CHECKLIST.md",
+      "language": "markdown",
+      "sizeLines": 45,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/CODEX.md",
+      "language": "markdown",
+      "sizeLines": 59,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/MEMORY.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/REPO_MAP.md",
+      "language": "markdown",
+      "sizeLines": 75,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/TOOLS.md",
+      "language": "markdown",
+      "sizeLines": 74,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/USER.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/openai.yaml",
+      "language": "yaml",
+      "sizeLines": 47,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".agents/skills/create-android-component/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/settings.json",
+      "language": "json",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".env",
+      "language": "config",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".firebaserc",
+      "language": "unknown",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/instructions/mobile-rn-standards.instructions.md",
+      "language": "markdown",
+      "sizeLines": 60,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".npmrc",
+      "language": "unknown",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".ua/.understandignore",
+      "language": "unknown",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "sizeLines": 1,
+      "fileCategory": "config"
+    },
+    {
+      "path": "App.tsx",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 240,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 138,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "android/app/build.gradle",
+      "language": "gradle",
+      "sizeLines": 189,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/debug.keystore",
+      "language": "keystore",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/google-services.json",
+      "language": "json",
+      "sizeLines": 70,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/proguard-rules.pro",
+      "language": "pro",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/androidTest/AndroidManifest.xml",
+      "language": "xml",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/debug/AndroidManifest.xml",
+      "language": "xml",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/AndroidManifest.xml",
+      "language": "xml",
+      "sizeLines": 32,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "language": "kotlin",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "language": "kotlin",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "language": "xml",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/drawable/rn_edit_text_material.xml",
+      "language": "xml",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "language": "xml",
+      "sizeLines": 4,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "language": "xml",
+      "sizeLines": 4,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "language": "webp",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "language": "webp",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "language": "webp",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "language": "webp",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "language": "webp",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "language": "webp",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "language": "webp",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "language": "webp",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "language": "webp",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "language": "webp",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/res/values-night/colors.xml",
+      "language": "xml",
+      "sizeLines": 0,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/values/colors.xml",
+      "language": "xml",
+      "sizeLines": 6,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/values/strings.xml",
+      "language": "xml",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/app/src/main/res/values/styles.xml",
+      "language": "xml",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/build.gradle",
+      "language": "gradle",
+      "sizeLines": 38,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/gradle.properties",
+      "language": "properties",
+      "sizeLines": 60,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/gradle/wrapper/gradle-wrapper.jar",
+      "language": "jar",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/gradle/wrapper/gradle-wrapper.properties",
+      "language": "properties",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": "android/gradlew",
+      "language": "unknown",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/gradlew.bat",
+      "language": "batch",
+      "sizeLines": 94,
+      "fileCategory": "script"
+    },
+    {
+      "path": "android/settings.gradle",
+      "language": "gradle",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "app.json",
+      "language": "json",
+      "sizeLines": 54,
+      "fileCategory": "config"
+    },
+    {
+      "path": "docs/audit-2026-07.md",
+      "language": "markdown",
+      "sizeLines": 279,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/campaign-management-prompts.md",
+      "language": "markdown",
+      "sizeLines": 564,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/claude-code-prompts.md",
+      "language": "markdown",
+      "sizeLines": 1069,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/collaborative-editing.md",
+      "language": "markdown",
+      "sizeLines": 258,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/dnd-product-guidelines.md",
+      "language": "markdown",
+      "sizeLines": 81,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/loading-states-and-skeleton.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/privacy-policy.en.md",
+      "language": "markdown",
+      "sizeLines": 58,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/privacy-policy.uk.md",
+      "language": "markdown",
+      "sizeLines": 58,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/product-collaboration-stage-4.md",
+      "language": "markdown",
+      "sizeLines": 77,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/product-dm-experience-stage-5.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/product-foundation-stage-1.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/product-homebrew-stage-3.md",
+      "language": "markdown",
+      "sizeLines": 105,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/product-redesign-stage-2.md",
+      "language": "markdown",
+      "sizeLines": 168,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/release-checklist-1.0.0.md",
+      "language": "markdown",
+      "sizeLines": 125,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/release-plan-google-play.md",
+      "language": "markdown",
+      "sizeLines": 324,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/sprint-plan.md",
+      "language": "markdown",
+      "sizeLines": 155,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/store-listing.md",
+      "language": "markdown",
+      "sizeLines": 163,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/ui-kit.md",
+      "language": "markdown",
+      "sizeLines": 93,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/ux-ui-roadmap.md",
+      "language": "markdown",
+      "sizeLines": 82,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "eas.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "firebase.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "firestore-tests/rules.test.ts",
+      "language": "typescript",
+      "sizeLines": 456,
+      "fileCategory": "code"
+    },
+    {
+      "path": "firestore.rules",
+      "language": "rules",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/README.md",
+      "language": "markdown",
+      "sizeLines": 117,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "functions/package.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "functions/src/accountDeletionCascade.test.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/src/accountDeletionCascade.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/src/createCampaignInvite.ts",
+      "language": "typescript",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/src/deleteMyAccount.ts",
+      "language": "typescript",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/src/redeemCampaignInvite.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "functions/tsconfig.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "functions/vitest.config.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "google-services.json",
+      "language": "json",
+      "sizeLines": 70,
+      "fileCategory": "config"
+    },
+    {
+      "path": "index.js",
+      "language": "javascript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "metro.config.js",
+      "language": "javascript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 127,
+      "fileCategory": "config"
+    },
+    {
+      "path": "scripts/lint-theme.mjs",
+      "language": "javascript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/lint-ui-tokens.mjs",
+      "language": "javascript",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/manual-dev-client-android.ps1",
+      "language": "powershell",
+      "sizeLines": 72,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/release-check.mjs",
+      "language": "javascript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/validate-srd.mjs",
+      "language": "javascript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/components/ShareCharacterSheetModal.tsx",
+      "language": "typescript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/AppRole-store.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/Character-store.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/CustomCoins-store.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/DmSettings-store.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/Monster-store.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/Spellbook-store.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/Sync-store.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/Theme-store.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/context/TrackerTemplates-store.ts",
+      "language": "typescript",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/locales/uk/monsters.json",
+      "language": "json",
+      "sizeLines": 13402,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/locales/uk/spells.json",
+      "language": "json",
+      "sizeLines": 4927,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/abilities.json",
+      "language": "json",
+      "sizeLines": 9,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/backgrounds.json",
+      "language": "json",
+      "sizeLines": 23,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/classProgression.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/classes.json",
+      "language": "json",
+      "sizeLines": 14,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/conditions.json",
+      "language": "json",
+      "sizeLines": 17,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/equipment.json",
+      "language": "json",
+      "sizeLines": 25,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/index.ts",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/srd/languages.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/metadata.ts",
+      "language": "typescript",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/data/srd/monsters.json",
+      "language": "json",
+      "sizeLines": 20059,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/races.json",
+      "language": "json",
+      "sizeLines": 154,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/references.json",
+      "language": "json",
+      "sizeLines": 128,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/skills.json",
+      "language": "json",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/data/srd/spells.json",
+      "language": "json",
+      "sizeLines": 10031,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/dm/boundary.test.ts",
+      "language": "typescript",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/campaign/index.ts",
+      "language": "typescript",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/campaign/linking.test.ts",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/campaign/linking.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/campaign/utils.test.ts",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/campaign/utils.ts",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/encounter/calculator.test.ts",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/encounter/calculator.ts",
+      "language": "typescript",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/encounter/index.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/initiative/index.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/initiative/roll.test.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/initiative/roll.ts",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/notes/conflict.test.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/notes/conflict.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/notes/index.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/campaign.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/campaignInvite.ts",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/encounter.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/encounterHistory.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/index.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/initiative.ts",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/domain/types/notes.ts",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/hooks/useCampaignOwnership.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/appRoleRepository.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignEncountersRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 225,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignEncountersRepository.ts",
+      "language": "typescript",
+      "sizeLines": 492,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "language": "typescript",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignNotesRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignNotesRepository.ts",
+      "language": "typescript",
+      "sizeLines": 518,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 406,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/campaignRepository.ts",
+      "language": "typescript",
+      "sizeLines": 495,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/dmSettingsRepository.ts",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/monsterRepository.ts",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/storageRepositories.test.ts",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/dm/repositories/trackerTemplatesRepository.ts",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/mappers/character.mapper.test.ts",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/mappers/character.mapper.ts",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/mappers/homebrew.mapper.test.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/mappers/homebrew.mapper.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/mappers/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/mappers/spell.mapper.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/migrations/index.test.ts",
+      "language": "typescript",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/migrations/index.ts",
+      "language": "typescript",
+      "sizeLines": 518,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/campaignEncounter.schema.ts",
+      "language": "typescript",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/campaignInitiative.schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/campaignInitiative.schema.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/campaignNote.schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/campaignNote.schema.ts",
+      "language": "typescript",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/character.schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/character.schema.ts",
+      "language": "typescript",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/createCharacterWizard.schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/createCharacterWizard.schema.ts",
+      "language": "typescript",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/homebrew.schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/homebrew.schema.ts",
+      "language": "typescript",
+      "sizeLines": 372,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/index.ts",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/spell.schema.test.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/spell.schema.ts",
+      "language": "typescript",
+      "sizeLines": 314,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/schemas/utils.ts",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/boundary.test.ts",
+      "language": "typescript",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/characterSpellAdapter.test.ts",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/characterSpellAdapter.ts",
+      "language": "typescript",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/spellCloudRepository.ts",
+      "language": "typescript",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/spellLocalRepository.ts",
+      "language": "typescript",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/spellRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 206,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/spellRepository.ts",
+      "language": "typescript",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/spellbook/spellbookEntity.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/adapters.ts",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/localization.test.ts",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/localization.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/schemas.ts",
+      "language": "typescript",
+      "sizeLines": 190,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/srdRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/srdRepository.ts",
+      "language": "typescript",
+      "sizeLines": 215,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/srdSelectors.ts",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/srd/types.ts",
+      "language": "typescript",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/types/character.ts",
+      "language": "typescript",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/types/dm.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/types/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/types/sourceMetadata.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/types/spellbook.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/domain/types/sync.ts",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/index.ts",
+      "language": "typescript",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/languageStorage.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/i18n/locales/en/bestiary.json",
+      "language": "json",
+      "sizeLines": 148,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/character.json",
+      "language": "json",
+      "sizeLines": 616,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/common.json",
+      "language": "json",
+      "sizeLines": 86,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/createCharacter.json",
+      "language": "json",
+      "sizeLines": 204,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/dice.json",
+      "language": "json",
+      "sizeLines": 56,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/dm.json",
+      "language": "json",
+      "sizeLines": 373,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/dnd.json",
+      "language": "json",
+      "sizeLines": 85,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/firstLaunch.json",
+      "language": "json",
+      "sizeLines": 18,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/home.json",
+      "language": "json",
+      "sizeLines": 54,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/initiative.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/legal.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/navigation.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/references.json",
+      "language": "json",
+      "sizeLines": 100,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/settings.json",
+      "language": "json",
+      "sizeLines": 81,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/spellbook.json",
+      "language": "json",
+      "sizeLines": 211,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/support.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/en/whatsNew.json",
+      "language": "json",
+      "sizeLines": 9,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/bestiary.json",
+      "language": "json",
+      "sizeLines": 148,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/character.json",
+      "language": "json",
+      "sizeLines": 616,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/common.json",
+      "language": "json",
+      "sizeLines": 86,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/createCharacter.json",
+      "language": "json",
+      "sizeLines": 204,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/dice.json",
+      "language": "json",
+      "sizeLines": 56,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/dm.json",
+      "language": "json",
+      "sizeLines": 373,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/dnd.json",
+      "language": "json",
+      "sizeLines": 85,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/firstLaunch.json",
+      "language": "json",
+      "sizeLines": 18,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/home.json",
+      "language": "json",
+      "sizeLines": 54,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/initiative.json",
+      "language": "json",
+      "sizeLines": 37,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/legal.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/navigation.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/references.json",
+      "language": "json",
+      "sizeLines": 100,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/settings.json",
+      "language": "json",
+      "sizeLines": 81,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/spellbook.json",
+      "language": "json",
+      "sizeLines": 145,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/support.json",
+      "language": "json",
+      "sizeLines": 28,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/locales/uk/whatsNew.json",
+      "language": "json",
+      "sizeLines": 9,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/i18n/types.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/modules/Header/Header.tsx",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/modules/Header/style.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/navigation/AppNavigator.tsx",
+      "language": "typescript",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/navigation/DMNavigator.tsx",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/navigation/ReferencesNavigator.tsx",
+      "language": "typescript",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/navigation/TabNavigator.tsx",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/navigation/sharedTypes.ts",
+      "language": "typescript",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/characterCloudRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 375,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/characterCloudRepository.ts",
+      "language": "typescript",
+      "sizeLines": 777,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/characterLocalRepository.test.ts",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/characterLocalRepository.ts",
+      "language": "typescript",
+      "sizeLines": 103,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/createCharacterDraftRepository.ts",
+      "language": "typescript",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/firstLaunchRepository.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/syncPathFieldMap.test.ts",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/syncPathFieldMap.ts",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/repositories/whatsNewRepository.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Bestiary/Bestiary.test.tsx",
+      "language": "typescript",
+      "sizeLines": 365,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Bestiary/Bestiary.tsx",
+      "language": "typescript",
+      "sizeLines": 439,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Bestiary/bestiaryFilters.test.ts",
+      "language": "typescript",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Bestiary/bestiaryFilters.ts",
+      "language": "typescript",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Bestiary/style.ts",
+      "language": "typescript",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/Character.tsx",
+      "language": "typescript",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/CharacterHeader.tsx",
+      "language": "typescript",
+      "sizeLines": 132,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/CharacterModals.tsx",
+      "language": "typescript",
+      "sizeLines": 622,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/CharacterSourceBadge.test.tsx",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/CharacterSourceBadge.tsx",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/CharacterTabs.tsx",
+      "language": "typescript",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/CombatSummaryCard.tsx",
+      "language": "typescript",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/QuickActionBar.test.tsx",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/components/QuickActionBar.tsx",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/hooks/levelChange.test.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/hooks/levelChange.ts",
+      "language": "typescript",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/hooks/useCharacterActions.tsx",
+      "language": "typescript",
+      "sizeLines": 3717,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/hooks/useQuickActions.ts",
+      "language": "typescript",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/style.ts",
+      "language": "typescript",
+      "sizeLines": 975,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/CharacterTabContent.test.tsx",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/CharacterTabContent.tsx",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/CombatTab.tsx",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/HomebrewTab.tsx",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/InventoryTab.tsx",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/MagicTab.tsx",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/NotesTab.tsx",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Character/tabs/OverviewTab.tsx",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "language": "typescript",
+      "sizeLines": 400,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
+      "language": "typescript",
+      "sizeLines": 1361,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/CreateCharacter/createCharacterWizard.test.ts",
+      "language": "typescript",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/CreateCharacter/createCharacterWizard.ts",
+      "language": "typescript",
+      "sizeLines": 977,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/CreateCharacter/style.ts",
+      "language": "typescript",
+      "sizeLines": 397,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DM.tsx",
+      "language": "typescript",
+      "sizeLines": 515,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMCampaignDetail.tsx",
+      "language": "typescript",
+      "sizeLines": 693,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMCampaignNotes.tsx",
+      "language": "typescript",
+      "sizeLines": 419,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMCampaigns.tsx",
+      "language": "typescript",
+      "sizeLines": 367,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMEncounterPrep.tsx",
+      "language": "typescript",
+      "sizeLines": 511,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMPartyOverview.tsx",
+      "language": "typescript",
+      "sizeLines": 263,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMQuickEdit.tsx",
+      "language": "typescript",
+      "sizeLines": 536,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMSharedUpdates.style.ts",
+      "language": "typescript",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/DMSharedUpdates.tsx",
+      "language": "typescript",
+      "sizeLines": 427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "language": "typescript",
+      "sizeLines": 268,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/EncounterCalculator/style.ts",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/LootGenerator/style.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/PinnedReferencesList.tsx",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/adapters/campaignLink.ts",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/adapters/index.ts",
+      "language": "typescript",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/adapters/unifiedParty.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DM/style.ts",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Dice/Dice.tsx",
+      "language": "typescript",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Dice/styles.ts",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DiceRoller/DiceRoller.test.tsx",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DiceRoller/DiceRoller.tsx",
+      "language": "typescript",
+      "sizeLines": 438,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/DiceRoller/styles.ts",
+      "language": "typescript",
+      "sizeLines": 307,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Home/Home.test.tsx",
+      "language": "typescript",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Home/Home.tsx",
+      "language": "typescript",
+      "sizeLines": 465,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Home/homeViewModel.test.ts",
+      "language": "typescript",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Home/homeViewModel.ts",
+      "language": "typescript",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Home/styles.ts",
+      "language": "typescript",
+      "sizeLines": 322,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "language": "typescript",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Initiative/Initiative.tsx",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "language": "typescript",
+      "sizeLines": 299,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Initiative/style.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/LegalLicenses/LegalLicenses.tsx",
+      "language": "typescript",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Monster/Monster.test.tsx",
+      "language": "typescript",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Monster/Monster.tsx",
+      "language": "typescript",
+      "sizeLines": 506,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Monster/style.ts",
+      "language": "typescript",
+      "sizeLines": 136,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/References/References.test.tsx",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/References/References.tsx",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/References/styles.ts",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Settings/DeleteAccountModal.tsx",
+      "language": "typescript",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Settings/Settings.tsx",
+      "language": "typescript",
+      "sizeLines": 315,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Settings/styles.ts",
+      "language": "typescript",
+      "sizeLines": 325,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Spellbook/Spellbook.tsx",
+      "language": "typescript",
+      "sizeLines": 1076,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Spellbook/spellbookFilters.test.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Spellbook/spellbookFilters.ts",
+      "language": "typescript",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Spellbook/styles.ts",
+      "language": "typescript",
+      "sizeLines": 408,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Support/Support.tsx",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/screens/Support/index.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/accountDeletion.test.ts",
+      "language": "typescript",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/accountDeletion.ts",
+      "language": "typescript",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/accountDeletionCascade.test.ts",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/accountDeletionCascade.ts",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/campaignInvite.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/characterDeletion.test.ts",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/characterDeletion.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/characterSheets.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/characterSyncCoordinator.test.ts",
+      "language": "typescript",
+      "sizeLines": 556,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/characterSyncCoordinator.ts",
+      "language": "typescript",
+      "sizeLines": 764,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/connections.ts",
+      "language": "typescript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/dmCampaignNotes.test.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/dmCampaignNotes.ts",
+      "language": "typescript",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/dmCampaigns.test.ts",
+      "language": "typescript",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/dmCampaigns.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/firebase.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/storeEffects/characterStoreEffects.ts",
+      "language": "typescript",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/storeEffects/dmStoreEffects.test.ts",
+      "language": "typescript",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/storeEffects/dmStoreEffects.ts",
+      "language": "typescript",
+      "sizeLines": 292,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/storeEffects/spellbookStoreEffects.ts",
+      "language": "typescript",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/storeEffects/syncStoreEffects.ts",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/storeEffects/uiStoreEffects.ts",
+      "language": "typescript",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/services/users.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterCard/CharacterCard.tsx",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterCard/style.ts",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 608,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterMenu/style.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterOverview/CharacterOverview.tsx",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterOverview/style.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx",
+      "language": "typescript",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx",
+      "language": "typescript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
+      "language": "typescript",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "language": "typescript",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "language": "typescript",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "language": "typescript",
+      "sizeLines": 338,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/style.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/style.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/EmptyPlaceholder.tsx",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx",
+      "language": "typescript",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/ErrorBoundary/style.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/Firebase/Auth.tsx",
+      "language": "typescript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "language": "typescript",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/FirstLaunchModals/style.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/Loader/Loader.tsx",
+      "language": "typescript",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/Loader/style.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/Modal/Modal.tsx",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/Modal/style.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/MonsterCard/MonsterCard.tsx",
+      "language": "typescript",
+      "sizeLines": 215,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/MonsterCard/style.ts",
+      "language": "typescript",
+      "sizeLines": 150,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/RollResultModal/style.ts",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/TextInput/MultiTextInput.tsx",
+      "language": "typescript",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/TextInput/TextInput.tsx",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/TextInput/index.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "language": "typescript",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/WhatsNewModal/style.ts",
+      "language": "typescript",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/Backgrounds.ts",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/CharacterClass.ts",
+      "language": "typescript",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/CharacterTabs.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/CharacterTemplates.ts",
+      "language": "typescript",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/ClassPresets.ts",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/ClassStartingGear.ts",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/DiceOptions.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/Races.ts",
+      "language": "typescript",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/SkillsTab.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/SpellbookSeed.ts",
+      "language": "typescript",
+      "sizeLines": 699,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/SubclassDetails.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/Subclasses.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/TrackerTemplates.ts",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/Weapons.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/WeaponsDb.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/attributes.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/encounter.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/const/experience.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/calculateModifier.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/collaboration/status.ts",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/combat.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/createEmptyCharacter.ts",
+      "language": "typescript",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/derived.test.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/derived.ts",
+      "language": "typescript",
+      "sizeLines": 156,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/dice.ts",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/gear.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/homebrew.ts",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/mapCloudCharacter.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/sourcePresentation.test.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/sourcePresentation.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/spellbook.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/stripUndefinedDeep.ts",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/sync/conflictPolicy.test.ts",
+      "language": "typescript",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/sync/conflictPolicy.ts",
+      "language": "typescript",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/sync/syncErrorClassification.test.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/sync/syncErrorClassification.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/helpers/weapons.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/mock/Elara_Moonshadow.json",
+      "language": "json",
+      "sizeLines": 131,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/shared/mock/defaultCharacter.json",
+      "language": "json",
+      "sizeLines": 36,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/shared/mock/defaultCharacter2.json",
+      "language": "json",
+      "sizeLines": 87,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/shared/mock/demon-lord-001.json",
+      "language": "json",
+      "sizeLines": 22,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/shared/mock/monsterBook.json",
+      "language": "json",
+      "sizeLines": 70,
+      "fileCategory": "config"
+    },
+    {
+      "path": "src/shared/services/auth/auth.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/auth/google.ts",
+      "language": "typescript",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/auth/index.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/diceRoller.test.ts",
+      "language": "typescript",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/diceRoller.ts",
+      "language": "typescript",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/fileSerice.ts",
+      "language": "typescript",
+      "sizeLines": 186,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/telemetry/productTelemetry.test.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/telemetry/productTelemetry.ts",
+      "language": "typescript",
+      "sizeLines": 102,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/telemetry/startupTrace.test.ts",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/telemetry/startupTrace.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/services/toast/index.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/styles/index.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/styles/statusTones.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/styles/theme.ts",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/styles/tokens.test.ts",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/styles/tokens.ts",
+      "language": "typescript",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/styles/useDesignTokens.ts",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Button.tsx",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Card.tsx",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Chip.tsx",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Input.tsx",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Screen.tsx",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Section.tsx",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/Text.tsx",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/index.ts",
+      "language": "typescript",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/skeleton/index.tsx",
+      "language": "typescript",
+      "sizeLines": 293,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/skeleton/skeleton.test.tsx",
+      "language": "typescript",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/uiVariants.test.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/ui/variantResolvers.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/appRoleStore.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/characterStore.ts",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/dmSettingsStore.ts",
+      "language": "typescript",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/dmStore.ts",
+      "language": "typescript",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/monsterStore.ts",
+      "language": "typescript",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/selectors/characterStoreSelectors.ts",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/selectors/syncStoreSelectors.ts",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/spellbookStore.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/storeSelectors.test.ts",
+      "language": "typescript",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/syncStore.ts",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/trackerTemplatesStore.ts",
+      "language": "typescript",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/stores/uiStore.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/test/mocks/expo-modules-core.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/test/mocks/react-native-firebase-analytics.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/test/mocks/react-native-firebase-crashlytics.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/test/mocks/react-native.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/test/mocks/react-navigation-native.ts",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Character.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/CustomCoin.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/DM.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/DeathSaves.ts",
+      "language": "typescript",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/HitPoints.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Monster.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Product.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/SavingThrows.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Skills.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/SourceMetadata.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/SpellSlots.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Spellbook.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Spells.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Stats.ts",
+      "language": "typescript",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Sync.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Traits.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/Weapon.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/types/skillToStat.ts",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 23,
+      "fileCategory": "config"
+    },
+    {
+      "path": "vitest.config.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "vitest.rules.config.ts",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 521,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "very-large",
+  "stats": {
+    "filesScanned": 521,
+    "byCategory": {
+      "docs": 31,
+      "config": 82,
+      "code": 406,
+      "script": 2
+    },
+    "byLanguage": {
+      "markdown": 31,
+      "yaml": 1,
+      "json": 64,
+      "config": 1,
+      "unknown": 4,
+      "typescript": 375,
+      "gradle": 3,
+      "keystore": 1,
+      "pro": 1,
+      "xml": 11,
+      "kotlin": 2,
+      "webp": 15,
+      "properties": 2,
+      "jar": 1,
+      "batch": 1,
+      "rules": 1,
+      "javascript": 6,
+      "powershell": 1
+    }
+  }
+}

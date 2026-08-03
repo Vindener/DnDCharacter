@@ -1,0 +1,219 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/components/ShareCharacterSheetModal.tsx",
+      "type": "file",
+      "name": "ShareCharacterSheetModal.tsx",
+      "filePath": "src/components/ShareCharacterSheetModal.tsx",
+      "summary": "Модальне вікно для керування спільним доступом до аркуша персонажа: запрошення та видалення редакторів за email із живою підпискою на список редакторів через Firebase.",
+      "tags": ["modal", "collaborative-editing", "firebase", "component", "sharing"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal",
+      "type": "function",
+      "name": "ShareCharacterSheetModal",
+      "filePath": "src/components/ShareCharacterSheetModal.tsx",
+      "lineRange": [15, 198],
+      "summary": "Реалізує UI та логіку шерингу аркуша: запрошення редактора за email, видалення редактора, підписку на sheet через characterCloudRepository та телеметрію подій шерингу.",
+      "tags": ["component", "modal", "sharing", "telemetry"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/context/Character-store.ts",
+      "type": "file",
+      "name": "Character-store.ts",
+      "filePath": "src/context/Character-store.ts",
+      "summary": "Реекспорт Zustand-стору персонажа (default та селектори активного персонажа, дій і базових полів стору) із src/stores для сумісності зі старими імпортами через src/context.",
+      "tags": ["barrel", "state-management", "zustand", "re-export"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/context/Theme-store.ts",
+      "type": "file",
+      "name": "Theme-store.ts",
+      "filePath": "src/context/Theme-store.ts",
+      "summary": "Однорядковий реекспорт Zustand-стору теми оформлення із src/stores у простір імен src/context.",
+      "tags": ["barrel", "state-management", "zustand", "re-export", "theme"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/encounter/calculator.test.ts",
+      "type": "file",
+      "name": "calculator.test.ts",
+      "filePath": "src/dm/domain/encounter/calculator.test.ts",
+      "summary": "Юніт-тести доменної логіки калькулятора складності енкаунтера (DM-інструменти): перевіряють множники монстрів і оцінку складності бою.",
+      "tags": ["test", "domain-logic", "encounter", "dm-tools"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/dm/domain/encounter/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/dm/domain/encounter/index.ts",
+      "summary": "Барель доменного модуля розрахунку складності енкаунтера: реекспортує пороги складності, таблицю досвіду монстрів та функції оцінки складності бою.",
+      "tags": ["barrel", "domain-logic", "encounter", "dm-tools"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/Character/components/CharacterSourceBadge.test.tsx",
+      "type": "file",
+      "name": "CharacterSourceBadge.test.tsx",
+      "filePath": "src/screens/Character/components/CharacterSourceBadge.test.tsx",
+      "summary": "Тести бейджа джерела контенту персонажа: перевіряють рендер для вбудованих правил і кастомних (homebrew) джерел через react-test-renderer.",
+      "tags": ["test", "component", "character-sheet"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/Character/components/CharacterSourceBadge.tsx",
+      "type": "file",
+      "name": "CharacterSourceBadge.tsx",
+      "filePath": "src/screens/Character/components/CharacterSourceBadge.tsx",
+      "summary": "Невеликий UI-компонент бейджа, що показує джерело контенту персонажа (офіційне правило чи кастомний homebrew-запис) з локалізованим підписом.",
+      "tags": ["component", "character-sheet", "badge", "localization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Character/components/CharacterSourceBadge.tsx:getCharacterSourceBadgeLabel",
+      "type": "function",
+      "name": "getCharacterSourceBadgeLabel",
+      "filePath": "src/screens/Character/components/CharacterSourceBadge.tsx",
+      "lineRange": [17, 27],
+      "summary": "Обчислює локалізований текст підпису бейджа залежно від того, чи джерело є вбудованим правилом системи, чи кастомним homebrew-записом.",
+      "tags": ["helper", "localization", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/Character/components/CharacterSourceBadge.tsx:CharacterSourceBadge",
+      "type": "function",
+      "name": "CharacterSourceBadge",
+      "filePath": "src/screens/Character/components/CharacterSourceBadge.tsx",
+      "lineRange": [29, 39],
+      "summary": "React-компонент, що рендерить бейдж джерела персонажа з обчисленим локалізованим підписом.",
+      "tags": ["component", "badge"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "type": "file",
+      "name": "EncounterCalculator.tsx",
+      "filePath": "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "summary": "Екран калькулятора складності бою для DM: додавання гравців і монстрів (вручну або з бестіарію/персонажів), обчислення складності енкаунтера за правилами 5e.",
+      "tags": ["screen", "dm-tools", "encounter", "component"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx:EncounterCalculator",
+      "type": "function",
+      "name": "EncounterCalculator",
+      "filePath": "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "lineRange": [39, 254],
+      "summary": "Головний компонент екрана: керує списками гравців і монстрів, модальними вікнами вибору героїв та монстрів, обчислює складність через evaluateEncounterDifficulty.",
+      "tags": ["screen", "dm-tools", "state-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/DM/adapters/unifiedParty.ts",
+      "type": "file",
+      "name": "unifiedParty.ts",
+      "filePath": "src/screens/DM/adapters/unifiedParty.ts",
+      "summary": "Адаптер, що об'єднує локальних персонажів, власні та спільні хмарні аркуші в єдиний відсортований список пати для DM-екранів.",
+      "tags": ["adapter", "dm-tools", "data-transformation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/screens/DM/adapters/unifiedParty.ts:buildUnifiedPartyList",
+      "type": "function",
+      "name": "buildUnifiedPartyList",
+      "filePath": "src/screens/DM/adapters/unifiedParty.ts",
+      "lineRange": [12, 34],
+      "summary": "Зливає три джерела персонажів (локальні, мої хмарні, спільні) у Map за id з пріоритетом хмарних версій і повертає список, відсортований за іменем.",
+      "tags": ["adapter", "utility", "merge-logic"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "type": "file",
+      "name": "LocalInitiativeBoard.tsx",
+      "filePath": "src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "summary": "Екран локального трекера ініціативи бою: додавання учасників (вручну або з персонажів гравця), редагування HP/ініціативи, кидки кубиків, позначення поразки та перетягування порядку.",
+      "tags": ["screen", "initiative-tracker", "combat", "component"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/screens/Initiative/LocalInitiativeBoard.tsx:LocalInitiativeBoard",
+      "type": "function",
+      "name": "LocalInitiativeBoard",
+      "filePath": "src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "lineRange": [30, 297],
+      "summary": "Керує станом списку учасників бою, drag-and-drop сортуванням порядку ініціативи, редагуванням значень та інтеграцією з панеллю кидка кубиків.",
+      "tags": ["screen", "state-management", "drag-and-drop"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/services/characterDeletion.test.ts",
+      "type": "file",
+      "name": "characterDeletion.test.ts",
+      "filePath": "src/services/characterDeletion.test.ts",
+      "summary": "Тести сервісу видалення копій персонажа: перевіряють коректний виклик видалення хмарної та локальної копій залежно від переданих прапорців.",
+      "tags": ["test", "service", "character-deletion"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    { "source": "file:src/components/ShareCharacterSheetModal.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/ShareCharacterSheetModal.tsx", "target": "file:src/repositories/characterCloudRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/ShareCharacterSheetModal.tsx", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/components/ShareCharacterSheetModal.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/dm/domain/encounter/calculator.test.ts", "target": "file:src/dm/domain/encounter/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.test.tsx", "target": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.test.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "file:src/shared/helpers/sourcePresentation.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/context/Monster-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/dm/domain/encounter/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/domain/srd/localization.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/screens/DM/EncounterCalculator/style.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/shared/components/TextInput/TextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/adapters/unifiedParty.ts", "target": "file:src/shared/helpers/mapCloudCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/DM/adapters/unifiedParty.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/screens/DM/style.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/screens/DiceRoller/DiceRoller.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/screens/Initiative/style.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/shared/components/TextInput/TextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/shared/services/diceRoller.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    { "source": "file:src/services/characterDeletion.test.ts", "target": "file:src/services/characterDeletion.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+
+    { "source": "file:src/dm/domain/encounter/index.ts", "target": "file:src/dm/domain/encounter/calculator.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "file:src/screens/Character/components/CharacterSourceBadge.test.tsx", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+
+    { "source": "file:src/components/ShareCharacterSheetModal.tsx", "target": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "function:src/screens/Character/components/CharacterSourceBadge.tsx:getCharacterSourceBadgeLabel", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "function:src/screens/Character/components/CharacterSourceBadge.tsx:CharacterSourceBadge", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "function:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx:EncounterCalculator", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/DM/adapters/unifiedParty.ts", "target": "function:src/screens/DM/adapters/unifiedParty.ts:buildUnifiedPartyList", "type": "contains", "direction": "forward", "weight": 1.0 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "function:src/screens/Initiative/LocalInitiativeBoard.tsx:LocalInitiativeBoard", "type": "contains", "direction": "forward", "weight": 1.0 },
+
+    { "source": "file:src/components/ShareCharacterSheetModal.tsx", "target": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "function:src/screens/Character/components/CharacterSourceBadge.tsx:getCharacterSourceBadgeLabel", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/screens/Character/components/CharacterSourceBadge.tsx", "target": "function:src/screens/Character/components/CharacterSourceBadge.tsx:CharacterSourceBadge", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx", "target": "function:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx:EncounterCalculator", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/screens/DM/adapters/unifiedParty.ts", "target": "function:src/screens/DM/adapters/unifiedParty.ts:buildUnifiedPartyList", "type": "exports", "direction": "forward", "weight": 0.8 },
+    { "source": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "target": "function:src/screens/Initiative/LocalInitiativeBoard.tsx:LocalInitiativeBoard", "type": "exports", "direction": "forward", "weight": 0.8 },
+
+    { "source": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal", "target": "function:src/repositories/characterCloudRepository.ts:subscribeCharacterSheet", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal", "target": "function:src/repositories/characterCloudRepository.ts:getEditorsForSheet", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal", "target": "function:src/repositories/characterCloudRepository.ts:addEditorByEmail", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/components/ShareCharacterSheetModal.tsx:ShareCharacterSheetModal", "target": "function:src/repositories/characterCloudRepository.ts:removeEditor", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx:EncounterCalculator", "target": "function:src/domain/srd/localization.ts:getLocalizedMonster", "type": "calls", "direction": "forward", "weight": 0.8 },
+    { "source": "function:src/screens/DM/adapters/unifiedParty.ts:buildUnifiedPartyList", "target": "function:src/shared/helpers/mapCloudCharacter.ts:mapCloudCharacterToLocalDto", "type": "calls", "direction": "forward", "weight": 0.8 }
+  ]
+}

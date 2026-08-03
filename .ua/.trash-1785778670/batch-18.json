@@ -1,0 +1,297 @@
+{
+  "nodes": [
+    {
+      "id": "document:.agents/AGENT.md",
+      "type": "document",
+      "name": "AGENT.md",
+      "filePath": ".agents/AGENT.md",
+      "summary": "Основний файл інструкцій для Codex-агента в репозиторії DnDCharacter (MythgateDND): роль агента, поточний продуктовий фокус (release hardening перед публікацією в Google Play), UX та DnD-принципи, заборонені зміни, кодинг-правила та команди валідації.",
+      "tags": ["документація", "інструкції-агента", "codex", "release-hardening", "roadmap"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.agents/CHECKLIST.md",
+      "type": "document",
+      "name": "CHECKLIST.md",
+      "filePath": ".agents/CHECKLIST.md",
+      "summary": "Контрольний список для перевірки UX/UI-змін: стани завантаження (skeleton), коректність DnD-механік (d20, атака/шкода, характеристики монстрів і заклять), мобільна юзабіліті та обов'язковий формат фінального звіту.",
+      "tags": ["документація", "чекліст", "ux-ui", "dnd-правила", "qa"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.agents/CODEX.md",
+      "type": "document",
+      "name": "CODEX.md",
+      "filePath": ".agents/CODEX.md",
+      "summary": "Специфічний для Codex гайд виконання завдань: базова позиція (мінімальні зміни, валідація лише реально запущеними командами), правила роботи з EAS-білдами та lockfile, підходи до UI-, дата/хмарних задач та рефакторингу.",
+      "tags": ["документація", "codex", "інструкції-агента", "eas-build", "рефакторинг"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.agents/MEMORY.md",
+      "type": "document",
+      "name": "MEMORY.md",
+      "filePath": ".agents/MEMORY.md",
+      "summary": "Стабільна пам'ять репозиторію для агента: технологічний стек (React Native/Expo/Zustand/Firebase), поточний продуктовий напрям, факти про спільне редагування персонажів кількома людьми, перелік архітектурно ключових файлів та наявні інструменти валідації.",
+      "tags": ["документація", "пам'ять-агента", "архітектура", "collaborative-editing", "codex"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.agents/REPO_MAP.md",
+      "type": "document",
+      "name": "REPO_MAP.md",
+      "filePath": ".agents/REPO_MAP.md",
+      "summary": "Карта репозиторію для агента: структура директорій src/ (навігація, екрани, спільні компоненти, стори, сервіси), поточні напрямки роботи (Dice, Home, Character, Spellbook, Bestiary), ключові користувацькі потоки та файли з високим впливом на систему.",
+      "tags": ["документація", "карта-репозиторію", "навігація-по-коду", "архітектура", "codex"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.agents/TOOLS.md",
+      "type": "document",
+      "name": "TOOLS.md",
+      "filePath": ".agents/TOOLS.md",
+      "summary": "Політика використання інструментів для Codex: правила пакетного менеджера npm, надійні команди проєкту (typecheck/lint/test), стратегія валідації, команди інспекції репозиторію та обережність із закоміченим android/ і версіями (versionName у build.gradle).",
+      "tags": ["документація", "тулінг", "npm", "валідація", "android"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.agents/USER.md",
+      "type": "document",
+      "name": "USER.md",
+      "filePath": ".agents/USER.md",
+      "summary": "Преференції користувача щодо співпраці з Codex: стиль спілкування українською з прямими практичними порадами, формат представлення результатів і продуктові пріоритети (Android UX, безпечний інкрементальний прогрес).",
+      "tags": ["документація", "преференції-користувача", "комунікація", "застаріла-інформація", "codex"],
+      "complexity": "simple",
+      "languageNotes": "Розділ «Current Product Preference» досі перелічує застарілий порядок спринтів (Dice Roller → Skeleton-loader → Home → ...), що вже не узгоджується з поточним фокусом на release hardening, описаним у CLAUDE.md."
+    },
+    {
+      "id": "config:.agents/openai.yaml",
+      "type": "config",
+      "name": "openai.yaml",
+      "filePath": ".agents/openai.yaml",
+      "summary": "YAML-конфігурація Codex-агента для OpenAI-сумісного інтерфейсу: опис агента, поведінкові інструкції (session-first UX, Play/Edit розділення), контекст проєкту (мова, тип кодової бази, платформа) та перелік основних і допоміжних файлів інструкцій з .agents/.",
+      "tags": ["конфігурація", "codex", "yaml", "агентна-конфігурація", "openai"],
+      "complexity": "simple",
+      "languageNotes": "Файл містить дублікат ключа `instructions` на верхньому рівні YAML-документа (рядки 12 і 31) — специфічний парсер зазнав невдачі через недопустимий дублікат ключа мапи й перейшов у regex-фолбек для екстракції секцій."
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/AGENT.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/MEMORY.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/TOOLS.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/USER.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/REPO_MAP.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/CHECKLIST.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:.agents/openai.yaml",
+      "target": "document:.agents/CODEX.md",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:.agents/AGENT.md",
+      "target": "document:docs/release-plan-google-play.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/AGENT.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/CODEX.md",
+      "target": "document:docs/release-plan-google-play.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "document:docs/collaborative-editing.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:src/context/Character-store.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:src/services/characterSheets.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:src/services/firebase.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:src/navigation/AppNavigator.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:src/components/ShareCharacterSheetModal.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/MEMORY.md",
+      "target": "file:src/shared/components/CharacterMenu/CharacterMenu.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:App.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/navigation/AppNavigator.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/context/Character-store.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/services/characterSheets.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/services/firebase.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/components/ShareCharacterSheetModal.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/screens/Character/Character.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/REPO_MAP.md",
+      "target": "file:src/shared/components/CharacterMenu/CharacterMenu.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/TOOLS.md",
+      "target": "file:src/services/firebase.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/TOOLS.md",
+      "target": "file:src/services/characterSheets.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/TOOLS.md",
+      "target": "file:src/services/users.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.agents/TOOLS.md",
+      "target": "file:src/services/connections.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

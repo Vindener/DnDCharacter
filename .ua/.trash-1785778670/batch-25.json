@@ -1,0 +1,280 @@
+{
+  "nodes": [
+    {
+      "id": "config:src/i18n/locales/en/bestiary.json",
+      "type": "config",
+      "name": "bestiary.json",
+      "filePath": "src/i18n/locales/en/bestiary.json",
+      "summary": "Англомовний namespace перекладів для екрана Бестіарію: заголовок, пошук, фільтри, режими перегляду, підписи джерел/ліцензій, порожні стани, дії, контекст кампанії та повідомлення про помилки.",
+      "tags": ["i18n", "localization", "bestiary", "translation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/character.json",
+      "type": "config",
+      "name": "character.json",
+      "filePath": "src/i18n/locales/en/character.json",
+      "summary": "Найбільший i18n-namespace проєкту: переклади для аркуша персонажа — вкладки (overview, combat, magic, inventory, notes, homebrew), синхронізація, конфлікти спільного редагування, історія змін, бейджі та модалки.",
+      "tags": ["i18n", "localization", "character-sheet", "collaborative-editing", "translation"],
+      "complexity": "complex",
+      "languageNotes": "Секції sync/conflict/history відображають продуктову модель спільного редагування (owners/editors, changeHistory) з docs/collaborative-editing.md."
+    },
+    {
+      "id": "config:src/i18n/locales/en/common.json",
+      "type": "config",
+      "name": "common.json",
+      "filePath": "src/i18n/locales/en/common.json",
+      "summary": "Спільні перекладені рядки, що перевикористовуються по всьому застосунку: загальні дії, стани, статуси, ролі, тексти валідації, ErrorBoundary та автентифікації.",
+      "tags": ["i18n", "localization", "shared", "translation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/createCharacter.json",
+      "type": "config",
+      "name": "createCharacter.json",
+      "filePath": "src/i18n/locales/en/createCharacter.json",
+      "summary": "Переклади майстра створення персонажа: прогрес кроків, ідентичність, раса/клас, характеристики, бойові параметри, спорядження, магія, особистість, хоумбрю та фінальний огляд.",
+      "tags": ["i18n", "localization", "create-character", "wizard", "translation"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:src/i18n/locales/en/dice.json",
+      "type": "config",
+      "name": "dice.json",
+      "filePath": "src/i18n/locales/en/dice.json",
+      "summary": "Переклади для екрана кидання кубиків: заголовок, дії, підписи, режими, перемикачі та повідомлення про помилки/порожній стан.",
+      "tags": ["i18n", "localization", "dice-roller", "translation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/dm.json",
+      "type": "config",
+      "name": "dm.json",
+      "filePath": "src/i18n/locales/en/dm.json",
+      "summary": "Переклади для GM Workspace (Campaign Management): дашборд, швидке редагування, підготовка зустрічей, спільні оновлення, огляд партії, список і деталі кампаній, нотатки, калькулятор зустрічей і генератор лута.",
+      "tags": ["i18n", "localization", "dm-workspace", "campaign-management", "translation"],
+      "complexity": "complex",
+      "languageNotes": "Відповідає фічі Campaign Management — свідомому винятку з release hardening, що додається паралельно (docs/campaign-management-prompts.md)."
+    },
+    {
+      "id": "config:src/i18n/locales/en/dnd.json",
+      "type": "config",
+      "name": "dnd.json",
+      "filePath": "src/i18n/locales/en/dnd.json",
+      "summary": "Довідкові переклади базових термінів D&D 5e: характеристики (повні й скорочені), класи, раси, підраси, передісторії, школи магії та навички.",
+      "tags": ["i18n", "localization", "dnd-terms", "translation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/firstLaunch.json",
+      "type": "config",
+      "name": "firstLaunch.json",
+      "filePath": "src/i18n/locales/en/firstLaunch.json",
+      "summary": "Короткий namespace для модалок першого запуску застосунку: попередження про розробку, згода на аналітику та подяка користувачу.",
+      "tags": ["i18n", "localization", "first-launch", "onboarding", "translation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/en/home.json",
+      "type": "config",
+      "name": "home.json",
+      "filePath": "src/i18n/locales/en/home.json",
+      "summary": "Переклади для головного екрана: заголовок, підзаголовок, дії, секції, порожній стан, hero-блок, список персонажів і смуга синхронізації.",
+      "tags": ["i18n", "localization", "home-screen", "translation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/initiative.json",
+      "type": "config",
+      "name": "initiative.json",
+      "filePath": "src/i18n/locales/en/initiative.json",
+      "summary": "Переклади для трекера ініціативи: заголовок, плейсхолдери, дії, вибір героя, порожній стан, підказка локального режиму та контекст кампанії.",
+      "tags": ["i18n", "localization", "initiative-tracker", "translation", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/en/legal.json",
+      "type": "config",
+      "name": "legal.json",
+      "filePath": "src/i18n/locales/en/legal.json",
+      "summary": "Переклади юридичного розділу застосунку: заголовок, вступ, перелік секцій (політика конфіденційності тощо) і джерела.",
+      "tags": ["i18n", "localization", "legal", "translation", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/en/navigation.json",
+      "type": "config",
+      "name": "navigation.json",
+      "filePath": "src/i18n/locales/en/navigation.json",
+      "summary": "Підписи екранів і вкладок навігації: герої, ініціатива, DM-розділ з усіма підекранами, довідники, підтримка, налаштування, кидання кубиків, аркуш персонажа, створення персонажа, заклинання й бестіарій.",
+      "tags": ["i18n", "localization", "navigation", "translation", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/en/references.json",
+      "type": "config",
+      "name": "references.json",
+      "filePath": "src/i18n/locales/en/references.json",
+      "summary": "Переклади для розділу довідників: заголовок, підказки, повідомлення «скоро», перелік записів і секція SRD-джерел.",
+      "tags": ["i18n", "localization", "references", "srd", "translation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/settings.json",
+      "type": "config",
+      "name": "settings.json",
+      "filePath": "src/i18n/locales/en/settings.json",
+      "summary": "Переклади екрана налаштувань: вигляд, акаунт, мова, власні монети, бестіарій, юридичний розділ, політика конфіденційності, аналітика та кампанія за замовчуванням.",
+      "tags": ["i18n", "localization", "settings", "translation", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:src/i18n/locales/en/spellbook.json",
+      "type": "config",
+      "name": "spellbook.json",
+      "filePath": "src/i18n/locales/en/spellbook.json",
+      "summary": "Розширений namespace перекладів для книги заклинань: вкладки, пошук, фільтри, рівні, джерела/ліцензії, прив'язка до персонажа, деталі заклинання, нотатки ДМа, форма редагування, стартовий набір заклинань і помилки.",
+      "tags": ["i18n", "localization", "spellbook", "translation", "configuration"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:src/i18n/locales/en/support.json",
+      "type": "config",
+      "name": "support.json",
+      "filePath": "src/i18n/locales/en/support.json",
+      "summary": "Переклади екрана підтримки проєкту: секції, донати, криптовалютні реквізити, форма зворотного зв'язку та помилки.",
+      "tags": ["i18n", "localization", "support", "translation", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:src/i18n/locales/en/whatsNew.json",
+      "type": "config",
+      "name": "whatsNew.json",
+      "filePath": "src/i18n/locales/en/whatsNew.json",
+      "summary": "Найменший namespace перекладів — модалка «Що нового»: заголовок, вступ, перелік пунктів оновлення і кнопка підтвердження.",
+      "tags": ["i18n", "localization", "whats-new", "translation", "configuration"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:src/i18n/locales/en/bestiary.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/character.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/common.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/createCharacter.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/dice.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/dm.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/dnd.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/firstLaunch.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/home.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/initiative.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/legal.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/navigation.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/references.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/settings.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/spellbook.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/support.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:src/i18n/locales/en/whatsNew.json",
+      "target": "file:src/i18n/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

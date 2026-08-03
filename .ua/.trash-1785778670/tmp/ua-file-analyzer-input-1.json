@@ -1,0 +1,216 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "src/context/AppRole-store.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
+    {"path": "src/context/DmSettings-store.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
+    {"path": "src/context/Spellbook-store.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
+    {"path": "src/context/Sync-store.ts", "language": "typescript", "sizeLines": 2, "fileCategory": "code"},
+    {"path": "src/dm/domain/campaign/index.ts", "language": "typescript", "sizeLines": 12, "fileCategory": "code"},
+    {"path": "src/dm/domain/campaign/linking.test.ts", "language": "typescript", "sizeLines": 43, "fileCategory": "code"},
+    {"path": "src/dm/domain/campaign/linking.ts", "language": "typescript", "sizeLines": 18, "fileCategory": "code"},
+    {"path": "src/dm/domain/campaign/utils.test.ts", "language": "typescript", "sizeLines": 56, "fileCategory": "code"},
+    {"path": "src/dm/domain/campaign/utils.ts", "language": "typescript", "sizeLines": 54, "fileCategory": "code"},
+    {"path": "src/dm/domain/encounter/calculator.ts", "language": "typescript", "sizeLines": 149, "fileCategory": "code"},
+    {"path": "src/dm/domain/initiative/index.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
+    {"path": "src/dm/domain/initiative/roll.test.ts", "language": "typescript", "sizeLines": 55, "fileCategory": "code"},
+    {"path": "src/dm/domain/notes/conflict.test.ts", "language": "typescript", "sizeLines": 47, "fileCategory": "code"},
+    {"path": "src/dm/domain/notes/conflict.ts", "language": "typescript", "sizeLines": 22, "fileCategory": "code"},
+    {"path": "src/dm/domain/notes/index.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
+    {"path": "src/dm/domain/types/index.ts", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
+    {"path": "src/dm/hooks/useCampaignOwnership.ts", "language": "typescript", "sizeLines": 7, "fileCategory": "code"},
+    {"path": "src/dm/repositories/campaignEncountersRepository.test.ts", "language": "typescript", "sizeLines": 225, "fileCategory": "code"},
+    {"path": "src/dm/repositories/campaignEncountersRepository.ts", "language": "typescript", "sizeLines": 492, "fileCategory": "code"},
+    {"path": "src/dm/repositories/campaignInitiativeRepository.test.ts", "language": "typescript", "sizeLines": 213, "fileCategory": "code"},
+    {"path": "src/dm/repositories/campaignInitiativeRepository.ts", "language": "typescript", "sizeLines": 230, "fileCategory": "code"},
+    {"path": "src/dm/repositories/campaignNotesRepository.ts", "language": "typescript", "sizeLines": 518, "fileCategory": "code"},
+    {"path": "src/dm/repositories/campaignRepository.ts", "language": "typescript", "sizeLines": 495, "fileCategory": "code"},
+    {"path": "src/navigation/DMNavigator.tsx", "language": "typescript", "sizeLines": 66, "fileCategory": "code"},
+    {"path": "src/repositories/characterCloudRepository.ts", "language": "typescript", "sizeLines": 777, "fileCategory": "code"},
+    {"path": "src/repositories/syncPathFieldMap.test.ts", "language": "typescript", "sizeLines": 79, "fileCategory": "code"},
+    {"path": "src/repositories/syncPathFieldMap.ts", "language": "typescript", "sizeLines": 59, "fileCategory": "code"},
+    {"path": "src/screens/DM/DM.tsx", "language": "typescript", "sizeLines": 515, "fileCategory": "code"},
+    {"path": "src/screens/DM/DMCampaignDetail.tsx", "language": "typescript", "sizeLines": 693, "fileCategory": "code"},
+    {"path": "src/screens/DM/DMCampaignNotes.tsx", "language": "typescript", "sizeLines": 419, "fileCategory": "code"},
+    {"path": "src/screens/DM/DMCampaigns.tsx", "language": "typescript", "sizeLines": 367, "fileCategory": "code"}
+  ],
+  "batchImportData": {
+    "src/context/AppRole-store.ts": [],
+    "src/context/DmSettings-store.ts": [],
+    "src/context/Spellbook-store.ts": [],
+    "src/context/Sync-store.ts": [],
+    "src/dm/domain/campaign/index.ts": [],
+    "src/dm/domain/campaign/linking.test.ts": [
+      "src/dm/domain/campaign/index.ts",
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/campaign/linking.ts": [
+      "src/dm/domain/campaign/utils.ts",
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/campaign/utils.test.ts": [
+      "src/dm/domain/campaign/index.ts",
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/campaign/utils.ts": [
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/encounter/calculator.ts": [
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/initiative/index.ts": [],
+    "src/dm/domain/initiative/roll.test.ts": [
+      "src/dm/domain/initiative/index.ts",
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/notes/conflict.test.ts": [
+      "src/dm/domain/notes/index.ts",
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/notes/conflict.ts": [
+      "src/dm/domain/types/index.ts"
+    ],
+    "src/dm/domain/notes/index.ts": [],
+    "src/dm/domain/types/index.ts": [],
+    "src/dm/hooks/useCampaignOwnership.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/services/firebase.ts"
+    ],
+    "src/dm/repositories/campaignEncountersRepository.test.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/dm/repositories/campaignEncountersRepository.ts",
+      "src/domain/migrations/index.ts"
+    ],
+    "src/dm/repositories/campaignEncountersRepository.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/domain/migrations/index.ts",
+      "src/domain/schemas/index.ts",
+      "src/services/firebase.ts"
+    ],
+    "src/dm/repositories/campaignInitiativeRepository.test.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/dm/repositories/campaignInitiativeRepository.ts",
+      "src/domain/migrations/index.ts"
+    ],
+    "src/dm/repositories/campaignInitiativeRepository.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/domain/migrations/index.ts",
+      "src/domain/schemas/index.ts",
+      "src/services/firebase.ts",
+      "src/shared/helpers/stripUndefinedDeep.ts"
+    ],
+    "src/dm/repositories/campaignNotesRepository.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/dm/repositories/campaignRepository.ts",
+      "src/domain/migrations/index.ts",
+      "src/domain/schemas/index.ts",
+      "src/services/firebase.ts"
+    ],
+    "src/dm/repositories/campaignRepository.ts": [
+      "src/dm/domain/campaign/index.ts",
+      "src/dm/domain/types/index.ts",
+      "src/domain/migrations/index.ts",
+      "src/services/connections.ts",
+      "src/services/firebase.ts",
+      "src/services/users.ts"
+    ],
+    "src/navigation/DMNavigator.tsx": [
+      "src/dm/domain/types/index.ts",
+      "src/modules/Header/Header.tsx",
+      "src/screens/DM/DM.tsx",
+      "src/screens/DM/DMCampaignDetail.tsx",
+      "src/screens/DM/DMCampaignNotes.tsx",
+      "src/screens/DM/DMCampaigns.tsx",
+      "src/screens/DM/DMEncounterPrep.tsx",
+      "src/screens/DM/DMPartyOverview.tsx",
+      "src/screens/DM/DMQuickEdit.tsx",
+      "src/screens/DM/DMSharedUpdates.tsx",
+      "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "src/screens/DM/LootGenerator/LootGenerator.tsx"
+    ],
+    "src/repositories/characterCloudRepository.ts": [
+      "src/domain/mappers/index.ts",
+      "src/domain/migrations/index.ts",
+      "src/domain/types/index.ts",
+      "src/repositories/syncPathFieldMap.ts",
+      "src/services/connections.ts",
+      "src/services/firebase.ts",
+      "src/services/users.ts",
+      "src/shared/helpers/stripUndefinedDeep.ts",
+      "src/shared/helpers/sync/syncErrorClassification.ts"
+    ],
+    "src/repositories/syncPathFieldMap.test.ts": [
+      "src/repositories/syncPathFieldMap.ts"
+    ],
+    "src/repositories/syncPathFieldMap.ts": [],
+    "src/screens/DM/DM.tsx": [
+      "src/context/AppRole-store.ts",
+      "src/context/Character-store.ts",
+      "src/context/Monster-store.ts",
+      "src/context/Spellbook-store.ts",
+      "src/context/Sync-store.ts",
+      "src/context/Theme-store.ts",
+      "src/dm/domain/types/index.ts",
+      "src/dm/repositories/campaignNotesRepository.ts",
+      "src/dm/repositories/campaignRepository.ts",
+      "src/navigation/DMNavigator.tsx",
+      "src/repositories/characterCloudRepository.ts",
+      "src/screens/DM/PinnedReferencesList.tsx",
+      "src/screens/DM/style.ts",
+      "src/services/firebase.ts",
+      "src/shared/helpers/collaboration/status.ts",
+      "src/shared/helpers/mapCloudCharacter.ts",
+      "src/shared/services/auth/index.ts",
+      "src/types/Character.ts",
+      "src/types/Product.ts"
+    ],
+    "src/screens/DM/DMCampaignDetail.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Monster-store.ts",
+      "src/context/Spellbook-store.ts",
+      "src/context/Sync-store.ts",
+      "src/context/Theme-store.ts",
+      "src/dm/domain/types/index.ts",
+      "src/dm/hooks/useCampaignOwnership.ts",
+      "src/dm/repositories/campaignEncountersRepository.ts",
+      "src/dm/repositories/campaignRepository.ts",
+      "src/navigation/DMNavigator.tsx",
+      "src/repositories/characterCloudRepository.ts",
+      "src/screens/DM/PinnedReferencesList.tsx",
+      "src/screens/DM/adapters/index.ts",
+      "src/screens/DM/style.ts",
+      "src/services/campaignInvite.ts",
+      "src/services/characterSyncCoordinator.ts",
+      "src/services/firebase.ts",
+      "src/shared/components/Modal/Modal.tsx",
+      "src/shared/services/telemetry/productTelemetry.ts",
+      "src/types/Character.ts"
+    ],
+    "src/screens/DM/DMCampaignNotes.tsx": [
+      "src/context/AppRole-store.ts",
+      "src/context/DmSettings-store.ts",
+      "src/context/Theme-store.ts",
+      "src/dm/domain/types/index.ts",
+      "src/dm/repositories/campaignNotesRepository.ts",
+      "src/dm/repositories/campaignRepository.ts",
+      "src/domain/schemas/index.ts",
+      "src/navigation/DMNavigator.tsx",
+      "src/screens/DM/style.ts",
+      "src/services/firebase.ts",
+      "src/shared/helpers/collaboration/status.ts",
+      "src/shared/styles/tokens.ts"
+    ],
+    "src/screens/DM/DMCampaigns.tsx": [
+      "src/context/Character-store.ts",
+      "src/context/Theme-store.ts",
+      "src/dm/domain/types/index.ts",
+      "src/dm/repositories/campaignRepository.ts",
+      "src/navigation/DMNavigator.tsx",
+      "src/repositories/characterCloudRepository.ts",
+      "src/screens/DM/adapters/index.ts",
+      "src/screens/DM/style.ts",
+      "src/services/campaignInvite.ts",
+      "src/services/firebase.ts",
+      "src/shared/components/Modal/Modal.tsx"
+    ]
+  }
+}

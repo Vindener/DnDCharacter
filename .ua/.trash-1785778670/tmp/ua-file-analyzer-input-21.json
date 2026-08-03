@@ -1,0 +1,15 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "android/build.gradle", "language": "gradle", "sizeLines": 38, "fileCategory": "config"},
+    {"path": "android/gradle.properties", "language": "properties", "sizeLines": 60, "fileCategory": "config"},
+    {"path": "android/gradlew.bat", "language": "batch", "sizeLines": 94, "fileCategory": "script"},
+    {"path": "android/settings.gradle", "language": "gradle", "sizeLines": 39, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    "android/build.gradle": [],
+    "android/gradle.properties": [],
+    "android/gradlew.bat": [],
+    "android/settings.gradle": []
+  }
+}

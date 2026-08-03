@@ -1,0 +1,123 @@
+Found 41 batch files (31 logical batches, 7 multi-part):
+  batch-1-part-1.json: 51 nodes, 86 edges
+  batch-1-part-2.json: 48 nodes, 103 edges
+  batch-1-part-3.json: 26 nodes, 63 edges
+  batch-1-part-4.json: 11 nodes, 70 edges
+  batch-2-part-1.json: 41 nodes, 120 edges
+  batch-2-part-2.json: 30 nodes, 95 edges
+  batch-3-part-1.json: 33 nodes, 170 edges
+  batch-3-part-2.json: 44 nodes, 121 edges
+  batch-3-part-3.json: 20 nodes, 32 edges
+  batch-4-part-1.json: 45 nodes, 82 edges
+  batch-4-part-2.json: 51 nodes, 69 edges
+  batch-5.json: 45 nodes, 120 edges
+  batch-6.json: 50 nodes, 120 edges
+  batch-7.json: 48 nodes, 98 edges
+  batch-8.json: 59 nodes, 120 edges
+  batch-9-part-1.json: 17 nodes, 50 edges
+  batch-9-part-2.json: 20 nodes, 97 edges
+  batch-10-part-1.json: 22 nodes, 97 edges
+  batch-10-part-2.json: 24 nodes, 66 edges
+  batch-11.json: 35 nodes, 111 edges
+  batch-12-part-1.json: 28 nodes, 69 edges
+  batch-12-part-2.json: 23 nodes, 55 edges
+  batch-13.json: 36 nodes, 67 edges
+  batch-14.json: 34 nodes, 90 edges
+  batch-15.json: 13 nodes, 30 edges
+  batch-16.json: 9 nodes, 17 edges
+  batch-17.json: 3 nodes, 2 edges
+  batch-18.json: 8 nodes, 31 edges
+  batch-19.json: 9 nodes, 8 edges
+  batch-20.json: 3 nodes, 1 edges
+  batch-21.json: 4 nodes, 4 edges
+  batch-22.json: 19 nodes, 21 edges
+  batch-23.json: 3 nodes, 4 edges
+  batch-24.json: 12 nodes, 12 edges
+  batch-25.json: 17 nodes, 17 edges
+  batch-26.json: 17 nodes, 17 edges
+  batch-27.json: 5 nodes, 0 edges
+  batch-28.json: 29 nodes, 24 edges
+  batch-29.json: 34 nodes, 22 edges
+  batch-30.json: 31 nodes, 10 edges
+  batch-31.json: 8 nodes, 6 edges
+
+Input: 1065 nodes, 2397 edges
+
+Fixed (2 corrections):
+     2 × tested_by edges dropped (orphan endpoint or test↔test / prod↔prod pair)
+
+Tested-by linker:
+     2 × tested_by edges produced (path-convention supplement, production → test)
+    65 × production nodes tagged "tested"
+
+Could not fix (62 issues — needs agent review):
+  - Edge file:src/domain/srd/localization.ts → file:src/data/locales/uk/monsters.json (imports): dropped, missing target 'file:src/data/locales/uk/monsters.json'
+  - Edge file:src/domain/srd/localization.ts → file:src/data/locales/uk/spells.json (imports): dropped, missing target 'file:src/data/locales/uk/spells.json'
+  - Edge function:src/screens/DM/DMEncounterPrep.tsx:DMEncounterPrep → function:src/shared/helpers/combat.ts:abilityMod (calls): dropped, missing target 'function:src/shared/helpers/combat.ts:abilityMod'
+  - Edge function:src/screens/DM/DMEncounterPrep.tsx:DMEncounterPrep → function:src/dm/domain/encounter/index.ts:evaluateEncounterDifficulty (calls): dropped, missing target 'function:src/dm/domain/encounter/index.ts:evaluateEncounterDifficulty'
+  - Edge function:src/screens/DM/DMEncounterPrep.tsx:DMEncounterPrep → function:src/dm/domain/initiative/index.ts:rollInitiativeFor (calls): dropped, missing target 'function:src/dm/domain/initiative/index.ts:rollInitiativeFor'
+  - Edge function:src/screens/DM/DMEncounterPrep.tsx:DMEncounterPrep → function:src/dm/domain/initiative/index.ts:sortByInitiative (calls): dropped, missing target 'function:src/dm/domain/initiative/index.ts:sortByInitiative'
+  - Edge function:src/screens/Home/Home.tsx:Home → function:src/shared/services/auth/index.ts:onGoogleButtonPress (calls): dropped, missing target 'function:src/shared/services/auth/index.ts:onGoogleButtonPress'
+  - Edge function:src/screens/Home/Home.tsx:Home → function:src/shared/services/auth/index.ts:useAuth (calls): dropped, missing target 'function:src/shared/services/auth/index.ts:useAuth'
+  - Edge function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter → function:src/domain/schemas/index.ts:parseCharacter (calls): dropped, missing target 'function:src/domain/schemas/index.ts:parseCharacter'
+  - Edge function:src/shared/components/CharacterMenu/CharacterMenu.tsx:CharacterMenu → function:src/shared/const/experience.ts:getLevelByExperience (calls): dropped, missing target 'function:src/shared/const/experience.ts:getLevelByExperience'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/bestiary.json (imports): dropped, missing target 'file:src/i18n/locales/en/bestiary.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/character.json (imports): dropped, missing target 'file:src/i18n/locales/en/character.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/common.json (imports): dropped, missing target 'file:src/i18n/locales/en/common.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/createCharacter.json (imports): dropped, missing target 'file:src/i18n/locales/en/createCharacter.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/dice.json (imports): dropped, missing target 'file:src/i18n/locales/en/dice.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/dm.json (imports): dropped, missing target 'file:src/i18n/locales/en/dm.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/dnd.json (imports): dropped, missing target 'file:src/i18n/locales/en/dnd.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/firstLaunch.json (imports): dropped, missing target 'file:src/i18n/locales/en/firstLaunch.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/home.json (imports): dropped, missing target 'file:src/i18n/locales/en/home.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/initiative.json (imports): dropped, missing target 'file:src/i18n/locales/en/initiative.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/legal.json (imports): dropped, missing target 'file:src/i18n/locales/en/legal.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/navigation.json (imports): dropped, missing target 'file:src/i18n/locales/en/navigation.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/references.json (imports): dropped, missing target 'file:src/i18n/locales/en/references.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/settings.json (imports): dropped, missing target 'file:src/i18n/locales/en/settings.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/spellbook.json (imports): dropped, missing target 'file:src/i18n/locales/en/spellbook.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/support.json (imports): dropped, missing target 'file:src/i18n/locales/en/support.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/en/whatsNew.json (imports): dropped, missing target 'file:src/i18n/locales/en/whatsNew.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/bestiary.json (imports): dropped, missing target 'file:src/i18n/locales/uk/bestiary.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/character.json (imports): dropped, missing target 'file:src/i18n/locales/uk/character.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/common.json (imports): dropped, missing target 'file:src/i18n/locales/uk/common.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/createCharacter.json (imports): dropped, missing target 'file:src/i18n/locales/uk/createCharacter.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/dice.json (imports): dropped, missing target 'file:src/i18n/locales/uk/dice.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/dm.json (imports): dropped, missing target 'file:src/i18n/locales/uk/dm.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/dnd.json (imports): dropped, missing target 'file:src/i18n/locales/uk/dnd.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/firstLaunch.json (imports): dropped, missing target 'file:src/i18n/locales/uk/firstLaunch.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/home.json (imports): dropped, missing target 'file:src/i18n/locales/uk/home.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/initiative.json (imports): dropped, missing target 'file:src/i18n/locales/uk/initiative.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/legal.json (imports): dropped, missing target 'file:src/i18n/locales/uk/legal.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/navigation.json (imports): dropped, missing target 'file:src/i18n/locales/uk/navigation.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/references.json (imports): dropped, missing target 'file:src/i18n/locales/uk/references.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/settings.json (imports): dropped, missing target 'file:src/i18n/locales/uk/settings.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/spellbook.json (imports): dropped, missing target 'file:src/i18n/locales/uk/spellbook.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/support.json (imports): dropped, missing target 'file:src/i18n/locales/uk/support.json'
+  - Edge file:src/i18n/index.ts → file:src/i18n/locales/uk/whatsNew.json (imports): dropped, missing target 'file:src/i18n/locales/uk/whatsNew.json'
+  - Edge function:src/screens/References/References.tsx:References → function:src/domain/srd/srdRepository.ts:getSrdReferences (calls): dropped, missing target 'function:src/domain/srd/srdRepository.ts:getSrdReferences'
+  - Edge function:src/screens/References/References.tsx:References → function:src/domain/srd/srdRepository.ts:getConditions (calls): dropped, missing target 'function:src/domain/srd/srdRepository.ts:getConditions'
+  - Edge function:src/screens/References/References.tsx:References → function:src/domain/srd/srdRepository.ts:getEquipment (calls): dropped, missing target 'function:src/domain/srd/srdRepository.ts:getEquipment'
+  - Edge function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects → function:src/domain/schemas/index.ts:parseCharacter (calls): dropped, missing target 'function:src/domain/schemas/index.ts:parseCharacter'
+  - Edge function:src/domain/spellbook/characterSpellAdapter.ts:applySpellStatus → function:src/domain/mappers/spell.mapper.ts:draftToEntity (calls): dropped, missing target 'function:src/domain/mappers/spell.mapper.ts:draftToEntity'
+  - Edge function:src/domain/spellbook/spellLocalRepository.ts:loadSpellbookState → function:src/domain/mappers/spell.mapper.ts:normalizeStoredSpellbookSpell (calls): dropped, missing target 'function:src/domain/mappers/spell.mapper.ts:normalizeStoredSpellbookSpell'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/abilities.json (imports): dropped, missing target 'file:src/data/srd/abilities.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/backgrounds.json (imports): dropped, missing target 'file:src/data/srd/backgrounds.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/classProgression.json (imports): dropped, missing target 'file:src/data/srd/classProgression.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/classes.json (imports): dropped, missing target 'file:src/data/srd/classes.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/conditions.json (imports): dropped, missing target 'file:src/data/srd/conditions.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/equipment.json (imports): dropped, missing target 'file:src/data/srd/equipment.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/languages.json (imports): dropped, missing target 'file:src/data/srd/languages.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/monsters.json (imports): dropped, missing target 'file:src/data/srd/monsters.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/races.json (imports): dropped, missing target 'file:src/data/srd/races.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/references.json (imports): dropped, missing target 'file:src/data/srd/references.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/skills.json (imports): dropped, missing target 'file:src/data/srd/skills.json'
+  - Edge file:src/data/srd/index.ts → file:src/data/srd/spells.json (imports): dropped, missing target 'file:src/data/srd/spells.json'
+
+Output: 1065 nodes, 2335 edges
+
+Imports edge recovery:
+  Recovered 1 `imports` edges from importMap (521 entries scanned)
+  Skipped 48 importMap target paths with no `file:` node in graph
+
+Written to /home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/assembled-graph.json (1164 KB)

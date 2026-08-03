@@ -1,0 +1,465 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "type": "file",
+      "name": "Inventory.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "summary": "Вкладка інвентарю аркуша персонажа: список предметів з можливістю додавання/видалення та автоматичним перенесенням у зброю при розпізнаванні назви з бази зброї.",
+      "tags": ["component", "inventory", "character-tab", "form"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "type": "file",
+      "name": "Notes.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "summary": "Вкладка нотаток персонажа з багаторядковим текстовим полем, що синхронізується з character store.",
+      "tags": ["component", "character-tab", "notes"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "type": "file",
+      "name": "Proficiencies.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "summary": "Вкладка володінь персонажа: текстове поле, де кожен рядок перетворюється на окремий елемент списку володінь.",
+      "tags": ["component", "character-tab", "proficiencies"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "type": "file",
+      "name": "SkillItem.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "summary": "Один рядок навички з полем модифікатора та кнопкою кидка d20, що відкриває модалку результату кидка.",
+      "tags": ["component", "skill", "dice-roll", "character-tab"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "type": "file",
+      "name": "Skills.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "summary": "Вкладка навичок персонажа: нормалізує збережені значення навичок та рендерить список SkillItem з можливістю редагування модифікаторів.",
+      "tags": ["component", "character-tab", "skills"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "type": "file",
+      "name": "Spells.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "summary": "Вкладка заклинань персонажа: керує осередками заклинань за рівнями, бонусом атаки, ДК рятункового кидка та списками відомих/підготовлених заклинань і замовлянь.",
+      "tags": ["component", "character-tab", "spells", "form"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "type": "file",
+      "name": "Traits.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "summary": "Вкладка рис персонажа: окремі багаторядкові поля для особистості, ідеалів, зв'язків і вад, кожне синхронізується зі своїм полем у character store.",
+      "tags": ["component", "character-tab", "traits"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "type": "file",
+      "name": "Weapon.tsx",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "summary": "Вкладка зброї персонажа: список зброї з полями атаки/шкоди, кидками кубиків через власний парсер виразів (наприклад '2d6+3') і модалкою результату кидка.",
+      "tags": ["component", "character-tab", "weapons", "dice-roll"],
+      "complexity": "complex",
+      "languageNotes": "Містить власний легкий парсер виразів кидків кубиків (parseDice/rollDice) замість використання спільного сервісу кидків."
+    },
+    {
+      "id": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "file",
+      "name": "style.ts",
+      "filePath": "src/shared/components/CharacterStats/Tabs/style.ts",
+      "summary": "Спільна фабрика стилів для вкладок аркуша персонажа (Inventory, Notes, Proficiencies, Skills, Spells, Traits), що використовує дизайн-токени та кольори теми.",
+      "tags": ["style", "shared", "theming", "character-tab"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/Loader/Loader.tsx",
+      "type": "file",
+      "name": "Loader.tsx",
+      "filePath": "src/shared/components/Loader/Loader.tsx",
+      "summary": "Анімований SVG-індикатор завантаження з циклічною анімацією обведення, що використовується в модалці результату кидка.",
+      "tags": ["component", "loading-state", "animation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/Modal/Modal.tsx",
+      "type": "file",
+      "name": "Modal.tsx",
+      "filePath": "src/shared/components/Modal/Modal.tsx",
+      "summary": "Перевикористовуваний базовий компонент модального вікна із заголовком, прокручуваним вмістом та кнопками підтвердження/закриття.",
+      "tags": ["component", "modal", "shared-ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "type": "file",
+      "name": "RollResultModal.tsx",
+      "filePath": "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "summary": "Модальне вікно результату кидка кубика: показує критичний успіх/провал, попередній результат і кнопку перекидання.",
+      "tags": ["component", "modal", "dice-roll"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "type": "file",
+      "name": "MultiTextInput.tsx",
+      "filePath": "src/shared/components/TextInput/MultiTextInput.tsx",
+      "summary": "Багаторядкове текстове поле з автоматичною зміною висоти в межах min/max та колбеком onSizeChange.",
+      "tags": ["component", "text-input", "shared-ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/TextInput/TextInput.tsx",
+      "type": "file",
+      "name": "TextInput.tsx",
+      "filePath": "src/shared/components/TextInput/TextInput.tsx",
+      "summary": "Обгортка над текстовим полем React Native з опційним стилізованим варіантом на базі спільного UI-компонента Input.",
+      "tags": ["component", "text-input", "shared-ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/components/TextInput/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "src/shared/components/TextInput/index.ts",
+      "summary": "Barrel-файл, що реекспортує компоненти TextInput та MultiTextInput для зручного імпорту.",
+      "tags": ["barrel", "entry-point", "text-input"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/CharacterTabs.ts",
+      "type": "file",
+      "name": "CharacterTabs.ts",
+      "filePath": "src/shared/const/CharacterTabs.ts",
+      "summary": "Тип-об'єднання назв вкладок аркуша персонажа (Attributes, Skills, Spells, Combat тощо), що визначає допустимі значення для навігації по вкладках.",
+      "tags": ["type-definition", "constants", "character-tab"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/SkillsTab.ts",
+      "type": "file",
+      "name": "SkillsTab.ts",
+      "filePath": "src/shared/const/SkillsTab.ts",
+      "summary": "Константа зі списком назв навичок D&D 5e (SKILL_NAMES), що використовується для рендеру вкладки навичок.",
+      "tags": ["constants", "skills", "data"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/attributes.ts",
+      "type": "file",
+      "name": "attributes.ts",
+      "filePath": "src/shared/const/attributes.ts",
+      "summary": "Список характеристик персонажа (сила, спритність тощо) з ключами й локалізованими підписами українською для вкладки атрибутів.",
+      "tags": ["constants", "attributes", "data"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/shared/const/experience.ts",
+      "type": "file",
+      "name": "experience.ts",
+      "filePath": "src/shared/const/experience.ts",
+      "summary": "Таблиця досвіду D&D 5e за рівнями та функція визначення рівня персонажа за кількістю очок досвіду.",
+      "tags": ["constants", "experience", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/types/Character.ts",
+      "type": "file",
+      "name": "Character.ts",
+      "filePath": "src/types/Character.ts",
+      "summary": "Barrel-файл типів, що реекспортує основні типи персонажа (CharacterEntity, CharacterDto, CharacterViewModel, CharacterDraft тощо) з domain-шару для зручного імпорту в UI.",
+      "tags": ["type-definition", "barrel", "character-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory",
+      "type": "function",
+      "name": "Inventory",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "lineRange": [18, 102],
+      "summary": "Компонент вкладки інвентарю: керує списком предметів, автоматично переносить розпізнану зброю до списку зброї персонажа.",
+      "tags": ["component", "inventory", "handler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes",
+      "type": "function",
+      "name": "Notes",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "lineRange": [14, 38],
+      "summary": "Компонент вкладки нотаток персонажа з одним багаторядковим полем вводу.",
+      "tags": ["component", "notes"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies",
+      "type": "function",
+      "name": "Proficiencies",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "lineRange": [14, 40],
+      "summary": "Компонент вкладки володінь: перетворює текст по рядках на масив володінь персонажа.",
+      "tags": ["component", "proficiencies"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "type": "function",
+      "name": "SkillItem",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "lineRange": [15, 58],
+      "summary": "Рядок однієї навички з полем модифікатора та кнопкою кидка d20 з відкриттям RollResultModal.",
+      "tags": ["component", "skill", "dice-roll"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:normalizeSkills",
+      "type": "function",
+      "name": "normalizeSkills",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "lineRange": [35, 56],
+      "summary": "Приводить збережене значення навичок персонажа (масив або об'єкт) до єдиної нормалізованої мапи ключ-значення.",
+      "tags": ["utility", "normalization", "skills"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills",
+      "type": "function",
+      "name": "Skills",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "lineRange": [58, 87],
+      "summary": "Компонент вкладки навичок, що рендерить список SkillItem на основі нормалізованих даних персонажа.",
+      "tags": ["component", "skills", "character-tab"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells",
+      "type": "function",
+      "name": "Spells",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "lineRange": [27, 169],
+      "summary": "Компонент вкладки заклинань: керує ДК рятункового кидка, бонусом атаки, осередками заклинань за рівнями та списками відомих/підготовлених заклинань і замовлянь.",
+      "tags": ["component", "spells", "form", "character-tab"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits",
+      "type": "function",
+      "name": "Traits",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "lineRange": [15, 64],
+      "summary": "Компонент вкладки рис персонажа з окремими полями для особистості, ідеалів, зв'язків і вад.",
+      "tags": ["component", "traits", "character-tab"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons",
+      "type": "function",
+      "name": "Weapons",
+      "filePath": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "lineRange": [32, 335],
+      "summary": "Компонент вкладки зброї: список зброї персонажа з полями атаки/шкоди, кидками кубиків через власний парсер виразів і модалками результату.",
+      "tags": ["component", "weapons", "dice-roll", "character-tab"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "function",
+      "name": "getStyles",
+      "filePath": "src/shared/components/CharacterStats/Tabs/style.ts",
+      "lineRange": [5, 34],
+      "summary": "Фабрика стилів для вкладок аркуша персонажа, що приймає кольори теми та повертає StyleSheet із дизайн-токенами.",
+      "tags": ["style", "factory", "theming"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/Loader/Loader.tsx:Loader",
+      "type": "function",
+      "name": "Loader",
+      "filePath": "src/shared/components/Loader/Loader.tsx",
+      "lineRange": [8, 50],
+      "summary": "Компонент анімованого SVG-індикатора завантаження з циклічною анімацією штриха.",
+      "tags": ["component", "loading-state", "animation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/Modal/Modal.tsx:Modal",
+      "type": "function",
+      "name": "Modal",
+      "filePath": "src/shared/components/Modal/Modal.tsx",
+      "lineRange": [18, 59],
+      "summary": "Базовий модальний компонент із заголовком, прокручуваним вмістом та кнопками підтвердження/закриття.",
+      "tags": ["component", "modal", "shared-ui"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "type": "function",
+      "name": "RollResultModal",
+      "filePath": "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "lineRange": [21, 73],
+      "summary": "Модальний компонент результату кидка: показує критичний успіх/провал, попередній результат і дозволяє перекинути кубик.",
+      "tags": ["component", "modal", "dice-roll"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "function",
+      "name": "MultiTextInput",
+      "filePath": "src/shared/components/TextInput/MultiTextInput.tsx",
+      "lineRange": [22, 73],
+      "summary": "Багаторядкове текстове поле, що автоматично підлаштовує висоту під вміст у межах min/max висоти.",
+      "tags": ["component", "text-input", "shared-ui"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/shared/components/TextInput/TextInput.tsx:TextInput",
+      "type": "function",
+      "name": "TextInput",
+      "filePath": "src/shared/components/TextInput/TextInput.tsx",
+      "lineRange": [24, 33],
+      "summary": "Компонент текстового поля, що або рендерить нативний RNTextInput без стилю, або стилізований спільний Input.",
+      "tags": ["component", "text-input", "shared-ui"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/const/WeaponsDb.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/shared/components/TextInput/TextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/shared/const/SkillsTab.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/shared/components/TextInput/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/types/Spells.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/types/Traits.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/Loader/Loader.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "file:src/shared/components/Modal/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/shared/components/Loader/Loader.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/shared/components/RollResultModal/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/const/attributes.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:normalizeSkills", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/Loader/Loader.tsx", "target": "function:src/shared/components/Loader/Loader.tsx:Loader", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "function:src/shared/components/Modal/Modal.tsx:Modal", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "contains", "direction": "forward", "weight": 1.0},
+
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/Loader/Loader.tsx", "target": "function:src/shared/components/Loader/Loader.tsx:Loader", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "function:src/shared/components/Modal/Modal.tsx:Modal", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/TextInput/index.ts", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:src/shared/components/TextInput/index.ts", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/Modal/Modal.tsx:Modal", "target": "function:src/shared/components/Modal/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "target": "function:src/shared/components/RollResultModal/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "target": "function:src/shared/components/Loader/Loader.tsx:Loader", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "target": "function:src/shared/components/Modal/Modal.tsx:Modal", "type": "calls", "direction": "forward", "weight": 0.8}
+  ]
+}

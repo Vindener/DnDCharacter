@@ -1,0 +1,3920 @@
+{
+  "scriptCompleted": true,
+  "directoryGroups": {
+    "scripts": [
+      "file:scripts/validate-srd.mjs",
+      "file:scripts/lint-theme.mjs",
+      "file:scripts/lint-ui-tokens.mjs",
+      "file:scripts/manual-dev-client-android.ps1",
+      "file:scripts/release-check.mjs"
+    ],
+    "root": [
+      "file:App.tsx",
+      "file:index.js",
+      "config:.env",
+      "document:CLAUDE.md",
+      "document:README.md",
+      "config:app.json",
+      "config:eas.json",
+      "config:firebase.json",
+      "config:google-services.json",
+      "config:package.json",
+      "config:tsconfig.json",
+      "file:.firebaserc",
+      "file:.npmrc",
+      "file:firestore.rules",
+      "file:metro.config.js",
+      "file:vitest.config.ts",
+      "file:vitest.rules.config.ts"
+    ],
+    "functions": [
+      "file:functions/src/accountDeletionCascade.ts",
+      "file:functions/src/deleteMyAccount.ts",
+      "file:functions/src/accountDeletionCascade.test.ts",
+      "document:functions/README.md",
+      "config:functions/package.json",
+      "config:functions/tsconfig.json",
+      "file:functions/src/createCampaignInvite.ts",
+      "file:functions/src/index.ts",
+      "file:functions/src/redeemCampaignInvite.ts",
+      "file:functions/vitest.config.ts"
+    ],
+    ".agents": [
+      "document:.agents/AGENT.md",
+      "document:.agents/CHECKLIST.md",
+      "document:.agents/CODEX.md",
+      "document:.agents/MEMORY.md",
+      "document:.agents/REPO_MAP.md",
+      "document:.agents/TOOLS.md",
+      "document:.agents/USER.md",
+      "config:.agents/openai.yaml",
+      "document:.agents/skills/create-android-component/SKILL.md"
+    ],
+    "android": [
+      "config:android/app/src/main/res/values/colors.xml",
+      "config:android/app/src/main/res/values/strings.xml",
+      "config:android/app/src/main/res/values/styles.xml",
+      "config:android/build.gradle",
+      "config:android/gradle.properties",
+      "file:android/gradlew.bat",
+      "config:android/settings.gradle",
+      "config:android/app/build.gradle",
+      "file:android/app/debug.keystore",
+      "config:android/app/google-services.json",
+      "file:android/app/proguard-rules.pro",
+      "config:android/app/src/androidTest/AndroidManifest.xml",
+      "config:android/app/src/debug/AndroidManifest.xml",
+      "config:android/app/src/main/AndroidManifest.xml",
+      "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "config:android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "config:android/app/src/main/res/drawable/rn_edit_text_material.xml",
+      "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "file:android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "config:android/app/src/main/res/values-night/colors.xml",
+      "file:android/gradle/wrapper/gradle-wrapper.jar",
+      "config:android/gradle/wrapper/gradle-wrapper.properties",
+      "file:android/gradlew"
+    ],
+    "docs": [
+      "document:docs/audit-2026-07.md",
+      "document:docs/campaign-management-prompts.md",
+      "document:docs/claude-code-prompts.md",
+      "document:docs/collaborative-editing.md",
+      "document:docs/dnd-product-guidelines.md",
+      "document:docs/loading-states-and-skeleton.md",
+      "document:docs/privacy-policy.en.md",
+      "document:docs/privacy-policy.uk.md",
+      "document:docs/product-collaboration-stage-4.md",
+      "document:docs/product-dm-experience-stage-5.md",
+      "document:docs/product-foundation-stage-1.md",
+      "document:docs/product-homebrew-stage-3.md",
+      "document:docs/product-redesign-stage-2.md",
+      "document:docs/release-checklist-1.0.0.md",
+      "document:docs/release-plan-google-play.md",
+      "document:docs/sprint-plan.md",
+      "document:docs/store-listing.md",
+      "document:docs/ui-kit.md",
+      "document:docs/ux-ui-roadmap.md"
+    ],
+    ".claude": [
+      "config:.claude/settings.json"
+    ],
+    ".github": [
+      "document:.github/instructions/mobile-rn-standards.instructions.md"
+    ],
+    ".ua": [
+      "file:.ua/.understandignore",
+      "config:.ua/config.json"
+    ],
+    "firestore-tests": [
+      "file:firestore-tests/rules.test.ts"
+    ],
+    "src/context": [
+      "file:src/context/AppRole-store.ts",
+      "file:src/context/DmSettings-store.ts",
+      "file:src/context/Spellbook-store.ts",
+      "file:src/context/Sync-store.ts",
+      "file:src/context/Monster-store.ts",
+      "file:src/context/TrackerTemplates-store.ts",
+      "file:src/context/Character-store.ts",
+      "file:src/context/Theme-store.ts",
+      "file:src/context/CustomCoins-store.ts"
+    ],
+    "src/dm": [
+      "file:src/dm/domain/campaign/index.ts",
+      "file:src/dm/domain/campaign/linking.test.ts",
+      "file:src/dm/domain/campaign/linking.ts",
+      "file:src/dm/domain/campaign/utils.test.ts",
+      "file:src/dm/domain/campaign/utils.ts",
+      "file:src/dm/domain/encounter/calculator.ts",
+      "file:src/dm/domain/initiative/index.ts",
+      "file:src/dm/domain/initiative/roll.test.ts",
+      "file:src/dm/domain/notes/conflict.test.ts",
+      "file:src/dm/domain/notes/conflict.ts",
+      "file:src/dm/domain/notes/index.ts",
+      "file:src/dm/domain/types/index.ts",
+      "file:src/dm/hooks/useCampaignOwnership.ts",
+      "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "file:src/dm/repositories/campaignNotesRepository.ts",
+      "file:src/dm/repositories/campaignRepository.ts",
+      "file:src/dm/repositories/monsterRepository.ts",
+      "file:src/dm/repositories/campaignNotesRepository.test.ts",
+      "file:src/dm/repositories/campaignRepository.test.ts",
+      "file:src/dm/repositories/dmSettingsRepository.ts",
+      "file:src/dm/domain/initiative/roll.ts",
+      "file:src/dm/domain/encounter/calculator.test.ts",
+      "file:src/dm/domain/encounter/index.ts",
+      "file:src/dm/repositories/appRoleRepository.ts",
+      "file:src/dm/repositories/storageRepositories.test.ts",
+      "file:src/dm/repositories/trackerTemplatesRepository.ts",
+      "file:src/dm/domain/types/encounter.ts",
+      "file:src/dm/domain/types/encounterHistory.ts",
+      "file:src/dm/domain/types/notes.ts",
+      "file:src/dm/boundary.test.ts",
+      "file:src/dm/domain/index.ts",
+      "file:src/dm/domain/types/campaign.ts",
+      "file:src/dm/domain/types/campaignInvite.ts",
+      "file:src/dm/domain/types/initiative.ts",
+      "file:src/dm/repositories/index.ts"
+    ],
+    "src/navigation": [
+      "file:src/navigation/DMNavigator.tsx",
+      "file:src/navigation/AppNavigator.tsx",
+      "file:src/navigation/ReferencesNavigator.tsx",
+      "file:src/navigation/TabNavigator.tsx",
+      "file:src/navigation/sharedTypes.ts"
+    ],
+    "src/repositories": [
+      "file:src/repositories/characterCloudRepository.ts",
+      "file:src/repositories/syncPathFieldMap.test.ts",
+      "file:src/repositories/syncPathFieldMap.ts",
+      "file:src/repositories/characterCloudRepository.test.ts",
+      "file:src/repositories/characterLocalRepository.test.ts",
+      "file:src/repositories/characterLocalRepository.ts",
+      "file:src/repositories/createCharacterDraftRepository.ts",
+      "file:src/repositories/firstLaunchRepository.ts",
+      "file:src/repositories/whatsNewRepository.ts"
+    ],
+    "src/domain": [
+      "file:src/domain/spellbook/characterSpellAdapter.test.ts",
+      "file:src/domain/spellbook/index.ts",
+      "file:src/domain/spellbook/spellRepository.test.ts",
+      "file:src/domain/srd/localization.ts",
+      "file:src/domain/mappers/character.mapper.test.ts",
+      "file:src/domain/mappers/character.mapper.ts",
+      "file:src/domain/mappers/homebrew.mapper.test.ts",
+      "file:src/domain/mappers/homebrew.mapper.ts",
+      "file:src/domain/mappers/spell.mapper.ts",
+      "file:src/domain/migrations/index.test.ts",
+      "file:src/domain/migrations/index.ts",
+      "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "file:src/domain/schemas/campaignInitiative.schema.test.ts",
+      "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "file:src/domain/schemas/campaignNote.schema.test.ts",
+      "file:src/domain/schemas/campaignNote.schema.ts",
+      "file:src/domain/schemas/character.schema.test.ts",
+      "file:src/domain/schemas/character.schema.ts",
+      "file:src/domain/schemas/createCharacterWizard.schema.test.ts",
+      "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "file:src/domain/schemas/homebrew.schema.test.ts",
+      "file:src/domain/schemas/homebrew.schema.ts",
+      "file:src/domain/schemas/index.ts",
+      "file:src/domain/schemas/spell.schema.test.ts",
+      "file:src/domain/schemas/spell.schema.ts",
+      "file:src/domain/schemas/utils.ts",
+      "file:src/domain/srd/index.ts",
+      "file:src/domain/types/index.ts",
+      "file:src/domain/mappers/index.ts",
+      "file:src/domain/spellbook/characterSpellAdapter.ts",
+      "file:src/domain/spellbook/spellCloudRepository.ts",
+      "file:src/domain/spellbook/spellLocalRepository.ts",
+      "file:src/domain/spellbook/spellRepository.ts",
+      "file:src/domain/spellbook/spellbookEntity.ts",
+      "file:src/domain/srd/adapters.ts",
+      "file:src/domain/srd/localization.test.ts",
+      "file:src/domain/srd/schemas.ts",
+      "file:src/domain/srd/srdRepository.test.ts",
+      "file:src/domain/srd/srdRepository.ts",
+      "file:src/domain/srd/srdSelectors.ts",
+      "file:src/domain/srd/types.ts",
+      "file:src/domain/types/sourceMetadata.ts",
+      "file:src/domain/types/character.ts",
+      "file:src/domain/spellbook/boundary.test.ts",
+      "file:src/domain/types/dm.ts",
+      "file:src/domain/types/spellbook.ts",
+      "file:src/domain/types/sync.ts"
+    ],
+    "src/modules": [
+      "file:src/modules/Header/Header.tsx",
+      "file:src/modules/Header/style.ts"
+    ],
+    "src/services": [
+      "file:src/services/storeEffects/spellbookStoreEffects.ts",
+      "file:src/services/campaignInvite.ts",
+      "file:src/services/characterSyncCoordinator.test.ts",
+      "file:src/services/characterSyncCoordinator.ts",
+      "file:src/services/connections.ts",
+      "file:src/services/firebase.ts",
+      "file:src/services/users.ts",
+      "file:src/services/dmCampaignNotes.test.ts",
+      "file:src/services/dmCampaignNotes.ts",
+      "file:src/services/dmCampaigns.test.ts",
+      "file:src/services/dmCampaigns.ts",
+      "file:src/services/storeEffects/uiStoreEffects.ts",
+      "file:src/services/characterDeletion.test.ts",
+      "file:src/services/characterDeletion.ts",
+      "file:src/services/accountDeletion.test.ts",
+      "file:src/services/accountDeletion.ts",
+      "file:src/services/accountDeletionCascade.test.ts",
+      "file:src/services/accountDeletionCascade.ts",
+      "file:src/services/storeEffects/characterStoreEffects.ts",
+      "file:src/services/storeEffects/syncStoreEffects.ts",
+      "file:src/services/storeEffects/dmStoreEffects.test.ts",
+      "file:src/services/storeEffects/dmStoreEffects.ts",
+      "file:src/services/characterSheets.ts"
+    ],
+    "src/stores": [
+      "file:src/stores/monsterStore.ts",
+      "file:src/stores/spellbookStore.ts",
+      "file:src/stores/dmSettingsStore.ts",
+      "file:src/stores/selectors/characterStoreSelectors.ts",
+      "file:src/stores/selectors/syncStoreSelectors.ts",
+      "file:src/stores/storeSelectors.test.ts",
+      "file:src/stores/uiStore.ts",
+      "file:src/stores/syncStore.ts",
+      "file:src/stores/dmStore.ts",
+      "file:src/stores/characterStore.ts",
+      "file:src/stores/appRoleStore.ts",
+      "file:src/stores/trackerTemplatesStore.ts"
+    ],
+    "src/types": [
+      "file:src/types/Monster.ts",
+      "file:src/types/Spellbook.ts",
+      "file:src/types/Sync.ts",
+      "file:src/types/skillToStat.ts",
+      "file:src/types/CustomCoin.ts",
+      "file:src/types/Character.ts",
+      "file:src/types/DeathSaves.ts",
+      "file:src/types/HitPoints.ts",
+      "file:src/types/SavingThrows.ts",
+      "file:src/types/Skills.ts",
+      "file:src/types/SpellSlots.ts",
+      "file:src/types/Spells.ts",
+      "file:src/types/Stats.ts",
+      "file:src/types/Traits.ts",
+      "file:src/types/Weapon.ts",
+      "file:src/types/Product.ts",
+      "file:src/types/DM.ts",
+      "file:src/types/SourceMetadata.ts"
+    ],
+    "src/test": [
+      "file:src/test/mocks/react-navigation-native.ts",
+      "file:src/test/mocks/expo-modules-core.ts",
+      "file:src/test/mocks/react-native-firebase-analytics.ts",
+      "file:src/test/mocks/react-native-firebase-crashlytics.ts",
+      "file:src/test/mocks/react-native.tsx"
+    ],
+    "src/components": [
+      "file:src/components/ShareCharacterSheetModal.tsx"
+    ],
+    "src/i18n": [
+      "file:src/i18n/index.ts",
+      "file:src/i18n/languageStorage.ts",
+      "file:src/i18n/types.ts",
+      "config:src/i18n/locales/en/bestiary.json",
+      "config:src/i18n/locales/en/character.json",
+      "config:src/i18n/locales/en/common.json",
+      "config:src/i18n/locales/en/createCharacter.json",
+      "config:src/i18n/locales/en/dice.json",
+      "config:src/i18n/locales/en/dm.json",
+      "config:src/i18n/locales/en/dnd.json",
+      "config:src/i18n/locales/en/firstLaunch.json",
+      "config:src/i18n/locales/en/home.json",
+      "config:src/i18n/locales/en/initiative.json",
+      "config:src/i18n/locales/en/legal.json",
+      "config:src/i18n/locales/en/navigation.json",
+      "config:src/i18n/locales/en/references.json",
+      "config:src/i18n/locales/en/settings.json",
+      "config:src/i18n/locales/en/spellbook.json",
+      "config:src/i18n/locales/en/support.json",
+      "config:src/i18n/locales/en/whatsNew.json",
+      "config:src/i18n/locales/uk/bestiary.json",
+      "config:src/i18n/locales/uk/character.json",
+      "config:src/i18n/locales/uk/common.json",
+      "config:src/i18n/locales/uk/createCharacter.json",
+      "config:src/i18n/locales/uk/dice.json",
+      "config:src/i18n/locales/uk/dm.json",
+      "config:src/i18n/locales/uk/dnd.json",
+      "config:src/i18n/locales/uk/firstLaunch.json",
+      "config:src/i18n/locales/uk/home.json",
+      "config:src/i18n/locales/uk/initiative.json",
+      "config:src/i18n/locales/uk/legal.json",
+      "config:src/i18n/locales/uk/navigation.json",
+      "config:src/i18n/locales/uk/references.json",
+      "config:src/i18n/locales/uk/settings.json",
+      "config:src/i18n/locales/uk/spellbook.json",
+      "config:src/i18n/locales/uk/support.json",
+      "config:src/i18n/locales/uk/whatsNew.json"
+    ],
+    "src/data": [
+      "file:src/data/srd/index.ts",
+      "file:src/data/srd/metadata.ts",
+      "config:src/data/srd/abilities.json",
+      "config:src/data/srd/backgrounds.json",
+      "config:src/data/srd/classProgression.json",
+      "config:src/data/srd/classes.json",
+      "config:src/data/srd/conditions.json",
+      "config:src/data/srd/equipment.json",
+      "config:src/data/srd/languages.json",
+      "config:src/data/srd/monsters.json",
+      "config:src/data/srd/races.json",
+      "config:src/data/srd/references.json",
+      "config:src/data/srd/skills.json",
+      "config:src/data/srd/spells.json",
+      "config:src/data/locales/uk/monsters.json",
+      "config:src/data/locales/uk/spells.json"
+    ],
+    "src/screens/DM": [
+      "file:src/screens/DM/DM.tsx",
+      "file:src/screens/DM/DMCampaignDetail.tsx",
+      "file:src/screens/DM/DMCampaignNotes.tsx",
+      "file:src/screens/DM/DMCampaigns.tsx",
+      "file:src/screens/DM/DMEncounterPrep.tsx",
+      "file:src/screens/DM/DMPartyOverview.tsx",
+      "file:src/screens/DM/DMQuickEdit.tsx",
+      "file:src/screens/DM/DMSharedUpdates.tsx",
+      "file:src/screens/DM/PinnedReferencesList.tsx",
+      "file:src/screens/DM/adapters/campaignLink.ts",
+      "file:src/screens/DM/adapters/index.ts",
+      "file:src/screens/DM/style.ts",
+      "file:src/screens/DM/DMSharedUpdates.style.ts",
+      "file:src/screens/DM/EncounterCalculator/style.ts",
+      "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "file:src/screens/DM/LootGenerator/style.ts",
+      "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "file:src/screens/DM/adapters/unifiedParty.ts"
+    ],
+    "src/screens/Bestiary": [
+      "file:src/screens/Bestiary/Bestiary.test.tsx",
+      "file:src/screens/Bestiary/Bestiary.tsx",
+      "file:src/screens/Bestiary/bestiaryFilters.test.ts",
+      "file:src/screens/Bestiary/bestiaryFilters.ts",
+      "file:src/screens/Bestiary/style.ts"
+    ],
+    "src/screens/Monster": [
+      "file:src/screens/Monster/Monster.test.tsx",
+      "file:src/screens/Monster/Monster.tsx",
+      "file:src/screens/Monster/style.ts"
+    ],
+    "src/screens/Spellbook": [
+      "file:src/screens/Spellbook/Spellbook.tsx",
+      "file:src/screens/Spellbook/spellbookFilters.test.ts",
+      "file:src/screens/Spellbook/spellbookFilters.ts",
+      "file:src/screens/Spellbook/styles.ts"
+    ],
+    "src/screens/Support": [
+      "file:src/screens/Support/Support.tsx",
+      "file:src/screens/Support/index.ts"
+    ],
+    "src/screens/Home": [
+      "file:src/screens/Home/Home.tsx",
+      "file:src/screens/Home/homeViewModel.test.ts",
+      "file:src/screens/Home/homeViewModel.ts",
+      "file:src/screens/Home/Home.test.tsx",
+      "file:src/screens/Home/styles.ts"
+    ],
+    "src/screens/Initiative": [
+      "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "file:src/screens/Initiative/Initiative.tsx",
+      "file:src/screens/Initiative/style.ts",
+      "file:src/screens/Initiative/LocalInitiativeBoard.tsx"
+    ],
+    "src/screens/CreateCharacter": [
+      "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "file:src/screens/CreateCharacter/createCharacterWizard.test.ts",
+      "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "file:src/screens/CreateCharacter/style.ts"
+    ],
+    "src/screens/Character": [
+      "file:src/screens/Character/Character.tsx",
+      "file:src/screens/Character/components/CharacterHeader.tsx",
+      "file:src/screens/Character/components/CharacterModals.tsx",
+      "file:src/screens/Character/components/CharacterTabs.tsx",
+      "file:src/screens/Character/components/CombatSummaryCard.tsx",
+      "file:src/screens/Character/components/QuickActionBar.tsx",
+      "file:src/screens/Character/hooks/useCharacterActions.tsx",
+      "file:src/screens/Character/hooks/useQuickActions.ts",
+      "file:src/screens/Character/tabs/CharacterTabContent.test.tsx",
+      "file:src/screens/Character/tabs/CharacterTabContent.tsx",
+      "file:src/screens/Character/tabs/CombatTab.tsx",
+      "file:src/screens/Character/tabs/HomebrewTab.tsx",
+      "file:src/screens/Character/tabs/InventoryTab.tsx",
+      "file:src/screens/Character/tabs/MagicTab.tsx",
+      "file:src/screens/Character/tabs/NotesTab.tsx",
+      "file:src/screens/Character/tabs/OverviewTab.tsx",
+      "file:src/screens/Character/components/QuickActionBar.test.tsx",
+      "file:src/screens/Character/style.ts",
+      "file:src/screens/Character/components/CharacterSourceBadge.test.tsx",
+      "file:src/screens/Character/components/CharacterSourceBadge.tsx",
+      "file:src/screens/Character/hooks/levelChange.test.ts",
+      "file:src/screens/Character/hooks/levelChange.ts"
+    ],
+    "src/screens/Dice": [
+      "file:src/screens/Dice/Dice.tsx",
+      "file:src/screens/Dice/styles.ts"
+    ],
+    "src/screens/DiceRoller": [
+      "file:src/screens/DiceRoller/DiceRoller.test.tsx",
+      "file:src/screens/DiceRoller/DiceRoller.tsx",
+      "file:src/screens/DiceRoller/styles.ts"
+    ],
+    "src/screens/LegalLicenses": [
+      "file:src/screens/LegalLicenses/LegalLicenses.tsx"
+    ],
+    "src/screens/References": [
+      "file:src/screens/References/styles.ts",
+      "file:src/screens/References/References.test.tsx",
+      "file:src/screens/References/References.tsx"
+    ],
+    "src/screens/Settings": [
+      "file:src/screens/Settings/DeleteAccountModal.tsx",
+      "file:src/screens/Settings/Settings.tsx",
+      "file:src/screens/Settings/styles.ts"
+    ],
+    "src/shared/components": [
+      "file:src/shared/components/MonsterCard/MonsterCard.tsx",
+      "file:src/shared/components/CharacterCard/style.ts",
+      "file:src/shared/components/CharacterMenu/style.ts",
+      "file:src/shared/components/CharacterOverview/style.ts",
+      "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "file:src/shared/components/CharacterStats/style.ts",
+      "file:src/shared/components/EmptyPlaceholder.tsx",
+      "file:src/shared/components/ErrorBoundary/style.ts",
+      "file:src/shared/components/Modal/style.ts",
+      "file:src/shared/components/MonsterCard/style.ts",
+      "file:src/shared/components/RollResultModal/style.ts",
+      "file:src/shared/components/CharacterCard/CharacterCard.tsx",
+      "file:src/shared/components/CharacterMenu/CharacterMenu.tsx",
+      "file:src/shared/components/CharacterOverview/CharacterOverview.tsx",
+      "file:src/shared/components/CharacterStats/CharacterStats.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
+      "file:src/shared/components/Firebase/Auth.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "file:src/shared/components/Loader/Loader.tsx",
+      "file:src/shared/components/Modal/Modal.tsx",
+      "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "file:src/shared/components/TextInput/TextInput.tsx",
+      "file:src/shared/components/TextInput/index.ts",
+      "file:src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx",
+      "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "file:src/shared/components/FirstLaunchModals/style.ts",
+      "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "file:src/shared/components/WhatsNewModal/style.ts",
+      "file:src/shared/components/Loader/style.ts"
+    ],
+    "src/shared/const": [
+      "file:src/shared/const/SpellbookSeed.ts",
+      "file:src/shared/const/TrackerTemplates.ts",
+      "file:src/shared/const/CharacterTemplates.ts",
+      "file:src/shared/const/ClassPresets.ts",
+      "file:src/shared/const/Subclasses.ts",
+      "file:src/shared/const/Weapons.ts",
+      "file:src/shared/const/CharacterTabs.ts",
+      "file:src/shared/const/SkillsTab.ts",
+      "file:src/shared/const/attributes.ts",
+      "file:src/shared/const/experience.ts",
+      "file:src/shared/const/CharacterClass.ts",
+      "file:src/shared/const/WeaponsDb.ts",
+      "file:src/shared/const/Backgrounds.ts",
+      "file:src/shared/const/ClassStartingGear.ts",
+      "file:src/shared/const/DiceOptions.ts",
+      "file:src/shared/const/Races.ts",
+      "file:src/shared/const/SubclassDetails.ts",
+      "file:src/shared/const/encounter.ts"
+    ],
+    "src/shared/helpers": [
+      "file:src/shared/helpers/sourcePresentation.test.ts",
+      "file:src/shared/helpers/sourcePresentation.ts",
+      "file:src/shared/helpers/collaboration/status.ts",
+      "file:src/shared/helpers/homebrew.ts",
+      "file:src/shared/helpers/mapCloudCharacter.ts",
+      "file:src/shared/helpers/stripUndefinedDeep.ts",
+      "file:src/shared/helpers/sync/conflictPolicy.test.ts",
+      "file:src/shared/helpers/sync/conflictPolicy.ts",
+      "file:src/shared/helpers/sync/syncErrorClassification.test.ts",
+      "file:src/shared/helpers/sync/syncErrorClassification.ts",
+      "file:src/shared/helpers/combat.ts",
+      "file:src/shared/helpers/createEmptyCharacter.ts",
+      "file:src/shared/helpers/calculateModifier.ts",
+      "file:src/shared/helpers/derived.test.ts",
+      "file:src/shared/helpers/derived.ts",
+      "file:src/shared/helpers/dice.ts",
+      "file:src/shared/helpers/gear.ts",
+      "file:src/shared/helpers/weapons.ts",
+      "file:src/shared/helpers/spellbook.ts"
+    ],
+    "src/shared/services": [
+      "file:src/shared/services/fileSerice.ts",
+      "file:src/shared/services/telemetry/productTelemetry.test.ts",
+      "file:src/shared/services/telemetry/productTelemetry.ts",
+      "file:src/shared/services/diceRoller.test.ts",
+      "file:src/shared/services/diceRoller.ts",
+      "file:src/shared/services/auth/google.ts",
+      "file:src/shared/services/auth/index.ts",
+      "file:src/shared/services/toast/index.ts",
+      "file:src/shared/services/auth/auth.tsx",
+      "file:src/shared/services/telemetry/startupTrace.test.ts",
+      "file:src/shared/services/telemetry/startupTrace.ts"
+    ],
+    "src/shared/styles": [
+      "file:src/shared/styles/statusTones.ts",
+      "file:src/shared/styles/theme.ts",
+      "file:src/shared/styles/tokens.test.ts",
+      "file:src/shared/styles/tokens.ts",
+      "file:src/shared/styles/useDesignTokens.ts",
+      "file:src/shared/styles/index.ts"
+    ],
+    "src/shared/ui": [
+      "file:src/shared/ui/Button.tsx",
+      "file:src/shared/ui/Card.tsx",
+      "file:src/shared/ui/Chip.tsx",
+      "file:src/shared/ui/Input.tsx",
+      "file:src/shared/ui/Screen.tsx",
+      "file:src/shared/ui/Section.tsx",
+      "file:src/shared/ui/Text.tsx",
+      "file:src/shared/ui/skeleton/index.tsx",
+      "file:src/shared/ui/skeleton/skeleton.test.tsx",
+      "file:src/shared/ui/uiVariants.test.ts",
+      "file:src/shared/ui/variantResolvers.ts",
+      "file:src/shared/ui/index.ts"
+    ],
+    "src/shared/mock": [
+      "config:src/shared/mock/Elara_Moonshadow.json",
+      "config:src/shared/mock/defaultCharacter.json",
+      "config:src/shared/mock/defaultCharacter2.json",
+      "config:src/shared/mock/demon-lord-001.json",
+      "config:src/shared/mock/monsterBook.json"
+    ]
+  },
+  "nodeTypeGroups": {
+    "file": [
+      "file:src/context/AppRole-store.ts",
+      "file:src/context/DmSettings-store.ts",
+      "file:src/context/Spellbook-store.ts",
+      "file:src/context/Sync-store.ts",
+      "file:src/dm/domain/campaign/index.ts",
+      "file:src/dm/domain/campaign/linking.test.ts",
+      "file:src/dm/domain/campaign/linking.ts",
+      "file:src/dm/domain/campaign/utils.test.ts",
+      "file:src/dm/domain/campaign/utils.ts",
+      "file:src/dm/domain/encounter/calculator.ts",
+      "file:src/dm/domain/initiative/index.ts",
+      "file:src/dm/domain/initiative/roll.test.ts",
+      "file:src/dm/domain/notes/conflict.test.ts",
+      "file:src/dm/domain/notes/conflict.ts",
+      "file:src/dm/domain/notes/index.ts",
+      "file:src/dm/domain/types/index.ts",
+      "file:src/dm/hooks/useCampaignOwnership.ts",
+      "file:src/dm/repositories/campaignEncountersRepository.test.ts",
+      "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "file:src/dm/repositories/campaignNotesRepository.ts",
+      "file:src/dm/repositories/campaignRepository.ts",
+      "file:src/navigation/DMNavigator.tsx",
+      "file:src/repositories/characterCloudRepository.ts",
+      "file:src/repositories/syncPathFieldMap.test.ts",
+      "file:src/repositories/syncPathFieldMap.ts",
+      "file:src/screens/DM/DM.tsx",
+      "file:src/screens/DM/DMCampaignDetail.tsx",
+      "file:src/screens/DM/DMCampaignNotes.tsx",
+      "file:src/screens/DM/DMCampaigns.tsx",
+      "file:src/context/Monster-store.ts",
+      "file:src/dm/repositories/monsterRepository.ts",
+      "file:src/domain/spellbook/characterSpellAdapter.test.ts",
+      "file:src/domain/spellbook/index.ts",
+      "file:src/domain/spellbook/spellRepository.test.ts",
+      "file:src/domain/srd/localization.ts",
+      "file:src/modules/Header/Header.tsx",
+      "file:src/navigation/AppNavigator.tsx",
+      "file:src/navigation/ReferencesNavigator.tsx",
+      "file:src/navigation/TabNavigator.tsx",
+      "file:src/navigation/sharedTypes.ts",
+      "file:src/screens/Bestiary/Bestiary.test.tsx",
+      "file:src/screens/Bestiary/Bestiary.tsx",
+      "file:src/screens/Bestiary/bestiaryFilters.test.ts",
+      "file:src/screens/Bestiary/bestiaryFilters.ts",
+      "file:src/screens/Monster/Monster.test.tsx",
+      "file:src/screens/Monster/Monster.tsx",
+      "file:src/screens/Spellbook/Spellbook.tsx",
+      "file:src/screens/Spellbook/spellbookFilters.test.ts",
+      "file:src/screens/Spellbook/spellbookFilters.ts",
+      "file:src/screens/Support/Support.tsx",
+      "file:src/services/storeEffects/spellbookStoreEffects.ts",
+      "file:src/shared/components/MonsterCard/MonsterCard.tsx",
+      "file:src/shared/const/SpellbookSeed.ts",
+      "file:src/shared/helpers/sourcePresentation.test.ts",
+      "file:src/shared/helpers/sourcePresentation.ts",
+      "file:src/shared/services/fileSerice.ts",
+      "file:src/stores/monsterStore.ts",
+      "file:src/stores/spellbookStore.ts",
+      "file:src/types/Monster.ts",
+      "file:src/types/Spellbook.ts",
+      "file:src/screens/DM/DMEncounterPrep.tsx",
+      "file:src/screens/DM/DMPartyOverview.tsx",
+      "file:src/screens/DM/DMQuickEdit.tsx",
+      "file:src/screens/DM/DMSharedUpdates.tsx",
+      "file:src/screens/DM/PinnedReferencesList.tsx",
+      "file:src/screens/DM/adapters/campaignLink.ts",
+      "file:src/screens/DM/adapters/index.ts",
+      "file:src/screens/DM/style.ts",
+      "file:src/screens/Home/Home.tsx",
+      "file:src/screens/Home/homeViewModel.test.ts",
+      "file:src/screens/Home/homeViewModel.ts",
+      "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "file:src/screens/Initiative/Initiative.tsx",
+      "file:src/services/campaignInvite.ts",
+      "file:src/services/characterSyncCoordinator.test.ts",
+      "file:src/services/characterSyncCoordinator.ts",
+      "file:src/services/connections.ts",
+      "file:src/services/firebase.ts",
+      "file:src/services/users.ts",
+      "file:src/shared/const/TrackerTemplates.ts",
+      "file:src/shared/helpers/collaboration/status.ts",
+      "file:src/shared/helpers/homebrew.ts",
+      "file:src/shared/helpers/mapCloudCharacter.ts",
+      "file:src/shared/helpers/stripUndefinedDeep.ts",
+      "file:src/shared/helpers/sync/conflictPolicy.test.ts",
+      "file:src/shared/helpers/sync/conflictPolicy.ts",
+      "file:src/shared/helpers/sync/syncErrorClassification.test.ts",
+      "file:src/shared/helpers/sync/syncErrorClassification.ts",
+      "file:src/shared/services/telemetry/productTelemetry.test.ts",
+      "file:src/shared/services/telemetry/productTelemetry.ts",
+      "file:src/types/Sync.ts",
+      "file:src/dm/repositories/campaignNotesRepository.test.ts",
+      "file:src/dm/repositories/campaignRepository.test.ts",
+      "file:src/dm/repositories/dmSettingsRepository.ts",
+      "file:src/domain/mappers/character.mapper.test.ts",
+      "file:src/domain/mappers/character.mapper.ts",
+      "file:src/domain/mappers/homebrew.mapper.test.ts",
+      "file:src/domain/mappers/homebrew.mapper.ts",
+      "file:src/domain/mappers/spell.mapper.ts",
+      "file:src/domain/migrations/index.test.ts",
+      "file:src/domain/migrations/index.ts",
+      "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "file:src/domain/schemas/campaignInitiative.schema.test.ts",
+      "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "file:src/domain/schemas/campaignNote.schema.test.ts",
+      "file:src/domain/schemas/campaignNote.schema.ts",
+      "file:src/domain/schemas/character.schema.test.ts",
+      "file:src/domain/schemas/character.schema.ts",
+      "file:src/domain/schemas/createCharacterWizard.schema.test.ts",
+      "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "file:src/domain/schemas/homebrew.schema.test.ts",
+      "file:src/domain/schemas/homebrew.schema.ts",
+      "file:src/domain/schemas/index.ts",
+      "file:src/domain/schemas/spell.schema.test.ts",
+      "file:src/domain/schemas/spell.schema.ts",
+      "file:src/domain/schemas/utils.ts",
+      "file:src/domain/srd/index.ts",
+      "file:src/domain/types/index.ts",
+      "file:src/repositories/characterCloudRepository.test.ts",
+      "file:src/repositories/characterLocalRepository.test.ts",
+      "file:src/repositories/characterLocalRepository.ts",
+      "file:src/repositories/createCharacterDraftRepository.ts",
+      "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "file:src/screens/CreateCharacter/createCharacterWizard.test.ts",
+      "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "file:src/screens/Home/Home.test.tsx",
+      "file:src/services/dmCampaignNotes.test.ts",
+      "file:src/services/dmCampaignNotes.ts",
+      "file:src/services/dmCampaigns.test.ts",
+      "file:src/services/dmCampaigns.ts",
+      "file:src/shared/const/CharacterTemplates.ts",
+      "file:src/shared/const/ClassPresets.ts",
+      "file:src/shared/const/Subclasses.ts",
+      "file:src/shared/const/Weapons.ts",
+      "file:src/shared/helpers/combat.ts",
+      "file:src/shared/helpers/createEmptyCharacter.ts",
+      "file:src/stores/dmSettingsStore.ts",
+      "file:src/stores/selectors/characterStoreSelectors.ts",
+      "file:src/stores/selectors/syncStoreSelectors.ts",
+      "file:src/stores/storeSelectors.test.ts",
+      "file:src/types/skillToStat.ts",
+      "file:src/context/TrackerTemplates-store.ts",
+      "file:src/dm/domain/initiative/roll.ts",
+      "file:src/screens/Character/Character.tsx",
+      "file:src/screens/Character/components/CharacterHeader.tsx",
+      "file:src/screens/Character/components/CharacterModals.tsx",
+      "file:src/screens/Character/components/CharacterTabs.tsx",
+      "file:src/screens/Character/components/CombatSummaryCard.tsx",
+      "file:src/screens/Character/components/QuickActionBar.tsx",
+      "file:src/screens/Character/hooks/useCharacterActions.tsx",
+      "file:src/screens/Character/hooks/useQuickActions.ts",
+      "file:src/screens/Character/tabs/CharacterTabContent.test.tsx",
+      "file:src/screens/Character/tabs/CharacterTabContent.tsx",
+      "file:src/screens/Character/tabs/CombatTab.tsx",
+      "file:src/screens/Character/tabs/HomebrewTab.tsx",
+      "file:src/screens/Character/tabs/InventoryTab.tsx",
+      "file:src/screens/Character/tabs/MagicTab.tsx",
+      "file:src/screens/Character/tabs/NotesTab.tsx",
+      "file:src/screens/Character/tabs/OverviewTab.tsx",
+      "file:src/screens/Dice/Dice.tsx",
+      "file:src/screens/DiceRoller/DiceRoller.test.tsx",
+      "file:src/screens/DiceRoller/DiceRoller.tsx",
+      "file:src/shared/helpers/calculateModifier.ts",
+      "file:src/shared/services/diceRoller.test.ts",
+      "file:src/shared/services/diceRoller.ts",
+      "file:src/modules/Header/style.ts",
+      "file:src/screens/Bestiary/style.ts",
+      "file:src/screens/Character/components/QuickActionBar.test.tsx",
+      "file:src/screens/Character/style.ts",
+      "file:src/screens/CreateCharacter/style.ts",
+      "file:src/screens/DM/DMSharedUpdates.style.ts",
+      "file:src/screens/DM/EncounterCalculator/style.ts",
+      "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "file:src/screens/DM/LootGenerator/style.ts",
+      "file:src/screens/Dice/styles.ts",
+      "file:src/screens/DiceRoller/styles.ts",
+      "file:src/screens/Home/styles.ts",
+      "file:src/screens/Initiative/style.ts",
+      "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "file:src/screens/Monster/style.ts",
+      "file:src/screens/References/styles.ts",
+      "file:src/screens/Spellbook/styles.ts",
+      "file:src/services/storeEffects/uiStoreEffects.ts",
+      "file:src/shared/components/CharacterCard/style.ts",
+      "file:src/shared/components/CharacterMenu/style.ts",
+      "file:src/shared/components/CharacterOverview/style.ts",
+      "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "file:src/shared/components/CharacterStats/style.ts",
+      "file:src/shared/components/EmptyPlaceholder.tsx",
+      "file:src/shared/components/ErrorBoundary/style.ts",
+      "file:src/shared/components/Modal/style.ts",
+      "file:src/shared/components/MonsterCard/style.ts",
+      "file:src/shared/components/RollResultModal/style.ts",
+      "file:src/shared/styles/statusTones.ts",
+      "file:src/shared/styles/theme.ts",
+      "file:src/shared/styles/tokens.test.ts",
+      "file:src/shared/styles/tokens.ts",
+      "file:src/shared/styles/useDesignTokens.ts",
+      "file:src/shared/ui/Button.tsx",
+      "file:src/shared/ui/Card.tsx",
+      "file:src/shared/ui/Chip.tsx",
+      "file:src/shared/ui/Input.tsx",
+      "file:src/shared/ui/Screen.tsx",
+      "file:src/shared/ui/Section.tsx",
+      "file:src/shared/ui/Text.tsx",
+      "file:src/shared/ui/skeleton/index.tsx",
+      "file:src/shared/ui/skeleton/skeleton.test.tsx",
+      "file:src/shared/ui/uiVariants.test.ts",
+      "file:src/shared/ui/variantResolvers.ts",
+      "file:src/stores/uiStore.ts",
+      "file:src/test/mocks/react-navigation-native.ts",
+      "file:src/types/CustomCoin.ts",
+      "file:src/components/ShareCharacterSheetModal.tsx",
+      "file:src/context/Character-store.ts",
+      "file:src/context/Theme-store.ts",
+      "file:src/dm/domain/encounter/calculator.test.ts",
+      "file:src/dm/domain/encounter/index.ts",
+      "file:src/screens/Character/components/CharacterSourceBadge.test.tsx",
+      "file:src/screens/Character/components/CharacterSourceBadge.tsx",
+      "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "file:src/screens/DM/adapters/unifiedParty.ts",
+      "file:src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "file:src/services/characterDeletion.test.ts",
+      "file:src/services/characterDeletion.ts",
+      "file:src/shared/components/CharacterCard/CharacterCard.tsx",
+      "file:src/shared/components/CharacterMenu/CharacterMenu.tsx",
+      "file:src/shared/components/CharacterOverview/CharacterOverview.tsx",
+      "file:src/shared/components/CharacterStats/CharacterStats.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
+      "file:src/context/CustomCoins-store.ts",
+      "file:src/i18n/index.ts",
+      "file:src/i18n/languageStorage.ts",
+      "file:src/i18n/types.ts",
+      "file:src/screens/References/References.test.tsx",
+      "file:src/screens/References/References.tsx",
+      "file:src/screens/Settings/DeleteAccountModal.tsx",
+      "file:src/screens/Settings/Settings.tsx",
+      "file:src/screens/Settings/styles.ts",
+      "file:src/services/accountDeletion.test.ts",
+      "file:src/services/accountDeletion.ts",
+      "file:src/services/accountDeletionCascade.test.ts",
+      "file:src/services/accountDeletionCascade.ts",
+      "file:src/services/storeEffects/characterStoreEffects.ts",
+      "file:src/services/storeEffects/syncStoreEffects.ts",
+      "file:src/shared/components/Firebase/Auth.tsx",
+      "file:src/shared/services/auth/google.ts",
+      "file:src/shared/services/auth/index.ts",
+      "file:src/shared/services/toast/index.ts",
+      "file:src/stores/syncStore.ts",
+      "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "file:src/shared/components/Loader/Loader.tsx",
+      "file:src/shared/components/Modal/Modal.tsx",
+      "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "file:src/shared/components/TextInput/TextInput.tsx",
+      "file:src/shared/components/TextInput/index.ts",
+      "file:src/shared/const/CharacterTabs.ts",
+      "file:src/shared/const/SkillsTab.ts",
+      "file:src/shared/const/attributes.ts",
+      "file:src/shared/const/experience.ts",
+      "file:src/types/Character.ts",
+      "file:scripts/validate-srd.mjs",
+      "file:src/domain/mappers/index.ts",
+      "file:src/domain/spellbook/characterSpellAdapter.ts",
+      "file:src/domain/spellbook/spellCloudRepository.ts",
+      "file:src/domain/spellbook/spellLocalRepository.ts",
+      "file:src/domain/spellbook/spellRepository.ts",
+      "file:src/domain/spellbook/spellbookEntity.ts",
+      "file:src/domain/srd/adapters.ts",
+      "file:src/domain/srd/localization.test.ts",
+      "file:src/domain/srd/schemas.ts",
+      "file:src/domain/srd/srdRepository.test.ts",
+      "file:src/domain/srd/srdRepository.ts",
+      "file:src/domain/srd/srdSelectors.ts",
+      "file:src/domain/srd/types.ts",
+      "file:src/domain/types/sourceMetadata.ts",
+      "file:src/services/storeEffects/dmStoreEffects.test.ts",
+      "file:src/services/storeEffects/dmStoreEffects.ts",
+      "file:src/shared/const/CharacterClass.ts",
+      "file:src/stores/dmStore.ts",
+      "file:src/domain/types/character.ts",
+      "file:src/screens/Character/hooks/levelChange.test.ts",
+      "file:src/screens/Character/hooks/levelChange.ts",
+      "file:src/shared/const/WeaponsDb.ts",
+      "file:src/shared/helpers/derived.test.ts",
+      "file:src/shared/helpers/derived.ts",
+      "file:src/shared/helpers/dice.ts",
+      "file:src/shared/helpers/gear.ts",
+      "file:src/shared/helpers/weapons.ts",
+      "file:src/stores/characterStore.ts",
+      "file:src/types/DeathSaves.ts",
+      "file:src/types/HitPoints.ts",
+      "file:src/types/SavingThrows.ts",
+      "file:src/types/Skills.ts",
+      "file:src/types/SpellSlots.ts",
+      "file:src/types/Spells.ts",
+      "file:src/types/Stats.ts",
+      "file:src/types/Traits.ts",
+      "file:src/types/Weapon.ts",
+      "file:App.tsx",
+      "file:index.js",
+      "file:src/data/srd/index.ts",
+      "file:src/data/srd/metadata.ts",
+      "file:src/repositories/firstLaunchRepository.ts",
+      "file:src/repositories/whatsNewRepository.ts",
+      "file:src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx",
+      "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
+      "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx",
+      "file:src/shared/components/FirstLaunchModals/style.ts",
+      "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx",
+      "file:src/shared/components/WhatsNewModal/style.ts",
+      "file:src/shared/services/auth/auth.tsx",
+      "file:src/shared/services/telemetry/startupTrace.test.ts",
+      "file:src/shared/services/telemetry/startupTrace.ts",
+      "file:src/shared/ui/index.ts",
+      "file:src/dm/repositories/appRoleRepository.ts",
+      "file:src/dm/repositories/storageRepositories.test.ts",
+      "file:src/dm/repositories/trackerTemplatesRepository.ts",
+      "file:src/stores/appRoleStore.ts",
+      "file:src/stores/trackerTemplatesStore.ts",
+      "file:src/types/Product.ts",
+      "file:functions/src/accountDeletionCascade.ts",
+      "file:functions/src/deleteMyAccount.ts",
+      "file:functions/src/accountDeletionCascade.test.ts",
+      "file:src/dm/domain/types/encounter.ts",
+      "file:src/dm/domain/types/encounterHistory.ts",
+      "file:src/dm/domain/types/notes.ts",
+      "file:android/gradlew.bat",
+      "file:.firebaserc",
+      "file:.npmrc",
+      "file:.ua/.understandignore",
+      "file:android/app/debug.keystore",
+      "file:android/app/proguard-rules.pro",
+      "file:android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "file:android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "file:android/app/src/main/res/mipmap-hdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-mdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp",
+      "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "file:android/gradle/wrapper/gradle-wrapper.jar",
+      "file:android/gradlew",
+      "file:firestore-tests/rules.test.ts",
+      "file:firestore.rules",
+      "file:functions/src/createCampaignInvite.ts",
+      "file:functions/src/index.ts",
+      "file:functions/src/redeemCampaignInvite.ts",
+      "file:functions/vitest.config.ts",
+      "file:metro.config.js",
+      "file:scripts/lint-theme.mjs",
+      "file:scripts/lint-ui-tokens.mjs",
+      "file:scripts/manual-dev-client-android.ps1",
+      "file:scripts/release-check.mjs",
+      "file:src/dm/boundary.test.ts",
+      "file:src/dm/domain/index.ts",
+      "file:src/dm/domain/types/campaign.ts",
+      "file:src/dm/domain/types/campaignInvite.ts",
+      "file:src/dm/domain/types/initiative.ts",
+      "file:src/dm/repositories/index.ts",
+      "file:src/domain/spellbook/boundary.test.ts",
+      "file:src/domain/types/dm.ts",
+      "file:src/domain/types/spellbook.ts",
+      "file:src/domain/types/sync.ts",
+      "file:src/screens/Support/index.ts",
+      "file:src/services/characterSheets.ts",
+      "file:src/shared/components/Loader/style.ts",
+      "file:src/shared/const/Backgrounds.ts",
+      "file:src/shared/const/ClassStartingGear.ts",
+      "file:src/shared/const/DiceOptions.ts",
+      "file:src/shared/const/Races.ts",
+      "file:src/shared/const/SubclassDetails.ts",
+      "file:src/shared/const/encounter.ts",
+      "file:src/shared/helpers/spellbook.ts",
+      "file:src/shared/styles/index.ts",
+      "file:src/test/mocks/expo-modules-core.ts",
+      "file:src/test/mocks/react-native-firebase-analytics.ts",
+      "file:src/test/mocks/react-native-firebase-crashlytics.ts",
+      "file:src/test/mocks/react-native.tsx",
+      "file:src/types/DM.ts",
+      "file:src/types/SourceMetadata.ts",
+      "file:vitest.config.ts",
+      "file:vitest.rules.config.ts"
+    ],
+    "document": [
+      "document:.agents/AGENT.md",
+      "document:.agents/CHECKLIST.md",
+      "document:.agents/CODEX.md",
+      "document:.agents/MEMORY.md",
+      "document:.agents/REPO_MAP.md",
+      "document:.agents/TOOLS.md",
+      "document:.agents/USER.md",
+      "document:CLAUDE.md",
+      "document:README.md",
+      "document:docs/audit-2026-07.md",
+      "document:docs/campaign-management-prompts.md",
+      "document:docs/claude-code-prompts.md",
+      "document:docs/collaborative-editing.md",
+      "document:docs/dnd-product-guidelines.md",
+      "document:docs/loading-states-and-skeleton.md",
+      "document:docs/privacy-policy.en.md",
+      "document:docs/privacy-policy.uk.md",
+      "document:docs/product-collaboration-stage-4.md",
+      "document:docs/product-dm-experience-stage-5.md",
+      "document:docs/product-foundation-stage-1.md",
+      "document:docs/product-homebrew-stage-3.md",
+      "document:docs/product-redesign-stage-2.md",
+      "document:docs/release-checklist-1.0.0.md",
+      "document:docs/release-plan-google-play.md",
+      "document:docs/sprint-plan.md",
+      "document:docs/store-listing.md",
+      "document:docs/ui-kit.md",
+      "document:docs/ux-ui-roadmap.md",
+      "document:functions/README.md",
+      "document:.agents/skills/create-android-component/SKILL.md",
+      "document:.github/instructions/mobile-rn-standards.instructions.md"
+    ],
+    "config": [
+      "config:.agents/openai.yaml",
+      "config:.env",
+      "config:app.json",
+      "config:eas.json",
+      "config:firebase.json",
+      "config:google-services.json",
+      "config:package.json",
+      "config:tsconfig.json",
+      "config:android/app/src/main/res/values/colors.xml",
+      "config:android/app/src/main/res/values/strings.xml",
+      "config:android/app/src/main/res/values/styles.xml",
+      "config:android/build.gradle",
+      "config:android/gradle.properties",
+      "config:android/settings.gradle",
+      "config:functions/package.json",
+      "config:functions/tsconfig.json",
+      "config:src/data/srd/abilities.json",
+      "config:src/data/srd/backgrounds.json",
+      "config:src/data/srd/classProgression.json",
+      "config:src/data/srd/classes.json",
+      "config:src/data/srd/conditions.json",
+      "config:src/data/srd/equipment.json",
+      "config:src/data/srd/languages.json",
+      "config:src/data/srd/monsters.json",
+      "config:src/data/srd/races.json",
+      "config:src/data/srd/references.json",
+      "config:src/data/srd/skills.json",
+      "config:src/data/srd/spells.json",
+      "config:src/i18n/locales/en/bestiary.json",
+      "config:src/i18n/locales/en/character.json",
+      "config:src/i18n/locales/en/common.json",
+      "config:src/i18n/locales/en/createCharacter.json",
+      "config:src/i18n/locales/en/dice.json",
+      "config:src/i18n/locales/en/dm.json",
+      "config:src/i18n/locales/en/dnd.json",
+      "config:src/i18n/locales/en/firstLaunch.json",
+      "config:src/i18n/locales/en/home.json",
+      "config:src/i18n/locales/en/initiative.json",
+      "config:src/i18n/locales/en/legal.json",
+      "config:src/i18n/locales/en/navigation.json",
+      "config:src/i18n/locales/en/references.json",
+      "config:src/i18n/locales/en/settings.json",
+      "config:src/i18n/locales/en/spellbook.json",
+      "config:src/i18n/locales/en/support.json",
+      "config:src/i18n/locales/en/whatsNew.json",
+      "config:src/i18n/locales/uk/bestiary.json",
+      "config:src/i18n/locales/uk/character.json",
+      "config:src/i18n/locales/uk/common.json",
+      "config:src/i18n/locales/uk/createCharacter.json",
+      "config:src/i18n/locales/uk/dice.json",
+      "config:src/i18n/locales/uk/dm.json",
+      "config:src/i18n/locales/uk/dnd.json",
+      "config:src/i18n/locales/uk/firstLaunch.json",
+      "config:src/i18n/locales/uk/home.json",
+      "config:src/i18n/locales/uk/initiative.json",
+      "config:src/i18n/locales/uk/legal.json",
+      "config:src/i18n/locales/uk/navigation.json",
+      "config:src/i18n/locales/uk/references.json",
+      "config:src/i18n/locales/uk/settings.json",
+      "config:src/i18n/locales/uk/spellbook.json",
+      "config:src/i18n/locales/uk/support.json",
+      "config:src/i18n/locales/uk/whatsNew.json",
+      "config:src/shared/mock/Elara_Moonshadow.json",
+      "config:src/shared/mock/defaultCharacter.json",
+      "config:src/shared/mock/defaultCharacter2.json",
+      "config:src/shared/mock/demon-lord-001.json",
+      "config:src/shared/mock/monsterBook.json",
+      "config:.claude/settings.json",
+      "config:.ua/config.json",
+      "config:android/app/build.gradle",
+      "config:android/app/google-services.json",
+      "config:android/app/src/androidTest/AndroidManifest.xml",
+      "config:android/app/src/debug/AndroidManifest.xml",
+      "config:android/app/src/main/AndroidManifest.xml",
+      "config:android/app/src/main/res/drawable/ic_launcher_background.xml",
+      "config:android/app/src/main/res/drawable/rn_edit_text_material.xml",
+      "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "config:android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "config:android/app/src/main/res/values-night/colors.xml",
+      "config:android/gradle/wrapper/gradle-wrapper.properties",
+      "config:src/data/locales/uk/monsters.json",
+      "config:src/data/locales/uk/spells.json"
+    ]
+  },
+  "crossCategoryEdges": [
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "tested_by",
+      "count": 65
+    },
+    {
+      "fromType": "config",
+      "toType": "file",
+      "edgeType": "configures",
+      "count": 53
+    },
+    {
+      "fromType": "file",
+      "toType": "config",
+      "edgeType": "imports",
+      "count": 48
+    },
+    {
+      "fromType": "document",
+      "toType": "document",
+      "edgeType": "related",
+      "count": 25
+    },
+    {
+      "fromType": "document",
+      "toType": "file",
+      "edgeType": "documents",
+      "count": 22
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "depends_on",
+      "count": 16
+    },
+    {
+      "fromType": "config",
+      "toType": "config",
+      "edgeType": "related",
+      "count": 8
+    },
+    {
+      "fromType": "config",
+      "toType": "document",
+      "edgeType": "depends_on",
+      "count": 7
+    },
+    {
+      "fromType": "config",
+      "toType": "file",
+      "edgeType": "depends_on",
+      "count": 6
+    },
+    {
+      "fromType": "document",
+      "toType": "config",
+      "edgeType": "documents",
+      "count": 4
+    },
+    {
+      "fromType": "config",
+      "toType": "config",
+      "edgeType": "depends_on",
+      "count": 3
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "configures",
+      "count": 3
+    },
+    {
+      "fromType": "file",
+      "toType": "config",
+      "edgeType": "depends_on",
+      "count": 2
+    },
+    {
+      "fromType": "config",
+      "toType": "file",
+      "edgeType": "related",
+      "count": 2
+    },
+    {
+      "fromType": "config",
+      "toType": "config",
+      "edgeType": "configures",
+      "count": 1
+    },
+    {
+      "fromType": "file",
+      "toType": "config",
+      "edgeType": "related",
+      "count": 1
+    },
+    {
+      "fromType": "file",
+      "toType": "file",
+      "edgeType": "related",
+      "count": 1
+    }
+  ],
+  "interGroupImports": [
+    {
+      "from": "src/shared/components",
+      "to": "src/context",
+      "count": 45
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/context",
+      "count": 35
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/shared/styles",
+      "count": 33
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/dm",
+      "count": 23
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/types",
+      "count": 19
+    },
+    {
+      "from": "src/dm",
+      "to": "src/domain",
+      "count": 15
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/services",
+      "count": 13
+    },
+    {
+      "from": "src/domain",
+      "to": "src/types",
+      "count": 13
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/shared/styles",
+      "count": 12
+    },
+    {
+      "from": "src/stores",
+      "to": "src/types",
+      "count": 12
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/shared/styles",
+      "count": 12
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/shared/helpers",
+      "count": 11
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/DM",
+      "count": 10
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/shared/helpers",
+      "count": 10
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/types",
+      "count": 10
+    },
+    {
+      "from": "src/services",
+      "to": "src/domain",
+      "count": 9
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/navigation",
+      "count": 8
+    },
+    {
+      "from": "src/services",
+      "to": "src/shared/services",
+      "count": 8
+    },
+    {
+      "from": "src/shared/helpers",
+      "to": "src/domain",
+      "count": 8
+    },
+    {
+      "from": "src/dm",
+      "to": "src/services",
+      "count": 7
+    },
+    {
+      "from": "src/repositories",
+      "to": "src/domain",
+      "count": 7
+    },
+    {
+      "from": "src/services",
+      "to": "src/stores",
+      "count": 7
+    },
+    {
+      "from": "src/shared/helpers",
+      "to": "src/types",
+      "count": 7
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/context",
+      "count": 7
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/types",
+      "count": 7
+    },
+    {
+      "from": "src/shared/ui",
+      "to": "src/context",
+      "count": 7
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/repositories",
+      "count": 6
+    },
+    {
+      "from": "src/stores",
+      "to": "src/dm",
+      "count": 6
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/shared/helpers",
+      "count": 6
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/shared/const",
+      "count": 6
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/shared/components",
+      "count": 5
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/domain",
+      "count": 5
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/types",
+      "count": 5
+    },
+    {
+      "from": "src/stores",
+      "to": "src/services",
+      "count": 5
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/types",
+      "count": 5
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/dm",
+      "count": 5
+    },
+    {
+      "from": "src/services",
+      "to": "src/types",
+      "count": 5
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/domain",
+      "count": 5
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/context",
+      "count": 5
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/shared/ui",
+      "count": 5
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/modules",
+      "count": 4
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/domain",
+      "count": 4
+    },
+    {
+      "from": "src/domain",
+      "to": "src/data",
+      "count": 4
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/types",
+      "count": 4
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/domain",
+      "count": 4
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/context",
+      "count": 4
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/shared/styles",
+      "count": 4
+    },
+    {
+      "from": "src/services",
+      "to": "src/repositories",
+      "count": 4
+    },
+    {
+      "from": "src/services",
+      "to": "src/shared/helpers",
+      "count": 4
+    },
+    {
+      "from": "src/shared/helpers",
+      "to": "src/shared/const",
+      "count": 4
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/domain",
+      "count": 4
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/shared/styles",
+      "count": 4
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/repositories",
+      "count": 4
+    },
+    {
+      "from": "src/repositories",
+      "to": "src/services",
+      "count": 3
+    },
+    {
+      "from": "src/repositories",
+      "to": "src/shared/helpers",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/dm",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/shared/styles",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/context",
+      "count": 3
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/navigation",
+      "count": 3
+    },
+    {
+      "from": "src/stores",
+      "to": "src/domain",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/context",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/shared/services",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/shared/components",
+      "count": 3
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/dm",
+      "count": 3
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/context",
+      "count": 3
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/shared/const",
+      "count": 3
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/shared/services",
+      "count": 3
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/shared/services",
+      "count": 3
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/services",
+      "count": 3
+    },
+    {
+      "from": "root",
+      "to": "src/shared/components",
+      "count": 3
+    },
+    {
+      "from": "root",
+      "to": "src/shared/services",
+      "count": 3
+    },
+    {
+      "from": "src/screens/DM",
+      "to": "src/shared/services",
+      "count": 2
+    },
+    {
+      "from": "src/dm",
+      "to": "src/types",
+      "count": 2
+    },
+    {
+      "from": "src/domain",
+      "to": "src/shared/helpers",
+      "count": 2
+    },
+    {
+      "from": "src/modules",
+      "to": "src/navigation",
+      "count": 2
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Spellbook",
+      "count": 2
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/types",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/context",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/types",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/context",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/dm",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/shared/helpers",
+      "count": 2
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/shared/helpers",
+      "count": 2
+    },
+    {
+      "from": "src/shared/services",
+      "to": "src/domain",
+      "count": 2
+    },
+    {
+      "from": "src/types",
+      "to": "src/domain",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/screens/DM",
+      "count": 2
+    },
+    {
+      "from": "src/services",
+      "to": "src/i18n",
+      "count": 2
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/repositories",
+      "count": 2
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/services",
+      "count": 2
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/shared/helpers",
+      "count": 2
+    },
+    {
+      "from": "src/shared/const",
+      "to": "src/domain",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/repositories",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/shared/components",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/services",
+      "count": 2
+    },
+    {
+      "from": "src/modules",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Dice",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/DiceRoller",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/LegalLicenses",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/References",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/shared/services",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/dm",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/i18n",
+      "count": 2
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/shared/styles",
+      "count": 2
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/shared/services",
+      "count": 2
+    },
+    {
+      "from": "src/domain",
+      "to": "src/shared/const",
+      "count": 2
+    },
+    {
+      "from": "root",
+      "to": "src/domain",
+      "count": 2
+    },
+    {
+      "from": "src/dm",
+      "to": "src/shared/helpers",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/dm",
+      "count": 1
+    },
+    {
+      "from": "src/modules",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/modules",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/modules",
+      "to": "src/shared/ui",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Initiative",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Support",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/shared/styles",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Bestiary",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Monster",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/References",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Character",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/CreateCharacter",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Dice",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/DiceRoller",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Home",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/LegalLicenses",
+      "count": 1
+    },
+    {
+      "from": "src/navigation",
+      "to": "src/screens/Settings",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/shared/components",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/shared/helpers",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Bestiary",
+      "to": "src/shared/ui",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/domain",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/shared/components",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/shared/helpers",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Monster",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/shared/components",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Spellbook",
+      "to": "src/shared/ui",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Support",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Support",
+      "to": "src/shared/styles",
+      "count": 1
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/domain",
+      "count": 1
+    },
+    {
+      "from": "src/shared/const",
+      "to": "src/types",
+      "count": 1
+    },
+    {
+      "from": "src/shared/services",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/shared/services",
+      "to": "src/types",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/repositories",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/shared/ui",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Home",
+      "to": "src/dm",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/shared/const",
+      "to": "src/dm",
+      "count": 1
+    },
+    {
+      "from": "src/domain",
+      "to": "src/screens/CreateCharacter",
+      "count": 1
+    },
+    {
+      "from": "src/repositories",
+      "to": "src/screens/CreateCharacter",
+      "count": 1
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/CreateCharacter",
+      "to": "src/types",
+      "count": 1
+    },
+    {
+      "from": "src/stores",
+      "to": "src/shared/helpers",
+      "count": 1
+    },
+    {
+      "from": "src/dm",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/shared/ui",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/screens/DiceRoller",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Character",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Dice",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Dice",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/DiceRoller",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/screens/DiceRoller",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/LegalLicenses",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/screens/LegalLicenses",
+      "to": "src/shared/ui",
+      "count": 1
+    },
+    {
+      "from": "src/services",
+      "to": "src/shared/styles",
+      "count": 1
+    },
+    {
+      "from": "src/shared/styles",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/stores",
+      "to": "src/shared/styles",
+      "count": 1
+    },
+    {
+      "from": "src/test",
+      "to": "src/shared/styles",
+      "count": 1
+    },
+    {
+      "from": "src/components",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/components",
+      "to": "src/repositories",
+      "count": 1
+    },
+    {
+      "from": "src/components",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/components",
+      "to": "src/shared/styles",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/screens/DiceRoller",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Initiative",
+      "to": "src/shared/services",
+      "count": 1
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/components",
+      "count": 1
+    },
+    {
+      "from": "src/screens/References",
+      "to": "src/i18n",
+      "count": 1
+    },
+    {
+      "from": "src/screens/References",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "src/screens/References",
+      "to": "src/domain",
+      "count": 1
+    },
+    {
+      "from": "src/screens/References",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/services",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "src/screens/Settings",
+      "to": "src/shared/components",
+      "count": 1
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/screens/Settings",
+      "count": 1
+    },
+    {
+      "from": "src/shared/services",
+      "to": "src/i18n",
+      "count": 1
+    },
+    {
+      "from": "scripts",
+      "to": "src/domain",
+      "count": 1
+    },
+    {
+      "from": "src/services",
+      "to": "src/dm",
+      "count": 1
+    },
+    {
+      "from": "src/stores",
+      "to": "src/shared/const",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/context",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/i18n",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/navigation",
+      "count": 1
+    },
+    {
+      "from": "root",
+      "to": "src/data",
+      "count": 1
+    },
+    {
+      "from": "src/shared/components",
+      "to": "src/i18n",
+      "count": 1
+    }
+  ],
+  "intraGroupDensity": {
+    "scripts": {
+      "internalEdges": 0,
+      "totalEdges": 1,
+      "density": 0
+    },
+    "root": {
+      "internalEdges": 1,
+      "totalEdges": 13,
+      "density": 0.07692307692307693
+    },
+    "functions": {
+      "internalEdges": 2,
+      "totalEdges": 2,
+      "density": 1
+    },
+    ".agents": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "android": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "docs": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".claude": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".github": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    ".ua": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "firestore-tests": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    },
+    "src/context": {
+      "internalEdges": 0,
+      "totalEdges": 127,
+      "density": 0
+    },
+    "src/dm": {
+      "internalEdges": 34,
+      "totalEdges": 108,
+      "density": 0.3148148148148148
+    },
+    "src/navigation": {
+      "internalEdges": 5,
+      "totalEdges": 61,
+      "density": 0.08196721311475409
+    },
+    "src/repositories": {
+      "internalEdges": 4,
+      "totalEdges": 38,
+      "density": 0.10526315789473684
+    },
+    "src/domain": {
+      "internalEdges": 76,
+      "totalEdges": 174,
+      "density": 0.4367816091954023
+    },
+    "src/modules": {
+      "internalEdges": 1,
+      "totalEdges": 12,
+      "density": 0.08333333333333333
+    },
+    "src/services": {
+      "internalEdges": 14,
+      "totalEdges": 92,
+      "density": 0.15217391304347827
+    },
+    "src/stores": {
+      "internalEdges": 2,
+      "totalEdges": 38,
+      "density": 0.05263157894736842
+    },
+    "src/types": {
+      "internalEdges": 1,
+      "totalEdges": 99,
+      "density": 0.010101010101010102
+    },
+    "src/test": {
+      "internalEdges": 0,
+      "totalEdges": 1,
+      "density": 0
+    },
+    "src/components": {
+      "internalEdges": 0,
+      "totalEdges": 5,
+      "density": 0
+    },
+    "src/i18n": {
+      "internalEdges": 37,
+      "totalEdges": 45,
+      "density": 0.8222222222222222
+    },
+    "src/data": {
+      "internalEdges": 13,
+      "totalEdges": 18,
+      "density": 0.7222222222222222
+    },
+    "src/screens/DM": {
+      "internalEdges": 17,
+      "totalEdges": 157,
+      "density": 0.10828025477707007
+    },
+    "src/screens/Bestiary": {
+      "internalEdges": 4,
+      "totalEdges": 25,
+      "density": 0.16
+    },
+    "src/screens/Monster": {
+      "internalEdges": 2,
+      "totalEdges": 15,
+      "density": 0.13333333333333333
+    },
+    "src/screens/Spellbook": {
+      "internalEdges": 3,
+      "totalEdges": 27,
+      "density": 0.1111111111111111
+    },
+    "src/screens/Support": {
+      "internalEdges": 0,
+      "totalEdges": 3,
+      "density": 0
+    },
+    "src/screens/Home": {
+      "internalEdges": 4,
+      "totalEdges": 29,
+      "density": 0.13793103448275862
+    },
+    "src/screens/Initiative": {
+      "internalEdges": 4,
+      "totalEdges": 26,
+      "density": 0.15384615384615385
+    },
+    "src/screens/CreateCharacter": {
+      "internalEdges": 5,
+      "totalEdges": 35,
+      "density": 0.14285714285714285
+    },
+    "src/screens/Character": {
+      "internalEdges": 26,
+      "totalEdges": 72,
+      "density": 0.3611111111111111
+    },
+    "src/screens/Dice": {
+      "internalEdges": 1,
+      "totalEdges": 6,
+      "density": 0.16666666666666666
+    },
+    "src/screens/DiceRoller": {
+      "internalEdges": 2,
+      "totalEdges": 9,
+      "density": 0.2222222222222222
+    },
+    "src/screens/LegalLicenses": {
+      "internalEdges": 0,
+      "totalEdges": 5,
+      "density": 0
+    },
+    "src/screens/References": {
+      "internalEdges": 2,
+      "totalEdges": 9,
+      "density": 0.2222222222222222
+    },
+    "src/screens/Settings": {
+      "internalEdges": 3,
+      "totalEdges": 21,
+      "density": 0.14285714285714285
+    },
+    "src/shared/components": {
+      "internalEdges": 55,
+      "totalEdges": 198,
+      "density": 0.2777777777777778
+    },
+    "src/shared/const": {
+      "internalEdges": 0,
+      "totalEdges": 20,
+      "density": 0
+    },
+    "src/shared/helpers": {
+      "internalEdges": 5,
+      "totalEdges": 70,
+      "density": 0.07142857142857142
+    },
+    "src/shared/services": {
+      "internalEdges": 4,
+      "totalEdges": 43,
+      "density": 0.09302325581395349
+    },
+    "src/shared/styles": {
+      "internalEdges": 3,
+      "totalEdges": 98,
+      "density": 0.030612244897959183
+    },
+    "src/shared/ui": {
+      "internalEdges": 8,
+      "totalEdges": 38,
+      "density": 0.21052631578947367
+    },
+    "src/shared/mock": {
+      "internalEdges": 0,
+      "totalEdges": 0,
+      "density": 0
+    }
+  },
+  "patternMatches": {
+    "scripts": "infrastructure",
+    "functions": "service",
+    "android": "infrastructure",
+    "docs": "documentation",
+    ".github": "ci-cd",
+    "firestore-tests": "test",
+    "src/context": "state",
+    "src/dm": "service",
+    "src/navigation": "api",
+    "src/repositories": "data",
+    "src/domain": "service",
+    "src/modules": "service",
+    "src/services": "service",
+    "src/types": "types",
+    "src/test": "test",
+    "src/components": "ui",
+    "src/i18n": "utility",
+    "src/data": "data",
+    "src/screens/DM": "service",
+    "src/screens/Settings": "config",
+    "src/shared/components": "ui",
+    "src/shared/helpers": "utility",
+    "src/shared/services": "service",
+    "src/shared/ui": "ui"
+  },
+  "deploymentTopology": {
+    "hasDockerfile": false,
+    "hasCompose": false,
+    "hasK8s": false,
+    "hasTerraform": false,
+    "hasCI": false,
+    "infraFiles": []
+  },
+  "dataPipeline": {
+    "schemaFiles": [
+      "firestore.rules"
+    ],
+    "migrationFiles": [],
+    "dataModelFiles": [
+      "src/repositories/characterCloudRepository.ts",
+      "src/repositories/syncPathFieldMap.test.ts",
+      "src/repositories/syncPathFieldMap.ts",
+      "src/types/Monster.ts",
+      "src/types/Spellbook.ts",
+      "src/domain/mappers/character.mapper.ts",
+      "src/domain/mappers/homebrew.mapper.ts",
+      "src/domain/mappers/spell.mapper.ts",
+      "src/domain/schemas/character.schema.ts",
+      "src/domain/schemas/homebrew.schema.ts",
+      "src/domain/schemas/spell.schema.ts",
+      "src/repositories/characterCloudRepository.test.ts",
+      "src/repositories/characterLocalRepository.test.ts",
+      "src/repositories/characterLocalRepository.ts",
+      "src/repositories/createCharacterDraftRepository.ts",
+      "src/screens/CreateCharacter/createCharacterWizard.ts",
+      "src/shared/const/CharacterTemplates.ts",
+      "src/shared/const/ClassPresets.ts",
+      "src/shared/const/Subclasses.ts",
+      "src/shared/const/Weapons.ts",
+      "src/shared/helpers/combat.ts",
+      "src/shared/helpers/createEmptyCharacter.ts",
+      "src/types/skillToStat.ts",
+      "src/types/CustomCoin.ts",
+      "src/services/accountDeletionCascade.ts",
+      "src/domain/types/character.ts",
+      "src/types/DeathSaves.ts",
+      "src/types/HitPoints.ts",
+      "src/types/SavingThrows.ts",
+      "src/types/Skills.ts",
+      "src/types/SpellSlots.ts",
+      "src/types/Spells.ts",
+      "src/types/Stats.ts",
+      "src/types/Traits.ts",
+      "src/types/Weapon.ts",
+      "src/data/srd/index.ts",
+      "src/data/srd/metadata.ts",
+      "src/repositories/firstLaunchRepository.ts",
+      "src/repositories/whatsNewRepository.ts",
+      "src/dm/domain/types/encounter.ts",
+      "docs/collaborative-editing.md",
+      "docs/product-foundation-stage-1.md",
+      "src/data/srd/abilities.json",
+      "src/data/srd/backgrounds.json",
+      "src/data/srd/classProgression.json",
+      "src/data/srd/classes.json",
+      "src/data/srd/conditions.json",
+      "src/data/srd/equipment.json",
+      "src/data/srd/languages.json",
+      "src/data/srd/monsters.json",
+      "src/data/srd/races.json",
+      "src/data/srd/references.json",
+      "src/data/srd/skills.json",
+      "src/data/srd/spells.json",
+      "src/data/locales/uk/monsters.json",
+      "src/data/locales/uk/spells.json",
+      "src/dm/domain/types/campaign.ts",
+      "src/dm/domain/types/campaignInvite.ts",
+      "src/dm/domain/types/initiative.ts",
+      "src/domain/types/dm.ts",
+      "src/domain/types/spellbook.ts",
+      "src/domain/types/sync.ts",
+      "src/shared/const/Backgrounds.ts",
+      "src/shared/const/ClassStartingGear.ts",
+      "src/shared/const/Races.ts",
+      "src/shared/const/SubclassDetails.ts"
+    ],
+    "apiHandlerFiles": [
+      "src/navigation/DMNavigator.tsx",
+      "src/navigation/AppNavigator.tsx",
+      "src/navigation/ReferencesNavigator.tsx",
+      "src/navigation/TabNavigator.tsx",
+      "src/navigation/sharedTypes.ts",
+      "functions/src/deleteMyAccount.ts",
+      "functions/src/createCampaignInvite.ts",
+      "functions/src/redeemCampaignInvite.ts"
+    ]
+  },
+  "docCoverage": {
+    "groupsWithDocs": 2,
+    "totalGroups": 44,
+    "coverageRatio": 0.05,
+    "undocumentedGroups": [
+      "scripts",
+      ".agents",
+      "android",
+      "docs",
+      ".claude",
+      ".github",
+      ".ua",
+      "firestore-tests",
+      "src/context",
+      "src/dm",
+      "src/navigation",
+      "src/repositories",
+      "src/domain",
+      "src/modules",
+      "src/services",
+      "src/stores",
+      "src/types",
+      "src/test",
+      "src/components",
+      "src/i18n",
+      "src/data",
+      "src/screens/DM",
+      "src/screens/Bestiary",
+      "src/screens/Monster",
+      "src/screens/Spellbook",
+      "src/screens/Support",
+      "src/screens/Home",
+      "src/screens/Initiative",
+      "src/screens/CreateCharacter",
+      "src/screens/Character",
+      "src/screens/Dice",
+      "src/screens/DiceRoller",
+      "src/screens/LegalLicenses",
+      "src/screens/References",
+      "src/screens/Settings",
+      "src/shared/components",
+      "src/shared/const",
+      "src/shared/helpers",
+      "src/shared/services",
+      "src/shared/styles",
+      "src/shared/ui",
+      "src/shared/mock"
+    ]
+  },
+  "dependencyDirection": [
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/dm",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "src/domain",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/stores",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/shared/ui",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/screens/DM"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/shared/helpers",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/dm",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "src/repositories",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/stores"
+    },
+    {
+      "dependent": "src/shared/helpers",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/shared/ui",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/stores",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/shared/const"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Settings",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/modules"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/domain",
+      "dependsOn": "src/data"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/shared/helpers",
+      "dependsOn": "src/shared/const"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/repositories",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/navigation"
+    },
+    {
+      "dependent": "src/stores",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/shared/const"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/DM",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/dm",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/screens/Spellbook"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/shared/services",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/screens/DM"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/i18n"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "src/modules",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Dice",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/DiceRoller",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/LegalLicenses",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/References",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Settings",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/Settings",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/screens/Settings",
+      "dependsOn": "src/i18n"
+    },
+    {
+      "dependent": "src/screens/Settings",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/dm",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/modules",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/modules",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/modules",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/screens/Support"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/screens/Dice"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/screens/DiceRoller"
+    },
+    {
+      "dependent": "src/navigation",
+      "dependsOn": "src/screens/LegalLicenses"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/Bestiary",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/screens/Monster",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/shared/components"
+    },
+    {
+      "dependent": "src/screens/Spellbook",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/screens/Support",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Support",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/shared/const",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/shared/services",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/shared/services",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/screens/Home",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/shared/const",
+      "dependsOn": "src/dm"
+    },
+    {
+      "dependent": "src/screens/CreateCharacter",
+      "dependsOn": "src/types"
+    },
+    {
+      "dependent": "src/stores",
+      "dependsOn": "src/shared/helpers"
+    },
+    {
+      "dependent": "src/dm",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/screens/Character",
+      "dependsOn": "src/screens/DiceRoller"
+    },
+    {
+      "dependent": "src/screens/Dice",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/Dice",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/DiceRoller",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/DiceRoller",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/screens/LegalLicenses",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/LegalLicenses",
+      "dependsOn": "src/shared/ui"
+    },
+    {
+      "dependent": "src/services",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/shared/styles",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/stores",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/test",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/components",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/components",
+      "dependsOn": "src/repositories"
+    },
+    {
+      "dependent": "src/components",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/components",
+      "dependsOn": "src/shared/styles"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/screens/DiceRoller"
+    },
+    {
+      "dependent": "src/screens/Initiative",
+      "dependsOn": "src/shared/services"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/components"
+    },
+    {
+      "dependent": "src/screens/References",
+      "dependsOn": "src/i18n"
+    },
+    {
+      "dependent": "src/screens/References",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "src/screens/References",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/screens/Settings",
+      "dependsOn": "src/services"
+    },
+    {
+      "dependent": "src/shared/services",
+      "dependsOn": "src/i18n"
+    },
+    {
+      "dependent": "scripts",
+      "dependsOn": "src/domain"
+    },
+    {
+      "dependent": "src/stores",
+      "dependsOn": "src/shared/const"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/context"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/i18n"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/navigation"
+    },
+    {
+      "dependent": "root",
+      "dependsOn": "src/data"
+    },
+    {
+      "dependent": "src/shared/components",
+      "dependsOn": "src/i18n"
+    }
+  ],
+  "fileStats": {
+    "totalFileNodes": 521,
+    "filesPerGroup": {
+      "scripts": 5,
+      "root": 17,
+      "functions": 10,
+      ".agents": 9,
+      "android": 39,
+      "docs": 19,
+      ".claude": 1,
+      ".github": 1,
+      ".ua": 2,
+      "firestore-tests": 1,
+      "src/context": 9,
+      "src/dm": 38,
+      "src/navigation": 5,
+      "src/repositories": 9,
+      "src/domain": 47,
+      "src/modules": 2,
+      "src/services": 23,
+      "src/stores": 12,
+      "src/types": 18,
+      "src/test": 5,
+      "src/components": 1,
+      "src/i18n": 37,
+      "src/data": 16,
+      "src/screens/DM": 18,
+      "src/screens/Bestiary": 5,
+      "src/screens/Monster": 3,
+      "src/screens/Spellbook": 4,
+      "src/screens/Support": 2,
+      "src/screens/Home": 5,
+      "src/screens/Initiative": 4,
+      "src/screens/CreateCharacter": 5,
+      "src/screens/Character": 22,
+      "src/screens/Dice": 2,
+      "src/screens/DiceRoller": 3,
+      "src/screens/LegalLicenses": 1,
+      "src/screens/References": 3,
+      "src/screens/Settings": 3,
+      "src/shared/components": 44,
+      "src/shared/const": 18,
+      "src/shared/helpers": 19,
+      "src/shared/services": 11,
+      "src/shared/styles": 6,
+      "src/shared/ui": 12,
+      "src/shared/mock": 5
+    },
+    "nodeTypeCounts": {
+      "file": 408,
+      "document": 31,
+      "config": 82
+    }
+  },
+  "fileFanIn": {
+    "file:src/dm/domain/campaign/index.ts": 4,
+    "file:src/dm/domain/types/index.ts": 38,
+    "file:src/dm/domain/campaign/utils.ts": 1,
+    "file:src/dm/domain/initiative/index.ts": 2,
+    "file:src/dm/domain/notes/index.ts": 1,
+    "file:src/services/firebase.ts": 21,
+    "file:src/dm/repositories/campaignEncountersRepository.ts": 3,
+    "file:src/domain/migrations/index.ts": 30,
+    "file:src/domain/schemas/index.ts": 19,
+    "file:src/dm/repositories/campaignInitiativeRepository.ts": 3,
+    "file:src/shared/helpers/stripUndefinedDeep.ts": 2,
+    "file:src/dm/repositories/campaignRepository.ts": 13,
+    "file:src/services/connections.ts": 2,
+    "file:src/services/users.ts": 4,
+    "file:src/modules/Header/Header.tsx": 4,
+    "file:src/screens/DM/DM.tsx": 1,
+    "file:src/screens/DM/DMCampaignDetail.tsx": 1,
+    "file:src/screens/DM/DMCampaignNotes.tsx": 1,
+    "file:src/screens/DM/DMCampaigns.tsx": 1,
+    "file:src/screens/DM/DMEncounterPrep.tsx": 1,
+    "file:src/screens/DM/DMPartyOverview.tsx": 1,
+    "file:src/screens/DM/DMQuickEdit.tsx": 1,
+    "file:src/screens/DM/DMSharedUpdates.tsx": 1,
+    "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx": 1,
+    "file:src/screens/DM/LootGenerator/LootGenerator.tsx": 1,
+    "file:src/domain/mappers/index.ts": 9,
+    "file:src/domain/types/index.ts": 26,
+    "file:src/repositories/syncPathFieldMap.ts": 2,
+    "file:src/shared/helpers/sync/syncErrorClassification.ts": 3,
+    "file:src/context/AppRole-store.ts": 5,
+    "file:src/context/Character-store.ts": 30,
+    "file:src/context/Monster-store.ts": 8,
+    "file:src/context/Spellbook-store.ts": 4,
+    "file:src/context/Sync-store.ts": 9,
+    "file:src/context/Theme-store.ts": 64,
+    "file:src/dm/repositories/campaignNotesRepository.ts": 3,
+    "file:src/navigation/DMNavigator.tsx": 9,
+    "file:src/repositories/characterCloudRepository.ts": 16,
+    "file:src/screens/DM/PinnedReferencesList.tsx": 2,
+    "file:src/screens/DM/style.ts": 10,
+    "file:src/shared/helpers/collaboration/status.ts": 7,
+    "file:src/shared/helpers/mapCloudCharacter.ts": 7,
+    "file:src/shared/services/auth/index.ts": 7,
+    "file:src/types/Character.ts": 34,
+    "file:src/types/Product.ts": 6,
+    "file:src/dm/hooks/useCampaignOwnership.ts": 2,
+    "file:src/screens/DM/adapters/index.ts": 4,
+    "file:src/services/campaignInvite.ts": 2,
+    "file:src/services/characterSyncCoordinator.ts": 8,
+    "file:src/shared/components/Modal/Modal.tsx": 11,
+    "file:src/shared/services/telemetry/productTelemetry.ts": 11,
+    "file:src/context/DmSettings-store.ts": 4,
+    "file:src/shared/styles/tokens.ts": 60,
+    "file:src/types/Monster.ts": 16,
+    "file:src/domain/spellbook/index.ts": 6,
+    "file:src/shared/helpers/createEmptyCharacter.ts": 9,
+    "file:src/data/srd/index.ts": 3,
+    "file:src/types/Spellbook.ts": 7,
+    "file:src/modules/Header/style.ts": 1,
+    "file:src/navigation/AppNavigator.tsx": 3,
+    "file:src/navigation/TabNavigator.tsx": 8,
+    "file:src/shared/services/auth/auth.tsx": 2,
+    "file:src/shared/ui/index.ts": 7,
+    "file:src/navigation/ReferencesNavigator.tsx": 5,
+    "file:src/screens/Initiative/Initiative.tsx": 1,
+    "file:src/screens/Support/Support.tsx": 1,
+    "file:src/navigation/sharedTypes.ts": 3,
+    "file:src/screens/Bestiary/Bestiary.tsx": 2,
+    "file:src/screens/Monster/Monster.tsx": 2,
+    "file:src/screens/References/References.tsx": 2,
+    "file:src/screens/Spellbook/Spellbook.tsx": 2,
+    "file:src/screens/Character/Character.tsx": 1,
+    "file:src/screens/CreateCharacter/CreateCharacter.tsx": 2,
+    "file:src/screens/Dice/Dice.tsx": 1,
+    "file:src/screens/DiceRoller/DiceRoller.tsx": 4,
+    "file:src/screens/Home/Home.tsx": 2,
+    "file:src/screens/LegalLicenses/LegalLicenses.tsx": 1,
+    "file:src/screens/Settings/Settings.tsx": 1,
+    "file:src/domain/srd/localization.ts": 12,
+    "file:src/screens/Bestiary/bestiaryFilters.ts": 2,
+    "file:src/screens/Bestiary/style.ts": 1,
+    "file:src/shared/components/MonsterCard/MonsterCard.tsx": 1,
+    "file:src/shared/helpers/sourcePresentation.ts": 7,
+    "file:src/shared/services/fileSerice.ts": 4,
+    "file:src/shared/ui/skeleton/index.tsx": 5,
+    "file:src/domain/srd/adapters.ts": 4,
+    "file:src/domain/srd/srdRepository.ts": 9,
+    "file:src/screens/Monster/style.ts": 1,
+    "file:src/shared/components/TextInput/TextInput.tsx": 8,
+    "file:src/screens/Spellbook/spellbookFilters.ts": 2,
+    "file:src/screens/Spellbook/styles.ts": 1,
+    "file:src/stores/spellbookStore.ts": 1,
+    "file:src/shared/components/MonsterCard/style.ts": 1,
+    "file:src/dm/repositories/monsterRepository.ts": 2,
+    "file:src/services/storeEffects/spellbookStoreEffects.ts": 1,
+    "file:src/domain/types/sourceMetadata.ts": 3,
+    "file:src/dm/domain/encounter/index.ts": 3,
+    "file:src/shared/helpers/combat.ts": 2,
+    "file:src/shared/helpers/homebrew.ts": 3,
+    "file:src/repositories/characterLocalRepository.ts": 3,
+    "file:src/screens/DM/DMSharedUpdates.style.ts": 1,
+    "file:src/shared/styles/theme.ts": 36,
+    "file:src/screens/Home/homeViewModel.ts": 2,
+    "file:src/screens/Home/styles.ts": 1,
+    "file:src/types/Sync.ts": 8,
+    "file:src/screens/Initiative/style.ts": 2,
+    "file:src/screens/Initiative/CampaignInitiativeBoard.tsx": 1,
+    "file:src/screens/Initiative/LocalInitiativeBoard.tsx": 1,
+    "file:src/i18n/index.ts": 8,
+    "file:src/shared/helpers/sync/conflictPolicy.ts": 2,
+    "file:src/shared/services/toast/index.ts": 3,
+    "file:src/domain/mappers/character.mapper.ts": 2,
+    "file:src/domain/mappers/homebrew.mapper.ts": 2,
+    "file:src/domain/schemas/campaignNote.schema.ts": 1,
+    "file:src/domain/schemas/utils.ts": 7,
+    "file:src/domain/schemas/homebrew.schema.ts": 1,
+    "file:src/domain/schemas/spell.schema.ts": 1,
+    "file:src/screens/CreateCharacter/createCharacterWizard.ts": 5,
+    "file:src/domain/srd/index.ts": 3,
+    "file:src/repositories/createCharacterDraftRepository.ts": 1,
+    "file:src/screens/CreateCharacter/style.ts": 1,
+    "file:src/shared/const/CharacterTemplates.ts": 2,
+    "file:src/shared/const/Subclasses.ts": 1,
+    "file:src/shared/services/diceRoller.ts": 8,
+    "file:src/types/skillToStat.ts": 1,
+    "file:src/services/dmCampaignNotes.ts": 1,
+    "file:src/services/dmCampaigns.ts": 1,
+    "file:src/shared/const/ClassPresets.ts": 2,
+    "file:src/shared/const/Weapons.ts": 1,
+    "file:src/dm/repositories/dmSettingsRepository.ts": 1,
+    "file:src/stores/selectors/characterStoreSelectors.ts": 1,
+    "file:src/stores/selectors/syncStoreSelectors.ts": 1,
+    "file:src/screens/Character/components/CharacterHeader.tsx": 1,
+    "file:src/screens/Character/components/CharacterModals.tsx": 1,
+    "file:src/screens/Character/components/CharacterTabs.tsx": 1,
+    "file:src/screens/Character/components/CombatSummaryCard.tsx": 1,
+    "file:src/screens/Character/components/QuickActionBar.tsx": 2,
+    "file:src/screens/Character/hooks/useCharacterActions.tsx": 6,
+    "file:src/screens/Character/tabs/CharacterTabContent.tsx": 2,
+    "file:src/shared/components/CharacterMenu/CharacterMenu.tsx": 1,
+    "file:src/shared/helpers/calculateModifier.ts": 4,
+    "file:src/context/TrackerTemplates-store.ts": 1,
+    "file:src/screens/Character/components/CharacterSourceBadge.tsx": 2,
+    "file:src/screens/Character/hooks/levelChange.ts": 2,
+    "file:src/screens/Character/hooks/useQuickActions.ts": 1,
+    "file:src/screens/Character/style.ts": 1,
+    "file:src/shared/helpers/derived.ts": 2,
+    "file:src/shared/helpers/dice.ts": 2,
+    "file:src/shared/styles/statusTones.ts": 1,
+    "file:src/screens/Character/tabs/CombatTab.tsx": 1,
+    "file:src/screens/Character/tabs/HomebrewTab.tsx": 1,
+    "file:src/screens/Character/tabs/InventoryTab.tsx": 1,
+    "file:src/screens/Character/tabs/MagicTab.tsx": 1,
+    "file:src/screens/Character/tabs/NotesTab.tsx": 1,
+    "file:src/screens/Character/tabs/OverviewTab.tsx": 1,
+    "file:src/screens/Dice/styles.ts": 1,
+    "file:src/screens/DiceRoller/styles.ts": 1,
+    "file:src/screens/DM/LootGenerator/style.ts": 1,
+    "file:src/stores/uiStore.ts": 1,
+    "file:src/shared/ui/Text.tsx": 3,
+    "file:src/shared/ui/variantResolvers.ts": 4,
+    "file:src/services/storeEffects/uiStoreEffects.ts": 1,
+    "file:src/types/CustomCoin.ts": 1,
+    "file:src/screens/DM/EncounterCalculator/style.ts": 1,
+    "file:src/services/characterDeletion.ts": 2,
+    "file:src/shared/components/CharacterCard/style.ts": 1,
+    "file:src/components/ShareCharacterSheetModal.tsx": 1,
+    "file:src/shared/components/CharacterMenu/style.ts": 1,
+    "file:src/shared/const/experience.ts": 1,
+    "file:src/shared/components/CharacterOverview/style.ts": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx": 1,
+    "file:src/shared/components/CharacterStats/style.ts": 1,
+    "file:src/shared/const/CharacterTabs.ts": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts": 1,
+    "file:src/shared/components/RollResultModal/RollResultModal.tsx": 3,
+    "file:src/shared/const/attributes.ts": 3,
+    "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx": 1,
+    "file:src/shared/components/CharacterStats/Tabs/style.ts": 10,
+    "file:src/shared/components/TextInput/MultiTextInput.tsx": 5,
+    "file:src/context/CustomCoins-store.ts": 2,
+    "file:src/types/DeathSaves.ts": 2,
+    "file:src/types/HitPoints.ts": 3,
+    "file:src/i18n/languageStorage.ts": 3,
+    "file:src/screens/References/styles.ts": 1,
+    "file:src/screens/Settings/styles.ts": 3,
+    "file:src/services/accountDeletion.ts": 2,
+    "file:src/screens/Settings/DeleteAccountModal.tsx": 1,
+    "file:src/shared/components/Firebase/Auth.tsx": 1,
+    "file:src/services/accountDeletionCascade.ts": 2,
+    "file:src/stores/characterStore.ts": 1,
+    "file:src/stores/syncStore.ts": 2,
+    "file:src/services/storeEffects/syncStoreEffects.ts": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx": 1,
+    "file:src/shared/const/WeaponsDb.ts": 3,
+    "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": 1,
+    "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx": 1,
+    "file:src/shared/const/SkillsTab.ts": 1,
+    "file:src/shared/components/TextInput/index.ts": 1,
+    "file:src/types/Spells.ts": 3,
+    "file:src/types/Traits.ts": 3,
+    "file:src/types/Weapon.ts": 4,
+    "file:src/shared/components/Modal/style.ts": 1,
+    "file:src/shared/components/Loader/Loader.tsx": 1,
+    "file:src/shared/components/RollResultModal/style.ts": 1,
+    "file:src/domain/mappers/spell.mapper.ts": 1,
+    "file:src/domain/spellbook/spellbookEntity.ts": 4,
+    "file:src/domain/types/character.ts": 1,
+    "file:src/shared/const/CharacterClass.ts": 1,
+    "file:src/domain/spellbook/spellRepository.ts": 2,
+    "file:src/domain/spellbook/characterSpellAdapter.ts": 2,
+    "file:src/domain/spellbook/spellCloudRepository.ts": 1,
+    "file:src/domain/spellbook/spellLocalRepository.ts": 1,
+    "file:src/domain/srd/types.ts": 4,
+    "file:src/domain/srd/schemas.ts": 1,
+    "file:src/types/Skills.ts": 3,
+    "file:src/types/Stats.ts": 4,
+    "file:src/services/storeEffects/dmStoreEffects.ts": 2,
+    "file:src/stores/dmStore.ts": 2,
+    "file:src/types/SavingThrows.ts": 1,
+    "file:src/shared/helpers/weapons.ts": 1,
+    "file:src/services/storeEffects/characterStoreEffects.ts": 1,
+    "file:src/types/SpellSlots.ts": 1,
+    "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx": 2,
+    "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx": 1,
+    "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx": 1,
+    "file:src/shared/services/telemetry/startupTrace.ts": 3,
+    "file:App.tsx": 1,
+    "file:src/data/srd/metadata.ts": 1,
+    "file:src/shared/components/ErrorBoundary/style.ts": 1,
+    "file:src/repositories/firstLaunchRepository.ts": 1,
+    "file:src/shared/components/FirstLaunchModals/style.ts": 1,
+    "file:src/repositories/whatsNewRepository.ts": 1,
+    "file:src/shared/components/WhatsNewModal/style.ts": 1,
+    "file:src/dm/repositories/appRoleRepository.ts": 2,
+    "file:src/dm/repositories/trackerTemplatesRepository.ts": 2,
+    "file:functions/src/accountDeletionCascade.ts": 2,
+    "file:src/dm/domain/types/encounter.ts": 1,
+    "file:src/dm/domain/types/notes.ts": 1,
+    "file:src/shared/components/CharacterOverview/CharacterOverview.tsx": 1,
+    "config:src/data/locales/uk/monsters.json": 1,
+    "config:src/data/locales/uk/spells.json": 1,
+    "config:src/i18n/locales/en/bestiary.json": 1,
+    "config:src/i18n/locales/en/character.json": 1,
+    "config:src/i18n/locales/en/common.json": 1,
+    "config:src/i18n/locales/en/createCharacter.json": 1,
+    "config:src/i18n/locales/en/dice.json": 1,
+    "config:src/i18n/locales/en/dm.json": 1,
+    "config:src/i18n/locales/en/dnd.json": 1,
+    "config:src/i18n/locales/en/firstLaunch.json": 1,
+    "config:src/i18n/locales/en/home.json": 1,
+    "config:src/i18n/locales/en/initiative.json": 1,
+    "config:src/i18n/locales/en/legal.json": 1,
+    "config:src/i18n/locales/en/navigation.json": 1,
+    "config:src/i18n/locales/en/references.json": 1,
+    "config:src/i18n/locales/en/settings.json": 1,
+    "config:src/i18n/locales/en/spellbook.json": 1,
+    "config:src/i18n/locales/en/support.json": 1,
+    "config:src/i18n/locales/en/whatsNew.json": 1,
+    "config:src/i18n/locales/uk/bestiary.json": 1,
+    "config:src/i18n/locales/uk/character.json": 1,
+    "config:src/i18n/locales/uk/common.json": 1,
+    "config:src/i18n/locales/uk/createCharacter.json": 1,
+    "config:src/i18n/locales/uk/dice.json": 1,
+    "config:src/i18n/locales/uk/dm.json": 1,
+    "config:src/i18n/locales/uk/dnd.json": 1,
+    "config:src/i18n/locales/uk/firstLaunch.json": 1,
+    "config:src/i18n/locales/uk/home.json": 1,
+    "config:src/i18n/locales/uk/initiative.json": 1,
+    "config:src/i18n/locales/uk/legal.json": 1,
+    "config:src/i18n/locales/uk/navigation.json": 1,
+    "config:src/i18n/locales/uk/references.json": 1,
+    "config:src/i18n/locales/uk/settings.json": 1,
+    "config:src/i18n/locales/uk/spellbook.json": 1,
+    "config:src/i18n/locales/uk/support.json": 1,
+    "config:src/i18n/locales/uk/whatsNew.json": 1,
+    "config:src/data/srd/abilities.json": 1,
+    "config:src/data/srd/backgrounds.json": 1,
+    "config:src/data/srd/classProgression.json": 1,
+    "config:src/data/srd/classes.json": 1,
+    "config:src/data/srd/conditions.json": 1,
+    "config:src/data/srd/equipment.json": 1,
+    "config:src/data/srd/languages.json": 1,
+    "config:src/data/srd/monsters.json": 1,
+    "config:src/data/srd/races.json": 1,
+    "config:src/data/srd/references.json": 1,
+    "config:src/data/srd/skills.json": 1,
+    "config:src/data/srd/spells.json": 1
+  },
+  "fileFanOut": {
+    "file:src/dm/domain/campaign/linking.test.ts": 2,
+    "file:src/dm/domain/campaign/linking.ts": 2,
+    "file:src/dm/domain/campaign/utils.test.ts": 2,
+    "file:src/dm/domain/campaign/utils.ts": 1,
+    "file:src/dm/domain/encounter/calculator.ts": 1,
+    "file:src/dm/domain/initiative/roll.test.ts": 2,
+    "file:src/dm/domain/notes/conflict.test.ts": 2,
+    "file:src/dm/domain/notes/conflict.ts": 1,
+    "file:src/dm/hooks/useCampaignOwnership.ts": 2,
+    "file:src/dm/repositories/campaignEncountersRepository.test.ts": 3,
+    "file:src/dm/repositories/campaignEncountersRepository.ts": 4,
+    "file:src/dm/repositories/campaignInitiativeRepository.test.ts": 3,
+    "file:src/dm/repositories/campaignInitiativeRepository.ts": 5,
+    "file:src/dm/repositories/campaignNotesRepository.ts": 5,
+    "file:src/dm/repositories/campaignRepository.ts": 6,
+    "file:src/navigation/DMNavigator.tsx": 12,
+    "file:src/repositories/characterCloudRepository.ts": 9,
+    "file:src/repositories/syncPathFieldMap.test.ts": 1,
+    "file:src/screens/DM/DM.tsx": 19,
+    "file:src/screens/DM/DMCampaignDetail.tsx": 20,
+    "file:src/screens/DM/DMCampaignNotes.tsx": 12,
+    "file:src/screens/DM/DMCampaigns.tsx": 11,
+    "file:src/dm/repositories/monsterRepository.ts": 2,
+    "file:src/domain/spellbook/characterSpellAdapter.test.ts": 2,
+    "file:src/domain/spellbook/spellRepository.test.ts": 2,
+    "file:src/domain/srd/localization.ts": 5,
+    "file:src/modules/Header/Header.tsx": 6,
+    "file:src/navigation/AppNavigator.tsx": 8,
+    "file:src/navigation/ReferencesNavigator.tsx": 7,
+    "file:src/navigation/TabNavigator.tsx": 11,
+    "file:src/screens/Bestiary/Bestiary.test.tsx": 3,
+    "file:src/screens/Bestiary/Bestiary.tsx": 13,
+    "file:src/screens/Bestiary/bestiaryFilters.test.ts": 4,
+    "file:src/screens/Bestiary/bestiaryFilters.ts": 2,
+    "file:src/screens/Monster/Monster.test.tsx": 2,
+    "file:src/screens/Monster/Monster.tsx": 10,
+    "file:src/screens/Spellbook/Spellbook.tsx": 16,
+    "file:src/screens/Spellbook/spellbookFilters.test.ts": 3,
+    "file:src/screens/Spellbook/spellbookFilters.ts": 4,
+    "file:src/screens/Support/Support.tsx": 2,
+    "file:src/services/storeEffects/spellbookStoreEffects.ts": 2,
+    "file:src/shared/components/MonsterCard/MonsterCard.tsx": 7,
+    "file:src/shared/const/SpellbookSeed.ts": 1,
+    "file:src/shared/helpers/sourcePresentation.test.ts": 1,
+    "file:src/shared/services/fileSerice.ts": 4,
+    "file:src/stores/monsterStore.ts": 2,
+    "file:src/stores/spellbookStore.ts": 2,
+    "file:src/types/Monster.ts": 1,
+    "file:src/screens/DM/DMEncounterPrep.tsx": 17,
+    "file:src/screens/DM/DMPartyOverview.tsx": 14,
+    "file:src/screens/DM/DMQuickEdit.tsx": 11,
+    "file:src/screens/DM/DMSharedUpdates.tsx": 13,
+    "file:src/screens/DM/PinnedReferencesList.tsx": 4,
+    "file:src/screens/DM/adapters/campaignLink.ts": 3,
+    "file:src/screens/DM/style.ts": 2,
+    "file:src/screens/Home/Home.tsx": 13,
+    "file:src/screens/Home/homeViewModel.test.ts": 3,
+    "file:src/screens/Home/homeViewModel.ts": 6,
+    "file:src/screens/Initiative/CampaignInitiativeBoard.tsx": 7,
+    "file:src/screens/Initiative/Initiative.tsx": 7,
+    "file:src/services/campaignInvite.ts": 2,
+    "file:src/services/characterSyncCoordinator.test.ts": 4,
+    "file:src/services/characterSyncCoordinator.ts": 11,
+    "file:src/services/connections.ts": 1,
+    "file:src/services/users.ts": 1,
+    "file:src/shared/const/TrackerTemplates.ts": 1,
+    "file:src/shared/helpers/collaboration/status.ts": 2,
+    "file:src/shared/helpers/homebrew.ts": 2,
+    "file:src/shared/helpers/mapCloudCharacter.ts": 2,
+    "file:src/shared/helpers/sync/conflictPolicy.test.ts": 1,
+    "file:src/shared/helpers/sync/conflictPolicy.ts": 1,
+    "file:src/shared/helpers/sync/syncErrorClassification.test.ts": 1,
+    "file:src/shared/services/telemetry/productTelemetry.test.ts": 1,
+    "file:src/dm/repositories/campaignNotesRepository.test.ts": 2,
+    "file:src/dm/repositories/campaignRepository.test.ts": 2,
+    "file:src/dm/repositories/dmSettingsRepository.ts": 1,
+    "file:src/domain/mappers/character.mapper.test.ts": 2,
+    "file:src/domain/mappers/character.mapper.ts": 3,
+    "file:src/domain/mappers/homebrew.mapper.test.ts": 1,
+    "file:src/domain/mappers/homebrew.mapper.ts": 2,
+    "file:src/domain/mappers/spell.mapper.ts": 2,
+    "file:src/domain/migrations/index.test.ts": 1,
+    "file:src/domain/schemas/campaignEncounter.schema.ts": 4,
+    "file:src/domain/schemas/campaignInitiative.schema.test.ts": 2,
+    "file:src/domain/schemas/campaignInitiative.schema.ts": 3,
+    "file:src/domain/schemas/campaignNote.schema.test.ts": 2,
+    "file:src/domain/schemas/campaignNote.schema.ts": 3,
+    "file:src/domain/schemas/character.schema.test.ts": 2,
+    "file:src/domain/schemas/character.schema.ts": 5,
+    "file:src/domain/schemas/createCharacterWizard.schema.test.ts": 1,
+    "file:src/domain/schemas/createCharacterWizard.schema.ts": 2,
+    "file:src/domain/schemas/homebrew.schema.test.ts": 1,
+    "file:src/domain/schemas/homebrew.schema.ts": 2,
+    "file:src/domain/schemas/spell.schema.test.ts": 1,
+    "file:src/domain/schemas/spell.schema.ts": 2,
+    "file:src/repositories/characterCloudRepository.test.ts": 2,
+    "file:src/repositories/characterLocalRepository.test.ts": 2,
+    "file:src/repositories/characterLocalRepository.ts": 3,
+    "file:src/repositories/createCharacterDraftRepository.ts": 1,
+    "file:src/screens/CreateCharacter/CreateCharacter.test.tsx": 4,
+    "file:src/screens/CreateCharacter/CreateCharacter.tsx": 18,
+    "file:src/screens/CreateCharacter/createCharacterWizard.test.ts": 1,
+    "file:src/screens/CreateCharacter/createCharacterWizard.ts": 7,
+    "file:src/screens/Home/Home.test.tsx": 4,
+    "file:src/services/dmCampaignNotes.test.ts": 2,
+    "file:src/services/dmCampaigns.test.ts": 2,
+    "file:src/shared/const/CharacterTemplates.ts": 1,
+    "file:src/shared/helpers/combat.ts": 3,
+    "file:src/shared/helpers/createEmptyCharacter.ts": 2,
+    "file:src/stores/dmSettingsStore.ts": 1,
+    "file:src/stores/selectors/characterStoreSelectors.ts": 1,
+    "file:src/stores/selectors/syncStoreSelectors.ts": 1,
+    "file:src/stores/storeSelectors.test.ts": 3,
+    "file:src/types/skillToStat.ts": 1,
+    "file:src/dm/domain/initiative/roll.ts": 2,
+    "file:src/screens/Character/Character.tsx": 11,
+    "file:src/screens/Character/components/CharacterHeader.tsx": 2,
+    "file:src/screens/Character/components/CharacterModals.tsx": 5,
+    "file:src/screens/Character/components/CharacterTabs.tsx": 1,
+    "file:src/screens/Character/components/CombatSummaryCard.tsx": 1,
+    "file:src/screens/Character/components/QuickActionBar.tsx": 1,
+    "file:src/screens/Character/hooks/useCharacterActions.tsx": 31,
+    "file:src/screens/Character/tabs/CharacterTabContent.test.tsx": 1,
+    "file:src/screens/Character/tabs/CharacterTabContent.tsx": 6,
+    "file:src/screens/Dice/Dice.tsx": 3,
+    "file:src/screens/DiceRoller/DiceRoller.test.tsx": 1,
+    "file:src/screens/DiceRoller/DiceRoller.tsx": 3,
+    "file:src/shared/services/diceRoller.test.ts": 1,
+    "file:src/modules/Header/style.ts": 2,
+    "file:src/screens/Bestiary/style.ts": 2,
+    "file:src/screens/Character/components/QuickActionBar.test.tsx": 2,
+    "file:src/screens/Character/style.ts": 2,
+    "file:src/screens/CreateCharacter/style.ts": 2,
+    "file:src/screens/DM/DMSharedUpdates.style.ts": 2,
+    "file:src/screens/DM/EncounterCalculator/style.ts": 2,
+    "file:src/screens/DM/LootGenerator/LootGenerator.tsx": 2,
+    "file:src/screens/DM/LootGenerator/style.ts": 2,
+    "file:src/screens/Dice/styles.ts": 2,
+    "file:src/screens/DiceRoller/styles.ts": 2,
+    "file:src/screens/Home/styles.ts": 2,
+    "file:src/screens/Initiative/style.ts": 2,
+    "file:src/screens/LegalLicenses/LegalLicenses.tsx": 4,
+    "file:src/screens/Monster/style.ts": 2,
+    "file:src/screens/References/styles.ts": 2,
+    "file:src/screens/Spellbook/styles.ts": 2,
+    "file:src/services/storeEffects/uiStoreEffects.ts": 3,
+    "file:src/shared/components/CharacterCard/style.ts": 2,
+    "file:src/shared/components/CharacterMenu/style.ts": 2,
+    "file:src/shared/components/CharacterOverview/style.ts": 2,
+    "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts": 2,
+    "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": 2,
+    "file:src/shared/components/CharacterStats/style.ts": 2,
+    "file:src/shared/components/EmptyPlaceholder.tsx": 2,
+    "file:src/shared/components/ErrorBoundary/style.ts": 2,
+    "file:src/shared/components/Modal/style.ts": 2,
+    "file:src/shared/components/MonsterCard/style.ts": 2,
+    "file:src/shared/components/RollResultModal/style.ts": 2,
+    "file:src/shared/styles/statusTones.ts": 1,
+    "file:src/shared/styles/tokens.test.ts": 1,
+    "file:src/shared/styles/useDesignTokens.ts": 2,
+    "file:src/shared/ui/Button.tsx": 4,
+    "file:src/shared/ui/Card.tsx": 3,
+    "file:src/shared/ui/Chip.tsx": 3,
+    "file:src/shared/ui/Input.tsx": 2,
+    "file:src/shared/ui/Screen.tsx": 2,
+    "file:src/shared/ui/Section.tsx": 2,
+    "file:src/shared/ui/Text.tsx": 3,
+    "file:src/shared/ui/skeleton/index.tsx": 3,
+    "file:src/shared/ui/skeleton/skeleton.test.tsx": 1,
+    "file:src/shared/ui/uiVariants.test.ts": 2,
+    "file:src/shared/ui/variantResolvers.ts": 2,
+    "file:src/stores/uiStore.ts": 3,
+    "file:src/test/mocks/react-navigation-native.ts": 1,
+    "file:src/components/ShareCharacterSheetModal.tsx": 4,
+    "file:src/dm/domain/encounter/calculator.test.ts": 1,
+    "file:src/screens/Character/components/CharacterSourceBadge.test.tsx": 2,
+    "file:src/screens/Character/components/CharacterSourceBadge.tsx": 2,
+    "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx": 9,
+    "file:src/screens/DM/adapters/unifiedParty.ts": 2,
+    "file:src/screens/Initiative/LocalInitiativeBoard.tsx": 9,
+    "file:src/services/characterDeletion.test.ts": 1,
+    "file:src/shared/components/CharacterCard/CharacterCard.tsx": 6,
+    "file:src/shared/components/CharacterMenu/CharacterMenu.tsx": 14,
+    "file:src/shared/components/CharacterOverview/CharacterOverview.tsx": 3,
+    "file:src/shared/components/CharacterStats/CharacterStats.tsx": 16,
+    "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx": 6,
+    "file:src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx": 6,
+    "file:src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx": 5,
+    "file:src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx": 6,
+    "file:src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx": 9,
+    "file:src/i18n/index.ts": 35,
+    "file:src/i18n/types.ts": 2,
+    "file:src/screens/References/References.test.tsx": 2,
+    "file:src/screens/References/References.tsx": 4,
+    "file:src/screens/Settings/DeleteAccountModal.tsx": 4,
+    "file:src/screens/Settings/Settings.tsx": 13,
+    "file:src/screens/Settings/styles.ts": 2,
+    "file:src/services/accountDeletion.test.ts": 1,
+    "file:src/services/accountDeletion.ts": 5,
+    "file:src/services/accountDeletionCascade.test.ts": 1,
+    "file:src/services/storeEffects/characterStoreEffects.ts": 8,
+    "file:src/services/storeEffects/syncStoreEffects.ts": 2,
+    "file:src/shared/components/Firebase/Auth.tsx": 4,
+    "file:src/shared/services/auth/google.ts": 2,
+    "file:src/stores/syncStore.ts": 2,
+    "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx": 8,
+    "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx": 5,
+    "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx": 5,
+    "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx": 4,
+    "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx": 6,
+    "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx": 7,
+    "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx": 6,
+    "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx": 4,
+    "file:src/shared/components/CharacterStats/Tabs/style.ts": 2,
+    "file:src/shared/components/Loader/Loader.tsx": 1,
+    "file:src/shared/components/Modal/Modal.tsx": 3,
+    "file:src/shared/components/RollResultModal/RollResultModal.tsx": 4,
+    "file:src/shared/components/TextInput/MultiTextInput.tsx": 2,
+    "file:src/shared/components/TextInput/TextInput.tsx": 3,
+    "file:src/shared/const/attributes.ts": 1,
+    "file:scripts/validate-srd.mjs": 1,
+    "file:src/domain/mappers/index.ts": 3,
+    "file:src/domain/spellbook/characterSpellAdapter.ts": 6,
+    "file:src/domain/spellbook/spellCloudRepository.ts": 1,
+    "file:src/domain/spellbook/spellLocalRepository.ts": 7,
+    "file:src/domain/spellbook/spellRepository.ts": 6,
+    "file:src/domain/spellbook/spellbookEntity.ts": 1,
+    "file:src/domain/srd/adapters.ts": 3,
+    "file:src/domain/srd/localization.test.ts": 3,
+    "file:src/domain/srd/schemas.ts": 1,
+    "file:src/domain/srd/srdRepository.test.ts": 1,
+    "file:src/domain/srd/srdRepository.ts": 3,
+    "file:src/domain/srd/srdSelectors.ts": 2,
+    "file:src/domain/srd/types.ts": 3,
+    "file:src/services/storeEffects/dmStoreEffects.test.ts": 2,
+    "file:src/services/storeEffects/dmStoreEffects.ts": 7,
+    "file:src/stores/dmStore.ts": 5,
+    "file:src/domain/types/character.ts": 8,
+    "file:src/screens/Character/hooks/levelChange.test.ts": 1,
+    "file:src/screens/Character/hooks/levelChange.ts": 3,
+    "file:src/shared/helpers/derived.test.ts": 1,
+    "file:src/shared/helpers/derived.ts": 3,
+    "file:src/shared/helpers/gear.ts": 4,
+    "file:src/shared/helpers/weapons.ts": 1,
+    "file:src/stores/characterStore.ts": 6,
+    "file:src/types/Spells.ts": 1,
+    "file:App.tsx": 8,
+    "file:index.js": 5,
+    "file:src/data/srd/index.ts": 13,
+    "file:src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx": 1,
+    "file:src/shared/components/ErrorBoundary/ErrorBoundary.tsx": 5,
+    "file:src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx": 5,
+    "file:src/shared/components/FirstLaunchModals/style.ts": 1,
+    "file:src/shared/components/WhatsNewModal/WhatsNewModal.tsx": 4,
+    "file:src/shared/components/WhatsNewModal/style.ts": 1,
+    "file:src/shared/services/telemetry/startupTrace.test.ts": 1,
+    "file:src/dm/repositories/appRoleRepository.ts": 2,
+    "file:src/dm/repositories/storageRepositories.test.ts": 3,
+    "file:src/dm/repositories/trackerTemplatesRepository.ts": 2,
+    "file:src/stores/appRoleStore.ts": 2,
+    "file:src/stores/trackerTemplatesStore.ts": 3,
+    "file:functions/src/deleteMyAccount.ts": 1,
+    "file:functions/src/accountDeletionCascade.test.ts": 1,
+    "file:src/dm/domain/types/encounterHistory.ts": 2
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
+  "batchFiles": [
+    {"path": "src/i18n/locales/uk/bestiary.json", "language": "json", "sizeLines": 148, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/character.json", "language": "json", "sizeLines": 616, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/common.json", "language": "json", "sizeLines": 86, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/createCharacter.json", "language": "json", "sizeLines": 204, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/dice.json", "language": "json", "sizeLines": 56, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/dm.json", "language": "json", "sizeLines": 373, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/dnd.json", "language": "json", "sizeLines": 85, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/firstLaunch.json", "language": "json", "sizeLines": 18, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/home.json", "language": "json", "sizeLines": 54, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/initiative.json", "language": "json", "sizeLines": 37, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/legal.json", "language": "json", "sizeLines": 24, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/navigation.json", "language": "json", "sizeLines": 28, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/references.json", "language": "json", "sizeLines": 100, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/settings.json", "language": "json", "sizeLines": 81, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/spellbook.json", "language": "json", "sizeLines": 145, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/support.json", "language": "json", "sizeLines": 28, "fileCategory": "config"},
+    {"path": "src/i18n/locales/uk/whatsNew.json", "language": "json", "sizeLines": 9, "fileCategory": "config"}
+  ],
+  "batchImportData": {
+    "src/i18n/locales/uk/bestiary.json": [],
+    "src/i18n/locales/uk/character.json": [],
+    "src/i18n/locales/uk/common.json": [],
+    "src/i18n/locales/uk/createCharacter.json": [],
+    "src/i18n/locales/uk/dice.json": [],
+    "src/i18n/locales/uk/dm.json": [],
+    "src/i18n/locales/uk/dnd.json": [],
+    "src/i18n/locales/uk/firstLaunch.json": [],
+    "src/i18n/locales/uk/home.json": [],
+    "src/i18n/locales/uk/initiative.json": [],
+    "src/i18n/locales/uk/legal.json": [],
+    "src/i18n/locales/uk/navigation.json": [],
+    "src/i18n/locales/uk/references.json": [],
+    "src/i18n/locales/uk/settings.json": [],
+    "src/i18n/locales/uk/spellbook.json": [],
+    "src/i18n/locales/uk/support.json": [],
+    "src/i18n/locales/uk/whatsNew.json": []
+  }
+}

@@ -1,0 +1,482 @@
+{
+  "nodes": [
+    {
+      "id": "file:android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "type": "file",
+      "name": "ic_launcher_round.webp",
+      "filePath": "android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp",
+      "summary": "Растрове зображення кругової іконки застосунку для щільності екрана mdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "type": "file",
+      "name": "ic_launcher.webp",
+      "filePath": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp",
+      "summary": "Растрове зображення стандартної іконки застосунку для щільності екрана xhdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp",
+      "type": "file",
+      "name": "ic_launcher_foreground.webp",
+      "filePath": "android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp",
+      "summary": "Передній шар адаптивної іконки застосунку (foreground layer) для щільності xhdpi.",
+      "tags": ["asset", "icon", "android-resource", "adaptive-icon", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "type": "file",
+      "name": "ic_launcher_round.webp",
+      "filePath": "android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp",
+      "summary": "Растрове зображення кругової іконки застосунку для щільності екрана xhdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "type": "file",
+      "name": "ic_launcher.webp",
+      "filePath": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp",
+      "summary": "Растрове зображення стандартної іконки застосунку для щільності екрана xxhdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp",
+      "type": "file",
+      "name": "ic_launcher_foreground.webp",
+      "filePath": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.webp",
+      "summary": "Передній шар адаптивної іконки застосунку (foreground layer) для щільності xxhdpi.",
+      "tags": ["asset", "icon", "android-resource", "adaptive-icon", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "type": "file",
+      "name": "ic_launcher_round.webp",
+      "filePath": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp",
+      "summary": "Растрове зображення кругової іконки застосунку для щільності екрана xxhdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "type": "file",
+      "name": "ic_launcher.webp",
+      "filePath": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp",
+      "summary": "Растрове зображення стандартної іконки застосунку для щільності екрана xxxhdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp",
+      "type": "file",
+      "name": "ic_launcher_foreground.webp",
+      "filePath": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.webp",
+      "summary": "Передній шар адаптивної іконки застосунку (foreground layer) для щільності xxxhdpi — найбільша роздільна здатність серед варіантів.",
+      "tags": ["asset", "icon", "android-resource", "adaptive-icon", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "type": "file",
+      "name": "ic_launcher_round.webp",
+      "filePath": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp",
+      "summary": "Растрове зображення кругової іконки застосунку для щільності екрана xxxhdpi.",
+      "tags": ["asset", "icon", "android-resource", "mipmap", "binary"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:android/app/src/main/res/values-night/colors.xml",
+      "type": "config",
+      "name": "colors.xml",
+      "filePath": "android/app/src/main/res/values-night/colors.xml",
+      "summary": "Порожній ресурсний файл кольорів для темної теми Android (`<resources/>` без визначених значень) — плейсхолдер, що очікує на узгодження з дизайном.",
+      "tags": ["configuration", "android", "theme", "dark-mode", "placeholder"],
+      "complexity": "simple",
+      "languageNotes": "Формально валідний, але порожній ресурс night-варіанту — Android використовує його лише якщо в майбутньому додадуть кольори, специфічні для темної теми."
+    },
+    {
+      "id": "file:android/gradle/wrapper/gradle-wrapper.jar",
+      "type": "file",
+      "name": "gradle-wrapper.jar",
+      "filePath": "android/gradle/wrapper/gradle-wrapper.jar",
+      "summary": "Бінарний завантажувач Gradle Wrapper — стандартний артефакт, що завантажує й запускає потрібну версію Gradle, вказану в `gradle-wrapper.properties`.",
+      "tags": ["build-system", "gradle-wrapper", "binary", "boilerplate"],
+      "complexity": "simple",
+      "languageNotes": "Автогенерований бінарник Gradle, ідентичний у більшості проєктів — не редагується вручну."
+    },
+    {
+      "id": "config:android/gradle/wrapper/gradle-wrapper.properties",
+      "type": "config",
+      "name": "gradle-wrapper.properties",
+      "filePath": "android/gradle/wrapper/gradle-wrapper.properties",
+      "summary": "Конфігурація Gradle Wrapper: фіксує дистрибутив Gradle 8.13 (bin), таймаут мережі та шляхи кешування.",
+      "tags": ["configuration", "gradle", "build-system", "version-pin"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:android/gradlew",
+      "type": "file",
+      "name": "gradlew",
+      "filePath": "android/gradlew",
+      "summary": "Стандартний shell-скрипт запуску Gradle Wrapper для Unix-подібних систем: визначає JAVA_HOME, збирає classpath і делегує виконання `gradle-wrapper.jar`.",
+      "tags": ["build-system", "entry-point", "shell-script", "boilerplate"],
+      "complexity": "moderate",
+      "languageNotes": "Автогенерований офіційний скрипт gradlew — містить лише допоміжні функції `warn()`/`die()` (по кілька рядків), решта — стандартна логіка визначення JVM і classpath."
+    },
+    {
+      "id": "file:firestore-tests/rules.test.ts",
+      "type": "file",
+      "name": "rules.test.ts",
+      "filePath": "firestore-tests/rules.test.ts",
+      "summary": "Інтеграційні тести правил безпеки Firestore (vitest + @firebase/rules-unit-testing) — перевіряють дозволені й заборонені сценарії читання/запису для колекцій users, emailIndex, connections, characterSheets, dmCampaigns, dmCampaignInvites, dmCampaignNotes, dmCampaignEncounters та dmCampaignInitiative.",
+      "tags": ["test", "security", "firestore", "integration-test", "rules"],
+      "complexity": "complex",
+      "languageNotes": "Читає `firestore.rules` напряму через `readFileSync` і піднімає emulator-середовище (`initializeTestEnvironment`) — відповідає вимозі CLAUDE.md §8.4 перевіряти правила через `firebase emulators:exec`, а не читанням коду."
+    },
+    {
+      "id": "function:firestore-tests/rules.test.ts:validCharacterSheet",
+      "type": "function",
+      "name": "validCharacterSheet",
+      "filePath": "firestore-tests/rules.test.ts",
+      "lineRange": [44, 57],
+      "summary": "Фабрика валідного тестового документа `characterSheets` з можливістю перевизначення полів — використовується для перевірки правила `isValidCharacterSheetWrite()`.",
+      "tags": ["test", "fixture", "factory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:firestore-tests/rules.test.ts:validDmCampaign",
+      "type": "function",
+      "name": "validDmCampaign",
+      "filePath": "firestore-tests/rules.test.ts",
+      "lineRange": [59, 68],
+      "summary": "Фабрика валідного тестового документа `dmCampaigns` для перевірки правил доступу власника/редактора кампанії.",
+      "tags": ["test", "fixture", "factory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:firestore-tests/rules.test.ts:validDmCampaignInvite",
+      "type": "function",
+      "name": "validDmCampaignInvite",
+      "filePath": "firestore-tests/rules.test.ts",
+      "lineRange": [70, 81],
+      "summary": "Фабрика валідного тестового документа `dmCampaignInvites` (capability-код запрошення) для тестів правил створення/читання інвайтів.",
+      "tags": ["test", "fixture", "factory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:firestore-tests/rules.test.ts:validDmCampaignInitiative",
+      "type": "function",
+      "name": "validDmCampaignInitiative",
+      "filePath": "firestore-tests/rules.test.ts",
+      "lineRange": [83, 93],
+      "summary": "Фабрика валідного тестового документа `dmCampaignInitiative` (трекер ініціативи бою) для перевірки правил доступу лише власника кампанії на запис.",
+      "tags": ["test", "fixture", "factory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:firestore-tests/rules.test.ts:validDmCampaignNote",
+      "type": "function",
+      "name": "validDmCampaignNote",
+      "filePath": "firestore-tests/rules.test.ts",
+      "lineRange": [95, 105],
+      "summary": "Фабрика валідного тестового документа `dmCampaignNotes` для перевірки правил доступу редактора/власника нотаток кампанії.",
+      "tags": ["test", "fixture", "factory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:firestore.rules",
+      "type": "file",
+      "name": "firestore.rules",
+      "filePath": "firestore.rules",
+      "summary": "Головні правила безпеки Firestore для колекцій users, emailIndex, connections, characterSheets, dmCampaigns, dmCampaignInvites, dmCampaignNotes, dmCampaignEncounters і dmCampaignInitiative — реалізують модель кількох редакторів (owners[]/editors[]) з guard-функціями валідації форми документа (SEC-1…SEC-4, COL-8/COL-9).",
+      "tags": ["security", "firestore", "database", "access-control", "rules"],
+      "complexity": "complex",
+      "languageNotes": "Firestore Rules DSL: спільний патерн isOwner()/isEditor() з перевіркою owners[]/editors[] повторюється для кожної колекції; capability-коди запрошень (dmCampaignInvites) навмисно не мають list-доступу, щоб унеможливити перебір кодів."
+    },
+    {
+      "id": "file:functions/src/createCampaignInvite.ts",
+      "type": "file",
+      "name": "createCampaignInvite.ts",
+      "filePath": "functions/src/createCampaignInvite.ts",
+      "summary": "Firebase Cloud Function (onCall), що генерує унікальний 8-символьний capability-код запрошення до кампанії ДМ-а з TTL 7 днів; лише власник кампанії може створювати інвайт.",
+      "tags": ["cloud-function", "firebase", "api-handler", "campaign-management"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:functions/src/createCampaignInvite.ts:createCampaignInvite",
+      "type": "function",
+      "name": "createCampaignInvite",
+      "filePath": "functions/src/createCampaignInvite.ts",
+      "lineRange": [35, 95],
+      "summary": "Обробник onCall: перевіряє автентифікацію та власника кампанії, генерує унікальний код (з ретраями при колізії через `.create()`) і записує документ `dmCampaignInvites`.",
+      "tags": ["cloud-function", "api-handler", "campaign-management"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:functions/src/index.ts",
+      "type": "file",
+      "name": "index.ts",
+      "filePath": "functions/src/index.ts",
+      "summary": "Точка входу Firebase Functions — реекспортує `deleteMyAccount`, `createCampaignInvite` та `redeemCampaignInvite` як розгортувані Cloud Functions.",
+      "tags": ["entry-point", "barrel", "cloud-functions"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:functions/src/redeemCampaignInvite.ts",
+      "type": "file",
+      "name": "redeemCampaignInvite.ts",
+      "filePath": "functions/src/redeemCampaignInvite.ts",
+      "summary": "Firebase Cloud Function (onCall), що атомарно (через `runTransaction`) додає користувача до `editors` кампанії ДМ-а за capability-кодом запрошення, з перевіркою терміну дії та ліміту використань.",
+      "tags": ["cloud-function", "transaction", "campaign-management", "api-handler"],
+      "complexity": "moderate",
+      "languageNotes": "Використовує `runTransaction` і `FieldValue.arrayUnion` — відповідає інваріанту CLAUDE.md §5.1/§5.3 про відсутність read-modify-write без транзакції та про додавання в масиви лише через `arrayUnion`."
+    },
+    {
+      "id": "function:functions/src/redeemCampaignInvite.ts:redeemCampaignInvite",
+      "type": "function",
+      "name": "redeemCampaignInvite",
+      "filePath": "functions/src/redeemCampaignInvite.ts",
+      "lineRange": [19, 90],
+      "summary": "Обробник onCall: у транзакції перевіряє існування інвайту й кампанії, чи вже є користувач учасником, термін дії та ліміт використань, після чого атомарно оновлює `editors` кампанії та `usedByUids` інвайту.",
+      "tags": ["cloud-function", "transaction", "api-handler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:functions/vitest.config.ts",
+      "type": "file",
+      "name": "vitest.config.ts",
+      "filePath": "functions/vitest.config.ts",
+      "summary": "Конфігурація vitest для Cloud Functions: node-середовище, вимкнені глобальні API, збирає тести за шаблоном `src/**/*.test.ts`.",
+      "tags": ["configuration", "test", "vitest", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:metro.config.js",
+      "type": "file",
+      "name": "metro.config.js",
+      "filePath": "metro.config.js",
+      "summary": "Мінімальна конфігурація Metro-бандлера для Expo/React Native застосунку.",
+      "tags": ["configuration", "bundler", "expo", "react-native"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/lint-theme.mjs",
+      "type": "file",
+      "name": "lint-theme.mjs",
+      "filePath": "scripts/lint-theme.mjs",
+      "summary": "Кастомний lint-скрипт, що обходить дерево `src` і виявляє «сирі» числові літерали в стилях, які мають йти через токени теми (`sp()`, `fs()`, `rd()`) — реалізує гейт якості з CLAUDE.md §9 («немає сирих числових літералів у стилях»).",
+      "tags": ["lint", "tooling", "theme", "ui-tokens", "quality-gate"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:scripts/lint-theme.mjs:walk",
+      "type": "function",
+      "name": "walk",
+      "filePath": "scripts/lint-theme.mjs",
+      "lineRange": [13, 27],
+      "summary": "Рекурсивно обходить директорію, збираючи шляхи до файлів стилів для подальшої перевірки на використання токенів теми.",
+      "tags": ["utility", "filesystem", "recursion"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/lint-ui-tokens.mjs",
+      "type": "file",
+      "name": "lint-ui-tokens.mjs",
+      "filePath": "scripts/lint-ui-tokens.mjs",
+      "summary": "Кастомний lint-скрипт, що обходить дерево `src` і перевіряє використання UI-примітивів `@/shared/ui` замість сирих React Native компонентів — реалізує гейт із CLAUDE.md §3 («UI-токени обов'язкові»).",
+      "tags": ["lint", "tooling", "ui-tokens", "quality-gate"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:scripts/lint-ui-tokens.mjs:walk",
+      "type": "function",
+      "name": "walk",
+      "filePath": "scripts/lint-ui-tokens.mjs",
+      "lineRange": [12, 28],
+      "summary": "Рекурсивно обходить директорію, збираючи шляхи до файлів для перевірки використання UI-примітивів.",
+      "tags": ["utility", "filesystem", "recursion"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/manual-dev-client-android.ps1",
+      "type": "file",
+      "name": "manual-dev-client-android.ps1",
+      "filePath": "scripts/manual-dev-client-android.ps1",
+      "summary": "PowerShell-скрипт для локального ручного тестування: знаходить Android SDK, перевіряє/запускає емулятор `Pixel_7_API_35`, чекає завершення завантаження і стартує Expo dev-client командою `npm start -- --android`.",
+      "tags": ["script", "powershell", "dev-tooling", "android", "emulator"],
+      "complexity": "moderate",
+      "languageNotes": "Лінійний скрипт без окремих іменованих функцій — послідовність перевірок SDK/AVD і очікування `sys.boot_completed` з таймаутом 180 спроб по 2с."
+    },
+    {
+      "id": "file:scripts/release-check.mjs",
+      "type": "file",
+      "name": "release-check.mjs",
+      "filePath": "scripts/release-check.mjs",
+      "summary": "Скрипт наскрізної перевірки готовності до релізу: послідовно запускає `typecheck`, `lint`, `lint:theme`, `test:unit`, `validate:srd` і `test:rules`, друкує підсумок і завершується з ненульовим кодом, якщо хоч один крок провалився.",
+      "tags": ["release", "quality-gate", "tooling", "ci-cd"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:firestore-tests/rules.test.ts",
+      "target": "function:firestore-tests/rules.test.ts:validCharacterSheet",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:firestore-tests/rules.test.ts",
+      "target": "function:firestore-tests/rules.test.ts:validDmCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:firestore-tests/rules.test.ts",
+      "target": "function:firestore-tests/rules.test.ts:validDmCampaignInvite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:firestore-tests/rules.test.ts",
+      "target": "function:firestore-tests/rules.test.ts:validDmCampaignInitiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:firestore-tests/rules.test.ts",
+      "target": "function:firestore-tests/rules.test.ts:validDmCampaignNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/createCampaignInvite.ts",
+      "target": "function:functions/src/createCampaignInvite.ts:createCampaignInvite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/createCampaignInvite.ts",
+      "target": "function:functions/src/createCampaignInvite.ts:createCampaignInvite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:functions/src/redeemCampaignInvite.ts",
+      "target": "function:functions/src/redeemCampaignInvite.ts:redeemCampaignInvite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:functions/src/redeemCampaignInvite.ts",
+      "target": "function:functions/src/redeemCampaignInvite.ts:redeemCampaignInvite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:scripts/lint-theme.mjs",
+      "target": "function:scripts/lint-theme.mjs:walk",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/lint-ui-tokens.mjs",
+      "target": "function:scripts/lint-ui-tokens.mjs:walk",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:firestore.rules",
+      "target": "file:firestore-tests/rules.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:firestore-tests/rules.test.ts",
+      "target": "file:firestore.rules",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:functions/vitest.config.ts",
+      "target": "file:functions/src/index.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:functions/vitest.config.ts",
+      "target": "file:functions/src/createCampaignInvite.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:functions/vitest.config.ts",
+      "target": "file:functions/src/redeemCampaignInvite.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:functions/src/index.ts",
+      "target": "file:functions/src/createCampaignInvite.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:functions/src/index.ts",
+      "target": "file:functions/src/redeemCampaignInvite.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:android/gradle/wrapper/gradle-wrapper.properties",
+      "target": "file:android/gradle/wrapper/gradle-wrapper.jar",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:android/gradlew",
+      "target": "file:android/gradle/wrapper/gradle-wrapper.jar",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:scripts/release-check.mjs",
+      "target": "file:firestore-tests/rules.test.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:scripts/release-check.mjs",
+      "target": "file:scripts/lint-theme.mjs",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

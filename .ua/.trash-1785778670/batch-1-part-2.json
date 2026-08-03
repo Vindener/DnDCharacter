@@ -1,0 +1,1542 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "type": "file",
+      "name": "campaignInitiativeRepository.ts",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "summary": "Репозиторій трекера бойової ініціативи кампанії: локальне сховище всіх трекерів, запис \"write-through\" у хмару, старт/оновлення/завершення ініціативи та підписка на зміни в реальному часі через Firestore.",
+      "tags": [
+        "repository",
+        "sync",
+        "firestore",
+        "offline-first",
+        "initiative",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "type": "file",
+      "name": "campaignNotesRepository.ts",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "summary": "Репозиторій нотаток кампанії DM: локально-перше сховище з чергою офлайн-операцій, міграція легасі-нотаток, мапінг Firestore-документів, рольовий доступ, підписка на зміни та вирішення конфліктів редагування нотаток кількома користувачами.",
+      "tags": [
+        "repository",
+        "sync",
+        "firestore",
+        "offline-first",
+        "notes",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "file",
+      "name": "campaignRepository.ts",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "summary": "Центральний репозиторій кампаній DM: локальне сховище, злиття списків кампаній, CRUD-операції (створення, перейменування, оновлення резюме, видалення), керування закріпленими монстрами/заклинаннями, запрошення редактора за email та підписка на всі доступні користувачу кампанії.",
+      "tags": [
+        "repository",
+        "sync",
+        "firestore",
+        "offline-first",
+        "campaign",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/navigation/DMNavigator.tsx",
+      "type": "file",
+      "name": "DMNavigator.tsx",
+      "filePath": "src/navigation/DMNavigator.tsx",
+      "summary": "Stack-навігатор розділу DM Workspace: реєструє екрани кампаній, деталей кампанії, нотаток, підготовки енкаунтера, огляду партії, швидкого редагування, спільних оновлень, калькулятора енкаунтерів та генератора луту.",
+      "tags": [
+        "entry-point",
+        "navigation",
+        "dm"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:mapCloudTracker",
+      "type": "function",
+      "name": "mapCloudTracker",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        29,
+        51
+      ],
+      "summary": "Перетворює Firestore-документ трекера ініціативи на локальну модель, мігруючи схему до останньої версії.",
+      "tags": [
+        "mapper",
+        "firestore",
+        "initiative"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:loadAllLocalTrackers",
+      "type": "function",
+      "name": "loadAllLocalTrackers",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        53,
+        63
+      ],
+      "summary": "Завантажує всі локально збережені трекери ініціативи кампаній з AsyncStorage.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "initiative"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:loadLocalCampaignInitiative",
+      "type": "function",
+      "name": "loadLocalCampaignInitiative",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        86,
+        89
+      ],
+      "summary": "Повертає локальний трекер ініціативи для конкретної кампанії за її id.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "initiative"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:buildCloudPayload",
+      "type": "function",
+      "name": "buildCloudPayload",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        95,
+        120
+      ],
+      "summary": "Формує payload трекера ініціативи для запису у Firestore, очищаючи undefined-поля перед відправкою.",
+      "tags": [
+        "firestore",
+        "mapper",
+        "initiative"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:writeThroughCloud",
+      "type": "function",
+      "name": "writeThroughCloud",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        128,
+        146
+      ],
+      "summary": "Записує трекер ініціативи напряму в Firestore (write-through), якщо доступна хмарна синхронізація.",
+      "tags": [
+        "sync",
+        "firestore",
+        "initiative"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:startCampaignInitiative",
+      "type": "function",
+      "name": "startCampaignInitiative",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        148,
+        167
+      ],
+      "summary": "Стартує новий трекер бойової ініціативи для кампанії з переданим списком бійців, зберігаючи локально та в хмарі.",
+      "tags": [
+        "repository",
+        "sync",
+        "initiative"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:updateCampaignInitiative",
+      "type": "function",
+      "name": "updateCampaignInitiative",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        169,
+        184
+      ],
+      "summary": "Оновлює частину стану активного трекера ініціативи кампанії (наприклад, поточний хід чи HP бійця).",
+      "tags": [
+        "repository",
+        "sync",
+        "initiative"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:endCampaignInitiative",
+      "type": "function",
+      "name": "endCampaignInitiative",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        186,
+        195
+      ],
+      "summary": "Завершує та прибирає активний трекер ініціативи кампанії локально та в хмарі.",
+      "tags": [
+        "repository",
+        "sync",
+        "initiative"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignInitiativeRepository.ts:subscribeCampaignInitiative",
+      "type": "function",
+      "name": "subscribeCampaignInitiative",
+      "filePath": "src/dm/repositories/campaignInitiativeRepository.ts",
+      "lineRange": [
+        197,
+        230
+      ],
+      "summary": "Підписується на зміни трекера ініціативи кампанії в реальному часі через Firestore `onSnapshot` та оновлює локальне сховище.",
+      "tags": [
+        "sync",
+        "firestore",
+        "realtime",
+        "initiative",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/navigation/DMNavigator.tsx:DMNavigator",
+      "type": "function",
+      "name": "DMNavigator",
+      "filePath": "src/navigation/DMNavigator.tsx",
+      "lineRange": [
+        40,
+        66
+      ],
+      "summary": "Компонент stack-навігатора, що реєструє всі екрани розділу DM Workspace (кампанії, деталі, нотатки, енкаунтери, партія, тощо).",
+      "tags": [
+        "entry-point",
+        "navigation",
+        "component"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:sanitizeNote",
+      "type": "function",
+      "name": "sanitizeNote",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        40,
+        52
+      ],
+      "summary": "Мігрує та валідує сирі дані нотатки кампанії зі сховища до останньої схеми.",
+      "tags": [
+        "validation",
+        "migration",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:mapCloudNote",
+      "type": "function",
+      "name": "mapCloudNote",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        54,
+        79
+      ],
+      "summary": "Перетворює Firestore-документ нотатки кампанії на локальну модель, мігруючи схему до актуальної версії.",
+      "tags": [
+        "mapper",
+        "firestore",
+        "notes"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:loadQueue",
+      "type": "function",
+      "name": "loadQueue",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        81,
+        93
+      ],
+      "summary": "Завантажує чергу відкладених офлайн-операцій над нотатками кампанії з AsyncStorage.",
+      "tags": [
+        "offline-first",
+        "queue",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:enqueue",
+      "type": "function",
+      "name": "enqueue",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        102,
+        113
+      ],
+      "summary": "Додає операцію над нотаткою до черги офлайн-синхронізації.",
+      "tags": [
+        "offline-first",
+        "queue",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:readLocalCampaignNotesFromStorage",
+      "type": "function",
+      "name": "readLocalCampaignNotesFromStorage",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        115,
+        128
+      ],
+      "summary": "Читає сирий список локальних нотаток кампанії з AsyncStorage без міграції легасі-формату.",
+      "tags": [
+        "offline-first",
+        "storage",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:ensureLegacyNotesMigrated",
+      "type": "function",
+      "name": "ensureLegacyNotesMigrated",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        130,
+        188
+      ],
+      "summary": "Одноразово мігрує нотатки зі старого (легасі) формату сховища до поточної версійованої схеми, зберігаючи результат назад.",
+      "tags": [
+        "migration",
+        "offline-first",
+        "notes"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:loadLocalCampaignNotes",
+      "type": "function",
+      "name": "loadLocalCampaignNotes",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        190,
+        193
+      ],
+      "summary": "Повертає локально збережені нотатки кампанії після забезпечення міграції легасі-даних.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:persistLocalCampaignNotes",
+      "type": "function",
+      "name": "persistLocalCampaignNotes",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        195,
+        204
+      ],
+      "summary": "Зберігає повний список локальних нотаток кампанії у AsyncStorage у версійованому конверті.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:buildCloudPayload",
+      "type": "function",
+      "name": "buildCloudPayload",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        233,
+        254
+      ],
+      "summary": "Формує payload нотатки кампанії для запису у Firestore.",
+      "tags": [
+        "firestore",
+        "mapper",
+        "notes"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:syncUpsert",
+      "type": "function",
+      "name": "syncUpsert",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        256,
+        291
+      ],
+      "summary": "Синхронізує локальну нотатку з Firestore, порівнюючи хмарний і локальний стан перед записом.",
+      "tags": [
+        "sync",
+        "firestore",
+        "notes"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:mergeRemoteIntoLocal",
+      "type": "function",
+      "name": "mergeRemoteIntoLocal",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        293,
+        335
+      ],
+      "summary": "Зливає вхідні зміни з Firestore-підписки в локальний список нотаток кампанії за id.",
+      "tags": [
+        "sync",
+        "conflict-resolution",
+        "notes"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:subscribeCampaignNotes",
+      "type": "function",
+      "name": "subscribeCampaignNotes",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        337,
+        372
+      ],
+      "summary": "Підписується на зміни нотаток кампанії в реальному часі через Firestore `onSnapshot` з рольовим доступом та злиттям у локальне сховище.",
+      "tags": [
+        "sync",
+        "firestore",
+        "realtime",
+        "notes",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:upsertCampaignNote",
+      "type": "function",
+      "name": "upsertCampaignNote",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        379,
+        422
+      ],
+      "summary": "Створює або оновлює нотатку кампанії локально та в хмарі (або ставить у чергу офлайн-операцій).",
+      "tags": [
+        "repository",
+        "sync",
+        "offline-first",
+        "notes"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:deleteCampaignNote",
+      "type": "function",
+      "name": "deleteCampaignNote",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        424,
+        437
+      ],
+      "summary": "Видаляє нотатку кампанії локально та з хмари (або ставить видалення в чергу офлайн-операцій).",
+      "tags": [
+        "repository",
+        "sync",
+        "offline-first",
+        "notes"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:flushCampaignNotesQueue",
+      "type": "function",
+      "name": "flushCampaignNotesQueue",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        439,
+        465
+      ],
+      "summary": "Обробляє чергу відкладених офлайн-операцій над нотатками після відновлення мережі.",
+      "tags": [
+        "sync",
+        "offline-first",
+        "queue",
+        "notes"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignNotesRepository.ts:resolveCampaignNoteConflict",
+      "type": "function",
+      "name": "resolveCampaignNoteConflict",
+      "filePath": "src/dm/repositories/campaignNotesRepository.ts",
+      "lineRange": [
+        467,
+        518
+      ],
+      "summary": "Вирішує конфлікт редагування нотатки кампанії кількома користувачами за вибраною стратегією або злитим вмістом.",
+      "tags": [
+        "conflict-resolution",
+        "sync",
+        "notes",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:sanitizeCampaign",
+      "type": "function",
+      "name": "sanitizeCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        45,
+        76
+      ],
+      "summary": "Валідує та нормалізує сирі дані кампанії зі сховища, підставляючи безпечні значення за замовчуванням.",
+      "tags": [
+        "validation",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:mapCloudCampaign",
+      "type": "function",
+      "name": "mapCloudCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        78,
+        103
+      ],
+      "summary": "Перетворює Firestore-документ кампанії на локальну модель.",
+      "tags": [
+        "mapper",
+        "firestore",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:persistLocalCampaigns",
+      "type": "function",
+      "name": "persistLocalCampaigns",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        105,
+        117
+      ],
+      "summary": "Зберігає повний список локальних кампаній у AsyncStorage та сповіщає про зміну.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "campaign"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:loadLocalCampaigns",
+      "type": "function",
+      "name": "loadLocalCampaigns",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        119,
+        135
+      ],
+      "summary": "Завантажує та санітизує всі локально збережені кампанії з AsyncStorage.",
+      "tags": [
+        "offline-first",
+        "repository",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:mergeCampaigns",
+      "type": "function",
+      "name": "mergeCampaigns",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        137,
+        150
+      ],
+      "summary": "Зливає кілька списків кампаній (локальний та хмарний) за id, віддаючи перевагу найновішим даним.",
+      "tags": [
+        "sync",
+        "conflict-resolution",
+        "campaign"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:buildLocalCampaign",
+      "type": "function",
+      "name": "buildLocalCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        152,
+        169
+      ],
+      "summary": "Створює новий об’єкт кампанії з дефолтними значеннями (id, власник, порожні списки) на основі назви.",
+      "tags": [
+        "factory",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:buildCloudPayload",
+      "type": "function",
+      "name": "buildCloudPayload",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        175,
+        189
+      ],
+      "summary": "Формує payload кампанії для запису у Firestore.",
+      "tags": [
+        "firestore",
+        "mapper",
+        "campaign"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:upsertCampaign",
+      "type": "function",
+      "name": "upsertCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        191,
+        218
+      ],
+      "summary": "Створює або оновлює кампанію локально та в хмарі (якщо доступна синхронізація).",
+      "tags": [
+        "repository",
+        "sync",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:ensureCampaignForName",
+      "type": "function",
+      "name": "ensureCampaignForName",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        220,
+        245
+      ],
+      "summary": "Знаходить існуючу кампанію за назвою або створює нову, повертаючи готовий об’єкт кампанії.",
+      "tags": [
+        "repository",
+        "campaign",
+        "factory"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:renameCampaign",
+      "type": "function",
+      "name": "renameCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        247,
+        281
+      ],
+      "summary": "Перейменовує кампанію, оновлюючи id/slug і синхронізуючи зміну локально та в хмарі.",
+      "tags": [
+        "repository",
+        "sync",
+        "campaign"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:updateCampaignSummary",
+      "type": "function",
+      "name": "updateCampaignSummary",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        283,
+        326
+      ],
+      "summary": "Оновлює резюме кампанії (опис, оцінку рівня партії тощо) локально та в хмарі.",
+      "tags": [
+        "repository",
+        "sync",
+        "campaign"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:deleteCampaign",
+      "type": "function",
+      "name": "deleteCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        332,
+        347
+      ],
+      "summary": "Видаляє кампанію локально та з хмари.",
+      "tags": [
+        "repository",
+        "sync",
+        "campaign"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:toggleCampaignPinnedId",
+      "type": "function",
+      "name": "toggleCampaignPinnedId",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        349,
+        382
+      ],
+      "summary": "Перемикає (додає/прибирає) закріплений id (монстра чи заклинання) у вказаному полі кампанії.",
+      "tags": [
+        "repository",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:togglePinnedMonsterForCampaign",
+      "type": "function",
+      "name": "togglePinnedMonsterForCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        384,
+        386
+      ],
+      "summary": "Публічна обгортка перемикання закріпленого монстра для кампанії.",
+      "tags": [
+        "repository",
+        "campaign",
+        "bestiary"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:togglePinnedSpellForCampaign",
+      "type": "function",
+      "name": "togglePinnedSpellForCampaign",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        388,
+        390
+      ],
+      "summary": "Публічна обгортка перемикання закріпленого заклинання для кампанії.",
+      "tags": [
+        "repository",
+        "campaign",
+        "spellbook"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:addCampaignEditorByEmail",
+      "type": "function",
+      "name": "addCampaignEditorByEmail",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        396,
+        419
+      ],
+      "summary": "Додає редактора кампанії за email, шукаючи користувача через індекс email та оновлюючи список editors.",
+      "tags": [
+        "repository",
+        "collaboration",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:getCampaignForLink",
+      "type": "function",
+      "name": "getCampaignForLink",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        421,
+        423
+      ],
+      "summary": "Повертає кампанію зі списку, що відповідає переданому посиланню персонажа на кампанію.",
+      "tags": [
+        "repository",
+        "campaign"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:src/dm/repositories/campaignRepository.ts:subscribeAccessibleCampaigns",
+      "type": "function",
+      "name": "subscribeAccessibleCampaigns",
+      "filePath": "src/dm/repositories/campaignRepository.ts",
+      "lineRange": [
+        425,
+        495
+      ],
+      "summary": "Підписується на всі кампанії, доступні поточному користувачу (як власнику чи редактору) через Firestore `onSnapshot`, зливаючи їх у локальне сховище.",
+      "tags": [
+        "sync",
+        "firestore",
+        "realtime",
+        "campaign",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "file:src/shared/helpers/stripUndefinedDeep.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/dm/domain/campaign/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/services/connections.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/services/users.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/modules/Header/Header.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DM.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMCampaigns.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMEncounterPrep.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMPartyOverview.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMQuickEdit.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMSharedUpdates.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:mapCloudTracker",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:loadAllLocalTrackers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:loadLocalCampaignInitiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:buildCloudPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:writeThroughCloud",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:startCampaignInitiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:updateCampaignInitiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:endCampaignInitiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:subscribeCampaignInitiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "function:src/navigation/DMNavigator.tsx:DMNavigator",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:sanitizeNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:mapCloudNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:loadQueue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:enqueue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:readLocalCampaignNotesFromStorage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:ensureLegacyNotesMigrated",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:loadLocalCampaignNotes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:persistLocalCampaignNotes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:buildCloudPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:syncUpsert",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:mergeRemoteIntoLocal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:subscribeCampaignNotes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:upsertCampaignNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:deleteCampaignNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:flushCampaignNotesQueue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:resolveCampaignNoteConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:sanitizeCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:mapCloudCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:persistLocalCampaigns",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:loadLocalCampaigns",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:mergeCampaigns",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:buildLocalCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:buildCloudPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:upsertCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:ensureCampaignForName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:renameCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:updateCampaignSummary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:deleteCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:toggleCampaignPinnedId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:togglePinnedMonsterForCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:togglePinnedSpellForCampaign",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:addCampaignEditorByEmail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:getCampaignForLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:subscribeAccessibleCampaigns",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:loadLocalCampaignInitiative",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:startCampaignInitiative",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:updateCampaignInitiative",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:endCampaignInitiative",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:subscribeCampaignInitiative",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:loadLocalCampaignNotes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:subscribeCampaignNotes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:upsertCampaignNote",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:deleteCampaignNote",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:flushCampaignNotesQueue",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "function:src/dm/repositories/campaignNotesRepository.ts:resolveCampaignNoteConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:loadLocalCampaigns",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:upsertCampaign",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:ensureCampaignForName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:renameCampaign",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:updateCampaignSummary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:deleteCampaign",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:togglePinnedMonsterForCampaign",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:togglePinnedSpellForCampaign",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:addCampaignEditorByEmail",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:getCampaignForLink",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "function:src/dm/repositories/campaignRepository.ts:subscribeAccessibleCampaigns",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "function:src/navigation/DMNavigator.tsx:DMNavigator",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "target": "file:src/dm/repositories/campaignInitiativeRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/dm/repositories/campaignRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "function:src/dm/repositories/campaignRepository.ts:togglePinnedMonsterForCampaign",
+      "target": "function:src/dm/repositories/campaignRepository.ts:toggleCampaignPinnedId",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/dm/repositories/campaignRepository.ts:togglePinnedSpellForCampaign",
+      "target": "function:src/dm/repositories/campaignRepository.ts:toggleCampaignPinnedId",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DM.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:src/navigation/DMNavigator.tsx",
+      "target": "file:src/screens/DM/DMCampaigns.tsx",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

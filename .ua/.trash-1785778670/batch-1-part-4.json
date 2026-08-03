@@ -1,0 +1,670 @@
+{
+  "nodes": [
+    {
+      "id": "file:src/repositories/syncPathFieldMap.test.ts",
+      "type": "file",
+      "name": "syncPathFieldMap.test.ts",
+      "filePath": "src/repositories/syncPathFieldMap.test.ts",
+      "summary": "Юніт-тести мапінгу шляхів синхронізації персонажа на шляхи полів Firestore.",
+      "tags": [
+        "test",
+        "sync",
+        "mapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:src/repositories/syncPathFieldMap.ts",
+      "type": "file",
+      "name": "syncPathFieldMap.ts",
+      "filePath": "src/repositories/syncPathFieldMap.ts",
+      "summary": "Мапить локальні шляхи змін персонажа (diff paths) на відповідні шляхи полів документа Firestore для точкових оновлень замість перезапису всього документа.",
+      "tags": [
+        "utility",
+        "sync",
+        "mapper",
+        "firestore"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:src/screens/DM/DM.tsx",
+      "type": "file",
+      "name": "DM.tsx",
+      "filePath": "src/screens/DM/DM.tsx",
+      "summary": "Головний екран DM Workspace: список кампаній і персонажів, закріплені довідники, статус синхронізації та вхід до підекранів DM-розділу.",
+      "tags": [
+        "screen",
+        "dm",
+        "component",
+        "entry-point"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "type": "file",
+      "name": "DMCampaignDetail.tsx",
+      "filePath": "src/screens/DM/DMCampaignDetail.tsx",
+      "summary": "Екран деталей кампанії DM: партія персонажів, енкаунтери, запрошення редакторів, статус синхронізації та телеметрія подій кампанії.",
+      "tags": [
+        "screen",
+        "dm",
+        "component",
+        "campaign",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "type": "file",
+      "name": "DMCampaignNotes.tsx",
+      "filePath": "src/screens/DM/DMCampaignNotes.tsx",
+      "summary": "Екран нотаток кампанії DM з відображенням статусу синхронізації та UI вирішення конфліктів редагування нотаток кількома користувачами.",
+      "tags": [
+        "screen",
+        "dm",
+        "component",
+        "notes",
+        "collaboration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:src/screens/DM/DMCampaigns.tsx",
+      "type": "file",
+      "name": "DMCampaigns.tsx",
+      "filePath": "src/screens/DM/DMCampaigns.tsx",
+      "summary": "Екран списку кампаній DM: створення, перейменування, запрошення редактора за email та навігація до деталей кампанії.",
+      "tags": [
+        "screen",
+        "dm",
+        "component",
+        "campaign"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/repositories/syncPathFieldMap.ts:mapSyncPathsToFieldPaths",
+      "type": "function",
+      "name": "mapSyncPathsToFieldPaths",
+      "filePath": "src/repositories/syncPathFieldMap.ts",
+      "lineRange": [
+        47,
+        59
+      ],
+      "summary": "Перетворює список локальних шляхів змін персонажа на список шляхів полів Firestore-документа для точкового `update()`.",
+      "tags": [
+        "utility",
+        "sync",
+        "mapper",
+        "firestore"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:src/screens/DM/DM.tsx:DM",
+      "type": "function",
+      "name": "DM",
+      "filePath": "src/screens/DM/DM.tsx",
+      "lineRange": [
+        44,
+        513
+      ],
+      "summary": "Компонент головного екрана DM Workspace: збирає кампанії, персонажів, закріплені довідники та статус синхронізації з кількох сторів і репозиторіїв.",
+      "tags": [
+        "screen",
+        "component",
+        "dm"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/screens/DM/DMCampaignDetail.tsx:DMCampaignDetail",
+      "type": "function",
+      "name": "DMCampaignDetail",
+      "filePath": "src/screens/DM/DMCampaignDetail.tsx",
+      "lineRange": [
+        32,
+        691
+      ],
+      "summary": "Компонент екрана деталей кампанії: партія, енкаунтери, запрошення редакторів, статус синхронізації та обробка помилок доступу.",
+      "tags": [
+        "screen",
+        "component",
+        "dm",
+        "campaign"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/screens/DM/DMCampaignNotes.tsx:DMCampaignNotes",
+      "type": "function",
+      "name": "DMCampaignNotes",
+      "filePath": "src/screens/DM/DMCampaignNotes.tsx",
+      "lineRange": [
+        28,
+        417
+      ],
+      "summary": "Компонент екрана нотаток кампанії з відображенням статусу синхронізації та вирішенням конфліктів редагування.",
+      "tags": [
+        "screen",
+        "component",
+        "dm",
+        "notes"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:src/screens/DM/DMCampaigns.tsx:DMCampaigns",
+      "type": "function",
+      "name": "DMCampaigns",
+      "filePath": "src/screens/DM/DMCampaigns.tsx",
+      "lineRange": [
+        27,
+        365
+      ],
+      "summary": "Компонент екрана списку кампаній: створення, перейменування, запрошення редактора та навігація до деталей.",
+      "tags": [
+        "screen",
+        "component",
+        "dm",
+        "campaign"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:src/repositories/syncPathFieldMap.test.ts",
+      "target": "file:src/repositories/syncPathFieldMap.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/context/AppRole-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/context/Monster-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/context/Spellbook-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/context/Sync-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/navigation/DMNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/screens/DM/PinnedReferencesList.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/screens/DM/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/shared/helpers/collaboration/status.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/shared/helpers/mapCloudCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/shared/services/auth/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "file:src/types/Product.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/context/Monster-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/context/Spellbook-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/context/Sync-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/dm/repositories/campaignEncountersRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/navigation/DMNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/screens/DM/PinnedReferencesList.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/screens/DM/adapters/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/screens/DM/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/services/campaignInvite.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/services/characterSyncCoordinator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/shared/components/Modal/Modal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/shared/services/telemetry/productTelemetry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/context/AppRole-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/context/DmSettings-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/navigation/DMNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/screens/DM/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/shared/helpers/collaboration/status.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/navigation/DMNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/screens/DM/adapters/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/screens/DM/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/services/campaignInvite.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "file:src/shared/components/Modal/Modal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/syncPathFieldMap.ts",
+      "target": "function:src/repositories/syncPathFieldMap.ts:mapSyncPathsToFieldPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/DM/DM.tsx",
+      "target": "function:src/screens/DM/DM.tsx:DM",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignDetail.tsx",
+      "target": "function:src/screens/DM/DMCampaignDetail.tsx:DMCampaignDetail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaignNotes.tsx",
+      "target": "function:src/screens/DM/DMCampaignNotes.tsx:DMCampaignNotes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/screens/DM/DMCampaigns.tsx",
+      "target": "function:src/screens/DM/DMCampaigns.tsx:DMCampaigns",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/repositories/syncPathFieldMap.ts",
+      "target": "function:src/repositories/syncPathFieldMap.ts:mapSyncPathsToFieldPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/repositories/syncPathFieldMap.ts",
+      "target": "file:src/repositories/syncPathFieldMap.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}
