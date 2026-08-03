@@ -1,4 +1,5 @@
 {
+  "title": "Initiative",
   "placeholders": {
     "name": "Name",
     "roll": "Roll",
@@ -11,7 +12,8 @@
     "returnToFight": "Return to fight",
     "markDefeated": "Mark defeated",
     "deleteRow": "Delete row",
-    "addHeroFromList": "Add hero from list"
+    "addHeroFromList": "Add hero from list",
+    "rollDice": "Roll dice"
   },
   "heroPicker": {
     "title": "Choose hero",

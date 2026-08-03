@@ -1,4 +1,5 @@
 {
+  "title": "Ініціатива",
   "placeholders": {
     "name": "Ім'я",
     "roll": "Кидок",
@@ -11,7 +12,8 @@
     "returnToFight": "Повернути в бій",
     "markDefeated": "Позначити переможеним",
     "deleteRow": "Видалити рядок",
-    "addHeroFromList": "Додати героя з переліку"
+    "addHeroFromList": "Додати героя з переліку",
+    "rollDice": "Кинути кубик"
   },
   "heroPicker": {
     "title": "Обрати героя",
