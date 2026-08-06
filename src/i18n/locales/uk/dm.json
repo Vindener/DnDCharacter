@@ -131,6 +131,10 @@
     "adjustedXp": "Скоригований досвід: {{xp}}",
     "xpPerPlayer": "Досвід на гравця: {{xp}}",
     "startInitiative": "Почати ініціативу",
+    "confirmNoPlayersTitle": "Жодного персонажа не обрано",
+    "confirmNoPlayersMessage": "До сутички не додано жодного гравця. Почати лише з монстрами?",
+    "confirmNoPlayersCancel": "Скасувати",
+    "confirmNoPlayersContinue": "Почати без гравців",
     "saveToCampaign": "Зберегти в кампанію",
     "savedToCampaign": "Збережено в історію кампанії • {{status}}",
     "difficulties": {

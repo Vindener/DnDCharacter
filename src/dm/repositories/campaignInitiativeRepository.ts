@@ -72,15 +72,37 @@ async function persistAllLocalTrackers(trackers: InitiativeTracker[]): Promise<v
   }
 }
 
+// endCampaignInitiative's removeLocalTracker and the writeThroughCloud call from a
+// subsequent startCampaignInitiative both do an unguarded load -> filter -> persist against
+// the same AsyncStorage key. Without serializing them, "end combat" immediately followed by
+// "start a new encounter" (the normal way to run a second fight in one session) can interleave:
+// remove's persist (computed before the new tracker existed) finishes after replace's persist,
+// silently wiping the just-started encounter back out of local storage. Queuing every
+// mutation through this promise chain keeps them strictly ordered.
+let localTrackerMutationQueue: Promise<unknown> = Promise.resolve();
+
+function withLocalTrackerLock<T>(task: () => Promise<T>): Promise<T> {
+  const run = localTrackerMutationQueue.then(task, task);
+  localTrackerMutationQueue = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  return run;
+}
+
 async function replaceLocalTracker(tracker: InitiativeTracker): Promise<void> {
-  const all = await loadAllLocalTrackers();
-  const next = [...all.filter((item) => item.campaignId !== tracker.campaignId), tracker];
-  await persistAllLocalTrackers(next);
+  await withLocalTrackerLock(async () => {
+    const all = await loadAllLocalTrackers();
+    const next = [...all.filter((item) => item.campaignId !== tracker.campaignId), tracker];
+    await persistAllLocalTrackers(next);
+  });
 }
 
 async function removeLocalTracker(campaignId: string): Promise<void> {
-  const all = await loadAllLocalTrackers();
-  await persistAllLocalTrackers(all.filter((item) => item.campaignId !== campaignId));
+  await withLocalTrackerLock(async () => {
+    const all = await loadAllLocalTrackers();
+    await persistAllLocalTrackers(all.filter((item) => item.campaignId !== campaignId));
+  });
 }
 
 export async function loadLocalCampaignInitiative(campaignId: string): Promise<InitiativeTracker | null> {

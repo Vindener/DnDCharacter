@@ -131,6 +131,10 @@
     "adjustedXp": "Adjusted XP: {{xp}}",
     "xpPerPlayer": "XP per player: {{xp}}",
     "startInitiative": "Start initiative",
+    "confirmNoPlayersTitle": "No characters selected",
+    "confirmNoPlayersMessage": "No players are added to this encounter. Start with monsters only?",
+    "confirmNoPlayersCancel": "Cancel",
+    "confirmNoPlayersContinue": "Start without players",
     "saveToCampaign": "Save to campaign",
     "savedToCampaign": "Saved to campaign history • {{status}}",
     "difficulties": {

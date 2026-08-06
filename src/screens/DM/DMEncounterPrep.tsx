@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { Alert, ScrollView, View, Text, Pressable, TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
@@ -278,8 +278,26 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
     setSaveStatus(t('encounterPrep.savedToCampaign', { status: formatSyncStatus(saved.syncStatus) }));
   };
 
+  // Starting with zero players used to happen silently (e.g. the GM stayed on the "campaign
+  // party" tab while these characters weren't linked to any campaign yet) and only the
+  // monsters would show up on the Initiative board with no indication why. Force an explicit
+  // confirmation instead of guessing the GM's intent.
+  const confirmNoPlayers = () =>
+    new Promise<boolean>((resolve) => {
+      Alert.alert(
+        t('encounterPrep.confirmNoPlayersTitle'),
+        t('encounterPrep.confirmNoPlayersMessage'),
+        [
+          { text: t('encounterPrep.confirmNoPlayersCancel'), style: 'cancel', onPress: () => resolve(false) },
+          { text: t('encounterPrep.confirmNoPlayersContinue'), onPress: () => resolve(true) },
+        ],
+        { cancelable: false },
+      );
+    });
+
   const startInitiative = async () => {
     if (!selectedCampaignId) return;
+    if (!selectedParty.length && !(await confirmNoPlayers())) return;
 
     const rolledPlayers = selectedParty.map((player) => {
       const mod = Number(player.initiative) || 0;
