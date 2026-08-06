@@ -1,0 +1,26 @@
+src/i18n/locales/en/dm.json
+  s_086a96e4ab6632::t_99ad3217e43077 134-137
+src/screens/DM/DMEncounterPrep.tsx
+  s_086a96e4ab6632::t_d284b5dbee1430 2
+  s_086a96e4ab6632::t_595e737578cc14 281-297,300
+src/dm/repositories/campaignInitiativeRepository.ts
+  s_086a96e4ab6632::t_d75603c7ea19c3 75-92,94-98,102-105
+src/i18n/locales/uk/dm.json
+  s_086a96e4ab6632::t_2429e8677aff35 134-137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "312acd89615afe48840618197605b11edc4c6952",
+  "prompts": {},
+  "sessions": {
+    "s_086a96e4ab6632": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e99ef8e-6f5a-4d7b-b618-d92c31968cec",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
