@@ -44,7 +44,7 @@ const LocalInitiativeBoard: React.FC = () => {
   const [isHeroPickerVisible, setHeroPickerVisible] = useState(false);
 
   const [rollingItemId, setRollingItemId] = useState<string | null>(null);
-  const lastRollTotalRef = useRef(0);
+  const lastRollTotalRef = useRef<number | null>(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -88,11 +88,16 @@ const LocalInitiativeBoard: React.FC = () => {
   const rollPreset = useMemo<DiceRollerPreset>(() => ({ id: rollingItemId || 'initiative-roll', dice: 'd20' }), [rollingItemId]);
 
   const closeRollModal = useCallback(() => {
-    if (rollingItemId) {
+    if (rollingItemId && lastRollTotalRef.current !== null) {
       handleChangeById(rollingItemId, 'roll', String(lastRollTotalRef.current));
     }
     setRollingItemId(null);
   }, [rollingItemId, handleChangeById]);
+
+  const openRollModal = useCallback((id: string) => {
+    lastRollTotalRef.current = null;
+    setRollingItemId(id);
+  }, []);
 
   const toNonNegativeInt = (raw: string) => {
     const digits = raw.replace(/[^\d]/g, '');
@@ -150,7 +155,7 @@ const LocalInitiativeBoard: React.FC = () => {
               <TouchableOpacity
                 style={styles.rollDiceButton}
                 disabled={item.defeated}
-                onPress={() => setRollingItemId(item.id)}
+                onPress={() => openRollModal(item.id)}
                 accessibilityLabel={t('actions.rollDice')}
               >
                 <MaterialCommunityIcons name='dice-d20-outline' size={20} color={colors.text} />
@@ -211,6 +216,7 @@ const LocalInitiativeBoard: React.FC = () => {
       handleChangeById,
       handleRemove,
       items,
+      openRollModal,
       styles.row,
       styles.rowDefeated,
       styles.rowContent,
