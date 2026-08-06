@@ -1,0 +1,30 @@
+src/i18n/locales/uk/settings.json
+  h_dfa0da26a12699 78
+src/screens/Initiative/LocalInitiativeBoard.tsx
+  s_086a96e4ab6632::t_632e23fdcc077c 47
+  s_086a96e4ab6632::t_abb12a24b84755 91,97-100
+  s_086a96e4ab6632::t_d0da42f6bb8c76 158
+  s_086a96e4ab6632::t_7010c49fa1cbd2 219
+  s_086a96e4ab6632::t_3088c34a6e2618 101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "f863ab2312885826b41927d8f3bb48e5a31c7f30",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_086a96e4ab6632": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e99ef8e-6f5a-4d7b-b618-d92c31968cec",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
