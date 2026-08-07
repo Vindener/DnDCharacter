@@ -1,0 +1,22 @@
+src/screens/Initiative/LocalInitiativeBoard.tsx
+  s_5efcbfcf68f16f::t_6866b78f9ca70f 3
+  s_5efcbfcf68f16f::t_70dca828ba57df 37
+  s_5efcbfcf68f16f::t_bacb7d1ab61cef 60
+  s_5efcbfcf68f16f::t_5134c0a3f8d326 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "af92aaae8831fefea1f31122344c832f6b7a73aa",
+  "prompts": {},
+  "sessions": {
+    "s_5efcbfcf68f16f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3bb9ebc6-aeb0-41e2-a20f-2dde17295a1b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
