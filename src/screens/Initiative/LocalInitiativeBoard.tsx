@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { ScrollView, TouchableOpacity, View, Text } from 'react-native';
+import { uuid } from 'expo-modules-core';
 import { useTranslation } from 'react-i18next';
 import useCharacterStore from '@/context/Character-store';
 import { useFocusEffect } from '@react-navigation/native';
@@ -33,7 +34,7 @@ const LocalInitiativeBoard: React.FC = () => {
   const styles = getInitiativeStyles(colors);
   const dmStyles = getDmStyles(colors);
 
-  const [items, setItems] = useState<InitiativeItem[]>([{ id: Date.now().toString(), name: '', roll: '', hits: '' }]);
+  const [items, setItems] = useState<InitiativeItem[]>([{ id: uuid.v4(), name: '', roll: '', hits: '' }]);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [hitsEnabled, setHitsEnabled] = useState<boolean>(false);
@@ -56,14 +57,14 @@ const LocalInitiativeBoard: React.FC = () => {
     (heroId: string) => {
       const hero = characters.find((c) => c.id === heroId);
       if (!hero) return;
-      setItems((prev) => [{ id: `${Date.now()}`, name: hero.name || t('heroPicker.fallbackName'), roll: '', hits: '' }, ...prev]);
+      setItems((prev) => [{ id: uuid.v4(), name: hero.name || t('heroPicker.fallbackName'), roll: '', hits: '' }, ...prev]);
       setHeroPickerVisible(false);
     },
     [characters, t],
   );
 
   const handleAdd = useCallback(() => {
-    setItems((prev) => [{ id: `${Date.now()}`, name: '', roll: '', hits: '' }, ...prev]);
+    setItems((prev) => [{ id: uuid.v4(), name: '', roll: '', hits: '' }, ...prev]);
   }, []);
 
   const handleRemove = useCallback((id: string) => {
