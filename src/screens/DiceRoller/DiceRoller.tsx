@@ -127,51 +127,62 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
       : styles.resultNeutral;
   const isCountLocked = mode !== 'normal';
 
-  const animateRoll = useCallback((onComplete: () => void) => {
-    setIsRolling(true);
-    pulse.setValue(0.88);
-    Animated.sequence([
-      Animated.timing(pulse, { toValue: 1.08, duration: 110, useNativeDriver: true }),
-      Animated.timing(pulse, { toValue: 0.94, duration: 90, useNativeDriver: true }),
-      Animated.timing(pulse, { toValue: 1, duration: 100, useNativeDriver: true }),
-    ]).start(() => {
-      setIsRolling(false);
-      onComplete();
-    });
-  }, [pulse]);
+  const animateRoll = useCallback(
+    (onComplete: () => void) => {
+      setIsRolling(true);
+      pulse.setValue(0.88);
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 1.08, duration: 110, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 0.94, duration: 90, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 1, duration: 100, useNativeDriver: true }),
+      ]).start(() => {
+        setIsRolling(false);
+        onComplete();
+      });
+    },
+    [pulse],
+  );
 
-  const commitResult = useCallback((next: DiceRollResult) => {
-    setResult(next);
-    setHistory((prev) => [next, ...prev].slice(0, 20));
-    onRollResult?.(next);
-  }, [onRollResult]);
+  const commitResult = useCallback(
+    (next: DiceRollResult) => {
+      setResult(next);
+      setHistory((prev) => [next, ...prev].slice(0, 20));
+      onRollResult?.(next);
+    },
+    [onRollResult],
+  );
 
-  const performRollFromConfig = useCallback((config: RollExecutionConfig) => {
-    onRollPress?.();
-    setError('');
-    animateRoll(() => {
-      try {
-        const formula = config.customFormula.trim();
-        const formulaModifier = config.modifier + (config.includeProficiency ? config.proficiencyBonus : 0);
-        const next = formula
-          ? rollFormula({ formula: appendFormulaModifier(formula, formulaModifier), label: config.label ?? t('labels.customRoll') })
-          : rollDice({
-              dice: config.dice,
-              count: config.mode === 'normal' ? config.count : 1,
-              modifier: config.modifier,
-              proficiencyBonus: config.proficiencyBonus,
-              includeProficiency: config.includeProficiency,
-              mode: config.mode,
-              label: config.label ?? t('labels.diceRoll', {
-                dice: `${config.mode === 'normal' ? config.count : 1}${config.dice}`.toUpperCase(),
-              }),
-            });
-        commitResult(next);
-      } catch (caught) {
-        setError(caught instanceof Error ? caught.message : t('errors.rollFailed'));
-      }
-    });
-  }, [animateRoll, commitResult, onRollPress, t]);
+  const performRollFromConfig = useCallback(
+    (config: RollExecutionConfig) => {
+      onRollPress?.();
+      setError('');
+      animateRoll(() => {
+        try {
+          const formula = config.customFormula.trim();
+          const formulaModifier = config.modifier + (config.includeProficiency ? config.proficiencyBonus : 0);
+          const next = formula
+            ? rollFormula({ formula: appendFormulaModifier(formula, formulaModifier), label: config.label ?? t('labels.customRoll') })
+            : rollDice({
+                dice: config.dice,
+                count: config.mode === 'normal' ? config.count : 1,
+                modifier: config.modifier,
+                proficiencyBonus: config.proficiencyBonus,
+                includeProficiency: config.includeProficiency,
+                mode: config.mode,
+                label:
+                  config.label ??
+                  t('labels.diceRoll', {
+                    dice: `${config.mode === 'normal' ? config.count : 1}${config.dice}`.toUpperCase(),
+                  }),
+              });
+          commitResult(next);
+        } catch (caught) {
+          setError(caught instanceof Error ? caught.message : t('errors.rollFailed'));
+        }
+      });
+    },
+    [animateRoll, commitResult, onRollPress, t],
+  );
 
   useEffect(() => {
     if (!preset) {
@@ -295,7 +306,9 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
           >
             <Text style={styles.stepperText}>-</Text>
           </Pressable>
-          <Text testID='diceRoller.count.value' style={styles.stepperValue}>{diceCount}</Text>
+          <Text testID='diceRoller.count.value' style={styles.stepperValue}>
+            {diceCount}
+          </Text>
           <Pressable
             testID='diceRoller.count.increment'
             style={[styles.stepperButton, isCountLocked ? styles.stepperButtonDisabled : null]}
@@ -349,11 +362,11 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('labels.mode')}</Text>
         <View style={styles.segmented}>
-          {MODE_OPTIONS.map((item) => (
+          {MODE_OPTIONS.map((item, index) => (
             <Pressable
               key={item}
               testID={`diceRoller.mode.${item}`}
-              style={[styles.segment, mode === item ? styles.segmentActive : null]}
+              style={[styles.segment, index > 0 ? styles.segmentDivider : null, mode === item ? styles.segmentActive : null]}
               onPress={() => handleModeChange(item)}
               android_ripple={{ color: colors.ripple }}
             >

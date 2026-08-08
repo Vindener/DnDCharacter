@@ -205,6 +205,10 @@ export const getStyles = (c: ThemeColors) =>
       justifyContent: 'center',
       paddingHorizontal: sp(6),
     },
+    segmentDivider: {
+      borderLeftWidth: 1,
+      borderLeftColor: c.border,
+    },
     segmentActive: {
       backgroundColor: c.primary,
     },

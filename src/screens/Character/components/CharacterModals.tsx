@@ -31,8 +31,6 @@ type CharacterModalsProps = Pick<
   | 'setLevelDraftStat'
   | 'cancelLevelChange'
   | 'confirmLevelChange'
-  | 'isDiceModalVisible'
-  | 'setIsDiceModalVisible'
   | 'weaponRollRequest'
   | 'closeWeaponRollModal'
   | 'handleContextRollResult'
@@ -114,8 +112,6 @@ function CharacterModalsBase({
   setLevelDraftStat,
   cancelLevelChange,
   confirmLevelChange,
-  isDiceModalVisible,
-  setIsDiceModalVisible,
   weaponRollRequest,
   closeWeaponRollModal,
   handleContextRollResult,
@@ -160,13 +156,8 @@ function CharacterModalsBase({
   applyShortRestRolls,
 }: CharacterModalsProps) {
   const { t } = useTranslation('character');
-  const [diceModalScrollSignal, setDiceModalScrollSignal] = React.useState(0);
   const [contextRollScrollSignal, setContextRollScrollSignal] = React.useState(0);
   const [restRollScrollSignal, setRestRollScrollSignal] = React.useState(0);
-
-  const scrollDiceModalToTop = React.useCallback(() => {
-    setDiceModalScrollSignal((prev) => prev + 1);
-  }, []);
 
   const scrollContextRollModalToTop = React.useCallback(() => {
     setContextRollScrollSignal((prev) => prev + 1);
@@ -299,9 +290,12 @@ function CharacterModalsBase({
     };
   }, [diceSides, restStep, rollsNeeded, shortRestFormula, shortRestHealingModifier]);
 
-  const handleShortRestRollResult = React.useCallback((result: DiceRollResult) => {
-    setRollResults(result.rolls.slice(0, rollsNeeded));
-  }, [rollsNeeded, setRollResults]);
+  const handleShortRestRollResult = React.useCallback(
+    (result: DiceRollResult) => {
+      setRollResults(result.rolls.slice(0, rollsNeeded));
+    },
+    [rollsNeeded, setRollResults],
+  );
 
   return (
     <>
@@ -326,7 +320,12 @@ function CharacterModalsBase({
         />
       </Modal>
 
-      <Modal isVisible={isTempHpModalVisible} onClose={() => setIsTempHpModalVisible(false)} onSubmit={saveTempHp} title={t('modals.tempHp.title')}>
+      <Modal
+        isVisible={isTempHpModalVisible}
+        onClose={() => setIsTempHpModalVisible(false)}
+        onSubmit={saveTempHp}
+        title={t('modals.tempHp.title')}
+      >
         <Text style={styles.modalLabel}>{t('modals.tempHp.value')}</Text>
         <RNTextInput
           value={tempShieldInput}
@@ -413,13 +412,13 @@ function CharacterModalsBase({
           placeholderTextColor={colors.textSecondary}
         />
 
-        <Pressable style={[styles.secondaryAction, styles.levelModalSubmit]} onPress={confirmLevelChange} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={[styles.secondaryAction, styles.levelModalSubmit]}
+          onPress={confirmLevelChange}
+          android_ripple={{ color: colors.ripple }}
+        >
           <Text style={styles.secondaryActionText}>{t('modals.level.save')}</Text>
         </Pressable>
-      </Modal>
-
-      <Modal isVisible={isDiceModalVisible} onClose={() => setIsDiceModalVisible(false)} scrollToTopSignal={diceModalScrollSignal}>
-        <DiceRollerPanel embedded onRollPress={scrollDiceModalToTop} />
       </Modal>
 
       <Modal
@@ -441,7 +440,12 @@ function CharacterModalsBase({
         ) : null}
       </Modal>
 
-      <Modal isVisible={isConditionModalVisible} onClose={() => setIsConditionModalVisible(false)} onSubmit={addCondition} title={t('modals.condition.title')}>
+      <Modal
+        isVisible={isConditionModalVisible}
+        onClose={() => setIsConditionModalVisible(false)}
+        onSubmit={addCondition}
+        title={t('modals.condition.title')}
+      >
         <Text style={styles.modalLabel}>{t('modals.condition.label')}</Text>
         <RNTextInput
           value={conditionInput}
@@ -452,7 +456,12 @@ function CharacterModalsBase({
         />
       </Modal>
 
-      <Modal isVisible={isQuickNoteModalVisible} onClose={() => setIsQuickNoteModalVisible(false)} onSubmit={addQuickSessionNote} title={t('modals.quickNote.title')}>
+      <Modal
+        isVisible={isQuickNoteModalVisible}
+        onClose={() => setIsQuickNoteModalVisible(false)}
+        onSubmit={addQuickSessionNote}
+        title={t('modals.quickNote.title')}
+      >
         <Text style={styles.modalLabel}>{t('modals.quickNote.label')}</Text>
         <RNTextInput
           value={quickNoteInput}
@@ -473,7 +482,7 @@ function CharacterModalsBase({
           placeholder={t('modals.spell.searchPlaceholder')}
           placeholderTextColor={colors.textSecondary}
         />
-                {quickSpellCandidates.length ? (
+        {quickSpellCandidates.length ? (
           <FlatList
             data={quickSpellCandidates}
             renderItem={renderQuickSpellCandidate}
@@ -521,7 +530,9 @@ function CharacterModalsBase({
                   styles.weaponActionButtonSecondary,
                   !selectedQuickSpell.damageProfiles?.[0] ? { opacity: 0.45 } : null,
                 ]}
-                onPress={() => selectedQuickSpell.damageProfiles?.[0] && rollSpellDamage(selectedQuickSpell.name, selectedQuickSpell.damageProfiles[0])}
+                onPress={() =>
+                  selectedQuickSpell.damageProfiles?.[0] && rollSpellDamage(selectedQuickSpell.name, selectedQuickSpell.damageProfiles[0])
+                }
                 android_ripple={{ color: colors.ripple }}
                 disabled={!selectedQuickSpell.damageProfiles?.[0]}
               >
@@ -556,7 +567,11 @@ function CharacterModalsBase({
             ))}
           </View>
         )}
-        {preparedSpellsLimit !== null && <Text style={styles.blockTextMuted}>{t('modals.spell.preparedCount', { count: preparedSpellsCount, limit: preparedSpellsLimit })}</Text>}
+        {preparedSpellsLimit !== null && (
+          <Text style={styles.blockTextMuted}>
+            {t('modals.spell.preparedCount', { count: preparedSpellsCount, limit: preparedSpellsLimit })}
+          </Text>
+        )}
         {preparedSpellsLimit !== null && !canAddPreparedFromQuickModal && !isQuickSpellAlreadyPrepared && (
           <Text style={styles.blockTextMuted}>{t('modals.spell.preparedLimitReached')}</Text>
         )}
@@ -571,7 +586,11 @@ function CharacterModalsBase({
         >
           <Text style={styles.secondaryActionText}>{t('modals.spell.addPrepared')}</Text>
         </Pressable>
-        <Pressable style={styles.secondaryAction} onPress={() => addSpellFromCharacter('cantrip')} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.secondaryAction}
+          onPress={() => addSpellFromCharacter('cantrip')}
+          android_ripple={{ color: colors.ripple }}
+        >
           <Text style={styles.secondaryActionText}>{t('modals.spell.addCantrip')}</Text>
         </Pressable>
       </Modal>
@@ -592,11 +611,12 @@ function CharacterModalsBase({
         )}
         {restStep === 'roll' && (
           <>
-            <Text style={styles.modalLabel}>
-              {t('modals.rest.hitDice', { rolls: rollsNeeded, sides: diceSides })}
-            </Text>
+            <Text style={styles.modalLabel}>{t('modals.rest.hitDice', { rolls: rollsNeeded, sides: diceSides })}</Text>
             <Text style={styles.blockTextMuted}>
-              {t('modals.rest.conFormula', { modifier: shortRestConModifier >= 0 ? `+${shortRestConModifier}` : shortRestConModifier, formula: shortRestFormula })}
+              {t('modals.rest.conFormula', {
+                modifier: shortRestConModifier >= 0 ? `+${shortRestConModifier}` : shortRestConModifier,
+                formula: shortRestFormula,
+              })}
             </Text>
             {shortRestPreset ? (
               <DiceRollerPanel

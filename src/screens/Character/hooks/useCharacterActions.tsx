@@ -338,7 +338,6 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   const [isTempHpModalVisible, setIsTempHpModalVisible] = useState(false);
   const [tempShieldInput, setTempShieldInput] = useState('0');
 
-  const [isDiceModalVisible, setIsDiceModalVisible] = useState(false);
   const [abilityRollResult, setAbilityRollResult] = useState<RollResult | null>(null);
   const [weaponRollResult, setWeaponRollResult] = useState<RollResult | null>(null);
   const [contextRollRequest, setContextRollRequest] = useState<ContextRollRequest | null>(null);
@@ -1862,7 +1861,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     applyLongRest,
     setTempShieldInput,
     setIsTempHpModalVisible,
-    setIsDiceModalVisible,
+    openDiceRoller: () => navigation.navigate('DiceRoller'),
     setIsConditionModalVisible,
     setIsQuickNoteModalVisible,
   });
@@ -3657,8 +3656,6 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setLevelDraftStat,
     cancelLevelChange,
     confirmLevelChange,
-    isDiceModalVisible,
-    setIsDiceModalVisible,
     weaponRollRequest: contextRollRequest,
     closeWeaponRollModal,
     handleContextRollResult,
