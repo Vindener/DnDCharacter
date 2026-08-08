@@ -1,0 +1,103 @@
+src/screens/Character/hooks/useQuickActions.ts
+  s_4d41b69c3be52e::t_a9435324efcc24 51
+  s_4d41b69c3be52e::t_073db7a66ca60a 70
+  s_4d41b69c3be52e::t_e2ba9a4c247c70 12
+  s_4d41b69c3be52e::t_89284988274cb7 32
+  s_4d41b69c3be52e::t_1dac028083edb2 9-11
+  s_4d41b69c3be52e::t_20473678f5e553 13-15,29-31
+  s_4d41b69c3be52e::t_fc75b0e77f1384 33-35,48-50
+  s_4d41b69c3be52e::t_54733f7962fa62 52-54,67-69
+  s_4d41b69c3be52e::t_8fd84cfda837e8 71-73
+  s_4d41b69c3be52e::t_b2e1797e7bc113 1-8,16-28,36-47,55-66,74-76
+src/screens/Character/hooks/useCharacterActions.tsx
+  s_4d41b69c3be52e::t_1ba525b7175b3b 1864
+src/screens/DiceRoller/styles.ts
+  s_4d41b69c3be52e::t_24dcadfc897d85 10,15,19,22,27,32,42,45,48,51,57,63,70,75,80,85,88,97,103,108,113,123,127,132,135,140,150,153,158,172,180,184,189,192,200,207-211,214,220,223,233,238,243,247,254,259,268,273,278,282,290,296,302,306,310
+  s_4d41b69c3be52e::t_a102d92ed38c62 7-9
+  s_4d41b69c3be52e::t_9054f6d1fe8468 11-14
+  s_4d41b69c3be52e::t_be461cfda7e1bd 16-18
+  s_4d41b69c3be52e::t_588485efd3b0c0 20-21
+  s_4d41b69c3be52e::t_84ce6593f23632 23-26
+  s_4d41b69c3be52e::t_7d0557fa505354 28-31
+  s_4d41b69c3be52e::t_f7075a1154c08e 33-35,39-41
+  s_4d41b69c3be52e::t_8013dfa5728297 43-44
+  s_4d41b69c3be52e::t_79cea1c40b5046 46-47
+  s_4d41b69c3be52e::t_bafba537d52f01 49-50
+  s_4d41b69c3be52e::t_a785e1857999e3 52-56
+  s_4d41b69c3be52e::t_109aa0bafb5b53 58-62
+  s_4d41b69c3be52e::t_6e6272cd2c4e6a 64-69
+  s_4d41b69c3be52e::t_06a3f9f846a314 71-74
+  s_4d41b69c3be52e::t_4ef1b3ac9cb730 76-79
+  s_4d41b69c3be52e::t_e129e3baac0ec9 81-84
+  s_4d41b69c3be52e::t_a54a3a6bc20bc5 86-87
+  s_4d41b69c3be52e::t_9cf06b56d5ba71 89-91,94-96
+  s_4d41b69c3be52e::t_84910b099c1344 98-102
+  s_4d41b69c3be52e::t_e505a8335a43bd 104-107
+  s_4d41b69c3be52e::t_dbe2f0d5962d20 109-112
+  s_4d41b69c3be52e::t_c3e2de39f3f24e 114-116,120-122
+  s_4d41b69c3be52e::t_177fd33f583263 124-126
+  s_4d41b69c3be52e::t_dc6974e707fd6e 128-131
+  s_4d41b69c3be52e::t_844e844e4a3ada 133-134
+  s_4d41b69c3be52e::t_ed160537175961 136-139
+  s_4d41b69c3be52e::t_fae01d644512bf 141-143,147-149
+  s_4d41b69c3be52e::t_e7b44cb4fff4fd 151-152
+  s_4d41b69c3be52e::t_f8bc0b4cd7ab0a 154-157
+  s_4d41b69c3be52e::t_1c288627f32a7b 159-161,169-171
+  s_4d41b69c3be52e::t_012fd4dcb5a0a7 173-175,177-179
+  s_4d41b69c3be52e::t_5c62cbb468d0bb 181-183
+  s_4d41b69c3be52e::t_25e3fc87681863 185-188
+  s_4d41b69c3be52e::t_4737d2ad8a1287 190-191
+  s_4d41b69c3be52e::t_d6d5bc33d681df 193-195,197-199
+  s_4d41b69c3be52e::t_5586075b367dba 201-206
+  s_4d41b69c3be52e::t_050615679e1f7a 212-213
+  s_4d41b69c3be52e::t_e2bf469b46ad50 215-219
+  s_4d41b69c3be52e::t_88209592f831b8 221-222
+  s_4d41b69c3be52e::t_5f3016e1c605be 224-226,230-232
+  s_4d41b69c3be52e::t_0d952d55450cc3 234-237
+  s_4d41b69c3be52e::t_2c2dd93f115a34 239-242
+  s_4d41b69c3be52e::t_484a8b04454fe5 244-246
+  s_4d41b69c3be52e::t_2a25a16030c751 248-253
+  s_4d41b69c3be52e::t_88d971fe026486 255-258
+  s_4d41b69c3be52e::t_491cfe9c6c67fd 260-262,265-267
+  s_4d41b69c3be52e::t_7068e507c1b72f 269-272
+  s_4d41b69c3be52e::t_7013404de8a623 274-277
+  s_4d41b69c3be52e::t_31014820f38f33 279-281
+  s_4d41b69c3be52e::t_afe05e10028464 283-285,287-289
+  s_4d41b69c3be52e::t_e9a53f9476e804 291-295
+  s_4d41b69c3be52e::t_d8e48b37861996 297-301
+  s_4d41b69c3be52e::t_ddfd7377305abd 303-305
+  s_4d41b69c3be52e::t_e5d0dc0477dcb3 307-309
+  s_4d41b69c3be52e::t_ddb07eeb52c91f 311
+  s_22076be9681b6f::t_5f0ce9d2d475fa 1-6,36-38,92-93,117-119,144-146,162-168,176,196,227-229,263-264,286
+src/screens/DiceRoller/DiceRoller.tsx
+  s_4d41b69c3be52e::t_813612d45f6a3c 365-369
+  s_4d41b69c3be52e::t_3eb71b9bc5f513 362-364
+  s_4d41b69c3be52e::t_b20e600758329f 370-372
+  s_22076be9681b6f::t_6f65255d4a4ae8 1-361,373-451
+src/screens/Character/components/CharacterModals.tsx
+  s_22076be9681b6f::t_d3f0b132254191 1-642
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "061fa826fb720d5d1d5a97a5dd87c05ed1795a33",
+  "prompts": {},
+  "sessions": {
+    "s_22076be9681b6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c132ecc5-c0a9-4aba-8067-dc482951f8eb",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_4d41b69c3be52e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d718d59d-dcf6-4df7-8319-6711024469e2",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
