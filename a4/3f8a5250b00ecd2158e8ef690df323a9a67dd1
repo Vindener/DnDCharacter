@@ -1,0 +1,21 @@
+android/app/build.gradle
+  s_135ecbcbefbd9a::t_9846d0f413beba 115-129,136
+eas.json
+  s_135ecbcbefbd9a::t_d6d8fde1f8c5b0 25-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "a43f8a5250b00ecd2158e8ef690df323a9a67dd1",
+  "prompts": {},
+  "sessions": {
+    "s_135ecbcbefbd9a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "805a5c8c-6584-4597-bcd4-9d36abc7eab3",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
