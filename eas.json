@@ -22,7 +22,10 @@
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "608733335623-k857u9k0p2t6gd52k9uthr76jbm001m3.apps.googleusercontent.com"
       },
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   }
 }
