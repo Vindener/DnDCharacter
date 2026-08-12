@@ -1,0 +1,157 @@
+docs/web-pages-spec.md
+  s_e2f238c7633253::t_32c55136201fba 1-27,29-50
+  h_dfa0da26a12699 28
+docs/privacy-policy.uk.md
+  s_2e3a1499474e58::t_c0f49bc7837a92 15,17
+  s_2e3a1499474e58::t_ecf56c4b1798af 21
+  s_2e3a1499474e58::t_11f1e717043d9b 27
+docs/audit-2026-07.md
+  s_d8b79752db6bf3::t_61573b86ddacb0 166-167
+  s_d8b79752db6bf3::t_0710565396cb1a 132,135
+  s_d8b79752db6bf3::t_0640f56cdcc8f2 197-198
+  s_d8b79752db6bf3::t_0356b9b5ab6aba 265
+  s_551c57871d6795::t_e5a3ee599b4a30 64,68-70
+  s_551c57871d6795::t_7341b81821f095 14-16
+  s_551c57871d6795::t_667e458999e0b3 171-174
+  s_d8b79752db6bf3::t_13896aaae40e3a 256
+  s_d8b79752db6bf3::t_71b628f8a5c66c 11-13,17-19
+  s_d8b79752db6bf3::t_87f978a42715b7 251
+  s_d8b79752db6bf3::t_b08401941ee003 220,224-226,229-231,234
+  s_4a7641070eb183::t_dbe6e68914cbc7 199-200
+  s_d8b79752db6bf3::t_d1dfabddc0791e 252
+  s_4a7641070eb183::t_c6ecc77065f25e 188
+  s_d8b79752db6bf3::t_72f009c9da0854 263
+  s_d8b79752db6bf3::t_2fd61a3b920235 254
+  s_d8b79752db6bf3::t_1ef69ba46d9190 136
+  s_d8b79752db6bf3::t_b0f2b34d05362e 235
+.claude/settings.json
+  h_dfa0da26a12699 4-6
+android/app/src/main/res/values/styles.xml
+  s_d8b79752db6bf3::t_7fdcfb3dd3337b 7-13
+docs/release-blockers.md
+  s_d8b79752db6bf3::t_c7da6758be6bf8 87-90
+  s_551c57871d6795::t_3cc482f1e8c3dd 27-35
+  s_d8b79752db6bf3::t_55d67b59919779 40-42,46-53,64,66-74
+  s_d8b79752db6bf3::t_4a1e018d88f867 1-22,24-26,36-39,43-45,63,65,75-86,91-93
+  s_d8b79752db6bf3::t_cd1150d8af68f9 54-62
+  h_dfa0da26a12699 23
+docs/release-plan-google-play.md
+  s_d8b79752db6bf3::t_9078f7a249a0a2 209
+  s_d8b79752db6bf3::t_4f2550a30a6716 86-87
+  s_d8b79752db6bf3::t_2aa470790c09c4 186
+  s_d8b79752db6bf3::t_1eb1725af29e83 82
+  s_d8b79752db6bf3::t_918122016d7d1e 5
+  s_d8b79752db6bf3::t_6dd4d49b2d6d1c 259-261
+  s_8aa5720d297e10::t_a959c1ed689c22 170-172
+  s_8aa5720d297e10::t_2d7e40a0e8c818 83
+  s_d8b79752db6bf3::t_eac124b9c7f2f4 204-208
+  s_183c64068f75db::t_a20626581660f9 136-144,163,168-169,173
+  s_d8b79752db6bf3::t_ea13649ab06e40 304
+  h_dfa0da26a12699 112,132
+  s_d8b79752db6bf3::t_12b2821c0889b2 88
+  s_8aa5720d297e10::t_07c2c669462b5c 145,147-154,157-159,161,164-167
+  s_d8b79752db6bf3::t_48dc15e21b3625 202-203
+  s_d8b79752db6bf3::t_803b3e0d4c711b 182
+  s_d8b79752db6bf3::t_f0712450f7d170 257
+  s_d8b79752db6bf3::t_aef1d45d7b28dc 84
+  s_d8b79752db6bf3::t_b195e4f646faf2 189
+  s_d8b79752db6bf3::t_f236ba7da5a9f9 256
+  s_183c64068f75db::t_f7ea1cf90e1248 146,155-156,160,162
+  s_d8b79752db6bf3::t_536a5437949f03 183-185,187-188
+README.md
+  s_d8b79752db6bf3::t_cf85452ef1f4b8 5-10
+docs/legal-terms-of-service.md
+  h_dfa0da26a12699 90,162
+  s_d8b79752db6bf3::t_b8cf4bf875c9d7 1-89,91-161
+docs/claude-code-prompts.md
+  s_d8b79752db6bf3::t_c9a6b14c5b2533 46,48
+  s_d8b79752db6bf3::t_f28fba490f01ab 25
+src/i18n/locales/en/support.json
+  s_d8b79752db6bf3::t_5429aee4b394a4 9
+docs/privacy-policy.en.md
+  s_2e3a1499474e58::t_e84ac1dfef9950 27
+  s_2e3a1499474e58::t_40cdf712ccc76c 21
+  s_2e3a1499474e58::t_fbd07cff040f01 15,17
+CLAUDE.md
+  s_d8b79752db6bf3::t_246e1c34475e9f 190
+  s_d8b79752db6bf3::t_39ea322dbb6971 242-251,253-255
+  s_d8b79752db6bf3::t_91aa959013bd7c 45,48,50-51,54-57
+  s_d8b79752db6bf3::t_e7ed5bb714fcb2 20,22-24,27-28
+  s_d8b79752db6bf3::t_31df9309a0db74 10
+  s_d8b79752db6bf3::t_2a19af0374dd75 58
+.agents/USER.md
+  s_d8b79752db6bf3::t_7721c5c9655f57 14
+android/app/google-services.json
+  h_dfa0da26a12699 33-48
+google-services.json
+  h_dfa0da26a12699 33-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "050594efe6e836c44492885083803cbd1a51bc8e",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_183c64068f75db": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d904fc9b-7ef9-4aed-93ce-b2cab1242a3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_2e3a1499474e58": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a205417f-2274-4174-86d7-b4f27c0b68e8",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_4a7641070eb183": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "88ff7cb4-fc47-4a16-b8fe-a26b73595b5b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_551c57871d6795": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ffa60dc4-9f47-41f1-acfa-ea1597668b6c",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_8aa5720d297e10": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c6178383-be86-443b-8b53-04ff4b929323",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_d8b79752db6bf3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b7749e4e-57fd-44cb-9b8c-01d015aedd61",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_e2f238c7633253": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a179d587-2261-43ce-8a66-f817104d7028",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
