@@ -263,12 +263,19 @@ const Home = () => {
   };
 
   const heroButton = isSignedIn
-    ? {
-        testID: 'home.continueGameButton',
-        icon: 'play-circle-outline' as const,
-        label: t('home:hero.continueGame'),
-        onPress: continueSession,
-      }
+    ? continueState.character
+      ? {
+          testID: 'home.continueGameButton',
+          icon: 'play-circle-outline' as const,
+          label: t('home:hero.continueGame'),
+          onPress: continueSession,
+        }
+      : {
+          testID: 'home.continueGameButton',
+          icon: 'person-add-outline' as const,
+          label: t('home:hero.createHero'),
+          onPress: continueSession,
+        }
     : {
         testID: 'home.continueGameButton',
         icon: 'logo-google' as const,

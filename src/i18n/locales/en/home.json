@@ -26,6 +26,7 @@
   },
   "hero": {
     "continueGame": "Continue Game",
+    "createHero": "Create Hero",
     "signInToPlay": "Sign in with Google",
     "mode": "Mode: {{role}} · {{name}}"
   },
