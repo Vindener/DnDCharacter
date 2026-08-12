@@ -2,7 +2,7 @@
 
 Ревізія: **v2, 2026-07-26** · Куди покласти: `docs/release-plan-google-play.md`
 Продукт: **Mythgate 5e Companion** (`com.vind.MythgateDND`) · Цільова версія: **1.0.0**
-Це **поточне джерело істини** замість `docs/sprint-plan.md` і `docs/ux-ui-roadmap.md`.
+Це **поточне джерело істини** замість `docs/archive/sprint-plan.md` і `docs/archive/ux-ui-roadmap.md` (перенесені в архів 2026-08-12, спринти 1–6 завершені).
 
 ---
 
@@ -79,13 +79,13 @@ Play Console ще не створений. Це змінює все, бо кри
 
 | # | Задача | Файли | DoD |
 | --- | --- | --- | --- |
-| R1-1 | Play Console: реєстрація, верифікація, тип акаунта, створення застосунку, перший AAB в Internal testing, **старт Closed testing + 12 тестувальників** | — | Відлік 14 днів пішов; дата старту зафіксована в цьому файлі |
-| R1-2 | Play App Signing: отримати SHA-1, додати у **Firebase Console + OAuth client**; переконатися, що реліз не підписаний debug-keystore (PLY-4) | `android/app/build.gradle`, Firebase Console | `keytool -printcert -jarfile` показує реліз-сертифікат; **Google Sign-In працює у білді, встановленому з Play** |
-| R1-3 | Версії 1.0.0 (PLY-6) | `app.json`, `android/app/build.gradle` | Обидва файли `1.0.0`; фактичний `versionCode` від EAS зафіксований |
+| R1-1 | ⚠️ **Частково.** Play Console: реєстрація, верифікація, тип акаунта, створення застосунку — ✅ зроблено (перевірено 2026-08-12, 10/11 пунктів налаштування додатка виконано). Перший AAB в Internal testing — ✅ зроблено. **Старт Closed testing + 12 тестувальників — не зроблено** (0 тестувальників на момент перевірки) | — | Відлік 14 днів **ще не пішов** — це головний блокер релізу, див. `docs/release-blockers.md` |
+| R1-2 | ✅ **ВИРІШЕНО 2026-08-12** (блокер з 2026-08-09). Play App Signing: SHA-1 отримано, додано у **Firebase Console + OAuth client**; реліз не підписаний debug-keystore (PLY-4) | `android/app/build.gradle`, Firebase Console, Google Cloud Console | `apksigner verify --print-certs` показав реліз-сертифікат; **Google Sign-In підтверджено працює у білді, встановленому з Play** («Firebase авторизація: Успішний вхід» на пристрої) |
+| R1-3 | ✅ **Зроблено.** Версії 1.0.0 (PLY-6) | `app.json`, `android/app/build.gradle` | Обидва файли `1.0.0` — підтверджено 2026-08-12; фактичний `versionCode` від EAS зафіксувати після першого білда |
 | R1-4 | **Видалення акаунта** (PLY-1 + COL-10 + SEC-5): екран у Settings, re-auth, callable Cloud Function із каскадом owner/editor і передачею ownership, правило `delete` для `users`, веб-сторінка запиту — ✅ **код зроблено (2026-07-26)**, деплой і публікація URL — ручні кроки, ще не виконані | `Settings.tsx`, новий `src/services/accountDeletion.ts`, Cloud Function, `firestore.rules`, i18n | Акаунт видаляється; **аркуш зі співредакторами не зникає в них**; ownership передано; повторний логін дає чистий профіль; URL живий |
-| R1-5 | Privacy Policy (PLY-2): текст із розкриттям, що вміст аркуша видимий запрошеним співредакторам і що DM бачить журнал змін; хостинг; лінк у Settings | новий екран або `Linking`, i18n | URL відкривається; лінк у застосунку; поле заповнене в Play Console |
-| R1-6 | Чистка permissions (PLY-3) + знести `react-native-fs`, `expo-media-library`, `expo-intent-launcher`; обмежити дозволи `expo-image-picker`; синхронізувати `app.json` | `AndroidManifest.xml`, `app.json`, `package.json` | Імпорт/експорт файлів і вибір аватарки працюють на девайсі; `aapt dump permissions` показує лише INTERNET + VIBRATE |
-| R1-7 | Прибрати крипто-гаманець, ухвалити рішення по банківських донатах (PLY-5) | `Support.tsx` | Немає крипто-реквізитів |
+| R1-5 | ✅ **Текст і лінк готові.** Privacy Policy (PLY-2): текст із розкриттям, що вміст аркуша видимий запрошеним співредакторам і що DM бачить журнал змін — готово (`docs/privacy-policy.{uk,en}.md`); лінк у Settings працює (`Settings.tsx:22-23,95-96,211-214`, `Linking.openURL`). ⚠️ URL — плейсхолдер (`https://mythgate-dnd.vercel.app/`, коментар `// manual:` каже почекати фінального хостингу), не поле в Play Console | новий екран або `Linking`, i18n | URL відкривається — **так, але це тимчасовий домен**; поле в Play Console — не перевірено |
+| R1-6 | ✅ **Зроблено 2026-08-12.** Чистка permissions (PLY-3) + знести `react-native-fs`, `expo-media-library`, `expo-intent-launcher`; обмежити дозволи `expo-image-picker`; синхронізувати `app.json` | `AndroidManifest.xml`, `app.json`, `package.json` | `AndroidManifest.xml` тепер декларує лише `INTERNET` + `VIBRATE` (+ `CAMERA` з `tools:node="remove"`) — підтверджено 2026-08-12; імпорт/експорт файлів на девайсі не перевірявся |
+| R1-7 | ✅ **Зроблено.** Прибрати крипто-гаманець, ухвалити рішення по банківських донатах (PLY-5) | `Support.tsx` | Крипто/банківських реквізитів немає — лише лінк на Telegram-канал (`Support.tsx:7`, `donationUrl`), Payments/Financial products ризик знято. Текст попередження свідомо змінено на збір коштів для **майбутнього iOS/iPhone-релізу** (не помилка — підтверджено власником продукту 2026-08-12); `uk/support.json:9` і `en/support.json:9` тепер синхронні |
 
 #### R1-4 додаток: текст веб-сторінки запиту на видалення акаунта
 
@@ -109,7 +109,7 @@ Play Console вимагає публічний URL для видалення а�
 >
 > Видалення акаунта **не торкається** локальних даних на пристрої (персонажів, створених без входу в акаунт) — застосунок працює локально без акаунта.
 >
-> Якщо не маєш доступу до застосунку, напиши на **vindener12@gmail.com** із темою «Видалення акаунта» і вкажи email, яким реєструвався. Заявки обробляються вручну протягом кількох днів.
+> Якщо не маєш доступу до застосунку, напиши на **mythgate5e@gmail.com** із темою «Видалення акаунта» і вкажи email, яким реєструвався. Заявки обробляються вручну протягом кількох днів.
 
 **English:**
 
@@ -129,9 +129,47 @@ Play Console вимагає публічний URL для видалення а�
 >
 > Local data on your device (characters created without signing in) is **not** affected by account deletion — the app works locally without an account.
 >
-> If you can't access the app, email **vindener12@gmail.com** with the subject "Account Deletion" and the email you registered with. Requests are handled manually within a few days.
+> If you can't access the app, email **mythgate5e@gmail.com** with the subject "Account Deletion" and the email you registered with. Requests are handled manually within a few days.
 
 **Ризик спринту:** набір 12 реальних тестувальників. Починай сьогодні, паралельно з кодом, не після.
+
+#### R1-2 додаток: діагноз помилки авторизації на internal testing (зафіксовано 2026-08-09/10)
+
+**Симптом:** на пристрої, що встановив застосунок із посилання Internal testing, кнопка «Увійти через Google» показує тост «Помилка авторизації» з кодом **`10`**.
+
+**Діагноз:** код `10` у `@react-native-google-signin/google-signin` — це `DEVELOPER_ERROR`, у 95% випадків = SHA-1 сертифіката, яким підписано встановлений APK, не зареєстрований як Android OAuth-клієнт для `com.vind.MythgateDND` у Firebase/Google Cloud. Перевірено:
+- `google-services.json` (корінь і `android/app/`, файли синхронні) містить 3 зареєстровані SHA-1 — усі це локальні debug/upload-ключі, жоден не може бути сертифікатом Google.
+- AAB `1.0.0` вже залитий у Internal testing (скріншот Play Console, 9 серп. 2026, 22:22) → Google Play App Signing для нового застосунку вмикається автоматично → реальний APK у тестувальників підписаний **сертифікатом Google**, а не тим ключем, яким EAS підписує AAB.
+- У Firebase Authentication вже є успішний вхід (`malitskyi_vv@kness.energy`, 25.06.2026) — тобто Sign-In працює з білдів, підписаних відомими ключами, і ламається саме на білді з Play. Це узгоджується з висновком.
+
+**⚠️ Уточнення 2026-08-12: значення з UI Play Console виявилось невірним.** SHA-1, зчитаний вручну з кнопки «Класичний ключ» на сторінці «Підписування додатків» (`8B:FA:B1:CF:...`, доданий у Firebase/GCP 2026-08-10-11), **не збігається** з тим, що реально підписує встановлений APK — після 1-2 днів очікування й перевірки на двох пристроях вхід так і не спрацював, а на dev-білдах/прямому APK (підписаних іншими, вже відомими ключами) вхід весь час працював, падав лише білд саме з Play. Це вказало точно на сертифікат, а не на пропагацію/Testing-режим/verify ownership (усі перевірені й виключені).
+
+**Остаточна перевірка — напряму з встановленого APK, без UI Play Console:**
+
+```bash
+adb shell pm path com.vind.MythgateDND   # знайти шлях до base.apk
+adb pull "<шлях до base.apk>" ./installed-from-play.apk
+apksigner verify --print-certs ./installed-from-play.apk   # sudo apt install apksigner, якщо нема
+```
+
+| | SHA-1 | SHA-256 |
+| --- | --- | --- |
+| **Реальний (з `apksigner`, підтверджено 2026-08-12)** | `E7:62:48:D1:A9:DA:6A:C5:1A:C0:EA:13:31:44:1C:75:9F:71:F2:1F` | `A4:19:8F:21:BA:47:F8:5C:68:D5:52:35:79:89:2D:D4:C4:AF:3E:D6:33:A6:B5:97:52:44:A8:AC:C8:FC:00:59` |
+| ~~Хибний (з UI Play Console, доданий помилково)~~ | ~~`8B:FA:B1:CF:6B:B4:C1:39:7E:B0:43:ED:BF:42:63:5F:17:6C:D4:70`~~ | — |
+| Upload key (не стосується проблеми, уже зареєстрований) | `4E:85:C6:CA:38:36:43:43:AF:A1:10:9E:85:08:85:4A:CA:6D:0E:51` | — |
+
+Збігається з третім відбитком на сторінці Play Console «Перевірка розробника Android» (Android Developer Verification) — та сторінка, на відміну від першого припущення, показує саме реальний сертифікат підписання.
+
+**Виправлення (ручні кроки в консолях Google, не в коді):**
+1. ✅ Реальний SHA-1/SHA-256 отримано напряму з `apksigner` (таблиця вище) — надійніше за читання значень з UI Play Console вручну.
+2. Firebase Console → Project settings → General → Android-застосунок → **Add fingerprint** → вставити SHA-1 `E7:62:48:D1:A9:DA:6A:C5:1A:C0:EA:13:31:44:1C:75:9F:71:F2:1F` (+SHA-256). Хибний запис `8B:FA:B1:CF:...` можна лишити чи прибрати пізніше — не заважає.
+3. Google Cloud Console → APIs & Services → Credentials → перевірити, чи обмежений ключ `AIzaSyCBF45t...` по SHA-1/package (рекомендація §8.4); якщо так — додати той самий правильний SHA-1 і туди.
+4. Почекати на поширення, повторити вхід у білді, встановленому з Play. Новий AAB **не потрібен** — реєстрація SHA-1 діє на бекенді Google, не вшита в APK (див. §5 Rollback).
+5. Після успіху — оновити `google-services.json` (обидва місця: корінь і `android/app/`) свіжим файлом із Firebase, щоб наступні білди вже містили новий OAuth-клієнт локально.
+
+**DoD цього під-пункту:** ✅ **Виконано 2026-08-12.** Google Sign-In проходить у білді, встановленому з посилання Internal testing — підтверджено на пристрої («Firebase авторизація: Успішний вхід»). SHA-1 `E7:62:48:D1:...` видно в Firebase Console серед зареєстрованих. `google-services.json` в обох місцях (корінь, `android/app/`) ще **не оновлено** свіжим файлом — зробити перед наступним білдом, не блокує поточний реліз.
+
+**Висновок / як не повторити:** причиною двох діб простою була не пропагація чи налаштування Google, а людська помилка при ручному копіюванні SHA-1 зі сторінки Play Console «Підписування додатків» — скопійоване значення (`8B:FA:B1:CF:...`) не збігалося з реальним сертифікатом APK. Найімовірніша причина — перехоплення буфера обміну спливаючим вікном браузерного розширення («Знімок зроблено») одразу після натискання кнопки копіювання, або переплутана колонка серед чотирьох схожих значень (класичний / постквантовий ключ × SHA-1 / SHA-256 — новий UI елемент через впровадження Google «Квантова готовність (бета)»). **Правило на майбутнє:** для будь-якого SHA-1/SHA-256, що йде в Firebase/GCP, спочатку `adb pull` + `apksigner verify --print-certs` на реально встановленому артефакті — і тільки це значення вважати достовірним, ручне зчитування з UI Play Console — ні. Це вже написано в кроках вище й мало би зловитися раніше, якби пункт «перевірити на реальному білді» в §4 регресійного чекліста виконувався одразу після кожної зміни SHA-1, а не в кінці.
 
 ---
 
@@ -141,14 +179,14 @@ Play Console вимагає публічний URL для видалення а�
 
 | # | Задача | DoD |
 | --- | --- | --- |
-| R2-1 | **Один кореневий фікс запису (COL-1+COL-2+COL-3):** content write пише **лише змінені шляхи** з `pendingPaths` через `update()` (або `runTransaction`); payload **не містить** `ownerUid`/`owners`/`editors`; журнал додається `arrayUnion`, ніколи цілим масивом | Два клієнти одночасно: DM −7 HP + гравець condition → **обидві зміни збереглися**; журнал обох присутній; тести на «payload не містить полів доступу» |
-| R2-2 | Доступ — окремі транзакційні операції `addEditor`/`removeEditor`/`transferOwnership`, які не пишуть вміст (COL-3) | Owner додає редактора, поки редактор активно пише → доступ не відкатився, `PERMISSION_DENIED` не виникає |
-| R2-3 | `firestore.rules`: SEC-2 (**захоплення `emailIndex`** — першим), SEC-1 (`users` list/read), SEC-3/COL-8 (валідація ключів, типів, довжин), SEC-4 (immutability `connections`) | Правила задеплоєні; описані дозволені/заборонені запити |
-| R2-4 | Тести правил `firebase emulators:exec` за чеклістом із `docs/collaborative-editing.md` §4 | Тести падають на старих правилах і проходять на нових |
-| R2-5 | Серверний час (COL-5): `serverTimestamp()` у журналі, `lastSyncAt` — серверний час останнього застосованого запису | Девайс зі зсунутим на ±10 хв годинником синхронізується коректно |
-| R2-6 | Дрібніші секції (COL-4): розбити `combat` на `vitals`/`defense`/`conditions`/`weapons`, `homebrew` за під-типами; оновити `collectConflictPaths` і `mergeCharacterBySections` + тести | HP vs condition → **не конфлікт**; HP vs HP → конфлікт із коректним розв'язанням |
-| R2-7 | Видимі помилки синку (COL-7 + REL-2): відрізнити офлайн (тиха черга) від permission-denied/quota (toast + телеметрія) | Штучний permission-denied показує повідомлення, а не тишу |
-| R2-8 | Видалити мертвий Firestore-код (SEC-6); синхронізувати `.agents/*` із новою фазою і фактом кількох редакторів | `tsc` + тести зелені; Codex більше не вважає Sprint 1 поточним |
+| R2-1 | ✅ **Значною мірою зроблено 2026-08-12.** Один кореневий фікс запису (COL-1+COL-2+COL-3): content write пише **лише змінені шляхи** з `pendingPaths` через `update()` (або `runTransaction`); payload **не містить** `ownerUid`/`owners`/`editors`; журнал додається `arrayUnion`, ніколи цілим масивом. `characterCloudRepository.ts:429-488` — точкові `update()`/`deleteField()` + `arrayUnion` для нового і для конкретного шляху; лишається один транзакційний merge-фолбек для "невідомого шляху" — звузити його до точкових шляхів залишається задачею | Два клієнти одночасно: DM −7 HP + гравець condition → **обидві зміни збереглися**; журнал обох присутній; тести на «payload не містить полів доступу» — **не перевірено двома клієнтами в цій сесії**, лише статичним читанням коду |
+| R2-2 | ✅ **Зроблено.** Доступ — окремі транзакційні операції `addEditor`/`removeEditor`/`transferOwnership`, які не пишуть вміст (COL-3) — `characterCloudRepository.ts:558,578,599`, кожна в `runTransaction`, пише лише `editors`/`owners`/`ownerUid`/`updatedAt` | Owner додає редактора, поки редактор активно пише → доступ не відкатився, `PERMISSION_DENIED` не виникає — **не перевірено на двох клієнтах** |
+| R2-3 | ✅ **Зроблено.** `firestore.rules`: SEC-2 (**захоплення `emailIndex`** — першим, `resource == null`/`resource.data.uid == uid()`), SEC-1 (`users` list капований `limit <= 10`, `get` лише для себе), SEC-3/COL-8 (`isValidCharacterSheetWrite` — keys/типи/розміри), SEC-4 (immutability `fromUid`/`toUid` у `connections`) | Правила задеплоєні; описані дозволені/заборонені запити — див. `firestore.rules:7-79` |
+| R2-4 | ✅ **Зроблено.** Тести правил `firebase emulators:exec` за чеклістом із `docs/collaborative-editing.md` §4 | `firestore-tests/rules.test.ts` (456 рядків, SEC-1/2/4/5 + immutability), `npm run test:rules` у `package.json` |
+| R2-5 | ✅ **Зроблено (комміт `804cab0`, 28 липня, статус у реєстрі оновлено 2026-08-12).** Серверний час (COL-5): `serverTimestamp()` у журналі, `lastSyncAt` — серверний час останнього застосованого запису | `serverTimestamp()` не можна класти в елемент `arrayUnion`, тому обране рішення — серверний курсор `lastChangeAt` на документі `characterSheets` (`characterCloudRepository.ts:448,469,482`); `syncState.lastSyncAt` тепер серверний час (`serverSyncAtMs` через `timestampToMillis`), не `Date.now()` читача; відбір нових шляхів — diff за стабільним `entry.id` (`computeRemoteHistorySync`, `characterSyncCoordinator.ts:591-609`), не за часом узагалі. `changeHistory[].atMs` лишається клієнтським свідомо — тільки для "N хв тому" в UI (`Character.tsx:158`, `DMSharedUpdates.tsx:365`), не бере участі в синк-логіці. Тест на зсув годинника ±10 хв: `characterSyncCoordinator.test.ts:433-518` |
+| R2-6 | ✅ **Зроблено.** Дрібніші секції (COL-4): розбити `combat` на `vitals`/`defense`/`conditions`/`weapons`, `homebrew` за під-типами; оновити `collectConflictPaths` і `mergeCharacterBySections` + тести | HP vs condition → **не конфлікт** — `conflictPolicy.ts:7-11` визначає `combat.vitals`/`combat.defense`/`combat.conditions`/`combat.weapons` як окремі секції, `characterSyncCoordinator.ts:476-499` мержить кожну незалежно |
+| R2-7 | ✅ **Зроблено.** Видимі помилки синку (COL-7 + REL-2): відрізнити офлайн (тиха черга) від permission-denied/quota (toast + телеметрія) | `bulkUpsertFromLocal` (`characterCloudRepository.ts:494-509`) повертає класифіковані `BulkUpsertFailure[]` замість глушення; `saveCharacters` (`characterLocalRepository.ts:35-41`) більше не ковтає помилку, кидає далі — **сам UI-toast у виклику не простежено окремо** |
+| R2-8 | ✅ **Зроблено.** Видалити мертвий Firestore-код (SEC-6) — `src/shared/services/firestore/` не існує, перевірено 2026-08-12. Синхронізувати `.agents/*` із новою фазою і фактом кількох редакторів — **зроблено в комітах `804b8f7`/`5a9b392`** для `AGENT.md`/`CODEX.md`/`MEMORY.md`/`TOOLS.md`; `.agents/USER.md` лишався застарілим, виправлено 2026-08-12 (див. CLAUDE.md §11) | `tsc` + тести зелені; Codex більше не вважає Sprint 1 поточним — підтверджено для всіх файлів `.agents/*` |
 
 **Не входить:** CRDT/OT, справжній presence, семантичний merge лічильників через `increment`. Це після 1.0 (див. `docs/collaborative-editing.md` §3).
 
@@ -161,14 +199,14 @@ Play Console вимагає публічний URL для видалення а�
 | # | Задача | DoD |
 | --- | --- | --- |
 | R3-1 | **Зміряти холодний старт** на реальному mid-range Android у release-білді (`performance.now()` + logcat). Спочатку цифра | Є базове число TTI |
-| R3-2 | Ліниве SRD (PERF-1): `require()` у мемоізованих геттерах, `Map`-індекси на першому доступі | Старт помітно швидший; Bestiary/Spellbook/Character/References працюють; тести зелені |
-| R3-3 | Zod для статичного SRD → build-time (`npm run validate:srd`), у рантаймі типізований каст; `src/domain/srd/*.test.ts` лишити зеленими | Дані валідуються в CI/тестах, не на старті |
-| R3-4 | Firebase Analytics **всередині** `productTelemetry.ts` + події спільного редагування (`sheet_shared`, `editor_added/removed`, `remote_change_applied`, `conflict_shown`, `conflict_resolved_*`, `permission_denied_on_upload`) + перемикач згоди в Settings | Події в DebugView; **жодного PII**; вимкнення реально спиняє відправку |
-| R3-5 | Crashlytics + root `ErrorBoundary` (REL-1) | Тестовий крах видно в консолі; ErrorBoundary показує екран відновлення |
-| R3-6 | `overrides` для 8 транзитивних CVE (SEC-7) | `npm audit` без critical/high, які закриваються без мажора; `npm ci` + білд працюють |
-| R3-7 | `minifyEnabled` + `shrinkResources` + ProGuard-правила (PERF-2) | **Повний smoke-тест release-білда** за чеклістом §4 |
-| R3-8 | Edge-to-edge на Android 15/16 (PLY-7): модалки, sticky-футери `CreateCharacter`, `ScrollView` padding, статус-бар | Скріншоти головних екранів на Android 15+ без контенту під барами |
-| R3-9 | Дрібне: `if (__DEV__) require('expo-dev-client')`, `expo-splash-screen` замість `return null`, тюнінг `FlatList`, прибрати `console.*` | PERF-4, PERF-5, PERF-6, SEC-9 закриті |
+| R3-2 | ✅ **Зроблено.** Ліниве SRD (PERF-1): `require()` у мемоізованих геттерах, `Map`-індекси на першому доступі | `src/data/srd/index.ts` — усі 12 завантажень тепер `require()` усередині функцій (не top-level `import`), коментар `PERF-1`. **Реальний вимір швидкості старту на девайсі — не проведено** |
+| R3-3 | ✅ **Зроблено.** Zod для статичного SRD → build-time (`npm run validate:srd`), у рантаймі типізований каст; `src/domain/srd/*.test.ts` лишити зеленими | `package.json` має `validate:srd` (`tsx scripts/validate-srd.mjs`); `srdRepository.ts:43-53` — рантайм-каст без Zod, коментар підтверджує перенесення в build-time; тести — 61/328 зелені (без падінь) |
+| R3-4 | ✅ **Зроблено.** Firebase Analytics **всередині** `productTelemetry.ts` + перемикач згоди в Settings (`@react-native-firebase/analytics` підключено). Події спільного редагування (`sheet_shared`, `editor_added/removed`, `remote_change_applied`, `conflict_shown`, `conflict_resolved_*`, `permission_denied_on_upload`) — **не звірено окремо в цій сесії**, перевірити список events у `productTelemetry.ts` проти CLAUDE.md §8.1 | Події в DebugView; **жодного PII**; вимкнення реально спиняє відправку |
+| R3-5 | ✅ **Зроблено.** Crashlytics + root `ErrorBoundary` (REL-1) — `App.tsx:7,20,38-52,93,108`, `src/shared/components/ErrorBoundary/` | Тестовий крах видно в консолі; ErrorBoundary показує екран відновлення |
+| R3-6 | `overrides` для 8 транзитивних CVE (SEC-7) — **зроблено 2026-07-31**, але `npm audit` **зріс до 35 (20 moderate/15 high)** 2026-08-12 через додавання `expo-updates` (ланцюжок `@expo/config-plugins → xcode`, той самий build-toolchain кластер, не рантайм APK) | `npm audit` без critical/high, які закриваються без мажора — **цифра оновлена, класифікація «build/dev-тулчейн» підтверджена, повне закриття лише через `expo@57`** |
+| R3-7 | `minifyEnabled` + `shrinkResources` + ProGuard-правила (PERF-2) — **не зроблено**, без змін | **Повний smoke-тест release-білда** за чеклістом §4 |
+| R3-8 | Edge-to-edge на Android 15/16 (PLY-7): модалки, sticky-футери `CreateCharacter`, `ScrollView` padding, статус-бар — **не перевірено в цій сесії** | Скріншоти головних екранів на Android 15+ без контенту під барами |
+| R3-9 | `if (__DEV__) require('expo-dev-client')` — ✅ зроблено (`App.tsx:9-14`); `expo-splash-screen` замість `return null` — ⚠️ частково (splash тримається до готовності i18n, але `return null` усередині ще є); тюнінг `FlatList` — не перевірено; прибрати `console.*` — кількість зросла 27→39, але **перевірено 2026-08-12: усі гейтяться `__DEV__`/`isStartupTraceEnabled()`**, у релізному білді не виконуються — не функціональний ризик, лишається гігієна коду | PERF-4 закрито, PERF-5 пом'якшено, PERF-6 не перевірено, SEC-9 — кількість зросла, але реального витоку в проді немає |
 | R3-10 | **Подати заявку на production access** (якщо 14 днів пройшли) | Заявка відправлена; дата зафіксована |
 
 #### R3-1 додаток: як міряти старт на девайсі (startupTrace)
@@ -215,12 +253,12 @@ adb logcat -v time -s ReactNativeJS:V | grep -i "startup-trace"
 | # | Задача | DoD |
 | --- | --- | --- |
 | R4-1 | ✅ `expo-updates` + `updates.*` + `runtimeVersion` (`appVersion`-політика, `"1.0.0"`) у `app.json`; `channel: "production"` у `eas.json` (лише профіль `production`); вручну `ENABLED=true` і метадані в `AndroidManifest.xml` (`// manual: EAS Update`) | Код готовий, живий тест — окремо в R4-2 |
-| R4-2 | **Живий тест OTA**: `eas update --branch <branch, змаплений на channel production>` → встановлений build підхоплює апдейт після рестарту | Перевірено на девайсі, не «за докою» |
-| R4-3 | Задокументувати межу OTA: тільно JS/асети; permissions, іконки в `res/`, нативні модулі = новий AAB | Абзац у цьому файлі + `README.md` |
+| R4-2 | ✅ **Зроблено 2026-08-12.** Живий тест OTA: `eas update --branch <branch, змаплений на channel production>` → встановлений build підхоплює апдейт після рестарту | Підтверджено власником продукту: `eas update` запущено, оновлення підхопилось на встановленому білді |
+| R4-3 | ✅ **Зроблено.** Задокументувати межу OTA: тільно JS/асети; permissions, іконки в `res/`, нативні модулі = новий AAB | Абзац «Межа OTA (R4-3)» вже нижче в цьому файлі. **У `README.md` окремого абзацу немає** — не критично, план релізу є джерелом істини |
 | R4-4 | ✅ Store listing (чернетка `docs/store-listing.md`): назва, short (80) і full (4000) описи **без «Dungeons & Dragons»** і логотипів Wizards, SRD 5.1 (CC-BY-4.0) атрибуція («5E compatible» — дозволено ліцензією); категорія, контакти, Privacy Policy URL | Чернетка готова, фінальне заповнення Play Console — на користувачі |
-| R4-5 | Data Safety: email, ім'я, user-generated content, ідентифікатори аналітики; шифрування в транзиті; **передача даних між користувачами** (спільні аркуші); посилання на видалення акаунта | Форма прийнята |
-| R4-6 | App content: content rating, target audience, ads = немає, news = ні | Заповнено |
-| R4-7 | Скріншоти (4–8, 1080×1920) + feature graphic 1024×500; реліз-нотатки uk + en | Завантажено |
+| R4-5 | ✅ **Зроблено.** Data Safety: email, ім'я, user-generated content, ідентифікатори аналітики; шифрування в транзиті; **передача даних між користувачами** (спільні аркуші); посилання на видалення акаунта | Чернетка `docs/store-listing.md` §6 використана повністю, **форма в Play Console заповнена — підтверджено власником продукту 2026-08-12** |
+| R4-6 | ✅ **Зроблено.** App content: content rating, target audience, ads = немає, news = ні | Чернетка `docs/store-listing.md` §5 використана повністю, **форма в Play Console заповнена — підтверджено власником продукту 2026-08-12** (фактичні подані значення вікової категорії окремо в репо не зафіксовані — не критично, форма вже прийнята) |
+| R4-7 | ⚠️ **Частково.** Скріншоти (4–8, 1080×1920) + feature graphic 1024×500; реліз-нотатки uk + en | **Чернетні/тимчасові скріншоти залиті 2026-08-12**, щоб не блокувати подання; фінальні — після дизайнера (дедлайн 20 серпня, §R4 «Специфікація для дизайнера»). Feature graphic і реліз-нотатки — не підтверджено |
 | R4-8 | Бренд, **якщо асети надійшли**: `assets/*` + `res/mipmap-*` + `drawable-*/splashscreen_logo.png`, стиснути PNG, узгодити `userInterfaceStyle` і фон сплешу (REL-6) | Іконка й сплеш оновлені в білді, не лише в `app.json` |
 
 **Межа OTA (R4-3):** `eas update` доставляє лише JS-бандл і статичні асети, завантажені через Metro/`export:embed`. Зміна `permissions`, іконок у `res/mipmap-*`/`drawable-*`, нативних модулів (нового `npm install` пакета з native-кодом) або значень у `AndroidManifest.xml`/`build.gradle` вимагає нового AAB — жоден `eas update` цього не донесе, застосунок на пристрої просто продовжить використовувати стару нативну частину.
@@ -263,7 +301,7 @@ adb logcat -v time -s ReactNativeJS:V | grep -i "startup-trace"
 - Семантичний merge лічильників (`FieldValue.increment` для HP/slots/resources), `arrayUnion` для conditions — після 1.0
 - Справжній presence із heartbeat; журнал змін у підколекцію — після 1.0
 - Розпил `useCharacterActions.tsx` (3494 рядки) і закриття 25 `exhaustive-deps` — після 1.0
-- CI workflow (REL-4) — бажано, але не блокер
+- CI workflow і E2E-автоматизація (REL-4) — **свідоме рішення власника продукту 2026-08-12: не плануються.** Регресію проганяють вручну (чекліст §4), не автоматизованими e2e-тестами. Не «бажано зробити пізніше» — закрите питання
 - GM Desktop Workspace (окрім Campaign Management MVP+, див.
   docs/campaign-management-prompts.md — свідомий виняток від 2026-08-01)
 

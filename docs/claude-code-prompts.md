@@ -22,7 +22,7 @@
 
 ```
 Прочитай спочатку: README.md, package.json, .agents/AGENT.md, .agents/MEMORY.md,
-.agents/TOOLS.md, .agents/CODEX.md, docs/sprint-plan.md, docs/ux-ui-roadmap.md.
+.agents/TOOLS.md, .agents/CODEX.md, docs/archive/sprint-plan.md, docs/archive/ux-ui-roadmap.md.
 
 Контекст: проєкт переходить із фази UX/UI-спринтів (усі 1-6 закриті) у фазу
 release hardening перед публікацією в Google Play. Я додаю в репозиторій чотири
@@ -43,8 +43,9 @@ docs/collaborative-editing.md, docs/audit-2026-07.md. Файли я вже по�
    `expo prebuild --clean` без узгодження і правило версій.
 4. .agents/CODEX.md: у розділі "When Working On The Current Roadmap" замінити
    згадки Sprint 1 / Dice Roller на посилання на новий план.
-5. Додай у docs/sprint-plan.md і docs/ux-ui-roadmap.md на початок файлу
+5. Додай у docs/archive/sprint-plan.md і docs/archive/ux-ui-roadmap.md на початок файлу
    рядок-маркер: "Статус: історія. Поточний план — docs/release-plan-google-play.md".
+   (Виконано; файли перенесено в docs/archive/ 2026-08-12.)
 6. Видали порожній каталог .codex/.
 
 Обмеження: жодних змін у src/, android/, package.json. Це документаційний таск.

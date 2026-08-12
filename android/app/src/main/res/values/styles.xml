@@ -4,6 +4,13 @@
     <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="android:statusBarColor">#ffffff</item>
+    <!-- manual: REL-6 fix 2026-08-12. AppTheme had no windowBackground, so it fell back to
+         AppCompat's default light-theme white — visible as a white flash for the instant
+         between the (correctly red) splash screen hiding and RN's first paint. Matching the
+         splash background here closes that gap. No app.json equivalent exists for this
+         Activity-level windowBackground; app.json's splash.backgroundColor (#EE1B24) already
+         matches. -->
+    <item name="android:windowBackground">@color/splashscreen_background</item>
   </style>
   <style name="Theme.App.SplashScreen" parent="AppTheme">
     <item name="android:windowBackground">@drawable/ic_launcher_background</item>

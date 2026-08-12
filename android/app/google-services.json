@@ -31,6 +31,22 @@
           }
         },
         {
+          "client_id": "608733335623-er5avem2capl3ptmv4v3o9rhihsgnnih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "8bfab1cf6bb4c1397eb043edbf42635f176cd470"
+          }
+        },
+        {
+          "client_id": "608733335623-oj54b5jvuvjfik8mlb2ltpta5bbio3c7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "e76248d1a9da6ac51ac0ea1331441c759f71f21f"
+          }
+        },
+        {
           "client_id": "608733335623-qfl5mpc39o1k4jhl5umjcq5t4o7f5c3j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

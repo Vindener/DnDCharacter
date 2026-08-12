@@ -7,7 +7,7 @@
 > свідомо додається паралельно з release hardening за рішенням власника
 > продукту від 2026-08-01. Роботу з цієї пачки ізольовано від R1-R5;
 > вона не звільняє від Definition of Done §9.
-> **Реліз-модель змінилась:** Play Console ще не створений, тому критичний шлях — не код, а 14-денний закритий тест Google Play. Деталі й спринти — у `docs/release-plan-google-play.md`.
+> **Реліз-модель:** Play Console вже створено (акаунт, застосунок, більшість чекліста заповнена — перевірено 2026-08-12), критичний шлях тепер — **старт 14-денного закритого тесту** (0 тестувальників на момент перевірки, потрібно 12). Деталі й спринти — у `docs/release-plan-google-play.md`, поточні блокери — `docs/release-blockers.md`.
 > **Ключовий продуктовий факт:** аркуш персонажа редагують **кілька людей одночасно** (owner + editors). Це змінює вимоги до синхронізації, правил Firestore і видалення акаунта. Модель і інваріанти — у `docs/collaborative-editing.md`.
 
 ---
@@ -17,13 +17,15 @@
 | Файл | Роль |
 | --- | --- |
 | `CLAUDE.md` | Робочі правила. Читати першим. |
-| `docs/release-plan-google-play.md` | **Поточний план і спринти R1–R5.** Замінює `docs/sprint-plan.md` і `docs/ux-ui-roadmap.md`. |
+| `docs/release-plan-google-play.md` | **Поточний план і спринти R1–R5.** Замінює `docs/archive/sprint-plan.md` і `docs/archive/ux-ui-roadmap.md`. |
 | `docs/collaborative-editing.md` | Цільова модель спільного редагування + інваріанти, які не можна ламати. |
-| `docs/audit-2026-07.md` | Реєстр знахідок (PLY / SEC / COL / PERF / REL) з файлами й рядками. Джерело задач. |
+| `docs/audit-2026-07.md` | Реєстр знахідок (PLY / SEC / COL / PERF / REL) з файлами й рядками. Джерело задач, статуси оновлюються (востаннє 2026-08-12). |
+| `docs/release-blockers.md` | Живий список реальних блокерів релізу й відкритих питань до власника продукту. |
+| `docs/legal-terms-of-service.md` | Умови використання / Acceptable Use — єдиний правовий документ, якого бракувало. |
 | `.github/instructions/mobile-rn-standards.instructions.md` | Код-стандарти RN/TS. Чинні. |
 | `docs/ui-kit.md`, `docs/loading-states-and-skeleton.md`, `docs/dnd-product-guidelines.md` | Чинні. |
-| `.agents/*` | Інструкції Codex. Технічні правила збігаються, роадмап **застарілий** (див. §11). |
-| `docs/sprint-plan.md`, `docs/ux-ui-roadmap.md`, `docs/product-*-stage-*.md` | **Історія.** Не беклог. |
+| `.agents/*` | Інструкції Codex. Технічні правила й роадмап синхронізовано з release hardening (див. §11). |
+| `docs/archive/sprint-plan.md`, `docs/archive/ux-ui-roadmap.md`, `docs/archive/product-*-stage-*.md` | **Історія.** Не беклог. Перенесено з `docs/` у `docs/archive/` 2026-08-12. |
 
 Пріоритет при конфлікті: `release-plan` → `collaborative-editing` → `CLAUDE.md` → `.github/instructions` → `.agents` → інші `docs`.
 
@@ -40,14 +42,19 @@
 - **`android/` закомічений** — bare-проєкт, prebuild на EAS не запускається. Наслідки в §4.
 - Пакетний менеджер — тільки `npm`, `legacy-peer-deps=true`.
 
-### Базова лінія якості (реально запускалося)
+### Базова лінія якості (реально запускалося, оновлено 2026-08-12)
 
 ```
-npm ci --include=dev  -> OK          npx tsc --noEmit -> 0 помилок
+npx tsc --noEmit      -> 0 помилок
 npm run lint          -> 0 errors, 25 warnings (react-hooks/exhaustive-deps)
-npm run test:unit     -> 50 файлів / 182 тести зелені (~28 с)
-npm audit             -> 23 (2 critical / 6 high / 15 moderate), усі в build/dev-тулчейні
+npm run test:unit     -> 61 файл / 328 тестів зелені (~2.3 с)
+npm audit             -> 35 (0 critical / 15 high / 20 moderate), усі в build/dev-тулчейні
 ```
+
+Зростання `npm audit` (було 23, потім 22 після `overrides` за SEC-7, тепер 35) —
+наслідок додавання `expo-updates` (R4-1): ланцюжок `@expo/config-plugins →
+xcode` того самого build-toolchain кластера. Не рантайм APK. Деталі —
+`docs/audit-2026-07.md` SEC-7.
 
 Твоя зміна не має погіршити цю лінію.
 
@@ -180,7 +187,7 @@ npx -p node@20.19.4 -p npm@10 npm ci --include=dev
 - Мертві модулі `src/shared/services/firestore/{firestore.ts,pdocs.ts,sharing.ts,loger.ts}` нікуди не імпортуються, але звертаються до колекцій без правил (`docs`, `docShares`, `sharedDocs`, `demoItems`) і роблять `addDoc` у `users`. **Видалити цілком.**
 - Уразливості: 23 записи, **усі в build/dev-тулчейні** — ризик для машини розробника й CI, а не RCE у публічному APK. Формулюй так. Закривати через `overrides` ті, де фікс без мажора: `tar`, `shell-quote`, `undici`, `ws`, `js-yaml`, `fast-uri`, `protobufjs`, `brace-expansion`. Після кожного — `npm ci` + `validate` + `test:unit` + локальний Android-білд.
 - Firebase Android API key обмежити в Google Cloud Console по package + SHA-1. **Після налаштування Play App Signing додати новий SHA-1 у Firebase і в OAuth client** — інакше Google Sign-In зламається саме в проді.
-- 27 `console.*` у прод-коді — прибрати або за `__DEV__`. Частина в шляху синку й друкує дані документів.
+- 39 `console.*` у прод-коді (було 27 — зросло, регрес, перевірено 2026-08-12) — прибрати або за `__DEV__`. Частина в шляху синку й друкує дані документів.
 
 ### 8.5 Оптимізація
 
@@ -232,9 +239,17 @@ npx -p node@20.19.4 -p npm@10 npm ci --include=dev
 
 ## 11. Синхронізація з Codex (`.agents/`)
 
-`.agents/AGENT.md`, `CODEX.md`, `MEMORY.md`, `USER.md` досі вказують «перший пріоритет — Sprint 1: Dice Roller + Skeleton-loader» і `docs/ux-ui-roadmap.md` як джерело істини. Це вже неправда.
+**Зроблено в комітах `804b8f7`/`5a9b392` (перевірено 2026-08-12):** `AGENT.md`,
+`CODEX.md`, `MEMORY.md`, `TOOLS.md` уже вказують на release hardening і
+`docs/release-plan-google-play.md` як джерело істини, спринти 1–6 позначені
+завершеними, факт про кількох редакторів аркуша й правила про закомічений
+`android/`/`versionName` у `build.gradle` присутні. Не переписуй ці чотири
+файли мимохідь — вони актуальні.
 
-- Не переписуй `.agents/*` мимохідь — це окремий таск (**R2-8** у плані).
-- Коли робитимеш: у `AGENT.md` замінити *Current Product Focus* і *Current Sprint Roadmap* на посилання на `docs/release-plan-google-play.md`; у `MEMORY.md` позначити спринти 1–6 завершеними і додати факт про кількох редакторів аркуша; у `TOOLS.md` додати правила про закомічений `android/`, prebuild і `versionName` у `build.gradle`.
-- Технічні правила (`no any`, `Pressable`, токени, Firestore лише в сервісах, EAS/lockfile) — чинні, збігаються з цим файлом, не чіпай.
-- `.codex/` — порожній каталог, можна видалити.
+`.agents/USER.md` лишався єдиним застарілим файлом (рядок про «поточний
+запит» — Dice Roller → Character Sheet → …) — **виправлено 2026-08-12** на
+посилання на release hardening фазу.
+
+`.codex/` **не існує** в репозиторії (перевірено 2026-08-12) — попереднє
+твердження, що це порожній каталог для видалення, було хибним, видаляти
+нічого.

@@ -12,19 +12,19 @@ The app also keeps a small technical log of its own activity locally on the devi
 
 ## 2. What is collected when you sign in with Google
 
-Sign-in is handled through Google Sign-In and Firebase Authentication. We receive your email, profile name, and avatar link from Google. This data is stored in your profile document in the Firestore cloud database (`users` collection): `uid`, `email`, display name, profile photo link, and profile creation/update timestamps.
+Sign-in is handled through Google Sign-In and Firebase Authentication. We receive your email, profile name, and avatar link from Google. This data is stored in your profile document in the Firestore cloud database (`users`): `uid`, `email`, display name, profile photo link, and profile creation/update timestamps.
 
-Separately, the `emailIndex` collection stores an "email → uid" lookup, used only so another player can find you by email to add you as a co-editor of a character sheet.
+Separately, `emailIndex` stores an "email → uid" lookup, used only so another player can find you by email to add you as a co-editor of a character sheet.
 
 ## 3. Character sheets: what is stored and who sees it
 
-If you're signed in, a character sheet syncs to Firestore (`characterSheets` collection). The document holds the full sheet content: character name, race, class, ability scores, hit points, inventory, spells, notes, backstory, and other fields from the character editor. If you added a character portrait, a reference to that image is included in the document as well.
+If you're signed in, a character sheet syncs to Firestore (`characterSheets`). The document holds the full sheet content: character name, race, class, ability scores, hit points, inventory, spells, notes, backstory, and other fields from the character editor. If you added a character portrait, a reference to that image is included in the document as well.
 
 **Character sheet content becomes visible to people you (or the sheet owner) invited as co-editors.** Adding a co-editor works by email: the app looks the user up by email through `emailIndex` and adds their `uid` to that sheet's `editors` list. A co-editor can see and edit the entire sheet they were added to, the same as the owner.
 
 **On shared sheets, the DM sees the change log.** Every sheet keeps a `changeHistory` field — a list of entries recording who (`uid`) changed which tab and which fields, and when. This log is visible to everyone with access to the sheet (owners and editors), including a DM who has been granted access. This exists to detect other people's changes during a live session and to show history on the DM screen.
 
-If you run a campaign as a DM, the `dmCampaigns` and `dmCampaignNotes` collections work the same way as `characterSheets`: campaign owners and editors can see and edit its content.
+If you run a campaign as a DM, `dmCampaigns` and `dmCampaignNotes` work the same way as `characterSheets`: campaign owners and editors can see and edit its content.
 
 ## 4. Third parties
 

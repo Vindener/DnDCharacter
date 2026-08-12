@@ -1,5 +1,8 @@
 {
   "enabledPlugins": {
     "understand-anything@understand-anything": true
+  },
+  "env": {
+    "OTEL_RESOURCE_ATTRIBUTES": "repo=DnDCharacter,team.id=my"
   }
 }

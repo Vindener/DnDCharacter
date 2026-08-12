@@ -11,7 +11,7 @@
 - Android UX quality is the primary priority.
 - Safe incremental progress is preferred over broad rewrites.
 - Project guidance should stay aligned with DnD rules and UX/UI quality.
-- Current requested roadmap starts with Dice Roller, Skeleton-loader, and Home, then Character Sheet, Create Character, Spellbook, and Bestiary.
+- UX/UI sprints 1-6 (Dice Roller, Skeleton-loader, Home, Character Sheet, Create Character, Spellbook, Bestiary) are complete. Current phase is release hardening — see `docs/release-plan-google-play.md` (sprints R1-R5) for the active roadmap. Campaign Management (GM Workspace) is the one deliberate parallel exception, see `docs/campaign-management-prompts.md`.
 
 ## How Codex Should Present Results
 - Start with what was done.
