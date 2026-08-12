@@ -30,7 +30,6 @@ export const getStyles = (c: ThemeColors) =>
     },
     content: {
       padding: sp(16),
-      paddingBottom: sp(132),
       gap: sp(12),
     },
     loadingState: {
@@ -354,10 +353,6 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '800',
     },
     footer: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
       flexDirection: 'row',
       gap: sp(10),
       paddingHorizontal: sp(16),
@@ -366,7 +361,6 @@ export const getStyles = (c: ThemeColors) =>
       borderTopWidth: 1,
       borderTopColor: c.border,
       backgroundColor: c.background,
-      elevation: 8,
     },
     navButton: {
       flex: 1,
