@@ -1,0 +1,19 @@
+src/screens/CreateCharacter/style.ts
+  s_5748dd88573450::t_98aed41438f8ff 1-391
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "73617d118198b28f13cd8acbafeabbdbdd8b7352",
+  "prompts": {},
+  "sessions": {
+    "s_5748dd88573450": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ebea0bc6-24f6-46b3-a148-ee8cd83ea0c4",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
