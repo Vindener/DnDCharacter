@@ -1,0 +1,36 @@
+src/services/storeEffects/uiStoreEffects.ts
+  s_5748dd88573450::t_f26105812a78c7 17-26,32
+  s_5748dd88573450::t_7aaa62016f98e1 129-148
+src/screens/Settings/Settings.tsx
+  s_5748dd88573450::t_68bc052fa8e6a0 31-32
+  s_5748dd88573450::t_b20b95923fb589 275-290
+src/navigation/AppNavigator.tsx
+  s_5748dd88573450::t_0692e987a8241d 36,43-44
+src/i18n/locales/en/settings.json
+  s_5748dd88573450::t_f97a16abd89a87 76-80
+src/stores/uiStore.ts
+  s_5748dd88573450::t_51fbc2ebb8aabb 14,23-24
+  s_5748dd88573450::t_d446e9652ef600 36,45-46
+src/shared/services/auth/google.ts
+  s_5748dd88573450::t_bdf434e2628cf2 4,9-13
+  s_5748dd88573450::t_f5aaa660abc482 45,50,52,62,66,68
+  s_5748dd88573450::t_dfb91dd0fbd3e8 14
+src/i18n/locales/uk/settings.json
+  s_5748dd88573450::t_3e1cb2f7b0f850 76-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "80ed2e0fcf1482b2ae6ee9af5063ed6e653ecb63",
+  "prompts": {},
+  "sessions": {
+    "s_5748dd88573450": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ebea0bc6-24f6-46b3-a148-ee8cd83ea0c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
