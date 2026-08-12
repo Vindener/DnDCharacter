@@ -19,8 +19,7 @@ import type { DMCampaign } from '@/dm/domain/types';
 
 type SettingsNavigation = StackNavigationProp<TabStackParamList, 'Settings'>;
 
-// manual: placeholder until the Privacy Policy is hosted for Play Console (owner fills in the real URL)
-const PRIVACY_POLICY_URL = 'https://mythgate-dnd.vercel.app/';
+const PRIVACY_POLICY_URL = 'https://www.mythgatednd.pp.ua/privacy';
 
 const Settings = () => {
   const { i18n, t } = useTranslation(['settings', 'common']);
