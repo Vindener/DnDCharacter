@@ -33,13 +33,15 @@ export default function AppNavigator() {
   const colors = useThemeStore((s) => s.colors);
   const loadTheme = useThemeStore((s) => s.loadTheme);
   const loadAnalyticsConsent = useThemeStore((s) => s.loadAnalyticsConsent);
+  const loadFirebaseDebugToastsEnabled = useThemeStore((s) => s.loadFirebaseDebugToastsEnabled);
   const insets = useSafeAreaInsets();
   const bottomInset = Math.max(insets.bottom, sp(6));
 
   useEffect(() => {
     loadTheme();
     loadAnalyticsConsent();
-  }, [loadTheme, loadAnalyticsConsent]);
+    loadFirebaseDebugToastsEnabled();
+  }, [loadTheme, loadAnalyticsConsent, loadFirebaseDebugToastsEnabled]);
 
   const isDark = useThemeStore((s) => s.isDark);
   const navigationStateRef = useRef<NavigationState | undefined>(undefined);

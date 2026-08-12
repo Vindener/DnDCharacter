@@ -11,6 +11,7 @@ export interface UiStore {
   colors: ThemeColors;
   coins: CustomCoin[];
   analyticsConsentEnabled: boolean;
+  firebaseDebugToastsEnabled: boolean;
   toggleTheme: () => Promise<void>;
   loadTheme: () => Promise<void>;
   load: () => Promise<void>;
@@ -19,6 +20,8 @@ export interface UiStore {
   clearAll: () => Promise<void>;
   setAnalyticsConsent: (enabled: boolean) => Promise<void>;
   loadAnalyticsConsent: () => Promise<void>;
+  setFirebaseDebugToastsEnabled: (enabled: boolean) => Promise<void>;
+  loadFirebaseDebugToastsEnabled: () => Promise<void>;
 }
 
 const useUiStore = create<UiStore>((set, get) => {
@@ -30,6 +33,7 @@ const useUiStore = create<UiStore>((set, get) => {
     colors: darkColors,
     coins: [],
     analyticsConsentEnabled: false,
+    firebaseDebugToastsEnabled: false,
     toggleTheme: effects.toggleTheme,
     loadTheme: effects.loadTheme,
     load: effects.load,
@@ -38,6 +42,8 @@ const useUiStore = create<UiStore>((set, get) => {
     clearAll: effects.clearAll,
     setAnalyticsConsent: effects.setAnalyticsConsent,
     loadAnalyticsConsent: effects.loadAnalyticsConsent,
+    setFirebaseDebugToastsEnabled: effects.setFirebaseDebugToastsEnabled,
+    loadFirebaseDebugToastsEnabled: effects.loadFirebaseDebugToastsEnabled,
   };
 });
 

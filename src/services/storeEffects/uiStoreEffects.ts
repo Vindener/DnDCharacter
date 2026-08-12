@@ -14,12 +14,22 @@ type UiStoreContext = {
 
 type UiStoreEffects = Pick<
   UiStore,
-  'toggleTheme' | 'loadTheme' | 'load' | 'add' | 'remove' | 'clearAll' | 'setAnalyticsConsent' | 'loadAnalyticsConsent'
+  | 'toggleTheme'
+  | 'loadTheme'
+  | 'load'
+  | 'add'
+  | 'remove'
+  | 'clearAll'
+  | 'setAnalyticsConsent'
+  | 'loadAnalyticsConsent'
+  | 'setFirebaseDebugToastsEnabled'
+  | 'loadFirebaseDebugToastsEnabled'
 >;
 
 const THEME_STORAGE_KEY = 'APP_THEME';
 const CUSTOM_COINS_STORAGE_KEY = 'custom_coins';
 const ANALYTICS_CONSENT_STORAGE_KEY = 'ANALYTICS_CONSENT_V1';
+const FIREBASE_DEBUG_TOASTS_STORAGE_KEY = 'FIREBASE_DEBUG_TOASTS_V1';
 
 export function createUiStoreEffects({ set, get }: UiStoreContext): UiStoreEffects {
   return {
@@ -115,6 +125,26 @@ export function createUiStoreEffects({ set, get }: UiStoreContext): UiStoreEffec
       // Always sync the native SDK's collection state on every app start — it defaults to
       // ON, so an explicit disable call is required even when the persisted choice is false.
       setTelemetryAnalyticsConsent(enabled);
+    },
+
+    setFirebaseDebugToastsEnabled: async (enabled) => {
+      set({ firebaseDebugToastsEnabled: enabled });
+      try {
+        await AsyncStorage.setItem(FIREBASE_DEBUG_TOASTS_STORAGE_KEY, JSON.stringify({ enabled }));
+      } catch (_error) {
+        /* intentionally ignored */
+      }
+    },
+
+    loadFirebaseDebugToastsEnabled: async () => {
+      let enabled = false;
+      try {
+        const value = await AsyncStorage.getItem(FIREBASE_DEBUG_TOASTS_STORAGE_KEY);
+        if (value) enabled = !!JSON.parse(value).enabled;
+      } catch (_error) {
+        /* intentionally ignored */
+      }
+      set({ firebaseDebugToastsEnabled: enabled });
     },
   };
 }

@@ -28,6 +28,8 @@ const Settings = () => {
   const toggleTheme = useThemeStore((s) => s.toggleTheme);
   const analyticsConsentEnabled = useThemeStore((s) => s.analyticsConsentEnabled);
   const setAnalyticsConsent = useThemeStore((s) => s.setAnalyticsConsent);
+  const firebaseDebugToastsEnabled = useThemeStore((s) => s.firebaseDebugToastsEnabled);
+  const setFirebaseDebugToastsEnabled = useThemeStore((s) => s.setFirebaseDebugToastsEnabled);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
@@ -270,6 +272,22 @@ const Settings = () => {
             />
           </View>
         </View>
+
+        {__DEV__ && (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>{t('settings:debug.title')}</Text>
+            <Text style={styles.sectionHint}>{t('settings:debug.hint')}</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>{t('settings:debug.firebaseToasts')}</Text>
+              <Switch
+                value={firebaseDebugToastsEnabled}
+                onValueChange={(value) => void setFirebaseDebugToastsEnabled(value)}
+                trackColor={{ false: colors.border, true: colors.primary }}
+                thumbColor={colors.onPrimary}
+              />
+            </View>
+          </View>
+        )}
       </ScrollView>
 
       <Modal visible={modalVisible} transparent animationType='fade' onRequestClose={closeModal}>

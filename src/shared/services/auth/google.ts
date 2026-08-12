@@ -1,9 +1,16 @@
 import auth, { GoogleAuthProvider } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { toast } from '@/shared/services/toast';
+import useUiStore from '@/stores/uiStore';
 import i18n from '@/i18n';
 
 let configured = false;
+
+function debugToast(type: 'info' | 'success', text1: string, text2?: string) {
+  if (__DEV__ && useUiStore.getState().firebaseDebugToastsEnabled) {
+    toast[type](text1, text2);
+  }
+}
 
 function readNestedString(source: unknown, keys: string[]): string | null {
   let current: unknown = source;
@@ -35,14 +42,14 @@ export function configureGoogleSignIn(webClientId: string) {
     profileImageSize: 150,
   });
   configured = true;
-  toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.webClientConfigured'));
+  debugToast('info', i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.webClientConfigured'));
 }
 
 export async function onGoogleButtonPress() {
   try {
-    toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.checkingPlayServices'));
+    debugToast('info', i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.checkingPlayServices'));
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.openingGoogleAuth'));
+    debugToast('info', i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.openingGoogleAuth'));
 
     const res = await GoogleSignin.signIn();
 
@@ -52,13 +59,13 @@ export async function onGoogleButtonPress() {
       toast.error(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.missingIdToken'));
       throw new Error(i18n.t('common:auth.idTokenNotFound'));
     }
-    toast.info(i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.idTokenReceived'));
+    debugToast('info', i18n.t('common:auth.googleSignIn'), i18n.t('common:auth.idTokenReceived'));
 
     const credential = GoogleAuthProvider.credential(idToken);
 
-    toast.info(i18n.t('common:auth.firebaseAuth'), i18n.t('common:auth.signingInWithCredential'));
+    debugToast('info', i18n.t('common:auth.firebaseAuth'), i18n.t('common:auth.signingInWithCredential'));
     const r = await auth().signInWithCredential(credential);
-    toast.success(i18n.t('common:auth.firebaseAuth'), i18n.t('common:auth.signInSuccess'));
+    debugToast('success', i18n.t('common:auth.firebaseAuth'), i18n.t('common:auth.signInSuccess'));
     return r;
   } catch (err: unknown) {
     const code = getErrorCodeOrMessage(err);
