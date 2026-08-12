@@ -1,0 +1,39 @@
+docs/release-blockers.md
+  s_5748dd88573450::t_f2d05e4b9b502a 136-161
+  s_5748dd88573450::t_6e6bea0e382296 78-96,162,165
+  s_5748dd88573450::t_592c10a6b6e9d2 97-113
+  s_5748dd88573450::t_1c4bf9b69b765e 26-31
+  s_5748dd88573450::t_800c6ea491f86d 16-25,32-33
+  s_5748dd88573450::t_1e12c4f3b17d4e 114-135
+src/screens/DM/DMCampaigns.tsx
+  s_5748dd88573450::t_9e4830e0125513 241
+firebase.json
+  s_5748dd88573450::t_112860d717e0b5 9
+src/screens/DM/DMCampaignDetail.tsx
+  s_5748dd88573450::t_f1aa48a2832ece 420
+docs/release-plan-google-play.md
+  s_5748dd88573450::t_0363c8950912ac 84
+src/screens/Settings/DeleteAccountModal.tsx
+  s_5748dd88573450::t_074b302deb4145 19-20
+  s_5748dd88573450::t_168c2b4614c3ff 84-86
+  s_5748dd88573450::t_cb22c1c3bc1bfa 87
+  s_5748dd88573450::t_4d04e3c487b01f 91
+CLAUDE.md
+  s_5748dd88573450::t_331fe66f340a17 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "216462f4fdc86e10c3a58766548cab5cbc447ae4",
+  "prompts": {},
+  "sessions": {
+    "s_5748dd88573450": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ebea0bc6-24f6-46b3-a148-ee8cd83ea0c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
