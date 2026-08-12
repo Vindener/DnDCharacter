@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { Alert, View, Text, Pressable, TextInput } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useTranslation } from 'react-i18next';
 import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
@@ -353,7 +354,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content} bottomOffset={16}>
       <View style={styles.card}>
         <Text style={styles.title}>{t('encounterPrep.title')}</Text>
         <Text style={styles.hint}>{t('encounterPrep.hint')}</Text>
@@ -522,7 +523,7 @@ const DMEncounterPrep: React.FC<Props> = ({ route, navigation }) => {
         </Pressable>
         {!!saveStatus && <Text style={styles.hint}>{saveStatus}</Text>}
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

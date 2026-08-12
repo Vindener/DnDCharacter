@@ -1,17 +1,6 @@
 import React, { JSX, useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Alert, Image, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Picker } from '@react-native-picker/picker';
 import { useNetInfo } from '@react-native-community/netinfo';
 import * as ImagePicker from 'expo-image-picker';
@@ -904,11 +893,25 @@ const CreateCharacter = (): JSX.Element => {
         ))}
       </View>
       <Pressable
-        style={styles.smallButton}
+        style={[
+          styles.toggleButton,
+          ABILITY_KEYS.every((ability) => draft.savingThrows[ability] === createSavingThrowDefaults(draft.selectedClass)[ability])
+            ? styles.toggleButtonActive
+            : null,
+        ]}
         onPress={() => updateDraft({ savingThrows: createSavingThrowDefaults(draft.selectedClass) })}
         android_ripple={{ color: colors.ripple }}
       >
-        <Text style={styles.smallButtonText}>{t('combat.takeFromClass')}</Text>
+        <Text
+          style={[
+            styles.toggleButtonText,
+            ABILITY_KEYS.every((ability) => draft.savingThrows[ability] === createSavingThrowDefaults(draft.selectedClass)[ability])
+              ? styles.toggleButtonTextActive
+              : null,
+          ]}
+        >
+          {t('combat.takeFromClass')}
+        </Text>
       </Pressable>
     </View>
   );
@@ -1339,21 +1342,20 @@ const CreateCharacter = (): JSX.Element => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <KeyboardAvoidingView style={styles.keyboardAvoider} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.shell}>
-          {renderHeader()}
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.content}
-            keyboardShouldPersistTaps='handled'
-            keyboardDismissMode='on-drag'
-            testID='createCharacter.screen'
-          >
-            {renderStep()}
-          </ScrollView>
-          {renderFooter()}
-        </View>
-      </KeyboardAvoidingView>
+      <View style={styles.shell}>
+        {renderHeader()}
+        <KeyboardAwareScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps='handled'
+          keyboardDismissMode='on-drag'
+          bottomOffset={16}
+          testID='createCharacter.screen'
+        >
+          {renderStep()}
+        </KeyboardAwareScrollView>
+        {renderFooter()}
+      </View>
     </SafeAreaView>
   );
 };

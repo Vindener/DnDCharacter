@@ -6,11 +6,13 @@
     "reroll": "Reroll",
     "clear": "Clear",
     "rollAgain": "Roll Again",
-    "clearHistory": "Clear History"
+    "clearHistory": "Clear History",
+    "resetCount": "Reset count"
   },
   "labels": {
     "dice": "Dice",
     "diceType": "Dice Type",
+    "diceTypeHint": "Tap a die to add it to the roll (mix multiple types, e.g. 2d8 + 2d6). Long-press a die to remove one — minimum 0.",
     "count": "Count",
     "countLockedForD20Mode": "Advantage and disadvantage are always 1d20.",
     "modifier": "Modifier",
@@ -51,6 +53,7 @@
     "history": "Roll history is empty."
   },
   "errors": {
-    "rollFailed": "Could not roll dice."
+    "rollFailed": "Could not roll dice.",
+    "noDiceSelected": "Pick at least one die."
   }
 }

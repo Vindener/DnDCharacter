@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, ScrollView, Image, Button, Pressable } from 'react-native';
+import { View, Text, Image, Button, Pressable } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { CommonActions, RouteProp, useNavigation } from '@react-navigation/native';
@@ -68,8 +69,7 @@ const createDuplicateMonster = (monster: MonsterDto, monsterFallback: string, co
   isCustom: true,
 });
 
-const getMetaLine = (monster: MonsterDto): string =>
-  [monster.size, monster.type, monster.alignment].filter(Boolean).join(' · ') || '—';
+const getMetaLine = (monster: MonsterDto): string => [monster.size, monster.type, monster.alignment].filter(Boolean).join(' · ') || '—';
 
 const getMainAttack = (monster: MonsterDto, fallback: string): string => {
   if (monster.mainAttack) return monster.mainAttack;
@@ -176,7 +176,9 @@ export default function Monster({ route }: Props) {
         const uri = result.assets[0].uri;
         setData((prev) => ({ ...prev, photoUri: uri }));
       }
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   };
 
   const removePhoto = () => {
@@ -202,7 +204,7 @@ export default function Monster({ route }: Props) {
         name: 'DM',
         params: {
           screen: 'DMEncounterPrep',
-            params: {
+          params: {
             initialMonster: createMonsterSeed(data, t('defaults.monster')),
           },
         },
@@ -256,7 +258,12 @@ export default function Monster({ route }: Props) {
   );
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 32 }} keyboardShouldPersistTaps='handled'>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 32 }}
+      keyboardShouldPersistTaps='handled'
+      bottomOffset={16}
+    >
       {data.photoUri ? <Image source={{ uri: data.photoUri }} style={styles.photo} /> : <View style={styles.placeholderPhoto} />}
       {editing && (
         <View style={styles.photoButtonsRow}>
@@ -272,7 +279,11 @@ export default function Monster({ route }: Props) {
 
       <View style={styles.headerRow}>
         {editing ? (
-          <TextInput style={[styles.name, styles.nameInput]} value={data.name} onChangeText={(text) => setData((prev) => ({ ...prev, name: text }))} />
+          <TextInput
+            style={[styles.name, styles.nameInput]}
+            value={data.name}
+            onChangeText={(text) => setData((prev) => ({ ...prev, name: text }))}
+          />
         ) : (
           <View style={styles.headerTextBlock}>
             <Text style={styles.name}>{data.name}</Text>
@@ -280,14 +291,23 @@ export default function Monster({ route }: Props) {
           </View>
         )}
         {canEditMonster ? (
-          <Pressable style={styles.iconButton} onPress={editing ? handleSave : () => setEditing(true)} android_ripple={{ color: colors.ripple }}>
+          <Pressable
+            style={styles.iconButton}
+            onPress={editing ? handleSave : () => setEditing(true)}
+            android_ripple={{ color: colors.ripple }}
+          >
             <Ionicons name={editing ? 'checkmark' : 'pencil'} size={22} color={colors.text} />
           </Pressable>
         ) : null}
       </View>
 
       <View style={styles.actionRow}>
-        <Pressable style={styles.actionButton} onPress={addToEncounter} android_ripple={{ color: colors.ripple }} testID='monster.addToEncounterButton'>
+        <Pressable
+          style={styles.actionButton}
+          onPress={addToEncounter}
+          android_ripple={{ color: colors.ripple }}
+          testID='monster.addToEncounterButton'
+        >
           <Ionicons name='add-circle-outline' size={16} color={colors.text} />
           <Text style={styles.actionText}>{t('actions.addToEncounterShort')}</Text>
         </Pressable>
@@ -295,7 +315,11 @@ export default function Monster({ route }: Props) {
           <Ionicons name={isPinned ? 'bookmark' : 'bookmark-outline'} size={16} color={colors.text} />
           <Text style={styles.actionText}>{isPinned ? t('detail.actions.unpin') : t('actions.pin')}</Text>
         </Pressable>
-        <Pressable style={styles.actionButton} onPress={() => void toggleFavoriteMonster(data.id)} android_ripple={{ color: colors.ripple }}>
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => void toggleFavoriteMonster(data.id)}
+          android_ripple={{ color: colors.ripple }}
+        >
           <Ionicons name={isFavorite ? 'star' : 'star-outline'} size={16} color={colors.text} />
           <Text style={styles.actionText}>{isFavorite ? t('detail.actions.removeFavorite') : t('detail.actions.addFavorite')}</Text>
         </Pressable>
@@ -382,23 +406,45 @@ export default function Monster({ route }: Props) {
         </>
       ) : (
         <View style={styles.metadataGrid}>
-          <Text style={styles.metadataText}>{t('detail.fields.savingThrows')}: {data.savingThrows || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.skills')}: {data.skills || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.senses')}: {data.senses || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.languages')}: {data.languages || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.hitDice')}: {data.hitDice || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.xp')}: {data.xp ?? '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.damageVulnerabilities')}: {data.damageVulnerabilities || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.damageResistances')}: {data.damageResistances || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.damageImmunities')}: {data.damageImmunities || '—'}</Text>
-          <Text style={styles.metadataText}>{t('detail.fields.conditionImmunities')}: {data.conditionImmunities || '—'}</Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.savingThrows')}: {data.savingThrows || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.skills')}: {data.skills || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.senses')}: {data.senses || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.languages')}: {data.languages || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.hitDice')}: {data.hitDice || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.xp')}: {data.xp ?? '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.damageVulnerabilities')}: {data.damageVulnerabilities || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.damageResistances')}: {data.damageResistances || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.damageImmunities')}: {data.damageImmunities || '—'}
+          </Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.conditionImmunities')}: {data.conditionImmunities || '—'}
+          </Text>
           {sourceLabel ? (
             <Text style={styles.metadataText}>
               {t('detail.fields.source')}: {sourceLabel}
               {licenseLabel ? ` · ${t('detail.fields.license')}: ${licenseLabel}` : ''}
             </Text>
           ) : null}
-          <Text style={styles.metadataText}>{t('detail.fields.environment')}: {data.environment || '—'}</Text>
+          <Text style={styles.metadataText}>
+            {t('detail.fields.environment')}: {data.environment || '—'}
+          </Text>
         </View>
       )}
 
@@ -421,7 +467,12 @@ export default function Monster({ route }: Props) {
           <Text style={styles.label}>{t('detail.sections.actions')}</Text>
           <TextInput style={styles.textArea} multiline value={data.actions || ''} onChangeText={(text) => setTextField('actions', text)} />
           <Text style={styles.label}>{t('detail.sections.reactions')}</Text>
-          <TextInput style={styles.textArea} multiline value={data.reactions || ''} onChangeText={(text) => setTextField('reactions', text)} />
+          <TextInput
+            style={styles.textArea}
+            multiline
+            value={data.reactions || ''}
+            onChangeText={(text) => setTextField('reactions', text)}
+          />
           <Text style={styles.label}>{t('detail.sections.legendaryActions')}</Text>
           <TextInput
             style={styles.textArea}
@@ -501,6 +552,6 @@ export default function Monster({ route }: Props) {
       <View style={{ marginTop: sp(12) }}>
         <Button title={t('detail.actions.exportJson')} onPress={() => FileService.exportMonster(data)} />
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

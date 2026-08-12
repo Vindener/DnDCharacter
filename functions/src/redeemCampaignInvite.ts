@@ -67,7 +67,14 @@ export const redeemCampaignInvite = onCall<RedeemCampaignInviteRequest, Promise<
           throw new HttpsError('failed-precondition', 'invite-exhausted');
         }
 
-        tx.update(campaignRef, { editors: FieldValue.arrayUnion(uid) });
+        const campaignUpdate: Record<string, unknown> = { editors: FieldValue.arrayUnion(uid) };
+        // Only the currently-tracked active code advances the visible "used" counter —
+        // an owner may have generated older codes before this one that are no longer
+        // denormalized on the campaign doc; those still work, just aren't counted here.
+        if (campaign.activeInviteCode === code) {
+          campaignUpdate.activeInviteUsedCount = FieldValue.increment(1);
+        }
+        tx.update(campaignRef, campaignUpdate);
         tx.update(inviteRef, { usedByUids: FieldValue.arrayUnion(uid) });
         return { alreadyMember: false };
       });

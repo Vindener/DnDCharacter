@@ -21,7 +21,7 @@ export type DMStackParamList = {
   EncounterCalculator: undefined;
   DMSharedUpdates: undefined;
   DMPartyOverview: undefined;
-  DMCampaigns: undefined;
+  DMCampaigns: { joinCode?: string } | undefined;
   DMCampaignDetail: { campaignId: string };
   DMQuickEdit: { characterId: string };
   DMCampaignNotes: { campaignId?: string } | undefined;

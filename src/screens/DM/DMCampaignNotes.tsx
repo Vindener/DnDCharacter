@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useNetInfo } from '@react-native-community/netinfo';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -211,7 +212,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content} bottomOffset={16}>
       <View style={styles.card}>
         <Text style={styles.title}>{t('dm:campaignNotes.title')}</Text>
         <Text style={styles.hint}>{t('dm:campaignNotes.hint')}</Text>
@@ -412,7 +413,7 @@ const DMCampaignNotes: React.FC<Props> = ({ route }) => {
           );
         })}
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

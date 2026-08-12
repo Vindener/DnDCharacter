@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { CommonActions } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,7 +12,7 @@ import useCharacterStore from '@/context/Character-store';
 import useSyncStore from '@/context/Sync-store';
 import useMonsterStore from '@/context/Monster-store';
 import useSpellbookStore from '@/context/Spellbook-store';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import { getEditorsForSheet, subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
 import { fbAuth } from '@/services/firebase';
 import type { DMCampaign, DMCampaignEncounter } from '@/dm/domain/types';
 import { addCampaignEditorByEmail, subscribeAccessibleCampaigns, updateCampaignSummary } from '@/dm/repositories/campaignRepository';
@@ -69,6 +70,7 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   const [emailInviteError, setEmailInviteError] = useState('');
   const [emailInviteSuccess, setEmailInviteSuccess] = useState('');
   const [inviteError, setInviteError] = useState('');
+  const [peopleByUid, setPeopleByUid] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     let unsub = () => {};
@@ -159,6 +161,31 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
     () => unifiedParty.filter((item) => !isCharacterInCampaign(item.payload, campaign)),
     [campaign, unifiedParty],
   );
+
+  useEffect(() => {
+    if (!campaign) {
+      setPeopleByUid(new Map());
+      return;
+    }
+    const uids = new Set<string>([...campaign.owners, ...campaign.editors]);
+    members.forEach((item) => {
+      if (item.ownerUid) uids.add(item.ownerUid);
+    });
+    if (!uids.size) {
+      setPeopleByUid(new Map());
+      return;
+    }
+
+    let cancelled = false;
+    void getEditorsForSheet(Array.from(uids)).then((people) => {
+      if (!cancelled) setPeopleByUid(new Map(people.map((person) => [person.uid, person.email])));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [campaign, members]);
+
+  const getPersonLabel = (uid?: string) => (uid ? peopleByUid.get(uid) || uid : '');
 
   const formatSource = (source: UnifiedPartyItem['source']) => t(`dm:partyOverview.sources.${source}`);
 
@@ -350,7 +377,12 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='dmCampaignDetail.screen'>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      testID='dmCampaignDetail.screen'
+      bottomOffset={16}
+    >
       <View style={styles.card}>
         <Text style={styles.title}>{campaign.name}</Text>
 
@@ -434,6 +466,24 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
             >
               <Text style={styles.authButtonText}>{t('dm:campaignDetail.emailInviteButton')}</Text>
             </Pressable>
+
+            {campaign.activeInviteCode && campaign.activeInviteExpiresAtMs && campaign.activeInviteExpiresAtMs > Date.now() ? (
+              <View style={styles.updateRow} testID='dmCampaignDetail.activeInvite'>
+                <Text style={styles.updateTitle} testID='dmCampaignDetail.activeInviteCode'>
+                  {t('dm:campaignDetail.activeInviteLabel', { code: campaign.activeInviteCode })}
+                </Text>
+                <Text style={styles.updateMeta}>
+                  {t('dm:campaignDetail.activeInviteUsage', { count: campaign.activeInviteUsedCount || 0 })}
+                </Text>
+                <Text style={styles.updateMeta}>
+                  {t('dm:campaignDetail.activeInviteExpiry', { date: new Date(campaign.activeInviteExpiresAtMs).toLocaleDateString() })}
+                </Text>
+              </View>
+            ) : (
+              <Text style={styles.hint} testID='dmCampaignDetail.noActiveInvite'>
+                {campaign.activeInviteCode ? t('dm:campaignDetail.activeInviteExpired') : t('dm:campaignDetail.noActiveInvite')}
+              </Text>
+            )}
           </>
         )}
 
@@ -447,6 +497,11 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
                 race: item.payload.race || t('common:fallbacks.race'),
               })}
             </Text>
+            {!!item.ownerUid && (
+              <Text style={styles.updateMeta} testID={`dmCampaignDetail.characterOwner.${item.id}`}>
+                {t('dm:campaignDetail.characterOwner', { person: getPersonLabel(item.ownerUid) })}
+              </Text>
+            )}
             <View style={styles.laneGrid}>
               <Pressable
                 style={styles.laneButton}
@@ -537,6 +592,24 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
             <Text style={styles.authButtonText}>{t('dm:campaignDetail.addMemberButton')}</Text>
           </Pressable>
         )}
+      </View>
+
+      <View style={styles.card} testID='dmCampaignDetail.peopleCard'>
+        <Text style={styles.title}>{t('dm:campaignDetail.peopleTitle')}</Text>
+        {campaign.owners.map((uid) => (
+          <View key={`owner-${uid}`} style={styles.updateRow}>
+            <Text style={styles.updateTitle}>{getPersonLabel(uid)}</Text>
+            <Text style={styles.updateMeta}>{t('dm:campaignDetail.roleOwner')}</Text>
+          </View>
+        ))}
+        {campaign.editors
+          .filter((uid) => !campaign.owners.includes(uid))
+          .map((uid) => (
+            <View key={`editor-${uid}`} style={styles.updateRow}>
+              <Text style={styles.updateTitle}>{getPersonLabel(uid)}</Text>
+              <Text style={styles.updateMeta}>{t('dm:campaignDetail.roleEditor')}</Text>
+            </View>
+          ))}
       </View>
 
       <View style={styles.card}>
@@ -682,7 +755,7 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
         {!!emailInviteSuccess && <Text style={styles.hint}>{emailInviteSuccess}</Text>}
         {!!emailInviteError && <Text style={styles.hint}>{emailInviteError}</Text>}
       </Modal>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

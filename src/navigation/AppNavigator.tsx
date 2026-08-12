@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import type { NavigationState, NavigatorScreenParams } from '@react-navigation/native';
+import type { LinkingOptions, NavigationState, NavigatorScreenParams } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +26,22 @@ export type AppStackParamList = {
 };
 
 const Stack = createBottomTabNavigator<AppStackParamList>();
+
+// Campaign invite deep link (see app.json "scheme" + AndroidManifest.xml's mythgatednd
+// intent-filter): "mythgatednd://join/CODE" opens straight to the redeem-invite modal on
+// DMCampaigns, pre-filled with the code (DMCampaigns.tsx reads route.params.joinCode).
+const linking: LinkingOptions<AppStackParamList> = {
+  prefixes: ['mythgatednd://', 'https://mythgatednd.pp.ua', 'https://www.mythgatednd.pp.ua'],
+  config: {
+    screens: {
+      DM: {
+        screens: {
+          DMCampaigns: 'join/:joinCode',
+        },
+      },
+    },
+  },
+};
 
 export default function AppNavigator() {
   const { t } = useTranslation('navigation');
@@ -86,9 +102,11 @@ export default function AppNavigator() {
       onStateChange={(state) => {
         navigationStateRef.current = state;
       }}
+      linking={linking}
     >
       <Stack.Navigator
         id={undefined}
+        backBehavior='history'
         screenOptions={({ route }) => ({
           header: () => <Header />,
           tabBarActiveTintColor: colors.brand,

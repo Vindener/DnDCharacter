@@ -75,6 +75,10 @@ export const getStyles = (c: ThemeColors) =>
     filtersBlock: {
       gap: sp(6),
     },
+    tabsRowScroll: {
+      flexGrow: 0,
+      flexShrink: 0,
+    },
     tabsRow: {
       gap: sp(8),
       paddingVertical: sp(2),
@@ -100,6 +104,10 @@ export const getStyles = (c: ThemeColors) =>
     },
     tabButtonTextActive: {
       color: c.onPrimary,
+    },
+    chipsRowScroll: {
+      flexGrow: 0,
+      flexShrink: 0,
     },
     chipsRow: {
       gap: sp(8),
@@ -403,6 +411,3 @@ export const getStyles = (c: ThemeColors) =>
       lineHeight: 16,
     },
   });
-
-
-

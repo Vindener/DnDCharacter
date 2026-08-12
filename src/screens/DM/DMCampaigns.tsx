@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -21,12 +22,14 @@ import {
 import { buildUnifiedPartyList, isCharacterInCampaign } from '@/screens/DM/adapters';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { CampaignInviteError, redeemCampaignInvite } from '@/services/campaignInvite';
+import { SkeletonCampaigns } from '@/shared/ui/skeleton';
 
 const isDev = typeof __DEV__ !== 'undefined' && __DEV__;
 
 const DMCampaigns: React.FC = () => {
   const { t } = useTranslation(['dm', 'common']);
   const navigation = useNavigation<StackNavigationProp<DMStackParamList, 'DMCampaigns'>>();
+  const route = useRoute<RouteProp<DMStackParamList, 'DMCampaigns'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
 
@@ -34,6 +37,7 @@ const DMCampaigns: React.FC = () => {
   const [mySheets, setMySheets] = useState<Record<string, unknown>[]>([]);
   const [sharedSheets, setSharedSheets] = useState<Record<string, unknown>[]>([]);
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
+  const [isCampaignsLoaded, setIsCampaignsLoaded] = useState(false);
 
   const [isCreating, setIsCreating] = useState(false);
   const [newName, setNewName] = useState('');
@@ -47,13 +51,25 @@ const DMCampaigns: React.FC = () => {
   const [isRedeeming, setIsRedeeming] = useState(false);
   const [redeemError, setRedeemError] = useState('');
 
+  // Opens straight to the redeem modal with the code pre-filled when the app was launched
+  // via a "mythgatednd://join/:joinCode" invite link (see AppNavigator's linking config).
+  useEffect(() => {
+    const joinCode = route.params?.joinCode;
+    if (!joinCode) return;
+    setRedeemCode(joinCode.trim().toUpperCase());
+    setIsRedeemModalVisible(true);
+    navigation.setParams({ joinCode: undefined });
+  }, [route.params?.joinCode, navigation]);
+
   useEffect(() => {
     let unsub = () => {};
     let cancelled = false;
 
     const run = async () => {
       unsub = await subscribeAccessibleCampaigns((next) => {
-        if (!cancelled) setCampaigns(next);
+        if (cancelled) return;
+        setCampaigns(next);
+        setIsCampaignsLoaded(true);
       });
     };
 
@@ -184,7 +200,7 @@ const DMCampaigns: React.FC = () => {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} testID='dmCampaigns.screen'>
+    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content} testID='dmCampaigns.screen' bottomOffset={16}>
       <View style={styles.card}>
         <Text style={styles.title}>{t('dm:campaignsList.title')}</Text>
         <Text style={styles.hint}>{t('dm:campaignsList.hint')}</Text>
@@ -249,86 +265,89 @@ const DMCampaigns: React.FC = () => {
         )}
       </View>
 
-      {campaigns.map((campaign) => (
-        <View key={campaign.id} style={styles.card} testID={`dmCampaigns.card.${campaign.id}`}>
-          {renamingId === campaign.id ? (
-            <>
-              <Text style={styles.modalLabel}>{t('dm:campaignsList.renamePlaceholder')}</Text>
-              <TextInput
-                value={renameInput}
-                onChangeText={setRenameInput}
-                placeholder={t('dm:campaignsList.renamePlaceholder')}
-                placeholderTextColor={colors.textSecondary}
-                style={styles.modalInput}
-                testID={`dmCampaigns.renameInput.${campaign.id}`}
-              />
-              <View style={styles.laneGrid}>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => {
-                    void saveRename(campaign.id);
-                  }}
-                  android_ripple={{ color: colors.ripple }}
-                >
-                  <Ionicons name='checkmark-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:campaignsList.saveRename')}</Text>
-                </Pressable>
-                <Pressable style={styles.laneButton} onPress={cancelRename} android_ripple={{ color: colors.ripple }}>
-                  <Ionicons name='close-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:campaignsList.cancelRename')}</Text>
-                </Pressable>
-              </View>
-            </>
-          ) : (
-            <>
-              <Text style={styles.title}>{campaign.name}</Text>
-              <Text style={styles.hint}>{campaign.summary || t('dm:campaignsList.noSummary')}</Text>
-              <View style={styles.statsRow}>
-                {typeof campaign.partyLevelEstimate === 'number' && (
-                  <View style={styles.statChip}>
-                    <Text style={styles.statChipText}>{t('dm:campaignsList.partyLevel', { level: campaign.partyLevelEstimate })}</Text>
-                  </View>
-                )}
-                <View style={styles.statChip}>
-                  <Text style={styles.statChipText}>{t('dm:campaignsList.members', { count: memberCounts.get(campaign.id) || 0 })}</Text>
+      {!isCampaignsLoaded && <SkeletonCampaigns />}
+
+      {isCampaignsLoaded &&
+        campaigns.map((campaign) => (
+          <View key={campaign.id} style={styles.card} testID={`dmCampaigns.card.${campaign.id}`}>
+            {renamingId === campaign.id ? (
+              <>
+                <Text style={styles.modalLabel}>{t('dm:campaignsList.renamePlaceholder')}</Text>
+                <TextInput
+                  value={renameInput}
+                  onChangeText={setRenameInput}
+                  placeholder={t('dm:campaignsList.renamePlaceholder')}
+                  placeholderTextColor={colors.textSecondary}
+                  style={styles.modalInput}
+                  testID={`dmCampaigns.renameInput.${campaign.id}`}
+                />
+                <View style={styles.laneGrid}>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => {
+                      void saveRename(campaign.id);
+                    }}
+                    android_ripple={{ color: colors.ripple }}
+                  >
+                    <Ionicons name='checkmark-outline' size={18} color={colors.text} />
+                    <Text style={styles.laneButtonText}>{t('dm:campaignsList.saveRename')}</Text>
+                  </Pressable>
+                  <Pressable style={styles.laneButton} onPress={cancelRename} android_ripple={{ color: colors.ripple }}>
+                    <Ionicons name='close-outline' size={18} color={colors.text} />
+                    <Text style={styles.laneButtonText}>{t('dm:campaignsList.cancelRename')}</Text>
+                  </Pressable>
                 </View>
-              </View>
+              </>
+            ) : (
+              <>
+                <Text style={styles.title}>{campaign.name}</Text>
+                <Text style={styles.hint}>{campaign.summary || t('dm:campaignsList.noSummary')}</Text>
+                <View style={styles.statsRow}>
+                  {typeof campaign.partyLevelEstimate === 'number' && (
+                    <View style={styles.statChip}>
+                      <Text style={styles.statChipText}>{t('dm:campaignsList.partyLevel', { level: campaign.partyLevelEstimate })}</Text>
+                    </View>
+                  )}
+                  <View style={styles.statChip}>
+                    <Text style={styles.statChipText}>{t('dm:campaignsList.members', { count: memberCounts.get(campaign.id) || 0 })}</Text>
+                  </View>
+                </View>
 
-              <View style={styles.laneGrid}>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => openCampaign(campaign)}
-                  android_ripple={{ color: colors.ripple }}
-                  testID={`dmCampaigns.open.${campaign.id}`}
-                >
-                  <Ionicons name='folder-open-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:campaignsList.open')}</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => startRename(campaign)}
-                  android_ripple={{ color: colors.ripple }}
-                  testID={`dmCampaigns.rename.${campaign.id}`}
-                >
-                  <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:campaignsList.rename')}</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => confirmDelete(campaign)}
-                  android_ripple={{ color: colors.ripple }}
-                  testID={`dmCampaigns.delete.${campaign.id}`}
-                >
-                  <Ionicons name='trash-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:campaignsList.delete')}</Text>
-                </Pressable>
-              </View>
-            </>
-          )}
-        </View>
-      ))}
+                <View style={styles.laneGrid}>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => openCampaign(campaign)}
+                    android_ripple={{ color: colors.ripple }}
+                    testID={`dmCampaigns.open.${campaign.id}`}
+                  >
+                    <Ionicons name='folder-open-outline' size={18} color={colors.text} />
+                    <Text style={styles.laneButtonText}>{t('dm:campaignsList.open')}</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => startRename(campaign)}
+                    android_ripple={{ color: colors.ripple }}
+                    testID={`dmCampaigns.rename.${campaign.id}`}
+                  >
+                    <Ionicons name='create-outline' size={18} color={colors.text} />
+                    <Text style={styles.laneButtonText}>{t('dm:campaignsList.rename')}</Text>
+                  </Pressable>
+                  <Pressable
+                    style={styles.laneButton}
+                    onPress={() => confirmDelete(campaign)}
+                    android_ripple={{ color: colors.ripple }}
+                    testID={`dmCampaigns.delete.${campaign.id}`}
+                  >
+                    <Ionicons name='trash-outline' size={18} color={colors.text} />
+                    <Text style={styles.laneButtonText}>{t('dm:campaignsList.delete')}</Text>
+                  </Pressable>
+                </View>
+              </>
+            )}
+          </View>
+        ))}
 
-      {!campaigns.length && (
+      {isCampaignsLoaded && !campaigns.length && (
         <View style={styles.card}>
           <Text style={styles.hint}>{t('dm:campaignsList.empty')}</Text>
         </View>
@@ -356,7 +375,7 @@ const DMCampaigns: React.FC = () => {
         {isRedeeming ? <ActivityIndicator color={colors.text} testID='dmCampaigns.redeemLoading' /> : null}
         {!!redeemError && <Text style={styles.hint}>{redeemError}</Text>}
       </Modal>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

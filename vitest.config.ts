@@ -8,6 +8,7 @@ export default defineConfig({
     alias: {
       '@react-navigation/native': resolve(__dirname, 'src/test/mocks/react-navigation-native.ts'),
       'react-native': resolve(__dirname, 'src/test/mocks/react-native.tsx'),
+      'react-native-keyboard-controller': resolve(__dirname, 'src/test/mocks/react-native-keyboard-controller.tsx'),
       'expo-modules-core': resolve(__dirname, 'src/test/mocks/expo-modules-core.ts'),
       '@react-native-firebase/analytics': resolve(__dirname, 'src/test/mocks/react-native-firebase-analytics.ts'),
       '@react-native-firebase/crashlytics': resolve(__dirname, 'src/test/mocks/react-native-firebase-crashlytics.ts'),

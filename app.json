@@ -2,6 +2,7 @@
   "expo": {
     "name": "Mythgate 5e Companion",
     "slug": "DnDCharacter",
+    "scheme": "mythgatednd",
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/crashlytics",
@@ -39,7 +40,16 @@
         "backgroundColor": "#EE1B24"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.vind.MythgateDND"
+      "package": "com.vind.MythgateDND",
+      "predictiveBackGestureEnabled": true,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [{ "scheme": "https", "host": "mythgatednd.pp.ua", "pathPrefix": "/join" }],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

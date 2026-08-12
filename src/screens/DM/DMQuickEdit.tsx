@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, View, Text, Pressable, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useTranslation } from 'react-i18next';
 import { CommonActions } from '@react-navigation/native';
 import type { StackScreenProps } from '@react-navigation/stack';
@@ -160,7 +161,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content} bottomOffset={16}>
       <View style={styles.card}>
         <Text style={styles.title}>{t('quickEdit.titleWithName', { name: character.name || t('quickEdit.characterFallback') })}</Text>
         <Text style={styles.hint}>{t('quickEdit.hint')}</Text>
@@ -203,10 +204,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           <Pressable
             style={styles.laneButton}
             onPress={() => {
-              void commitPatch(
-                (prev) => ({ ...prev, hp: { ...prev.hp, temp: (prev.hp?.temp || 0) + 1 } }),
-                ['combat.hp'],
-              );
+              void commitPatch((prev) => ({ ...prev, hp: { ...prev.hp, temp: (prev.hp?.temp || 0) + 1 } }), ['combat.hp']);
             }}
             android_ripple={{ color: colors.ripple }}
           >
@@ -219,8 +217,12 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           </Pressable>
         </View>
 
-        <Text style={styles.updateMeta}>{t('quickEdit.hpLine', { current: character.hp?.current || 0, max: character.hp?.max || 0, temp: character.hp?.temp || 0 })}</Text>
-        <Text style={styles.updateMeta}>{t('quickEdit.acInitiativeLine', { ac: character.ac || 0, initiative: character.initiative || 0 })}</Text>
+        <Text style={styles.updateMeta}>
+          {t('quickEdit.hpLine', { current: character.hp?.current || 0, max: character.hp?.max || 0, temp: character.hp?.temp || 0 })}
+        </Text>
+        <Text style={styles.updateMeta}>
+          {t('quickEdit.acInitiativeLine', { ac: character.ac || 0, initiative: character.initiative || 0 })}
+        </Text>
 
         <View style={styles.laneGrid}>
           <Pressable
@@ -286,7 +288,9 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
             <Text style={styles.laneButtonText}>{t('quickEdit.clearConditions')}</Text>
           </Pressable>
         </View>
-        <Text style={styles.updateMeta}>{t('quickEdit.currentConditions', { conditions: (character.conditions || []).join(', ') || t('quickEdit.noConditions') })}</Text>
+        <Text style={styles.updateMeta}>
+          {t('quickEdit.currentConditions', { conditions: (character.conditions || []).join(', ') || t('quickEdit.noConditions') })}
+        </Text>
       </View>
 
       <View style={styles.card}>
@@ -384,7 +388,9 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
         {(character.customResources || []).map((resource) => (
           <View key={resource.id} style={styles.updateRow}>
             <Text style={styles.updateTitle}>{resource.label || t('quickEdit.resourceFallback')}</Text>
-            <Text style={styles.updateMeta}>{resource.current}/{resource.max ?? '-'}</Text>
+            <Text style={styles.updateMeta}>
+              {resource.current}/{resource.max ?? '-'}
+            </Text>
             <View style={styles.laneGrid}>
               <Pressable
                 style={styles.laneButton}
@@ -444,10 +450,7 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           onPress={() => {
             const nextItem = inventoryInput.trim();
             if (!nextItem) return;
-            void commitPatch(
-              (prev) => ({ ...prev, inventory: [...(prev.inventory || []), nextItem] }),
-              ['inventory.items'],
-            );
+            void commitPatch((prev) => ({ ...prev, inventory: [...(prev.inventory || []), nextItem] }), ['inventory.items']);
             setInventoryInput('');
           }}
           android_ripple={{ color: colors.ripple }}
@@ -497,7 +500,12 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
         </Pressable>
       </View>
 
-      <Modal isVisible={isHpModalVisible} onClose={() => setIsHpModalVisible(false)} onSubmit={saveHpModal} title={t('quickEdit.changeHpTitle')}>
+      <Modal
+        isVisible={isHpModalVisible}
+        onClose={() => setIsHpModalVisible(false)}
+        onSubmit={saveHpModal}
+        title={t('quickEdit.changeHpTitle')}
+      >
         <Text style={styles.modalLabel}>{t('quickEdit.currentHp')}</Text>
         <TextInput
           value={tempCurrentHp}
@@ -526,11 +534,8 @@ const DMQuickEdit: React.FC<Props> = ({ route, navigation }) => {
           placeholderTextColor={colors.textSecondary}
         />
       </Modal>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
 export default DMQuickEdit;
-
-
-

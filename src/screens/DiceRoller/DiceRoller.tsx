@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { Animated, Pressable, Text, TextInput, View } from 'react-native';
+import { KeyboardAwareScrollView, type KeyboardAwareScrollViewRef } from 'react-native-keyboard-controller';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +27,17 @@ function appendFormulaModifier(formula: string, modifier: number): string {
 function clampDiceCount(count: number): number {
   if (!Number.isFinite(count)) return MIN_DICE_COUNT;
   return Math.min(Math.max(Math.floor(count), MIN_DICE_COUNT), MAX_DICE_COUNT);
+}
+
+type DiceCounts = Partial<Record<DiceType, number>>;
+
+// Builds a "2d8+2d6" style formula from the per-die tap counters — reuses the existing
+// rollFormula() parser instead of adding a second multi-dice execution path.
+function buildFormulaFromCounts(counts: DiceCounts): string {
+  return Object.entries(counts)
+    .filter((entry): entry is [DiceType, number] => (entry[1] ?? 0) > 0)
+    .map(([dice, count]) => `${count}${dice}`)
+    .join('+');
 }
 
 function formatResultDetails(result: DiceRollResult, t: TFunction<'dice'>): string[] {
@@ -108,12 +120,13 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
   const pulse = useRef(new Animated.Value(1)).current;
   const autoRolledPresetId = useRef<string | null>(null);
 
-  const [selectedDice, setSelectedDice] = useState<DiceType>(preset?.dice ?? 'd20');
   const [modifier, setModifier] = useState(preset?.modifier ?? 0);
   const [proficiencyBonus, setProficiencyBonus] = useState(preset?.proficiencyBonus ?? 2);
   const [includeProficiency, setIncludeProficiency] = useState(preset?.includeProficiency ?? false);
   const [mode, setMode] = useState<RollMode>(preset?.mode ?? 'normal');
-  const [diceCount, setDiceCount] = useState(clampDiceCount(preset?.count ?? 1));
+  const [diceCounts, setDiceCounts] = useState<DiceCounts>(() =>
+    (preset?.mode ?? 'normal') === 'normal' ? { [preset?.dice ?? 'd20']: clampDiceCount(preset?.count ?? 1) } : {},
+  );
   const [customFormula, setCustomFormula] = useState(preset?.formula ?? '');
   const [result, setResult] = useState<DiceRollResult | null>(null);
   const [history, setHistory] = useState<DiceRollResult[]>([]);
@@ -198,12 +211,11 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
     const nextCount = nextMode === 'normal' ? clampDiceCount(preset.count ?? 1) : 1;
     const nextFormula = preset.formula ?? '';
 
-    setSelectedDice(nextDice);
     setModifier(nextModifier);
     setProficiencyBonus(nextProficiencyBonus);
     setIncludeProficiency(nextIncludeProficiency);
     setMode(nextMode);
-    setDiceCount(nextCount);
+    setDiceCounts(nextMode === 'normal' ? { [nextDice]: nextCount } : {});
     setCustomFormula(nextFormula);
     setResult(null);
     setHistory([]);
@@ -224,18 +236,26 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
     }
   }, [autoRoll, performRollFromConfig, preset]);
 
-  const handleDiceChange = (dice: DiceType) => {
-    setSelectedDice(dice);
-    if (dice !== 'd20' && mode !== 'normal') setMode('normal');
+  const handleDiceChipPress = (dice: DiceType) => {
+    setDiceCounts((prev) => ({ ...prev, [dice]: Math.min((prev[dice] ?? 0) + 1, MAX_DICE_COUNT) }));
   };
+
+  const handleDiceChipLongPress = (dice: DiceType) => {
+    setDiceCounts((prev) => {
+      const nextCount = Math.max((prev[dice] ?? 0) - 1, 0);
+      if (nextCount === 0) {
+        const { [dice]: _removed, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [dice]: nextCount };
+    });
+  };
+
+  const resetDiceCounts = () => setDiceCounts({});
 
   const handleModeChange = (nextMode: RollMode) => {
     setMode(nextMode);
-    if (nextMode !== 'normal') {
-      setSelectedDice('d20');
-      setDiceCount(1);
-      if (customFormula.trim()) setCustomFormula('');
-    }
+    if (nextMode !== 'normal' && customFormula.trim()) setCustomFormula('');
   };
 
   const handleFormulaChange = (value: string) => {
@@ -244,21 +264,40 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
   };
 
   const performRoll = () => {
+    if (mode !== 'normal') {
+      performRollFromConfig({
+        dice: 'd20',
+        modifier,
+        proficiencyBonus,
+        includeProficiency,
+        mode,
+        count: 1,
+        customFormula: '',
+        label: preset?.label,
+      });
+      return;
+    }
+
+    const formula = customFormula.trim() || buildFormulaFromCounts(diceCounts);
+    if (!formula) {
+      setError(t('errors.noDiceSelected'));
+      return;
+    }
+
     performRollFromConfig({
-      dice: selectedDice,
+      dice: 'd20',
       modifier,
       proficiencyBonus,
       includeProficiency,
       mode,
-      count: diceCount,
-      customFormula,
+      count: 1,
+      customFormula: formula,
       label: preset?.label,
     });
   };
 
   const adjustModifier = (delta: number) => setModifier((prev) => prev + delta);
   const adjustProficiency = (delta: number) => setProficiencyBonus((prev) => Math.max(prev + delta, 0));
-  const adjustDiceCount = (delta: number) => setDiceCount((prev) => clampDiceCount(prev + delta));
 
   return (
     <View style={embedded ? styles.embeddedContent : styles.content}>
@@ -280,46 +319,43 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t('labels.diceType')}</Text>
-        <View style={styles.chipGrid}>
-          {DICE_OPTIONS.map((dice) => (
-            <Pressable
-              key={dice}
-              style={[styles.chip, selectedDice === dice ? styles.chipActive : null]}
-              onPress={() => handleDiceChange(dice)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, selectedDice === dice ? styles.chipTextActive : null]}>{dice}</Text>
-            </Pressable>
-          ))}
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{t('labels.count')}</Text>
-        <View style={styles.stepperRow}>
-          <Pressable
-            testID='diceRoller.count.decrement'
-            style={[styles.stepperButton, isCountLocked ? styles.stepperButtonDisabled : null]}
-            onPress={() => adjustDiceCount(-1)}
-            android_ripple={{ color: colors.ripple }}
-            disabled={isCountLocked || diceCount <= MIN_DICE_COUNT}
-          >
-            <Text style={styles.stepperText}>-</Text>
-          </Pressable>
-          <Text testID='diceRoller.count.value' style={styles.stepperValue}>
-            {diceCount}
-          </Text>
-          <Pressable
-            testID='diceRoller.count.increment'
-            style={[styles.stepperButton, isCountLocked ? styles.stepperButtonDisabled : null]}
-            onPress={() => adjustDiceCount(1)}
-            android_ripple={{ color: colors.ripple }}
-            disabled={isCountLocked || diceCount >= MAX_DICE_COUNT}
-          >
-            <Text style={styles.stepperText}>+</Text>
-          </Pressable>
-        </View>
-        {isCountLocked ? <Text style={styles.helperText}>{t('labels.countLockedForD20Mode')}</Text> : null}
+        {isCountLocked ? (
+          <>
+            <Text style={styles.stepperValue}>1d20</Text>
+            <Text style={styles.helperText}>{t('labels.countLockedForD20Mode')}</Text>
+          </>
+        ) : (
+          <>
+            <View style={styles.chipGrid}>
+              {DICE_OPTIONS.map((dice) => {
+                const count = diceCounts[dice] ?? 0;
+                return (
+                  <Pressable
+                    key={dice}
+                    testID={`diceRoller.diceChip.${dice}`}
+                    style={[styles.chip, count > 0 ? styles.chipActive : null]}
+                    onPress={() => handleDiceChipPress(dice)}
+                    onLongPress={() => handleDiceChipLongPress(dice)}
+                    android_ripple={{ color: colors.ripple }}
+                  >
+                    <Text style={[styles.chipText, count > 0 ? styles.chipTextActive : null]}>{count > 0 ? `${count}${dice}` : dice}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+            <View style={styles.diceTypeFooterRow}>
+              <Text style={styles.helperText}>{t('labels.diceTypeHint')}</Text>
+              <Pressable
+                testID='diceRoller.resetCount'
+                style={styles.resetCountButton}
+                onPress={resetDiceCounts}
+                android_ripple={{ color: colors.ripple }}
+              >
+                <Text style={styles.resetCountButtonText}>{t('actions.resetCount')}</Text>
+              </Pressable>
+            </View>
+          </>
+        )}
       </View>
 
       <View style={styles.section}>
@@ -435,16 +471,16 @@ export const DiceRollerPanel: React.FC<DiceRollerPanelProps> = ({
 const DiceRoller: React.FC = () => {
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<KeyboardAwareScrollViewRef>(null);
 
   const scrollToResult = () => {
     scrollRef.current?.scrollTo({ y: 0, animated: true });
   };
 
   return (
-    <ScrollView ref={scrollRef} style={styles.container} keyboardShouldPersistTaps='handled'>
+    <KeyboardAwareScrollView ref={scrollRef} style={styles.container} keyboardShouldPersistTaps='handled' bottomOffset={16}>
       <DiceRollerPanel onRollPress={scrollToResult} />
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

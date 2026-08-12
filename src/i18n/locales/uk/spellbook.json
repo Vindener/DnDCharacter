@@ -29,14 +29,14 @@
     "no": "Ні"
   },
   "levels": {
-    "cantrip": "Каніпс",
+    "cantrip": "Заговори",
     "level": "Рівень {{level}}"
   },
   "status": {
     "available": "Доступне",
     "known": "Відоме",
     "prepared": "Підготовлене",
-    "cantrip": "Каніпс"
+    "cantrip": "Заговори"
   },
   "sources": {
     "userCustom": "Власне",

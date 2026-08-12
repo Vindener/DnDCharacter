@@ -651,7 +651,7 @@ const Spellbook = ({ route }: Props) => {
         testID='spellbook.searchInput'
       />
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsRow}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsRowScroll} contentContainerStyle={styles.tabsRow}>
         {TABS.map((tab) => (
           <Pressable
             key={tab}
@@ -666,7 +666,7 @@ const Spellbook = ({ route }: Props) => {
       </ScrollView>
 
       <View style={styles.filtersBlock}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsRowScroll} contentContainerStyle={styles.chipsRow}>
           {LEVEL_FILTERS.map((item) => (
             <Pressable
               key={`level-${String(item)}`}
@@ -823,7 +823,7 @@ const Spellbook = ({ route }: Props) => {
         }
       >
         {selectedSpell ? (
-          <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
+          <View style={[styles.modalScroll, styles.modalScrollContent]}>
             {(() => {
               const display = getDisplaySpell(selectedSpell, sortLocale);
               const sourceLabel = getSourceLabel(t, selectedSpell.source);
@@ -935,7 +935,7 @@ const Spellbook = ({ route }: Props) => {
                 </Pressable>
               </>
             ) : null}
-          </ScrollView>
+          </View>
         ) : null}
       </Modal>
 
@@ -946,7 +946,7 @@ const Spellbook = ({ route }: Props) => {
         title={editingSpell ? t('form.editTitle') : t('form.newTitle')}
         subtitle={editingSpell && !isEditableSpellSource(editingSpell) ? t('form.copySubtitle') : t('form.localSubtitle')}
       >
-        <ScrollView style={styles.modalScroll} contentContainerStyle={styles.modalScrollContent} keyboardShouldPersistTaps='handled'>
+        <View style={[styles.modalScroll, styles.modalScrollContent]}>
           <Text style={styles.modalLabel}>{t('form.name')}</Text>
           <TextInput
             value={modalName}
@@ -1067,7 +1067,7 @@ const Spellbook = ({ route }: Props) => {
           />
           <Text style={styles.modalHint}>{t('form.damageProfileFormat')}</Text>
           <Text style={styles.modalHint}>{t('form.damageTypes', { types: SPELL_DAMAGE_TYPES.join(', ') })}</Text>
-        </ScrollView>
+        </View>
       </Modal>
     </View>
   );

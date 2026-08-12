@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
@@ -93,16 +94,18 @@ export default function App() {
     <ErrorBoundary>
       <AuthProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <SafeAreaProvider>
-            <AppStatusBar />
-            <CrashlyticsUserBinding />
-            <NavigatorRenderProbe>
-              <AppNavigator />
-            </NavigatorRenderProbe>
-            <Toast />
-            <WhatsNewModal />
-            <FirstLaunchModals />
-          </SafeAreaProvider>
+          <KeyboardProvider>
+            <SafeAreaProvider>
+              <AppStatusBar />
+              <CrashlyticsUserBinding />
+              <NavigatorRenderProbe>
+                <AppNavigator />
+              </NavigatorRenderProbe>
+              <Toast />
+              <WhatsNewModal />
+              <FirstLaunchModals />
+            </SafeAreaProvider>
+          </KeyboardProvider>
         </GestureHandlerRootView>
       </AuthProvider>
     </ErrorBoundary>

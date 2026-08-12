@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import { Modal as RNModal, View, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { Modal as RNModal, View, Pressable, StyleSheet } from 'react-native';
+import { KeyboardAwareScrollView, type KeyboardAwareScrollViewRef } from 'react-native-keyboard-controller';
 import { getStyles } from '@/shared/components/Modal/style';
 import useThemeStore from '@/context/Theme-store';
 import { Button, Text } from '@/shared/ui';
@@ -19,7 +20,7 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 
   const { t } = useTranslation('common');
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
-  const scrollRef = React.useRef<ScrollView>(null);
+  const scrollRef = React.useRef<KeyboardAwareScrollViewRef>(null);
 
   React.useEffect(() => {
     if (!isVisible || scrollToTopSignal === 0) return;
@@ -37,15 +38,16 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 
           {title ? <Text style={styles.title}>{title}</Text> : null}
           {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
           <View style={styles.content}>
-            <ScrollView
+            <KeyboardAwareScrollView
               ref={scrollRef}
               style={styles.scrollArea}
               contentContainerStyle={styles.scrollContent}
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps='handled'
+              bottomOffset={16}
             >
               {children}
-            </ScrollView>
+            </KeyboardAwareScrollView>
             {onSubmit ? (
               <View style={styles.actions}>
                 <Button title={t('actions.save')} variant='primary' onPress={onSubmit} />

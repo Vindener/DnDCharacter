@@ -111,6 +111,26 @@ export const getStyles = (c: ThemeColors) =>
       flexWrap: 'wrap',
       gap: sp(8),
     },
+    diceTypeFooterRow: {
+      gap: sp(8),
+      marginTop: sp(4),
+    },
+    // Uses c.background (not c.card/secondaryButton) so it's visible against this section's
+    // own c.card fill — c.border equals c.card in dark mode, so a card-on-card button here
+    // has no visible edge at all (matches the chip background pattern above).
+    resetCountButton: {
+      alignItems: 'center',
+      borderRadius: rd(8),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: sp(9),
+    },
+    resetCountButtonText: {
+      color: c.text,
+      fontSize: fs(13),
+      fontWeight: '800',
+    },
     chip: {
       minWidth: 62,
       borderRadius: rd(10),

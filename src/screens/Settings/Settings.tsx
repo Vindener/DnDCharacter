@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Switch, Modal, TextInput, Pressable, ScrollView, Linking } from 'react-native';
+import { View, Text, Switch, Modal, TextInput, Pressable, Linking } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
@@ -134,7 +135,7 @@ const Settings = () => {
 
   return (
     <View style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.content} bottomOffset={16}>
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('settings:appearance.title')}</Text>
           <View style={styles.row}>
@@ -154,8 +155,6 @@ const Settings = () => {
           <Auth />
         </View>
 
-        <DeleteAccountModal />
-
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('settings:language.title')}</Text>
           <Text style={styles.sectionHint}>{t('settings:language.hint')}</Text>
@@ -164,6 +163,48 @@ const Settings = () => {
             {renderLanguageButton('en', t('settings:language.english'))}
           </View>
         </View>
+        {campaigns.length > 0 && (
+          <View style={styles.card}>
+            <Text style={styles.sectionTitle}>{t('settings:defaultCampaign.title')}</Text>
+            <Text style={styles.sectionHint}>{t('settings:defaultCampaign.hint')}</Text>
+            <View style={styles.languageRow}>
+              <Pressable
+                accessibilityRole='button'
+                accessibilityState={{ selected: !defaultCampaignId }}
+                android_ripple={{ color: colors.ripple }}
+                onPress={() => void setDefaultCampaignId(null)}
+                style={({ pressed }) => [
+                  styles.languageButton,
+                  !defaultCampaignId ? styles.languageButtonActive : null,
+                  pressed ? styles.languageButtonPressed : null,
+                ]}
+              >
+                <Text style={[styles.languageButtonText, !defaultCampaignId ? styles.languageButtonTextActive : null]}>
+                  {t('settings:defaultCampaign.none')}
+                </Text>
+              </Pressable>
+              {campaigns.map((campaign) => {
+                const isActive = defaultCampaignId === campaign.id;
+                return (
+                  <Pressable
+                    key={campaign.id}
+                    accessibilityRole='button'
+                    accessibilityState={{ selected: isActive }}
+                    android_ripple={{ color: colors.ripple }}
+                    onPress={() => void setDefaultCampaignId(campaign.id)}
+                    style={({ pressed }) => [
+                      styles.languageButton,
+                      isActive ? styles.languageButtonActive : null,
+                      pressed ? styles.languageButtonPressed : null,
+                    ]}
+                  >
+                    <Text style={[styles.languageButtonText, isActive ? styles.languageButtonTextActive : null]}>{campaign.name}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+        )}
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('settings:customCoins.title')}</Text>
@@ -216,48 +257,7 @@ const Settings = () => {
           </Pressable>
         </View>
 
-        {campaigns.length > 0 && (
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>{t('settings:defaultCampaign.title')}</Text>
-            <Text style={styles.sectionHint}>{t('settings:defaultCampaign.hint')}</Text>
-            <View style={styles.languageRow}>
-              <Pressable
-                accessibilityRole='button'
-                accessibilityState={{ selected: !defaultCampaignId }}
-                android_ripple={{ color: colors.ripple }}
-                onPress={() => void setDefaultCampaignId(null)}
-                style={({ pressed }) => [
-                  styles.languageButton,
-                  !defaultCampaignId ? styles.languageButtonActive : null,
-                  pressed ? styles.languageButtonPressed : null,
-                ]}
-              >
-                <Text style={[styles.languageButtonText, !defaultCampaignId ? styles.languageButtonTextActive : null]}>
-                  {t('settings:defaultCampaign.none')}
-                </Text>
-              </Pressable>
-              {campaigns.map((campaign) => {
-                const isActive = defaultCampaignId === campaign.id;
-                return (
-                  <Pressable
-                    key={campaign.id}
-                    accessibilityRole='button'
-                    accessibilityState={{ selected: isActive }}
-                    android_ripple={{ color: colors.ripple }}
-                    onPress={() => void setDefaultCampaignId(campaign.id)}
-                    style={({ pressed }) => [
-                      styles.languageButton,
-                      isActive ? styles.languageButtonActive : null,
-                      pressed ? styles.languageButtonPressed : null,
-                    ]}
-                  >
-                    <Text style={[styles.languageButtonText, isActive ? styles.languageButtonTextActive : null]}>{campaign.name}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
-        )}
+        <DeleteAccountModal />
 
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('settings:analytics.title')}</Text>
@@ -288,7 +288,7 @@ const Settings = () => {
             </View>
           </View>
         )}
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <Modal visible={modalVisible} transparent animationType='fade' onRequestClose={closeModal}>
         <View style={styles.modalBackdrop}>

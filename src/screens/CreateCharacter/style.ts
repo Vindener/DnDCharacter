@@ -8,9 +8,6 @@ export const getStyles = (c: ThemeColors) =>
       flex: 1,
       backgroundColor: c.background,
     },
-    keyboardAvoider: {
-      flex: 1,
-    },
     shell: {
       flex: 1,
       backgroundColor: c.background,

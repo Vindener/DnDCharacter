@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Linking, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Linking, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { fs, rd, sp } from '@/shared/styles/tokens';
@@ -64,7 +65,7 @@ export default function Support() {
 
   return (
     <View style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.container} bottomOffset={16}>
         <View style={styles.card}>
           <Text style={styles.title}>{t('sections.donation')}</Text>
           <Text style={{ color: colors.warning, fontWeight: '600' as const }}>{t('donation.warning')}</Text>
@@ -91,7 +92,7 @@ export default function Support() {
             <Text style={styles.btnText}>{t('feedback.telegramDirect')}</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 }

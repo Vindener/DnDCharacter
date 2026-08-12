@@ -72,6 +72,9 @@ function sanitizeCampaign(raw: unknown): DMCampaign | null {
     partyLevelEstimate: clampPartyLevelEstimate(cast.partyLevelEstimate),
     pinnedMonsterIds: sanitizeCampaignPinnedIds(cast.pinnedMonsterIds),
     pinnedSpellIds: sanitizeCampaignPinnedIds(cast.pinnedSpellIds),
+    activeInviteCode: cast.activeInviteCode ? String(cast.activeInviteCode) : undefined,
+    activeInviteExpiresAtMs: typeof cast.activeInviteExpiresAtMs === 'number' ? cast.activeInviteExpiresAtMs : undefined,
+    activeInviteUsedCount: typeof cast.activeInviteUsedCount === 'number' ? cast.activeInviteUsedCount : undefined,
   };
 }
 
@@ -99,6 +102,9 @@ function mapCloudCampaign(doc: Record<string, unknown>): DMCampaign | null {
     partyLevelEstimate: clampPartyLevelEstimate(migrated.partyLevelEstimate),
     pinnedMonsterIds: sanitizeCampaignPinnedIds(migrated.pinnedMonsterIds),
     pinnedSpellIds: sanitizeCampaignPinnedIds(migrated.pinnedSpellIds),
+    activeInviteCode: migrated.activeInviteCode ? String(migrated.activeInviteCode) : undefined,
+    activeInviteExpiresAtMs: typeof migrated.activeInviteExpiresAtMs === 'number' ? migrated.activeInviteExpiresAtMs : undefined,
+    activeInviteUsedCount: typeof migrated.activeInviteUsedCount === 'number' ? migrated.activeInviteUsedCount : undefined,
   };
 }
 

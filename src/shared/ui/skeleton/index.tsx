@@ -93,24 +93,14 @@ export function SkeletonBox({ width = '100%', height = 16, radius = rd(8), style
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const opacity = usePulse();
 
-  return (
-    <Animated.View
-      testID={testID}
-      style={[styles.surface, { width, height, borderRadius: radius, opacity }, style]}
-    />
-  );
+  return <Animated.View testID={testID} style={[styles.surface, { width, height, borderRadius: radius, opacity }, style]} />;
 }
 
 export function SkeletonText({ lines = 1, width = '100%', lastLineWidth = '70%', style, testID }: SkeletonTextProps) {
   return (
     <View testID={testID} style={[{ gap: sp(6) }, style]}>
       {Array.from({ length: lines }).map((_, index) => (
-        <SkeletonBox
-          key={`skeleton-text-${index}`}
-          width={index === lines - 1 ? lastLineWidth : width}
-          height={12}
-          radius={rd(6)}
-        />
+        <SkeletonBox key={`skeleton-text-${index}`} width={index === lines - 1 ? lastLineWidth : width} height={12} radius={rd(6)} />
       ))}
     </View>
   );
@@ -139,7 +129,13 @@ export function SkeletonList({ count = 4, renderItem, testID }: SkeletonListProp
     <View testID={testID} style={styles.list}>
       {Array.from({ length: count }).map((_, index) => (
         <React.Fragment key={`skeleton-list-${index}`}>
-          {renderItem ? renderItem(index) : <SkeletonCard><SkeletonText lines={3} /></SkeletonCard>}
+          {renderItem ? (
+            renderItem(index)
+          ) : (
+            <SkeletonCard>
+              <SkeletonText lines={3} />
+            </SkeletonCard>
+          )}
         </React.Fragment>
       ))}
     </View>
@@ -250,7 +246,14 @@ export function SkeletonCharacterSheet() {
           ))}
         </View>
       </SkeletonCard>
-      <SkeletonList count={3} renderItem={() => <SkeletonCard><SkeletonText lines={4} /></SkeletonCard>} />
+      <SkeletonList
+        count={3}
+        renderItem={() => (
+          <SkeletonCard>
+            <SkeletonText lines={4} />
+          </SkeletonCard>
+        )}
+      />
     </ScrollView>
   );
 }
@@ -268,6 +271,28 @@ export function SkeletonSpellbook() {
         ))}
       </View>
       <SkeletonList count={4} renderItem={() => <SkeletonSpellCard />} />
+    </View>
+  );
+}
+
+export function SkeletonCampaigns() {
+  const colors = useThemeStore((s) => s.colors);
+  const styles = React.useMemo(() => getStyles(colors), [colors]);
+
+  return (
+    <View testID='skeleton-campaigns' style={styles.list}>
+      <SkeletonList
+        count={3}
+        renderItem={(index) => (
+          <SkeletonCard key={`skeleton-campaign-${index}`}>
+            <SkeletonText lines={2} lastLineWidth='60%' />
+            <View style={styles.wrapRow}>
+              <SkeletonBox width={90} height={30} radius={rd(8)} />
+              <SkeletonBox width={90} height={30} radius={rd(8)} />
+            </View>
+          </SkeletonCard>
+        )}
+      />
     </View>
   );
 }

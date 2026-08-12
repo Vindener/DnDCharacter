@@ -82,11 +82,29 @@ export const createCampaignInvite = onCall<CreateCampaignInviteRequest, Promise<
         // .create() (not .set()) so a same-tick collision with another generation
         // attempt throws instead of silently overwriting an existing invite.
         await inviteRef.create(invite);
-        logger.info('createCampaignInvite: completed', { campaignId, uid });
-        return { code, expiresAtMs };
       } catch {
         // Collision — retry with a freshly generated code.
+        continue;
       }
+
+      // Denormalized onto the campaign doc so the owner can see "is there an active
+      // code, has anyone used it" from a normal dmCampaigns read — dmCampaignInvites
+      // itself has `list: false` (SEC: prevents code enumeration), so it can't be
+      // queried directly from the client. Point update only — never touches
+      // owners/editors, so this can't race with an addEditor/removeEditor transaction.
+      // Deliberately outside the collision try/catch above: a failure here must not
+      // trigger a retry that mints a second, orphaned invite code.
+      try {
+        await db
+          .collection('dmCampaigns')
+          .doc(campaignId)
+          .update({ activeInviteCode: code, activeInviteExpiresAtMs: expiresAtMs, activeInviteUsedCount: 0 });
+      } catch (error) {
+        logger.error('createCampaignInvite: invite created but campaign denormalization failed', { campaignId, uid, error });
+      }
+
+      logger.info('createCampaignInvite: completed', { campaignId, uid });
+      return { code, expiresAtMs };
     }
 
     logger.error('createCampaignInvite: exhausted code generation attempts', { campaignId, uid });

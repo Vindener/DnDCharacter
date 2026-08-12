@@ -39,6 +39,14 @@
           }
         },
         {
+          "client_id": "608733335623-jvb8c3heiqd32guiivplgdnqcifo43vn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vind.MythgateDND",
+            "certificate_hash": "69ca6e33cf4c67837fde7866a610db42f52b3fcc"
+          }
+        },
+        {
           "client_id": "608733335623-oj54b5jvuvjfik8mlb2ltpta5bbio3c7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

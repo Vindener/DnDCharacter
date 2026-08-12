@@ -12,6 +12,9 @@ export interface DMCampaign {
   partyLevelEstimate?: number;
   pinnedMonsterIds?: string[];
   pinnedSpellIds?: string[];
+  activeInviteCode?: string;
+  activeInviteExpiresAtMs?: number;
+  activeInviteUsedCount?: number;
 }
 
 export type CampaignLinkInput = {

@@ -152,7 +152,7 @@
     "openSpellbook": "Відкрити Spellbook",
     "pinnedSpells": "Закріплені закляття",
     "noPinnedSpells": "Закріплених заклять немає",
-    "cantrip": "Каніпс",
+    "cantrip": "Заговори",
     "spellRolls": "Кидки заклять",
     "quickRollsEmpty": "Додайте закляття до Prepared/Known/Cantrip для швидких кидків.",
     "preparedSpells": "Підготовлені закляття",
@@ -601,8 +601,8 @@
       "preparedLimitMessage": "Підготовлено {{count}}/{{limit}}. Приберіть одне підготовлене закляття або підвищіть рівень/характеристику.",
       "addKnown": "+ Додати у відомі",
       "addPrepared": "+ Додати у підготовлені",
-      "addCantrip": "+ Додати як каніпс",
-      "cantrip": "каніпс",
+      "addCantrip": "+ Додати як заговори",
+      "cantrip": "заговори",
       "level": "рівень {{level}}"
     },
     "rest": {
