@@ -16,6 +16,8 @@ import {
 
 type Phase = 'closed' | 'loadingPreview' | 'preview' | 'processing' | 'success' | 'partial' | 'error';
 
+const isDev = typeof __DEV__ !== 'undefined' && __DEV__;
+
 function previewActionKey(action: AccountDeletionPreviewItem['action']['type']): string {
   switch (action) {
     case 'delete':
@@ -79,12 +81,14 @@ export default function DeleteAccountModal() {
       }
       await logout().catch(() => {});
     } catch (err: unknown) {
+      if (isDev)
+        console.error('[DeleteAccountModal] requestAccountDeletion FAILED (is deleteMyAccount deployed on this Firebase project?):', err);
+      // Cloud Functions error codes (e.g. raw "NOT_FOUND" when the function isn't
+      // deployed yet) are not user-facing text — always show the generic copy here.
       const message =
         err instanceof AccountDeletionError && err.code === 'reauth-failed'
           ? t('settings:account.dangerZone.reauthCancelled')
-          : err instanceof Error
-            ? err.message
-            : String(err);
+          : t('settings:account.dangerZone.errorMessage');
       setErrorMessage(message);
       setPhase('error');
     }

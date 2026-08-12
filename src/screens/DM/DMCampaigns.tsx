@@ -237,18 +237,14 @@ const DMCampaigns: React.FC = () => {
             >
               <Text style={styles.authButtonText}>{t('dm:campaignsList.newCampaignButton')}</Text>
             </Pressable>
-            {/* Functional once createCampaignInvite/redeemCampaignInvite are deployed on
-                a Blaze-plan Firebase project — disabled until then. */}
             <Pressable
-              style={[styles.authButton, { opacity: 0.45 }]}
-              disabled
+              style={styles.authButton}
               onPress={openRedeemModal}
               android_ripple={{ color: colors.ripple }}
               testID='dmCampaigns.redeemInviteButton'
             >
               <Text style={styles.authButtonText}>{t('dm:campaignsList.redeemInviteButton')}</Text>
             </Pressable>
-            <Text style={styles.hint}>{t('dm:campaignsList.redeemInviteDisabledHint')}</Text>
           </>
         )}
       </View>

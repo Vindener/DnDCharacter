@@ -416,11 +416,8 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
 
         {isOwner && (
           <>
-            {/* Code-based invite: functional once createCampaignInvite/redeemCampaignInvite
-                are deployed on a Blaze-plan Firebase project — disabled until then. */}
             <Pressable
-              style={[styles.authButton, { opacity: 0.45 }]}
-              disabled
+              style={styles.authButton}
               onPress={() => {
                 void openInviteModal();
               }}
@@ -429,7 +426,6 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
             >
               <Text style={styles.authButtonText}>{t('dm:campaignDetail.inviteButton')}</Text>
             </Pressable>
-            <Text style={styles.hint}>{t('dm:campaignDetail.inviteCodeDisabledHint')}</Text>
             <Pressable
               style={styles.authButton}
               onPress={openEmailInviteModal}
