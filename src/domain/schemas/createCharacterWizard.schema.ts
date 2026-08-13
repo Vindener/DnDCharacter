@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {
   ABILITY_KEYS,
   POINT_BUY_BUDGET,
+  isStandardArrayComplete,
   pointBuySpent,
   type ShareTarget,
   type StartMethod,
@@ -24,6 +25,7 @@ export type CreateCharacterWizardPayload = {
   backgroundKey: string;
   customBackground: string;
   statMethod: StatMethod;
+  stats: Record<string, number>;
   pointBuyStats: Record<string, number>;
   manualStats: Record<string, string>;
   rollStats: Record<string, string>;
@@ -81,6 +83,7 @@ function normalizeWizardPayload(raw: unknown): CreateCharacterWizardPayload {
     backgroundKey: toTrimmedString(cast.backgroundKey),
     customBackground: toTrimmedString(cast.customBackground),
     statMethod: STAT_METHODS.includes(statMethodRaw as StatMethod) ? (statMethodRaw as StatMethod) : 'array',
+    stats: normalizeRecordNumbers(cast.stats),
     pointBuyStats: normalizeRecordNumbers(cast.pointBuyStats),
     manualStats: normalizeRecordStrings(cast.manualStats),
     rollStats: normalizeRecordStrings(cast.rollStats),
@@ -119,6 +122,20 @@ function validateRaceClassBackground(value: CreateCharacterWizardPayload, ctx: z
 }
 
 function validateStats(value: CreateCharacterWizardPayload, ctx: z.RefinementCtx): void {
+  if (value.statMethod === 'array') {
+    const stats = {
+      strength: value.stats.strength ?? 0,
+      dexterity: value.stats.dexterity ?? 0,
+      constitution: value.stats.constitution ?? 0,
+      intelligence: value.stats.intelligence ?? 0,
+      wisdom: value.stats.wisdom ?? 0,
+      charisma: value.stats.charisma ?? 0,
+    };
+    if (!isStandardArrayComplete(stats)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['stats'], message: 'Розподіліть усі шість значень стандартного масиву.' });
+    }
+  }
+
   if (value.statMethod === 'pointbuy') {
     const spent = pointBuySpent({
       strength: value.pointBuyStats.strength ?? 8,
@@ -167,12 +184,16 @@ function validateStorage(value: CreateCharacterWizardPayload, ctx: z.RefinementC
   if (value.storageMode === 'local-cloud' && !value.isOnline) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['storageMode'], message: 'Хмарне створення недоступне офлайн.' });
   }
-  if (!value.inviteEmail) return;
-  if (!EMAIL_REGEX.test(value.inviteEmail)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['inviteEmail'], message: 'Електронна пошта для шерінгу має некоректний формат.' });
+  if (value.shareTarget !== 'none') {
+    if (value.storageMode === 'local-only') {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['storageMode'], message: 'Шерінг доступний тільки у режимі "Локально + Хмара".' });
+    }
+    if (!value.inviteEmail) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['inviteEmail'], message: 'Вкажіть email, щоб додати редактора.' });
+    }
   }
-  if (value.storageMode === 'local-only') {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['storageMode'], message: 'Шерінг доступний тільки у режимі "Локально + Хмара".' });
+  if (value.inviteEmail && !EMAIL_REGEX.test(value.inviteEmail)) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['inviteEmail'], message: 'Електронна пошта для шерінгу має некоректний формат.' });
   }
 }
 

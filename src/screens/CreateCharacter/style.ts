@@ -259,6 +259,34 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: fs(12),
       lineHeight: fs(17),
     },
+    statRowFullWidthHint: {
+      width: '100%',
+    },
+    arrayChipRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: sp(6),
+    },
+    arrayChip: {
+      borderRadius: rd(8),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: sp(6),
+      paddingHorizontal: sp(10),
+    },
+    arrayChipActive: {
+      backgroundColor: c.primary,
+      borderColor: c.primary,
+    },
+    arrayChipText: {
+      color: c.text,
+      fontWeight: '800',
+      fontSize: fs(13),
+    },
+    arrayChipTextActive: {
+      color: c.onPrimary,
+    },
     warningText: {
       color: c.danger,
       fontSize: fs(12),

@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  safeParseCreateCharacterWizard,
-  safeParseCreateCharacterWizardStep,
-} from '@/domain/schemas';
+import { safeParseCreateCharacterWizard, safeParseCreateCharacterWizardStep } from '@/domain/schemas';
 
 describe('createCharacterWizard.schema', () => {
   const validPayload = {
@@ -20,6 +17,14 @@ describe('createCharacterWizard.schema', () => {
     shareTarget: 'dm',
     inviteEmail: 'dm@example.com',
     statMethod: 'array',
+    stats: {
+      strength: 15,
+      dexterity: 14,
+      constitution: 13,
+      intelligence: 12,
+      wisdom: 10,
+      charisma: 8,
+    },
     pointBuyStats: {
       strength: 8,
       dexterity: 8,
@@ -62,43 +67,68 @@ describe('createCharacterWizard.schema', () => {
     expect(safeParseCreateCharacterWizardStep({ ...validPayload, name: ' ', level: '25' }, 2).ok).toBe(false);
     expect(safeParseCreateCharacterWizardStep({ ...validPayload, selectedClass: 'custom', customClassName: '' }, 3).ok).toBe(false);
     expect(
-      safeParseCreateCharacterWizardStep({
-        ...validPayload,
-        statMethod: 'manual',
-        manualStats: { ...validPayload.manualStats, strength: '31' },
-      }, 4).ok,
+      safeParseCreateCharacterWizardStep(
+        {
+          ...validPayload,
+          statMethod: 'manual',
+          manualStats: { ...validPayload.manualStats, strength: '31' },
+        },
+        4,
+      ).ok,
     ).toBe(false);
     expect(
-      safeParseCreateCharacterWizardStep({
-        ...validPayload,
-        statMethod: 'random',
-        rollStats: { ...validPayload.rollStats, dexterity: '0' },
-      }, 4).ok,
+      safeParseCreateCharacterWizardStep(
+        {
+          ...validPayload,
+          statMethod: 'random',
+          rollStats: { ...validPayload.rollStats, dexterity: '0' },
+        },
+        4,
+      ).ok,
     ).toBe(false);
     expect(safeParseCreateCharacterWizardStep({ ...validPayload, hpMax: '0' }, 5).ok).toBe(false);
-    expect(safeParseCreateCharacterWizardStep({ ...validPayload, storageMode: 'local-only', inviteEmail: 'dm@example.com' }, 10).ok).toBe(false);
+    expect(safeParseCreateCharacterWizardStep({ ...validPayload, storageMode: 'local-only', inviteEmail: 'dm@example.com' }, 10).ok).toBe(
+      false,
+    );
     expect(safeParseCreateCharacterWizardStep({ ...validPayload, name: '' }, 11).ok).toBe(false);
   });
 
   it('checks point-buy constraint on step 4', () => {
-    const result = safeParseCreateCharacterWizardStep({
-      ...validPayload,
-      statMethod: 'pointbuy',
-      pointBuyStats: {
-        strength: 15,
-        dexterity: 15,
-        constitution: 15,
-        intelligence: 15,
-        wisdom: 15,
-        charisma: 15,
+    const result = safeParseCreateCharacterWizardStep(
+      {
+        ...validPayload,
+        statMethod: 'pointbuy',
+        pointBuyStats: {
+          strength: 15,
+          dexterity: 15,
+          constitution: 15,
+          intelligence: 15,
+          wisdom: 15,
+          charisma: 15,
+        },
       },
-    }, 4);
+      4,
+    );
 
     expect(result.ok).toBe(false);
   });
 
   it('allows offline local create but rejects offline cloud create', () => {
-    expect(safeParseCreateCharacterWizardStep({ ...validPayload, storageMode: 'local-only', inviteEmail: '', isOnline: false }, 10).ok).toBe(true);
+    expect(
+      safeParseCreateCharacterWizardStep(
+        { ...validPayload, storageMode: 'local-only', shareTarget: 'none', inviteEmail: '', isOnline: false },
+        10,
+      ).ok,
+    ).toBe(true);
     expect(safeParseCreateCharacterWizardStep({ ...validPayload, storageMode: 'local-cloud', isOnline: false }, 10).ok).toBe(false);
+  });
+
+  it('rejects a share target without an invite email', () => {
+    expect(
+      safeParseCreateCharacterWizardStep({ ...validPayload, storageMode: 'local-cloud', shareTarget: 'dm', inviteEmail: '' }, 10).ok,
+    ).toBe(false);
+    expect(
+      safeParseCreateCharacterWizardStep({ ...validPayload, storageMode: 'local-cloud', shareTarget: 'player', inviteEmail: '   ' }, 10).ok,
+    ).toBe(false);
   });
 });

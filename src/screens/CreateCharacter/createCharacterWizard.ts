@@ -91,6 +91,33 @@ export const STANDARD_ARRAY: Record<AbilityKey, number> = {
   charisma: 8,
 };
 
+export const STANDARD_ARRAY_VALUES: number[] = [15, 14, 13, 12, 10, 8];
+
+export function isStandardArrayValueTakenByOther(stats: Record<AbilityKey, number>, ability: AbilityKey, value: number): boolean {
+  return ABILITY_KEYS.some((key) => key !== ability && stats[key] === value);
+}
+
+export function isStandardArrayComplete(stats: Record<AbilityKey, number>): boolean {
+  const remaining = [...STANDARD_ARRAY_VALUES];
+  return ABILITY_KEYS.every((ability) => {
+    const index = remaining.indexOf(stats[ability]);
+    if (index === -1) return false;
+    remaining.splice(index, 1);
+    return true;
+  });
+}
+
+function createUnassignedStandardArray(): Record<AbilityKey, number> {
+  return {
+    strength: 0,
+    dexterity: 0,
+    constitution: 0,
+    intelligence: 0,
+    wisdom: 0,
+    charisma: 0,
+  };
+}
+
 export const POINT_BUY_MIN = 8;
 export const POINT_BUY_MAX = 15;
 export const POINT_BUY_BUDGET = 27;
@@ -303,7 +330,7 @@ export function createInitialDraft(): CreateCharacterDraft {
     backgroundKey,
     customBackground: '',
     statMethod: 'array',
-    stats: { ...STANDARD_ARRAY },
+    stats: createUnassignedStandardArray(),
     pointBuyStats: {
       strength: 8,
       dexterity: 8,

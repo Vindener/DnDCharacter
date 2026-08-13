@@ -31,7 +31,7 @@ import {
   POINT_BUY_BUDGET,
   POINT_BUY_MAX,
   POINT_BUY_MIN,
-  STANDARD_ARRAY,
+  STANDARD_ARRAY_VALUES,
   TOTAL_CREATE_CHARACTER_STEPS,
   getCreateClassOptions,
   applyDerivedDefaults,
@@ -43,6 +43,7 @@ import {
   formatAbilityModifier,
   getCreateClassById,
   getCreateStartingEquipmentForClass,
+  isStandardArrayValueTakenByOther,
   mergeDraftWithDefaults,
   rollAbilityScore,
   shouldShowMagicStep,
@@ -760,7 +761,9 @@ const CreateCharacter = (): JSX.Element => {
           <View style={styles.statLabelBlock}>
             <Text style={styles.statLabel}>{t(`dnd:abilities.${ability}`)}</Text>
             <Text style={styles.helperText}>
-              {derived.finalStats[ability]} ({formatAbilityModifier(derived.finalStats[ability])})
+              {draft.statMethod === 'array' && !draft.stats[ability]
+                ? '—'
+                : `${derived.finalStats[ability]} (${formatAbilityModifier(derived.finalStats[ability])})`}
             </Text>
           </View>
           {draft.statMethod === 'pointbuy' ? (
@@ -798,10 +801,33 @@ const CreateCharacter = (): JSX.Element => {
               {!!draft.rollDetails[ability] && <Text style={styles.helperText}>{draft.rollDetails[ability]}</Text>}
             </View>
           ) : (
-            <Text style={styles.statValue}>{STANDARD_ARRAY[ability]}</Text>
+            <Text style={styles.statValue}>{draft.stats[ability] || '—'}</Text>
           )}
           {draft.statMethod === 'roll' && !!draft.rollDetails[ability] && (
             <Text style={styles.helperText}>{draft.rollDetails[ability]}</Text>
+          )}
+          {draft.statMethod === 'pointbuy' && draft.pointBuyStats[ability] >= POINT_BUY_MAX && (
+            <Text style={[styles.helperText, styles.statRowFullWidthHint]}>{t('stats.pointBuyMaxHint')}</Text>
+          )}
+          {draft.statMethod === 'array' && (
+            <View style={[styles.arrayChipRow, styles.statRowFullWidthHint]}>
+              {STANDARD_ARRAY_VALUES.map((value) => {
+                const taken = isStandardArrayValueTakenByOther(draft.stats, ability, value);
+                const active = draft.stats[ability] === value;
+                return (
+                  <Pressable
+                    key={value}
+                    disabled={taken}
+                    onPress={() => selectArrayValue(ability, value)}
+                    style={[styles.arrayChip, active ? styles.arrayChipActive : null, taken ? styles.navButtonDisabled : null]}
+                    android_ripple={{ color: colors.ripple }}
+                    testID={`createCharacter.arrayValue.${ability}.${value}`}
+                  >
+                    <Text style={[styles.arrayChipText, active ? styles.arrayChipTextActive : null]}>{value}</Text>
+                  </Pressable>
+                );
+              })}
+            </View>
           )}
         </View>
       ))}
@@ -829,6 +855,12 @@ const CreateCharacter = (): JSX.Element => {
   const generateRandomStats = (): void => {
     const result = rollLocalizedAbilityScores();
     updateDraft({ statMethod: 'random', rollStats: result.stats, rollDetails: result.details });
+  };
+
+  const selectArrayValue = (ability: AbilityKey, value: number): void => {
+    if (isStandardArrayValueTakenByOther(draft.stats, ability, value)) return;
+    const next = draft.stats[ability] === value ? 0 : value;
+    updateDraft({ stats: { ...draft.stats, [ability]: next } });
   };
 
   const adjustPointBuy = (ability: AbilityKey, delta: number): void => {

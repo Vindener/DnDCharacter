@@ -28,17 +28,12 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="exp+dndcharacter"/>
       </intent-filter>
-      <!-- manual: campaign invite deep link (mirrors app.json "scheme": "mythgatednd") -->
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="mythgatednd"/>
       </intent-filter>
-      <!-- manual: HTTPS App Link so tapping the invite link in Telegram/etc. actually opens
-           the app instead of a malformed "http://mythgatednd://..." (custom schemes aren't
-           reliably auto-linked by chat apps). Requires assetlinks.json verification — see
-           docs/campaign-management-prompts.md / CLAUDE.md §8.4. -->
       <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>

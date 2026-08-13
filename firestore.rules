@@ -77,7 +77,13 @@ service cloud.firestore {
           && (!('notes' in d) || (d.notes is string && d.notes.size() <= 20000))
           && (!('backstory' in d) || (d.backstory is string && d.backstory.size() <= 20000));
       }
-      allow get, list: if isEditor();
+      // resource == null lets a client check "does this id exist yet" (the create-vs-update
+      // check every upsert does) without permission-denied: reading resource.data on a
+      // nonexistent doc always evaluates false, so the plain isEditor() check used to deny
+      // this even for the doc's future owner, before the doc could ever be created. Safe:
+      // there is no data behind a nonexistent id, and isEditor() still fully gates docs that
+      // do exist.
+      allow get, list: if resource == null || isEditor();
       allow create: if isSignedIn()
         && request.resource.data.ownerUid == uid()
         && request.resource.data.owners != null

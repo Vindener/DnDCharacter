@@ -4,6 +4,10 @@ import { parseDice } from '@/shared/helpers/dice';
 
 export const MIN_CHARACTER_LEVEL = 1;
 export const MAX_CHARACTER_LEVEL = 20;
+const MIN_ABILITY_SCORE = 1;
+const MAX_ABILITY_SCORE = 30;
+const MAX_LEVEL_UP_HP = 9999;
+const MAX_LEVEL_UP_AC = 30;
 
 export type LevelChangeDraftValues = {
   stats: Stats;
@@ -36,7 +40,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 function normalizeStat(value: number): number {
-  return Math.max(1, Math.round(value));
+  return clamp(Math.round(value), MIN_ABILITY_SCORE, MAX_ABILITY_SCORE);
 }
 
 function normalizeStats(stats: Stats): Stats {
@@ -61,13 +65,9 @@ export function buildNextHitDice(currentHitDice: string, currentLevel: number, t
   return `${nextCount}d${sides}`;
 }
 
-export function applyLevelChange(
-  current: LevelChangeCurrentValues,
-  targetLevel: number,
-  draft: LevelChangeDraftValues,
-): LevelChangeResult {
+export function applyLevelChange(current: LevelChangeCurrentValues, targetLevel: number, draft: LevelChangeDraftValues): LevelChangeResult {
   const safeTargetLevel = clamp(Math.round(targetLevel || current.level), MIN_CHARACTER_LEVEL, MAX_CHARACTER_LEVEL);
-  const safeHpMax = Math.max(1, Math.round(draft.hp.max || 0));
+  const safeHpMax = clamp(Math.round(draft.hp.max || 0), 1, MAX_LEVEL_UP_HP);
   const safeHpCurrent = clamp(Math.round(draft.hp.current || 0), 0, safeHpMax);
 
   return {
@@ -80,7 +80,7 @@ export function applyLevelChange(
       current: safeHpCurrent,
       temp: Math.max(0, Math.round(current.hpTemp || 0)),
     },
-    ac: Math.max(0, Math.round(draft.ac || 0)),
+    ac: clamp(Math.round(draft.ac || 0), 0, MAX_LEVEL_UP_AC),
     initiative: Math.max(0, Math.round(draft.initiative || 0)),
     proficiencyBonus: clamp(Math.round(draft.proficiencyBonus || 0), 1, 10),
   };

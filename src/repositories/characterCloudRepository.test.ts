@@ -161,6 +161,22 @@ describe('characterCloudRepository', () => {
     expect(mocks.targetRef.update).not.toHaveBeenCalled();
   });
 
+  it('sends the full ownership payload in the transactional fallback when the doc does not exist yet, even if the plain get() said it did', async () => {
+    // Simulates the race behind the reported permission-denied bug: the outer ref.get() reads
+    // stale/optimistic local cache and reports the brand-new doc as already existing, but the
+    // transaction's own strongly-consistent get() shows it still doesn't exist server-side.
+    mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+    mocks.tx.get.mockResolvedValueOnce({ id: 'char-1', exists: false, data: () => null });
+
+    await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }));
+
+    expect(mocks.tx.set).toHaveBeenCalledTimes(1);
+    const [, payload] = mocks.tx.set.mock.calls[0] as [unknown, Record<string, unknown>];
+    expect(payload.ownerUid).toBe('user-1');
+    expect(payload.owners).toEqual(['user-1']);
+    expect(payload.editors).toEqual([]);
+  });
+
   it('appends changeHistory via arrayUnion, not by assigning a plain array, on the narrow path', async () => {
     mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
 

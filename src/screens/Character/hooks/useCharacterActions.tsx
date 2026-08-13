@@ -145,6 +145,14 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
+const MAX_HP = 9999;
+const MAX_TEMP_HP = 9999;
+const MAX_AC = 30;
+const MAX_SPEED = 999;
+const MAX_SPELL_SAVE_DC = 30;
+const MIN_SPELL_ATTACK_BONUS = -10;
+const MAX_SPELL_ATTACK_BONUS = 30;
+
 function parseNumber(value: string, fallback = 0): number {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
@@ -981,7 +989,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   }, [characterData.hp.current, characterData.hp.max]);
 
   const saveHpModal = useCallback(() => {
-    const nextMax = Math.max(1, parseNumber(tempMaxHp, characterData.hp.max));
+    const nextMax = clamp(parseNumber(tempMaxHp, characterData.hp.max), 1, MAX_HP);
     const nextCurrent = clamp(parseNumber(tempCurrentHp, characterData.hp.current), 0, nextMax);
 
     patchCharacter(
@@ -1000,7 +1008,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   }, [characterData.hp.current, characterData.hp.max, patchCharacter, tempCurrentHp, tempMaxHp]);
 
   const saveTempHp = useCallback(() => {
-    const value = Math.max(0, parseNumber(tempShieldInput, characterData.hp.temp));
+    const value = clamp(parseNumber(tempShieldInput, characterData.hp.temp), 0, MAX_TEMP_HP);
     patchCharacter(
       (prev) => ({
         ...prev,
@@ -2885,7 +2893,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         (next) =>
           patchCharacter(
             (prev) => {
-              const max = Math.max(1, parseNumber(next, prev.hp.max));
+              const max = clamp(parseNumber(next, prev.hp.max), 1, MAX_HP);
               return {
                 ...prev,
                 hp: { ...prev.hp, max, current: clamp(prev.hp.current, 0, max) },
@@ -2903,7 +2911,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           patchCharacter(
             (prev) => ({
               ...prev,
-              hp: { ...prev.hp, temp: Math.max(0, parseNumber(next, prev.hp.temp)) },
+              hp: { ...prev.hp, temp: clamp(parseNumber(next, prev.hp.temp), 0, MAX_TEMP_HP) },
             }),
             ['combat.hp'],
           ),
@@ -2913,14 +2921,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       <Text style={styles.editLabel}>AC</Text>
       {renderTextInput(
         String(characterData.ac),
-        (next) => patchCharacter((prev) => ({ ...prev, ac: Math.max(0, parseNumber(next, prev.ac)) }), ['combat.core']),
+        (next) => patchCharacter((prev) => ({ ...prev, ac: clamp(parseNumber(next, prev.ac), 0, MAX_AC) }), ['combat.core']),
         t('edit.combat.acPlaceholder'),
         { keyboardType: 'number-pad' },
       )}
       <Text style={styles.editLabel}>{t('edit.combat.speed')}</Text>
       {renderTextInput(
         String(characterData.speed),
-        (next) => patchCharacter((prev) => ({ ...prev, speed: Math.max(0, parseNumber(next, prev.speed)) }), ['combat.core']),
+        (next) => patchCharacter((prev) => ({ ...prev, speed: clamp(parseNumber(next, prev.speed), 0, MAX_SPEED) }), ['combat.core']),
         t('edit.combat.speed'),
         { keyboardType: 'number-pad' },
       )}
@@ -3015,7 +3023,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           (next) =>
             patchCharacter((prev) => ({
               ...prev,
-              spells: { ...prev.spells, spellSaveDC: Math.max(0, parseNumber(next, prev.spells.spellSaveDC)) },
+              spells: { ...prev.spells, spellSaveDC: clamp(parseNumber(next, prev.spells.spellSaveDC), 0, MAX_SPELL_SAVE_DC) },
             })),
           'DC',
           { keyboardType: 'number-pad' },
@@ -3026,7 +3034,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           (next) =>
             patchCharacter((prev) => ({
               ...prev,
-              spells: { ...prev.spells, spellAttackBonus: parseNumber(next, prev.spells.spellAttackBonus) },
+              spells: {
+                ...prev.spells,
+                spellAttackBonus: clamp(parseNumber(next, prev.spells.spellAttackBonus), MIN_SPELL_ATTACK_BONUS, MAX_SPELL_ATTACK_BONUS),
+              },
             })),
           t('edit.magic.spellAttackBonusPlaceholder'),
           { keyboardType: 'number-pad' },

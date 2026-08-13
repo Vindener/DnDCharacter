@@ -474,9 +474,14 @@ export async function upsertCharacterSheetFromLocal(
 
   // Unknown/tab-default path set: fall back to a transactional read-modify-write so the
   // read and write happen atomically instead of racing another client's write (COL-1).
+  // The plain `ref.get()` above can report the doc as existing from local cache before this
+  // doc's very first `.set()` (the `!hasDoc(snap)` branch above) has actually committed
+  // server-side. Re-check existence with the transaction's own strongly-consistent read: a
+  // content-only payload here for a doc that isn't really there yet fails the `create` rule's
+  // `owners != null` check with permission-denied, so fall back to the full ownership payload.
   await db.runTransaction(async (tx) => {
-    await tx.get(ref);
-    const payload = buildContentPayload(dto);
+    const txSnap = await tx.get(ref);
+    const payload = hasDoc(txSnap) ? buildContentPayload(dto) : (stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>);
     if (additions.length) {
       payload.changeHistory = arrayUnion(...additions);
       payload.lastChangeAt = now();

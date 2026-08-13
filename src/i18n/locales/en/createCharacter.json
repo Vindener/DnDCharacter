@@ -106,6 +106,7 @@
       "random": "Random"
     },
     "pointBuySpent": "Point buy: {{spent}}/{{budget}}",
+    "pointBuyMaxHint": "15 is the per-ability cap in point buy. Higher scores come from race or level-up increases.",
     "rollHint": "For each ability, roll 4d6 through DiceRoller. Drop the lowest die and add the other three.",
     "randomHint": "Random generation creates all six abilities with 4d6, dropping the lowest die.",
     "regenerate": "Regenerate",

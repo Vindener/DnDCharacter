@@ -247,7 +247,10 @@ function enterName(tree: ReactTestRenderer, name: string): void {
 }
 
 function advanceToReview(tree: ReactTestRenderer): void {
-  for (let index = 0; index < 8; index += 1) {
+  press(tree, 'createCharacter.nextButton');
+  press(tree, 'createCharacter.nextButton');
+  press(tree, 'createCharacter.statMethod.pointbuy');
+  for (let index = 0; index < 6; index += 1) {
     press(tree, 'createCharacter.nextButton');
   }
 }
@@ -339,6 +342,7 @@ describe('CreateCharacter', () => {
       ...createInitialDraft(),
       step: 11,
       name: 'Cloud Hero',
+      statMethod: 'pointbuy',
       storageMode: 'local-cloud',
       shareTarget: 'dm',
       inviteEmail: 'dm@example.com',
