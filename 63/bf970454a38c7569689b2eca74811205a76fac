@@ -1,0 +1,46 @@
+docs/legal-terms-of-service.md
+  s_0ab90a764b4cd5::t_e79fa602dd1627 16-27
+docs/release-plan-google-play.md
+  s_0ab90a764b4cd5::t_cd885eb2ce8337 87
+  s_0ab90a764b4cd5::t_0770ae673b95e1 262
+app.json
+  s_0ab90a764b4cd5::t_cb172a0e0939c6 19
+src/i18n/locales/en/whatsNew.json
+  s_0ab90a764b4cd5::t_a4490317b23115 5-9
+docs/audit-2026-07.md
+  s_0ab90a764b4cd5::t_1329eaad65a83f 20-33
+  s_0ab90a764b4cd5::t_c81444af5fd3a8 40-41
+  s_0ab90a764b4cd5::t_bbf9f514095875 321
+  s_0ab90a764b4cd5::t_405adf04310ec2 66-68,74
+  s_0ab90a764b4cd5::t_501385386908ef 70,72
+  s_0ab90a764b4cd5::t_ef4d0e41cc560e 186-197
+CLAUDE.md
+  s_0ab90a764b4cd5::t_b6be0dc7bab5f7 22
+  s_0ab90a764b4cd5::t_b4c0d218b98620 45,50-51,54-64
+  s_0ab90a764b4cd5::t_f7c5c209cf49ca 76
+docs/store-listing.md
+  s_0ab90a764b4cd5::t_39559d1c278a9b 104-110
+docs/release-blockers.md
+  s_0ab90a764b4cd5::t_08d41513573b01 50-62
+  s_0ab90a764b4cd5::t_5c14afc18693db 243-266
+  s_0ab90a764b4cd5::t_a5cde464c06ba6 167-172
+  s_0ab90a764b4cd5::t_48b505322be690 173-205
+src/i18n/locales/uk/whatsNew.json
+  s_0ab90a764b4cd5::t_9ef46cf6a36aff 5-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "63bf970454a38c7569689b2eca74811205a76fac",
+  "prompts": {},
+  "sessions": {
+    "s_0ab90a764b4cd5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "56f4b41e-79cb-462e-a96f-28a530c29ed5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
