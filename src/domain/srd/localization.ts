@@ -85,6 +85,14 @@ function ensureLocalizationLoaded(): void {
   });
 }
 
+// Lets a screen pay the one-time require()+Map-build cost while its skeleton is still on
+// screen (e.g. right after data starts loading), instead of it landing inside the first
+// useMemo that consumes getLocalizedX() once real data arrives — that useMemo runs during
+// the very render that replaces the skeleton, so an unwarmed cache there is felt as a freeze.
+export function warmSrdLocalizationCache(): void {
+  ensureLocalizationLoaded();
+}
+
 function getCanonicalId(id: string, prefix: string): string {
   return id.startsWith(prefix) ? id.slice(prefix.length) : id;
 }

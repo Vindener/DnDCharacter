@@ -196,6 +196,16 @@ export function getSrdSkills(): SrdSkill[] {
   return loadSkills();
 }
 
+// Pre-populates the caches the Character sheet needs (races/classes/classProgression) before
+// the tab render that consumes them runs, so the first-ever open of a character in a session
+// doesn't pay the lazy-load cost synchronously inside that render's useMemo (perceived as a
+// freeze between the skeleton and the loaded sheet).
+export function warmCharacterSrdCache(): void {
+  loadRaces();
+  loadClasses();
+  loadClassProgressions();
+}
+
 // Build-time validation entry point (see scripts/validate-srd.mjs). Deliberately re-reads
 // the raw JSON via the same lazy loaders rather than the caches above, so this always
 // validates the actual on-disk data regardless of whether the runtime caches were

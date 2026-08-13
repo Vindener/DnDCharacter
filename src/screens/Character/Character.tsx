@@ -14,6 +14,7 @@ import { CharacterTabContent } from './tabs/CharacterTabContent';
 import { CharacterModals } from './components/CharacterModals';
 import useCharacterStore from '@/context/Character-store';
 import { SkeletonCharacterSheet } from '@/shared/ui/skeleton';
+import { DeferredMount } from '@/shared/components/DeferredMount/DeferredMount';
 
 interface CharacterProps {
   route: {
@@ -23,7 +24,9 @@ interface CharacterProps {
   };
 }
 
-export default function Character({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
+type CharacterScreenProps = Partial<CharacterProps> & { route?: CharacterProps['route'] };
+
+function CharacterScreen({ route }: CharacterScreenProps) {
   const { t } = useTranslation('character');
   const state = useCharacterActions({ route });
   const insets = useSafeAreaInsets();
@@ -109,7 +112,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               <Text style={styles.conflictTitle}>{t('conflict.title')}</Text>
             </View>
             <Text style={styles.conflictText}>{t('conflict.message')}</Text>
-            {currentSync.conflictPaths.length > 0 && <Text style={styles.conflictPaths}>{t('conflict.paths', { paths: currentSync.conflictPaths.join(', ') })}</Text>}
+            {currentSync.conflictPaths.length > 0 && (
+              <Text style={styles.conflictPaths}>{t('conflict.paths', { paths: currentSync.conflictPaths.join(', ') })}</Text>
+            )}
             <View style={styles.conflictActionsRow}>
               <Pressable style={styles.conflictAction} onPress={resolveConflictWithLocal} android_ripple={{ color: colors.ripple }}>
                 <Text style={styles.conflictActionText}>{t('conflict.keepLocal')}</Text>
@@ -149,7 +154,9 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
               <Text style={styles.sectionTitle}>{t('history.title', { tab: tabLabels[selectedTab] })}</Text>
             </View>
             {latestTabChangeLabel && latestTabChange ? (
-              <Text style={styles.blockTextMuted}>{t('history.latestChange', { label: latestTabChangeLabel, date: new Date(latestTabChange.atMs).toLocaleString() })}</Text>
+              <Text style={styles.blockTextMuted}>
+                {t('history.latestChange', { label: latestTabChangeLabel, date: new Date(latestTabChange.atMs).toLocaleString() })}
+              </Text>
             ) : null}
             {!tabHistory.length && <Text style={styles.blockTextMuted}>{t('history.empty')}</Text>}
             {tabHistory.map((entry: CharacterChangeHistoryEntry) => (
@@ -190,5 +197,13 @@ export default function Character({ route }: Partial<CharacterProps> & { route?:
 
       <CharacterModals {...viewState} />
     </View>
+  );
+}
+
+export default function Character(props: CharacterScreenProps) {
+  return (
+    <DeferredMount>
+      <CharacterScreen {...props} />
+    </DeferredMount>
   );
 }

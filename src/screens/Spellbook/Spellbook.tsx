@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, TextInput, FlatList, Pressable, ScrollView } from 'react-native';
+import { View, Text, TextInput, FlatList, Pressable, ScrollView, InteractionManager } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
@@ -18,6 +18,7 @@ import type { CharacterSpellStatus, SpellComponents, SpellDamageProfile, Spellbo
 import type { CharacterViewModel } from '@/types/Character';
 import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 import { SkeletonSpellbook } from '@/shared/ui/skeleton';
+import { DeferredMount } from '@/shared/components/DeferredMount/DeferredMount';
 import type { DMCampaign } from '@/dm/domain/types';
 import { subscribeAccessibleCampaigns, togglePinnedSpellForCampaign } from '@/dm/repositories/campaignRepository';
 import {
@@ -28,7 +29,12 @@ import {
 } from './spellbookFilters';
 import { getStyles } from './styles';
 import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
-import { getLocalizedSpellClass, getLocalizedSpellFields, getLocalizedSpellSchool } from '@/domain/srd/localization';
+import {
+  getLocalizedSpellClass,
+  getLocalizedSpellFields,
+  getLocalizedSpellSchool,
+  warmSrdLocalizationCache,
+} from '@/domain/srd/localization';
 
 type Props = {
   route: {
@@ -130,7 +136,7 @@ function buildImportedSpell(name: string, importedSchool: string, importedTag: s
   };
 }
 
-const Spellbook = ({ route }: Props) => {
+const SpellbookScreen = ({ route }: Props) => {
   const { t, i18n } = useTranslation('spellbook');
   const colors = useThemeStore((s) => s.colors);
   const styles = useMemo(() => getStyles(colors), [colors]);
@@ -192,6 +198,11 @@ const Spellbook = ({ route }: Props) => {
   useEffect(() => {
     loadSpellbook().catch(() => {});
   }, [loadSpellbook]);
+
+  useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => warmSrdLocalizationCache());
+    return () => task.cancel();
+  }, []);
 
   useEffect(() => {
     if (!campaignId) return undefined;
@@ -1072,5 +1083,11 @@ const Spellbook = ({ route }: Props) => {
     </View>
   );
 };
+
+const Spellbook = (props: Props) => (
+  <DeferredMount>
+    <SpellbookScreen {...props} />
+  </DeferredMount>
+);
 
 export default Spellbook;

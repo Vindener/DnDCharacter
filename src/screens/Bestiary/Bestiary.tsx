@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, FlatList, TextInput, Pressable, ScrollView } from 'react-native';
+import { View, Text, FlatList, TextInput, Pressable, ScrollView, InteractionManager } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import type { TFunction } from 'i18next';
@@ -11,9 +11,10 @@ import { getStyles } from './style';
 import FileService from '@/shared/services/fileSerice';
 import type { MonsterDto } from '@/types/Monster';
 import { SkeletonBestiary } from '@/shared/ui/skeleton';
+import { DeferredMount } from '@/shared/components/DeferredMount/DeferredMount';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
-import { getLocalizedMonsterTerm } from '@/domain/srd/localization';
+import { getLocalizedMonsterTerm, warmSrdLocalizationCache } from '@/domain/srd/localization';
 import type { DMCampaign } from '@/dm/domain/types';
 import { subscribeAccessibleCampaigns, togglePinnedMonsterForCampaign } from '@/dm/repositories/campaignRepository';
 import {
@@ -72,7 +73,7 @@ const createBlankMonster = (t: TFunction<'bestiary'>): MonsterDto => ({
 
 type Props = StackScreenProps<ReferencesStackParamList, 'List'>;
 
-const Bestiary = ({ route }: Props) => {
+const BestiaryScreen = ({ route }: Props) => {
   const { i18n, t } = useTranslation('bestiary');
   const navigation = useNavigation<StackNavigationProp<ReferencesStackParamList, 'List'>>();
   const monsters = useMonsterStore((s) => s.monsters);
@@ -98,6 +99,11 @@ const Bestiary = ({ route }: Props) => {
   useEffect(() => {
     void loadMonsters();
   }, [loadMonsters]);
+
+  useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => warmSrdLocalizationCache());
+    return () => task.cancel();
+  }, []);
 
   useEffect(() => {
     if (!campaignId) return undefined;
@@ -435,5 +441,11 @@ const Bestiary = ({ route }: Props) => {
     </View>
   );
 };
+
+const Bestiary = (props: Props) => (
+  <DeferredMount>
+    <BestiaryScreen {...props} />
+  </DeferredMount>
+);
 
 export default Bestiary;

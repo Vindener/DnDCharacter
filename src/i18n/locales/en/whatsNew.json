@@ -2,11 +2,9 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Updated step-by-step character creation: point buy, standard array, and clear limit hints.",
-    "Multiple people can now edit one sheet at once — conflicts no longer happen at the whole-section level.",
-    "Added campaigns and GM tools: encounter prep, an initiative tracker, and code-based player invites.",
-    "Added account deletion, a Privacy Policy, and Terms of Use.",
-    "The app now reports crashes and errors instead of showing a blank white screen."
+    "Fixed a freeze with no loading indicator when opening the character sheet, bestiary, or spellbook.",
+    "Added a loading indicator when switching to these screens, so transitions feel smoother.",
+    "Improved crash diagnostics for faster fixes in upcoming releases."
   ],
   "gotIt": "Got it"
 }

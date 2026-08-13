@@ -1,6 +1,14 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+// manual: must be applied before the `android { buildTypes { release { firebaseCrashlytics {...} } } }`
+// block below — the Crashlytics Gradle plugin only registers that DSL extension once it's
+// applied, and Groovy evaluates `apply plugin` / `android {}` script statements in file order,
+// not deferred. Previously these two lines lived at the bottom of the file (after `android {}`),
+// which built fine until nativeSymbolUploadEnabled was added and failed with
+// "Could not find method firebaseCrashlytics()".
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 def rootGoogleServices = new File(projectRoot, "google-services.json")
@@ -103,7 +111,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.0.2"
     }
     signingConfigs {
         debug {
@@ -138,6 +146,13 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
+            // manual: without this the Crashlytics Gradle plugin never uploads our own native
+            // symbols (libappmodules.so/libreactnative.so), so every native crash shows
+            // "(Missing BuildId ...)" instead of a resolved stack — confirmed 2026-08-13 against
+            // live Crashlytics issues for release 1.0.0.
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
         }
     }
     packagingOptions {
@@ -197,6 +212,5 @@ dependencies {
         implementation jscFlavor
     }
 }
-
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics' // manual: @react-native-firebase/crashlytics config plugin equivalent — android/ is committed, prebuild does not run
+// @react-native-firebase/crashlytics config plugin equivalent — android/ is committed, prebuild
+// does not run. Applied near the top of the file (see comment there) instead of here.

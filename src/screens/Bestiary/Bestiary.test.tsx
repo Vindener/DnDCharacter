@@ -75,7 +75,9 @@ vi.mock('react-native', async () => {
     ScrollView: makeHost('ScrollView'),
     TextInput: makeHost('TextInput'),
     Image: makeHost('Image'),
+    ActivityIndicator: makeHost('ActivityIndicator'),
     StyleSheet: { create: (styles: unknown) => styles, absoluteFill: {} },
+    InteractionManager: { runAfterInteractions: (callback: () => void) => (callback(), { cancel: () => {} }) },
     FlatList: ({
       data,
       renderItem,

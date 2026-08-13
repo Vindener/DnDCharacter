@@ -56,7 +56,8 @@ Play Console ще не створений. Це змінює все, бо кри
 
 | Параметр | Значення | Де |
 | --- | --- | --- |
-| `versionName` | `1.0.0` — **у двох місцях** | `app.json` (`version`) **і** `android/app/build.gradle` (`versionName`) |
+| `versionName` (native, Play Console) | `1.0.2` — піднято 2026-08-13 (вечір), разом з `app.json` | `android/app/build.gradle` |
+| `app.json` `version` (JS/OTA-сигнал) | `1.0.2` — синхронізовано з gradle того ж дня | `app.json` |
 | `versionCode` | керує EAS (`appVersionSource: "remote"` + `android.autoIncrement: true` у профілі `production`, додано 2026-08-12); локальний `versionCode 1` у `build.gradle` руками не чіпати | `eas.json`, `build.gradle` |
 | targetSdk / compileSdk | `36` / `36` — **уже відповідає вимозі Play від 31.08.2026** | `react-native/gradle/libs.versions.toml` |
 | Формат | AAB (production profile) | `eas.json` |
@@ -64,6 +65,10 @@ Play Console ще не створений. Це змінює все, бо кри
 | `runtimeVersion` | обрати `appVersion` або `fingerprint` і **зафіксувати** | `app.json` |
 
 ⚠️ У bare-проєкті `versionName` береться з gradle, а не з `app.json`. Якщо оновити лише `app.json`, стор отримає `0.91.1`. А якщо розійдуться `app.json.version` і `versionName` при політиці `runtimeVersion: appVersion` — OTA-апдейти полетять не в ту збірку.
+
+**Розбіжність 2026-08-13 (вечір) — закрито спільним номером `1.0.2`.** Раніше того ж дня `app.json` піднімали до `1.0.1` як чистий JS/OTA-маркер (`WhatsNewModal.tsx` порівнює `Constants.expoConfig.version` із AsyncStorage — рядкова нерівність, не semver), лишаючи `build.gradle` на `1.0.0`, бо весь тодішній пуш ішов через `eas update` (permission-denied у створенні персонажа SEC-10, видалення акаунта, ліміти point buy/standard array, кампанії/інвайт по коду — усе чистий JS). Увечері до `android/app/build.gradle` додався нативний фікс (`firebaseCrashlytics { nativeSymbolUploadEnabled true }` + порядок `apply plugin`, REL-8 в аудиті) — тобто цей пуш **вже не можна** закрити самим `eas update`, потрібен новий AAB. Це і є момент, коли, за планом нижче, `build.gradle`/`app.json` підіймаються до спільного номера: обидва → `1.0.2`. Контент «Що нового» замінено на фікси цього пуску (зникнення скелетона без індикатора на Character/Bestiary/Spellbook, індикатор завантаження при переході, покращена діагностика крашів) — попередній список 1.0.1 тестувальники вже бачили через OTA, тож він не накопичується, а перезаписується під актуальний реліз.
+
+`runtimeVersion` лишається статичним літералом `"1.0.0"` — не чіпаю, бо зміна суто в Gradle/Crashlytics-конфігурації білда, JS↔native контракт (бридж/native-модулі) не зламано, тож старі OTA-бандли лишаються сумісними з новим native-білдом.
 
 ⚠️ **Інцидент 2026-08-12:** без `autoIncrement` профіль `production` віддавав той самий `versionCode` на кожному білді (перший AAB отримав `1`, другий теж хотів `1` — Play Console відхилив «Код версії 1 уже використовується», бо цей код уже був залитий раніше вручну). Виправлено `eas build:version:set` (`1`→`2`) + `android.autoIncrement: true` у `eas.json`, щоб це не повторювалось на кожному наступному білді.
 

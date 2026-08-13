@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { View, Text, Pressable, TextInput as RNTextInput } from 'react-native';
+import { View, Text, Pressable, TextInput as RNTextInput, InteractionManager } from 'react-native';
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -71,7 +71,7 @@ import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { getStatusToneColors } from '@/shared/styles/statusTones';
 import type { DiceRollResult } from '@/shared/services/diceRoller';
 import { applyLevelChange, MAX_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, type LevelChangeDraftValues } from './levelChange';
-import { getSrdClassFeaturesAtLevel, getSrdProgressionFeatureNames, getSrdRaceTraits } from '@/domain/srd';
+import { getSrdClassFeaturesAtLevel, getSrdProgressionFeatureNames, getSrdRaceTraits, warmCharacterSrdCache } from '@/domain/srd';
 import { CharacterSourceBadge } from '../components/CharacterSourceBadge';
 import { isBuiltInRulesSource } from '@/shared/helpers/sourcePresentation';
 import { getLocalizedSpellFields } from '@/domain/srd/localization';
@@ -306,6 +306,10 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   useEffect(() => {
     characterDataRef.current = characterData;
   }, [characterData]);
+  useEffect(() => {
+    const task = InteractionManager.runAfterInteractions(() => warmCharacterSrdCache());
+    return () => task.cancel();
+  }, []);
   const [mode, setMode] = useState<CharacterMode>('play');
   const [selectedTab, setSelectedTab] = useState<CharacterTab>('Overview');
   const [isCloudDoc, setIsCloudDoc] = useState<boolean>(false);
