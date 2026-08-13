@@ -2,8 +2,11 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "The character sheet now opens faster after starting the app.",
-    "Fixed minor issues in the Bestiary and Spellbook."
+    "Updated step-by-step character creation: point buy, standard array, and clear limit hints.",
+    "Multiple people can now edit one sheet at once — conflicts no longer happen at the whole-section level.",
+    "Added campaigns and GM tools: encounter prep, an initiative tracker, and code-based player invites.",
+    "Added account deletion, a Privacy Policy, and Terms of Use.",
+    "The app now reports crashes and errors instead of showing a blank white screen."
   ],
   "gotIt": "Got it"
 }
