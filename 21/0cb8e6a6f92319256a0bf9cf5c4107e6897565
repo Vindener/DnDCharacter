@@ -1,0 +1,49 @@
+src/i18n/locales/en/settings.json
+  s_09aa357a25f312::t_1d4d1f4f3dc8e0 66-70
+src/i18n/locales/uk/navigation.json
+  s_09aa357a25f312::t_168357d9d8899d 12
+src/screens/UpdateHistory/UpdateHistory.tsx
+  s_09aa357a25f312::t_39339e19149fc6 1-70
+src/i18n/locales/uk/settings.json
+  s_09aa357a25f312::t_5aa383d7bd462c 66-70
+src/i18n/locales/en/changeHistory.json
+  s_09aa357a25f312::t_eff50e703db188 1-33
+src/i18n/locales/uk/changeHistory.json
+  s_09aa357a25f312::t_7132beb01eb623 1-33
+src/i18n/index.ts
+  s_09aa357a25f312::t_8a9a78222240d4 44
+  s_09aa357a25f312::t_e8cb47d2b52ebe 65
+  s_09aa357a25f312::t_3c9fa55fb59280 85
+  s_09aa357a25f312::t_35e0a3979a3c52 25
+src/i18n/locales/en/navigation.json
+  s_09aa357a25f312::t_042414e7cbeb42 12
+src/navigation/TabNavigator.tsx
+  s_09aa357a25f312::t_f6a0f41ba547be 16
+  s_09aa357a25f312::t_ae4f10d3073bcf 32
+  s_09aa357a25f312::t_a03f659c8c5237 59
+  s_09aa357a25f312::t_dd6413d02eee83 13-15
+  s_09aa357a25f312::t_f04892c4856e0d 17-19,29-31
+  s_09aa357a25f312::t_9d53f8cc6c95b6 33-35,56-58
+  s_09aa357a25f312::t_d65c61f3d3d8c7 60-62
+  s_09aa357a25f312::t_df5767544908e2 1-12,20-28,36-55
+src/screens/Settings/Settings.tsx
+  s_09aa357a25f312::t_42a0be907beade 254-260
+  s_09aa357a25f312::t_fb4d33f732dad8 97
+  s_09aa357a25f312::t_5c58b80c8511b2 253
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "210cb8e6a6f92319256a0bf9cf5c4107e6897565",
+  "prompts": {},
+  "sessions": {
+    "s_09aa357a25f312": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e6e36128-a444-4394-bd75-2f6632e9d2f9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
