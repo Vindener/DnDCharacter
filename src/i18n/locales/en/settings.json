@@ -63,6 +63,11 @@
     "hint": "Review the app's legal and license notices.",
     "open": "Open Legal & Licenses"
   },
+  "updateHistory": {
+    "title": "Update History",
+    "hint": "See what changed in previous versions of the app.",
+    "open": "Open Update History"
+  },
   "privacyPolicy": {
     "title": "Privacy Policy",
     "hint": "See what data the app collects and who can see it.",

@@ -94,6 +94,7 @@ const Settings = () => {
     }
   };
   const openLegalLicenses = () => navigation.navigate('LegalLicenses');
+  const openUpdateHistory = () => navigation.navigate('UpdateHistory');
   const openPrivacyPolicy = () => {
     void Linking.openURL(PRIVACY_POLICY_URL);
   };
@@ -246,6 +247,14 @@ const Settings = () => {
           <Text style={styles.sectionHint}>{t('settings:legal.hint')}</Text>
           <Pressable onPress={openLegalLicenses} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
             <Text style={styles.actionButtonText}>{t('settings:legal.open')}</Text>
+          </Pressable>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('settings:updateHistory.title')}</Text>
+          <Text style={styles.sectionHint}>{t('settings:updateHistory.hint')}</Text>
+          <Pressable onPress={openUpdateHistory} style={styles.actionButton} android_ripple={{ color: colors.ripple }}>
+            <Text style={styles.actionButtonText}>{t('settings:updateHistory.open')}</Text>
           </Pressable>
         </View>
 

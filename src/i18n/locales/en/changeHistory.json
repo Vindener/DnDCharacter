@@ -1,0 +1,33 @@
+{
+  "title": "Update History",
+  "intro": "What changed in previous versions of the app.",
+  "versions": [
+    {
+      "version": "1.0.2",
+      "items": [
+        "Fixed a freeze with no loading indicator when opening the character sheet, bestiary, or spellbook.",
+        "Added a loading indicator when switching to these screens, so transitions feel smoother.",
+        "Improved crash diagnostics for faster fixes in upcoming releases."
+      ]
+    },
+    {
+      "version": "1.0.1",
+      "items": [
+        "Fixed a permission error when creating a character.",
+        "Improved account deletion and error handling.",
+        "Fixed ability score limits (point buy / standard array).",
+        "Fixed joining a campaign via invite code."
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "items": [
+        "First closed testing release on Google Play.",
+        "Create and edit a character offline, no sign-in required.",
+        "Bestiary, spellbook, and dice roller.",
+        "Google sign-in and cloud sync for character sheets.",
+        "Collaborative character sheet editing with other players and the GM."
+      ]
+    }
+  ]
+}

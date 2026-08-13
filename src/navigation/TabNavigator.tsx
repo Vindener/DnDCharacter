@@ -13,6 +13,7 @@ import CreateCharacter from '@/screens/CreateCharacter/CreateCharacter';
 import { CharacterViewModel } from '@/types/Character';
 import Spellbook from '@/screens/Spellbook/Spellbook';
 import LegalLicenses from '@/screens/LegalLicenses/LegalLicenses';
+import UpdateHistory from '@/screens/UpdateHistory/UpdateHistory';
 import type { SpellbookRouteParams } from '@/navigation/sharedTypes';
 
 export type TabStackParamList = {
@@ -28,6 +29,7 @@ export type TabStackParamList = {
   Spellbook: SpellbookRouteParams;
   Settings: undefined;
   LegalLicenses: undefined;
+  UpdateHistory: undefined;
 };
 
 const Stack = createStackNavigator<TabStackParamList>();
@@ -54,6 +56,7 @@ export default function TabNavigator(): JSX.Element {
       <Stack.Screen name='Spellbook' component={Spellbook} options={{ title: t('spellbook') }} />
       <Stack.Screen name='Settings' component={Settings} options={{ title: t('settings'), header: () => <Header /> }} />
       <Stack.Screen name='LegalLicenses' component={LegalLicenses} options={{ title: t('legalLicenses') }} />
+      <Stack.Screen name='UpdateHistory' component={UpdateHistory} options={{ title: t('updateHistory') }} />
     </Stack.Navigator>
   );
 }

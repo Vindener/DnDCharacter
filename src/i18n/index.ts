@@ -22,6 +22,7 @@ import ukReferences from './locales/uk/references.json';
 import ukInitiative from './locales/uk/initiative.json';
 import ukLegal from './locales/uk/legal.json';
 import ukWhatsNew from './locales/uk/whatsNew.json';
+import ukChangeHistory from './locales/uk/changeHistory.json';
 import ukFirstLaunch from './locales/uk/firstLaunch.json';
 
 import enCommon from './locales/en/common.json';
@@ -40,6 +41,7 @@ import enReferences from './locales/en/references.json';
 import enInitiative from './locales/en/initiative.json';
 import enLegal from './locales/en/legal.json';
 import enWhatsNew from './locales/en/whatsNew.json';
+import enChangeHistory from './locales/en/changeHistory.json';
 import enFirstLaunch from './locales/en/firstLaunch.json';
 
 export const resources = {
@@ -60,6 +62,7 @@ export const resources = {
     initiative: ukInitiative,
     legal: ukLegal,
     whatsNew: ukWhatsNew,
+    changeHistory: ukChangeHistory,
     firstLaunch: ukFirstLaunch,
   },
   en: {
@@ -79,6 +82,7 @@ export const resources = {
     initiative: enInitiative,
     legal: enLegal,
     whatsNew: enWhatsNew,
+    changeHistory: enChangeHistory,
     firstLaunch: enFirstLaunch,
   },
 } as const;
