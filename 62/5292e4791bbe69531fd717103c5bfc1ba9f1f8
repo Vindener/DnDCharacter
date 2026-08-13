@@ -1,0 +1,106 @@
+src/screens/CreateCharacter/CreateCharacter.tsx
+  s_7f31c827cc726d::t_db321ffc695e51 764-766
+  s_7f31c827cc726d::t_ece51cbcc45e16 860-865
+  s_7f31c827cc726d::t_13befea72ea719 804,811-830
+  s_7f31c827cc726d::t_12651dba60145a 34,46
+  s_7f31c827cc726d::t_4207dde04e95a8 809-810,831
+src/domain/schemas/createCharacterWizard.schema.ts
+  s_7f31c827cc726d::t_d7e713b930fdfd 5
+  s_7f31c827cc726d::t_48abf2a2815d18 28
+  s_7f31c827cc726d::t_a54a5cc794058a 106,109,115,118,121,125-138,151,165,171,174,177,180,186,197,234-235
+  s_7f31c827cc726d::t_7ab5bcda824343 86
+  s_7f31c827cc726d::t_d42c6f8e1a8207 150,187-196
+  s_7f31c827cc726d::t_184a5ce3652bd6 2-4
+  s_7f31c827cc726d::t_5b4575bf41880d 6-8,25-27
+  s_7f31c827cc726d::t_ee29335147bcf5 29-31,83-85
+  s_7f31c827cc726d::t_b6c452234439c7 87-89,103-105
+  s_7f31c827cc726d::t_05a1f626ba9d32 107-108
+  s_7f31c827cc726d::t_3af6219fe5e8ee 110-114
+  s_7f31c827cc726d::t_ef7dae11281bc3 116-117
+  s_7f31c827cc726d::t_6ff8a3e0373035 119-120
+  s_7f31c827cc726d::t_7e7a33a599da45 122-124
+  s_7f31c827cc726d::t_15444a8aafc9b3 139-141,147-149
+  s_7f31c827cc726d::t_6c0d2a744f06a2 152-154,162-164
+  s_7f31c827cc726d::t_f7ca587a808ee3 166-170
+  s_7f31c827cc726d::t_29811038a68f20 172-173
+  s_7f31c827cc726d::t_8984d93084d0a0 175-176
+  s_7f31c827cc726d::t_68489fe2a1759b 178-179
+  s_7f31c827cc726d::t_fad938af865efb 181-185
+  s_7f31c827cc726d::t_6fe692bde9bd98 198-200,231-233
+  s_7f31c827cc726d::t_ccb879dd92c41e 236-238
+  s_7f31c827cc726d::t_f983abd194a6c9 1,9-24,32-82,90-102,142-146,155-161,201-230,239-241
+src/repositories/characterCloudRepository.ts
+  s_7f31c827cc726d::t_aa04f25b2652f6 477-481,483-484
+src/screens/CreateCharacter/CreateCharacter.test.tsx
+  s_7f31c827cc726d::t_fc32086d2d55bc 250-253
+  s_7f31c827cc726d::t_d225e6268850b4 345
+src/screens/CreateCharacter/createCharacterWizard.ts
+  s_7f31c827cc726d::t_24eb7c7117cc22 333
+  s_7f31c827cc726d::t_33dc91babd736b 94-120
+docs/audit-2026-07.md
+  s_7f31c827cc726d::t_c0a4fc2065e41f 215-216
+  s_7f31c827cc726d::t_d3e6cb7196e673 178-191
+src/screens/CreateCharacter/style.ts
+  s_7f31c827cc726d::t_9810b93de9139f 262-264
+  s_7f31c827cc726d::t_68eb570c0a92b9 265-289
+src/screens/Character/hooks/useCharacterActions.tsx
+  s_7f31c827cc726d::t_5303f9d442d493 3026,3037-3038,3040
+  s_7f31c827cc726d::t_27bbfa89ae8e57 148-155
+  s_7f31c827cc726d::t_4b088f0f335c42 992
+  s_7f31c827cc726d::t_352940354d80f5 1011
+  s_7f31c827cc726d::t_c400ee48e44ed3 2896,2914,2924,2931
+  s_7f31c827cc726d::t_c5876a74c478c9 3039
+docs/release-blockers.md
+  s_7f31c827cc726d::t_eb71884936bbd8 174-195
+src/repositories/characterCloudRepository.test.ts
+  s_7f31c827cc726d::t_271ac998d2ddfb 164-179
+src/screens/Character/hooks/levelChange.ts
+  s_7f31c827cc726d::t_be1e11275051f3 7-10
+  s_7f31c827cc726d::t_12283637fa84c0 70
+  s_7f31c827cc726d::t_56f1b7b203c2d7 43
+  s_7f31c827cc726d::t_d3e51fea3731a0 83
+  s_7f31c827cc726d::t_6621fe1b1ff316 4-6
+  s_7f31c827cc726d::t_cadd4e99de4b4a 11-13,40-42
+  s_7f31c827cc726d::t_075bfc856757b4 44-46,67-69
+  s_7f31c827cc726d::t_103ea392d3f650 71-73,80-82
+  s_7f31c827cc726d::t_50866d213b28b9 84-86
+  s_7f31c827cc726d::t_8b9d4eb3b32429 1-3,14-39,47-66,74-79,87
+firestore.rules
+  s_7f31c827cc726d::t_369956f96336f3 80-86
+src/domain/schemas/createCharacterWizard.schema.test.ts
+  s_7f31c827cc726d::t_7702c7753df28f 64,69-70,77-80,87-88,94,114,117-133
+  s_7f31c827cc726d::t_4ca32d90fcc307 20-27,34-35,43,51
+  s_7f31c827cc726d::t_991337f148faea 17-19
+  s_7f31c827cc726d::t_cc76a6ccf711d7 28-33
+  s_7f31c827cc726d::t_aecbfe19df3dd4 36-38,40-42
+  s_7f31c827cc726d::t_04aa16fd25bedd 44-46,48-50
+  s_7f31c827cc726d::t_a1b1264454cc24 52-54,61-63
+  s_7f31c827cc726d::t_e9a700576217f0 65-68
+  s_7f31c827cc726d::t_0af739f3e26695 71-76
+  s_7f31c827cc726d::t_470bb4bd6fa46d 81-86
+  s_7f31c827cc726d::t_e771cccfb31996 89-93
+  s_7f31c827cc726d::t_92e19b2816fe2f 95-97,111-113
+  s_7f31c827cc726d::t_ee4b6c39d6692a 115-116
+  s_7f31c827cc726d::t_58825a97f05ff2 134
+  s_7f31c827cc726d::t_2c0a9ba2b99ae6 1-16,39,47,55-60,98-110
+src/i18n/locales/en/createCharacter.json
+  s_7f31c827cc726d::t_d4dad8df0702a6 109
+src/i18n/locales/uk/createCharacter.json
+  s_7f31c827cc726d::t_11ea897cc7c416 109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "625292e4791bbe69531fd717103c5bfc1ba9f1f8",
+  "prompts": {},
+  "sessions": {
+    "s_7f31c827cc726d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f4273f58-1d35-4ccd-a027-fe95f8d8ead5",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
