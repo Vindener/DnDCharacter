@@ -7,6 +7,12 @@
 > свідомо додається паралельно з release hardening за рішенням власника
 > продукту від 2026-08-01. Роботу з цієї пачки ізольовано від R1-R5;
 > вона не звільняє від Definition of Done §9.
+> **Виняток 2 (2026-08-14):** автозаповнення стартових заклять у створенні персонажа —
+> за класом персонажа в текстове поле (не dropdown/мультивибір, щоб гравець вільно
+> дописував/видаляв рядки для не-1-рівневих персонажів або нестандартного вибору) і
+> окрема модалка вибору заклять 1-го рівня. Свідомо додано за рішенням власника
+> продукту від 2026-08-14, за фідбеком тестувальника. Так само не звільняє від
+> Definition of Done §9.
 > **Реліз-модель:** Play Console вже створено, реліз `1.0.0 (4)` схвалено Google, 12 тестувальників набрано (обидва пункти чекліста «Робоча версія» виконані — перевірено 2026-08-12). Критичний шлях тепер — **14-денний безперервний закритий тест, старт 2026-08-12 → завершення 2026-08-26** (кнопка «Подати заявку» стане активною не раніше цієї дати, за умови безперервного opt-in усіх 12 тестувальників). Деталі й спринти — у `docs/release-plan-google-play.md`, поточні блокери — `docs/release-blockers.md`.
 > **Ключовий продуктовий факт:** аркуш персонажа редагують **кілька людей одночасно** (owner + editors). Це змінює вимоги до синхронізації, правил Firestore і видалення акаунта. Модель і інваріанти — у `docs/collaborative-editing.md`.
 
@@ -14,18 +20,18 @@
 
 ## 1. Джерела істини
 
-| Файл | Роль |
-| --- | --- |
-| `CLAUDE.md` | Робочі правила. Читати першим. |
-| `docs/release-plan-google-play.md` | **Поточний план і спринти R1–R5.** Замінює `docs/archive/sprint-plan.md` і `docs/archive/ux-ui-roadmap.md`. |
-| `docs/collaborative-editing.md` | Цільова модель спільного редагування + інваріанти, які не можна ламати. |
-| `docs/audit-2026-07.md` | Реєстр знахідок (PLY / SEC / COL / PERF / REL) з файлами й рядками. Джерело задач, статуси оновлюються (востаннє 2026-08-13). |
-| `docs/release-blockers.md` | Живий список реальних блокерів релізу й відкритих питань до власника продукту. |
-| `docs/legal-terms-of-service.md` | Умови використання / Acceptable Use — єдиний правовий документ, якого бракувало. |
-| `.github/instructions/mobile-rn-standards.instructions.md` | Код-стандарти RN/TS. Чинні. |
-| `docs/ui-kit.md`, `docs/loading-states-and-skeleton.md`, `docs/dnd-product-guidelines.md` | Чинні. |
-| `.agents/*` | Інструкції Codex. Технічні правила й роадмап синхронізовано з release hardening (див. §11). |
-| `docs/archive/sprint-plan.md`, `docs/archive/ux-ui-roadmap.md`, `docs/archive/product-*-stage-*.md` | **Історія.** Не беклог. Перенесено з `docs/` у `docs/archive/` 2026-08-12. |
+| Файл                                                                                                | Роль                                                                                                                          |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `CLAUDE.md`                                                                                         | Робочі правила. Читати першим.                                                                                                |
+| `docs/release-plan-google-play.md`                                                                  | **Поточний план і спринти R1–R5.** Замінює `docs/archive/sprint-plan.md` і `docs/archive/ux-ui-roadmap.md`.                   |
+| `docs/collaborative-editing.md`                                                                     | Цільова модель спільного редагування + інваріанти, які не можна ламати.                                                       |
+| `docs/audit-2026-07.md`                                                                             | Реєстр знахідок (PLY / SEC / COL / PERF / REL) з файлами й рядками. Джерело задач, статуси оновлюються (востаннє 2026-08-13). |
+| `docs/release-blockers.md`                                                                          | Живий список реальних блокерів релізу й відкритих питань до власника продукту.                                                |
+| `docs/legal-terms-of-service.md`                                                                    | Умови використання / Acceptable Use — єдиний правовий документ, якого бракувало.                                              |
+| `.github/instructions/mobile-rn-standards.instructions.md`                                          | Код-стандарти RN/TS. Чинні.                                                                                                   |
+| `docs/ui-kit.md`, `docs/loading-states-and-skeleton.md`, `docs/dnd-product-guidelines.md`           | Чинні.                                                                                                                        |
+| `.agents/*`                                                                                         | Інструкції Codex. Технічні правила й роадмап синхронізовано з release hardening (див. §11).                                   |
+| `docs/archive/sprint-plan.md`, `docs/archive/ux-ui-roadmap.md`, `docs/archive/product-*-stage-*.md` | **Історія.** Не беклог. Перенесено з `docs/` у `docs/archive/` 2026-08-12.                                                    |
 
 Пріоритет при конфлікті: `release-plan` → `collaborative-editing` → `CLAUDE.md` → `.github/instructions` → `.agents` → інші `docs`.
 
@@ -47,7 +53,7 @@
 ```
 npx tsc --noEmit      -> 0 помилок
 npm run lint          -> 0 errors, 25 warnings (react-hooks/exhaustive-deps)
-npm run test:unit     -> 61 файл / 331 тест зелені (~2.4 с)
+npm run test:unit     -> 62 файли / 342 тести зелені (~2.5 с) (2026-08-13: 61/331)
 npm audit             -> 38 (0 critical / 17 high / 21 moderate), build-тулчейн + 1 runtime-залежність без практичного експлойту
 ```
 
@@ -194,7 +200,7 @@ npx -p node@20.19.4 -p npm@10 npm ci --include=dev
 - Мертві модулі `src/shared/services/firestore/{firestore.ts,pdocs.ts,sharing.ts,loger.ts}` нікуди не імпортуються, але звертаються до колекцій без правил (`docs`, `docShares`, `sharedDocs`, `demoItems`) і роблять `addDoc` у `users`. **Видалити цілком.**
 - Уразливості: 23 записи, **усі в build/dev-тулчейні** — ризик для машини розробника й CI, а не RCE у публічному APK. Формулюй так. Закривати через `overrides` ті, де фікс без мажора: `tar`, `shell-quote`, `undici`, `ws`, `js-yaml`, `fast-uri`, `protobufjs`, `brace-expansion`. Після кожного — `npm ci` + `validate` + `test:unit` + локальний Android-білд.
 - Firebase Android API key обмежити в Google Cloud Console по package + SHA-1. **Після налаштування Play App Signing додати новий SHA-1 у Firebase і в OAuth client** — інакше Google Sign-In зламається саме в проді.
-- **Локальний debug-білд (`npm run android`) підписується `android/app/debug.keystore`** (закомічений у репо), а **не** стандартним `~/.android/debug.keystore` — так налаштовано в `android/app/build.gradle:110,124` навмисно, щоб SHA-1 debug-збірки був однаковий у всієї команди. Якщо після нового `npm run android` Google Sign-In падає з помилкою 10 (DEVELOPER_ERROR) — бери SHA-1 саме з `android/app/debug.keystore` (`keytool -list -v -keystore android/app/debug.keystore -alias androiddebugkey -storepass android -keypass android`), не з домашнього. Перевірено 2026-08-12: реліз (`eas build`) цього не стосується — там окремі EAS-керовані credentials (`MYAPP_UPLOAD_*`), SHA-1 для Play App Signing вже зареєстрований окремо.
+- **Локальний debug-білд (`npm run android`) підписується `android/app/debug.keystore`** (закомічений у репо), а **не** стандартним `~/.android/debug.keystore` — так налаштовано в `android/app/build.gradle:110,124` навмисно, щоб SHA-1 debug-збірки був однаковий у всієї команди. Якщо після нового `npm run android` Google Sign-In падає з помилкою 10 (DEVELOPER*ERROR) — бери SHA-1 саме з `android/app/debug.keystore` (`keytool -list -v -keystore android/app/debug.keystore -alias androiddebugkey -storepass android -keypass android`), не з домашнього. Перевірено 2026-08-12: реліз (`eas build`) цього не стосується — там окремі EAS-керовані credentials (`MYAPP_UPLOAD*\*`), SHA-1 для Play App Signing вже зареєстрований окремо.
 - 39 `console.*` у прод-коді (було 27 — зросло, регрес, перевірено 2026-08-12) — прибрати або за `__DEV__`. Частина в шляху синку й друкує дані документів.
 
 ### 8.5 Оптимізація
@@ -210,7 +216,9 @@ npx -p node@20.19.4 -p npm@10 npm ci --include=dev
 Порядок: (1) зміряти на реальному mid-range Android у release-білді; (2) `require()` у мемоізованих геттерах; (3) `Map`-індекси ліниво; (4) Zod для статичного SRD → build-time (`npm run validate:srd`), у рантаймі типізований каст, тести `src/domain/srd/*.test.ts` лишити зеленими; (5) за потреби `React.lazy` для Bestiary/Spellbook/DM.
 
 Інше:
-- `minifyEnabled` і `shrinkResources` вимкнені (немає `android.enableProguardInReleaseBuilds` / `android.enableShrinkResourcesInReleaseBuilds` у `gradle.properties`). Увімкнути + ProGuard-правила для RN Firebase/Reanimated + **повний smoke-тест релізного білда** (R8 ламає рефлексію).
+
+- `minifyEnabled` і `shrinkResources` — ✅ увімкнено 2026-08-14 (обидва прапорці в `gradle.properties`, окремими комітами). Keep-правила в `proguard-rules.pro` додано лише для бібліотек без власних `consumerProguardFiles` (`react-native-screens`, `react-native-gesture-handler`, `react-native-keyboard-controller`, `react-native-pager-view`, `io.invertase.firebase`) — перевірено читанням `node_modules/**/android/build.gradle` кожної залежності. Два локальні `./gradlew :app:bundleRelease` пройшли (BUILD SUCCESSFUL), підтверджено по `mapping.txt`/змердженому `configuration.txt`. **Повний smoke-тест на реальному пристрої ще не пройдено** — деталі й чекліст `docs/audit-2026-07.md` PERF-2, `docs/release-plan-google-play.md` §4.
+- **Локальна release-збірка засмічує `node_modules/**/android/{build,.cxx}`** (десятки тисяч файлів на модуль, CMake-кеш по 100–500 МБ) — Metro за замовчуванням намагається відстежувати все це через `inotify` і падає з `ENOSPC: System limit for number of file watchers reached` при наступному `npm run android`. Виправлено двічі: (1) `metro.config.js` тепер виключає `android/**/build/**` і `android/**/.cxx/**` зі свого `blockList`; (2) після будь-якої локальної release-збірки прибирай сміття — `./gradlew clean` (в `android/`) + вручну видали залишкові `.cxx`, якщо `clean` їх не зачепив.
 - Невикористані пакети (0 імпортів у `src`): `react-native-fs`, `react-native-vector-icons`, `react-navigation@^5.0.0`, `expo-media-library`, `expo-intent-launcher`, `react-native-uuid`. Знімати по одному, кожен раз `validate` + білд. **Не знімати** `react-native-pager-view` і `react-native-tab-view` — peer для `@react-navigation/material-top-tabs`.
 - `App.tsx:7` — `import 'expo-dev-client'` безумовний. Обгорнути в `if (__DEV__)`.
 - `App.tsx:31-33` — `return null` до готовності i18n → біла пауза. Використати `expo-splash-screen`.

@@ -61,19 +61,22 @@ describe('createCharacterWizard helpers', () => {
 
   it('maps draft into a character entity', () => {
     const draft = applyDerivedDefaults(
-      applyStartMethod({
-        ...createInitialDraft(),
-        name: 'Arthas',
-        selectedClass: 'paladin',
-        raceKey: 'human',
-        backgroundKey: 'acolyte',
-        ac: '18',
-        hpMax: '12',
-        hpCurrent: '12',
-        storageMode: 'local-cloud',
-        shareTarget: 'dm',
-        inviteEmail: 'dm@example.com',
-      }, 'standard-5e'),
+      applyStartMethod(
+        {
+          ...createInitialDraft(),
+          name: 'Arthas',
+          selectedClass: 'paladin',
+          raceKey: 'human',
+          backgroundKey: 'acolyte',
+          ac: '18',
+          hpMax: '12',
+          hpCurrent: '12',
+          storageMode: 'local-cloud',
+          shareTarget: 'dm',
+          inviteEmail: 'dm@example.com',
+        },
+        'standard-5e',
+      ),
       { forceCombat: true, forceEquipment: true },
     );
 
@@ -96,13 +99,16 @@ describe('createCharacterWizard helpers', () => {
   });
 
   it('creates valid custom/homebrew metadata without marking it as SRD', () => {
-    const draft = applyDerivedDefaults({
-      ...createInitialDraft(),
-      name: 'Gearwright',
-      selectedClass: 'artificer',
-      raceKey: 'human',
-      backgroundKey: 'acolyte',
-    }, { forceCombat: true, forceEquipment: true });
+    const draft = applyDerivedDefaults(
+      {
+        ...createInitialDraft(),
+        name: 'Gearwright',
+        selectedClass: 'artificer',
+        raceKey: 'human',
+        backgroundKey: 'acolyte',
+      },
+      { forceCombat: true, forceEquipment: true },
+    );
 
     const character = buildCharacterFromDraft(draft, 'artificer-id');
 
@@ -111,5 +117,43 @@ describe('createCharacterWizard helpers', () => {
     expect(character.contentSources?.class?.origin).toBe('homebrew');
     expect(character.contentSources?.class?.source).toBe('homebrew');
     expect(character.contentSources?.race?.origin).toBe('srd-5.1');
+  });
+
+  it('auto-fills starting spells for the initial draft when the default class is a caster', () => {
+    const draft = { ...createInitialDraft(), selectedClass: 'wizard' };
+    const filled = applyDerivedDefaults(draft, { forceMagic: true });
+
+    expect(filled.cantripsText.split('\n').filter(Boolean)).toHaveLength(3);
+    expect(filled.knownSpellsText.split('\n').filter(Boolean)).toHaveLength(6);
+    expect(filled.preparedSpellsText).toBe('');
+  });
+
+  it('does not overwrite manually edited spell text on unrelated draft changes', () => {
+    const wizardDraft = applyDerivedDefaults({ ...createInitialDraft(), selectedClass: 'wizard' }, { forceMagic: true });
+    const edited = { ...wizardDraft, cantripsText: 'Prestidigitation' };
+
+    const untouched = applyDerivedDefaults(edited);
+
+    expect(untouched.cantripsText).toBe('Prestidigitation');
+  });
+
+  it('refreshes suggested spells when the class explicitly changes', () => {
+    const wizardDraft = applyDerivedDefaults({ ...createInitialDraft(), selectedClass: 'wizard' }, { forceMagic: true });
+    const switchedToCleric = applyDerivedDefaults({ ...wizardDraft, selectedClass: 'cleric' }, { forceMagic: true });
+
+    expect(switchedToCleric.knownSpellsText).toBe('');
+    expect(switchedToCleric.preparedSpellsText.split('\n').filter(Boolean)).toHaveLength(2);
+  });
+
+  it('suggests no starting spells for paladin/ranger, who cast starting at level 2', () => {
+    const paladin = applyDerivedDefaults({ ...createInitialDraft(), selectedClass: 'paladin' }, { forceMagic: true });
+    const ranger = applyDerivedDefaults({ ...createInitialDraft(), selectedClass: 'ranger' }, { forceMagic: true });
+
+    expect(paladin.cantripsText).toBe('');
+    expect(paladin.knownSpellsText).toBe('');
+    expect(paladin.preparedSpellsText).toBe('');
+    expect(ranger.cantripsText).toBe('');
+    expect(ranger.knownSpellsText).toBe('');
+    expect(ranger.preparedSpellsText).toBe('');
   });
 });

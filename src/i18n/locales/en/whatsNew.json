@@ -2,9 +2,12 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Fixed a freeze with no loading indicator when opening the character sheet, bestiary, or spellbook.",
-    "Added a loading indicator when switching to these screens, so transitions feel smoother.",
-    "Improved crash diagnostics for faster fixes in upcoming releases."
+    "Fixed an app crash right after creating a character.",
+    "Fixed a rare crash when quickly closing a dialog with a text field.",
+    "Character creation now suggests starting spells by class automatically, with a separate picker for level-1 spells.",
+    "Fixed a duplicated highlighted class/school filter in the spellbook.",
+    "Fixed the Ranger class translation in the spellbook.",
+    "Reduced app size and improved performance."
   ],
   "gotIt": "Got it"
 }

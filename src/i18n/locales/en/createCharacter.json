@@ -147,7 +147,12 @@
     "cantrips": "Cantrips",
     "knownSpells": "Known spells",
     "preparedSpells": "Prepared spells",
-    "spellSlots": "Spell slots"
+    "spellSlots": "Spell slots",
+    "spellPicker": {
+      "openButton": "Choose 1st-level spells",
+      "title": "1st-level spells",
+      "confirm": "Save"
+    }
   },
   "personality": {
     "alignment": "Alignment",

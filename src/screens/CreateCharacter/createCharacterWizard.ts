@@ -25,9 +25,11 @@ import {
   getStartingEquipmentForClass,
 } from '@/domain/srd';
 import type { SrdAbilityId as AbilityKey, SrdClassFeature, SrdStartingEquipment } from '@/domain/srd';
+import { getSuggestedStartingSpells } from '@/domain/srd/startingSpells';
 import { abilityMod, proficiencyBonus } from '@/shared/helpers/combat';
 import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { rollDice as rollDiceWithService } from '@/shared/services/diceRoller';
+import { getCurrentLanguage } from '@/i18n';
 import skillToStat, { AbilityStatsKey, SkillKey } from '@/types/skillToStat';
 
 export type StartMethod = 'standard-5e' | 'quick' | 'homebrew-blank' | 'import';
@@ -301,6 +303,20 @@ export interface AbilityRollResult {
   detail: string;
 }
 
+// Auto-fills the free-text spell fields with a class-appropriate SRD suggestion the player
+// is expected to freely edit or delete (not every character is level 1, and the "default"
+// picks won't fit everyone) — see CLAUDE.md exception 2026-08-14.
+function buildSuggestedSpellText(classId: string): Pick<CreateCharacterDraft, 'cantripsText' | 'knownSpellsText' | 'preparedSpellsText'> {
+  const className = getCreateClassById(classId)?.name ?? '';
+  const suggestion = getSuggestedStartingSpells(className, getCurrentLanguage());
+
+  return {
+    cantripsText: suggestion.cantrips.join('\n'),
+    knownSpellsText: suggestion.mode === 'known' ? suggestion.spells.join('\n') : '',
+    preparedSpellsText: suggestion.mode === 'prepared' ? suggestion.spells.join('\n') : '',
+  };
+}
+
 export function createInitialDraft(): CreateCharacterDraft {
   const selectedClass = getCreateClassOptions()[0] || 'fighter';
   const raceKey = getSrdRaceOptions()[0] || 'human';
@@ -365,9 +381,7 @@ export function createInitialDraft(): CreateCharacterDraft {
     spellcastingAbility: getCreateClassById(selectedClass)?.spellcastingAbility ?? 'intelligence',
     spellSaveDC: '',
     spellAttackBonus: '',
-    cantripsText: '',
-    knownSpellsText: '',
-    preparedSpellsText: '',
+    ...buildSuggestedSpellText(selectedClass),
     spellSlotsText: '',
     alignment: '',
     ideals: '',
@@ -472,7 +486,7 @@ export function applyStartMethod(draft: CreateCharacterDraft, method: StartMetho
 
 export function applyDerivedDefaults(
   draft: CreateCharacterDraft,
-  options: { forceCombat?: boolean; forceEquipment?: boolean } = {},
+  options: { forceCombat?: boolean; forceEquipment?: boolean; forceMagic?: boolean } = {},
 ): CreateCharacterDraft {
   const defaults = deriveDraftDefaults(draft);
   const spellAbility = getCreateClassById(draft.selectedClass)?.spellcastingAbility ?? draft.spellcastingAbility;
@@ -481,6 +495,7 @@ export function applyDerivedDefaults(
   const saveDc = 8 + proficiency + spellMod;
   const spellAttack = proficiency + spellMod;
   const selectedGear = defaults.selectedGear;
+  const suggestedSpells = defaults.isCaster ? buildSuggestedSpellText(draft.selectedClass) : undefined;
 
   return {
     ...draft,
@@ -502,6 +517,11 @@ export function applyDerivedDefaults(
     spellcastingAbility: spellAbility,
     spellSaveDC: draft.spellSaveDC || String(saveDc),
     spellAttackBonus: draft.spellAttackBonus || String(spellAttack),
+    cantripsText: (options.forceMagic || !draft.cantripsText) && suggestedSpells ? suggestedSpells.cantripsText : draft.cantripsText,
+    knownSpellsText:
+      (options.forceMagic || !draft.knownSpellsText) && suggestedSpells ? suggestedSpells.knownSpellsText : draft.knownSpellsText,
+    preparedSpellsText:
+      (options.forceMagic || !draft.preparedSpellsText) && suggestedSpells ? suggestedSpells.preparedSpellsText : draft.preparedSpellsText,
   };
 }
 

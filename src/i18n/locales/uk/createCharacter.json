@@ -147,7 +147,12 @@
     "cantrips": "Замовляння",
     "knownSpells": "Відомі закляття",
     "preparedSpells": "Підготовлені закляття",
-    "spellSlots": "Комірки заклять"
+    "spellSlots": "Комірки заклять",
+    "spellPicker": {
+      "openButton": "Обрати заклинання 1-го рівня",
+      "title": "Заклинання 1-го рівня",
+      "confirm": "Зберегти"
+    }
   },
   "personality": {
     "alignment": "Світогляд",

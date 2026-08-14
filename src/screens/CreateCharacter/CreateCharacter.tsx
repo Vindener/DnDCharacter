@@ -1,5 +1,17 @@
 import React, { JSX, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Image, Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Modal as RNModal,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Picker } from '@react-native-picker/picker';
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -25,6 +37,9 @@ import { SUBCLASSES } from '@/shared/const/Subclasses';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import FileService from '@/shared/services/fileSerice';
 import { formatSchemaErrors, safeParseCreateCharacterWizardStep } from '@/domain/schemas';
+import { getClassLevel1SpellMode, getEligibleLevel1Spells } from '@/domain/srd/startingSpells';
+import { getStyles as getSpellPickerStyles } from '@/shared/components/Modal/style';
+import { Button } from '@/shared/ui';
 import { getStyles } from '@/screens/CreateCharacter/style';
 import {
   ABILITY_KEYS,
@@ -99,10 +114,11 @@ const START_OPTIONS: StartMethod[] = ['standard-5e', 'quick', 'homebrew-blank', 
 const STAT_METHODS: CreateCharacterDraft['statMethod'][] = ['array', 'pointbuy', 'manual', 'roll', 'random'];
 
 const CreateCharacter = (): JSX.Element => {
-  const { t } = useTranslation(['createCharacter', 'dnd']);
+  const { t, i18n } = useTranslation(['createCharacter', 'dnd']);
   const navigation = useNavigation<StackNavigationProp<TabStackParamList, 'CreateCharacter'>>();
   const colors = useThemeStore((s) => s.colors);
   const styles = getStyles(colors);
+  const spellPickerStyles = getSpellPickerStyles(colors);
   const netInfo = useNetInfo();
   const isOnline = netInfo.isConnected !== false && netInfo.isInternetReachable !== false;
 
@@ -127,9 +143,19 @@ const CreateCharacter = (): JSX.Element => {
   const [isImporting, setIsImporting] = useState(false);
   const [campaigns, setCampaigns] = useState<DMCampaign[]>([]);
   const [isAddingNewCampaign, setIsAddingNewCampaign] = useState(false);
+  const [isSpellPickerVisible, setIsSpellPickerVisible] = useState(false);
+  const [pickedCantripIds, setPickedCantripIds] = useState<Set<string>>(new Set());
+  const [pickedLeveledSpellIds, setPickedLeveledSpellIds] = useState<Set<string>>(new Set());
 
   const isSignedIn = Boolean(fbAuth.currentUser);
   const derived = useMemo(() => deriveDraftDefaults(draft), [draft]);
+  const level1SpellLocale = i18n.language === 'uk' ? 'uk' : 'en';
+  const spellcastingClassName = draft.selectedClass === 'custom' ? '' : getCreateClassById(draft.selectedClass)?.name || '';
+  const level1SpellMode = spellcastingClassName ? getClassLevel1SpellMode(spellcastingClassName) : 'none';
+  const eligibleLevel1Spells = useMemo(
+    () => (level1SpellMode !== 'none' ? getEligibleLevel1Spells(spellcastingClassName, level1SpellLocale) : { cantrips: [], leveled: [] }),
+    [spellcastingClassName, level1SpellMode, level1SpellLocale],
+  );
   const step = draft.step;
   const selectedCampaignId = useMemo(
     () => campaigns.find((campaign) => campaign.name === draft.campaign)?.id || null,
@@ -187,6 +213,49 @@ const CreateCharacter = (): JSX.Element => {
 
   const setTextField = (field: DraftTextField, value: string): void => {
     updateDraft({ [field]: value } as Partial<CreateCharacterDraft>);
+  };
+
+  const linesToNameSet = (text: string): Set<string> =>
+    new Set(
+      text
+        .split('\n')
+        .map((line) => line.trim().toLowerCase())
+        .filter(Boolean),
+    );
+
+  const openSpellPicker = (): void => {
+    const pickedCantripNames = linesToNameSet(draft.cantripsText);
+    const pickedLeveledNames = linesToNameSet(level1SpellMode === 'prepared' ? draft.preparedSpellsText : draft.knownSpellsText);
+
+    setPickedCantripIds(
+      new Set(
+        eligibleLevel1Spells.cantrips.filter((spell) => pickedCantripNames.has(spell.name.trim().toLowerCase())).map((spell) => spell.id),
+      ),
+    );
+    setPickedLeveledSpellIds(
+      new Set(
+        eligibleLevel1Spells.leveled.filter((spell) => pickedLeveledNames.has(spell.name.trim().toLowerCase())).map((spell) => spell.id),
+      ),
+    );
+    setIsSpellPickerVisible(true);
+  };
+
+  const toggleSpellPick = (setter: React.Dispatch<React.SetStateAction<Set<string>>>, id: string): void => {
+    setter((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const confirmSpellPicker = (): void => {
+    const cantripNames = eligibleLevel1Spells.cantrips.filter((spell) => pickedCantripIds.has(spell.id)).map((spell) => spell.name);
+    const leveledNames = eligibleLevel1Spells.leveled.filter((spell) => pickedLeveledSpellIds.has(spell.id)).map((spell) => spell.name);
+
+    setTextField('cantripsText', cantripNames.join('\n'));
+    setTextField(level1SpellMode === 'prepared' ? 'preparedSpellsText' : 'knownSpellsText', leveledNames.join('\n'));
+    setIsSpellPickerVisible(false);
   };
 
   const setStep = (nextStep: number): void => {
@@ -631,7 +700,7 @@ const CreateCharacter = (): JSX.Element => {
                   magicEnabled: Boolean(spellcastingAbility) || prev.magicEnabled,
                   spellcastingAbility: spellcastingAbility || prev.spellcastingAbility,
                 },
-                { forceCombat: true, forceEquipment: true },
+                { forceCombat: true, forceEquipment: true, forceMagic: true },
               ),
             );
           }}
@@ -1079,6 +1148,11 @@ const CreateCharacter = (): JSX.Element => {
         onChangeText={(value) => setTextField('spellAttackBonus', value)}
         keyboardType='numbers-and-punctuation'
       />
+      {level1SpellMode !== 'none' && (eligibleLevel1Spells.cantrips.length > 0 || eligibleLevel1Spells.leveled.length > 0) ? (
+        <Pressable style={styles.toggleButton} onPress={openSpellPicker} android_ripple={{ color: colors.ripple }}>
+          <Text style={styles.toggleButtonText}>{t('magic.spellPicker.openButton')}</Text>
+        </Pressable>
+      ) : null}
       <Text style={styles.label}>{t('magic.cantrips')}</Text>
       <TextInput
         style={[styles.input, styles.multilineInput]}
@@ -1108,6 +1182,76 @@ const CreateCharacter = (): JSX.Element => {
         placeholder='1:2, 2:1'
         placeholderTextColor={colors.textSecondary}
       />
+      {/* Plain RN Modal + ScrollView, deliberately NOT the shared KeyboardAwareScrollView-based
+          Modal component: this picker has no text input, so it needs no keyboard avoidance, and
+          reusing that Modal here nested a second react-native-keyboard-controller scroll view
+          inside the wizard's own outer KeyboardAwareScrollView, crashing natively on step 7. */}
+      <RNModal visible={isSpellPickerVisible} transparent animationType='fade' onRequestClose={() => setIsSpellPickerVisible(false)}>
+        <View style={spellPickerStyles.wrapper}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={() => setIsSpellPickerVisible(false)} />
+          <View style={spellPickerStyles.container}>
+            <Pressable
+              onPress={() => setIsSpellPickerVisible(false)}
+              style={spellPickerStyles.close}
+              android_ripple={{ color: colors.ripple }}
+            >
+              <Text style={spellPickerStyles.closeText}>✕</Text>
+            </Pressable>
+            <Text style={spellPickerStyles.title}>{t('magic.spellPicker.title')}</Text>
+            <View style={spellPickerStyles.content}>
+              <ScrollView
+                style={spellPickerStyles.scrollArea}
+                contentContainerStyle={spellPickerStyles.scrollContent}
+                showsVerticalScrollIndicator={false}
+              >
+                {eligibleLevel1Spells.cantrips.length > 0 ? (
+                  <>
+                    <Text style={styles.label}>{t('magic.cantrips')}</Text>
+                    <View style={styles.toggleRow}>
+                      {eligibleLevel1Spells.cantrips.map((spell) => (
+                        <Pressable
+                          key={spell.id}
+                          style={[styles.toggleButton, pickedCantripIds.has(spell.id) ? styles.toggleButtonActive : null]}
+                          onPress={() => toggleSpellPick(setPickedCantripIds, spell.id)}
+                          android_ripple={{ color: colors.ripple }}
+                        >
+                          <Text style={[styles.toggleButtonText, pickedCantripIds.has(spell.id) ? styles.toggleButtonTextActive : null]}>
+                            {spell.name}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </>
+                ) : null}
+                {eligibleLevel1Spells.leveled.length > 0 ? (
+                  <>
+                    <Text style={styles.label}>{t(level1SpellMode === 'prepared' ? 'magic.preparedSpells' : 'magic.knownSpells')}</Text>
+                    <View style={styles.toggleRow}>
+                      {eligibleLevel1Spells.leveled.map((spell) => (
+                        <Pressable
+                          key={spell.id}
+                          style={[styles.toggleButton, pickedLeveledSpellIds.has(spell.id) ? styles.toggleButtonActive : null]}
+                          onPress={() => toggleSpellPick(setPickedLeveledSpellIds, spell.id)}
+                          android_ripple={{ color: colors.ripple }}
+                        >
+                          <Text
+                            style={[styles.toggleButtonText, pickedLeveledSpellIds.has(spell.id) ? styles.toggleButtonTextActive : null]}
+                          >
+                            {spell.name}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </>
+                ) : null}
+              </ScrollView>
+              <View style={spellPickerStyles.actions}>
+                <Button title={t('magic.spellPicker.confirm')} variant='primary' onPress={confirmSpellPicker} />
+              </View>
+            </View>
+          </View>
+        </View>
+      </RNModal>
     </View>
   );
 

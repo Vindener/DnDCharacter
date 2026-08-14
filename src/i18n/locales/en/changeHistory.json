@@ -3,6 +3,17 @@
   "intro": "What changed in previous versions of the app.",
   "versions": [
     {
+      "version": "1.0.3",
+      "items": [
+        "Fixed an app crash right after creating a character.",
+        "Fixed a rare crash when quickly closing a dialog with a text field.",
+        "Character creation now suggests starting spells by class automatically, with a separate picker for level-1 spells.",
+        "Fixed a duplicated highlighted class/school filter in the spellbook.",
+        "Fixed the Ranger class translation in the spellbook.",
+        "Reduced app size and improved performance."
+      ]
+    },
+    {
       "version": "1.0.2",
       "items": [
         "Fixed a freeze with no loading indicator when opening the character sheet, bestiary, or spellbook.",

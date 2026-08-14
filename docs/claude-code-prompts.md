@@ -766,7 +766,7 @@ android.enableShrinkResourcesInReleaseBuilds, яких у gradle.properties не
 1. Перелічи всі нативні/рефлексивні залежності проєкту і для кожної скажи, чи
    потрібні keep-правила: @react-native-firebase/*, react-native-reanimated
    (правила частково є), react-native-svg, react-native-screens,
-   react-native-gesture-handler, @react-native-google-signin, expo-*, zustand, zod.
+   react-native-gesture-handler, @react-native-google-signin, expo-*, zustand, zod і тд.
 2. Покажи, які саме правила додаєш у proguard-rules.pro і чому.
 3. Опиши, що я мушу перевірити після цього (повний smoke-тест release-білда).
 ЧЕКАЙ підтвердження.

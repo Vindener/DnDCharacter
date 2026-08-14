@@ -695,9 +695,7 @@ const SpellbookScreen = ({ route }: Props) => {
             onPress={() => setClassFilter('all')}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>
-              {classFilter === 'all' ? t('filters.class') : getLocalizedSpellClass(classFilter, sortLocale)}
-            </Text>
+            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{t('filters.class')}</Text>
           </Pressable>
           {classOptions.map((className) => (
             <Pressable
@@ -716,9 +714,7 @@ const SpellbookScreen = ({ route }: Props) => {
             onPress={() => setSchoolFilter('all')}
             android_ripple={{ color: colors.ripple }}
           >
-            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>
-              {schoolFilter === 'all' ? t('filters.school') : getLocalizedSpellSchool(schoolFilter, sortLocale)}
-            </Text>
+            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{t('filters.school')}</Text>
           </Pressable>
           {schoolOptions.map((school) => (
             <Pressable

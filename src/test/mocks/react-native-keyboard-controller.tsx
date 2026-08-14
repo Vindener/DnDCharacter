@@ -14,3 +14,8 @@ export const KeyboardAvoidingView = ({ children, ...props }: MockProps) =>
 
 export const KeyboardStickyView = ({ children, ...props }: MockProps) =>
   React.createElement('KeyboardStickyView', props, children as React.ReactNode);
+
+export const KeyboardController = {
+  dismiss: () => Promise.resolve(),
+  isVisible: () => false,
+};

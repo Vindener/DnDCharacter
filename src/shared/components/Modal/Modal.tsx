@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Modal as RNModal, View, Pressable, StyleSheet } from 'react-native';
-import { KeyboardAwareScrollView, type KeyboardAwareScrollViewRef } from 'react-native-keyboard-controller';
+import { KeyboardAwareScrollView, KeyboardController, type KeyboardAwareScrollViewRef } from 'react-native-keyboard-controller';
 import { getStyles } from '@/shared/components/Modal/style';
 import useThemeStore from '@/context/Theme-store';
 import { Button, Text } from '@/shared/ui';
@@ -21,6 +21,26 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
   const scrollRef = React.useRef<KeyboardAwareScrollViewRef>(null);
+  // RN's <Modal> unmounts its content the instant `visible` turns false, with no exit-animation
+  // grace period on Android (unlike iOS). If the keyboard is still closing, KeyboardAwareScrollView's
+  // in-flight worklet then touches an already-torn-down Fabric view and crashes natively (SIGSEGV in
+  // libworklets.so/libhermes.so or libreactnative.so/libfbjni.so — Crashlytics 0e46c2200.../042ac2c3f...).
+  // Keep the modal mounted until the keyboard has actually finished closing.
+  const [isRendered, setIsRendered] = React.useState(isVisible);
+
+  React.useEffect(() => {
+    if (isVisible) {
+      setIsRendered(true);
+      return;
+    }
+    let cancelled = false;
+    void KeyboardController.dismiss().finally(() => {
+      if (!cancelled) setIsRendered(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [isVisible]);
 
   React.useEffect(() => {
     if (!isVisible || scrollToTopSignal === 0) return;
@@ -28,7 +48,7 @@ export const Modal = ({ title, subtitle, onSubmit, onClose, scrollToTopSignal = 
   }, [isVisible, scrollToTopSignal]);
 
   return (
-    <RNModal visible={isVisible} transparent animationType='fade' onRequestClose={onClose}>
+    <RNModal visible={isRendered} transparent animationType='fade' onRequestClose={onClose}>
       <View style={styles.wrapper}>
         <Pressable style={StyleSheet.absoluteFill} onPress={onClose} />
         <View style={styles.container}>
