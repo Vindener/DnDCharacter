@@ -1,0 +1,1060 @@
+docs/archive/product-redesign-stage-2.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-181
+src/screens/Character/tabs/HomebrewTab.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+.ua/.trash-1785778670/batch-12-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-617
+.ua/.trash-1785778670/tmp/ua-tour-results.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-4237
+src/dm/boundary.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-77
+src/screens/Character/hooks/levelChange.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-79
+.ua/.trash-1785778670/batch-10-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-705
+.ua/knowledge-graph.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-27862
+docs/archive/sprint-plan.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-174
+docs/release-blockers.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-299
+.ua/.trash-1785778670/tmp/batch-prompts/batch-23.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-36
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-16.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+src/shared/const/Weapons.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-135
+src/services/storeEffects/dmStoreEffects.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-299
+src/shared/components/Loader/Loader.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-60
+src/shared/components/EmptyPlaceholder.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+src/i18n/locales/en/whatsNew.json
+  s_6e22369efa7cb9::t_a82db1e2242313 1-14
+src/shared/components/CharacterCard/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-42
+.ua/.trash-1785778670/batch-1-part-4.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-600
+src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-89
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-23.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+android/app/google-services.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-95
+src/shared/const/attributes.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-17
+.ua/.trash-1785778670/tmp/ua-file-extract-results-11.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-2468
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-19.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-25
+src/shared/mock/Elara_Moonshadow.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-97
+.agents/CHECKLIST.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-51
+.ua/.trash-1785778670/tmp/batch-prompts/batch-1.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1322
+package.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-134
+.ua/.trash-1785778670/tmp/batch-prompts/batch-25.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-320
+.ua/.trash-1785778670/tmp/ua-file-extract-results-22.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1647
+.ua/.trash-1785778670/batch-4-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1023
+src/screens/DM/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-138
+src/dm/repositories/monsterRepository.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-61
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-21.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-15
+src/shared/ui/Button.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-89
+.ua/.trash-1785778670/batches.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-15582
+.ua/.trash-1785778670/batch-11.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1131
+src/domain/schemas/spell.schema.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-321
+src/shared/ui/Input.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-50
+docs/archive/ux-ui-roadmap.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-99
+src/data/srd/conditions.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-122
+.ua/.trash-1785778670/tmp/ua-file-extract-results-31.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-300
+functions/README.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-117
+.ua/.trash-1785778670/tmp/ua-file-extract-results-14.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1419
+.ua/.trash-1785778670/batch-2-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1245
+src/domain/schemas/utils.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-102
+android/gradle.properties
+  s_ba310cb2ac2a5a::t_7bbee9564dace2 13
+src/shared/ui/Screen.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-57
+src/screens/Character/hooks/useCharacterActions.tsx
+  s_6e22369efa7cb9::t_d6b903a7af9af6 474-477
+  s_6e22369efa7cb9::t_03745d8ff52550 480-484,488
+  s_6e22369efa7cb9::t_d2d12b40d62858 1399-1407
+  s_6e22369efa7cb9::t_c7909583bb8da5 492-499
+  s_6e22369efa7cb9::t_15d624d3b4dc9d 1431-1441,1459
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-18.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-23
+.ua/.trash-1785778670/batch-2-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-974
+.ua/.trash-1785778670/batch-3-part-3.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-427
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-28.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-82
+.ua/.trash-1785778670/tmp/batch-prompts/batch-20.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-36
+.ua/.trash-1785778670/batch-13.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-822
+docs/ui-kit.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-98
+src/domain/schemas/homebrew.schema.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-352
+src/context/Character-store.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-2
+src/screens/Character/tabs/NotesTab.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+src/dm/repositories/campaignNotesRepository.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-511
+.ua/.trash-1785778670/tmp/ua-file-extract-results-15.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-302
+.ua/.trash-1785778670/batch-1-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1203
+.ua/.trash-1785778670/tmp/ua-file-extract-results-21.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-17
+src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-40
+src/types/skillToStat.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-36
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-6.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-124
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-14.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-95
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-15.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-27
+scripts/lint-theme.mjs
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-57
+src/screens/Character/components/CharacterHeader.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-144
+src/shared/helpers/createEmptyCharacter.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-158
+src/shared/ui/Chip.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-63
+CLAUDE.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 221
+src/domain/srd/index.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-4
+src/i18n/locales/uk/changeHistory.json
+  s_6e22369efa7cb9::t_ea02b372293dbd 1-56
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-26.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-41
+.ua/.trash-1785778670/tmp/ua-file-extract-results-16.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-464
+src/domain/spellbook/spellLocalRepository.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-187
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-20.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+.ua/.trash-1785778670/tmp/ua-file-extract-results-25.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1260
+src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-25
+src/shared/components/CharacterMenu/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-33
+docs/release-checklist-1.0.0.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-134
+src/i18n/locales/uk/references.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-121
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-25.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-41
+.ua/.trash-1785778670/tmp/ua-file-extract-results-7.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-5491
+.ua/.trash-1785778670/tmp/ua-arch-results.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-3896
+.ua/.trash-1785778670/tmp/ua-scan-files.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-3164
+src/screens/Character/tabs/MagicTab.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+docs/archive/product-homebrew-stage-3.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-113
+.ua/.trash-1785778670/tmp/batch-prompts/batch-17.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-36
+.ua/.trash-1785778670/tmp/batch-prompts/batch-16.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-36
+.ua/.trash-1785778670/tmp/ua-import-map-output.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1422
+.ua/.trash-1785778670/tmp/ua-tour-edges.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-8697
+android/app/build.gradle
+  s_6e22369efa7cb9::t_fd81acf9ffb675 114
+.ua/.trash-1785778670/tmp/batch-prompts/batch-22.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-68
+.ua/.trash-1785778670/tmp/ua-tour-nodes.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-3649
+src/i18n/locales/en/character.json
+  s_6e22369efa7cb9::t_23379cd99f7864 594
+  s_6e22369efa7cb9::t_1c49cdf485f899 1-593,595-617
+src/screens/Character/components/CharacterTabs.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-78
+docs/collaborative-editing.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-265
+src/i18n/locales/en/references.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-118
+.ua/.trash-1785778670/tmp/ua-tour-input.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-12424
+src/screens/Monster/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-134
+src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-42
+.ua/.trash-1785778670/batch-12-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-764
+src/shared/components/CharacterStats/Tabs/Coins/Coins.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-168
+src/stores/characterStore.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-75
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-5.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-110
+src/dm/domain/encounter/index.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1
+src/stores/appRoleStore.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-33
+src/screens/Home/homeViewModel.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-269
+src/data/srd/abilities.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-8
+src/dm/domain/encounter/calculator.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-140
+src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-342
+src/shared/ui/Card.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-48
+src/shared/components/TextInput/index.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-2
+.ua/.trash-1785778670/tmp/batch-prompts/batch-21.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-38
+src/screens/References/References.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-125
+src/shared/helpers/derived.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-161
+src/data/srd/skills.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+.ua/.trash-1785778670/tmp/batch-prompts/batch-28.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-80
+src/domain/mappers/homebrew.mapper.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-31
+src/shared/const/DiceOptions.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1
+src/screens/Character/tabs/CharacterTabContent.test.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-119
+.ua/.trash-1785778670/tmp/batch-prompts/batch-15.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-172
+src/domain/spellbook/spellRepository.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-260
+src/screens/Character/components/CharacterModals.tsx
+  s_6e22369efa7cb9::t_0f340d6acb1689 159
+  s_6e22369efa7cb9::t_f976261668fbbc 184-185,189
+  s_6e22369efa7cb9::t_61ae4fc83a5194 498
+  s_6e22369efa7cb9::t_e325631248a842 7
+src/services/users.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+.ua/.trash-1785778670/tmp/batch-prompts/batch-30.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-111
+src/data/srd/spells.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-7020
+src/domain/migrations/index.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-187
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-9.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-206
+google-services.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-95
+src/screens/Spellbook/spellbookFilters.test.ts
+  s_6e22369efa7cb9::t_90299d7a2ea579 110-123
+  s_6e22369efa7cb9::t_949f4cc0ca3998 107-109
+  s_6e22369efa7cb9::t_37930c67039b5e 124-126
+  s_6e22369efa7cb9::t_e5626a7a27d191 1-106,127-132
+.ua/.trash-1785778670/tmp/batch-prompts/batch-12.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-502
+.ua/.trash-1785778670/tmp/ua-file-extract-results-5.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-5121
+.ua/.trash-1785778670/batch-4-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-990
+src/shared/components/CharacterStats/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-15
+src/shared/components/TextInput/MultiTextInput.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-73
+src/data/srd/races.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-430
+.ua/.trash-1785778670/tmp/batch-prompts/batch-11.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-770
+.ua/.trash-1785778670/tmp/ua-file-extract-results-23.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-166
+.ua/.trash-1785778670/tmp/ua-arch-input.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-20249
+docs/loading-states-and-skeleton.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-66
+src/shared/const/encounter.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-3
+.ua/.trash-1785778670/tmp/ua-import-map-input.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-542
+.agents/AGENT.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-99
+src/screens/Character/tabs/OverviewTab.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+src/screens/Character/components/CharacterSourceBadge.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-36
+.ua/.trash-1785778670/batch-9-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-888
+src/shared/const/WeaponsDb.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-26
+src/shared/helpers/homebrew.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-51
+app.json
+  s_6e22369efa7cb9::t_5a36f983c343b9 1-64
+docs/dnd-product-guidelines.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-91
+.ua/.trash-1785778670/tmp/batch-prompts/batch-9.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1290
+.ua/.trash-1785778670/batch-8.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1418
+src/shared/components/CharacterCard/CharacterCard.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-75
+src/stores/dmStore.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-60
+.ua/.trash-1785778670/tmp/ua-arch-layer-assignment.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-543
+src/dm/domain/encounter/calculator.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-39
+src/screens/Character/tabs/InventoryTab.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+src/shared/components/Modal/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-72
+src/shared/services/diceRoller.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-169
+src/i18n/locales/uk/whatsNew.json
+  s_6e22369efa7cb9::t_c34ca5f9e9e940 1-14
+src/types/CustomCoin.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-5
+.ua/.trash-1785778670/tmp/batch-prompts/batch-7.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-539
+.ua/.trash-1785778670/tour.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-113
+.agents/MEMORY.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-89
+.ua/.trash-1785778670/batch-3-part-2.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1299
+src/screens/Character/components/CombatSummaryCard.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-89
+src/shared/const/SpellbookSeed.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-666
+.ua/.trash-1785778670/tmp/batch-prompts/batch-19.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-48
+src/data/srd/classes.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-558
+.ua/.trash-1785778670/tmp/ua-tour-layers.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-52
+src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+.ua/.trash-1785778670/batch-10-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-896
+src/stores/selectors/characterStoreSelectors.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+src/shared/helpers/collaboration/status.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-80
+.ua/meta.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-6
+.ua/.trash-1785778670/layers.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-593
+src/i18n/locales/uk/character.json
+  s_6e22369efa7cb9::t_2ae23487ef4c5d 594
+  s_6e22369efa7cb9::t_62607fa8e1d617 1-593,595-617
+.ua/.trash-1785778670/tmp/ua-file-extract-results-28.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-414
+docs/claude-code-prompts.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1070
+src/data/srd/classProgression.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-350
+.ua/.trash-1785778670/tmp/ua-file-extract-results-19.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-434
+.ua/.trash-1785778670/tmp/batch-prompts/batch-3.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1528
+src/data/srd/languages.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-18
+src/screens/Character/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-973
+.agents/TOOLS.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-88
+functions/src/accountDeletionCascade.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-46
+functions/src/deleteMyAccount.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-161
+src/shared/components/CharacterOverview/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-16
+.ua/.trash-1785778670/assembled-graph.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-27862
+src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-24
+.ua/.trash-1785778670/tmp/ua-inline-validate.cjs
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-85
+src/screens/Character/components/CharacterSourceBadge.test.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-65
+.ua/.trash-1785778670/tmp/ua-file-extract-results-20.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-21
+src/screens/DM/adapters/campaignLink.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+src/screens/Dice/styles.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-105
+src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-66
+src/shared/components/MonsterCard/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-149
+src/shared/components/RollResultModal/RollResultModal.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-73
+src/shared/components/CharacterStats/Tabs/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+.agents/skills/create-android-component/SKILL.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-46
+src/shared/ui/index.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-30
+.ua/config.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1
+.ua/.trash-1785778670/tmp/ua-arch-importEdges.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-7228
+src/repositories/createCharacterDraftRepository.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-44
+docs/audit-2026-07.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-429
+.ua/fingerprints.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-19416
+.ua/.trash-1785778670/batch-3-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1534
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-11.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-158
+src/services/dmCampaignNotes.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-87
+src/screens/DM/DMSharedUpdates.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-428
+.ua/.trash-1785778670/tmp/batch-prompts/batch-10.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-673
+src/shared/const/CharacterTemplates.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-128
+src/stores/monsterStore.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-124
+src/dm/domain/notes/conflict.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-43
+src/domain/spellbook/characterSpellAdapter.test.ts
+  s_6e22369efa7cb9::t_775b08bdac24f8 23-24,31,38,41,48,51,55,58,79,81-102,105,119,122
+  s_6e22369efa7cb9::t_c5bd8b979d3ff2 20-22
+  s_6e22369efa7cb9::t_97b428da68a23c 25-30
+  s_6e22369efa7cb9::t_eceed2ebcfac84 32-37
+  s_6e22369efa7cb9::t_276c250ffc531f 39-40
+  s_6e22369efa7cb9::t_2db17a107c1ff1 42-47
+  s_6e22369efa7cb9::t_9d852372c162f9 49-50
+  s_6e22369efa7cb9::t_e8ca132a5dcbe3 52-54
+  s_6e22369efa7cb9::t_c4d0dbd656cc1c 56-57
+  s_6e22369efa7cb9::t_6cd51e174e16a9 59-61,76-78
+  s_6e22369efa7cb9::t_a962507a52cb9d 80
+  s_6e22369efa7cb9::t_29f55895b3040b 103-104
+  s_6e22369efa7cb9::t_c4eecf208e0268 106-108,116-118
+  s_6e22369efa7cb9::t_7472b1f0400419 120-121
+  s_6e22369efa7cb9::t_b84f9db10dfb45 123
+  s_6e22369efa7cb9::t_e706cbbadc9e1c 1-19,62-75,109-115
+src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-104
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-31.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-19
+src/screens/DM/DMPartyOverview.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-279
+src/modules/Header/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-48
+src/shared/const/Races.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-161
+docs/archive/product-collaboration-stage-4.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-83
+src/stores/trackerTemplatesStore.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-61
+.ua/.trash-1785778670/batch-14.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-938
+.ua/.trash-1785778670/tmp/batch-prompts/batch-31.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-42
+src/domain/spellbook/characterSpellAdapter.ts
+  s_6e22369efa7cb9::t_6f420e8398977a 97,107-123
+  s_6e22369efa7cb9::t_4ff0863289fc17 142,152-169
+  s_6e22369efa7cb9::t_5a1b5dd545be38 94-96
+  s_6e22369efa7cb9::t_92607cb33dc6a0 98-100,104-106
+  s_6e22369efa7cb9::t_1d7f0770fef314 124-126,139-141
+  s_6e22369efa7cb9::t_8bb7b09be1de0e 143-145,149-151
+  s_6e22369efa7cb9::t_ac1247236483a6 170-172
+  s_6e22369efa7cb9::t_2c351c593a67a6 1-93,101-103,127-138,146-148,173-230
+.ua/.trash-1785778670/tmp/batch-prompts/batch-4.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-527
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-200
+src/domain/spellbook/boundary.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-66
+src/shared/const/SkillsTab.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-20
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-7.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-85
+.ua/.trash-1785778670/tmp/batch-prompts/batch-8.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-563
+docs/store-listing.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-170
+.ua/.trash-1785778670/review.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-80
+.ua/.trash-1785778670/tmp/ua-file-extract-results-27.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-513
+src/shared/styles/index.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-12
+.ua/.trash-1785778670/batch-7.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1153
+.github/instructions/mobile-rn-standards.instructions.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-61
+.ua/.trash-1785778670/tmp/ua-tour-analyze.js
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-359
+.ua/.trash-1785778670/tmp/ua-arch-analyze.js
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-554
+src/screens/Spellbook/Spellbook.tsx
+  s_6e22369efa7cb9::t_7e5c75a6bbffbc 277-282,284-285,287-292,299-301,305-306
+  s_6e22369efa7cb9::t_8c91cb971c52d0 388,393
+  s_6e22369efa7cb9::t_61ae4fc83a5194 731-819
+  s_6e22369efa7cb9::t_55054de036c18e 172
+  s_6e22369efa7cb9::t_e354a4ba29fa9a 677-690
+  s_6e22369efa7cb9::t_01055b2653c715 533-534
+  s_6e22369efa7cb9::t_1b3e7b8bce009f 653
+  s_6e22369efa7cb9::t_ad4422773cd98a 482-492
+  s_6e22369efa7cb9::t_05e6f55a00aa8e 701-712,714-717,719-721,723,725,729-730,820-857,859
+  s_6e22369efa7cb9::t_7fbdbe6e43c7dd 494-495
+  s_6e22369efa7cb9::t_951f318c5a9d95 519
+  s_6e22369efa7cb9::t_9a718e7f95bd78 173
+src/domain/srd/schemas.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-196
+src/domain/types/character.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-204
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-27.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-17
+.ua/intermediate/scan-result.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-4570
+src/services/storeEffects/spellbookStoreEffects.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-129
+.ua/.trash-1785778670/tmp/batch-prompts/batch-26.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-320
+src/data/srd/references.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-106
+src/screens/DM/EncounterCalculator/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-25
+.ua/.trash-1785778670/fingerprint-input.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-527
+.ua/.trash-1785778670/tmp/batch-prompts/batch-6.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-654
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-29.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-77
+.ua/.trash-1785778670/tmp/ua-file-extract-results-18.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-506
+README.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-142
+src/data/srd/metadata.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-7
+.agents/REPO_MAP.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-89
+.agents/USER.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-30
+.ua/.trash-1785778670/batch-9-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-519
+.ua/.trash-1785778670/tmp/batch-prompts/batch-13.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-235
+src/domain/mappers/spell.mapper.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-102
+src/shared/const/Subclasses.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-35
+src/screens/DM/DMSharedUpdates.style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-128
+.ua/.trash-1785778670/tmp/batch-prompts/batch-18.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-46
+src/domain/srd/localization.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-53
+src/screens/DM/LootGenerator/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-9
+.ua/.trash-1785778670/tmp/batch-prompts/batch-27.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-40
+src/dm/domain/notes/conflict.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-21
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-17.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+.agents/CODEX.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-69
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-24.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-31
+src/screens/Character/components/QuickActionBar.test.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-83
+src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-174
+.ua/.trash-1785778670/tmp/ua-file-extract-results-6.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-9943
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-30.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-57
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-12.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-89
+.ua/.trash-1785778670/batch-1-part-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1098
+.ua/.trash-1785778670/tmp/ua-file-extract-results-30.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1042
+.ua/.trash-1785778670/tmp/batch-prompts/batch-29.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-80
+src/data/srd/monsters.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-18479
+src/dm/repositories/campaignNotesRepository.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-91
+.ua/.trash-1785778670/tmp/ua-file-extract-results-29.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-363
+src/screens/Character/tabs/CombatTab.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-13
+src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-176
+src/shared/const/Backgrounds.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-58
+src/i18n/locales/uk/spellbook.json
+  s_6e22369efa7cb9::t_a04112486c4937 19
+  s_6e22369efa7cb9::t_305cb2686dcf90 1-18,20-146
+.ua/.trash-1785778670/tmp/batch-prompts/batch-2.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-951
+src/domain/srd/startingSpells.test.ts
+  s_6e22369efa7cb9::t_752075e5b10a80 50-61
+  s_6e22369efa7cb9::t_70e7a0a2ea0a5a 24-26
+.ua/.trash-1785778670/tmp/batch-prompts/batch-24.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-307
+.ua/.trash-1785778670/tmp/ua-file-analyzer-input-22.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-45
+.ua/.trash-1785778670/tmp/ua-arch-fileNodes.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-4170
+functions/src/accountDeletionCascade.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-34
+docs/archive/product-foundation-stage-1.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-301
+src/domain/schemas/character.schema.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-274
+src/i18n/locales/en/spellbook.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-273
+.ua/.trash-1785778670/tmp/ua-file-extract-results-12.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-3820
+src/screens/DM/EncounterCalculator/EncounterCalculator.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-259
+src/shared/const/ClassStartingGear.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-106
+.ua/.trash-1785778670/tmp/ua-file-extract-results-24.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-186
+src/shared/ui/Section.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-57
+.ua/.trash-1785778670/batch-5.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1279
+.ua/.trash-1785778670/batch-1-part-3.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-707
+.ua/.trash-1785778670/tmp/ua-file-extract-results-17.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-57
+src/screens/References/References.test.tsx
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-132
+src/dm/repositories/trackerTemplatesRepository.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-46
+docs/legal-terms-of-service.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-173
+docs/web-pages-spec.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-56
+src/screens/Spellbook/styles.ts
+  s_6e22369efa7cb9::t_5f69bafb159bec 81-91
+  s_6e22369efa7cb9::t_1d2c86c2bda54a 60-62
+.ua/.trash-1785778670/tmp/batch-prompts/batch-5.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-792
+.ua/.trash-1785778670/batch-6.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1328
+.ua/.trash-1785778670/tmp/batch-prompts/batch-14.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-370
+.ua/.trash-1785778670/tmp/ua-file-extract-results-9.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-4505
+docs/release-plan-google-play.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-380
+.ua/.trash-1785778670/tmp/ua-file-extract-results-26.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-1255
+src/screens/Home/homeViewModel.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-216
+src/data/srd/equipment.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-171
+.ua/.trash-1785778670/tmp/ua-file-extract-results-1.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-9944
+src/i18n/locales/en/changeHistory.json
+  s_6e22369efa7cb9::t_1c64214eb77875 1-56
+src/screens/Bestiary/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-242
+.ua/.trash-1785778670/tmp/ua-arch-allEdges.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-8697
+src/domain/srd/startingSpells.ts
+  s_6e22369efa7cb9::t_7b9cef64d3c527 19-22,27-28
+docs/archive/product-dm-experience-stage-5.md
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-120
+src/screens/Bestiary/bestiaryFilters.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-80
+src/services/dmCampaigns.test.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-82
+src/shared/components/RollResultModal/style.ts
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-42
+src/data/locales/uk/spells.json
+  s_6e22369efa7cb9::t_3547065908ffe6 82,94,118,202,214,250,262,322,334,382,406,418,430,442,454,610,622,706,766,778,790,814,898,958,982,1018,1030,1078,1126,1162,1198,1234,1270,1354,1366,1438,1474,1498,1522,1534,1546,1558,1594,1630,1642,1654,1714,1762,1786,1798,1846,1858,1870,1882,1918,1942,1978,2014,2050,2134,2146,2170,2230,2266,2302,2374,2470,2530,2554,2590,2602,2614,2626,2650,2662,2674,2722,2734,2758,2854,2914,2950,2974,3022,3034,3046,3118,3166,3214,3238,3262,3274,3298,3346,3382,3394,3442,3478,3514,3550,3586,3658,3682,3706,3802
+src/data/srd/backgrounds.json
+  s_6e22369efa7cb9::t_61ae4fc83a5194 1-22
+.claude/settings.json
+  s_6e22369efa7cb9::t_f2915250d7fdd8 1-8
+.eslintrc.cjs
+  s_6e22369efa7cb9::t_2d48693cf4dcbc 1-27
+.prettierrc
+  s_6e22369efa7cb9::t_0af61fbbd2bd0c 1-12
+.ua/.trash-1785778670/assemble-review.json
+  s_6e22369efa7cb9::t_f3cfaa53f179cf 1-16
+.ua/.trash-1785778670/batch-15.json
+  s_6e22369efa7cb9::t_b3b19d25ed2309 1-340
+.ua/.trash-1785778670/batch-16.json
+  s_6e22369efa7cb9::t_11cab2648cf68d 1-215
+.ua/.trash-1785778670/batch-17.json
+  s_6e22369efa7cb9::t_4007d210e635ea 1-48
+.ua/.trash-1785778670/batch-18.json
+  s_6e22369efa7cb9::t_c5f1d4276029cf 1-297
+.ua/.trash-1785778670/batch-19.json
+  s_6e22369efa7cb9::t_fb9b230fe6cbc4 1-146
+.ua/.trash-1785778670/batch-20.json
+  s_6e22369efa7cb9::t_7a29c67082443d 1-42
+.ua/.trash-1785778670/batch-21.json
+  s_6e22369efa7cb9::t_05f329f035d8be 1-74
+.ua/.trash-1785778670/batch-22.json
+  s_6e22369efa7cb9::t_9d3e0295174c28 1-327
+.ua/.trash-1785778670/batch-23.json
+  s_6e22369efa7cb9::t_14615365aeb94a 1-62
+.ua/.trash-1785778670/batch-24.json
+  s_6e22369efa7cb9::t_f36d56b70c6ff3 1-201
+.ua/.trash-1785778670/batch-25.json
+  s_6e22369efa7cb9::t_122d5d21494ff4 1-280
+.ua/.trash-1785778670/batch-26.json
+  s_6e22369efa7cb9::t_c2d1f16bd4c911 1-279
+.ua/.trash-1785778670/batch-27.json
+  s_6e22369efa7cb9::t_a342118950fc64 1-50
+.ua/.trash-1785778670/batch-28.json
+  s_6e22369efa7cb9::t_9879c89ced4801 1-441
+.ua/.trash-1785778670/batch-29.json
+  s_6e22369efa7cb9::t_ea8f1cae545895 1-482
+.ua/.trash-1785778670/batch-30.json
+  s_6e22369efa7cb9::t_3dfde8ff5ac8e9 1-366
+.ua/.trash-1785778670/batch-31.json
+  s_6e22369efa7cb9::t_44128a20ec46ee 1-122
+docs/campaign-management-prompts.md
+  s_6e22369efa7cb9::t_d40d174c82763d 1-564
+docs/privacy-policy.en.md
+  s_6e22369efa7cb9::t_678daf4600ac8c 1-58
+docs/privacy-policy.uk.md
+  s_6e22369efa7cb9::t_63c6682739669c 1-58
+eas.json
+  s_6e22369efa7cb9::t_b69c7247f9f93a 1-32
+firebase.json
+  s_6e22369efa7cb9::t_050f5c46b3c924 1-24
+functions/package-lock.json
+  s_6e22369efa7cb9::t_a27cdcc7e3c371 1-4857
+functions/package.json
+  s_6e22369efa7cb9::t_8ba4da0082240a 1-28
+functions/src/createCampaignInvite.ts
+  s_6e22369efa7cb9::t_d6feb23c1eed5d 1-113
+functions/src/index.ts
+  s_6e22369efa7cb9::t_82f264744b151a 1-3
+functions/src/redeemCampaignInvite.ts
+  s_6e22369efa7cb9::t_afb9f98b1ca285 1-97
+functions/tsconfig.json
+  s_6e22369efa7cb9::t_8658d59f7317b8 1-19
+functions/vitest.config.ts
+  s_6e22369efa7cb9::t_01407f6b3e0d8d 1-9
+package-lock.json
+  s_6e22369efa7cb9::t_f670a3c15640d5 1-19302
+scripts/lint-ui-tokens.mjs
+  s_6e22369efa7cb9::t_c3c8960e2daa5a 1-60
+scripts/release-check.mjs
+  s_6e22369efa7cb9::t_3f84a30959b65c 1-31
+scripts/validate-srd.mjs
+  s_6e22369efa7cb9::t_8d176cc541f9cf 1-13
+src/context/AppRole-store.ts
+  s_6e22369efa7cb9::t_a4fcd0e64def4f 1
+src/context/CustomCoins-store.ts
+  s_6e22369efa7cb9::t_feeb6df70666a1 1
+src/context/Monster-store.ts
+  s_6e22369efa7cb9::t_45ed167e522da7 1
+src/context/Spellbook-store.ts
+  s_6e22369efa7cb9::t_4e6bbb7a2daf47 1
+src/context/Sync-store.ts
+  s_6e22369efa7cb9::t_d149e53b8340bc 1-2
+src/context/Theme-store.ts
+  s_6e22369efa7cb9::t_4e5939ef29d4b6 1
+src/context/TrackerTemplates-store.ts
+  s_6e22369efa7cb9::t_c44476f425276e 1-2
+src/data/locales/uk/monsters.json
+  s_6e22369efa7cb9::t_9e4e40fc7326cd 1-13402
+src/dm/domain/campaign/linking.test.ts
+  s_6e22369efa7cb9::t_e95286b38fab3b 1-43
+src/dm/domain/campaign/linking.ts
+  s_6e22369efa7cb9::t_028e7981130f22 1-18
+src/dm/domain/notes/index.ts
+  s_6e22369efa7cb9::t_95ecc2e9be5810 1
+src/dm/repositories/appRoleRepository.ts
+  s_6e22369efa7cb9::t_432dfd1789153c 1-30
+src/dm/repositories/index.ts
+  s_6e22369efa7cb9::t_53a6d2ecc95129 1-5
+src/dm/repositories/storageRepositories.test.ts
+  s_6e22369efa7cb9::t_24019ce301b374 1-79
+src/domain/mappers/character.mapper.test.ts
+  s_6e22369efa7cb9::t_b27fc55dfc61bb 1-58
+src/domain/mappers/character.mapper.ts
+  s_6e22369efa7cb9::t_5a1f2a92ab0a60 1-56
+src/domain/mappers/homebrew.mapper.test.ts
+  s_6e22369efa7cb9::t_8af733ac65bdf2 1-55
+src/domain/mappers/index.ts
+  s_6e22369efa7cb9::t_aa7b86bde1f2e3 1-5
+src/domain/schemas/character.schema.test.ts
+  s_6e22369efa7cb9::t_80a8bfeac0378b 1-66
+src/domain/schemas/homebrew.schema.test.ts
+  s_6e22369efa7cb9::t_64ebcca08b64f7 1-33
+src/domain/schemas/spell.schema.test.ts
+  s_6e22369efa7cb9::t_07d539996326f0 1-31
+src/domain/spellbook/index.ts
+  s_6e22369efa7cb9::t_431b7e75a4e7a6 1-5
+src/domain/spellbook/spellCloudRepository.ts
+  s_6e22369efa7cb9::t_8a89d7958c1c43 1-8
+src/domain/spellbook/spellRepository.test.ts
+  s_6e22369efa7cb9::t_9b3b84f032ef33 1-206
+src/domain/spellbook/spellbookEntity.ts
+  s_6e22369efa7cb9::t_3fa99737355a43 1-75
+src/domain/srd/adapters.ts
+  s_6e22369efa7cb9::t_aff76dde4d0ff7 1-69
+src/domain/srd/types.ts
+  s_6e22369efa7cb9::t_4c283857f9ddd6 1-173
+src/domain/types/index.ts
+  s_6e22369efa7cb9::t_67fba76e73af2b 1-5
+src/domain/types/sourceMetadata.ts
+  s_6e22369efa7cb9::t_d1a2047c20db32 1-13
+src/domain/types/spellbook.ts
+  s_6e22369efa7cb9::t_77cd6af53bca8b 1-9
+src/i18n/languageStorage.ts
+  s_6e22369efa7cb9::t_9b8dea1e946ef5 1-25
+src/i18n/locales/en/bestiary.json
+  s_6e22369efa7cb9::t_25519e604ab5d7 1-148
+src/i18n/locales/en/common.json
+  s_6e22369efa7cb9::t_4d06e9841efd25 1-86
+src/i18n/locales/en/dice.json
+  s_6e22369efa7cb9::t_0482e92c6e7c5a 1-59
+src/i18n/locales/en/dm.json
+  s_6e22369efa7cb9::t_fb8b3925cca2e1 1-384
+src/i18n/locales/en/dnd.json
+  s_6e22369efa7cb9::t_c33955339c48e6 1-85
+src/i18n/locales/en/firstLaunch.json
+  s_6e22369efa7cb9::t_80ee36130683ca 1-18
+src/i18n/locales/en/home.json
+  s_6e22369efa7cb9::t_198905b37c2b87 1-55
+src/i18n/locales/en/legal.json
+  s_6e22369efa7cb9::t_dd863db3a90ef0 1-24
+src/i18n/locales/en/navigation.json
+  s_6e22369efa7cb9::t_81d38a6a218104 1-29
+src/i18n/locales/en/support.json
+  s_6e22369efa7cb9::t_6dff9043023eb6 1-28
+src/i18n/locales/uk/bestiary.json
+  s_6e22369efa7cb9::t_e4ec9f1795bc3a 1-148
+src/i18n/locales/uk/common.json
+  s_6e22369efa7cb9::t_bb8ef11e09921e 1-86
+src/i18n/locales/uk/dice.json
+  s_6e22369efa7cb9::t_d3f64549ffb73e 1-59
+src/i18n/locales/uk/dnd.json
+  s_6e22369efa7cb9::t_89ecb11444b89a 1-85
+src/i18n/locales/uk/firstLaunch.json
+  s_6e22369efa7cb9::t_14bbdb72199d96 1-18
+src/i18n/locales/uk/home.json
+  s_6e22369efa7cb9::t_f4f66dee48b11f 1-55
+src/i18n/locales/uk/legal.json
+  s_6e22369efa7cb9::t_71dd74907bf487 1-24
+src/i18n/locales/uk/navigation.json
+  s_6e22369efa7cb9::t_7806574759e750 1-29
+src/i18n/locales/uk/support.json
+  s_6e22369efa7cb9::t_6a433e8137d329 1-28
+src/i18n/types.ts
+  s_6e22369efa7cb9::t_e0afdc2523c87c 1-7
+src/modules/Header/Header.tsx
+  s_6e22369efa7cb9::t_06186023147c96 1-79
+src/screens/Bestiary/bestiaryFilters.ts
+  s_6e22369efa7cb9::t_d25f90c096dc34 1-109
+src/screens/Character/components/QuickActionBar.tsx
+  s_6e22369efa7cb9::t_80641267039d2e 1-55
+src/screens/Character/tabs/CharacterTabContent.tsx
+  s_6e22369efa7cb9::t_21863aef50ea47 1-62
+src/screens/DM/LootGenerator/LootGenerator.tsx
+  s_6e22369efa7cb9::t_39a35a293a128f 1-19
+src/screens/Dice/Dice.tsx
+  s_6e22369efa7cb9::t_3408eb04a9a95f 1-51
+src/screens/Monster/Monster.test.tsx
+  s_6e22369efa7cb9::t_9fd12d70da6b85 1-139
+src/screens/References/styles.ts
+  s_6e22369efa7cb9::t_510ac97d63e2fc 1-101
+src/screens/Support/index.ts
+  s_6e22369efa7cb9::t_29f866ac6ec3d3 1
+src/services/characterDeletion.test.ts
+  s_6e22369efa7cb9::t_a168a875ea8df6 1-56
+src/services/characterDeletion.ts
+  s_6e22369efa7cb9::t_ec2605ea1df8aa 1-19
+src/services/dmCampaignNotes.ts
+  s_6e22369efa7cb9::t_dd3764997bd7cb 1-8
+src/services/dmCampaigns.ts
+  s_6e22369efa7cb9::t_9cac6cdc3f5332 1-9
+src/services/storeEffects/dmStoreEffects.test.ts
+  s_6e22369efa7cb9::t_ae2a2a718c6e17 1-184
+src/shared/components/CharacterOverview/CharacterOverview.tsx
+  s_6e22369efa7cb9::t_02df546c86cc3e 1-30
+src/shared/components/CharacterStats/CharacterStats.tsx
+  s_6e22369efa7cb9::t_949cc98f509f22 1-66
+src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx
+  s_6e22369efa7cb9::t_67528b880c4bcc 1-66
+src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx
+  s_6e22369efa7cb9::t_1bc6a062722249 1-64
+src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx
+  s_6e22369efa7cb9::t_605b24ad42a576 1-58
+src/shared/components/Firebase/Auth.tsx
+  s_6e22369efa7cb9::t_3ad78a42b644de 1-70
+src/shared/components/TextInput/TextInput.tsx
+  s_6e22369efa7cb9::t_4865ba16d50e94 1-35
+src/shared/const/CharacterClass.ts
+  s_6e22369efa7cb9::t_4000d09f2dda68 1-32
+src/shared/const/CharacterTabs.ts
+  s_6e22369efa7cb9::t_0a8fa67e7641f8 1-11
+src/shared/const/ClassPresets.ts
+  s_6e22369efa7cb9::t_b7e832a6830b65 1-97
+src/shared/const/SubclassDetails.ts
+  s_6e22369efa7cb9::t_8c3fcf60f9d5a7 1-39
+src/shared/const/TrackerTemplates.ts
+  s_6e22369efa7cb9::t_5b024e144e5dcd 1-28
+src/shared/const/experience.ts
+  s_6e22369efa7cb9::t_f78ee815303223 1-36
+src/shared/helpers/calculateModifier.ts
+  s_6e22369efa7cb9::t_16be22a8b02179 1-3
+src/shared/helpers/combat.ts
+  s_6e22369efa7cb9::t_f68f43e8246721 1-55
+src/shared/helpers/derived.test.ts
+  s_6e22369efa7cb9::t_4c10ace89bf06f 1-38
+src/shared/helpers/dice.ts
+  s_6e22369efa7cb9::t_2a05f2b476d00d 1-13
+src/shared/helpers/gear.ts
+  s_6e22369efa7cb9::t_a7496e2e7d05e5 1-21
+src/shared/helpers/mapCloudCharacter.ts
+  s_6e22369efa7cb9::t_a21e49b89020ed 1-6
+src/shared/helpers/sourcePresentation.test.ts
+  s_6e22369efa7cb9::t_f0f3bbaa192ac2 1-19
+src/shared/helpers/sourcePresentation.ts
+  s_6e22369efa7cb9::t_83bf4ad572aa5c 1-7
+src/shared/helpers/spellbook.ts
+  s_6e22369efa7cb9::t_45daf09ae4500a 1-7
+src/shared/helpers/weapons.ts
+  s_6e22369efa7cb9::t_7d2a096788cbe0 1-11
+src/shared/mock/defaultCharacter.json
+  s_6e22369efa7cb9::t_5552f4f2cae8cd 1-36
+src/shared/mock/defaultCharacter2.json
+  s_6e22369efa7cb9::t_072f4a2a4c2c9d 1-87
+src/shared/mock/demon-lord-001.json
+  s_6e22369efa7cb9::t_49bd24ea852c43 1-22
+src/shared/mock/monsterBook.json
+  s_6e22369efa7cb9::t_3149dedd6f0194 1-70
+src/shared/services/auth/auth.tsx
+  s_6e22369efa7cb9::t_7695a4a077a5df 1-29
+src/shared/services/diceRoller.test.ts
+  s_6e22369efa7cb9::t_55442a580a7c27 1-112
+src/shared/services/toast/index.ts
+  s_6e22369efa7cb9::t_770e3375b7f6d3 1-19
+src/shared/styles/statusTones.ts
+  s_6e22369efa7cb9::t_7ee160463c4741 1-25
+src/shared/styles/theme.ts
+  s_6e22369efa7cb9::t_09a3857df2b158 1-83
+src/shared/styles/tokens.test.ts
+  s_6e22369efa7cb9::t_9eb940688cbcf4 1-33
+src/shared/styles/tokens.ts
+  s_6e22369efa7cb9::t_53e6442ed8d6c9 1-192
+src/shared/styles/useDesignTokens.ts
+  s_6e22369efa7cb9::t_f58096df2581c3 1-15
+src/shared/ui/Text.tsx
+  s_6e22369efa7cb9::t_f4aa6091c653ac 1-41
+src/shared/ui/skeleton/skeleton.test.tsx
+  s_6e22369efa7cb9::t_af9307a3f80e68 1-92
+src/shared/ui/uiVariants.test.ts
+  s_6e22369efa7cb9::t_d1bf2758a827ca 1-35
+src/shared/ui/variantResolvers.ts
+  s_6e22369efa7cb9::t_9889af1b50c2a3 1-50
+src/stores/spellbookStore.ts
+  s_6e22369efa7cb9::t_41a262b3617928 1-39
+src/test/mocks/expo-modules-core.ts
+  s_6e22369efa7cb9::t_9f116d0152829e 1-5
+src/test/mocks/react-navigation-native.ts
+  s_6e22369efa7cb9::t_fe56be4d6a37b5 1-15
+src/types/Character.ts
+  s_6e22369efa7cb9::t_de5dbf980ef39c 1-27
+src/types/DeathSaves.ts
+  s_6e22369efa7cb9::t_09cdc598334e2a 1-4
+src/types/HitPoints.ts
+  s_6e22369efa7cb9::t_d9f8b30b8ceb53 1-5
+src/types/Monster.ts
+  s_6e22369efa7cb9::t_e98e2164b65387 1-55
+src/types/Product.ts
+  s_6e22369efa7cb9::t_bbe8eadda318c6 1-3
+src/types/SavingThrows.ts
+  s_6e22369efa7cb9::t_f9fbaf410cc464 1-9
+src/types/Skills.ts
+  s_6e22369efa7cb9::t_c47223b85814d7 1-20
+src/types/SourceMetadata.ts
+  s_6e22369efa7cb9::t_4550ff28772edd 1
+src/types/SpellSlots.ts
+  s_6e22369efa7cb9::t_d61277d890f521 1-6
+src/types/Spellbook.ts
+  s_6e22369efa7cb9::t_fce8f6a481f026 1-9
+src/types/Spells.ts
+  s_6e22369efa7cb9::t_9b7fcffc76c1b3 1-11
+src/types/Stats.ts
+  s_6e22369efa7cb9::t_eb1b0bd237f818 1-8
+src/types/Sync.ts
+  s_6e22369efa7cb9::t_2c39963e2bfaf5 1
+src/types/Traits.ts
+  s_6e22369efa7cb9::t_9c900aaea56202 1-6
+src/types/Weapon.ts
+  s_6e22369efa7cb9::t_7c930f6525bc30 1-5
+tsconfig.json
+  s_6e22369efa7cb9::t_5f730838cbd42a 1-23
+src/screens/Spellbook/spellbookFilters.ts
+  s_6e22369efa7cb9::t_b46189885f7733 1-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5098035656c8668f956b6fbdf59893c6e6890321",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_6e22369efa7cb9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8bfbe68f-0aeb-4070-b83d-964d6e2bcde2",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_ba310cb2ac2a5a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5f82218e-4c69-4799-be52-ee860e015223",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
