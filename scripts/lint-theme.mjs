@@ -4,11 +4,10 @@ import path from 'node:path';
 const ROOT = process.cwd();
 const SRC_DIR = path.join(ROOT, 'src');
 
-const ALLOWLIST = new Set([
-  path.normalize('src/shared/styles/theme.ts'),
-]);
+const ALLOWLIST = new Set([path.normalize('src/shared/styles/theme.ts')]);
 
-const COLOR_LITERAL_RE = /(['"`])(?:#[0-9A-Fa-f]{3,8}|rgba?\([^)]*\)|(?:white|black|red|green|blue|yellow|orange|purple|pink|gray|grey|tomato))\1/g;
+const COLOR_LITERAL_RE =
+  /(['"`])(?:#[0-9A-Fa-f]{3,8}|rgba?\([^)]*\)|(?:white|black|red|green|blue|yellow|orange|purple|pink|gray|grey|tomato))\1/g;
 
 function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });

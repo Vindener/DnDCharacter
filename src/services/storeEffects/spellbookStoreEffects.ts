@@ -1,11 +1,7 @@
 import { createSpellRepository } from '@/domain/spellbook';
 import type { SpellbookStore } from '@/stores/spellbookStore';
 
-type SetSpellbookStore = (
-  partial:
-    | Partial<SpellbookStore>
-    | ((state: SpellbookStore) => Partial<SpellbookStore>),
-) => void;
+type SetSpellbookStore = (partial: Partial<SpellbookStore> | ((state: SpellbookStore) => Partial<SpellbookStore>)) => void;
 
 type SpellbookStoreContext = {
   set: SetSpellbookStore;

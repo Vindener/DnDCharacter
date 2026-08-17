@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-5.json` (single-file mode) OR `batch-5-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/domain/types/index.ts": [],
@@ -14,18 +15,13 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/repositories/characterCloudRepository.ts",
     "src/shared/helpers/createEmptyCharacter.ts"
   ],
-  "src/repositories/characterLocalRepository.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/repositories/characterLocalRepository.ts"
-  ],
+  "src/repositories/characterLocalRepository.test.ts": ["src/domain/migrations/index.ts", "src/repositories/characterLocalRepository.ts"],
   "src/repositories/characterLocalRepository.ts": [
     "src/domain/mappers/index.ts",
     "src/domain/migrations/index.ts",
     "src/domain/types/index.ts"
   ],
-  "src/repositories/createCharacterDraftRepository.ts": [
-    "src/screens/CreateCharacter/createCharacterWizard.ts"
-  ],
+  "src/repositories/createCharacterDraftRepository.ts": ["src/screens/CreateCharacter/createCharacterWizard.ts"],
   "src/screens/CreateCharacter/CreateCharacter.test.tsx": [
     "src/dm/domain/types/index.ts",
     "src/domain/types/index.ts",
@@ -52,9 +48,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/services/auth/index.ts",
     "src/shared/services/fileSerice.ts"
   ],
-  "src/screens/CreateCharacter/createCharacterWizard.test.ts": [
-    "src/screens/CreateCharacter/createCharacterWizard.ts"
-  ],
+  "src/screens/CreateCharacter/createCharacterWizard.test.ts": ["src/screens/CreateCharacter/createCharacterWizard.ts"],
   "src/screens/CreateCharacter/createCharacterWizard.ts": [
     "src/domain/srd/index.ts",
     "src/domain/types/index.ts",
@@ -70,52 +64,30 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/services/auth/index.ts",
     "src/types/Character.ts"
   ],
-  "src/services/dmCampaignNotes.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/services/dmCampaignNotes.ts"
-  ],
+  "src/services/dmCampaignNotes.test.ts": ["src/domain/migrations/index.ts", "src/services/dmCampaignNotes.ts"],
   "src/services/dmCampaignNotes.ts": [],
-  "src/services/dmCampaigns.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/services/dmCampaigns.ts"
-  ],
+  "src/services/dmCampaigns.test.ts": ["src/domain/migrations/index.ts", "src/services/dmCampaigns.ts"],
   "src/services/dmCampaigns.ts": [],
-  "src/shared/const/CharacterTemplates.ts": [
-    "src/domain/types/index.ts"
-  ],
+  "src/shared/const/CharacterTemplates.ts": ["src/domain/types/index.ts"],
   "src/shared/const/ClassPresets.ts": [],
   "src/shared/const/Subclasses.ts": [],
   "src/shared/const/Weapons.ts": [],
-  "src/shared/helpers/combat.ts": [
-    "src/domain/types/index.ts",
-    "src/shared/const/ClassPresets.ts",
-    "src/shared/const/Weapons.ts"
-  ],
-  "src/shared/helpers/createEmptyCharacter.ts": [
-    "src/domain/schemas/index.ts",
-    "src/domain/types/index.ts"
-  ],
-  "src/stores/dmSettingsStore.ts": [
-    "src/dm/repositories/dmSettingsRepository.ts"
-  ],
-  "src/stores/selectors/characterStoreSelectors.ts": [
-    "src/domain/types/index.ts"
-  ],
-  "src/stores/selectors/syncStoreSelectors.ts": [
-    "src/types/Sync.ts"
-  ],
+  "src/shared/helpers/combat.ts": ["src/domain/types/index.ts", "src/shared/const/ClassPresets.ts", "src/shared/const/Weapons.ts"],
+  "src/shared/helpers/createEmptyCharacter.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+  "src/stores/dmSettingsStore.ts": ["src/dm/repositories/dmSettingsRepository.ts"],
+  "src/stores/selectors/characterStoreSelectors.ts": ["src/domain/types/index.ts"],
+  "src/stores/selectors/syncStoreSelectors.ts": ["src/types/Sync.ts"],
   "src/stores/storeSelectors.test.ts": [
     "src/shared/helpers/createEmptyCharacter.ts",
     "src/stores/selectors/characterStoreSelectors.ts",
     "src/stores/selectors/syncStoreSelectors.ts"
   ],
-  "src/types/skillToStat.ts": [
-    "src/domain/types/index.ts"
-  ]
+  "src/types/skillToStat.ts": ["src/domain/types/index.ts"]
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/domain/types/index.ts": [
@@ -139,11 +111,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/homebrew.mapper.ts",
       "batchIndex": 4,
-      "symbols": [
-        "dtoToEntity",
-        "entityToDto",
-        "draftToEntity"
-      ]
+      "symbols": ["dtoToEntity", "entityToDto", "draftToEntity"]
     },
     {
       "path": "src/domain/mappers/spell.mapper.ts",
@@ -174,11 +142,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/schemas/campaignInitiative.schema.ts",
       "batchIndex": 4,
-      "symbols": [
-        "campaignInitiativeSchema",
-        "parseCampaignInitiative",
-        "safeParseCampaignInitiative"
-      ]
+      "symbols": ["campaignInitiativeSchema", "parseCampaignInitiative", "safeParseCampaignInitiative"]
     },
     {
       "path": "src/domain/schemas/campaignNote.schema.ts",
@@ -201,23 +165,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/schemas/character.schema.ts",
       "batchIndex": 4,
-      "symbols": [
-        "characterSchema",
-        "parseCharacter",
-        "parseCharacterDraft",
-        "safeParseCharacter",
-        "normalizeCharacter"
-      ]
+      "symbols": ["characterSchema", "parseCharacter", "parseCharacterDraft", "safeParseCharacter", "normalizeCharacter"]
     },
     {
       "path": "src/domain/schemas/homebrew.schema.ts",
       "batchIndex": 4,
-      "symbols": [
-        "homebrewSchema",
-        "parseHomebrew",
-        "safeParseHomebrew",
-        "normalizeHomebrew"
-      ]
+      "symbols": ["homebrewSchema", "parseHomebrew", "safeParseHomebrew", "normalizeHomebrew"]
     },
     {
       "path": "src/domain/schemas/spell.schema.ts",
@@ -272,39 +225,27 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/characterStoreEffects.ts",
       "batchIndex": 10,
-      "symbols": [
-        "createCharacterStoreEffects"
-      ]
+      "symbols": ["createCharacterStoreEffects"]
     },
     {
       "path": "src/shared/const/attributes.ts",
       "batchIndex": 11,
-      "symbols": [
-        "attributes"
-      ]
+      "symbols": ["attributes"]
     },
     {
       "path": "src/shared/helpers/gear.ts",
       "batchIndex": 13,
-      "symbols": [
-        "mergeGearIntoCharacter"
-      ]
+      "symbols": ["mergeGearIntoCharacter"]
     },
     {
       "path": "src/shared/helpers/homebrew.ts",
       "batchIndex": 3,
-      "symbols": [
-        "normalizeHomebrewV3",
-        "isHomebrewCharacter",
-        "appendQuickSessionNote"
-      ]
+      "symbols": ["normalizeHomebrewV3", "isHomebrewCharacter", "appendQuickSessionNote"]
     },
     {
       "path": "src/shared/helpers/mapCloudCharacter.ts",
       "batchIndex": 3,
-      "symbols": [
-        "mapCloudCharacterToLocalDto"
-      ]
+      "symbols": ["mapCloudCharacterToLocalDto"]
     },
     {
       "path": "src/shared/services/fileSerice.ts",
@@ -314,11 +255,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/stores/characterStore.ts",
       "batchIndex": 13,
-      "symbols": [
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/stores/spellbookStore.ts",
@@ -377,11 +314,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     },
     {
       "path": "src/domain/migrations/index.ts",
@@ -405,9 +338,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/characterStoreEffects.ts",
       "batchIndex": 10,
-      "symbols": [
-        "createCharacterStoreEffects"
-      ]
+      "symbols": ["createCharacterStoreEffects"]
     }
   ],
   "src/screens/CreateCharacter/CreateCharacter.test.tsx": [
@@ -421,28 +352,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Sync-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default",
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["default", "selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -539,9 +459,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     },
     {
       "path": "src/repositories/characterCloudRepository.ts",
@@ -575,9 +493,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/CreateCharacter/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/characterSyncCoordinator.ts",
@@ -598,28 +514,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/services/auth/index.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AuthProvider",
-        "useAuth",
-        "configureGoogleSignIn",
-        "onGoogleButtonPress",
-        "logout",
-        "reauthenticateWithGoogle"
-      ]
+      "symbols": ["AuthProvider", "useAuth", "configureGoogleSignIn", "onGoogleButtonPress", "logout", "reauthenticateWithGoogle"]
     },
     {
       "path": "src/shared/services/fileSerice.ts",
@@ -636,11 +536,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/services/diceRoller.ts",
       "batchIndex": 6,
-      "symbols": [
-        "rollDice",
-        "rollFormula",
-        "parseDiceType"
-      ]
+      "symbols": ["rollDice", "rollFormula", "parseDiceType"]
     },
     {
       "path": "src/domain/schemas/createCharacterWizard.schema.ts",
@@ -665,14 +561,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/services/auth/index.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AuthProvider",
-        "useAuth",
-        "configureGoogleSignIn",
-        "onGoogleButtonPress",
-        "logout",
-        "reauthenticateWithGoogle"
-      ]
+      "symbols": ["AuthProvider", "useAuth", "configureGoogleSignIn", "onGoogleButtonPress", "logout", "reauthenticateWithGoogle"]
     },
     {
       "path": "src/types/Character.ts",
@@ -832,9 +721,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/Home/homeViewModel.test.ts",
@@ -856,28 +743,21 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/dm/repositories/dmSettingsRepository.ts",
       "batchIndex": 4,
-      "symbols": [
-        "loadDefaultCampaignId",
-        "persistDefaultCampaignId"
-      ]
+      "symbols": ["loadDefaultCampaignId", "persistDefaultCampaignId"]
     }
   ],
   "src/stores/selectors/syncStoreSelectors.ts": [
     {
       "path": "src/types/Sync.ts",
       "batchIndex": 3,
-      "symbols": [
-        "CharacterSyncMap",
-        "CharacterSyncState",
-        "SyncStatus",
-        "SyncTransportState"
-      ]
+      "symbols": ["CharacterSyncMap", "CharacterSyncState", "SyncStatus", "SyncTransportState"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/domain/types/index.ts` (5 lines, language: `typescript`, fileCategory: `code`)
 2. `src/repositories/characterCloudRepository.test.ts` (375 lines, language: `typescript`, fileCategory: `code`)
 3. `src/repositories/characterLocalRepository.test.ts` (119 lines, language: `typescript`, fileCategory: `code`)

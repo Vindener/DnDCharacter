@@ -1,9 +1,4 @@
-import type {
-  DifficultyThreshold,
-  EncounterDifficultyResult,
-  EncounterMonsterInput,
-  EncounterPlayerInput,
-} from '@/dm/domain/types';
+import type { DifficultyThreshold, EncounterDifficultyResult, EncounterMonsterInput, EncounterPlayerInput } from '@/dm/domain/types';
 
 export const DIFFICULTY_THRESHOLDS: Record<number, DifficultyThreshold> = {
   1: { easy: 25, medium: 50, hard: 75, deadly: 100 },
@@ -95,10 +90,7 @@ export function getMonsterMultiplier(monsters: number, partySize: number): numbe
   return multiplier;
 }
 
-export function evaluateEncounterDifficulty(
-  players: EncounterPlayerInput[],
-  monsters: EncounterMonsterInput[],
-): EncounterDifficultyResult {
+export function evaluateEncounterDifficulty(players: EncounterPlayerInput[], monsters: EncounterMonsterInput[]): EncounterDifficultyResult {
   const thresholds = players.reduce(
     (acc, player) => {
       const level = Math.max(1, Math.min(20, Number(player.level) || 1));
@@ -146,4 +138,3 @@ export function evaluateEncounterDifficulty(
     multiplier,
   };
 }
-

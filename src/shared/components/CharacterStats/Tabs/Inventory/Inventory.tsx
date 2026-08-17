@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { WEAPONS_DB } from '@/shared/const/WeaponsDb';
-import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
+import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
 import { CharacterViewModel } from '@/types/Character';
@@ -22,14 +22,14 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
   const updateCharacterWeapons = useCharacterStore((s) => s.updateCharacterWeapons);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
-  
+
   const [items, setItems] = useState<string[]>(character?.inventory || []);
 
   const autoMoveIfWeapon = (text: string) => {
     const norm = (text || '').trim().toLowerCase();
     if (!norm) return false;
     // find by exact name (UA) case-insensitive
-    const entry = WEAPONS_DB.find(w => w.name.toLowerCase() === norm);
+    const entry = WEAPONS_DB.find((w) => w.name.toLowerCase() === norm);
     if (!entry) return false;
     // Move to weapons list
     const currentWeapons = character?.weapons || [];
@@ -102,7 +102,3 @@ const Inventory: React.FC<InventoryProps> = ({ data }) => {
 };
 
 export default Inventory;
-
-
-
-

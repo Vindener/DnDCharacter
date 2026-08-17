@@ -32,7 +32,7 @@ export async function loadTrackerTemplates(): Promise<ResourceTemplate[]> {
           label: String(resource.label || 'Ресурс'),
           current: Math.max(0, Number(resource.current) || 0),
           max: typeof resource.max === 'number' ? Math.max(0, resource.max) : undefined,
-          resetRule: (String(resource.resetRule || 'none') as ResourceTemplate['resource']['resetRule']),
+          resetRule: String(resource.resetRule || 'none') as ResourceTemplate['resource']['resetRule'],
           visibility: resource.visibility as ResourceTemplate['resource']['visibility'],
           color: typeof resource.color === 'string' ? resource.color : undefined,
         },
@@ -42,8 +42,5 @@ export async function loadTrackerTemplates(): Promise<ResourceTemplate[]> {
 }
 
 export async function persistTrackerTemplates(templates: ResourceTemplate[]): Promise<void> {
-  await AsyncStorage.setItem(
-    USER_TEMPLATES_STORAGE_KEY,
-    JSON.stringify(createStorageEnvelope('dmUserTemplates', templates || [])),
-  );
+  await AsyncStorage.setItem(USER_TEMPLATES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmUserTemplates', templates || [])));
 }

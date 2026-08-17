@@ -37,9 +37,7 @@
           "name": "NavigatorRenderProbe",
           "startLine": 57,
           "endLine": 64,
-          "params": [
-            "{ children }"
-          ]
+          "params": ["{ children }"]
         },
         {
           "name": "App",
@@ -491,9 +489,7 @@
           "name": "setLastSeenWhatsNewVersion",
           "startLine": 13,
           "endLine": 19,
-          "params": [
-            "version"
-          ]
+          "params": ["version"]
         }
       ],
       "exports": [
@@ -559,18 +555,13 @@
           "name": "translate",
           "startLine": 14,
           "endLine": 16,
-          "params": [
-            "key",
-            "defaultValue"
-          ]
+          "params": ["key", "defaultValue"]
         },
         {
           "name": "ErrorFallback",
           "startLine": 22,
           "endLine": 43,
-          "params": [
-            "{ onRestart }"
-          ]
+          "params": ["{ onRestart }"]
         }
       ],
       "classes": [
@@ -578,15 +569,8 @@
           "name": "ErrorBoundary",
           "startLine": 53,
           "endLine": 81,
-          "methods": [
-            "getDerivedStateFromError",
-            "componentDidCatch",
-            "render"
-          ],
-          "properties": [
-            "state",
-            "handleRestart"
-          ]
+          "methods": ["getDerivedStateFromError", "componentDidCatch", "render"],
+          "properties": ["state", "handleRestart"]
         }
       ],
       "exports": [
@@ -967,9 +951,7 @@
           "name": "AuthProvider",
           "startLine": 11,
           "endLine": 25,
-          "params": [
-            "{ children }"
-          ]
+          "params": ["{ children }"]
         },
         {
           "name": "useAuth",
@@ -1050,9 +1032,7 @@
           "name": "setDev",
           "startLine": 12,
           "endLine": 18,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         }
       ],
       "callGraph": [
@@ -1103,9 +1083,7 @@
           "name": "markStartup",
           "startLine": 36,
           "endLine": 44,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "getStartupMarks",

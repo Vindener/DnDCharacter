@@ -169,6 +169,8 @@ const SpellbookScreen = ({ route }: Props) => {
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [classFilter, setClassFilter] = useState('all');
   const [schoolFilter, setSchoolFilter] = useState('all');
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(true);
+  const [isOfflineBannerVisible, setIsOfflineBannerVisible] = useState(true);
   const [ritualFilter, setRitualFilter] = useState<BooleanFilter>('all');
   const [concentrationFilter, setConcentrationFilter] = useState<BooleanFilter>('all');
   const [selectedCharacterId, setSelectedCharacterId] = useState<string>(params?.characterId || '');
@@ -272,23 +274,36 @@ const SpellbookScreen = ({ route }: Props) => {
   const pinnedSet = useMemo(() => new Set(pinnedSpellIds), [pinnedSpellIds]);
 
   const spellbookWithCharacterImports = useMemo<SpellbookSpell[]>(() => {
+    // A character's known/prepared/cantrip list stores free-text spell names in whatever
+    // locale was active when they were typed or auto-suggested (see startingSpells.ts),
+    // while `spell.name` here is always the base SRD/custom name (English for srd-5.1
+    // entries). Matching only on the raw name meant every localized (uk) name silently
+    // missed its real spell and got replaced by a blank "imported" stub — index by the
+    // current-language display name too so a uk-typed "Щит" resolves to the real Shield entry.
     const byName = new Map<string, SpellbookSpell>();
+    const ordered: SpellbookSpell[] = [];
+
     spells.forEach((spell) => {
-      const key = normalizeSpellName(spell.name);
-      if (!key || byName.has(key)) return;
-      byName.set(key, spell);
+      const baseKey = normalizeSpellName(spell.name);
+      if (baseKey && byName.has(baseKey)) return;
+      if (baseKey) byName.set(baseKey, spell);
+      const localizedKey = normalizeSpellName(getLocalizedSpellFields(spell, i18n.language).name);
+      if (localizedKey && !byName.has(localizedKey)) byName.set(localizedKey, spell);
+      ordered.push(spell);
     });
 
     characters.forEach((character) => {
       collectCharacterSpellNames(character).forEach((name) => {
         const key = normalizeSpellName(name);
         if (!key || byName.has(key)) return;
-        byName.set(key, buildImportedSpell(name, t('defaults.importedSchool'), t('sources.imported')));
+        const imported = buildImportedSpell(name, t('defaults.importedSchool'), t('sources.imported'));
+        byName.set(key, imported);
+        ordered.push(imported);
       });
     });
 
-    return Array.from(byName.values());
-  }, [characters, spells, t]);
+    return ordered;
+  }, [characters, spells, t, i18n.language]);
 
   const selectedSpell = useMemo(
     () => spellbookWithCharacterImports.find((spell) => spell.id === selectedSpellId) || null,
@@ -370,13 +385,12 @@ const SpellbookScreen = ({ route }: Props) => {
     setConcentrationFilter('all');
   };
 
-  const assignSpellStatus = (spellName: string, status: CharacterSpellStatus) => {
+  const assignSpellStatus = (spellName: string | string[], status: CharacterSpellStatus) => {
     if (!selectedCharacter || !canUseCharacterActions) return;
 
     const updated = applySpellStatus(selectedCharacter, spellName, status, { preparedLimit: selectedPreparedLimit });
     if (status === 'prepared' && updated === selectedCharacter && selectedPreparedLimit !== null) {
-      const key = normalizeSpellName(spellName);
-      const alreadyPrepared = selectedPreparedSpellNames.has(key);
+      const alreadyPrepared = getCharacterSpellStatus(selectedCharacter, spellName) === 'prepared';
       if (!alreadyPrepared && selectedPreparedCount >= selectedPreparedLimit) {
         setNotice(t('notices.preparedLimit', { count: selectedPreparedCount, limit: selectedPreparedLimit }));
         return;
@@ -465,8 +479,20 @@ const SpellbookScreen = ({ route }: Props) => {
     void updateSpellNote(selectedSpell.id, noteDraft);
   };
 
+  // Deleting a custom/homebrew/imported spellbook entry only removes the catalog record —
+  // if the selected character's free-text spell lists still name it, it immediately comes
+  // back as a blank "imported" stub on the next render. Clear it from that character too.
+  const deleteEditableSpell = (spell: SpellbookSpell) => {
+    void removeCustomSpell(spell.id);
+    if (!selectedCharacter) return;
+    const spellNameAliases = [getDisplaySpell(spell, sortLocale).name, spell.name];
+    if (getCharacterSpellStatus(selectedCharacter, spellNameAliases) === 'available') return;
+    void updateCharacter(selectedCharacter.id, applySpellStatus(selectedCharacter, spellNameAliases, 'available'));
+  };
+
   const renderStatusActions = (spell: SpellbookSpell) => {
-    const status = getCharacterSpellStatus(selectedCharacter, spell.name);
+    const spellNameAliases = [getDisplaySpell(spell, sortLocale).name, spell.name];
+    const status = getCharacterSpellStatus(selectedCharacter, spellNameAliases);
     const canSetPrepared =
       !selectedCharacter || selectedPreparedLimit === null || status === 'prepared' || selectedPreparedCount < selectedPreparedLimit;
 
@@ -490,7 +516,7 @@ const SpellbookScreen = ({ route }: Props) => {
               status === nextStatus ? styles.statusButtonActive : null,
               nextStatus === 'prepared' && !canSetPrepared ? { opacity: 0.45 } : null,
             ]}
-            onPress={() => assignSpellStatus(spell.name, nextStatus)}
+            onPress={() => assignSpellStatus(spellNameAliases, nextStatus)}
             android_ripple={{ color: colors.ripple }}
             disabled={nextStatus === 'prepared' && !canSetPrepared}
           >
@@ -504,11 +530,11 @@ const SpellbookScreen = ({ route }: Props) => {
   };
 
   const renderSpellCard = ({ item }: { item: SpellbookSpell }) => {
-    const status = getCharacterSpellStatus(selectedCharacter, item.name);
+    const display = getDisplaySpell(item, sortLocale);
+    const status = getCharacterSpellStatus(selectedCharacter, [display.name, item.name]);
     const isFavorite = favoriteSet.has(item.id);
     const isPinned = pinnedSet.has(item.id);
     const canFavorite = item.source !== 'imported';
-    const display = getDisplaySpell(item, sortLocale);
     const sourceLabel = getSourceLabel(t, item.source);
 
     return (
@@ -624,7 +650,7 @@ const SpellbookScreen = ({ route }: Props) => {
           {isEditableSpellSource(item) ? (
             <Pressable
               style={styles.deleteCustomButton}
-              onPress={() => void removeCustomSpell(item.id)}
+              onPress={() => deleteEditableSpell(item)}
               android_ripple={{ color: colors.ripple }}
             >
               <Text style={styles.deleteCustomButtonText}>{t('actions.delete')}</Text>
@@ -648,10 +674,20 @@ const SpellbookScreen = ({ route }: Props) => {
         </Pressable>
       </View>
 
-      <View style={styles.offlineBanner}>
-        <MaterialCommunityIcons name='cloud-off-outline' size={16} color={colors.onInfo} />
-        <Text style={styles.offlineBannerText}>{t('offlineBanner')}</Text>
-      </View>
+      {isOfflineBannerVisible ? (
+        <View style={styles.offlineBanner}>
+          <MaterialCommunityIcons name='cloud-off-outline' size={16} color={colors.onInfo} />
+          <Text style={styles.offlineBannerText}>{t('offlineBanner')}</Text>
+          <Pressable
+            style={styles.offlineBannerClose}
+            onPress={() => setIsOfflineBannerVisible(false)}
+            android_ripple={{ color: colors.ripple }}
+            testID='spellbook.offlineBannerClose'
+          >
+            <MaterialCommunityIcons name='close' size={16} color={colors.onInfo} />
+          </Pressable>
+        </View>
+      ) : null}
 
       <TextInput
         value={search}
@@ -662,143 +698,165 @@ const SpellbookScreen = ({ route }: Props) => {
         testID='spellbook.searchInput'
       />
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsRowScroll} contentContainerStyle={styles.tabsRow}>
-        {TABS.map((tab) => (
-          <Pressable
-            key={tab}
-            style={[styles.tabButton, activeTab === tab ? styles.tabButtonActive : null]}
-            onPress={() => setActiveTab(tab)}
-            android_ripple={{ color: colors.ripple }}
-            testID={`spellbook.tab.${tab}`}
-          >
-            <Text style={[styles.tabButtonText, activeTab === tab ? styles.tabButtonTextActive : null]}>{t(`tabs.${tab}`)}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
+      <Pressable
+        style={styles.filtersHeader}
+        onPress={() => setIsFiltersExpanded((prev) => !prev)}
+        android_ripple={{ color: colors.ripple }}
+        testID='spellbook.filtersToggle'
+      >
+        <Text style={styles.filtersHeaderText}>
+          {t('filters.title')}
+          {activeFilterCount ? ` (${activeFilterCount})` : ''}
+        </Text>
+        <MaterialCommunityIcons name={isFiltersExpanded ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
+      </Pressable>
 
-      <View style={styles.filtersBlock}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsRowScroll} contentContainerStyle={styles.chipsRow}>
-          {LEVEL_FILTERS.map((item) => (
-            <Pressable
-              key={`level-${String(item)}`}
-              style={[styles.chip, levelFilter === item ? styles.chipActive : null]}
-              onPress={() => setLevelFilter(item)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, levelFilter === item ? styles.chipTextActive : null]}>
-                {item === 'all' ? t('filters.all') : item === 0 ? t('levels.cantrip') : String(item)}
-              </Text>
-            </Pressable>
-          ))}
-          <Pressable
-            style={[styles.chip, classFilter !== 'all' ? styles.chipActive : null]}
-            onPress={() => setClassFilter('all')}
-            android_ripple={{ color: colors.ripple }}
-          >
-            <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{t('filters.class')}</Text>
-          </Pressable>
-          {classOptions.map((className) => (
-            <Pressable
-              key={`class-${className}`}
-              style={[styles.chip, classFilter === className ? styles.chipActive : null]}
-              onPress={() => setClassFilter(className)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, classFilter === className ? styles.chipTextActive : null]}>
-                {getLocalizedSpellClass(className, sortLocale)}
-              </Text>
-            </Pressable>
-          ))}
-          <Pressable
-            style={[styles.chip, schoolFilter !== 'all' ? styles.chipActive : null]}
-            onPress={() => setSchoolFilter('all')}
-            android_ripple={{ color: colors.ripple }}
-          >
-            <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{t('filters.school')}</Text>
-          </Pressable>
-          {schoolOptions.map((school) => (
-            <Pressable
-              key={`school-${school}`}
-              style={[styles.chip, schoolFilter === school ? styles.chipActive : null]}
-              onPress={() => setSchoolFilter(school)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, schoolFilter === school ? styles.chipTextActive : null]}>
-                {getLocalizedSpellSchool(school, sortLocale)}
-              </Text>
-            </Pressable>
-          ))}
-          {BOOLEAN_FILTERS.map((item) => (
-            <Pressable
-              key={`ritual-${item}`}
-              style={[styles.chip, ritualFilter === item && item !== 'all' ? styles.chipActive : null]}
-              onPress={() => setRitualFilter(item)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, ritualFilter === item && item !== 'all' ? styles.chipTextActive : null]}>
-                {t('labels.ritual')}: {t(`boolean.${item}`)}
-              </Text>
-            </Pressable>
-          ))}
-          {BOOLEAN_FILTERS.map((item) => (
-            <Pressable
-              key={`concentration-${item}`}
-              style={[styles.chip, concentrationFilter === item && item !== 'all' ? styles.chipActive : null]}
-              onPress={() => setConcentrationFilter(item)}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, concentrationFilter === item && item !== 'all' ? styles.chipTextActive : null]}>
-                {t('labels.concentration')}: {t(`boolean.${item}`)}
-              </Text>
-            </Pressable>
-          ))}
-        </ScrollView>
-        {activeFilterCount ? (
-          <View style={styles.activeFiltersRow}>
-            <Text style={styles.preparedInfo}>{t('filters.active', { count: activeFilterCount })}</Text>
-            <Pressable style={styles.clearButton} onPress={clearFilters} android_ripple={{ color: colors.ripple }}>
-              <Text style={styles.clearButtonText}>{t('filters.clear')}</Text>
-            </Pressable>
-          </View>
-        ) : null}
-      </View>
-
-      {!isDmMode ? (
-        <View style={styles.characterPickerBlock}>
-          <Text style={styles.sectionLabel}>{t('characterBinding.title')}</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-            <Pressable
-              style={[styles.chip, !selectedCharacter ? styles.chipActive : null]}
-              onPress={() => setSelectedCharacterId('')}
-              android_ripple={{ color: colors.ripple }}
-            >
-              <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>
-                {t('characterBinding.referenceOnly')}
-              </Text>
-            </Pressable>
-            {characters.map((character) => (
+      {isFiltersExpanded ? (
+        <>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsRowScroll} contentContainerStyle={styles.tabsRow}>
+            {TABS.map((tab) => (
               <Pressable
-                key={`char-${character.id}`}
-                style={[styles.chip, selectedCharacter?.id === character.id ? styles.chipActive : null]}
-                onPress={() => setSelectedCharacterId(character.id)}
+                key={tab}
+                style={[styles.tabButton, activeTab === tab ? styles.tabButtonActive : null]}
+                onPress={() => setActiveTab(tab)}
                 android_ripple={{ color: colors.ripple }}
+                testID={`spellbook.tab.${tab}`}
               >
-                <Text style={[styles.chipText, selectedCharacter?.id === character.id ? styles.chipTextActive : null]}>
-                  {character.name || t('characterBinding.characterFallback')}
-                </Text>
+                <Text style={[styles.tabButtonText, activeTab === tab ? styles.tabButtonTextActive : null]}>{t(`tabs.${tab}`)}</Text>
               </Pressable>
             ))}
           </ScrollView>
-          {selectedCharacter && selectedPreparedLimit !== null ? (
-            <Text style={styles.preparedInfo}>
-              {t('characterBinding.prepared', { count: selectedPreparedCount, limit: selectedPreparedLimit })}
-            </Text>
+
+          <View style={styles.filtersBlock}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.chipsRowScroll}
+              contentContainerStyle={styles.chipsRow}
+            >
+              {LEVEL_FILTERS.map((item) => (
+                <Pressable
+                  key={`level-${String(item)}`}
+                  style={[styles.chip, levelFilter === item ? styles.chipActive : null]}
+                  onPress={() => setLevelFilter(item)}
+                  android_ripple={{ color: colors.ripple }}
+                >
+                  <Text style={[styles.chipText, levelFilter === item ? styles.chipTextActive : null]}>
+                    {item === 'all' ? t('filters.all') : item === 0 ? t('levels.cantrip') : String(item)}
+                  </Text>
+                </Pressable>
+              ))}
+              <Pressable
+                style={[styles.chip, classFilter !== 'all' ? styles.chipActive : null]}
+                onPress={() => setClassFilter('all')}
+                android_ripple={{ color: colors.ripple }}
+              >
+                <Text style={[styles.chipText, classFilter !== 'all' ? styles.chipTextActive : null]}>{t('filters.class')}</Text>
+              </Pressable>
+              {classOptions.map((className) => (
+                <Pressable
+                  key={`class-${className}`}
+                  style={[styles.chip, classFilter === className ? styles.chipActive : null]}
+                  onPress={() => setClassFilter(className)}
+                  android_ripple={{ color: colors.ripple }}
+                >
+                  <Text style={[styles.chipText, classFilter === className ? styles.chipTextActive : null]}>
+                    {getLocalizedSpellClass(className, sortLocale)}
+                  </Text>
+                </Pressable>
+              ))}
+              <Pressable
+                style={[styles.chip, schoolFilter !== 'all' ? styles.chipActive : null]}
+                onPress={() => setSchoolFilter('all')}
+                android_ripple={{ color: colors.ripple }}
+              >
+                <Text style={[styles.chipText, schoolFilter !== 'all' ? styles.chipTextActive : null]}>{t('filters.school')}</Text>
+              </Pressable>
+              {schoolOptions.map((school) => (
+                <Pressable
+                  key={`school-${school}`}
+                  style={[styles.chip, schoolFilter === school ? styles.chipActive : null]}
+                  onPress={() => setSchoolFilter(school)}
+                  android_ripple={{ color: colors.ripple }}
+                >
+                  <Text style={[styles.chipText, schoolFilter === school ? styles.chipTextActive : null]}>
+                    {getLocalizedSpellSchool(school, sortLocale)}
+                  </Text>
+                </Pressable>
+              ))}
+              {BOOLEAN_FILTERS.map((item) => (
+                <Pressable
+                  key={`ritual-${item}`}
+                  style={[styles.chip, ritualFilter === item && item !== 'all' ? styles.chipActive : null]}
+                  onPress={() => setRitualFilter(item)}
+                  android_ripple={{ color: colors.ripple }}
+                >
+                  <Text style={[styles.chipText, ritualFilter === item && item !== 'all' ? styles.chipTextActive : null]}>
+                    {t('labels.ritual')}: {t(`boolean.${item}`)}
+                  </Text>
+                </Pressable>
+              ))}
+              {BOOLEAN_FILTERS.map((item) => (
+                <Pressable
+                  key={`concentration-${item}`}
+                  style={[styles.chip, concentrationFilter === item && item !== 'all' ? styles.chipActive : null]}
+                  onPress={() => setConcentrationFilter(item)}
+                  android_ripple={{ color: colors.ripple }}
+                >
+                  <Text style={[styles.chipText, concentrationFilter === item && item !== 'all' ? styles.chipTextActive : null]}>
+                    {t('labels.concentration')}: {t(`boolean.${item}`)}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+            {activeFilterCount ? (
+              <View style={styles.activeFiltersRow}>
+                <Text style={styles.preparedInfo}>{t('filters.active', { count: activeFilterCount })}</Text>
+                <Pressable style={styles.clearButton} onPress={clearFilters} android_ripple={{ color: colors.ripple }}>
+                  <Text style={styles.clearButtonText}>{t('filters.clear')}</Text>
+                </Pressable>
+              </View>
+            ) : null}
+          </View>
+
+          {!isDmMode ? (
+            <View style={styles.characterPickerBlock}>
+              <Text style={styles.sectionLabel}>{t('characterBinding.title')}</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
+                <Pressable
+                  style={[styles.chip, !selectedCharacter ? styles.chipActive : null]}
+                  onPress={() => setSelectedCharacterId('')}
+                  android_ripple={{ color: colors.ripple }}
+                >
+                  <Text style={[styles.chipText, !selectedCharacter ? styles.chipTextActive : null]}>
+                    {t('characterBinding.referenceOnly')}
+                  </Text>
+                </Pressable>
+                {characters.map((character) => (
+                  <Pressable
+                    key={`char-${character.id}`}
+                    style={[styles.chip, selectedCharacter?.id === character.id ? styles.chipActive : null]}
+                    onPress={() => setSelectedCharacterId(character.id)}
+                    android_ripple={{ color: colors.ripple }}
+                  >
+                    <Text style={[styles.chipText, selectedCharacter?.id === character.id ? styles.chipTextActive : null]}>
+                      {character.name || t('characterBinding.characterFallback')}
+                    </Text>
+                  </Pressable>
+                ))}
+              </ScrollView>
+              {selectedCharacter && selectedPreparedLimit !== null ? (
+                <Text style={styles.preparedInfo}>
+                  {t('characterBinding.prepared', { count: selectedPreparedCount, limit: selectedPreparedLimit })}
+                </Text>
+              ) : null}
+              {selectedCharacter && !selectedCharacterIsCaster ? (
+                <Text style={styles.preparedWarning}>{t('characterBinding.notCaster')}</Text>
+              ) : null}
+              {notice ? <Text style={styles.preparedWarning}>{notice}</Text> : null}
+            </View>
           ) : null}
-          {selectedCharacter && !selectedCharacterIsCaster ? (
-            <Text style={styles.preparedWarning}>{t('characterBinding.notCaster')}</Text>
-          ) : null}
-          {notice ? <Text style={styles.preparedWarning}>{notice}</Text> : null}
-        </View>
+        </>
       ) : null}
 
       {isDmMode && pinnedSpellIds.length ? <Text style={styles.preparedInfo}>{t('pinnedHint')}</Text> : null}

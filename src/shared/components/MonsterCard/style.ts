@@ -147,4 +147,3 @@ export const getStyles = (c: ThemeColors) =>
       padding: sp(4),
     },
   });
-

@@ -17,12 +17,19 @@ const PREPARED_FULL_CASTER_CLASSES = new Set(['cleric', 'druid', 'wizard']);
 const PREPARED_HALF_CASTER_CLASSES = new Set(['paladin', 'artificer']);
 
 function normalizeClassKey(value: string): string {
-  const raw = String(value || '').trim().toLowerCase();
+  const raw = String(value || '')
+    .trim()
+    .toLowerCase();
   if (!raw) return '';
   if (CLASS_PRESETS[raw]) return raw;
 
   for (const [classKey, uaLabel] of Object.entries(CLASS_TRANSLATIONS)) {
-    if (String(uaLabel || '').trim().toLowerCase() === raw) return classKey;
+    if (
+      String(uaLabel || '')
+        .trim()
+        .toLowerCase() === raw
+    )
+      return classKey;
   }
 
   return raw;
@@ -87,6 +94,22 @@ function hasSpell(list: string[], name: string): boolean {
   return list.some((entry) => normalizeSpellName(entry) === key);
 }
 
+// A spell name can reach here as its current-locale display name (what the spell picker
+// and starting-spell auto-fill write) or as the spell's base/English name (what toggling a
+// reference-list status button writes) — the two can legitimately differ for the same SRD
+// spell. Callers that already know both forms pass them as aliases so a status set under
+// one form is still found and cleared under the other.
+function toNameAliases(spellName: string | string[]): string[] {
+  const raw = Array.isArray(spellName) ? spellName : [spellName];
+  return raw.map((value) => String(value || '').trim()).filter(Boolean);
+}
+
+function hasAnySpell(list: string[], names: string[]): boolean {
+  if (!names.length) return false;
+  const keys = new Set(names.map(normalizeSpellName));
+  return list.some((entry) => keys.has(normalizeSpellName(entry)));
+}
+
 function addUniqueSpell(list: string[], spellName: string): string[] {
   const next = String(spellName || '').trim();
   if (!next) return list;
@@ -94,50 +117,56 @@ function addUniqueSpell(list: string[], spellName: string): string[] {
   return [...list, next];
 }
 
-function removeSpell(list: string[], spellName: string): string[] {
-  const key = normalizeSpellName(spellName);
-  return list.filter((entry) => normalizeSpellName(entry) !== key);
+function removeAnySpell(list: string[], names: string[]): string[] {
+  if (!names.length) return list;
+  const keys = new Set(names.map(normalizeSpellName));
+  return list.filter((entry) => !keys.has(normalizeSpellName(entry)));
 }
 
 export function collectCharacterSpellNames(character: CharacterEntity | null | undefined): string[] {
   if (!character) return [];
   const names = new Map<string, string>();
-  [...(character.spells?.knownSpells || []), ...(character.spells?.preparedSpells || []), ...(character.spells?.cantrips || [])].forEach((name) => {
-    const trimmed = String(name || '').trim();
-    if (!trimmed) return;
-    const key = normalizeSpellName(trimmed);
-    if (!names.has(key)) names.set(key, trimmed);
-  });
+  [...(character.spells?.knownSpells || []), ...(character.spells?.preparedSpells || []), ...(character.spells?.cantrips || [])].forEach(
+    (name) => {
+      const trimmed = String(name || '').trim();
+      if (!trimmed) return;
+      const key = normalizeSpellName(trimmed);
+      if (!names.has(key)) names.set(key, trimmed);
+    },
+  );
   return Array.from(names.values());
 }
 
-export function getCharacterSpellStatus(character: CharacterEntity | null | undefined, spellName: string): CharacterSpellStatus {
+export function getCharacterSpellStatus(character: CharacterEntity | null | undefined, spellName: string | string[]): CharacterSpellStatus {
   if (!character) return 'available';
-  if (hasSpell(character.spells?.preparedSpells || [], spellName)) return 'prepared';
-  if (hasSpell(character.spells?.cantrips || [], spellName)) return 'cantrip';
-  if (hasSpell(character.spells?.knownSpells || [], spellName)) return 'known';
+  const names = toNameAliases(spellName);
+  if (!names.length) return 'available';
+  if (hasAnySpell(character.spells?.preparedSpells || [], names)) return 'prepared';
+  if (hasAnySpell(character.spells?.cantrips || [], names)) return 'cantrip';
+  if (hasAnySpell(character.spells?.knownSpells || [], names)) return 'known';
   return 'available';
 }
 
 export function applySpellStatus(
   character: CharacterEntity,
-  spellName: string,
+  spellName: string | string[],
   status: CharacterSpellStatus,
   options?: { preparedLimit?: number | null },
 ): CharacterEntity {
-  const name = String(spellName || '').trim();
+  const names = toNameAliases(spellName);
+  const name = names[0];
   if (!name) return character;
 
   const known = [...(character.spells?.knownSpells || [])];
   const prepared = [...(character.spells?.preparedSpells || [])];
   const cantrips = [...(character.spells?.cantrips || [])];
   const preparedLimit = typeof options?.preparedLimit === 'number' ? Math.max(0, options.preparedLimit) : null;
-  const alreadyPrepared = hasSpell(prepared, name);
+  const alreadyPrepared = hasAnySpell(prepared, names);
 
   const resetToAvailable = () => ({
-    knownSpells: removeSpell(known, name),
-    preparedSpells: removeSpell(prepared, name),
-    cantrips: removeSpell(cantrips, name),
+    knownSpells: removeAnySpell(known, names),
+    preparedSpells: removeAnySpell(prepared, names),
+    cantrips: removeAnySpell(cantrips, names),
   });
 
   if (status === 'available') {

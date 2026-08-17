@@ -50,9 +50,7 @@ export const RollResultModal: React.FC<RollResultModalProps> = ({ isVisible, onC
           {result.random === 20 && <Text style={styles.criticalSuccess}>{t('labels.criticalSuccess')}</Text>}
           {result.random === 1 && <Text style={styles.criticalFailure}>{t('labels.criticalFailure')}</Text>}
 
-          <Text style={styles.rollResult}>
-            {t('labels.rollResultWithModifier', { total: result.total, formula: result.formula })}
-          </Text>
+          <Text style={styles.rollResult}>{t('labels.rollResultWithModifier', { total: result.total, formula: result.formula })}</Text>
 
           {previousResult && (
             <View style={styles.previousBlock}>

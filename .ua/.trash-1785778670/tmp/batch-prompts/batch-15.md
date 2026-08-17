@@ -7,25 +7,17 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-15.json` (single-file mode) OR `batch-15-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
-  "src/dm/repositories/appRoleRepository.ts": [
-    "src/domain/migrations/index.ts",
-    "src/types/Product.ts"
-  ],
+  "src/dm/repositories/appRoleRepository.ts": ["src/domain/migrations/index.ts", "src/types/Product.ts"],
   "src/dm/repositories/storageRepositories.test.ts": [
     "src/dm/repositories/appRoleRepository.ts",
     "src/dm/repositories/monsterRepository.ts",
     "src/dm/repositories/trackerTemplatesRepository.ts"
   ],
-  "src/dm/repositories/trackerTemplatesRepository.ts": [
-    "src/dm/domain/types/index.ts",
-    "src/domain/migrations/index.ts"
-  ],
-  "src/stores/appRoleStore.ts": [
-    "src/dm/repositories/appRoleRepository.ts",
-    "src/types/Product.ts"
-  ],
+  "src/dm/repositories/trackerTemplatesRepository.ts": ["src/dm/domain/types/index.ts", "src/domain/migrations/index.ts"],
+  "src/stores/appRoleStore.ts": ["src/dm/repositories/appRoleRepository.ts", "src/types/Product.ts"],
   "src/stores/trackerTemplatesStore.ts": [
     "src/dm/domain/types/index.ts",
     "src/dm/repositories/trackerTemplatesRepository.ts",
@@ -36,6 +28,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/dm/repositories/appRoleRepository.ts": [
@@ -58,12 +51,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/dm/repositories/monsterRepository.ts",
       "batchIndex": 2,
-      "symbols": [
-        "loadMonstersState",
-        "persistMonstersState",
-        "persistPinnedMonsterIds",
-        "persistFavoriteMonsterIds"
-      ]
+      "symbols": ["loadMonstersState", "persistMonstersState", "persistPinnedMonsterIds", "persistFavoriteMonsterIds"]
     }
   ],
   "src/dm/repositories/trackerTemplatesRepository.ts": [
@@ -168,6 +156,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/dm/repositories/appRoleRepository.ts` (30 lines, language: `typescript`, fileCategory: `code`)
 2. `src/dm/repositories/storageRepositories.test.ts` (79 lines, language: `typescript`, fileCategory: `code`)
 3. `src/dm/repositories/trackerTemplatesRepository.ts` (49 lines, language: `typescript`, fileCategory: `code`)

@@ -6,4 +6,3 @@
   { "id": "wisdom", "name": "Wisdom", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "mental"] },
   { "id": "charisma", "name": "Charisma", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["ability", "mental"] }
 ]
-

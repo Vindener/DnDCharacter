@@ -14,11 +14,21 @@ vi.mock('react-native', () => ({
   View: 'View',
   Text: 'Text',
   Pressable: 'Pressable',
-  FlatList: ({ data, renderItem, keyExtractor }: { data: unknown[]; renderItem: (item: { item: unknown }) => React.ReactNode; keyExtractor?: (item: unknown) => string }) =>
+  FlatList: ({
+    data,
+    renderItem,
+    keyExtractor,
+  }: {
+    data: unknown[];
+    renderItem: (item: { item: unknown }) => React.ReactNode;
+    keyExtractor?: (item: unknown) => string;
+  }) =>
     React.createElement(
       'FlatList',
       null,
-      data.map((item, index) => React.createElement(React.Fragment, { key: keyExtractor ? keyExtractor(item) : String(index) }, renderItem({ item }))),
+      data.map((item, index) =>
+        React.createElement(React.Fragment, { key: keyExtractor ? keyExtractor(item) : String(index) }, renderItem({ item })),
+      ),
     ),
 }));
 

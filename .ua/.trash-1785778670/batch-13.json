@@ -345,76 +345,478 @@
     }
   ],
   "edges": [
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/DeathSaves.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/HitPoints.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/SavingThrows.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Skills.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Spells.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Traits.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/types/character.ts", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/screens/Character/hooks/levelChange.test.ts", "target": "file:src/screens/Character/hooks/levelChange.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/shared/helpers/dice.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/types/HitPoints.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/derived.test.ts", "target": "file:src/shared/helpers/derived.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/types/Skills.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/types/Stats.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/shared/const/WeaponsDb.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/shared/helpers/weapons.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/gear.ts", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/shared/helpers/weapons.ts", "target": "file:src/shared/const/WeaponsDb.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/stores/characterStore.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/stores/characterStore.ts", "target": "file:src/services/storeEffects/characterStoreEffects.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/stores/characterStore.ts", "target": "file:src/shared/const/attributes.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/stores/characterStore.ts", "target": "file:src/types/Spells.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/stores/characterStore.ts", "target": "file:src/types/Traits.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/stores/characterStore.ts", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/types/Spells.ts", "target": "file:src/types/SpellSlots.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/DeathSaves.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/HitPoints.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/SavingThrows.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/Skills.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/Spells.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/Stats.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/Traits.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/types/character.ts",
+      "target": "file:src/types/Weapon.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.test.ts",
+      "target": "file:src/screens/Character/hooks/levelChange.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "file:src/shared/helpers/dice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "file:src/types/HitPoints.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "file:src/types/Stats.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/derived.test.ts",
+      "target": "file:src/shared/helpers/derived.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "file:src/types/Skills.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "file:src/types/Stats.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/gear.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/gear.ts",
+      "target": "file:src/shared/const/WeaponsDb.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/gear.ts",
+      "target": "file:src/shared/helpers/weapons.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/gear.ts",
+      "target": "file:src/types/Weapon.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/weapons.ts",
+      "target": "file:src/shared/const/WeaponsDb.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/characterStore.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/characterStore.ts",
+      "target": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/characterStore.ts",
+      "target": "file:src/shared/const/attributes.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/characterStore.ts",
+      "target": "file:src/types/Spells.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/characterStore.ts",
+      "target": "file:src/types/Traits.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/characterStore.ts",
+      "target": "file:src/types/Weapon.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/types/Spells.ts",
+      "target": "file:src/types/SpellSlots.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:normalizeStats", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:findWeapon", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:abilityMod", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkills", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkillBonus", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeAC", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getHitDieForClass", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeHP", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSpeed", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:parseDice", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:rollDice", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/gear.ts", "target": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/shared/helpers/weapons.ts", "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "type": "contains", "direction": "forward", "weight": 1.0 },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "function:src/screens/Character/hooks/levelChange.ts:normalizeStats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/const/WeaponsDb.ts",
+      "target": "function:src/shared/const/WeaponsDb.ts:findWeapon",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/const/WeaponsDb.ts",
+      "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:abilityMod",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeSkills",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeSkillBonus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeAC",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:getHitDieForClass",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeHP",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeSpeed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/dice.ts",
+      "target": "function:src/shared/helpers/dice.ts:parseDice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/dice.ts",
+      "target": "function:src/shared/helpers/dice.ts:rollDice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/gear.ts",
+      "target": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/weapons.ts",
+      "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:findWeapon", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/const/WeaponsDb.ts", "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:abilityMod", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkills", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSkillBonus", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeAC", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:getHitDieForClass", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeHP", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "function:src/shared/helpers/derived.ts:computeSpeed", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:parseDice", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/dice.ts", "target": "function:src/shared/helpers/dice.ts:rollDice", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/gear.ts", "target": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/shared/helpers/weapons.ts", "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "type": "exports", "direction": "forward", "weight": 0.8 },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "function:src/screens/Character/hooks/levelChange.ts:applyLevelChange",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/const/WeaponsDb.ts",
+      "target": "function:src/shared/const/WeaponsDb.ts:findWeapon",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/const/WeaponsDb.ts",
+      "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:abilityMod",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeSkills",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:getSkillProficiencyBonus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeSkillBonus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeAC",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:getHitDieForClass",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeHP",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "function:src/shared/helpers/derived.ts:computeSpeed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/dice.ts",
+      "target": "function:src/shared/helpers/dice.ts:parseDice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/dice.ts",
+      "target": "function:src/shared/helpers/dice.ts:rollDice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/gear.ts",
+      "target": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/weapons.ts",
+      "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    { "source": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter", "target": "function:src/shared/const/WeaponsDb.ts:findWeapon", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems", "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice", "target": "function:src/shared/helpers/dice.ts:parseDice", "type": "calls", "direction": "forward", "weight": 0.8 },
+    {
+      "source": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter",
+      "target": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/helpers/gear.ts:mergeGearIntoCharacter",
+      "target": "function:src/shared/const/WeaponsDb.ts:findWeapon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/helpers/weapons.ts:splitGearIntoWeaponsAndItems",
+      "target": "function:src/shared/const/WeaponsDb.ts:isWeaponName",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/Character/hooks/levelChange.ts:buildNextHitDice",
+      "target": "function:src/shared/helpers/dice.ts:parseDice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    { "source": "file:src/screens/Character/hooks/levelChange.ts", "target": "file:src/screens/Character/hooks/levelChange.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/shared/helpers/derived.ts", "target": "file:src/shared/helpers/derived.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 }
+    {
+      "source": "file:src/screens/Character/hooks/levelChange.ts",
+      "target": "file:src/screens/Character/hooks/levelChange.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/shared/helpers/derived.ts",
+      "target": "file:src/shared/helpers/derived.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
   ]
 }

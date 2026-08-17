@@ -62,9 +62,7 @@ const BASE_PRESETS: HomebrewTemplatePreset[] = [
       { id: mkId('caster-res', 1), label: 'Ritual Uses', current: 1, max: 2, resetRule: 'short-rest' },
     ],
     sections: [{ id: mkId('caster-sec', 0), title: 'Spell Tweaks', content: '' }],
-    entries: [
-      { id: mkId('caster-entry', 0), kind: 'spell', name: 'Custom Spell', description: '', tags: ['caster'] },
-    ],
+    entries: [{ id: mkId('caster-entry', 0), kind: 'spell', name: 'Custom Spell', description: '', tags: ['caster'] }],
   },
   {
     id: 'martial',
@@ -99,7 +97,10 @@ function cloneResource(resource: CharacterCustomResource, index: number): Charac
   };
 }
 
-function cloneSection(section: NonNullable<CharacterEntity['customSections']>[number], index: number): NonNullable<CharacterEntity['customSections']>[number] {
+function cloneSection(
+  section: NonNullable<CharacterEntity['customSections']>[number],
+  index: number,
+): NonNullable<CharacterEntity['customSections']>[number] {
   return {
     ...section,
     id: `${section.id}-${Date.now()}-${index}`,
@@ -114,7 +115,9 @@ function cloneEntry(entry: CharacterHomebrewEntry, index: number): CharacterHome
   };
 }
 
-export function buildTemplatePatch(templateId: CharacterTemplateId): Pick<CharacterEntity, 'characterTemplateId' | 'customResources' | 'customSections' | 'homebrewEntries'> {
+export function buildTemplatePatch(
+  templateId: CharacterTemplateId,
+): Pick<CharacterEntity, 'characterTemplateId' | 'customResources' | 'customSections' | 'homebrewEntries'> {
   const preset = CHARACTER_TEMPLATE_PRESETS.find((item) => item.id === templateId) || CHARACTER_TEMPLATE_PRESETS[0];
   return {
     characterTemplateId: preset.id,
@@ -123,4 +126,3 @@ export function buildTemplatePatch(templateId: CharacterTemplateId): Pick<Charac
     homebrewEntries: preset.entries.map(cloneEntry),
   };
 }
-

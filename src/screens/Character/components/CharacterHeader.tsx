@@ -78,7 +78,9 @@ function CharacterHeaderBase({
           </Text>
           <View style={styles.badgesRow}>{syncBadges.map(renderBadge)}</View>
           <View style={styles.syncIndicatorRow}>
-            <Text style={styles.syncIndicatorText}>{syncStatusLabel} · {syncFeedback}</Text>
+            <Text style={styles.syncIndicatorText}>
+              {syncStatusLabel} · {syncFeedback}
+            </Text>
             {currentSync?.transportMessage ? <Text style={styles.syncIndicatorText}>{currentSync.transportMessage}</Text> : null}
           </View>
           <Pressable style={styles.syncNowButton} onPress={syncNow} android_ripple={{ color: colors.ripple }}>
@@ -98,7 +100,11 @@ function CharacterHeaderBase({
             accessibilityState={{ selected: mode === 'play' }}
             testID='character.mode.play'
           >
-            <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode='tail'
+              style={[styles.modeButtonText, mode === 'play' ? styles.modeButtonTextActive : null]}
+            >
               {t('character:modes.play')}
             </Text>
           </Pressable>
@@ -110,7 +116,11 @@ function CharacterHeaderBase({
             accessibilityState={{ selected: mode === 'edit' }}
             testID='character.mode.edit'
           >
-            <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode='tail'
+              style={[styles.modeButtonText, mode === 'edit' ? styles.modeButtonTextActive : null]}
+            >
               {t('character:modes.edit')}
             </Text>
           </Pressable>
@@ -122,7 +132,9 @@ function CharacterHeaderBase({
           android_ripple={{ color: colors.ripple }}
           testID='character.sessionMode.toggle'
         >
-          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>{t('character:header.session')}</Text>
+          <Text style={[styles.sessionToggleText, characterData.sessionMode ? styles.sessionToggleTextActive : null]}>
+            {t('character:header.session')}
+          </Text>
         </Pressable>
       </View>
     </View>

@@ -132,5 +132,3 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: fs(12),
     },
   });
-
-

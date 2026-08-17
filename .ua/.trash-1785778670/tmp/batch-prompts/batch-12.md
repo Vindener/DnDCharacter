@@ -7,11 +7,10 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-12.json` (single-file mode) OR `batch-12-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
-  "scripts/validate-srd.mjs": [
-    "src/domain/srd/srdRepository.ts"
-  ],
+  "scripts/validate-srd.mjs": ["src/domain/srd/srdRepository.ts"],
   "src/domain/mappers/index.ts": [
     "src/domain/mappers/character.mapper.ts",
     "src/domain/mappers/homebrew.mapper.ts",
@@ -25,9 +24,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/const/ClassPresets.ts",
     "src/shared/helpers/calculateModifier.ts"
   ],
-  "src/domain/spellbook/spellCloudRepository.ts": [
-    "src/domain/spellbook/spellRepository.ts"
-  ],
+  "src/domain/spellbook/spellCloudRepository.ts": ["src/domain/spellbook/spellRepository.ts"],
   "src/domain/spellbook/spellLocalRepository.ts": [
     "src/domain/mappers/index.ts",
     "src/domain/migrations/index.ts",
@@ -45,44 +42,20 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/domain/spellbook/spellLocalRepository.ts",
     "src/domain/spellbook/spellbookEntity.ts"
   ],
-  "src/domain/spellbook/spellbookEntity.ts": [
-    "src/domain/types/sourceMetadata.ts"
-  ],
-  "src/domain/srd/adapters.ts": [
-    "src/domain/spellbook/spellbookEntity.ts",
-    "src/domain/srd/types.ts",
-    "src/types/Monster.ts"
-  ],
+  "src/domain/spellbook/spellbookEntity.ts": ["src/domain/types/sourceMetadata.ts"],
+  "src/domain/srd/adapters.ts": ["src/domain/spellbook/spellbookEntity.ts", "src/domain/srd/types.ts", "src/types/Monster.ts"],
   "src/domain/srd/localization.test.ts": [
     "src/domain/srd/adapters.ts",
     "src/domain/srd/localization.ts",
     "src/domain/srd/srdRepository.ts"
   ],
-  "src/domain/srd/schemas.ts": [
-    "src/domain/srd/types.ts"
-  ],
-  "src/domain/srd/srdRepository.test.ts": [
-    "src/domain/srd/srdRepository.ts"
-  ],
-  "src/domain/srd/srdRepository.ts": [
-    "src/data/srd/index.ts",
-    "src/domain/srd/schemas.ts",
-    "src/domain/srd/types.ts"
-  ],
-  "src/domain/srd/srdSelectors.ts": [
-    "src/domain/srd/srdRepository.ts",
-    "src/domain/srd/types.ts"
-  ],
-  "src/domain/srd/types.ts": [
-    "src/domain/types/sourceMetadata.ts",
-    "src/types/Skills.ts",
-    "src/types/Stats.ts"
-  ],
+  "src/domain/srd/schemas.ts": ["src/domain/srd/types.ts"],
+  "src/domain/srd/srdRepository.test.ts": ["src/domain/srd/srdRepository.ts"],
+  "src/domain/srd/srdRepository.ts": ["src/data/srd/index.ts", "src/domain/srd/schemas.ts", "src/domain/srd/types.ts"],
+  "src/domain/srd/srdSelectors.ts": ["src/domain/srd/srdRepository.ts", "src/domain/srd/types.ts"],
+  "src/domain/srd/types.ts": ["src/domain/types/sourceMetadata.ts", "src/types/Skills.ts", "src/types/Stats.ts"],
   "src/domain/types/sourceMetadata.ts": [],
-  "src/services/storeEffects/dmStoreEffects.test.ts": [
-    "src/services/storeEffects/dmStoreEffects.ts",
-    "src/stores/dmStore.ts"
-  ],
+  "src/services/storeEffects/dmStoreEffects.test.ts": ["src/services/storeEffects/dmStoreEffects.ts", "src/stores/dmStore.ts"],
   "src/services/storeEffects/dmStoreEffects.ts": [
     "src/dm/domain/types/index.ts",
     "src/domain/migrations/index.ts",
@@ -104,6 +77,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/domain/mappers/index.ts": [
@@ -127,11 +101,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/homebrew.mapper.ts",
       "batchIndex": 4,
-      "symbols": [
-        "dtoToEntity",
-        "entityToDto",
-        "draftToEntity"
-      ]
+      "symbols": ["dtoToEntity", "entityToDto", "draftToEntity"]
     },
     {
       "path": "src/domain/mappers/spell.mapper.ts",
@@ -178,9 +148,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/repositories/characterLocalRepository.ts",
       "batchIndex": 5,
-      "symbols": [
-        "characterLocalRepository"
-      ]
+      "symbols": ["characterLocalRepository"]
     },
     {
       "path": "src/services/characterSyncCoordinator.ts",
@@ -201,18 +169,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/homebrew.ts",
       "batchIndex": 3,
-      "symbols": [
-        "normalizeHomebrewV3",
-        "isHomebrewCharacter",
-        "appendQuickSessionNote"
-      ]
+      "symbols": ["normalizeHomebrewV3", "isHomebrewCharacter", "appendQuickSessionNote"]
     },
     {
       "path": "src/shared/helpers/mapCloudCharacter.ts",
       "batchIndex": 3,
-      "symbols": [
-        "mapCloudCharacterToLocalDto"
-      ]
+      "symbols": ["mapCloudCharacterToLocalDto"]
     },
     {
       "path": "src/shared/services/fileSerice.ts",
@@ -229,16 +191,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/const/ClassPresets.ts",
       "batchIndex": 5,
-      "symbols": [
-        "CLASS_PRESETS"
-      ]
+      "symbols": ["CLASS_PRESETS"]
     },
     {
       "path": "src/shared/helpers/calculateModifier.ts",
       "batchIndex": 6,
-      "symbols": [
-        "calculateModifier"
-      ]
+      "symbols": ["calculateModifier"]
     }
   ],
   "src/domain/spellbook/spellLocalRepository.ts": [
@@ -384,9 +342,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/References/References.tsx",
       "batchIndex": 10,
-      "symbols": [
-        "References"
-      ]
+      "symbols": ["References"]
     }
   ],
   "src/domain/srd/types.ts": [
@@ -510,15 +466,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/types/Product.ts",
       "batchIndex": 15,
-      "symbols": [
-        "APP_ROLES"
-      ]
+      "symbols": ["APP_ROLES"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `scripts/validate-srd.mjs` (13 lines, language: `javascript`, fileCategory: `code`)
 2. `src/domain/mappers/index.ts` (5 lines, language: `typescript`, fileCategory: `code`)
 3. `src/domain/spellbook/characterSpellAdapter.ts` (201 lines, language: `typescript`, fileCategory: `code`)

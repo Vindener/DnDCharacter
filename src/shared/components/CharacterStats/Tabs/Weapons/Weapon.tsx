@@ -10,7 +10,10 @@ const randInt = (min: number, max: number) => Math.floor(Math.random() * (max - 
 
 const parseDice = (expr: string): { count: number; sides: number } => {
   if (!expr) return { count: 1, sides: 6 };
-  const match = String(expr).trim().toLowerCase().match(/(\d+)d(\d+)/);
+  const match = String(expr)
+    .trim()
+    .toLowerCase()
+    .match(/(\d+)d(\d+)/);
   if (!match) return { count: 1, sides: 6 };
   return { count: parseInt(match[1], 10) || 1, sides: parseInt(match[2], 10) || 6 };
 };
@@ -268,7 +271,9 @@ const Weapons: React.FC = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{modalOpen?.kind === 'attack' ? t('legacy.weapons.attackRoll') : t('legacy.weapons.damageRoll')}</Text>
+              <Text style={styles.modalTitle}>
+                {modalOpen?.kind === 'attack' ? t('legacy.weapons.attackRoll') : t('legacy.weapons.damageRoll')}
+              </Text>
               <TouchableOpacity onPress={closeModal}>
                 <Text style={styles.modalCloseText}>{t('legacy.weapons.close')}</Text>
               </TouchableOpacity>
@@ -335,4 +340,3 @@ const Weapons: React.FC = () => {
 };
 
 export default Weapons;
-

@@ -85,7 +85,7 @@
 8. ~~**PLY-5 — донат-текст.**~~ — ✅ Закрито 2026-08-12. Крипто-гаманець і
    банківські посилання (PrivatBank/monobank/USDT) прибрано з `Support.tsx`
    — залишився лише лінк на Telegram-канал (`donationUrl =
-   'https://t.me/mythgatednd/12'`), Payments/Financial products ризик
+'https://t.me/mythgatednd/12'`), Payments/Financial products ризик
    знято. Текст «збираємо гроші для... публікації в Apple» — **не помилка**,
    підтверджено власником продукту: це свідомий збір на майбутній
    iOS/iPhone-реліз. `uk/support.json:9` і `en/support.json:9` тепер
@@ -115,7 +115,7 @@
 
    **Підтверджено спробою деплою 2026-08-12:** `firebase deploy` дійшов до
    кроку ввімкнення `artifactregistry.googleapis.com` і впав з `Error: Your
-   project mythgatednd must be on the Blaze (pay-as-you-go) plan` — причина
+project mythgatednd must be on the Blaze (pay-as-you-go) plan` — причина
    підтверджена, це не гіпотеза.
 
    **Рішення власника продукту (2026-08-12):** перейти на Blaze +
@@ -131,7 +131,7 @@
    **Зроблено власником 2026-08-12:** Blaze підключено, бюджетний алерт $1
    налаштовано (Billing → Budgets & alerts). `firebase deploy` після цього
    пройшов далі — `firestore.rules` задеплоїлись успішно (`released rules
-   firestore.rules to cloud.firestore`), API (`cloudbuild`, `artifactregistry`,
+firestore.rules to cloud.firestore`), API (`cloudbuild`, `artifactregistry`,
    `run`, `eventarc`, `pubsub`, `firebaseextensions`) увімкнено автоматично.
 
    **Новий блокер, знайдений на цьому кроці (той-таки день):** усі три
@@ -153,7 +153,7 @@
    **Ще один блокер після успішного деплою (той-таки день):** усі три
    функції відповідали `UNAUTHENTICATED` на легітимні виклики з застосунку.
    Причина — Cloud Run-сервіси (2nd gen) деплоїлись з `Require
-   authentication` замість `Allow public access` на вкладці Security, тож
+authentication` замість `Allow public access` на вкладці Security, тож
    запит відхилявся на рівні IAM ще до того, як код функції встиг
    перевірити `request.auth?.uid`. **Виправлено власником вручну** в Cloud
    Run Console (Services → `deletemyaccount`/`createcampaigninvite`/
@@ -209,67 +209,67 @@
    `mythgatednd.pp.ua` (той самий, де вже є `/privacy`), щоб додати
    `.well-known/assetlinks.json` і сторінку `/join/:code`. Це вебова робота,
    не зміна коду застосунку (окрім, можливо, додавання другого `<data
-   android:host="www.mythgatednd.pp.ua">` intent-filter в `AndroidManifest.xml`
+android:host="www.mythgatednd.pp.ua">` intent-filter в `AndroidManifest.xml`
    для узгодження з `AppNavigator.tsx`).
 
 9.5. ~~**Два нові SIGSEGV-краші від тестувальника (Crashlytics, `1.0.2 (8)`).**~~
-   — ✅ Виправлено 2026-08-14. Крашився вихід на крок 7 («заклинання») в
-   створенні персонажа й закриття модалок із текстовим полем одразу після
-   вводу. Корінна причина: вкладений `KeyboardAwareScrollView`
-   (`react-native-keyboard-controller`) усередині вже наявного зовнішнього —
-   RN `<Modal>` на Android розмонтовує вміст синхронно, без exit-анімації;
-   якщо клавіатура ще закривається, worklet усередині торкається вже
-   знищеної Fabric-view. Деталі, зокрема чому в Crashlytics стектрейс не
-   резолвився (`Missing BuildId`) — `docs/audit-2026-07.md` REL-9.
-   Супутньо: `docs/campaign-management-prompts.md`-подібний виняток №2 в
-   `CLAUDE.md` (автозаповнення заклять у створенні персонажа) додано тим
-   самим проходом — не блокер, задокументовано окремо.
+— ✅ Виправлено 2026-08-14. Крашився вихід на крок 7 («заклинання») в
+створенні персонажа й закриття модалок із текстовим полем одразу після
+вводу. Корінна причина: вкладений `KeyboardAwareScrollView`
+(`react-native-keyboard-controller`) усередині вже наявного зовнішнього —
+RN `<Modal>` на Android розмонтовує вміст синхронно, без exit-анімації;
+якщо клавіатура ще закривається, worklet усередині торкається вже
+знищеної Fabric-view. Деталі, зокрема чому в Crashlytics стектрейс не
+резолвився (`Missing BuildId`) — `docs/audit-2026-07.md` REL-9.
+Супутньо: `docs/campaign-management-prompts.md`-подібний виняток №2 в
+`CLAUDE.md` (автозаповнення заклять у створенні персонажа) додано тим
+самим проходом — не блокер, задокументовано окремо.
 
 9.6. ~~**Краш одразу після створення персонажа + суб'єктивні «лаги» в грі
-   (знайдено власником продукту, версія `1.0.2`).**~~ — ✅ Виправлено
-   2026-08-14. Реальний `logcat` з підключеного пристрою показав 4 ідентичні
-   native SIGABRT (`Pointer tag ... was truncated` — double-free) у
-   деструкторі `RNCAndroidDialogPickerProps`, тобто відомий баг
-   `@react-native-picker/picker` з New Architecture на RN 0.81, виправлений
-   у `2.11.3`. Проєкт мав закомічений `2.11.1`. Піднято до `2.11.4` +
-   попутно `expo` до `~54.0.36` (patch). Підтверджено на реальному пристрої
-   власником продукту — краш і лаги зникли. Версія піднята до `1.0.3`
-   (`app.json` + `android/app/build.gradle`), запис додано в екран «Історія
-   оновлень» і модалку «Що нового». Деталі — `docs/audit-2026-07.md` REL-10.
+(знайдено власником продукту, версія `1.0.2`).**~~ — ✅ Виправлено
+2026-08-14. Реальний `logcat` з підключеного пристрою показав 4 ідентичні
+native SIGABRT (`Pointer tag ... was truncated` — double-free) у
+деструкторі `RNCAndroidDialogPickerProps`, тобто відомий баг
+`@react-native-picker/picker` з New Architecture на RN 0.81, виправлений
+у `2.11.3`. Проєкт мав закомічений `2.11.1`. Піднято до `2.11.4` +
+попутно `expo` до `~54.0.36` (patch). Підтверджено на реальному пристрої
+власником продукту — краш і лаги зникли. Версія піднята до `1.0.3`
+(`app.json` + `android/app/build.gradle`), запис додано в екран «Історія
+оновлень» і модалку «Що нового». Деталі — `docs/audit-2026-07.md` REL-10.
 
 ### Продуктове рішення
 
 10. ~~**REL-6 — білий спалах на старті.**~~ — ✅ Виправлено 2026-08-12: причина
-   була не в самому сплеші (він і так брендовий червоний), а у відсутньому
-   `android:windowBackground` в `AppTheme` — на мить показувався дефолтний
-   білий фон AppCompat між приховуванням сплеша й першим кадром RN. Додано
-   `android:windowBackground = @color/splashscreen_background`
-   (`android/app/src/main/res/values/styles.xml`). **Не вирішено:** сам
-   `userInterfaceStyle: "light"` (примусовий світлий режим) — це лишається
-   окремим продуктовим рішенням, не пов'язаним з баґом, що злякав
-   тестувальника.
+    була не в самому сплеші (він і так брендовий червоний), а у відсутньому
+    `android:windowBackground` в `AppTheme` — на мить показувався дефолтний
+    білий фон AppCompat між приховуванням сплеша й першим кадром RN. Додано
+    `android:windowBackground = @color/splashscreen_background`
+    (`android/app/src/main/res/values/styles.xml`). **Не вирішено:** сам
+    `userInterfaceStyle: "light"` (примусовий світлий режим) — це лишається
+    окремим продуктовим рішенням, не пов'язаним з баґом, що злякав
+    тестувальника.
 11. ~~**SEC-10 — створення персонажа «Локально + Хмара» падало з
-   `permission-denied` (знайдено власником продукту на пристрої).**~~ —
-   ✅ Виправлено 2026-08-13. Корінна причина: `characterSheets`-правило
-   `allow get, list: if isEditor();` вимагало `resource.data.ownerUid`, а для
-   ЩЕ НЕ ІСНУЮЧОГО документа `resource == null` — тож навіть службовий
-   `ref.get()` (перевірка "документ новий чи існуючий?" в
-   `upsertCharacterSheetFromLocal`) падав з `permission-denied` ще до спроби
-   створення. Персонаж ніколи не потрапляв у Firestore; помилки `Listen` в
-   `adb logcat` були наслідком, не причиною. Перед цим перевірено й
-   відкинуто кілька хибних версій: App Check (не підключений), зсув
-   годинника (спростовано — паралельний запис у `users/{uid}` тим самим
-   `request.auth` проходив), стара версія правил (деплой підтверджено
-   актуальним). Фікс: `firestore.rules` →
-   `allow get, list: if resource == null || isEditor();` — дозволяє
-   безпечно перевірити "документа ще нема" (там немає даних, нічого не
-   витікає), захист існуючих документів не змінився. Перевірено на
-   Firestore-емуляторі (`firebase emulators:exec` + `rules-unit-testing`,
-   6 сценаріїв, включно з "чужий не власник все ще НЕ читає існуючий
-   документ") і підтверджено на реальному пристрої власником продукту.
-   Супутньо закрито залишок COL-1 (гонка в транзакційному фолбеку синку,
-   окрема, менш критична дірка того самого коду) — деталі SEC-10 в
-   `docs/audit-2026-07.md`.
+    `permission-denied` (знайдено власником продукту на пристрої).**~~ —
+    ✅ Виправлено 2026-08-13. Корінна причина: `characterSheets`-правило
+    `allow get, list: if isEditor();` вимагало `resource.data.ownerUid`, а для
+    ЩЕ НЕ ІСНУЮЧОГО документа `resource == null` — тож навіть службовий
+    `ref.get()` (перевірка "документ новий чи існуючий?" в
+    `upsertCharacterSheetFromLocal`) падав з `permission-denied` ще до спроби
+    створення. Персонаж ніколи не потрапляв у Firestore; помилки `Listen` в
+    `adb logcat` були наслідком, не причиною. Перед цим перевірено й
+    відкинуто кілька хибних версій: App Check (не підключений), зсув
+    годинника (спростовано — паралельний запис у `users/{uid}` тим самим
+    `request.auth` проходив), стара версія правил (деплой підтверджено
+    актуальним). Фікс: `firestore.rules` →
+    `allow get, list: if resource == null || isEditor();` — дозволяє
+    безпечно перевірити "документа ще нема" (там немає даних, нічого не
+    витікає), захист існуючих документів не змінився. Перевірено на
+    Firestore-емуляторі (`firebase emulators:exec` + `rules-unit-testing`,
+    6 сценаріїв, включно з "чужий не власник все ще НЕ читає існуючий
+    документ") і підтверджено на реальному пристрої власником продукту.
+    Супутньо закрито залишок COL-1 (гонка в транзакційному фолбеку синку,
+    окрема, менш критична дірка того самого коду) — деталі SEC-10 в
+    `docs/audit-2026-07.md`.
 
 ---
 

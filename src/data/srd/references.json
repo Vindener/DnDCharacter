@@ -7,10 +7,7 @@
     "entries": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "conditions"
-    ]
+    "tags": ["reference", "conditions"]
   },
   {
     "id": "actions-in-combat",
@@ -25,11 +22,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "combat",
-      "actions"
-    ]
+    "tags": ["reference", "combat", "actions"]
   },
   {
     "id": "resting",
@@ -48,10 +41,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "resting"
-    ]
+    "tags": ["reference", "resting"]
   },
   {
     "id": "ability-checks",
@@ -66,10 +56,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "checks"
-    ]
+    "tags": ["reference", "checks"]
   },
   {
     "id": "saving-throws",
@@ -84,10 +71,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "saves"
-    ]
+    "tags": ["reference", "saves"]
   },
   {
     "id": "equipment",
@@ -102,10 +86,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "equipment"
-    ]
+    "tags": ["reference", "equipment"]
   },
   {
     "id": "spellcasting-basics",
@@ -120,9 +101,6 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "reference",
-      "spellcasting"
-    ]
+    "tags": ["reference", "spellcasting"]
   }
 ]

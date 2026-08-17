@@ -22,10 +22,7 @@ export function isCharacterInCampaign(character: CharacterCampaignSource, campai
   return Boolean(legacyCampaignName) && legacyCampaignName === campaign.nameNormalized;
 }
 
-export function getCharacterCampaignLabel(
-  character: CharacterCampaignSource,
-  campaignNamesById: Map<string, string>,
-): string {
+export function getCharacterCampaignLabel(character: CharacterCampaignSource, campaignNamesById: Map<string, string>): string {
   if (character.campaignId) {
     const byId = campaignNamesById.get(character.campaignId);
     if (byId) return byId;

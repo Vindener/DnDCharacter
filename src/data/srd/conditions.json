@@ -1,17 +1,122 @@
 [
-  { "id": "blinded", "name": "Blinded", "summary": "Cannot see and automatically fails checks that require sight.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "charmed", "name": "Charmed", "summary": "Cannot attack the charmer and the charmer has advantage on social checks.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "deafened", "name": "Deafened", "summary": "Cannot hear and automatically fails checks that require hearing.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "frightened", "name": "Frightened", "summary": "Disadvantage while the source of fear is in sight and cannot willingly move closer.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "grappled", "name": "Grappled", "summary": "Speed becomes 0 until the grapple ends.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "incapacitated", "name": "Incapacitated", "summary": "Cannot take actions or reactions.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "invisible", "name": "Invisible", "summary": "Cannot be seen without special senses or magic.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "paralyzed", "name": "Paralyzed", "summary": "Incapacitated, cannot move or speak, and is especially vulnerable to attacks.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "petrified", "name": "Petrified", "summary": "Transformed into a solid substance and incapacitated.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "poisoned", "name": "Poisoned", "summary": "Disadvantage on attack rolls and ability checks.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "prone", "name": "Prone", "summary": "Can crawl, has disadvantage on attacks, and nearby attackers gain advantage.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "restrained", "name": "Restrained", "summary": "Speed becomes 0 and attacks against the creature have advantage.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "stunned", "name": "Stunned", "summary": "Incapacitated, cannot move, and can speak only falteringly.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "unconscious", "name": "Unconscious", "summary": "Incapacitated, unaware, prone, and drops held items.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] },
-  { "id": "exhaustion", "name": "Exhaustion", "summary": "A cumulative condition with worsening penalties by level.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["condition"] }
+  {
+    "id": "blinded",
+    "name": "Blinded",
+    "summary": "Cannot see and automatically fails checks that require sight.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "charmed",
+    "name": "Charmed",
+    "summary": "Cannot attack the charmer and the charmer has advantage on social checks.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "deafened",
+    "name": "Deafened",
+    "summary": "Cannot hear and automatically fails checks that require hearing.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "frightened",
+    "name": "Frightened",
+    "summary": "Disadvantage while the source of fear is in sight and cannot willingly move closer.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "grappled",
+    "name": "Grappled",
+    "summary": "Speed becomes 0 until the grapple ends.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "incapacitated",
+    "name": "Incapacitated",
+    "summary": "Cannot take actions or reactions.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "invisible",
+    "name": "Invisible",
+    "summary": "Cannot be seen without special senses or magic.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "paralyzed",
+    "name": "Paralyzed",
+    "summary": "Incapacitated, cannot move or speak, and is especially vulnerable to attacks.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "petrified",
+    "name": "Petrified",
+    "summary": "Transformed into a solid substance and incapacitated.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "poisoned",
+    "name": "Poisoned",
+    "summary": "Disadvantage on attack rolls and ability checks.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "prone",
+    "name": "Prone",
+    "summary": "Can crawl, has disadvantage on attacks, and nearby attackers gain advantage.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "restrained",
+    "name": "Restrained",
+    "summary": "Speed becomes 0 and attacks against the creature have advantage.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "stunned",
+    "name": "Stunned",
+    "summary": "Incapacitated, cannot move, and can speak only falteringly.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "unconscious",
+    "name": "Unconscious",
+    "summary": "Incapacitated, unaware, prone, and drops held items.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  },
+  {
+    "id": "exhaustion",
+    "name": "Exhaustion",
+    "summary": "A cumulative condition with worsening penalties by level.",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["condition"]
+  }
 ]

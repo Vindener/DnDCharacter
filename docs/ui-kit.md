@@ -32,6 +32,7 @@ borderRadius: rd(10),
 Use `typography(variant)` and `Text` component variants for consistent text rhythm.
 
 Supported variants:
+
 - `caption`
 - `bodySm`
 - `body`
@@ -56,6 +57,7 @@ Import from `@/shared/ui`:
 - `Section`
 
 Guidelines:
+
 - Prefer these primitives for new UI code.
 - Interactive elements should use `Pressable` (with `android_ripple` where appropriate).
 - Keep business logic outside UI primitives.
@@ -73,6 +75,7 @@ npm run lint:ui
 ## Skeleton UI
 
 New loading components should follow the same token system:
+
 - `sp()` for spacing
 - `fs()` for typography
 - `rd()` for radius
@@ -83,11 +86,13 @@ Skeletons should match the shape of the real content and avoid layout jumps.
 ## Allowed and Disallowed
 
 Allowed:
+
 - `padding: sp(12)`
 - `fontSize: fs(14)`
 - `borderRadius: rd(12)`
 
 Disallowed in new code:
+
 - `padding: 12`
 - `fontSize: 14`
 - `borderRadius: 12`

@@ -687,9 +687,7 @@
       "file:src/services/accountDeletionCascade.ts": 6
     },
     "byDepth": {
-      "0": [
-        "file:App.tsx"
-      ],
+      "0": ["file:App.tsx"],
       "1": [
         "file:src/context/Theme-store.ts",
         "file:src/i18n/index.ts",
@@ -1560,25 +1558,15 @@
       "edgeCount": 8
     },
     {
-      "nodes": [
-        "file:src/services/storeEffects/uiStoreEffects.ts",
-        "file:src/stores/uiStore.ts",
-        "file:src/shared/styles/theme.ts"
-      ],
+      "nodes": ["file:src/services/storeEffects/uiStoreEffects.ts", "file:src/stores/uiStore.ts", "file:src/shared/styles/theme.ts"],
       "edgeCount": 4
     },
     {
-      "nodes": [
-        "file:src/services/storeEffects/spellbookStoreEffects.ts",
-        "file:src/stores/spellbookStore.ts"
-      ],
+      "nodes": ["file:src/services/storeEffects/spellbookStoreEffects.ts", "file:src/stores/spellbookStore.ts"],
       "edgeCount": 2
     },
     {
-      "nodes": [
-        "file:src/services/storeEffects/syncStoreEffects.ts",
-        "file:src/stores/syncStore.ts"
-      ],
+      "nodes": ["file:src/services/storeEffects/syncStoreEffects.ts", "file:src/stores/syncStore.ts"],
       "edgeCount": 2
     }
   ],

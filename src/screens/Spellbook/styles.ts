@@ -57,6 +57,9 @@ export const getStyles = (c: ThemeColors) =>
       alignItems: 'center',
       gap: sp(8),
     },
+    offlineBannerClose: {
+      padding: sp(2),
+    },
     offlineBannerText: {
       color: c.onInfo,
       fontSize: fs(12),
@@ -74,6 +77,17 @@ export const getStyles = (c: ThemeColors) =>
     },
     filtersBlock: {
       gap: sp(6),
+    },
+    filtersHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingVertical: sp(4),
+    },
+    filtersHeaderText: {
+      color: c.text,
+      fontSize: fs(13),
+      fontWeight: '700',
     },
     tabsRowScroll: {
       flexGrow: 0,

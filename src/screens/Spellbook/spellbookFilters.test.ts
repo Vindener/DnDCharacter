@@ -27,9 +27,32 @@ const baseSpell = (patch: Partial<SpellbookSpell>): SpellbookSpell => ({
 });
 
 const spells: SpellbookSpell[] = [
-  baseSpell({ id: 'magic-missile', name: 'Magic Missile', level: 1, school: 'Evocation', classes: ['Wizard'], description: 'Force darts.' }),
-  baseSpell({ id: 'detect-magic', name: 'Detect Magic', level: 1, school: 'Divination', classes: ['Wizard', 'Cleric'], ritual: true, concentration: true }),
-  baseSpell({ id: 'custom-flare', name: 'Custom Flare', level: 2, school: 'Custom', classes: ['Bard'], source: 'user-custom', license: 'custom' }),
+  baseSpell({
+    id: 'magic-missile',
+    name: 'Magic Missile',
+    level: 1,
+    school: 'Evocation',
+    classes: ['Wizard'],
+    description: 'Force darts.',
+  }),
+  baseSpell({
+    id: 'detect-magic',
+    name: 'Detect Magic',
+    level: 1,
+    school: 'Divination',
+    classes: ['Wizard', 'Cleric'],
+    ritual: true,
+    concentration: true,
+  }),
+  baseSpell({
+    id: 'custom-flare',
+    name: 'Custom Flare',
+    level: 2,
+    school: 'Custom',
+    classes: ['Bard'],
+    source: 'user-custom',
+    license: 'custom',
+  }),
 ];
 
 const character = createEmptyCharacter({
@@ -82,6 +105,25 @@ describe('spellbookFilters', () => {
     expect(run({ activeTab: 'custom' })).toEqual(['custom-flare']);
     expect(run({ activeTab: 'known' })).toEqual(['magic-missile']);
     expect(run({ activeTab: 'prepared' })).toEqual(['detect-magic']);
+  });
+
+  it('matches the known/prepared tabs when the character stores the localized spell name', () => {
+    // startingSpells.ts and the spell picker write the current-locale display name (e.g. the
+    // Ukrainian "Чарівна ракета") into the character's free-text spell lists, while `spell.name`
+    // here stays the base/English SRD name — the known/prepared tab must match on either form.
+    const ukCharacter = createEmptyCharacter({
+      spells: {
+        spellcastingAbility: 'int',
+        spellSaveDC: 13,
+        spellAttackBonus: 5,
+        spellSlots: {},
+        knownSpells: ['Чарівна ракета'],
+        preparedSpells: [],
+        cantrips: [],
+      },
+    });
+
+    expect(run({ activeTab: 'known', locale: 'uk', selectedCharacter: ukCharacter })).toEqual(['magic-missile']);
   });
 
   it('sorts pinned spells first in GM mode', () => {

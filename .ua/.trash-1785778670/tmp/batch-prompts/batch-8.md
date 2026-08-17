@@ -7,172 +7,97 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-8.json` (single-file mode) OR `batch-8-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
-  "src/shared/components/EmptyPlaceholder.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/ErrorBoundary/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/Modal/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/MonsterCard/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/RollResultModal/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/styles/statusTones.ts": [
-    "src/shared/styles/theme.ts"
-  ],
+  "src/shared/components/EmptyPlaceholder.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/ErrorBoundary/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/Modal/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/MonsterCard/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/RollResultModal/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/styles/statusTones.ts": ["src/shared/styles/theme.ts"],
   "src/shared/styles/theme.ts": [],
-  "src/shared/styles/tokens.test.ts": [
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/shared/styles/tokens.test.ts": ["src/shared/styles/tokens.ts"],
   "src/shared/styles/tokens.ts": [],
-  "src/shared/styles/useDesignTokens.ts": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/shared/styles/useDesignTokens.ts": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
   "src/shared/ui/Button.tsx": [
     "src/context/Theme-store.ts",
     "src/shared/styles/tokens.ts",
     "src/shared/ui/Text.tsx",
     "src/shared/ui/variantResolvers.ts"
   ],
-  "src/shared/ui/Card.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts",
-    "src/shared/ui/variantResolvers.ts"
-  ],
-  "src/shared/ui/Chip.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts",
-    "src/shared/ui/Text.tsx"
-  ],
-  "src/shared/ui/Input.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/ui/Screen.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/ui/Section.tsx": [
-    "src/shared/styles/tokens.ts",
-    "src/shared/ui/Text.tsx"
-  ],
-  "src/shared/ui/Text.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts",
-    "src/shared/ui/variantResolvers.ts"
-  ],
-  "src/shared/ui/skeleton/index.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/ui/skeleton/skeleton.test.tsx": [
-    "src/shared/ui/skeleton/index.tsx"
-  ],
-  "src/shared/ui/uiVariants.test.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/ui/variantResolvers.ts"
-  ],
-  "src/shared/ui/variantResolvers.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/stores/uiStore.ts": [
-    "src/services/storeEffects/uiStoreEffects.ts",
-    "src/shared/styles/theme.ts",
-    "src/types/CustomCoin.ts"
-  ],
-  "src/test/mocks/react-navigation-native.ts": [
-    "src/shared/styles/theme.ts"
-  ],
+  "src/shared/ui/Card.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/variantResolvers.ts"],
+  "src/shared/ui/Chip.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/Text.tsx"],
+  "src/shared/ui/Input.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/ui/Screen.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/ui/Section.tsx": ["src/shared/styles/tokens.ts", "src/shared/ui/Text.tsx"],
+  "src/shared/ui/Text.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/variantResolvers.ts"],
+  "src/shared/ui/skeleton/index.tsx": ["src/context/Theme-store.ts", "src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/ui/skeleton/skeleton.test.tsx": ["src/shared/ui/skeleton/index.tsx"],
+  "src/shared/ui/uiVariants.test.ts": ["src/shared/styles/theme.ts", "src/shared/ui/variantResolvers.ts"],
+  "src/shared/ui/variantResolvers.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/stores/uiStore.ts": ["src/services/storeEffects/uiStoreEffects.ts", "src/shared/styles/theme.ts", "src/types/CustomCoin.ts"],
+  "src/test/mocks/react-navigation-native.ts": ["src/shared/styles/theme.ts"],
   "src/types/CustomCoin.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/shared/components/EmptyPlaceholder.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/components/ErrorBoundary/style.ts": [
     {
       "path": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
       "batchIndex": 14,
-      "symbols": [
-        "ErrorBoundary"
-      ]
+      "symbols": ["ErrorBoundary"]
     }
   ],
   "src/shared/components/Modal/style.ts": [
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     }
   ],
   "src/shared/components/MonsterCard/style.ts": [
     {
       "path": "src/shared/components/MonsterCard/MonsterCard.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "MonsterCard"
-      ]
+      "symbols": ["MonsterCard"]
     }
   ],
   "src/shared/components/RollResultModal/style.ts": [
     {
       "path": "src/shared/components/RollResultModal/RollResultModal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "RollResultModal"
-      ]
+      "symbols": ["RollResultModal"]
     }
   ],
   "src/shared/styles/statusTones.ts": [
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/shared/styles/theme.ts": [
     {
       "path": "src/modules/Header/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Bestiary/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Character/components/QuickActionBar.test.tsx",
@@ -182,72 +107,52 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/CreateCharacter/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/DMSharedUpdates.style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/EncounterCalculator/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/LootGenerator/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/style.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Dice/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DiceRoller/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Home/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Initiative/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/LegalLicenses/LegalLicenses.tsx",
@@ -257,86 +162,62 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Monster/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/References/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Settings/styles.ts",
       "batchIndex": 10,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Spellbook/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/storeEffects/uiStoreEffects.ts",
       "batchIndex": 7,
-      "symbols": [
-        "createUiStoreEffects"
-      ]
+      "symbols": ["createUiStoreEffects"]
     },
     {
       "path": "src/shared/components/CharacterCard/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterMenu/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterOverview/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/style.ts",
       "batchIndex": 11,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     }
   ],
   "src/shared/styles/tokens.ts": [
@@ -363,30 +244,22 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/style.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Monster/Monster.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "Monster"
-      ]
+      "symbols": ["Monster"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/style.ts",
       "batchIndex": 11,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/navigation/AppNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "AppNavigator"
-      ]
+      "symbols": ["AppNavigator"]
     },
     {
       "path": "src/shared/components/TextInput/TextInput.tsx",
@@ -431,16 +304,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/TextInput/MultiTextInput.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "MultiTextInput"
-      ]
+      "symbols": ["MultiTextInput"]
     },
     {
       "path": "src/components/ShareCharacterSheetModal.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "ShareCharacterSheetModal"
-      ]
+      "symbols": ["ShareCharacterSheetModal"]
     },
     {
       "path": "src/screens/LegalLicenses/LegalLicenses.tsx",
@@ -450,9 +319,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Settings/styles.ts",
       "batchIndex": 10,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
@@ -462,235 +329,173 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Initiative/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/modules/Header/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Bestiary/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Character/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/CreateCharacter/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/DMSharedUpdates.style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/EncounterCalculator/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DM/LootGenerator/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Dice/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/DiceRoller/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Home/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Monster/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/References/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Spellbook/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/screens/Support/Support.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "Support"
-      ]
+      "symbols": ["Support"]
     },
     {
       "path": "src/shared/components/CharacterCard/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterMenu/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterOverview/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/FirstLaunchModals/style.ts",
       "batchIndex": 14,
-      "symbols": [
-        "styles"
-      ]
+      "symbols": ["styles"]
     },
     {
       "path": "src/shared/components/WhatsNewModal/style.ts",
       "batchIndex": 14,
-      "symbols": [
-        "styles"
-      ]
+      "symbols": ["styles"]
     }
   ],
   "src/shared/styles/useDesignTokens.ts": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/Button.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/Card.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/Chip.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/Input.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/Screen.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/Text.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/ui/skeleton/index.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/Bestiary/Bestiary.tsx",
@@ -700,9 +505,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/Character.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "Character"
-      ]
+      "symbols": ["Character"]
     },
     {
       "path": "src/screens/Home/Home.tsx",
@@ -719,15 +522,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/uiStoreEffects.ts",
       "batchIndex": 7,
-      "symbols": [
-        "createUiStoreEffects"
-      ]
+      "symbols": ["createUiStoreEffects"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/shared/components/EmptyPlaceholder.tsx` (35 lines, language: `typescript`, fileCategory: `code`)
 2. `src/shared/components/ErrorBoundary/style.ts` (25 lines, language: `typescript`, fileCategory: `code`)
 3. `src/shared/components/Modal/style.ts` (77 lines, language: `typescript`, fileCategory: `code`)

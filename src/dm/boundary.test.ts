@@ -35,12 +35,7 @@ describe('dm domain boundary guards', () => {
   it('has no forbidden Character/store imports inside src/dm/domain and src/dm/repositories', () => {
     const root = process.cwd();
     const targets = [join(root, 'src', 'dm', 'domain'), join(root, 'src', 'dm', 'repositories')];
-    const forbidden = [
-      '@/types/Character',
-      '@/stores/dmStore',
-      '@/stores/characterStore',
-      '@/repositories/character',
-    ];
+    const forbidden = ['@/types/Character', '@/stores/dmStore', '@/stores/characterStore', '@/repositories/character'];
 
     const violations: string[] = [];
 

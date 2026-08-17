@@ -1,25 +1,171 @@
 [
-  { "id": "club", "name": "Club", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "simple-weapon"] },
-  { "id": "dagger", "name": "Dagger", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "simple-weapon"] },
-  { "id": "greataxe", "name": "Greataxe", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "martial-weapon"] },
-  { "id": "longsword", "name": "Longsword", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "martial-weapon"] },
-  { "id": "rapier", "name": "Rapier", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "martial-weapon"] },
-  { "id": "shortsword", "name": "Shortsword", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "martial-weapon"] },
-  { "id": "quarterstaff", "name": "Quarterstaff", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "simple-weapon"] },
-  { "id": "light-crossbow", "name": "Light crossbow", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "simple-weapon", "ranged"] },
-  { "id": "longbow", "name": "Longbow", "category": "weapon", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "martial-weapon", "ranged"] },
-  { "id": "leather-armor", "name": "Leather armor", "category": "armor", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "light-armor"] },
-  { "id": "scale-mail", "name": "Scale mail", "category": "armor", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "medium-armor"] },
-  { "id": "chain-mail", "name": "Chain mail", "category": "armor", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "heavy-armor"] },
+  {
+    "id": "club",
+    "name": "Club",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "simple-weapon"]
+  },
+  {
+    "id": "dagger",
+    "name": "Dagger",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "simple-weapon"]
+  },
+  {
+    "id": "greataxe",
+    "name": "Greataxe",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "martial-weapon"]
+  },
+  {
+    "id": "longsword",
+    "name": "Longsword",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "martial-weapon"]
+  },
+  {
+    "id": "rapier",
+    "name": "Rapier",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "martial-weapon"]
+  },
+  {
+    "id": "shortsword",
+    "name": "Shortsword",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "martial-weapon"]
+  },
+  {
+    "id": "quarterstaff",
+    "name": "Quarterstaff",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "simple-weapon"]
+  },
+  {
+    "id": "light-crossbow",
+    "name": "Light crossbow",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "simple-weapon", "ranged"]
+  },
+  {
+    "id": "longbow",
+    "name": "Longbow",
+    "category": "weapon",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "martial-weapon", "ranged"]
+  },
+  {
+    "id": "leather-armor",
+    "name": "Leather armor",
+    "category": "armor",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "light-armor"]
+  },
+  {
+    "id": "scale-mail",
+    "name": "Scale mail",
+    "category": "armor",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "medium-armor"]
+  },
+  {
+    "id": "chain-mail",
+    "name": "Chain mail",
+    "category": "armor",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "heavy-armor"]
+  },
   { "id": "shield", "name": "Shield", "category": "armor", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "shield"] },
-  { "id": "explorers-pack", "name": "Explorer's pack", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "pack"] },
-  { "id": "dungeoneers-pack", "name": "Dungeoneer's pack", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "pack"] },
-  { "id": "scholars-pack", "name": "Scholar's pack", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "pack"] },
-  { "id": "priests-pack", "name": "Priest's pack", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "pack"] },
-  { "id": "component-pouch", "name": "Component pouch", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "spellcasting-focus"] },
-  { "id": "arcane-focus", "name": "Arcane focus", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "spellcasting-focus"] },
-  { "id": "holy-symbol", "name": "Holy symbol", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "spellcasting-focus"] },
-  { "id": "spellbook", "name": "Spellbook", "category": "adventuring-gear", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "spellcasting"] },
-  { "id": "thieves-tools", "name": "Thieves' tools", "category": "tool", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["equipment", "tool"] }
+  {
+    "id": "explorers-pack",
+    "name": "Explorer's pack",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "pack"]
+  },
+  {
+    "id": "dungeoneers-pack",
+    "name": "Dungeoneer's pack",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "pack"]
+  },
+  {
+    "id": "scholars-pack",
+    "name": "Scholar's pack",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "pack"]
+  },
+  {
+    "id": "priests-pack",
+    "name": "Priest's pack",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "pack"]
+  },
+  {
+    "id": "component-pouch",
+    "name": "Component pouch",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "spellcasting-focus"]
+  },
+  {
+    "id": "arcane-focus",
+    "name": "Arcane focus",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "spellcasting-focus"]
+  },
+  {
+    "id": "holy-symbol",
+    "name": "Holy symbol",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "spellcasting-focus"]
+  },
+  {
+    "id": "spellbook",
+    "name": "Spellbook",
+    "category": "adventuring-gear",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "spellcasting"]
+  },
+  {
+    "id": "thieves-tools",
+    "name": "Thieves' tools",
+    "category": "tool",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["equipment", "tool"]
+  }
 ]
-

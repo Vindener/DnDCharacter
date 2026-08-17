@@ -36,11 +36,11 @@ function dirOf(filePath) {
   return idx === -1 ? '' : filePath.slice(0, idx);
 }
 
-const filePaths = fileNodes.map(n => n.filePath || n.name || '');
+const filePaths = fileNodes.map((n) => n.filePath || n.name || '');
 
 function computeCommonPrefix(paths) {
   if (paths.length === 0) return '';
-  const splitPaths = paths.map(p => p.split('/'));
+  const splitPaths = paths.map((p) => p.split('/'));
   let prefix = splitPaths[0].slice(0, -1); // exclude filename
   for (let i = 1; i < splitPaths.length; i++) {
     const segs = splitPaths[i].slice(0, -1);
@@ -68,7 +68,10 @@ let hasSubdirs = false;
 for (const p of filePaths) {
   let rest = p;
   if (commonPrefix && rest.startsWith(commonPrefix)) rest = rest.slice(commonPrefix.length);
-  if (rest.includes('/')) { hasSubdirs = true; break; }
+  if (rest.includes('/')) {
+    hasSubdirs = true;
+    break;
+  }
 }
 
 const directoryGroups = {};
@@ -223,7 +226,7 @@ const crossCategoryEdges = Object.entries(crossCategoryCounts)
     const [fromType, toType, edgeType] = key.split('|');
     return { fromType, toType, edgeType, count };
   })
-  .filter(x => x.fromType !== x.toType || x.edgeType !== 'imports')
+  .filter((x) => x.fromType !== x.toType || x.edgeType !== 'imports')
   .sort((a, b) => b.count - a.count);
 
 // ---------- E. Inter-Group Import Frequency ----------
@@ -262,48 +265,109 @@ for (const grp of Object.keys(directoryGroups)) {
   intraGroupDensity[grp] = {
     internalEdges,
     totalEdges,
-    density: totalEdges > 0 ? internalEdges / totalEdges : 0
+    density: totalEdges > 0 ? internalEdges / totalEdges : 0,
   };
 }
 
 // ---------- G. Directory Pattern Matching ----------
 
 const DIR_PATTERN_MAP = {
-  routes: 'api', api: 'api', controllers: 'api', endpoints: 'api', handlers: 'api',
-  services: 'service', core: 'service', lib: 'service', domain: 'service', logic: 'service',
-  models: 'data', db: 'data', data: 'data', persistence: 'data', repository: 'data', entities: 'data', repositories: 'data',
-  components: 'ui', views: 'ui', pages: 'ui', ui: 'ui', layouts: 'ui', screens: 'ui',
-  middleware: 'middleware', plugins: 'middleware', interceptors: 'middleware', guards: 'middleware',
-  utils: 'utility', helpers: 'utility', common: 'utility', shared: 'utility', tools: 'utility',
-  config: 'config', constants: 'config', env: 'config', settings: 'config',
-  __tests__: 'test', test: 'test', tests: 'test', spec: 'test', specs: 'test',
-  types: 'types', interfaces: 'types', schemas: 'types', contracts: 'types', dtos: 'types',
+  routes: 'api',
+  api: 'api',
+  controllers: 'api',
+  endpoints: 'api',
+  handlers: 'api',
+  services: 'service',
+  core: 'service',
+  lib: 'service',
+  domain: 'service',
+  logic: 'service',
+  models: 'data',
+  db: 'data',
+  data: 'data',
+  persistence: 'data',
+  repository: 'data',
+  entities: 'data',
+  repositories: 'data',
+  components: 'ui',
+  views: 'ui',
+  pages: 'ui',
+  ui: 'ui',
+  layouts: 'ui',
+  screens: 'ui',
+  middleware: 'middleware',
+  plugins: 'middleware',
+  interceptors: 'middleware',
+  guards: 'middleware',
+  utils: 'utility',
+  helpers: 'utility',
+  common: 'utility',
+  shared: 'utility',
+  tools: 'utility',
+  config: 'config',
+  constants: 'config',
+  env: 'config',
+  settings: 'config',
+  __tests__: 'test',
+  test: 'test',
+  tests: 'test',
+  spec: 'test',
+  specs: 'test',
+  types: 'types',
+  interfaces: 'types',
+  schemas: 'types',
+  contracts: 'types',
+  dtos: 'types',
   hooks: 'hooks',
-  store: 'state', state: 'state', reducers: 'state', actions: 'state', slices: 'state',
-  assets: 'assets', static: 'assets', public: 'assets',
+  store: 'state',
+  state: 'state',
+  reducers: 'state',
+  actions: 'state',
+  slices: 'state',
+  assets: 'assets',
+  static: 'assets',
+  public: 'assets',
   migrations: 'data',
-  management: 'config', commands: 'config',
+  management: 'config',
+  commands: 'config',
   templatetags: 'utility',
   signals: 'service',
   serializers: 'api',
   cmd: 'entry',
   internal: 'service',
   pkg: 'utility',
-  dto: 'types', request: 'types', response: 'types',
+  dto: 'types',
+  request: 'types',
+  response: 'types',
   entity: 'data',
   controller: 'api',
   routers: 'api',
   composables: 'service',
   blueprints: 'api',
-  mailers: 'service', jobs: 'service', channels: 'service',
+  mailers: 'service',
+  jobs: 'service',
+  channels: 'service',
   bin: 'entry',
-  docs: 'documentation', documentation: 'documentation', wiki: 'documentation',
-  deploy: 'infrastructure', deployment: 'infrastructure', infra: 'infrastructure', infrastructure: 'infrastructure',
-  '.github': 'ci-cd', '.gitlab': 'ci-cd', '.circleci': 'ci-cd',
-  k8s: 'infrastructure', kubernetes: 'infrastructure', helm: 'infrastructure', charts: 'infrastructure',
-  terraform: 'infrastructure', tf: 'infrastructure',
+  docs: 'documentation',
+  documentation: 'documentation',
+  wiki: 'documentation',
+  deploy: 'infrastructure',
+  deployment: 'infrastructure',
+  infra: 'infrastructure',
+  infrastructure: 'infrastructure',
+  '.github': 'ci-cd',
+  '.gitlab': 'ci-cd',
+  '.circleci': 'ci-cd',
+  k8s: 'infrastructure',
+  kubernetes: 'infrastructure',
+  helm: 'infrastructure',
+  charts: 'infrastructure',
+  terraform: 'infrastructure',
+  tf: 'infrastructure',
   docker: 'infrastructure',
-  sql: 'data', database: 'data', schema: 'data',
+  sql: 'data',
+  database: 'data',
+  schema: 'data',
   // project-specific extras
   functions: 'service',
   android: 'infrastructure',
@@ -334,16 +398,35 @@ for (const grp of Object.keys(directoryGroups)) {
 // ---------- H. Deployment Topology Detection ----------
 
 const infraFiles = [];
-let hasDockerfile = false, hasCompose = false, hasK8s = false, hasTerraform = false, hasCI = false;
+let hasDockerfile = false,
+  hasCompose = false,
+  hasK8s = false,
+  hasTerraform = false,
+  hasCI = false;
 
 for (const n of fileNodes) {
   const fp = n.filePath || '';
   const base = path.basename(fp);
-  if (/^Dockerfile/.test(base)) { hasDockerfile = true; infraFiles.push(fp); }
-  if (/^docker-compose/.test(base)) { hasCompose = true; infraFiles.push(fp); }
-  if (/\.ya?ml$/.test(base) && /(k8s|kubernetes|helm)/i.test(fp)) { hasK8s = true; infraFiles.push(fp); }
-  if (/\.tf$/.test(base) || /\.tfvars$/.test(base)) { hasTerraform = true; infraFiles.push(fp); }
-  if (/^\.github\/workflows\//.test(fp) || base === '.gitlab-ci.yml' || base === 'Jenkinsfile') { hasCI = true; infraFiles.push(fp); }
+  if (/^Dockerfile/.test(base)) {
+    hasDockerfile = true;
+    infraFiles.push(fp);
+  }
+  if (/^docker-compose/.test(base)) {
+    hasCompose = true;
+    infraFiles.push(fp);
+  }
+  if (/\.ya?ml$/.test(base) && /(k8s|kubernetes|helm)/i.test(fp)) {
+    hasK8s = true;
+    infraFiles.push(fp);
+  }
+  if (/\.tf$/.test(base) || /\.tfvars$/.test(base)) {
+    hasTerraform = true;
+    infraFiles.push(fp);
+  }
+  if (/^\.github\/workflows\//.test(fp) || base === '.gitlab-ci.yml' || base === 'Jenkinsfile') {
+    hasCI = true;
+    infraFiles.push(fp);
+  }
   if (base === 'Makefile') infraFiles.push(fp);
 }
 
@@ -353,7 +436,7 @@ const deploymentTopology = {
   hasK8s,
   hasTerraform,
   hasCI,
-  infraFiles: [...new Set(infraFiles)]
+  infraFiles: [...new Set(infraFiles)],
 };
 
 // ---------- I. Data Pipeline Detection ----------
@@ -387,15 +470,15 @@ const dataPipeline = {
   schemaFiles: [...new Set(schemaFiles)],
   migrationFiles: [...new Set(migrationFiles)],
   dataModelFiles: [...new Set(dataModelFiles)],
-  apiHandlerFiles: [...new Set(apiHandlerFiles)]
+  apiHandlerFiles: [...new Set(apiHandlerFiles)],
 };
 
 // ---------- J. Documentation Coverage ----------
 
-const docFiles = fileNodes.filter(n => n.type === 'document' || /\.md$/.test(n.filePath || '') || /\.rst$/.test(n.filePath || ''));
+const docFiles = fileNodes.filter((n) => n.type === 'document' || /\.md$/.test(n.filePath || '') || /\.rst$/.test(n.filePath || ''));
 const groupsWithDocsSet = new Set();
 for (const grp of Object.keys(directoryGroups)) {
-  const hasReadme = directoryGroups[grp].some(id => {
+  const hasReadme = directoryGroups[grp].some((id) => {
     const n = nodeById.get(id);
     return n && /readme/i.test(path.basename(n.filePath || ''));
   });
@@ -403,13 +486,13 @@ for (const grp of Object.keys(directoryGroups)) {
 }
 const totalGroups = Object.keys(directoryGroups).length;
 const groupsWithDocs = groupsWithDocsSet.size;
-const undocumentedGroups = Object.keys(directoryGroups).filter(g => !groupsWithDocsSet.has(g));
+const undocumentedGroups = Object.keys(directoryGroups).filter((g) => !groupsWithDocsSet.has(g));
 
 const docCoverage = {
   groupsWithDocs,
   totalGroups,
   coverageRatio: totalGroups > 0 ? Number((groupsWithDocs / totalGroups).toFixed(2)) : 0,
-  undocumentedGroups
+  undocumentedGroups,
 };
 
 // ---------- K. Dependency Direction ----------
@@ -439,7 +522,7 @@ for (const [t, ids] of Object.entries(nodeTypeGroups)) nodeTypeCounts[t] = ids.l
 const fileStats = {
   totalFileNodes: fileNodes.length,
   filesPerGroup,
-  nodeTypeCounts
+  nodeTypeCounts,
 };
 
 // ---------- Output ----------
@@ -458,7 +541,7 @@ const result = {
   dependencyDirection,
   fileStats,
   fileFanIn: fanIn,
-  fileFanOut: fanOut
+  fileFanOut: fanOut,
 };
 
 try {

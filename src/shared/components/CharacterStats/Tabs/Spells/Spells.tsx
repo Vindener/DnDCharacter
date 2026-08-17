@@ -163,12 +163,14 @@ const Spells: React.FC<SpellsProps> = ({ data }) => {
       />
 
       <Text style={styles.label}>{t('legacy.spells.cantrips')}</Text>
-      <MultiTextInput numberOfLines={4} value={cantripsText} onChangeText={handleCantripsChange} placeholder={t('legacy.spells.cantripsPlaceholder')} />
+      <MultiTextInput
+        numberOfLines={4}
+        value={cantripsText}
+        onChangeText={handleCantripsChange}
+        placeholder={t('legacy.spells.cantripsPlaceholder')}
+      />
     </ScrollView>
   );
 };
 
 export default Spells;
-
-
-

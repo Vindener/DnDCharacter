@@ -1,12 +1,12 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/test/mocks/react-native-firebase-crashlytics.ts", "language": "typescript", "sizeLines": 11, "fileCategory": "code"},
-    {"path": "src/test/mocks/react-native.tsx", "language": "typescript", "sizeLines": 75, "fileCategory": "code"},
-    {"path": "src/types/DM.ts", "language": "typescript", "sizeLines": 17, "fileCategory": "code"},
-    {"path": "src/types/SourceMetadata.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
-    {"path": "vitest.config.ts", "language": "typescript", "sizeLines": 21, "fileCategory": "code"},
-    {"path": "vitest.rules.config.ts", "language": "typescript", "sizeLines": 11, "fileCategory": "code"}
+    { "path": "src/test/mocks/react-native-firebase-crashlytics.ts", "language": "typescript", "sizeLines": 11, "fileCategory": "code" },
+    { "path": "src/test/mocks/react-native.tsx", "language": "typescript", "sizeLines": 75, "fileCategory": "code" },
+    { "path": "src/types/DM.ts", "language": "typescript", "sizeLines": 17, "fileCategory": "code" },
+    { "path": "src/types/SourceMetadata.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code" },
+    { "path": "vitest.config.ts", "language": "typescript", "sizeLines": 21, "fileCategory": "code" },
+    { "path": "vitest.rules.config.ts", "language": "typescript", "sizeLines": 11, "fileCategory": "code" }
   ],
   "batchImportData": {
     "src/test/mocks/react-native-firebase-crashlytics.ts": [],

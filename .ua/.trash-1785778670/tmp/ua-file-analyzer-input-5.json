@@ -1,31 +1,36 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/domain/types/index.ts", "language": "typescript", "sizeLines": 5, "fileCategory": "code"},
-    {"path": "src/repositories/characterCloudRepository.test.ts", "language": "typescript", "sizeLines": 375, "fileCategory": "code"},
-    {"path": "src/repositories/characterLocalRepository.test.ts", "language": "typescript", "sizeLines": 119, "fileCategory": "code"},
-    {"path": "src/repositories/characterLocalRepository.ts", "language": "typescript", "sizeLines": 103, "fileCategory": "code"},
-    {"path": "src/repositories/createCharacterDraftRepository.ts", "language": "typescript", "sizeLines": 40, "fileCategory": "code"},
-    {"path": "src/screens/CreateCharacter/CreateCharacter.test.tsx", "language": "typescript", "sizeLines": 400, "fileCategory": "code"},
-    {"path": "src/screens/CreateCharacter/CreateCharacter.tsx", "language": "typescript", "sizeLines": 1361, "fileCategory": "code"},
-    {"path": "src/screens/CreateCharacter/createCharacterWizard.test.ts", "language": "typescript", "sizeLines": 115, "fileCategory": "code"},
-    {"path": "src/screens/CreateCharacter/createCharacterWizard.ts", "language": "typescript", "sizeLines": 977, "fileCategory": "code"},
-    {"path": "src/screens/Home/Home.test.tsx", "language": "typescript", "sizeLines": 327, "fileCategory": "code"},
-    {"path": "src/services/dmCampaignNotes.test.ts", "language": "typescript", "sizeLines": 77, "fileCategory": "code"},
-    {"path": "src/services/dmCampaignNotes.ts", "language": "typescript", "sizeLines": 8, "fileCategory": "code"},
-    {"path": "src/services/dmCampaigns.test.ts", "language": "typescript", "sizeLines": 80, "fileCategory": "code"},
-    {"path": "src/services/dmCampaigns.ts", "language": "typescript", "sizeLines": 9, "fileCategory": "code"},
-    {"path": "src/shared/const/CharacterTemplates.ts", "language": "typescript", "sizeLines": 126, "fileCategory": "code"},
-    {"path": "src/shared/const/ClassPresets.ts", "language": "typescript", "sizeLines": 97, "fileCategory": "code"},
-    {"path": "src/shared/const/Subclasses.ts", "language": "typescript", "sizeLines": 36, "fileCategory": "code"},
-    {"path": "src/shared/const/Weapons.ts", "language": "typescript", "sizeLines": 38, "fileCategory": "code"},
-    {"path": "src/shared/helpers/combat.ts", "language": "typescript", "sizeLines": 55, "fileCategory": "code"},
-    {"path": "src/shared/helpers/createEmptyCharacter.ts", "language": "typescript", "sizeLines": 159, "fileCategory": "code"},
-    {"path": "src/stores/dmSettingsStore.ts", "language": "typescript", "sizeLines": 32, "fileCategory": "code"},
-    {"path": "src/stores/selectors/characterStoreSelectors.ts", "language": "typescript", "sizeLines": 33, "fileCategory": "code"},
-    {"path": "src/stores/selectors/syncStoreSelectors.ts", "language": "typescript", "sizeLines": 37, "fileCategory": "code"},
-    {"path": "src/stores/storeSelectors.test.ts", "language": "typescript", "sizeLines": 124, "fileCategory": "code"},
-    {"path": "src/types/skillToStat.ts", "language": "typescript", "sizeLines": 37, "fileCategory": "code"}
+    { "path": "src/domain/types/index.ts", "language": "typescript", "sizeLines": 5, "fileCategory": "code" },
+    { "path": "src/repositories/characterCloudRepository.test.ts", "language": "typescript", "sizeLines": 375, "fileCategory": "code" },
+    { "path": "src/repositories/characterLocalRepository.test.ts", "language": "typescript", "sizeLines": 119, "fileCategory": "code" },
+    { "path": "src/repositories/characterLocalRepository.ts", "language": "typescript", "sizeLines": 103, "fileCategory": "code" },
+    { "path": "src/repositories/createCharacterDraftRepository.ts", "language": "typescript", "sizeLines": 40, "fileCategory": "code" },
+    { "path": "src/screens/CreateCharacter/CreateCharacter.test.tsx", "language": "typescript", "sizeLines": 400, "fileCategory": "code" },
+    { "path": "src/screens/CreateCharacter/CreateCharacter.tsx", "language": "typescript", "sizeLines": 1361, "fileCategory": "code" },
+    {
+      "path": "src/screens/CreateCharacter/createCharacterWizard.test.ts",
+      "language": "typescript",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    { "path": "src/screens/CreateCharacter/createCharacterWizard.ts", "language": "typescript", "sizeLines": 977, "fileCategory": "code" },
+    { "path": "src/screens/Home/Home.test.tsx", "language": "typescript", "sizeLines": 327, "fileCategory": "code" },
+    { "path": "src/services/dmCampaignNotes.test.ts", "language": "typescript", "sizeLines": 77, "fileCategory": "code" },
+    { "path": "src/services/dmCampaignNotes.ts", "language": "typescript", "sizeLines": 8, "fileCategory": "code" },
+    { "path": "src/services/dmCampaigns.test.ts", "language": "typescript", "sizeLines": 80, "fileCategory": "code" },
+    { "path": "src/services/dmCampaigns.ts", "language": "typescript", "sizeLines": 9, "fileCategory": "code" },
+    { "path": "src/shared/const/CharacterTemplates.ts", "language": "typescript", "sizeLines": 126, "fileCategory": "code" },
+    { "path": "src/shared/const/ClassPresets.ts", "language": "typescript", "sizeLines": 97, "fileCategory": "code" },
+    { "path": "src/shared/const/Subclasses.ts", "language": "typescript", "sizeLines": 36, "fileCategory": "code" },
+    { "path": "src/shared/const/Weapons.ts", "language": "typescript", "sizeLines": 38, "fileCategory": "code" },
+    { "path": "src/shared/helpers/combat.ts", "language": "typescript", "sizeLines": 55, "fileCategory": "code" },
+    { "path": "src/shared/helpers/createEmptyCharacter.ts", "language": "typescript", "sizeLines": 159, "fileCategory": "code" },
+    { "path": "src/stores/dmSettingsStore.ts", "language": "typescript", "sizeLines": 32, "fileCategory": "code" },
+    { "path": "src/stores/selectors/characterStoreSelectors.ts", "language": "typescript", "sizeLines": 33, "fileCategory": "code" },
+    { "path": "src/stores/selectors/syncStoreSelectors.ts", "language": "typescript", "sizeLines": 37, "fileCategory": "code" },
+    { "path": "src/stores/storeSelectors.test.ts", "language": "typescript", "sizeLines": 124, "fileCategory": "code" },
+    { "path": "src/types/skillToStat.ts", "language": "typescript", "sizeLines": 37, "fileCategory": "code" }
   ],
   "batchImportData": {
     "src/domain/types/index.ts": [],
@@ -33,18 +38,13 @@
       "src/repositories/characterCloudRepository.ts",
       "src/shared/helpers/createEmptyCharacter.ts"
     ],
-    "src/repositories/characterLocalRepository.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/repositories/characterLocalRepository.ts"
-    ],
+    "src/repositories/characterLocalRepository.test.ts": ["src/domain/migrations/index.ts", "src/repositories/characterLocalRepository.ts"],
     "src/repositories/characterLocalRepository.ts": [
       "src/domain/mappers/index.ts",
       "src/domain/migrations/index.ts",
       "src/domain/types/index.ts"
     ],
-    "src/repositories/createCharacterDraftRepository.ts": [
-      "src/screens/CreateCharacter/createCharacterWizard.ts"
-    ],
+    "src/repositories/createCharacterDraftRepository.ts": ["src/screens/CreateCharacter/createCharacterWizard.ts"],
     "src/screens/CreateCharacter/CreateCharacter.test.tsx": [
       "src/dm/domain/types/index.ts",
       "src/domain/types/index.ts",
@@ -71,9 +71,7 @@
       "src/shared/services/auth/index.ts",
       "src/shared/services/fileSerice.ts"
     ],
-    "src/screens/CreateCharacter/createCharacterWizard.test.ts": [
-      "src/screens/CreateCharacter/createCharacterWizard.ts"
-    ],
+    "src/screens/CreateCharacter/createCharacterWizard.test.ts": ["src/screens/CreateCharacter/createCharacterWizard.ts"],
     "src/screens/CreateCharacter/createCharacterWizard.ts": [
       "src/domain/srd/index.ts",
       "src/domain/types/index.ts",
@@ -89,47 +87,24 @@
       "src/shared/services/auth/index.ts",
       "src/types/Character.ts"
     ],
-    "src/services/dmCampaignNotes.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/services/dmCampaignNotes.ts"
-    ],
+    "src/services/dmCampaignNotes.test.ts": ["src/domain/migrations/index.ts", "src/services/dmCampaignNotes.ts"],
     "src/services/dmCampaignNotes.ts": [],
-    "src/services/dmCampaigns.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/services/dmCampaigns.ts"
-    ],
+    "src/services/dmCampaigns.test.ts": ["src/domain/migrations/index.ts", "src/services/dmCampaigns.ts"],
     "src/services/dmCampaigns.ts": [],
-    "src/shared/const/CharacterTemplates.ts": [
-      "src/domain/types/index.ts"
-    ],
+    "src/shared/const/CharacterTemplates.ts": ["src/domain/types/index.ts"],
     "src/shared/const/ClassPresets.ts": [],
     "src/shared/const/Subclasses.ts": [],
     "src/shared/const/Weapons.ts": [],
-    "src/shared/helpers/combat.ts": [
-      "src/domain/types/index.ts",
-      "src/shared/const/ClassPresets.ts",
-      "src/shared/const/Weapons.ts"
-    ],
-    "src/shared/helpers/createEmptyCharacter.ts": [
-      "src/domain/schemas/index.ts",
-      "src/domain/types/index.ts"
-    ],
-    "src/stores/dmSettingsStore.ts": [
-      "src/dm/repositories/dmSettingsRepository.ts"
-    ],
-    "src/stores/selectors/characterStoreSelectors.ts": [
-      "src/domain/types/index.ts"
-    ],
-    "src/stores/selectors/syncStoreSelectors.ts": [
-      "src/types/Sync.ts"
-    ],
+    "src/shared/helpers/combat.ts": ["src/domain/types/index.ts", "src/shared/const/ClassPresets.ts", "src/shared/const/Weapons.ts"],
+    "src/shared/helpers/createEmptyCharacter.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+    "src/stores/dmSettingsStore.ts": ["src/dm/repositories/dmSettingsRepository.ts"],
+    "src/stores/selectors/characterStoreSelectors.ts": ["src/domain/types/index.ts"],
+    "src/stores/selectors/syncStoreSelectors.ts": ["src/types/Sync.ts"],
     "src/stores/storeSelectors.test.ts": [
       "src/shared/helpers/createEmptyCharacter.ts",
       "src/stores/selectors/characterStoreSelectors.ts",
       "src/stores/selectors/syncStoreSelectors.ts"
     ],
-    "src/types/skillToStat.ts": [
-      "src/domain/types/index.ts"
-    ]
+    "src/types/skillToStat.ts": ["src/domain/types/index.ts"]
   }
 }

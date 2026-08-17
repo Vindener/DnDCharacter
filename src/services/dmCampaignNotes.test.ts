@@ -17,7 +17,16 @@ const { storage, asyncStorageMock } = vi.hoisted(() => {
 });
 
 const { ensureCampaignForNameMock } = vi.hoisted(() => ({
-  ensureCampaignForNameMock: vi.fn(async () => ({ id: 'campaign-base', name: 'Base', nameNormalized: 'base', ownerUid: 'local', owners: [], editors: [], createdAtMs: 1, updatedAtMs: 1 })),
+  ensureCampaignForNameMock: vi.fn(async () => ({
+    id: 'campaign-base',
+    name: 'Base',
+    nameNormalized: 'base',
+    ownerUid: 'local',
+    owners: [],
+    editors: [],
+    createdAtMs: 1,
+    updatedAtMs: 1,
+  })),
 }));
 
 const { firebaseMock } = vi.hoisted(() => ({
@@ -56,9 +65,10 @@ beforeEach(() => {
 
 describe('dmCampaignNotes migration pipeline', () => {
   it('migrates legacy DM_NOTES_V2 into versioned notes storage', async () => {
-    storage.set('DM_NOTES_V2', JSON.stringify([
-      { id: 'old-1', title: 'Legacy title', content: 'Legacy body', campaign: 'Base', lastEdited: 100 },
-    ]));
+    storage.set(
+      'DM_NOTES_V2',
+      JSON.stringify([{ id: 'old-1', title: 'Legacy title', content: 'Legacy body', campaign: 'Base', lastEdited: 100 }]),
+    );
 
     const notes = await loadLocalCampaignNotes();
 

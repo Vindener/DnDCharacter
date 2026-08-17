@@ -5,4 +5,3 @@ export const SRD_METADATA = {
   license: 'ogl-1.0a',
   tags: ['srd', '5e'],
 } as const;
-

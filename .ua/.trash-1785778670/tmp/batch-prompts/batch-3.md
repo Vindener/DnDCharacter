@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-3.json` (single-file mode) OR `batch-3-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/screens/DM/DMEncounterPrep.tsx": [
@@ -78,16 +79,9 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/types/Monster.ts",
     "src/types/Spellbook.ts"
   ],
-  "src/screens/DM/adapters/campaignLink.ts": [
-    "src/dm/domain/campaign/index.ts",
-    "src/dm/domain/types/index.ts",
-    "src/types/Character.ts"
-  ],
+  "src/screens/DM/adapters/campaignLink.ts": ["src/dm/domain/campaign/index.ts", "src/dm/domain/types/index.ts", "src/types/Character.ts"],
   "src/screens/DM/adapters/index.ts": [],
-  "src/screens/DM/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/screens/DM/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
   "src/screens/Home/Home.tsx": [
     "src/context/Character-store.ts",
     "src/context/Sync-store.ts",
@@ -134,10 +128,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/screens/Initiative/CampaignInitiativeBoard.tsx",
     "src/screens/Initiative/LocalInitiativeBoard.tsx"
   ],
-  "src/services/campaignInvite.ts": [
-    "src/services/firebase.ts",
-    "src/shared/services/telemetry/productTelemetry.ts"
-  ],
+  "src/services/campaignInvite.ts": ["src/services/firebase.ts", "src/shared/services/telemetry/productTelemetry.ts"],
   "src/services/characterSyncCoordinator.test.ts": [
     "src/repositories/characterCloudRepository.ts",
     "src/services/characterSyncCoordinator.ts",
@@ -157,99 +148,58 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/types/Character.ts",
     "src/types/Sync.ts"
   ],
-  "src/services/connections.ts": [
-    "src/services/firebase.ts"
-  ],
+  "src/services/connections.ts": ["src/services/firebase.ts"],
   "src/services/firebase.ts": [],
-  "src/services/users.ts": [
-    "src/services/firebase.ts"
-  ],
-  "src/shared/const/TrackerTemplates.ts": [
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/shared/helpers/collaboration/status.ts": [
-    "src/types/Product.ts",
-    "src/types/Sync.ts"
-  ],
-  "src/shared/helpers/homebrew.ts": [
-    "src/domain/mappers/index.ts",
-    "src/domain/types/index.ts"
-  ],
-  "src/shared/helpers/mapCloudCharacter.ts": [
-    "src/domain/mappers/index.ts",
-    "src/domain/types/index.ts"
-  ],
+  "src/services/users.ts": ["src/services/firebase.ts"],
+  "src/shared/const/TrackerTemplates.ts": ["src/dm/domain/types/index.ts"],
+  "src/shared/helpers/collaboration/status.ts": ["src/types/Product.ts", "src/types/Sync.ts"],
+  "src/shared/helpers/homebrew.ts": ["src/domain/mappers/index.ts", "src/domain/types/index.ts"],
+  "src/shared/helpers/mapCloudCharacter.ts": ["src/domain/mappers/index.ts", "src/domain/types/index.ts"],
   "src/shared/helpers/stripUndefinedDeep.ts": [],
-  "src/shared/helpers/sync/conflictPolicy.test.ts": [
-    "src/shared/helpers/sync/conflictPolicy.ts"
-  ],
-  "src/shared/helpers/sync/conflictPolicy.ts": [
-    "src/types/Sync.ts"
-  ],
-  "src/shared/helpers/sync/syncErrorClassification.test.ts": [
-    "src/shared/helpers/sync/syncErrorClassification.ts"
-  ],
+  "src/shared/helpers/sync/conflictPolicy.test.ts": ["src/shared/helpers/sync/conflictPolicy.ts"],
+  "src/shared/helpers/sync/conflictPolicy.ts": ["src/types/Sync.ts"],
+  "src/shared/helpers/sync/syncErrorClassification.test.ts": ["src/shared/helpers/sync/syncErrorClassification.ts"],
   "src/shared/helpers/sync/syncErrorClassification.ts": [],
-  "src/shared/services/telemetry/productTelemetry.test.ts": [
-    "src/shared/services/telemetry/productTelemetry.ts"
-  ],
+  "src/shared/services/telemetry/productTelemetry.test.ts": ["src/shared/services/telemetry/productTelemetry.ts"],
   "src/shared/services/telemetry/productTelemetry.ts": [],
   "src/types/Sync.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/screens/DM/DMEncounterPrep.tsx": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/DmSettings-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Monster-store.ts",
       "batchIndex": 2,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/encounter/index.ts",
       "batchIndex": 9,
-      "symbols": [
-        "DIFFICULTY_THRESHOLDS",
-        "CHALLENGE_XP",
-        "getMonsterMultiplier",
-        "evaluateEncounterDifficulty"
-      ]
+      "symbols": ["DIFFICULTY_THRESHOLDS", "CHALLENGE_XP", "getMonsterMultiplier", "evaluateEncounterDifficulty"]
     },
     {
       "path": "src/dm/domain/initiative/index.ts",
       "batchIndex": 1,
-      "symbols": [
-        "rollInitiativeFor",
-        "sortByInitiative"
-      ]
+      "symbols": ["rollInitiativeFor", "sortByInitiative"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -312,69 +262,39 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     },
     {
       "path": "src/shared/helpers/combat.ts",
       "batchIndex": 5,
-      "symbols": [
-        "abilityMod",
-        "proficiencyBonus",
-        "computeAttackBonus",
-        "defaultDamageString",
-        "damageAbilityMod"
-      ]
+      "symbols": ["abilityMod", "proficiencyBonus", "computeAttackBonus", "defaultDamageString", "damageAbilityMod"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/screens/DM/DMPartyOverview.tsx": [
     {
       "path": "src/context/AppRole-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Sync-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default",
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["default", "selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -401,9 +321,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     },
     {
       "path": "src/repositories/characterCloudRepository.ts",
@@ -470,56 +388,32 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Sync-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default",
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["default", "selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     },
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/types/Character.ts",
@@ -557,42 +451,27 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/AppRole-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Sync-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default",
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["default", "selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     },
     {
       "path": "src/repositories/characterCloudRepository.ts",
@@ -626,16 +505,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/repositories/characterLocalRepository.ts",
       "batchIndex": 5,
-      "symbols": [
-        "characterLocalRepository"
-      ]
+      "symbols": ["characterLocalRepository"]
     },
     {
       "path": "src/screens/DM/DMSharedUpdates.style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/types/Character.ts",
@@ -782,24 +657,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/DM/DM.tsx",
@@ -831,35 +694,22 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Sync-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default",
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["default", "selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     },
     {
       "path": "src/repositories/characterCloudRepository.ts",
@@ -893,21 +743,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Home/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/services/auth/index.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AuthProvider",
-        "useAuth",
-        "configureGoogleSignIn",
-        "onGoogleButtonPress",
-        "logout",
-        "reauthenticateWithGoogle"
-      ]
+      "symbols": ["AuthProvider", "useAuth", "configureGoogleSignIn", "onGoogleButtonPress", "logout", "reauthenticateWithGoogle"]
     },
     {
       "path": "src/shared/ui/skeleton/index.tsx",
@@ -937,9 +778,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/createEmptyCharacter.ts",
       "batchIndex": 5,
-      "symbols": [
-        "createEmptyCharacter"
-      ]
+      "symbols": ["createEmptyCharacter"]
     }
   ],
   "src/screens/Home/homeViewModel.ts": [
@@ -982,18 +821,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/types/Product.ts",
       "batchIndex": 15,
-      "symbols": [
-        "APP_ROLES"
-      ]
+      "symbols": ["APP_ROLES"]
     }
   ],
   "src/screens/Initiative/CampaignInitiativeBoard.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -1014,9 +849,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Initiative/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/TextInput/TextInput.tsx",
@@ -1026,25 +859,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/screens/Initiative/Initiative.tsx": [
     {
       "path": "src/context/DmSettings-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -1054,9 +876,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/dm/hooks/useCampaignOwnership.ts",
       "batchIndex": 1,
-      "symbols": [
-        "useCampaignOwnership"
-      ]
+      "symbols": ["useCampaignOwnership"]
     },
     {
       "path": "src/dm/repositories/campaignRepository.ts",
@@ -1078,9 +898,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/AppNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "AppNavigator"
-      ]
+      "symbols": ["AppNavigator"]
     },
     {
       "path": "src/screens/Initiative/LocalInitiativeBoard.tsx",
@@ -1133,20 +951,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/createEmptyCharacter.ts",
       "batchIndex": 5,
-      "symbols": [
-        "createEmptyCharacter"
-      ]
+      "symbols": ["createEmptyCharacter"]
     }
   ],
   "src/services/characterSyncCoordinator.ts": [
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     },
     {
       "path": "src/i18n/index.ts",
@@ -1193,10 +1005,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/services/toast/index.ts",
       "batchIndex": 10,
-      "symbols": [
-        "showToast",
-        "toast"
-      ]
+      "symbols": ["showToast", "toast"]
     },
     {
       "path": "src/types/Character.ts",
@@ -1232,9 +1041,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -1249,9 +1056,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/syncStoreEffects.ts",
       "batchIndex": 10,
-      "symbols": [
-        "createSyncStoreEffects"
-      ]
+      "symbols": ["createSyncStoreEffects"]
     },
     {
       "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
@@ -1311,9 +1116,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/dm/hooks/useCampaignOwnership.ts",
       "batchIndex": 1,
-      "symbols": [
-        "useCampaignOwnership"
-      ]
+      "symbols": ["useCampaignOwnership"]
     },
     {
       "path": "src/dm/repositories/campaignEncountersRepository.ts",
@@ -1399,9 +1202,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -1431,12 +1232,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/accountDeletion.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AccountDeletionError",
-        "buildTransferKey",
-        "previewAccountDeletion",
-        "requestAccountDeletion"
-      ]
+      "symbols": ["AccountDeletionError", "buildTransferKey", "previewAccountDeletion", "requestAccountDeletion"]
     }
   ],
   "src/services/users.ts": [
@@ -1489,9 +1285,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/Firebase/Auth.tsx",
       "batchIndex": 10,
-      "symbols": [
-        "Auth"
-      ]
+      "symbols": ["Auth"]
     }
   ],
   "src/shared/const/TrackerTemplates.ts": [
@@ -1505,16 +1299,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/types/Product.ts",
       "batchIndex": 15,
-      "symbols": [
-        "APP_ROLES"
-      ]
+      "symbols": ["APP_ROLES"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/DM.tsx",
@@ -1531,11 +1321,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     },
     {
       "path": "src/domain/types/index.ts",
@@ -1545,20 +1331,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/shared/helpers/mapCloudCharacter.ts": [
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     },
     {
       "path": "src/domain/types/index.ts",
@@ -1568,9 +1348,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/DM.tsx",
@@ -1580,9 +1358,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/adapters/unifiedParty.ts",
       "batchIndex": 9,
-      "symbols": [
-        "buildUnifiedPartyList"
-      ]
+      "symbols": ["buildUnifiedPartyList"]
     }
   ],
   "src/shared/helpers/stripUndefinedDeep.ts": [
@@ -1662,16 +1438,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/components/ShareCharacterSheetModal.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "ShareCharacterSheetModal"
-      ]
+      "symbols": ["ShareCharacterSheetModal"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/DMCampaignDetail.tsx",
@@ -1681,57 +1453,41 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/accountDeletion.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AccountDeletionError",
-        "buildTransferKey",
-        "previewAccountDeletion",
-        "requestAccountDeletion"
-      ]
+      "symbols": ["AccountDeletionError", "buildTransferKey", "previewAccountDeletion", "requestAccountDeletion"]
     },
     {
       "path": "src/services/storeEffects/characterStoreEffects.ts",
       "batchIndex": 10,
-      "symbols": [
-        "createCharacterStoreEffects"
-      ]
+      "symbols": ["createCharacterStoreEffects"]
     },
     {
       "path": "src/services/storeEffects/uiStoreEffects.ts",
       "batchIndex": 7,
-      "symbols": [
-        "createUiStoreEffects"
-      ]
+      "symbols": ["createUiStoreEffects"]
     },
     {
       "path": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
       "batchIndex": 14,
-      "symbols": [
-        "ErrorBoundary"
-      ]
+      "symbols": ["ErrorBoundary"]
     }
   ],
   "src/types/Sync.ts": [
     {
       "path": "src/stores/selectors/syncStoreSelectors.ts",
       "batchIndex": 5,
-      "symbols": [
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/stores/syncStore.ts",
       "batchIndex": 10,
-      "symbols": [
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["selectSyncByCharacterId", "selectSyncStoreActions"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/screens/DM/DMEncounterPrep.tsx` (511 lines, language: `typescript`, fileCategory: `code`)
 2. `src/screens/DM/DMPartyOverview.tsx` (263 lines, language: `typescript`, fileCategory: `code`)
 3. `src/screens/DM/DMQuickEdit.tsx` (536 lines, language: `typescript`, fileCategory: `code`)

@@ -435,139 +435,865 @@
     }
   ],
   "edges": [
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/dm/repositories/campaignInitiativeRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/screens/DM/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/screens/Initiative/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/shared/components/TextInput/TextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/dm/repositories/campaignInitiativeRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/screens/DM/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/screens/Initiative/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/shared/components/TextInput/TextInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/context/DmSettings-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/dm/hooks/useCampaignOwnership.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/dm/repositories/campaignRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/navigation/AppNavigator.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "file:src/screens/Initiative/LocalInitiativeBoard.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/context/DmSettings-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/dm/hooks/useCampaignOwnership.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/navigation/AppNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "file:src/screens/Initiative/LocalInitiativeBoard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/services/campaignInvite.ts", "target": "file:src/services/firebase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/campaignInvite.ts", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "file:src/shared/services/telemetry/productTelemetry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/services/characterSyncCoordinator.test.ts", "target": "file:src/repositories/characterCloudRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.test.ts", "target": "file:src/services/characterSyncCoordinator.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.test.ts", "target": "file:src/shared/helpers/createEmptyCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.test.ts", "target": "file:src/types/Sync.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/services/characterSyncCoordinator.test.ts",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.test.ts",
+      "target": "file:src/services/characterSyncCoordinator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.test.ts",
+      "target": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.test.ts",
+      "target": "file:src/types/Sync.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/domain/mappers/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/i18n/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/repositories/characterCloudRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/services/firebase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/shared/helpers/mapCloudCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/shared/helpers/sync/conflictPolicy.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/shared/helpers/sync/syncErrorClassification.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/shared/services/toast/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/types/Sync.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/domain/mappers/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/i18n/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/shared/helpers/mapCloudCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/shared/helpers/sync/conflictPolicy.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/shared/helpers/sync/syncErrorClassification.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/shared/services/telemetry/productTelemetry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/shared/services/toast/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/types/Sync.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/services/connections.ts", "target": "file:src/services/firebase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/users.ts", "target": "file:src/services/firebase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/const/TrackerTemplates.ts", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "file:src/types/Product.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "file:src/types/Sync.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "file:src/domain/mappers/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/services/connections.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/users.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/const/TrackerTemplates.ts",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "file:src/types/Product.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "file:src/types/Sync.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "file:src/domain/mappers/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx", "target": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Initiative/Initiative.tsx", "target": "function:src/screens/Initiative/Initiative.tsx:Initiative", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/campaignInvite.ts", "target": "class:src/services/campaignInvite.ts:CampaignInviteError", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/campaignInvite.ts", "target": "function:src/services/campaignInvite.ts:createCampaignInvite", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/campaignInvite.ts", "target": "function:src/services/campaignInvite.ts:redeemCampaignInvite", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:resolveStatus", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:buildDefaultSyncState", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncState", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncMap", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:applySyncTransition", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:buildUploadPlan", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:mergeCharacterBySections", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:reconcileRemoteSnapshot", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:computeRemoteHistorySync", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:computeSeenEntryIdsFromRawHistory", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:resolveConflict", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/connections.ts", "target": "function:src/services/connections.ts:errorMeta", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/connections.ts", "target": "function:src/services/connections.ts:ensureConnection", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/firebase.ts", "target": "function:src/services/firebase.ts:timestampToMillis", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/firebase.ts", "target": "function:src/services/firebase.ts:hasDoc", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/users.ts", "target": "function:src/services/users.ts:ensureUserIndexOnLogin", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/users.ts", "target": "function:src/services/users.ts:findUserByEmail", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:isNetworkOnline", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getSyncDisplayStatus", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getSyncStatusKind", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getShareDisplayStatus", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:mapRoleToHistoryActor", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getChangeSourceLabel", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:summarizeHistoryPaths", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "function:src/shared/helpers/homebrew.ts:normalizeHomebrewV3", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "function:src/shared/helpers/homebrew.ts:isHomebrewCharacter", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "function:src/shared/helpers/homebrew.ts:appendQuickSessionNote", "type": "contains", "direction": "forward", "weight": 1.0},
+    {
+      "source": "file:src/screens/Initiative/CampaignInitiativeBoard.tsx",
+      "target": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Initiative/Initiative.tsx",
+      "target": "function:src/screens/Initiative/Initiative.tsx:Initiative",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "class:src/services/campaignInvite.ts:CampaignInviteError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "function:src/services/campaignInvite.ts:createCampaignInvite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "function:src/services/campaignInvite.ts:redeemCampaignInvite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:resolveStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:buildDefaultSyncState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:applySyncTransition",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:buildUploadPlan",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:mergeCharacterBySections",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:reconcileRemoteSnapshot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:computeRemoteHistorySync",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:computeSeenEntryIdsFromRawHistory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:resolveConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/connections.ts",
+      "target": "function:src/services/connections.ts:errorMeta",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/connections.ts",
+      "target": "function:src/services/connections.ts:ensureConnection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/firebase.ts",
+      "target": "function:src/services/firebase.ts:timestampToMillis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/firebase.ts",
+      "target": "function:src/services/firebase.ts:hasDoc",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/users.ts",
+      "target": "function:src/services/users.ts:ensureUserIndexOnLogin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/users.ts",
+      "target": "function:src/services/users.ts:findUserByEmail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:isNetworkOnline",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getSyncDisplayStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getSyncStatusKind",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getShareDisplayStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:mapRoleToHistoryActor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getChangeSourceLabel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:summarizeHistoryPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "function:src/shared/helpers/homebrew.ts:normalizeHomebrewV3",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "function:src/shared/helpers/homebrew.ts:isHomebrewCharacter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "function:src/shared/helpers/homebrew.ts:appendQuickSessionNote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    {"source": "file:src/services/campaignInvite.ts", "target": "class:src/services/campaignInvite.ts:CampaignInviteError", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/campaignInvite.ts", "target": "function:src/services/campaignInvite.ts:createCampaignInvite", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/campaignInvite.ts", "target": "function:src/services/campaignInvite.ts:redeemCampaignInvite", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:buildDefaultSyncState", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncState", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncMap", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:applySyncTransition", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:buildUploadPlan", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:reconcileRemoteSnapshot", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:computeRemoteHistorySync", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:computeSeenEntryIdsFromRawHistory", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "function:src/services/characterSyncCoordinator.ts:resolveConflict", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/connections.ts", "target": "function:src/services/connections.ts:ensureConnection", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/firebase.ts", "target": "function:src/services/firebase.ts:timestampToMillis", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/firebase.ts", "target": "function:src/services/firebase.ts:hasDoc", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/users.ts", "target": "function:src/services/users.ts:ensureUserIndexOnLogin", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/users.ts", "target": "function:src/services/users.ts:findUserByEmail", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:isNetworkOnline", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getSyncDisplayStatus", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getSyncStatusKind", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getShareDisplayStatus", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:mapRoleToHistoryActor", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:getChangeSourceLabel", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/collaboration/status.ts", "target": "function:src/shared/helpers/collaboration/status.ts:summarizeHistoryPaths", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "function:src/shared/helpers/homebrew.ts:normalizeHomebrewV3", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "function:src/shared/helpers/homebrew.ts:isHomebrewCharacter", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/homebrew.ts", "target": "function:src/shared/helpers/homebrew.ts:appendQuickSessionNote", "type": "exports", "direction": "forward", "weight": 0.8},
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "class:src/services/campaignInvite.ts:CampaignInviteError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "function:src/services/campaignInvite.ts:createCampaignInvite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/campaignInvite.ts",
+      "target": "function:src/services/campaignInvite.ts:redeemCampaignInvite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:buildDefaultSyncState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:applySyncTransition",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:buildUploadPlan",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:reconcileRemoteSnapshot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:computeRemoteHistorySync",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:computeSeenEntryIdsFromRawHistory",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "function:src/services/characterSyncCoordinator.ts:resolveConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/connections.ts",
+      "target": "function:src/services/connections.ts:ensureConnection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/firebase.ts",
+      "target": "function:src/services/firebase.ts:timestampToMillis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/firebase.ts",
+      "target": "function:src/services/firebase.ts:hasDoc",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/users.ts",
+      "target": "function:src/services/users.ts:ensureUserIndexOnLogin",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/users.ts",
+      "target": "function:src/services/users.ts:findUserByEmail",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:isNetworkOnline",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getSyncDisplayStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getSyncStatusKind",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getShareDisplayStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:mapRoleToHistoryActor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:getChangeSourceLabel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/collaboration/status.ts",
+      "target": "function:src/shared/helpers/collaboration/status.ts:summarizeHistoryPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "function:src/shared/helpers/homebrew.ts:normalizeHomebrewV3",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "function:src/shared/helpers/homebrew.ts:isHomebrewCharacter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/homebrew.ts",
+      "target": "function:src/shared/helpers/homebrew.ts:appendQuickSessionNote",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "file:src/services/characterSyncCoordinator.ts", "target": "file:src/services/characterSyncCoordinator.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
+    {
+      "source": "file:src/services/characterSyncCoordinator.ts",
+      "target": "file:src/services/characterSyncCoordinator.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
 
-    {"source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard", "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:endCampaignInitiative", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard", "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:subscribeCampaignInitiative", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard", "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:updateCampaignInitiative", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard", "target": "function:src/screens/DM/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard", "target": "function:src/screens/Initiative/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {
+      "source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:endCampaignInitiative",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:subscribeCampaignInitiative",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard",
+      "target": "function:src/dm/repositories/campaignInitiativeRepository.ts:updateCampaignInitiative",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard",
+      "target": "function:src/screens/DM/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/Initiative/CampaignInitiativeBoard.tsx:CampaignInitiativeBoard",
+      "target": "function:src/screens/Initiative/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/screens/Initiative/Initiative.tsx:Initiative", "target": "function:src/dm/repositories/campaignRepository.ts:subscribeAccessibleCampaigns", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/Initiative/Initiative.tsx:Initiative", "target": "function:src/dm/hooks/useCampaignOwnership.ts:useCampaignOwnership", "type": "calls", "direction": "forward", "weight": 0.8},
+    {
+      "source": "function:src/screens/Initiative/Initiative.tsx:Initiative",
+      "target": "function:src/dm/repositories/campaignRepository.ts:subscribeAccessibleCampaigns",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/Initiative/Initiative.tsx:Initiative",
+      "target": "function:src/dm/hooks/useCampaignOwnership.ts:useCampaignOwnership",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/services/campaignInvite.ts:createCampaignInvite", "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/campaignInvite.ts:redeemCampaignInvite", "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent", "type": "calls", "direction": "forward", "weight": 0.8},
+    {
+      "source": "function:src/services/campaignInvite.ts:createCampaignInvite",
+      "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/campaignInvite.ts:redeemCampaignInvite",
+      "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/services/characterSyncCoordinator.ts:resolveStatus", "target": "function:src/shared/helpers/sync/conflictPolicy.ts:resolveSyncStatus", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:mergeCharacterBySections", "target": "function:src/shared/helpers/sync/conflictPolicy.ts:pathToSyncSection", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:reconcileRemoteSnapshot", "target": "function:src/shared/helpers/sync/conflictPolicy.ts:collectConflictPaths", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "target": "function:src/repositories/characterCloudRepository.ts:upsertFromLocal", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "target": "function:src/shared/helpers/sync/syncErrorClassification.ts:classifySyncError", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "target": "file:src/domain/mappers/index.ts", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "target": "file:src/shared/services/toast/index.ts", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:resolveConflict", "target": "function:src/repositories/characterCloudRepository.ts:fetchById", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:resolveConflict", "target": "function:src/shared/helpers/mapCloudCharacter.ts:mapCloudCharacterToLocalDto", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/characterSyncCoordinator.ts:resolveConflict", "target": "function:src/services/firebase.ts:timestampToMillis", "type": "calls", "direction": "forward", "weight": 0.8},
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:resolveStatus",
+      "target": "function:src/shared/helpers/sync/conflictPolicy.ts:resolveSyncStatus",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:mergeCharacterBySections",
+      "target": "function:src/shared/helpers/sync/conflictPolicy.ts:pathToSyncSection",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:reconcileRemoteSnapshot",
+      "target": "function:src/shared/helpers/sync/conflictPolicy.ts:collectConflictPaths",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "target": "function:src/repositories/characterCloudRepository.ts:upsertFromLocal",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "target": "function:src/shared/helpers/sync/syncErrorClassification.ts:classifySyncError",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "target": "file:src/domain/mappers/index.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "target": "file:src/shared/services/toast/index.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:resolveConflict",
+      "target": "function:src/repositories/characterCloudRepository.ts:fetchById",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:resolveConflict",
+      "target": "function:src/shared/helpers/mapCloudCharacter.ts:mapCloudCharacterToLocalDto",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/characterSyncCoordinator.ts:resolveConflict",
+      "target": "function:src/services/firebase.ts:timestampToMillis",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/shared/helpers/homebrew.ts:normalizeHomebrewV3", "target": "file:src/domain/mappers/index.ts", "type": "calls", "direction": "forward", "weight": 0.8}
+    {
+      "source": "function:src/shared/helpers/homebrew.ts:normalizeHomebrewV3",
+      "target": "file:src/domain/mappers/index.ts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
   ]
 }

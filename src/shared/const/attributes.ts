@@ -15,4 +15,3 @@ export const attributes: Attribute[] = [
   { key: 'wisdom', label: 'Мудрість' },
   { key: 'charisma', label: 'Харизма' },
 ];
-

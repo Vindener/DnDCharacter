@@ -231,15 +231,33 @@ const DMPartyOverview = () => {
               </Text>
 
               <View style={styles.laneGrid}>
-                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
+                <Pressable
+                  style={styles.laneButton}
+                  onPress={() => {
+                    void openCharacter(item.payload);
+                  }}
+                  android_ripple={{ color: colors.ripple }}
+                >
                   <Ionicons name='link-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>{t('dm:partyOverview.openLiveCopy')}</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openQuickEdit(item.payload); }} android_ripple={{ color: colors.ripple }}>
+                <Pressable
+                  style={styles.laneButton}
+                  onPress={() => {
+                    void openQuickEdit(item.payload);
+                  }}
+                  android_ripple={{ color: colors.ripple }}
+                >
                   <Ionicons name='create-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>{t('dm:partyOverview.quickEdit')}</Text>
                 </Pressable>
-                <Pressable style={styles.laneButton} onPress={() => { void openCharacter(item.payload); }} android_ripple={{ color: colors.ripple }}>
+                <Pressable
+                  style={styles.laneButton}
+                  onPress={() => {
+                    void openCharacter(item.payload);
+                  }}
+                  android_ripple={{ color: colors.ripple }}
+                >
                   <Ionicons name='document-text-outline' size={18} color={colors.text} />
                   <Text style={styles.laneButtonText}>{t('dm:partyOverview.openFullSheet')}</Text>
                 </Pressable>
@@ -259,5 +277,3 @@ const DMPartyOverview = () => {
 };
 
 export default DMPartyOverview;
-
-

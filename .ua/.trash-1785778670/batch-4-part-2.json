@@ -499,78 +499,492 @@
     }
   ],
   "edges": [
-    { "source": "file:src/domain/schemas/campaignNote.schema.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignNote.schema.test.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.test.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "file:src/domain/schemas/homebrew.schema.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "file:src/domain/schemas/spell.schema.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.test.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/homebrew.schema.test.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/spell.schema.test.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.test.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.test.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "file:src/domain/schemas/homebrew.schema.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "file:src/domain/schemas/spell.schema.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.test.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.test.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.test.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "function:src/domain/schemas/campaignNote.schema.ts:parseConflictRemote", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "function:src/domain/schemas/campaignNote.schema.ts:normalizeCampaignNotePayload", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "function:src/domain/schemas/campaignNote.schema.ts:parseQueueItem", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseStats", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseSavingThrows", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseSkills", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseSkillProficiencies", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseEquipment", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseContentSourceRef", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseContentSources", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseWeapons", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "function:src/domain/schemas/character.schema.ts:parseCharacterEntity", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:normalizeWizardPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateRaceClassBackground", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateStats", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateCombat", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateStorage", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:safeParseCreateCharacterWizardStep", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:coerceFieldValue", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeCustomField", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeResource", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeCustomResetRule", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeTracker", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:trackerToResource", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeNotesGroup", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeHomebrewEntry", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeLegacySpellListEntries", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeHomebrewDraft", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseSpellComponents", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseDamageProfile", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseDamageProfilesFromText", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseDamageProfiles", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseSpellbookSpell", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseCharacterSpells", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "function:src/domain/schemas/spell.schema.ts:parseUpsertSpellInput", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/utils.ts", "target": "function:src/domain/schemas/utils.ts:toBoolean", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/utils.ts", "target": "function:src/domain/schemas/utils.ts:toFiniteStringRecord", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/utils.ts", "target": "function:src/domain/schemas/utils.ts:safeParseWithIssues", "type": "contains", "direction": "forward", "weight": 1.0 },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "function:src/domain/schemas/campaignNote.schema.ts:parseConflictRemote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "function:src/domain/schemas/campaignNote.schema.ts:normalizeCampaignNotePayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "function:src/domain/schemas/campaignNote.schema.ts:parseQueueItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseStats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseSavingThrows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseSkills",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseSkillProficiencies",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseEquipment",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseContentSourceRef",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseContentSources",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseWeapons",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "function:src/domain/schemas/character.schema.ts:parseCharacterEntity",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:normalizeWizardPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateRaceClassBackground",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateStats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateCombat",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:validateStorage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:safeParseCreateCharacterWizardStep",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:coerceFieldValue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeCustomField",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeResource",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeCustomResetRule",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeTracker",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:trackerToResource",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeNotesGroup",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeHomebrewEntry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeLegacySpellListEntries",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "function:src/domain/schemas/homebrew.schema.ts:normalizeHomebrewDraft",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseSpellComponents",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseDamageProfile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseDamageProfilesFromText",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseDamageProfiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseSpellbookSpell",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseCharacterSpells",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "function:src/domain/schemas/spell.schema.ts:parseUpsertSpellInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/utils.ts",
+      "target": "function:src/domain/schemas/utils.ts:toBoolean",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/utils.ts",
+      "target": "function:src/domain/schemas/utils.ts:toFiniteStringRecord",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/utils.ts",
+      "target": "function:src/domain/schemas/utils.ts:safeParseWithIssues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:safeParseCreateCharacterWizardStep", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/schemas/utils.ts", "target": "function:src/domain/schemas/utils.ts:toBoolean", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/schemas/utils.ts", "target": "function:src/domain/schemas/utils.ts:toFiniteStringRecord", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/schemas/utils.ts", "target": "function:src/domain/schemas/utils.ts:safeParseWithIssues", "type": "exports", "direction": "forward", "weight": 0.8 },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "function:src/domain/schemas/createCharacterWizard.schema.ts:safeParseCreateCharacterWizardStep",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/schemas/utils.ts",
+      "target": "function:src/domain/schemas/utils.ts:toBoolean",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/schemas/utils.ts",
+      "target": "function:src/domain/schemas/utils.ts:toFiniteStringRecord",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/schemas/utils.ts",
+      "target": "function:src/domain/schemas/utils.ts:safeParseWithIssues",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    { "source": "file:src/domain/schemas/campaignNote.schema.ts", "target": "file:src/domain/schemas/campaignNote.schema.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/schemas/character.schema.ts", "target": "file:src/domain/schemas/character.schema.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/schemas/createCharacterWizard.schema.ts", "target": "file:src/domain/schemas/createCharacterWizard.schema.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/schemas/homebrew.schema.ts", "target": "file:src/domain/schemas/homebrew.schema.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/schemas/spell.schema.ts", "target": "file:src/domain/schemas/spell.schema.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+    {
+      "source": "file:src/domain/schemas/campaignNote.schema.ts",
+      "target": "file:src/domain/schemas/campaignNote.schema.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/schemas/character.schema.ts",
+      "target": "file:src/domain/schemas/character.schema.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/schemas/createCharacterWizard.schema.ts",
+      "target": "file:src/domain/schemas/createCharacterWizard.schema.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/schemas/homebrew.schema.ts",
+      "target": "file:src/domain/schemas/homebrew.schema.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/schemas/spell.schema.ts",
+      "target": "file:src/domain/schemas/spell.schema.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
 
-    { "source": "function:src/domain/schemas/campaignNote.schema.ts:normalizeCampaignNotePayload", "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest", "type": "calls", "direction": "forward", "weight": 0.8 }
+    {
+      "source": "function:src/domain/schemas/campaignNote.schema.ts:normalizeCampaignNotePayload",
+      "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
   ]
 }

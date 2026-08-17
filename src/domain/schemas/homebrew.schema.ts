@@ -41,25 +41,12 @@ const NOTE_GROUP_SEED: Array<{ key: keyof NonNullable<CharacterDto['notesBlocks'
   { key: 'quests', title: 'Квести', order: 4 },
 ];
 
-const TEMPLATE_IDS: CharacterTemplateId[] = [
-  'standard-5e',
-  'homebrew-light',
-  'homebrew-heavy',
-  'caster',
-  'martial',
-  'custom-blank',
-];
+const TEMPLATE_IDS: CharacterTemplateId[] = ['standard-5e', 'homebrew-light', 'homebrew-heavy', 'caster', 'martial', 'custom-blank'];
 const FIELD_TYPES: CustomFieldType[] = ['text', 'number', 'boolean', 'select'];
 const RESET_RULES: TrackerResetRule[] = ['none', 'short-rest', 'long-rest', 'session'];
 const VISIBILITY_RULES: TrackerVisibility[] = ['player', 'dm', 'both'];
 const HOMEBREW_KINDS: CharacterHomebrewEntry['kind'][] = ['spell', 'ability', 'feat'];
-const HOMEBREW_ACTIVATION: Array<NonNullable<CharacterHomebrewEntry['activation']>> = [
-  'action',
-  'bonus',
-  'reaction',
-  'passive',
-  'special',
-];
+const HOMEBREW_ACTIVATION: Array<NonNullable<CharacterHomebrewEntry['activation']>> = ['action', 'bonus', 'reaction', 'passive', 'special'];
 const CUSTOM_RESET_TRIGGER: CharacterCustomResetRule['trigger'][] = ['short-rest', 'long-rest', 'session-start'];
 const CUSTOM_RESET_MODE: CharacterCustomResetRule['mode'][] = ['set', 'increment', 'decrement'];
 
@@ -101,10 +88,7 @@ function coerceFieldValue(type: CustomFieldType, value: unknown, options?: strin
 function normalizeCustomField(raw: unknown, index: number): CharacterCustomField | null {
   const record = asRecord(raw);
   const type = selectCustomFieldType(record.type);
-  const options =
-    type === 'select'
-      ? toStringArray(record.options, { dedupe: true })
-      : undefined;
+  const options = type === 'select' ? toStringArray(record.options, { dedupe: true }) : undefined;
   return {
     id: toTrimmedString(record.id) || `custom-field-${index}`,
     label: toTrimmedString(record.label) || `Поле ${index + 1}`,
@@ -203,9 +187,7 @@ function normalizeHomebrewEntry(raw: unknown, index: number): CharacterHomebrewE
 
   return {
     id: toTrimmedString(record.id) || `homebrew-entry-${index}`,
-    kind: HOMEBREW_KINDS.includes(kind as CharacterHomebrewEntry['kind'])
-      ? (kind as CharacterHomebrewEntry['kind'])
-      : 'ability',
+    kind: HOMEBREW_KINDS.includes(kind as CharacterHomebrewEntry['kind']) ? (kind as CharacterHomebrewEntry['kind']) : 'ability',
     name,
     description: toString(record.description, ''),
     tags: toStringArray(record.tags, { dedupe: true }),
@@ -262,9 +244,7 @@ function normalizeLegacyFeatureEntries(rawBlocks: unknown): CharacterHomebrewEnt
         id: `legacy-feature-${blockId}-${entryIndex}`,
         kind: 'ability',
         name,
-        description: blockTitle
-          ? `Із застарілого блоку особливостей: ${blockTitle}`
-          : 'Перенесено із застарілого блоку особливостей',
+        description: blockTitle ? `Із застарілого блоку особливостей: ${blockTitle}` : 'Перенесено із застарілого блоку особливостей',
         tags: blockTitle ? [blockTitle] : [],
       });
     });

@@ -93,7 +93,12 @@ type PreviewAccumulator = HomeCharacterPreview & {
   hasHomebrew: boolean;
 };
 
-function createPreview(input: HomeCharacterInput, syncByCharacter: CharacterSyncMap, isConnected: boolean | null | undefined, role: AppRole): PreviewAccumulator {
+function createPreview(
+  input: HomeCharacterInput,
+  syncByCharacter: CharacterSyncMap,
+  isConnected: boolean | null | undefined,
+  role: AppRole,
+): PreviewAccumulator {
   const { payload, source, isSharedSheet } = input;
   const syncStatus = getSyncDisplayStatus(syncByCharacter[payload.id], isConnected);
   const shareStatus = getShareDisplayStatus({

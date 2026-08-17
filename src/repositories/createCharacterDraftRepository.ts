@@ -24,13 +24,17 @@ async function loadDraft(): Promise<CreateCharacterDraft | null> {
 async function saveDraft(draft: CreateCharacterDraft): Promise<void> {
   try {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 async function clearDraft(): Promise<void> {
   try {
     await AsyncStorage.removeItem(STORAGE_KEY);
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 export const createCharacterDraftRepository: CreateCharacterDraftRepository = {

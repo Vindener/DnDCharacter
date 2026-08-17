@@ -7,24 +7,23 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-16.json` (single-file mode) OR `batch-16-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
-  "functions/src/accountDeletionCascade.test.ts": [
-    "functions/src/accountDeletionCascade.ts"
-  ],
+  "functions/src/accountDeletionCascade.test.ts": ["functions/src/accountDeletionCascade.ts"],
   "functions/src/accountDeletionCascade.ts": [],
-  "functions/src/deleteMyAccount.ts": [
-    "functions/src/accountDeletionCascade.ts"
-  ]
+  "functions/src/deleteMyAccount.ts": ["functions/src/accountDeletionCascade.ts"]
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {}
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `functions/src/accountDeletionCascade.test.ts` (39 lines, language: `typescript`, fileCategory: `code`)
 2. `functions/src/accountDeletionCascade.ts` (50 lines, language: `typescript`, fileCategory: `code`)
 3. `functions/src/deleteMyAccount.ts` (167 lines, language: `typescript`, fileCategory: `code`)

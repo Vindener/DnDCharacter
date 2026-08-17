@@ -21,9 +21,9 @@ describe('startingSpells', () => {
     expect(cleric.spells).toHaveLength(2);
   });
 
-  it('suggests nothing for classes that only get spellcasting at level 2', () => {
-    expect(getSuggestedStartingSpells('Paladin', 'en')).toEqual({ mode: 'none', cantrips: [], spells: [] });
-    expect(getSuggestedStartingSpells('Ranger', 'en')).toEqual({ mode: 'none', cantrips: [], spells: [] });
+  it('suggests zero cantrips/spells for half-casters that only get spellcasting at level 2', () => {
+    expect(getSuggestedStartingSpells('Paladin', 'en')).toEqual({ mode: 'prepared', cantrips: [], spells: [] });
+    expect(getSuggestedStartingSpells('Ranger', 'en')).toEqual({ mode: 'known', cantrips: [], spells: [] });
   });
 
   it('suggests nothing for a non-caster or unknown class name', () => {
@@ -47,7 +47,17 @@ describe('startingSpells', () => {
     });
   });
 
-  it('returns an empty eligible list for classes without level-1 spellcasting', () => {
-    expect(getEligibleLevel1Spells('Paladin', 'en')).toEqual({ cantrips: [], leveled: [] });
+  it('returns an empty eligible list for a non-caster class', () => {
+    expect(getEligibleLevel1Spells('Barbarian', 'en')).toEqual({ cantrips: [], leveled: [] });
+  });
+
+  it('exposes the eligible level-1 spell list for half-casters so a level 2+ Paladin/Ranger can be built by hand', () => {
+    const paladin = getEligibleLevel1Spells('Paladin', 'en');
+    expect(paladin.cantrips).toEqual([]);
+    expect(paladin.leveled.length).toBeGreaterThan(0);
+
+    const ranger = getEligibleLevel1Spells('Ranger', 'en');
+    expect(ranger.cantrips).toEqual([]);
+    expect(ranger.leveled.length).toBeGreaterThan(0);
   });
 });

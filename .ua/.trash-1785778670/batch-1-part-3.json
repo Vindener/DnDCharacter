@@ -6,13 +6,7 @@
       "name": "characterCloudRepository.ts",
       "filePath": "src/repositories/characterCloudRepository.ts",
       "summary": "Центральний Firestore-репозиторій аркушів персонажів для спільного редагування: upsert/підписки/передача власності/керування редакторами, конверти історії змін, автозбереження та bulk-завантаження. Ключовий файл інваріантів спільного редагування з `docs/collaborative-editing.md`.",
-      "tags": [
-        "repository",
-        "firestore",
-        "sync",
-        "collaboration",
-        "ownership"
-      ],
+      "tags": ["repository", "firestore", "sync", "collaboration", "ownership"],
       "complexity": "complex",
       "languageNotes": "Поточна реалізація `upsertCharacterSheetFromLocal` робить read-modify-write (`get()` → зібрати весь документ → `set(merge:true)`) замість транзакції чи точкових `update()` — це прямий ризик втрати чужих змін, описаний у CLAUDE.md §5.1."
     },
@@ -21,16 +15,9 @@
       "type": "function",
       "name": "toSheetSnapshotDoc",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        196,
-        275
-      ],
+      "lineRange": [196, 275],
       "summary": "Перетворює локальний DTO персонажа на структуру документа-знімка аркуша персонажа для запису у Firestore, розкладаючи дані по секціях.",
-      "tags": [
-        "mapper",
-        "firestore",
-        "character"
-      ],
+      "tags": ["mapper", "firestore", "character"],
       "complexity": "complex"
     },
     {
@@ -38,15 +25,9 @@
       "type": "function",
       "name": "dtoToSheet",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        277,
-        352
-      ],
+      "lineRange": [277, 352],
       "summary": "Перетворює локальний DTO персонажа на модель аркуша персонажа, узгоджену зі схемою хмарного документа.",
-      "tags": [
-        "mapper",
-        "character"
-      ],
+      "tags": ["mapper", "character"],
       "complexity": "complex"
     },
     {
@@ -54,16 +35,9 @@
       "type": "function",
       "name": "buildHistoryEntries",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        371,
-        401
-      ],
+      "lineRange": [371, 401],
       "summary": "Будує записи історії змін (`changeHistory`) для змінених шляхів персонажа з actor role та часовою міткою.",
-      "tags": [
-        "collaboration",
-        "history",
-        "character"
-      ],
+      "tags": ["collaboration", "history", "character"],
       "complexity": "moderate"
     },
     {
@@ -71,16 +45,9 @@
       "type": "function",
       "name": "buildContentPayload",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        415,
-        427
-      ],
+      "lineRange": [415, 427],
       "summary": "Формує вміст payload персонажа для запису у Firestore на основі DTO.",
-      "tags": [
-        "firestore",
-        "mapper",
-        "character"
-      ],
+      "tags": ["firestore", "mapper", "character"],
       "complexity": "simple"
     },
     {
@@ -88,17 +55,9 @@
       "type": "function",
       "name": "upsertCharacterSheetFromLocal",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        429,
-        488
-      ],
+      "lineRange": [429, 488],
       "summary": "Записує локальні зміни персонажа у Firestore: читає поточний документ, зливає зміни та зберігає (`set` з `merge:true`) разом з історією змін. Наразі не використовує транзакцію, що є ризиком read-modify-write при паралельному редагуванні кількома користувачами (CLAUDE.md §5.1).",
-      "tags": [
-        "sync",
-        "firestore",
-        "character",
-        "collaboration"
-      ],
+      "tags": ["sync", "firestore", "character", "collaboration"],
       "complexity": "complex"
     },
     {
@@ -106,16 +65,9 @@
       "type": "function",
       "name": "bulkUpsertFromLocal",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        494,
-        511
-      ],
+      "lineRange": [494, 511],
       "summary": "Виконує пакетний upsert кількох локальних персонажів у Firestore послідовно чи батчами.",
-      "tags": [
-        "sync",
-        "firestore",
-        "character"
-      ],
+      "tags": ["sync", "firestore", "character"],
       "complexity": "moderate"
     },
     {
@@ -123,18 +75,9 @@
       "type": "function",
       "name": "subscribeCharacterSheet",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        513,
-        535
-      ],
+      "lineRange": [513, 535],
       "summary": "Підписується на зміни конкретного аркуша персонажа в реальному часі через Firestore `onSnapshot`.",
-      "tags": [
-        "sync",
-        "firestore",
-        "realtime",
-        "character",
-        "collaboration"
-      ],
+      "tags": ["sync", "firestore", "realtime", "character", "collaboration"],
       "complexity": "moderate"
     },
     {
@@ -142,16 +85,9 @@
       "type": "function",
       "name": "updateCharacterSheet",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        537,
-        542
-      ],
+      "lineRange": [537, 542],
       "summary": "Оновлює аркуш персонажа в Firestore точковим `update()`.",
-      "tags": [
-        "sync",
-        "firestore",
-        "character"
-      ],
+      "tags": ["sync", "firestore", "character"],
       "complexity": "simple"
     },
     {
@@ -159,15 +95,9 @@
       "type": "function",
       "name": "deleteCharacterSheet",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        544,
-        546
-      ],
+      "lineRange": [544, 546],
       "summary": "Видаляє документ аркуша персонажа з Firestore.",
-      "tags": [
-        "firestore",
-        "character"
-      ],
+      "tags": ["firestore", "character"],
       "complexity": "simple"
     },
     {
@@ -175,17 +105,9 @@
       "type": "function",
       "name": "addEditorByEmail",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        558,
-        576
-      ],
+      "lineRange": [558, 576],
       "summary": "Додає редактора до аркуша персонажа за email, оновлюючи масив `editors` окремою операцією.",
-      "tags": [
-        "collaboration",
-        "ownership",
-        "firestore",
-        "character"
-      ],
+      "tags": ["collaboration", "ownership", "firestore", "character"],
       "complexity": "moderate"
     },
     {
@@ -193,17 +115,9 @@
       "type": "function",
       "name": "removeEditor",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        578,
-        590
-      ],
+      "lineRange": [578, 590],
       "summary": "Прибирає редактора з аркуша персонажа за uid.",
-      "tags": [
-        "collaboration",
-        "ownership",
-        "firestore",
-        "character"
-      ],
+      "tags": ["collaboration", "ownership", "firestore", "character"],
       "complexity": "moderate"
     },
     {
@@ -211,17 +125,9 @@
       "type": "function",
       "name": "transferOwnership",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        599,
-        625
-      ],
+      "lineRange": [599, 625],
       "summary": "Передає право власності (ownership) на аркуш персонажа новому користувачу, наприклад під час видалення акаунта попереднього власника.",
-      "tags": [
-        "collaboration",
-        "ownership",
-        "firestore",
-        "character"
-      ],
+      "tags": ["collaboration", "ownership", "firestore", "character"],
       "complexity": "moderate"
     },
     {
@@ -229,15 +135,9 @@
       "type": "function",
       "name": "saveCharacterSheetAsNew",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        627,
-        639
-      ],
+      "lineRange": [627, 639],
       "summary": "Зберігає персонажа як новий документ у Firestore (наприклад, для дублювання аркуша).",
-      "tags": [
-        "firestore",
-        "character"
-      ],
+      "tags": ["firestore", "character"],
       "complexity": "moderate"
     },
     {
@@ -245,17 +145,9 @@
       "type": "function",
       "name": "subscribeMySheets",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        643,
-        663
-      ],
+      "lineRange": [643, 663],
       "summary": "Підписується на всі аркуші персонажів, де поточний користувач є власником.",
-      "tags": [
-        "sync",
-        "firestore",
-        "realtime",
-        "character"
-      ],
+      "tags": ["sync", "firestore", "realtime", "character"],
       "complexity": "moderate"
     },
     {
@@ -263,18 +155,9 @@
       "type": "function",
       "name": "subscribeSharedWithMe",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        665,
-        685
-      ],
+      "lineRange": [665, 685],
       "summary": "Підписується на всі аркуші персонажів, де поточний користувач є редактором (спільний доступ).",
-      "tags": [
-        "sync",
-        "firestore",
-        "realtime",
-        "character",
-        "collaboration"
-      ],
+      "tags": ["sync", "firestore", "realtime", "character", "collaboration"],
       "complexity": "moderate"
     },
     {
@@ -282,15 +165,9 @@
       "type": "function",
       "name": "fetchCharacterSheet",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        687,
-        696
-      ],
+      "lineRange": [687, 696],
       "summary": "Одноразово завантажує документ аркуша персонажа з Firestore за id.",
-      "tags": [
-        "firestore",
-        "character"
-      ],
+      "tags": ["firestore", "character"],
       "complexity": "simple"
     },
     {
@@ -298,15 +175,9 @@
       "type": "function",
       "name": "autosaveCharacter",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        698,
-        700
-      ],
+      "lineRange": [698, 700],
       "summary": "Тонка обгортка над upsert для автозбереження персонажа в хмару.",
-      "tags": [
-        "sync",
-        "character"
-      ],
+      "tags": ["sync", "character"],
       "complexity": "simple"
     },
     {
@@ -314,16 +185,9 @@
       "type": "function",
       "name": "getEditorsForSheet",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        710,
-        735
-      ],
+      "lineRange": [710, 735],
       "summary": "Завантажує дані користувачів-редакторів аркуша персонажа за списком uid, розбиваючи запит на чанки для обмежень Firestore.",
-      "tags": [
-        "firestore",
-        "collaboration",
-        "character"
-      ],
+      "tags": ["firestore", "collaboration", "character"],
       "complexity": "moderate"
     },
     {
@@ -331,15 +195,9 @@
       "type": "function",
       "name": "upsertFromLocal",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        737,
-        739
-      ],
+      "lineRange": [737, 739],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `upsertCharacterSheetFromLocal`.",
-      "tags": [
-        "facade",
-        "character"
-      ],
+      "tags": ["facade", "character"],
       "complexity": "simple"
     },
     {
@@ -347,15 +205,9 @@
       "type": "function",
       "name": "fetchById",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        741,
-        743
-      ],
+      "lineRange": [741, 743],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `fetchCharacterSheet`.",
-      "tags": [
-        "facade",
-        "character"
-      ],
+      "tags": ["facade", "character"],
       "complexity": "simple"
     },
     {
@@ -363,15 +215,9 @@
       "type": "function",
       "name": "subscribeById",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        745,
-        747
-      ],
+      "lineRange": [745, 747],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `subscribeCharacterSheet`.",
-      "tags": [
-        "facade",
-        "character"
-      ],
+      "tags": ["facade", "character"],
       "complexity": "simple"
     },
     {
@@ -379,15 +225,9 @@
       "type": "function",
       "name": "subscribeMine",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        749,
-        751
-      ],
+      "lineRange": [749, 751],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `subscribeMySheets`.",
-      "tags": [
-        "facade",
-        "character"
-      ],
+      "tags": ["facade", "character"],
       "complexity": "simple"
     },
     {
@@ -395,16 +235,9 @@
       "type": "function",
       "name": "subscribeShared",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        753,
-        755
-      ],
+      "lineRange": [753, 755],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `subscribeSharedWithMe`.",
-      "tags": [
-        "facade",
-        "character",
-        "collaboration"
-      ],
+      "tags": ["facade", "character", "collaboration"],
       "complexity": "simple"
     },
     {
@@ -412,15 +245,9 @@
       "type": "function",
       "name": "updateById",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        757,
-        759
-      ],
+      "lineRange": [757, 759],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `updateCharacterSheet`.",
-      "tags": [
-        "facade",
-        "character"
-      ],
+      "tags": ["facade", "character"],
       "complexity": "simple"
     },
     {
@@ -428,15 +255,9 @@
       "type": "function",
       "name": "deleteById",
       "filePath": "src/repositories/characterCloudRepository.ts",
-      "lineRange": [
-        761,
-        763
-      ],
+      "lineRange": [761, 763],
       "summary": "Публічний метод фасаду репозиторію, що делегує до `deleteCharacterSheet`.",
-      "tags": [
-        "facade",
-        "character"
-      ],
+      "tags": ["facade", "character"],
       "complexity": "simple"
     }
   ],

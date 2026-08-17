@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { DiceRollerPanel, type DiceRollerPreset } from '@/screens/DiceRoller/DiceRoller';
 import { Modal } from '@/shared/components/Modal/Modal';
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
+import { getLocalizedSpellFields } from '@/domain/srd/localization';
 import type { DiceRollResult } from '@/shared/services/diceRoller';
 import type { CharacterActionsReadyState } from '../hooks/useCharacterActions';
 
@@ -155,7 +156,7 @@ function CharacterModalsBase({
   diceSides,
   applyShortRestRolls,
 }: CharacterModalsProps) {
-  const { t } = useTranslation('character');
+  const { t, i18n } = useTranslation('character');
   const [contextRollScrollSignal, setContextRollScrollSignal] = React.useState(0);
   const [restRollScrollSignal, setRestRollScrollSignal] = React.useState(0);
 
@@ -180,11 +181,12 @@ function CharacterModalsBase({
         android_ripple={{ color: colors.ripple }}
       >
         <Text style={styles.secondaryActionText}>
-          {item.name} • {item.level === 0 ? t('modals.spell.cantrip') : t('modals.spell.level', { level: item.level })}
+          {getLocalizedSpellFields(item, i18n.language).name} •{' '}
+          {item.level === 0 ? t('modals.spell.cantrip') : t('modals.spell.level', { level: item.level })}
         </Text>
       </Pressable>
     ),
-    [colors.ripple, pickExistingSpellForQuickAdd, styles.secondaryAction, styles.secondaryActionText],
+    [colors.ripple, i18n.language, pickExistingSpellForQuickAdd, styles.secondaryAction, styles.secondaryActionText],
   );
 
   const contextRollModalTitle = React.useMemo(() => {
@@ -493,7 +495,7 @@ function CharacterModalsBase({
             scrollEnabled={false}
           />
         ) : (
-          <Text style={styles.blockTextMuted}>{t('modals.spell.empty')}</Text>
+          <Text style={styles.blockTextMuted}>{quickSpellSearch.trim() ? t('modals.spell.empty') : t('modals.spell.searchHint')}</Text>
         )}
 
         <Text style={styles.modalLabel}>{t('modals.spell.name')}</Text>

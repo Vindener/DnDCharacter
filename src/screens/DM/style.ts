@@ -136,5 +136,3 @@ export const getStyles = (c: ThemeColors) =>
       marginBottom: sp(8),
     },
   });
-
-

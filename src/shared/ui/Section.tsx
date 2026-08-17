@@ -16,8 +16,16 @@ export const Section: React.FC<SectionProps> = ({ title, subtitle, action, style
       {(title || subtitle || action) && (
         <View style={styles.header}>
           <View style={styles.headTextWrap}>
-            {title ? <Text variant='title' weight='bold'>{title}</Text> : null}
-            {subtitle ? <Text variant='bodySm' tone='secondary'>{subtitle}</Text> : null}
+            {title ? (
+              <Text variant='title' weight='bold'>
+                {title}
+              </Text>
+            ) : null}
+            {subtitle ? (
+              <Text variant='bodySm' tone='secondary'>
+                {subtitle}
+              </Text>
+            ) : null}
           </View>
           {action ? <View>{action}</View> : null}
         </View>
@@ -47,4 +55,3 @@ const styles = StyleSheet.create({
 });
 
 export default Section;
-

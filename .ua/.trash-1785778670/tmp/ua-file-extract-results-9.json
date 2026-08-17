@@ -25,9 +25,7 @@
           "name": "ShareCharacterSheetModal",
           "startLine": 15,
           "endLine": 198,
-          "params": [
-            "{ visible, onClose, sheetId }"
-          ]
+          "params": ["{ visible, onClose, sheetId }"]
         }
       ],
       "exports": [
@@ -415,9 +413,7 @@
           "name": "renderBadge",
           "startLine": 35,
           "endLine": 41,
-          "params": [
-            "source"
-          ]
+          "params": ["source"]
         }
       ],
       "callGraph": [
@@ -455,18 +451,13 @@
           "name": "getCharacterSourceBadgeLabel",
           "startLine": 17,
           "endLine": 27,
-          "params": [
-            "source",
-            "t"
-          ]
+          "params": ["source", "t"]
         },
         {
           "name": "CharacterSourceBadge",
           "startLine": 29,
           "endLine": 39,
-          "params": [
-            "{ source, id, styles }"
-          ]
+          "params": ["{ source, id, styles }"]
         }
       ],
       "exports": [
@@ -1115,11 +1106,7 @@
           "name": "buildUnifiedPartyList",
           "startLine": 12,
           "endLine": 34,
-          "params": [
-            "localCharacters",
-            "mySheets",
-            "sharedSheets"
-          ]
+          "params": ["localCharacters", "mySheets", "sharedSheets"]
         }
       ],
       "exports": [
@@ -1695,9 +1682,7 @@
           "name": "deleteCharacterCopies",
           "startLine": 8,
           "endLine": 19,
-          "params": [
-            "{\n  characterId,\n  deleteCloud,\n  deleteCloudCopy,\n  deleteLocalCopy,\n}"
-          ]
+          "params": ["{\n  characterId,\n  deleteCloud,\n  deleteCloudCopy,\n  deleteLocalCopy,\n}"]
         }
       ],
       "exports": [
@@ -1737,9 +1722,7 @@
           "name": "CharacterCard",
           "startLine": 20,
           "endLine": 74,
-          "params": [
-            "{ character }"
-          ]
+          "params": ["{ character }"]
         }
       ],
       "exports": [
@@ -1874,9 +1857,7 @@
           "name": "errorCodeOrMessage",
           "startLine": 26,
           "endLine": 33,
-          "params": [
-            "error"
-          ]
+          "params": ["error"]
         },
         {
           "name": "CharacterMenu",
@@ -3290,9 +3271,7 @@
           "name": "CharacterStats",
           "startLine": 26,
           "endLine": 64,
-          "params": [
-            "{ character }"
-          ]
+          "params": ["{ character }"]
         }
       ],
       "callGraph": [
@@ -3400,9 +3379,7 @@
           "name": "AttributesItem",
           "startLine": 17,
           "endLine": 66,
-          "params": [
-            "{ label, value, statKey, onChange }"
-          ]
+          "params": ["{ label, value, statKey, onChange }"]
         }
       ],
       "exports": [
@@ -3582,9 +3559,7 @@
           "name": "Attributes",
           "startLine": 15,
           "endLine": 33,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -3637,9 +3612,7 @@
           "name": "BackStory",
           "startLine": 14,
           "endLine": 62,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -3752,17 +3725,13 @@
           "name": "clampToNonNegativeInt",
           "startLine": 15,
           "endLine": 18,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "Coins",
           "startLine": 20,
           "endLine": 161,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -4120,9 +4089,7 @@
           "name": "Combat",
           "startLine": 22,
           "endLine": 172,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [

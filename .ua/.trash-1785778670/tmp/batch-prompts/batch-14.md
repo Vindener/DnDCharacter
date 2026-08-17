@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-14.json` (single-file mode) OR `batch-14-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "App.tsx": [
@@ -44,9 +45,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
   "src/data/srd/metadata.ts": [],
   "src/repositories/firstLaunchRepository.ts": [],
   "src/repositories/whatsNewRepository.ts": [],
-  "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx": [
-    "src/shared/components/ErrorBoundary/ErrorBoundary.tsx"
-  ],
+  "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx": ["src/shared/components/ErrorBoundary/ErrorBoundary.tsx"],
   "src/shared/components/ErrorBoundary/ErrorBoundary.tsx": [
     "src/context/Theme-store.ts",
     "src/i18n/index.ts",
@@ -61,37 +60,30 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/components/Modal/Modal.tsx",
     "src/shared/ui/index.ts"
   ],
-  "src/shared/components/FirstLaunchModals/style.ts": [
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/shared/components/FirstLaunchModals/style.ts": ["src/shared/styles/tokens.ts"],
   "src/shared/components/WhatsNewModal/WhatsNewModal.tsx": [
     "src/repositories/whatsNewRepository.ts",
     "src/shared/components/Modal/Modal.tsx",
     "src/shared/components/WhatsNewModal/style.ts",
     "src/shared/ui/index.ts"
   ],
-  "src/shared/components/WhatsNewModal/style.ts": [
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/shared/components/WhatsNewModal/style.ts": ["src/shared/styles/tokens.ts"],
   "src/shared/services/auth/auth.tsx": [],
-  "src/shared/services/telemetry/startupTrace.test.ts": [
-    "src/shared/services/telemetry/startupTrace.ts"
-  ],
+  "src/shared/services/telemetry/startupTrace.test.ts": ["src/shared/services/telemetry/startupTrace.ts"],
   "src/shared/services/telemetry/startupTrace.ts": [],
   "src/shared/ui/index.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "App.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/i18n/index.ts",
@@ -109,9 +101,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/AppNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "AppNavigator"
-      ]
+      "symbols": ["AppNavigator"]
     }
   ],
   "index.js": [
@@ -262,9 +252,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/i18n/index.ts",
@@ -282,76 +270,45 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/ErrorBoundary/style.ts",
       "batchIndex": 8,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/services/telemetry/productTelemetry.ts",
       "batchIndex": 3,
-      "symbols": [
-        "setAnalyticsConsent",
-        "isAnalyticsConsentEnabled",
-        "trackProductEvent",
-        "getProductEvents"
-      ]
+      "symbols": ["setAnalyticsConsent", "isAnalyticsConsentEnabled", "trackProductEvent", "getProductEvents"]
     }
   ],
   "src/shared/components/FirstLaunchModals/FirstLaunchModals.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     }
   ],
   "src/shared/components/FirstLaunchModals/style.ts": [
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/shared/components/WhatsNewModal/WhatsNewModal.tsx": [
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     }
   ],
   "src/shared/components/WhatsNewModal/style.ts": [
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/shared/services/auth/auth.tsx": [
@@ -375,9 +332,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     },
     {
       "path": "src/shared/components/TextInput/TextInput.tsx",
@@ -389,6 +344,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `App.tsx` (110 lines, language: `typescript`, fileCategory: `code`)
 2. `index.js` (39 lines, language: `javascript`, fileCategory: `code`)
 3. `src/data/srd/index.ts` (45 lines, language: `typescript`, fileCategory: `code`)

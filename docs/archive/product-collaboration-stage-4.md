@@ -19,6 +19,7 @@ Move cloud/shared from a background technical feature to a visible product advan
 ## Scope Delivered
 
 1. Unified status semantics:
+
 - `Sync status` shown as one of:
   - `Local only`
   - `Synced`
@@ -31,29 +32,34 @@ Move cloud/shared from a background technical feature to a visible product advan
 - same terminology across `Home`, `Character`, `GM Home`, `GM Shared Updates`.
 
 2. Sync visibility and controls:
+
 - sync indicator and transport feedback in Character header;
 - `Sync now` action in Character and GM Shared Updates;
 - auto-sync feedback states (`syncing/uploading/downloading/synced/error`);
 - NetInfo-based offline detection with pending queue messaging.
 
 3. Conflict policy:
+
 - section-based conflict detection (`overview`, `combat`, `magic`, `inventory`, `notes`, `homebrew`);
 - auto-merge path for non-overlapping sections;
 - conflict prompt for same-section overlap;
 - no silent overwrite path for session-critical counters.
 
 4. Change source marker + light revision history:
+
 - shared history entries now carry attribution (`GM|Player`) and compact path summary;
 - Character shows tab-level marker and compact history;
 - GM Shared Updates shows light timeline rows with source marker and summary.
 
 5. Copy semantics:
+
 - `Local copy` (detached local clone);
 - `Shared live copy` (open/edit shared sheet directly);
 - `Duplicate from shared` (new independent copy from shared payload);
 - actions exposed explicitly from Character menu and GM Shared Updates queue.
 
 6. Onboarding:
+
 - Create Character storage step now explains `Local`, `Cloud`, `Shared`;
 - Review step includes collaboration consequences and sync behavior hints.
 

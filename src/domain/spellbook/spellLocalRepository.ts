@@ -26,7 +26,11 @@ function sortSpells(spells: SpellbookSpell[]): SpellbookSpell[] {
 }
 
 function buildSeedSpells(): SpellbookSpell[] {
-  return sortSpells(getSrdSpells().map(srdSpellToSpellbookSpell).filter((spell) => Boolean(spell.name)));
+  return sortSpells(
+    getSrdSpells()
+      .map(srdSpellToSpellbookSpell)
+      .filter((spell) => Boolean(spell.name)),
+  );
 }
 
 function mergeStoredWithSeed(stored: SpellbookSpell[], seed: SpellbookSpell[]): SpellbookSpell[] {
@@ -52,9 +56,11 @@ function buildLegacyIdMap(stored: SpellbookSpell[], spells: SpellbookSpell[]): M
 }
 
 function remapKnownIds(rawIds: string[], knownIds: Set<string>, legacyIdMap: Map<string, string>): string[] {
-  return Array.from(new Set(rawIds
-    .map((id) => (knownIds.has(id) ? id : legacyIdMap.get(id)))
-    .filter((id): id is string => Boolean(id) && knownIds.has(id))));
+  return Array.from(
+    new Set(
+      rawIds.map((id) => (knownIds.has(id) ? id : legacyIdMap.get(id))).filter((id): id is string => Boolean(id) && knownIds.has(id)),
+    ),
+  );
 }
 
 async function saveSpells(spells: SpellbookSpell[]): Promise<void> {
@@ -67,10 +73,7 @@ async function saveSpells(spells: SpellbookSpell[]): Promise<void> {
 
 async function saveFavoriteSpellIds(favoriteSpellIds: string[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(
-      FAVORITES_STORAGE_KEY,
-      JSON.stringify(createStorageEnvelope('spellbookFavorites', favoriteSpellIds)),
-    );
+    await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('spellbookFavorites', favoriteSpellIds)));
   } catch (_error) {
     /* intentionally ignored */
   }
@@ -78,10 +81,7 @@ async function saveFavoriteSpellIds(favoriteSpellIds: string[]): Promise<void> {
 
 async function savePinnedSpellIds(pinnedSpellIds: string[]): Promise<void> {
   try {
-    await AsyncStorage.setItem(
-      PINS_STORAGE_KEY,
-      JSON.stringify(createStorageEnvelope('spellbookPins', pinnedSpellIds)),
-    );
+    await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('spellbookPins', pinnedSpellIds)));
   } catch (_error) {
     /* intentionally ignored */
   }
@@ -89,10 +89,7 @@ async function savePinnedSpellIds(pinnedSpellIds: string[]): Promise<void> {
 
 async function saveSpellNotesById(spellNotesById: Record<string, string>): Promise<void> {
   try {
-    await AsyncStorage.setItem(
-      NOTES_STORAGE_KEY,
-      JSON.stringify(createStorageEnvelope('spellbookNotes', spellNotesById)),
-    );
+    await AsyncStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('spellbookNotes', spellNotesById)));
   } catch (_error) {
     /* intentionally ignored */
   }
@@ -136,28 +133,21 @@ async function loadSpellbookState(): Promise<SpellbookState> {
     const spellNotesById = Object.fromEntries(
       Object.entries(rawNotesById)
         .map(([id, value]) => [knownIds.has(id) ? id : legacyIdMap.get(id), value] as const)
-        .filter((entry): entry is readonly [string, unknown] => Boolean(entry[0]) && knownIds.has(entry[0]) && Boolean(String(entry[1] || '').trim()))
+        .filter(
+          (entry): entry is readonly [string, unknown] =>
+            Boolean(entry[0]) && knownIds.has(entry[0]) && Boolean(String(entry[1] || '').trim()),
+        )
         .map(([id, value]) => [id, String(value).trim()]),
     );
 
     const shouldPersistSpells =
-      spellsEnvelope.usedLegacyFormat ||
-      spellsEnvelope.migrated ||
-      !normalizedSpells.length ||
-      spells.length !== normalizedSpells.length;
+      spellsEnvelope.usedLegacyFormat || spellsEnvelope.migrated || !normalizedSpells.length || spells.length !== normalizedSpells.length;
 
     const shouldPersistFavorites =
-      favoriteEnvelope.usedLegacyFormat ||
-      favoriteEnvelope.migrated ||
-      favoriteSpellIds.length !== rawFavoriteIds.length;
-    const shouldPersistPins =
-      pinsEnvelope.usedLegacyFormat ||
-      pinsEnvelope.migrated ||
-      pinnedSpellIds.length !== rawPinnedIds.length;
+      favoriteEnvelope.usedLegacyFormat || favoriteEnvelope.migrated || favoriteSpellIds.length !== rawFavoriteIds.length;
+    const shouldPersistPins = pinsEnvelope.usedLegacyFormat || pinsEnvelope.migrated || pinnedSpellIds.length !== rawPinnedIds.length;
     const shouldPersistNotes =
-      notesEnvelope.usedLegacyFormat ||
-      notesEnvelope.migrated ||
-      Object.keys(spellNotesById).length !== Object.keys(rawNotesById).length;
+      notesEnvelope.usedLegacyFormat || notesEnvelope.migrated || Object.keys(spellNotesById).length !== Object.keys(rawNotesById).length;
 
     if (shouldPersistSpells) {
       await saveSpells(spells);

@@ -90,11 +90,15 @@ export const srdClassSchema = srdBaseSchema.extend({
 
 export const srdClassProgressionSchema = srdBaseSchema.omit({ name: true }).extend({
   classId: z.string().min(1),
-  levels: z.array(z.object({
-    level: z.number().int().min(1).max(20),
-    proficiencyBonus: z.number().int().min(2).max(6),
-    features: z.array(z.string()),
-  })).length(20),
+  levels: z
+    .array(
+      z.object({
+        level: z.number().int().min(1).max(20),
+        proficiencyBonus: z.number().int().min(2).max(6),
+        features: z.array(z.string()),
+      }),
+    )
+    .length(20),
 }) satisfies z.ZodType<SrdClassProgression>;
 
 export const srdEquipmentItemSchema = srdBaseSchema.extend({
@@ -162,10 +166,12 @@ export const srdReferenceEntrySchema = srdBaseSchema.omit({ name: true }).extend
   category: z.string().min(1),
   title: z.string().min(1),
   summary: z.string(),
-  entries: z.array(z.object({
-    title: z.string().min(1),
-    body: z.string(),
-  })),
+  entries: z.array(
+    z.object({
+      title: z.string().min(1),
+      body: z.string(),
+    }),
+  ),
 }) satisfies z.ZodType<SrdReferenceEntry>;
 
 export const srdSkillSchema = srdBaseSchema.extend({

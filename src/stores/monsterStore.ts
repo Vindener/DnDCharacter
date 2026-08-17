@@ -56,7 +56,9 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
       const validFavorites = existingFavorites.filter((id) => newMonsters.some((monster) => monster.id === id));
       await persistMonstersState(newMonsters, validPins, validFavorites);
       set({ monsters: newMonsters, pinnedMonsterIds: validPins, favoriteMonsterIds: validFavorites });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 
   addMonster: async (monster) => {
@@ -89,31 +91,33 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
 
   togglePinnedMonster: async (id) => {
     const currentPins = get().pinnedMonsterIds;
-    const nextPins = currentPins.includes(id)
-      ? currentPins.filter((itemId) => itemId !== id)
-      : [...currentPins, id];
+    const nextPins = currentPins.includes(id) ? currentPins.filter((itemId) => itemId !== id) : [...currentPins, id];
     try {
       await persistPinnedMonsterIds(nextPins);
       set({ pinnedMonsterIds: nextPins });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 
   toggleFavoriteMonster: async (id) => {
     const currentFavorites = get().favoriteMonsterIds;
-    const nextFavorites = currentFavorites.includes(id)
-      ? currentFavorites.filter((itemId) => itemId !== id)
-      : [id, ...currentFavorites];
+    const nextFavorites = currentFavorites.includes(id) ? currentFavorites.filter((itemId) => itemId !== id) : [id, ...currentFavorites];
     try {
       await persistFavoriteMonsterIds(nextFavorites);
       set({ favoriteMonsterIds: nextFavorites });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 
   clearPinnedMonsters: async () => {
     try {
       await persistPinnedMonsterIds([]);
       set({ pinnedMonsterIds: [] });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 }));
 

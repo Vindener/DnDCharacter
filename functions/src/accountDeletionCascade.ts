@@ -20,11 +20,7 @@ export type CascadeAction =
  * transfer ownership; one of several owners -> drop from owners; editor only ->
  * drop from editors.
  */
-export function decideCascadeAction(
-  doc: CascadeOwnershipDoc,
-  myUid: string,
-  chosenNewOwnerUid?: string,
-): CascadeAction {
+export function decideCascadeAction(doc: CascadeOwnershipDoc, myUid: string, chosenNewOwnerUid?: string): CascadeAction {
   const owners = doc.owners || [];
   const editors = doc.editors || [];
   const isOwner = owners.includes(myUid) || doc.ownerUid === myUid;

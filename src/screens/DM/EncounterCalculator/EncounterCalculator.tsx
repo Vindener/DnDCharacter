@@ -15,14 +15,14 @@ import { getLocalizedMonster } from '@/domain/srd/localization';
 
 interface PlayerGroup {
   id: string;
-  level: string; 
+  level: string;
   count: string;
 }
 
 interface MonsterGroup {
   id: string;
   name: string;
-  cr: string; 
+  cr: string;
   count: string;
 }
 
@@ -30,10 +30,10 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 const DIFFICULTY_KEYS: Record<string, string> = {
   'Немає даних': 'none',
   'Дуже легко': 'trivial',
-  'Легко': 'easy',
-  'Середньо': 'medium',
-  'Складно': 'hard',
-  'Смертельно': 'deadly',
+  Легко: 'easy',
+  Середньо: 'medium',
+  Складно: 'hard',
+  Смертельно: 'deadly',
 };
 
 const EncounterCalculator: React.FC = () => {
@@ -66,8 +66,7 @@ const EncounterCalculator: React.FC = () => {
 
   const addPlayer = () => setPlayers((p) => [...p, { id: uid(), level: '1', count: '1' }]);
   const removePlayer = (id: string) => setPlayers((p) => p.filter((x) => x.id != id));
-  const updatePlayer = (id: string, patch: Partial<PlayerGroup>) =>
-    setPlayers((p) => p.map((x) => (x.id === id ? { ...x, ...patch } : x)));
+  const updatePlayer = (id: string, patch: Partial<PlayerGroup>) => setPlayers((p) => p.map((x) => (x.id === id ? { ...x, ...patch } : x)));
 
   const addMonster = () => setMonsters((m) => [...m, { id: uid(), name: '', cr: '1/8', count: '1' }]);
   const removeMonster = (id: string) => setMonsters((m) => m.filter((x) => x.id != id));
@@ -218,7 +217,9 @@ const EncounterCalculator: React.FC = () => {
                 style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: sp(10) }}
               >
                 <Ionicons name='person-outline' size={18} color={colors.textSecondary} />
-                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{hero.name || t('dm:encounterCalculator.unnamedHero')}</Text>
+                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>
+                  {hero.name || t('dm:encounterCalculator.unnamedHero')}
+                </Text>
                 <Text style={{ marginLeft: sp(8), color: colors.textSecondary, fontSize: fs(14) }}>
                   {hero.class || '???'} · {t('dm:encounterCalculator.heroLevel', { level: hero.level || '?' })}
                 </Text>
@@ -240,7 +241,9 @@ const EncounterCalculator: React.FC = () => {
                 style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: sp(10) }}
               >
                 <Ionicons name='skull-outline' size={18} color={colors.textSecondary} />
-                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>{mon.name || t('dm:encounterCalculator.unnamedMonster')}</Text>
+                <Text style={{ marginLeft: sp(8), color: colors.text, fontSize: fs(16) }}>
+                  {mon.name || t('dm:encounterCalculator.unnamedMonster')}
+                </Text>
                 {!!mon.challenge && (
                   <Text style={{ marginLeft: sp(8), color: colors.textSecondary, fontSize: fs(14) }}>CR {mon.challenge}</Text>
                 )}
@@ -254,15 +257,3 @@ const EncounterCalculator: React.FC = () => {
 };
 
 export default EncounterCalculator;
-
-
-
-
-
-
-
-
-
-
-
-

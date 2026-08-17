@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import MultiTextInput  from '@/shared/components/TextInput/MultiTextInput';
+import MultiTextInput from '@/shared/components/TextInput/MultiTextInput';
 import { getStyles } from '@/shared/components/CharacterStats/Tabs/style';
 import useThemeStore from '@/context/Theme-store';
 import { CharacterViewModel } from '@/types/Character';

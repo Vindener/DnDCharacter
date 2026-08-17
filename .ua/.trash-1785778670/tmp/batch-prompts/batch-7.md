@@ -7,135 +7,65 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-7.json` (single-file mode) OR `batch-7-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
-  "src/modules/Header/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/Bestiary/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/modules/Header/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/Bestiary/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
   "src/screens/Character/components/QuickActionBar.test.tsx": [
     "src/screens/Character/components/QuickActionBar.tsx",
     "src/shared/styles/theme.ts"
   ],
-  "src/screens/Character/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/CreateCharacter/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/DM/DMSharedUpdates.style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/DM/EncounterCalculator/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/DM/LootGenerator/LootGenerator.tsx": [
-    "src/context/Theme-store.ts",
-    "src/screens/DM/LootGenerator/style.ts"
-  ],
-  "src/screens/DM/LootGenerator/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/Dice/styles.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/DiceRoller/styles.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/Home/styles.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/Initiative/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/screens/Character/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/CreateCharacter/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/DM/DMSharedUpdates.style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/DM/EncounterCalculator/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/DM/LootGenerator/LootGenerator.tsx": ["src/context/Theme-store.ts", "src/screens/DM/LootGenerator/style.ts"],
+  "src/screens/DM/LootGenerator/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/Dice/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/DiceRoller/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/Home/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/Initiative/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
   "src/screens/LegalLicenses/LegalLicenses.tsx": [
     "src/context/Theme-store.ts",
     "src/shared/styles/theme.ts",
     "src/shared/styles/tokens.ts",
     "src/shared/ui/index.ts"
   ],
-  "src/screens/Monster/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/References/styles.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/screens/Spellbook/styles.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/screens/Monster/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/References/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/screens/Spellbook/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
   "src/services/storeEffects/uiStoreEffects.ts": [
     "src/shared/services/telemetry/productTelemetry.ts",
     "src/shared/styles/theme.ts",
     "src/stores/uiStore.ts"
   ],
-  "src/shared/components/CharacterCard/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/CharacterMenu/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/CharacterOverview/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
+  "src/shared/components/CharacterCard/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/CharacterMenu/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/CharacterOverview/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
   "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts": [
     "src/shared/styles/theme.ts",
     "src/shared/styles/tokens.ts"
   ],
-  "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/CharacterStats/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ]
+  "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/CharacterStats/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"]
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/modules/Header/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/modules/Header/Header.tsx",
@@ -147,24 +77,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Bestiary/Bestiary.tsx",
@@ -176,72 +94,41 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/components/QuickActionBar.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "QuickActionBar"
-      ]
+      "symbols": ["QuickActionBar"]
     },
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     }
   ],
   "src/screens/Character/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/screens/CreateCharacter/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -253,24 +140,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/DM/DMSharedUpdates.tsx",
@@ -282,24 +157,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/DM/EncounterCalculator/EncounterCalculator.tsx",
@@ -311,64 +174,36 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     }
   ],
   "src/screens/DM/LootGenerator/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/screens/Dice/styles.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Dice/Dice.tsx",
@@ -380,55 +215,29 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/DiceRoller/DiceRoller.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "DiceRollerPanel"
-      ]
+      "symbols": ["DiceRollerPanel"]
     }
   ],
   "src/screens/Home/styles.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Home/Home.tsx",
@@ -440,24 +249,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Initiative/CampaignInitiativeBoard.tsx",
@@ -474,31 +271,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/ui/index.ts",
@@ -545,95 +328,53 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     }
   ],
   "src/screens/Monster/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Monster/Monster.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "Monster"
-      ]
+      "symbols": ["Monster"]
     }
   ],
   "src/screens/References/styles.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/References/References.tsx",
       "batchIndex": 10,
-      "symbols": [
-        "References"
-      ]
+      "symbols": ["References"]
     }
   ],
   "src/screens/Spellbook/styles.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/screens/Spellbook/Spellbook.tsx",
@@ -645,20 +386,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/services/telemetry/productTelemetry.ts",
       "batchIndex": 3,
-      "symbols": [
-        "setAnalyticsConsent",
-        "isAnalyticsConsentEnabled",
-        "trackProductEvent",
-        "getProductEvents"
-      ]
+      "symbols": ["setAnalyticsConsent", "isAnalyticsConsentEnabled", "trackProductEvent", "getProductEvents"]
     },
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/stores/uiStore.ts",
@@ -670,55 +403,29 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterCard/CharacterCard.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "CharacterCard"
-      ]
+      "symbols": ["CharacterCard"]
     }
   ],
   "src/shared/components/CharacterMenu/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
@@ -730,24 +437,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterOverview/CharacterOverview.tsx",
@@ -759,86 +454,46 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "AttributesItem"
-      ]
+      "symbols": ["AttributesItem"]
     }
   ],
   "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "SkillItem"
-      ]
+      "symbols": ["SkillItem"]
     }
   ],
   "src/shared/components/CharacterStats/style.ts": [
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
@@ -850,6 +505,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/modules/Header/style.ts` (50 lines, language: `typescript`, fileCategory: `code`)
 2. `src/screens/Bestiary/style.ts` (244 lines, language: `typescript`, fileCategory: `code`)
 3. `src/screens/Character/components/QuickActionBar.test.tsx` (73 lines, language: `typescript`, fileCategory: `code`)

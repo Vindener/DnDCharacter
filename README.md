@@ -5,6 +5,7 @@
 Current release plan: [docs/release-plan-google-play.md](docs/release-plan-google-play.md).
 
 Historical design docs (archived 2026-08-12, superseded by the code they describe):
+
 - [Stage 1: Product Foundation / UX Foundation](docs/archive/product-foundation-stage-1.md)
 - [Stage 2: Redesign Character Experience](docs/archive/product-redesign-stage-2.md)
 - [Stage 4: Collaboration & Sync Workflow](docs/archive/product-collaboration-stage-4.md)

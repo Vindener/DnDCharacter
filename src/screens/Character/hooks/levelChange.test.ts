@@ -1,11 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  applyLevelChange,
-  buildNextHitDice,
-  MAX_CHARACTER_LEVEL,
-  MIN_CHARACTER_LEVEL,
-  type LevelChangeDraftValues,
-} from './levelChange';
+import { applyLevelChange, buildNextHitDice, MAX_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, type LevelChangeDraftValues } from './levelChange';
 
 const baseDraft: LevelChangeDraftValues = {
   stats: {
@@ -27,27 +21,15 @@ const baseDraft: LevelChangeDraftValues = {
 
 describe('levelChange helpers', () => {
   it('clamps target level into 1..20 range', () => {
-    const low = applyLevelChange(
-      { level: 3, experience: 999, hitDice: '3d8', hpTemp: 0 },
-      -5,
-      baseDraft,
-    );
-    const high = applyLevelChange(
-      { level: 3, experience: 999, hitDice: '3d8', hpTemp: 0 },
-      999,
-      baseDraft,
-    );
+    const low = applyLevelChange({ level: 3, experience: 999, hitDice: '3d8', hpTemp: 0 }, -5, baseDraft);
+    const high = applyLevelChange({ level: 3, experience: 999, hitDice: '3d8', hpTemp: 0 }, 999, baseDraft);
 
     expect(low.level).toBe(MIN_CHARACTER_LEVEL);
     expect(high.level).toBe(MAX_CHARACTER_LEVEL);
   });
 
   it('keeps XP unchanged on level transitions', () => {
-    const next = applyLevelChange(
-      { level: 5, experience: 12345, hitDice: '5d10', hpTemp: 4 },
-      6,
-      baseDraft,
-    );
+    const next = applyLevelChange({ level: 5, experience: 12345, hitDice: '5d10', hpTemp: 4 }, 6, baseDraft);
 
     expect(next.experience).toBe(12345);
   });
@@ -59,27 +41,23 @@ describe('levelChange helpers', () => {
   });
 
   it('validates and clamps draft fields', () => {
-    const next = applyLevelChange(
-      { level: 4, experience: 50, hitDice: '4d8', hpTemp: -5 },
-      3,
-      {
-        stats: {
-          strength: -10,
-          dexterity: 0,
-          constitution: 1.4,
-          intelligence: 17.8,
-          wisdom: 14,
-          charisma: 12,
-        },
-        hp: {
-          current: 999,
-          max: 0,
-        },
-        ac: -100,
-        initiative: -8,
-        proficiencyBonus: 55,
+    const next = applyLevelChange({ level: 4, experience: 50, hitDice: '4d8', hpTemp: -5 }, 3, {
+      stats: {
+        strength: -10,
+        dexterity: 0,
+        constitution: 1.4,
+        intelligence: 17.8,
+        wisdom: 14,
+        charisma: 12,
       },
-    );
+      hp: {
+        current: 999,
+        max: 0,
+      },
+      ac: -100,
+      initiative: -8,
+      proficiencyBonus: 55,
+    });
 
     expect(next.stats.strength).toBe(1);
     expect(next.stats.dexterity).toBe(1);
@@ -93,11 +71,7 @@ describe('levelChange helpers', () => {
   });
 
   it('keeps hit dice stable when target level is unchanged', () => {
-    const next = applyLevelChange(
-      { level: 7, experience: 777, hitDice: '7d12', hpTemp: 1 },
-      7,
-      baseDraft,
-    );
+    const next = applyLevelChange({ level: 7, experience: 777, hitDice: '7d12', hpTemp: 1 }, 7, baseDraft);
 
     expect(next.level).toBe(7);
     expect(next.hitDice).toBe('7d12');

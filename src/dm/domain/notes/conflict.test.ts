@@ -18,23 +18,19 @@ const baseNote: DMCampaignNote = {
 
 describe('dm/domain/notes/conflict', () => {
   it('exports all note sync statuses', () => {
-    expect(NOTE_SYNC_STATUS).toEqual([
-      'Local only',
-      'Synced',
-      'Pending sync',
-      'Offline changes pending',
-      'Conflict detected',
-    ]);
+    expect(NOTE_SYNC_STATUS).toEqual(['Local only', 'Synced', 'Pending sync', 'Offline changes pending', 'Conflict detected']);
   });
 
   it('detects only true conflict payloads', () => {
     expect(hasConflict(baseNote)).toBe(false);
     expect(hasConflict({ ...baseNote, syncStatus: 'Conflict detected' })).toBe(false);
-    expect(hasConflict({
-      ...baseNote,
-      syncStatus: 'Conflict detected',
-      conflictRemote: { title: 'Remote', content: 'Body', updatedAtMs: 50 },
-    })).toBe(true);
+    expect(
+      hasConflict({
+        ...baseNote,
+        syncStatus: 'Conflict detected',
+        conflictRemote: { title: 'Remote', content: 'Body', updatedAtMs: 50 },
+      }),
+    ).toBe(true);
   });
 
   it('normalizes conflict remote payload', () => {

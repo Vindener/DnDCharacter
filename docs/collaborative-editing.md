@@ -9,24 +9,24 @@
 
 Перед критикою — фактичний стан, бо модель складніша, ніж «залив документ у хмару»:
 
-| Механізм | Де | Що робить |
-| --- | --- | --- |
-| Роли доступу | `firestore.rules`, `characterCloudRepository.ts` | `ownerUid`, `owners[]`, `editors[]`; editor може писати вміст, але не змінювати склад доступу |
-| Live-підписка на аркуш | `useCharacterActions.tsx:610` (`subscribeCharacterSheet`) | Чужі зміни приходять у відкритий екран у реальному часі |
-| Журнал змін | `changeHistory[]`, `buildHistoryEntries`, `mergeBoundedHistory` (обмеження 50) | Хто (`uid`), яка роль (`actorRole`), який таб, які шляхи, коли (`atMs`) |
-| Виявлення віддалених змін | `useCharacterActions.tsx:628-632` | Із `changeHistory` беруться записи інших `uid` після `lastSyncAt` → `remotePathsSinceLastSync` |
-| Секційний merge | `mergeCharacterBySections` у `characterSyncCoordinator.ts` | Якщо локально немає pending-змін у секції — секція повністю береться з хмари |
-| Виявлення конфліктів | `collectConflictPaths` у `conflictPolicy.ts` | Перетин шляхів або **однієї секції**; критичні шляхи (`combat.hp`, `magic.spell-slots`, `homebrew.resources/trackers`, `combat.death-saves`) еквалюються агресивніше |
-| Стани синку | `resolveSyncStatus` | `local-only`, `pending-upload`, `pending-download`, `conflict`, `in-sync` |
-| Ручне розв'язання | `resolveConflict` + телеметрія `sync_conflict_resolved_{local,cloud,later}` | Користувач вибирає локальне / хмарне / відкласти |
-| Огляд чужих змін для DM | `src/screens/DM/DMSharedUpdates.tsx` | Читає `changeHistory` спільних аркушів |
-| Списки | `subscribeMySheets` (`owners array-contains`), `subscribeSharedWithMe` (`editors array-contains`) | Запити узгоджені з правилами, тому `list` не падає |
+| Механізм                  | Де                                                                                                | Що робить                                                                                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Роли доступу              | `firestore.rules`, `characterCloudRepository.ts`                                                  | `ownerUid`, `owners[]`, `editors[]`; editor може писати вміст, але не змінювати склад доступу                                                                        |
+| Live-підписка на аркуш    | `useCharacterActions.tsx:610` (`subscribeCharacterSheet`)                                         | Чужі зміни приходять у відкритий екран у реальному часі                                                                                                              |
+| Журнал змін               | `changeHistory[]`, `buildHistoryEntries`, `mergeBoundedHistory` (обмеження 50)                    | Хто (`uid`), яка роль (`actorRole`), який таб, які шляхи, коли (`atMs`)                                                                                              |
+| Виявлення віддалених змін | `useCharacterActions.tsx:628-632`                                                                 | Із `changeHistory` беруться записи інших `uid` після `lastSyncAt` → `remotePathsSinceLastSync`                                                                       |
+| Секційний merge           | `mergeCharacterBySections` у `characterSyncCoordinator.ts`                                        | Якщо локально немає pending-змін у секції — секція повністю береться з хмари                                                                                         |
+| Виявлення конфліктів      | `collectConflictPaths` у `conflictPolicy.ts`                                                      | Перетин шляхів або **однієї секції**; критичні шляхи (`combat.hp`, `magic.spell-slots`, `homebrew.resources/trackers`, `combat.death-saves`) еквалюються агресивніше |
+| Стани синку               | `resolveSyncStatus`                                                                               | `local-only`, `pending-upload`, `pending-download`, `conflict`, `in-sync`                                                                                            |
+| Ручне розв'язання         | `resolveConflict` + телеметрія `sync_conflict_resolved_{local,cloud,later}`                       | Користувач вибирає локальне / хмарне / відкласти                                                                                                                     |
+| Огляд чужих змін для DM   | `src/screens/DM/DMSharedUpdates.tsx`                                                              | Читає `changeHistory` спільних аркушів                                                                                                                               |
+| Списки                    | `subscribeMySheets` (`owners array-contains`), `subscribeSharedWithMe` (`editors array-contains`) | Запити узгоджені з правилами, тому `list` не падає                                                                                                                   |
 
 Тобто фундамент є: підписки, журнал, секційний merge, явні стани, ручне розв'язання. Проблеми — у конкретних місцях, і вони виправляються точково.
 
 ---
 
-## 2. Знахідки (COL-*)
+## 2. Знахідки (COL-\*)
 
 ### COL-1 · Критично · Read-modify-write без транзакції → тиха втрата чужих змін
 
@@ -69,6 +69,7 @@ payload.changeHistory = mergeBoundedHistory(existingMeta?.changeHistory, additio
 Додатково: ліміт 50 записів. У сесії з двома активними редакторами 50 записів набігає швидко; після переповнення старіші зміни зникають із журналу, і клієнт, який довго був офлайн, «не побачить» їх зовсім.
 
 **Фікс:**
+
 - додавання історії — тільно `arrayUnion(...additions)` (уже експортований у `src/services/firebase.ts:10`), ніколи не цілим масивом;
 - або перенести журнал у підколекцію `characterSheets/{id}/changes` з `serverTimestamp()` — це знімає і ліміт 50, і розмір документа, і дає нормальні запити «що змінилось після X»;
 - обрізання історії робити окремою операцією обслуговування, а не в шляху запису.
@@ -111,6 +112,7 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 У живій сесії це найчастіший сценарій із усіх можливих. Продуктовий наслідок: або людей засипає конфліктами, або вони тихо втрачають правки — обидва варіанти вбивають довіру до спільного аркуша.
 
 **Фікс (поетапно):**
+
 1. Розбити `combat` на під-секції: `combat.vitals` (hp, tempHp, deathSaves), `combat.defense` (ac, speed, initiative, hitDice), `combat.conditions`, `combat.weapons`. Аналогічно `homebrew` (`resources`/`trackers`/`fields`/`sections`) — там теж критичні шляхи.
 2. Для числових «лічильників» (HP, spell slots, resources) перейти від «останній переміг» до **семантичного merge**: писати дельту (`FieldValue.increment`) або зберігати `{value, updatedAt, updatedBy}` на полі й брати свіжіше за серверним часом. HP — це не текст, це рахівниця; два одночасні `−7` і `+2` мають дати `−5`, а не «хтось один».
 3. `conditions` — це множина: `arrayUnion`/`arrayRemove` замість заміни масиву.
@@ -131,6 +133,7 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 `useCharacterActions.tsx`): `serverTimestamp()` не можна класти всередину елементів масиву
 `arrayUnion`, тому буквальний "серверний час на кожен запис журналу" вимагав би підколекції
 (окрема задача, див. нижче). Мінімальний варіант без підколекції:
+
 1. Документ `characterSheets` отримав нове поле `lastChangeAt = now()` (serverTimestamp),
    яке бампається одночасно з кожним додаванням `changeHistory`. `syncState.lastSyncAt` тепер
    зберігає саме цей серверний час останнього оброненого знімка, а не локальний `Date.now()`.
@@ -151,6 +154,7 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 ### COL-6 · Середній · Немає presence — не видно, хто зараз в аркуші
 
 Немає жодної індикації «DM щойно відкрив цей аркуш» / «гравець редагує Combat». Через це:
+
 - конфлікти виглядають випадковими, бо користувач не знає, що хтось ще в документі;
 - люди не мають шансу скоординуватись голосом («не тягни HP, я вже пишу»), хоча за столом це найдешевший спосіб.
 
@@ -194,16 +198,16 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 
 **Правильна логіка каскаду:**
 
-| Ситуація | Дія |
-| --- | --- |
-| Я єдиний owner, редакторів немає | видалити документ |
-| Я єдиний owner, є редактори | передати ownership першому редактору (або запитати користувача), себе прибрати з `owners` |
-| Я один із кількох owners | прибрати себе з `owners` |
-| Я тільно editor | прибрати себе з `editors` |
-| `connections`, де я учасник | позначити неактивними або видалити |
-| `emailIndex/{my-email}` | видалити |
-| `users/{myUid}` | видалити (потрібне правило, зараз `delete: if false`) |
-| `dmCampaigns` / `dmCampaignNotes` | та сама логіка owner/editor |
+| Ситуація                          | Дія                                                                                       |
+| --------------------------------- | ----------------------------------------------------------------------------------------- |
+| Я єдиний owner, редакторів немає  | видалити документ                                                                         |
+| Я єдиний owner, є редактори       | передати ownership першому редактору (або запитати користувача), себе прибрати з `owners` |
+| Я один із кількох owners          | прибрати себе з `owners`                                                                  |
+| Я тільно editor                   | прибрати себе з `editors`                                                                 |
+| `connections`, де я учасник       | позначити неактивними або видалити                                                        |
+| `emailIndex/{my-email}`           | видалити                                                                                  |
+| `users/{myUid}`                   | видалити (потрібне правило, зараз `delete: if false`)                                     |
+| `dmCampaigns` / `dmCampaignNotes` | та сама логіка owner/editor                                                               |
 
 Це неможливо зробити консистентно з клієнта під правилами: після видалення `users/{uid}` і виходу з акаунта клієнт уже не має прав добивати решту. **Рішення:** Cloud Function на `onDelete` користувача Auth (або callable-функція «видалити мій акаунт»), яка виконує каскад із адмін-правами. Це єдине місце в плані, де знадобиться серверний код — врахуй у часі.
 
@@ -214,8 +218,8 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 Порядок написання коду:
 
 1. **Розділити операції на дві категорії:**
-   - *content write* — вміст персонажа. Ніколи не торкається `ownerUid`/`owners`/`editors`. Пише **тільно змінені шляхи** (з `pendingPaths`) через `update()`, або цілий документ у `runTransaction`.
-   - *access write* — склад доступу. Тільно транзакції `addEditor` / `removeEditor` / `transferOwnership`. Ніколи не пишуть вміст.
+   - _content write_ — вміст персонажа. Ніколи не торкається `ownerUid`/`owners`/`editors`. Пише **тільно змінені шляхи** (з `pendingPaths`) через `update()`, або цілий документ у `runTransaction`.
+   - _access write_ — склад доступу. Тільно транзакції `addEditor` / `removeEditor` / `transferOwnership`. Ніколи не пишуть вміст.
 2. **Журнал змін** — `arrayUnion` (швидкий фікс) або підколекція `changes` із `serverTimestamp()` (правильний фікс).
 3. **Час — серверний** для журналу й `lastSyncAt`.
 4. **Секції дрібніші**: `combat.vitals` / `combat.defense` / `combat.conditions` / `combat.weapons`; `homebrew.*` за під-типами.
@@ -233,6 +237,7 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 Спільне редагування **неможливо перевірити на одному клієнті**. Потрібні два: емулятор + фізичний девайс, два різні Google-акаунти (owner і editor).
 
 **Юніт/інтеграційні (vitest)**
+
 - [ ] `collectConflictPaths` після дроблення секцій: HP vs condition → **не конфлікт**; HP vs HP → конфлікт.
 - [ ] `mergeCharacterBySections` на нових під-секціях.
 - [ ] `reconcileRemoteSnapshot`: `replace` / `merge` / `conflict` / `noop` на серверних таймстемпах.
@@ -240,6 +245,7 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 - [ ] Content write не містить `owners`/`editors`/`ownerUid` у payload.
 
 **Правила (firebase emulators:exec)**
+
 - [ ] editor не може змінити `editors`/`owners`/`ownerUid`.
 - [ ] сторонній користувач не читає й не пише аркуш.
 - [ ] не можна перезаписати чужий `emailIndex` (SEC-2).
@@ -248,6 +254,7 @@ if (section !== 'unknown' && cloudSections.has(section)) { out.push(path); }
 - [ ] документ із зайвими/невалідними полями відхиляється (COL-8).
 
 **Два клієнти, вручну**
+
 - [ ] Одночасно: DM тисне −7 HP, гравець ставить condition → **обидві зміни збереглися**, конфлікт-модалки немає.
 - [ ] Одночасно обидва правлять HP → конфлікт показаний, розв'язання працює, після нього стан однаковий на обох.
 - [ ] Owner додає редактора, поки редактор активно щось пише → доступ не відкатився, `PERMISSION_DENIED` не з'явився.

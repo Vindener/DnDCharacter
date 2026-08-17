@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-13.json` (single-file mode) OR `batch-13-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/domain/types/character.ts": [
@@ -19,23 +20,11 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/types/Traits.ts",
     "src/types/Weapon.ts"
   ],
-  "src/screens/Character/hooks/levelChange.test.ts": [
-    "src/screens/Character/hooks/levelChange.ts"
-  ],
-  "src/screens/Character/hooks/levelChange.ts": [
-    "src/shared/helpers/dice.ts",
-    "src/types/HitPoints.ts",
-    "src/types/Stats.ts"
-  ],
+  "src/screens/Character/hooks/levelChange.test.ts": ["src/screens/Character/hooks/levelChange.ts"],
+  "src/screens/Character/hooks/levelChange.ts": ["src/shared/helpers/dice.ts", "src/types/HitPoints.ts", "src/types/Stats.ts"],
   "src/shared/const/WeaponsDb.ts": [],
-  "src/shared/helpers/derived.test.ts": [
-    "src/shared/helpers/derived.ts"
-  ],
-  "src/shared/helpers/derived.ts": [
-    "src/types/Character.ts",
-    "src/types/Skills.ts",
-    "src/types/Stats.ts"
-  ],
+  "src/shared/helpers/derived.test.ts": ["src/shared/helpers/derived.ts"],
+  "src/shared/helpers/derived.ts": ["src/types/Character.ts", "src/types/Skills.ts", "src/types/Stats.ts"],
   "src/shared/helpers/dice.ts": [],
   "src/shared/helpers/gear.ts": [
     "src/domain/types/index.ts",
@@ -43,9 +32,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/helpers/weapons.ts",
     "src/types/Weapon.ts"
   ],
-  "src/shared/helpers/weapons.ts": [
-    "src/shared/const/WeaponsDb.ts"
-  ],
+  "src/shared/helpers/weapons.ts": ["src/shared/const/WeaponsDb.ts"],
   "src/stores/characterStore.ts": [
     "src/domain/types/index.ts",
     "src/services/storeEffects/characterStoreEffects.ts",
@@ -59,9 +46,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
   "src/types/SavingThrows.ts": [],
   "src/types/Skills.ts": [],
   "src/types/SpellSlots.ts": [],
-  "src/types/Spells.ts": [
-    "src/types/SpellSlots.ts"
-  ],
+  "src/types/Spells.ts": ["src/types/SpellSlots.ts"],
   "src/types/Stats.ts": [],
   "src/types/Traits.ts": [],
   "src/types/Weapon.ts": []
@@ -69,6 +54,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/domain/types/character.ts": [
@@ -88,9 +74,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/shared/const/WeaponsDb.ts": [
@@ -135,18 +119,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/shared/helpers/dice.ts": [
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/shared/helpers/gear.ts": [
@@ -165,16 +145,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/characterStoreEffects.ts",
       "batchIndex": 10,
-      "symbols": [
-        "createCharacterStoreEffects"
-      ]
+      "symbols": ["createCharacterStoreEffects"]
     },
     {
       "path": "src/shared/const/attributes.ts",
       "batchIndex": 11,
-      "symbols": [
-        "attributes"
-      ]
+      "symbols": ["attributes"]
     }
   ],
   "src/types/DeathSaves.ts": [
@@ -230,6 +206,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/domain/types/character.ts` (205 lines, language: `typescript`, fileCategory: `code`)
 2. `src/screens/Character/hooks/levelChange.test.ts` (105 lines, language: `typescript`, fileCategory: `code`)
 3. `src/screens/Character/hooks/levelChange.ts` (87 lines, language: `typescript`, fileCategory: `code`)

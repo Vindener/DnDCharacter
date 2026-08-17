@@ -2,7 +2,16 @@ import { z } from 'zod';
 import type { CharacterContentSourceRef, CharacterEntity, CharacterDraft, SkillProficiencyRank } from '@/domain/types';
 import { parseHomebrew } from './homebrew.schema';
 import { normalizeCharacterSpells } from './spell.schema';
-import { asRecord, safeParseWithIssues, toBoolean, toFiniteStringRecord, toNumber, toString, toStringArray, toTrimmedString } from './utils';
+import {
+  asRecord,
+  safeParseWithIssues,
+  toBoolean,
+  toFiniteStringRecord,
+  toNumber,
+  toString,
+  toStringArray,
+  toTrimmedString,
+} from './utils';
 import { migratePayloadToLatest } from '@/domain/migrations';
 
 function parseStats(raw: unknown): CharacterEntity['stats'] {
@@ -74,9 +83,7 @@ function parseEquipment(raw: unknown): CharacterEntity['equipment'] {
     armor: toTrimmedString(cast.armor) || undefined,
     shield: toTrimmedString(cast.shield) || undefined,
     attunedItems: toStringArray(cast.attunedItems, { dedupe: true }),
-    carryingCapacity: Number.isFinite(Number(cast.carryingCapacity))
-      ? Math.max(0, toNumber(cast.carryingCapacity, 0))
-      : undefined,
+    carryingCapacity: Number.isFinite(Number(cast.carryingCapacity)) ? Math.max(0, toNumber(cast.carryingCapacity, 0)) : undefined,
   };
 
   if (!equipment.armor && !equipment.shield && !equipment.attunedItems?.length && equipment.carryingCapacity === undefined) {
@@ -265,5 +272,3 @@ export function safeParseCharacter(input: unknown) {
 export function normalizeCharacter(input: unknown): CharacterEntity {
   return parseCharacter(input);
 }
-
-

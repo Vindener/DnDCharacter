@@ -1,31 +1,22 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/dm/repositories/appRoleRepository.ts", "language": "typescript", "sizeLines": 30, "fileCategory": "code"},
-    {"path": "src/dm/repositories/storageRepositories.test.ts", "language": "typescript", "sizeLines": 79, "fileCategory": "code"},
-    {"path": "src/dm/repositories/trackerTemplatesRepository.ts", "language": "typescript", "sizeLines": 49, "fileCategory": "code"},
-    {"path": "src/stores/appRoleStore.ts", "language": "typescript", "sizeLines": 29, "fileCategory": "code"},
-    {"path": "src/stores/trackerTemplatesStore.ts", "language": "typescript", "sizeLines": 60, "fileCategory": "code"},
-    {"path": "src/types/Product.ts", "language": "typescript", "sizeLines": 3, "fileCategory": "code"}
+    { "path": "src/dm/repositories/appRoleRepository.ts", "language": "typescript", "sizeLines": 30, "fileCategory": "code" },
+    { "path": "src/dm/repositories/storageRepositories.test.ts", "language": "typescript", "sizeLines": 79, "fileCategory": "code" },
+    { "path": "src/dm/repositories/trackerTemplatesRepository.ts", "language": "typescript", "sizeLines": 49, "fileCategory": "code" },
+    { "path": "src/stores/appRoleStore.ts", "language": "typescript", "sizeLines": 29, "fileCategory": "code" },
+    { "path": "src/stores/trackerTemplatesStore.ts", "language": "typescript", "sizeLines": 60, "fileCategory": "code" },
+    { "path": "src/types/Product.ts", "language": "typescript", "sizeLines": 3, "fileCategory": "code" }
   ],
   "batchImportData": {
-    "src/dm/repositories/appRoleRepository.ts": [
-      "src/domain/migrations/index.ts",
-      "src/types/Product.ts"
-    ],
+    "src/dm/repositories/appRoleRepository.ts": ["src/domain/migrations/index.ts", "src/types/Product.ts"],
     "src/dm/repositories/storageRepositories.test.ts": [
       "src/dm/repositories/appRoleRepository.ts",
       "src/dm/repositories/monsterRepository.ts",
       "src/dm/repositories/trackerTemplatesRepository.ts"
     ],
-    "src/dm/repositories/trackerTemplatesRepository.ts": [
-      "src/dm/domain/types/index.ts",
-      "src/domain/migrations/index.ts"
-    ],
-    "src/stores/appRoleStore.ts": [
-      "src/dm/repositories/appRoleRepository.ts",
-      "src/types/Product.ts"
-    ],
+    "src/dm/repositories/trackerTemplatesRepository.ts": ["src/dm/domain/types/index.ts", "src/domain/migrations/index.ts"],
+    "src/stores/appRoleStore.ts": ["src/dm/repositories/appRoleRepository.ts", "src/types/Product.ts"],
     "src/stores/trackerTemplatesStore.ts": [
       "src/dm/domain/types/index.ts",
       "src/dm/repositories/trackerTemplatesRepository.ts",

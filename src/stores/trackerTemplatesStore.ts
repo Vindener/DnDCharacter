@@ -1,10 +1,7 @@
 import { create } from 'zustand';
 import type { CharacterCustomResource } from '@/types/Character';
 import type { ResourceTemplate } from '@/dm/domain/types';
-import {
-  loadTrackerTemplates,
-  persistTrackerTemplates,
-} from '@/dm/repositories/trackerTemplatesRepository';
+import { loadTrackerTemplates, persistTrackerTemplates } from '@/dm/repositories/trackerTemplatesRepository';
 
 export interface TrackerTemplatesStore {
   userTemplates: ResourceTemplate[];
@@ -45,7 +42,9 @@ const useTrackerTemplatesStore = create<TrackerTemplatesStore>((set, get) => ({
     set({ userTemplates: merged });
     try {
       await persistTrackerTemplates(merged);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 
   removeUserTemplate: async (templateId) => {
@@ -53,7 +52,9 @@ const useTrackerTemplatesStore = create<TrackerTemplatesStore>((set, get) => ({
     set({ userTemplates: merged });
     try {
       await persistTrackerTemplates(merged);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 }));
 

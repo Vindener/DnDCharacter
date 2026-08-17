@@ -8,11 +8,7 @@ import { getSrdMonsters } from '@/domain/srd/srdRepository';
 import { srdMonsterToMonsterDto } from '@/domain/srd/adapters';
 import type { MonsterDto } from '@/types/Monster';
 
-type SetDmStore = (
-  partial:
-    | Partial<DmStore>
-    | ((state: DmStore) => Partial<DmStore>),
-) => void;
+type SetDmStore = (partial: Partial<DmStore> | ((state: DmStore) => Partial<DmStore>)) => void;
 
 type DmStoreContext = {
   set: SetDmStore;
@@ -47,14 +43,15 @@ async function persistUserTemplates(templates: ResourceTemplate[]): Promise<void
   try {
     const envelope = createStorageEnvelope('dmUserTemplates', templates || []);
     await AsyncStorage.setItem(USER_TEMPLATES_STORAGE_KEY, JSON.stringify(envelope));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 function normalizeRole(raw: unknown): 'Player' | 'DM' | 'Hybrid' {
   if (raw === 'Player' || raw === 'DM' || raw === 'Hybrid') return raw;
   return 'Hybrid';
 }
-
 
 function parseStoredValue(raw: string | null): unknown {
   if (raw === null || raw === undefined) return null;
@@ -107,7 +104,10 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
       const existingFavorites = get().favoriteMonsterIds;
       const validPins = existingPins.filter((id) => mergedMonsters.some((monster) => monster.id === id));
       const validFavorites = existingFavorites.filter((id) => mergedMonsters.some((monster) => monster.id === id));
-      await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsters', persistableMonsters(mergedMonsters))));
+      await AsyncStorage.setItem(
+        MONSTERS_STORAGE_KEY,
+        JSON.stringify(createStorageEnvelope('dmMonsters', persistableMonsters(mergedMonsters))),
+      );
       await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', validPins)));
       await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsterFavorites', validFavorites)));
       set({ monsters: mergedMonsters, pinnedMonsterIds: validPins, favoriteMonsterIds: validFavorites, isLoaded: true, loadError: null });
@@ -188,32 +188,38 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
       try {
         await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', nextPins)));
         set({ pinnedMonsterIds: nextPins });
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     toggleFavoriteMonster: async (id) => {
       const currentFavorites = get().favoriteMonsterIds;
-      const nextFavorites = currentFavorites.includes(id)
-        ? currentFavorites.filter((itemId) => itemId !== id)
-        : [id, ...currentFavorites];
+      const nextFavorites = currentFavorites.includes(id) ? currentFavorites.filter((itemId) => itemId !== id) : [id, ...currentFavorites];
       try {
         await AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsterFavorites', nextFavorites)));
         set({ favoriteMonsterIds: nextFavorites });
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     clearPinnedMonsters: async () => {
       try {
         await AsyncStorage.setItem(PINS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmPins', [])));
         set({ pinnedMonsterIds: [] });
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     setRole: async (role) => {
       set({ role });
       try {
         await AsyncStorage.setItem(ROLE_STORAGE_KEY, JSON.stringify(createStorageEnvelope('appRole', role)));
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     loadRole: async () => {
@@ -222,7 +228,9 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
         const parsed = parseStoredValue(raw);
         const migrated = normalizeStorageEnvelope<string>('appRole', parsed, 'Hybrid');
         set({ role: normalizeRole(migrated.data) });
-      } catch (_error) { /* intentionally ignored */ }
+      } catch (_error) {
+        /* intentionally ignored */
+      }
     },
 
     loadUserTemplates: async () => {
@@ -289,4 +297,3 @@ export function createDmStoreEffects({ set, get }: DmStoreContext): DmStoreEffec
     },
   };
 }
-

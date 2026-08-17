@@ -24,8 +24,7 @@ export function appendQuickSessionNote(character: CharacterEntity, note: string)
 
   const groups = character.customNotesGroups || [];
   const sessionGroup = groups.find(
-    (group) =>
-      group.id === 'seed-session' || group.title.toLowerCase() === 'session' || group.title.toLowerCase() === 'сесія',
+    (group) => group.id === 'seed-session' || group.title.toLowerCase() === 'session' || group.title.toLowerCase() === 'сесія',
   );
 
   if (sessionGroup) {

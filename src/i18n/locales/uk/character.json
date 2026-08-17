@@ -591,6 +591,7 @@
       "search": "Пошук у Spellbook",
       "searchPlaceholder": "Введи назву або школу",
       "empty": "Нічого не знайдено у spellbook.",
+      "searchHint": "Почніть вводити назву або школу, щоб знайти закляття у spellbook.",
       "name": "Назва закляття",
       "namePlaceholder": "Назва закляття",
       "levelLabel": "Рівень (0-9)",

@@ -53,17 +53,13 @@
           "name": "collectFiles",
           "startLine": 5,
           "endLine": 21,
-          "params": [
-            "dir"
-          ]
+          "params": ["dir"]
         },
         {
           "name": "extractImports",
           "startLine": 23,
           "endLine": 32,
-          "params": [
-            "code"
-          ]
+          "params": ["code"]
         }
       ],
       "callGraph": [
@@ -216,26 +212,19 @@
           "name": "collectFiles",
           "startLine": 5,
           "endLine": 21,
-          "params": [
-            "dir"
-          ]
+          "params": ["dir"]
         },
         {
           "name": "extractImports",
           "startLine": 23,
           "endLine": 32,
-          "params": [
-            "code"
-          ]
+          "params": ["code"]
         },
         {
           "name": "isAllowedInfraDependency",
           "startLine": 34,
           "endLine": 37,
-          "params": [
-            "filePath",
-            "importedPath"
-          ]
+          "params": ["filePath", "importedPath"]
         }
       ],
       "callGraph": [
@@ -754,9 +743,7 @@
           "name": "SUBRACE_OPTIONS",
           "startLine": 154,
           "endLine": 158,
-          "params": [
-            "raceKey"
-          ]
+          "params": ["raceKey"]
         }
       ],
       "exports": [

@@ -240,5 +240,3 @@ export const getStyles = (c: ThemeColors) =>
       fontWeight: '700',
     },
   });
-
-

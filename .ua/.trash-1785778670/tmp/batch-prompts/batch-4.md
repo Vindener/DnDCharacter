@@ -7,42 +7,21 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-4.json` (single-file mode) OR `batch-4-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/dm/repositories/campaignNotesRepository.test.ts": [
     "src/dm/repositories/campaignNotesRepository.ts",
     "src/domain/migrations/index.ts"
   ],
-  "src/dm/repositories/campaignRepository.test.ts": [
-    "src/dm/repositories/campaignRepository.ts",
-    "src/domain/migrations/index.ts"
-  ],
-  "src/dm/repositories/dmSettingsRepository.ts": [
-    "src/domain/migrations/index.ts"
-  ],
-  "src/domain/mappers/character.mapper.test.ts": [
-    "src/domain/mappers/character.mapper.ts",
-    "src/domain/migrations/index.ts"
-  ],
-  "src/domain/mappers/character.mapper.ts": [
-    "src/domain/migrations/index.ts",
-    "src/domain/schemas/index.ts",
-    "src/domain/types/index.ts"
-  ],
-  "src/domain/mappers/homebrew.mapper.test.ts": [
-    "src/domain/mappers/homebrew.mapper.ts"
-  ],
-  "src/domain/mappers/homebrew.mapper.ts": [
-    "src/domain/schemas/index.ts",
-    "src/domain/types/index.ts"
-  ],
-  "src/domain/mappers/spell.mapper.ts": [
-    "src/domain/schemas/index.ts",
-    "src/domain/types/index.ts"
-  ],
-  "src/domain/migrations/index.test.ts": [
-    "src/domain/migrations/index.ts"
-  ],
+  "src/dm/repositories/campaignRepository.test.ts": ["src/dm/repositories/campaignRepository.ts", "src/domain/migrations/index.ts"],
+  "src/dm/repositories/dmSettingsRepository.ts": ["src/domain/migrations/index.ts"],
+  "src/domain/mappers/character.mapper.test.ts": ["src/domain/mappers/character.mapper.ts", "src/domain/migrations/index.ts"],
+  "src/domain/mappers/character.mapper.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+  "src/domain/mappers/homebrew.mapper.test.ts": ["src/domain/mappers/homebrew.mapper.ts"],
+  "src/domain/mappers/homebrew.mapper.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+  "src/domain/mappers/spell.mapper.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+  "src/domain/migrations/index.test.ts": ["src/domain/migrations/index.ts"],
   "src/domain/migrations/index.ts": [],
   "src/domain/schemas/campaignEncounter.schema.ts": [
     "src/domain/migrations/index.ts",
@@ -50,28 +29,19 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/domain/schemas/utils.ts",
     "src/domain/types/index.ts"
   ],
-  "src/domain/schemas/campaignInitiative.schema.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/domain/schemas/index.ts"
-  ],
+  "src/domain/schemas/campaignInitiative.schema.test.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts"],
   "src/domain/schemas/campaignInitiative.schema.ts": [
     "src/domain/migrations/index.ts",
     "src/domain/schemas/utils.ts",
     "src/domain/types/index.ts"
   ],
-  "src/domain/schemas/campaignNote.schema.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/domain/schemas/index.ts"
-  ],
+  "src/domain/schemas/campaignNote.schema.test.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts"],
   "src/domain/schemas/campaignNote.schema.ts": [
     "src/domain/migrations/index.ts",
     "src/domain/schemas/utils.ts",
     "src/domain/types/index.ts"
   ],
-  "src/domain/schemas/character.schema.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/domain/schemas/index.ts"
-  ],
+  "src/domain/schemas/character.schema.test.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts"],
   "src/domain/schemas/character.schema.ts": [
     "src/domain/migrations/index.ts",
     "src/domain/schemas/homebrew.schema.ts",
@@ -79,34 +49,23 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/domain/schemas/utils.ts",
     "src/domain/types/index.ts"
   ],
-  "src/domain/schemas/createCharacterWizard.schema.test.ts": [
-    "src/domain/schemas/index.ts"
-  ],
+  "src/domain/schemas/createCharacterWizard.schema.test.ts": ["src/domain/schemas/index.ts"],
   "src/domain/schemas/createCharacterWizard.schema.ts": [
     "src/domain/schemas/utils.ts",
     "src/screens/CreateCharacter/createCharacterWizard.ts"
   ],
-  "src/domain/schemas/homebrew.schema.test.ts": [
-    "src/domain/schemas/index.ts"
-  ],
-  "src/domain/schemas/homebrew.schema.ts": [
-    "src/domain/schemas/utils.ts",
-    "src/domain/types/index.ts"
-  ],
+  "src/domain/schemas/homebrew.schema.test.ts": ["src/domain/schemas/index.ts"],
+  "src/domain/schemas/homebrew.schema.ts": ["src/domain/schemas/utils.ts", "src/domain/types/index.ts"],
   "src/domain/schemas/index.ts": [],
-  "src/domain/schemas/spell.schema.test.ts": [
-    "src/domain/schemas/index.ts"
-  ],
-  "src/domain/schemas/spell.schema.ts": [
-    "src/domain/schemas/utils.ts",
-    "src/domain/types/index.ts"
-  ],
+  "src/domain/schemas/spell.schema.test.ts": ["src/domain/schemas/index.ts"],
+  "src/domain/schemas/spell.schema.ts": ["src/domain/schemas/utils.ts", "src/domain/types/index.ts"],
   "src/domain/schemas/utils.ts": [],
   "src/domain/srd/index.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/dm/repositories/campaignNotesRepository.test.ts": [
@@ -158,11 +117,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     }
   ],
   "src/domain/mappers/homebrew.mapper.ts": [
@@ -174,11 +129,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     }
   ],
   "src/domain/mappers/spell.mapper.ts": [
@@ -190,21 +141,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     }
   ],
   "src/domain/migrations/index.ts": [
     {
       "path": "src/dm/repositories/appRoleRepository.ts",
       "batchIndex": 15,
-      "symbols": [
-        "loadAppRole",
-        "persistAppRole"
-      ]
+      "symbols": ["loadAppRole", "persistAppRole"]
     },
     {
       "path": "src/dm/repositories/campaignEncountersRepository.test.ts",
@@ -271,27 +215,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/dm/repositories/monsterRepository.ts",
       "batchIndex": 2,
-      "symbols": [
-        "loadMonstersState",
-        "persistMonstersState",
-        "persistPinnedMonsterIds",
-        "persistFavoriteMonsterIds"
-      ]
+      "symbols": ["loadMonstersState", "persistMonstersState", "persistPinnedMonsterIds", "persistFavoriteMonsterIds"]
     },
     {
       "path": "src/dm/repositories/trackerTemplatesRepository.ts",
       "batchIndex": 15,
-      "symbols": [
-        "loadTrackerTemplates",
-        "persistTrackerTemplates"
-      ]
+      "symbols": ["loadTrackerTemplates", "persistTrackerTemplates"]
     },
     {
       "path": "src/domain/spellbook/spellLocalRepository.ts",
       "batchIndex": 12,
-      "symbols": [
-        "createSpellLocalRepository"
-      ]
+      "symbols": ["createSpellLocalRepository"]
     },
     {
       "path": "src/domain/spellbook/spellRepository.test.ts",
@@ -335,9 +269,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/repositories/characterLocalRepository.ts",
       "batchIndex": 5,
-      "symbols": [
-        "characterLocalRepository"
-      ]
+      "symbols": ["characterLocalRepository"]
     },
     {
       "path": "src/services/dmCampaignNotes.test.ts",
@@ -352,9 +284,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/dmStoreEffects.ts",
       "batchIndex": 12,
-      "symbols": [
-        "createDmStoreEffects"
-      ]
+      "symbols": ["createDmStoreEffects"]
     }
   ],
   "src/domain/schemas/campaignEncounter.schema.ts": [
@@ -469,16 +399,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/spellbook/spellRepository.ts",
       "batchIndex": 12,
-      "symbols": [
-        "createSpellRepository"
-      ]
+      "symbols": ["createSpellRepository"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -498,16 +424,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/characterStoreEffects.ts",
       "batchIndex": 10,
-      "symbols": [
-        "createCharacterStoreEffects"
-      ]
+      "symbols": ["createCharacterStoreEffects"]
     },
     {
       "path": "src/shared/helpers/createEmptyCharacter.ts",
       "batchIndex": 5,
-      "symbols": [
-        "createEmptyCharacter"
-      ]
+      "symbols": ["createEmptyCharacter"]
     }
   ],
   "src/domain/schemas/spell.schema.ts": [
@@ -521,9 +443,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -571,6 +491,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/dm/repositories/campaignNotesRepository.test.ts` (90 lines, language: `typescript`, fileCategory: `code`)
 2. `src/dm/repositories/campaignRepository.test.ts` (406 lines, language: `typescript`, fileCategory: `code`)
 3. `src/dm/repositories/dmSettingsRepository.ts` (24 lines, language: `typescript`, fileCategory: `code`)

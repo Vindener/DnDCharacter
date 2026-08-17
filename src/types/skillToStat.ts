@@ -34,4 +34,3 @@ const skillToStat: Record<SkillKey, AbilityStatsKey> = {
 };
 
 export default skillToStat;
-

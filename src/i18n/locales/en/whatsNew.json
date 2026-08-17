@@ -2,12 +2,13 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Fixed an app crash right after creating a character.",
-    "Fixed a rare crash when quickly closing a dialog with a text field.",
-    "Character creation now suggests starting spells by class automatically, with a separate picker for level-1 spells.",
-    "Fixed a duplicated highlighted class/school filter in the spellbook.",
-    "Fixed the Ranger class translation in the spellbook.",
-    "Reduced app size and improved performance."
+    "Fixed character spells showing dashes instead of real data (casting time, range, components) in the spellbook.",
+    "Fixed deleting a spell from the Known tab — it's now actually removed from the character instead of reappearing.",
+    "Paladin and Ranger now get suggested spells during character creation.",
+    "Unified the Cleric class translation in the spellbook.",
+    "Fixed Ukrainian-language spell search on the character sheet.",
+    "Adding an existing spell from the spellbook on the character sheet no longer creates a duplicate.",
+    "The filters block and the local-storage banner in the spellbook can now be collapsed/closed."
   ],
   "gotIt": "Got it"
 }

@@ -18,6 +18,7 @@ Make GM workflow a first-class mode, not a player sheet extension.
 - encounter prep handoff into initiative.
 
 Cross-stage alignment:
+
 - Historically, Stage 1 was used for role model and sync conflict baseline.
 - Historically, Stage 2 was used for play/edit separation.
 - Historically, Stage 3 was used for homebrew canonical model.
@@ -26,6 +27,7 @@ Cross-stage alignment:
 ## Scope Delivered
 
 1. GM dashboard IA redesign:
+
 - `Party Overview` block;
 - `Shared Character Access + Quick Edit` block;
 - `Campaign Notes` block;
@@ -34,18 +36,21 @@ Cross-stage alignment:
 - quick reference entrypoints to `Bestiary`, `Spellbook`, `Initiative`.
 
 2. GM stack extensions:
+
 - `DMPartyOverview`;
 - `DMQuickEdit({ characterId })`;
 - `DMCampaignNotes({ campaignId? })`;
 - `DMEncounterPrep({ campaignId? })`.
 
 3. Campaign core (MVP+):
+
 - `campaignId` added to character schema;
 - dedicated campaign entities (`dmCampaigns`) with local cache + cloud sync;
 - migration path from legacy `character.campaign` to `campaignId`;
 - party grouping by campaign id with legacy fallback.
 
 4. Campaign notes (Cloud + Offline):
+
 - dedicated campaign notes entities (`dmCampaignNotes`);
 - local cache + offline queue (`upsert/delete`);
 - shared sync states aligned with Stage 4 labels;
@@ -55,6 +60,7 @@ Cross-stage alignment:
   - merge manual
 
 5. Expanded GM quick edit:
+
 - HP/current/temp;
 - conditions;
 - initiative and AC;
@@ -65,6 +71,7 @@ Cross-stage alignment:
 - quick edit pushes shared history with `actorRole: GM`.
 
 6. Encounter prep starter flow:
+
 - select campaign;
 - auto-pull party from campaign-linked characters;
 - add monsters from bestiary (pinned-first);
@@ -85,10 +92,12 @@ Cross-stage alignment:
 ## Firestore Access Model
 
 New collections follow owner/editor model consistent with Stage 1 capabilities:
+
 - `dmCampaigns`
 - `dmCampaignNotes`
 
 Rules mirror `characterSheets` semantics:
+
 - owner has full update rights;
 - editor can update content fields but cannot mutate ownership arrays.
 

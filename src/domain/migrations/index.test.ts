@@ -44,7 +44,9 @@ function legacyPayload(kind: MigrationKind): unknown {
     case 'dmNotesQueue':
       return [{ id: 'q1', type: 'upsert', noteId: 'note-1', campaignId: 'campaign-1', atMs: 1 }];
     case 'dmMonsters':
-      return [{ id: 'm1', name: 'Goblin', stats: { strength: 8, dexterity: 14, constitution: 10, intelligence: 8, wisdom: 8, charisma: 8 } }];
+      return [
+        { id: 'm1', name: 'Goblin', stats: { strength: 8, dexterity: 14, constitution: 10, intelligence: 8, wisdom: 8, charisma: 8 } },
+      ];
     case 'dmPins':
       return ['m1', 'm1', 'm2'];
     case 'dmUserTemplates':

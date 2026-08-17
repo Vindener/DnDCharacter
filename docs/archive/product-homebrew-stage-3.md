@@ -28,6 +28,7 @@ Make character sheets usable for non-standard systems and campaign rules without
 ## Scope Delivered In This Iteration
 
 1. Canonical homebrew model:
+
 - `characterTemplateId` with templates:
   - `standard-5e`
   - `homebrew-light`
@@ -40,6 +41,7 @@ Make character sheets usable for non-standard systems and campaign rules without
 - `homebrewEntries[]` with `kind: spell | ability | feat`.
 
 2. Backward-compatible migration and normalization:
+
 - `normalizeHomebrewV3()` on local/cloud read.
 - one-way migration:
   - `customTrackers -> customResources`
@@ -48,31 +50,37 @@ Make character sheets usable for non-standard systems and campaign rules without
 - legacy fields stay readable during transition.
 
 3. Create Character templates (`Create-only`, `Prefill + Editable`):
+
 - template selection in step flow;
 - template prefill for resources/sections/entries;
 - created character stores selected template id.
 
 4. Homebrew UI expansion:
+
 - Character screen now manages canonical resources.
 - custom notes groups are editable and dynamic.
 - custom sections and homebrew entries are editable.
 - Spellbook includes core spells + homebrew spell entries.
 
 5. Tracker templates:
+
 - system templates are built-in.
 - user templates are local-only and reusable between characters.
 
 ## UX Decisions
 
 1. Homebrew label derives automatically:
+
 - helper `isHomebrewCharacter(dto)` returns true when:
   - template is not `standard-5e`, or
   - canonical homebrew content exists.
 
 2. No manual Homebrew override:
+
 - label reflects data, not a toggle.
 
 3. Notes model:
+
 - legacy fixed notes are migrated to seeded groups;
 - user can add/remove custom groups.
 

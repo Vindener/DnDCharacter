@@ -50,19 +50,13 @@
           "name": "rollInitiativeFor",
           "startLine": 4,
           "endLine": 6,
-          "params": [
-            "modifier",
-            "label",
-            "random"
-          ]
+          "params": ["modifier", "label", "random"]
         },
         {
           "name": "sortByInitiative",
           "startLine": 11,
           "endLine": 16,
-          "params": [
-            "combatants"
-          ]
+          "params": ["combatants"]
         }
       ],
       "exports": [
@@ -117,9 +111,7 @@
           "name": "Character",
           "startLine": 26,
           "endLine": 194,
-          "params": [
-            "{ route }"
-          ]
+          "params": ["{ route }"]
         }
       ],
       "exports": [
@@ -381,10 +373,7 @@
           "name": "appendSignedModifier",
           "startLine": 89,
           "endLine": 92,
-          "params": [
-            "formula",
-            "modifier"
-          ]
+          "params": ["formula", "modifier"]
         },
         {
           "name": "CharacterModalsBase",
@@ -972,9 +961,7 @@
           "name": "CharacterTabsBase",
           "startLine": 26,
           "endLine": 69,
-          "params": [
-            "{ styles, colors, tabOrder, tabLabels, selectedTab, hasConflictForTab, openTab }"
-          ]
+          "params": ["{ styles, colors, tabOrder, tabLabels, selectedTab, hasConflictForTab, openTab }"]
         }
       ],
       "exports": [
@@ -1034,28 +1021,19 @@
           "name": "clamp",
           "startLine": 11,
           "endLine": 13,
-          "params": [
-            "value",
-            "min",
-            "max"
-          ]
+          "params": ["value", "min", "max"]
         },
         {
           "name": "CombatSummaryCardBase",
           "startLine": 15,
           "endLine": 68,
-          "params": [
-            "{\n  styles,\n  characterData,\n  hpPercent,\n  proficiency,\n  passivePerception,\n  sectionConflictLabel,\n}"
-          ]
+          "params": ["{\n  styles,\n  characterData,\n  hpPercent,\n  proficiency,\n  passivePerception,\n  sectionConflictLabel,\n}"]
         },
         {
           "name": "areEqual",
           "startLine": 70,
           "endLine": 85,
-          "params": [
-            "prev",
-            "next"
-          ]
+          "params": ["prev", "next"]
         }
       ],
       "exports": [
@@ -1145,9 +1123,7 @@
           "name": "QuickActionBarBase",
           "startLine": 20,
           "endLine": 53,
-          "params": [
-            "{ styles, colors, quickActions, onQuickActionPress }"
-          ]
+          "params": ["{ styles, colors, quickActions, onQuickActionPress }"]
         }
       ],
       "exports": [
@@ -1192,152 +1168,109 @@
           "name": "conflictSectionFromPaths",
           "startLine": 42,
           "endLine": 46,
-          "params": [
-            "paths"
-          ]
+          "params": ["paths"]
         },
         {
           "name": "clamp",
           "startLine": 144,
           "endLine": 146,
-          "params": [
-            "value",
-            "min",
-            "max"
-          ]
+          "params": ["value", "min", "max"]
         },
         {
           "name": "parseNumber",
           "startLine": 148,
           "endLine": 151,
-          "params": [
-            "value",
-            "fallback"
-          ]
+          "params": ["value", "fallback"]
         },
         {
           "name": "parseModalNumber",
           "startLine": 153,
           "endLine": 156,
-          "params": [
-            "value",
-            "fallback"
-          ]
+          "params": ["value", "fallback"]
         },
         {
           "name": "formatSignedModifier",
           "startLine": 158,
           "endLine": 160,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "formatBonus",
           "startLine": 162,
           "endLine": 164,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "normalizeConditionKey",
           "startLine": 166,
           "endLine": 168,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "getConditionHint",
           "startLine": 170,
           "endLine": 175,
-          "params": [
-            "value",
-            "t"
-          ]
+          "params": ["value", "t"]
         },
         {
           "name": "getNextSkillRank",
           "startLine": 177,
           "endLine": 182,
-          "params": [
-            "rank"
-          ]
+          "params": ["rank"]
         },
         {
           "name": "parseLines",
           "startLine": 184,
           "endLine": 189,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "buildLevelChangeDraftText",
           "startLine": 191,
           "endLine": 207,
-          "params": [
-            "character",
-            "fallbackProficiency"
-          ]
+          "params": ["character", "fallbackProficiency"]
         },
         {
           "name": "buildDiceRollResultDetails",
           "startLine": 209,
           "endLine": 223,
-          "params": [
-            "result",
-            "t"
-          ]
+          "params": ["result", "t"]
         },
         {
           "name": "buildProficiencyByLevel",
           "startLine": 225,
           "endLine": 228,
-          "params": [
-            "level"
-          ]
+          "params": ["level"]
         },
         {
           "name": "getResourceResetValue",
           "startLine": 230,
           "endLine": 233,
-          "params": [
-            "resource"
-          ]
+          "params": ["resource"]
         },
         {
           "name": "ensureCharacterDefaults",
           "startLine": 235,
           "endLine": 241,
-          "params": [
-            "character"
-          ]
+          "params": ["character"]
         },
         {
           "name": "sanitizeChangeHistory",
           "startLine": 243,
           "endLine": 263,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "useCharacterActions",
           "startLine": 265,
           "endLine": 3705,
-          "params": [
-            "{ route }"
-          ]
+          "params": ["{ route }"]
         },
         {
           "name": "getSheetOwners",
           "startLine": 3711,
           "endLine": 3717,
-          "params": [
-            "doc"
-          ]
+          "params": ["doc"]
         }
       ],
       "exports": [
@@ -8359,9 +8292,7 @@
           "name": "makeProps",
           "startLine": 39,
           "endLine": 57,
-          "params": [
-            "overrides"
-          ]
+          "params": ["overrides"]
         }
       ],
       "callGraph": [
@@ -8444,9 +8375,7 @@
           "name": "CharacterTabContentBase",
           "startLine": 26,
           "endLine": 60,
-          "params": [
-            "props"
-          ]
+          "params": ["props"]
         }
       ],
       "exports": [
@@ -8474,9 +8403,7 @@
           "name": "CombatTab",
           "startLine": 3,
           "endLine": 5,
-          "params": [
-            "{ mode, renderPlay, renderEdit }"
-          ]
+          "params": ["{ mode, renderPlay, renderEdit }"]
         }
       ],
       "exports": [
@@ -8516,9 +8443,7 @@
           "name": "HomebrewTab",
           "startLine": 3,
           "endLine": 5,
-          "params": [
-            "{ mode, renderPlay, renderEdit }"
-          ]
+          "params": ["{ mode, renderPlay, renderEdit }"]
         }
       ],
       "exports": [
@@ -8558,9 +8483,7 @@
           "name": "InventoryTab",
           "startLine": 3,
           "endLine": 5,
-          "params": [
-            "{ mode, renderPlay, renderEdit }"
-          ]
+          "params": ["{ mode, renderPlay, renderEdit }"]
         }
       ],
       "exports": [
@@ -8600,9 +8523,7 @@
           "name": "MagicTab",
           "startLine": 3,
           "endLine": 5,
-          "params": [
-            "{ mode, renderPlay, renderEdit }"
-          ]
+          "params": ["{ mode, renderPlay, renderEdit }"]
         }
       ],
       "exports": [
@@ -8642,9 +8563,7 @@
           "name": "NotesTab",
           "startLine": 3,
           "endLine": 5,
-          "params": [
-            "{ mode, renderPlay, renderEdit }"
-          ]
+          "params": ["{ mode, renderPlay, renderEdit }"]
         }
       ],
       "exports": [
@@ -8684,9 +8603,7 @@
           "name": "OverviewTab",
           "startLine": 3,
           "endLine": 5,
-          "params": [
-            "{ mode, renderPlay, renderEdit }"
-          ]
+          "params": ["{ mode, renderPlay, renderEdit }"]
         }
       ],
       "exports": [
@@ -8726,17 +8643,13 @@
           "name": "Dice",
           "startLine": 18,
           "endLine": 44,
-          "params": [
-            "{ route, sides: propSides, onRoll }"
-          ]
+          "params": ["{ route, sides: propSides, onRoll }"]
         },
         {
           "name": "rollSingleDie",
           "startLine": 46,
           "endLine": 49,
-          "params": [
-            "sides"
-          ]
+          "params": ["sides"]
         }
       ],
       "callGraph": [
@@ -8872,52 +8785,37 @@
           "name": "signed",
           "startLine": 16,
           "endLine": 19,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "appendFormulaModifier",
           "startLine": 21,
           "endLine": 24,
-          "params": [
-            "formula",
-            "modifier"
-          ]
+          "params": ["formula", "modifier"]
         },
         {
           "name": "clampDiceCount",
           "startLine": 26,
           "endLine": 29,
-          "params": [
-            "count"
-          ]
+          "params": ["count"]
         },
         {
           "name": "formatResultDetails",
           "startLine": 31,
           "endLine": 43,
-          "params": [
-            "result",
-            "t"
-          ]
+          "params": ["result", "t"]
         },
         {
           "name": "formatImmediateResult",
           "startLine": 45,
           "endLine": 63,
-          "params": [
-            "result",
-            "t"
-          ]
+          "params": ["result", "t"]
         },
         {
           "name": "DiceRollerPanel",
           "startLine": 97,
           "endLine": 420,
-          "params": [
-            "{\n  embedded = false,\n  autoRoll = false,\n  onRollPress,\n  onRollResult,\n  preset,\n  resultAction,\n}"
-          ]
+          "params": ["{\n  embedded = false,\n  autoRoll = false,\n  onRollPress,\n  onRollResult,\n  preset,\n  resultAction,\n}"]
         },
         {
           "name": "DiceRoller",
@@ -9703,9 +9601,7 @@
           "name": "calculateModifier",
           "startLine": 1,
           "endLine": 3,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         }
       ],
       "exports": [
@@ -9740,9 +9636,7 @@
           "name": "fixedRandom",
           "startLine": 4,
           "endLine": 7,
-          "params": [
-            "...values"
-          ]
+          "params": ["...values"]
         }
       ],
       "metrics": {
@@ -9769,69 +9663,49 @@
           "name": "randomInt",
           "startLine": 51,
           "endLine": 53,
-          "params": [
-            "max",
-            "random"
-          ]
+          "params": ["max", "random"]
         },
         {
           "name": "clampCount",
           "startLine": 55,
           "endLine": 58,
-          "params": [
-            "count"
-          ]
+          "params": ["count"]
         },
         {
           "name": "formatSigned",
           "startLine": 60,
           "endLine": 63,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "normalizeFormula",
           "startLine": 65,
           "endLine": 67,
-          "params": [
-            "count",
-            "dice",
-            "modifier",
-            "proficiencyBonus"
-          ]
+          "params": ["count", "dice", "modifier", "proficiencyBonus"]
         },
         {
           "name": "parseFormulaTerms",
           "startLine": 69,
           "endLine": 92,
-          "params": [
-            "rawFormula"
-          ]
+          "params": ["rawFormula"]
         },
         {
           "name": "rollDice",
           "startLine": 94,
           "endLine": 128,
-          "params": [
-            "input"
-          ]
+          "params": ["input"]
         },
         {
           "name": "rollFormula",
           "startLine": 130,
           "endLine": 165,
-          "params": [
-            "input"
-          ]
+          "params": ["input"]
         },
         {
           "name": "parseDiceType",
           "startLine": 167,
           "endLine": 171,
-          "params": [
-            "sides"
-          ]
+          "params": ["sides"]
         }
       ],
       "exports": [

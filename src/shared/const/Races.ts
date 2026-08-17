@@ -1,24 +1,27 @@
-export type AbilityKey = 'strength'|'dexterity'|'constitution'|'intelligence'|'wisdom'|'charisma';
+export type AbilityKey = 'strength' | 'dexterity' | 'constitution' | 'intelligence' | 'wisdom' | 'charisma';
 
 export interface FlexibleASI {
-  count: number;                // how many +1 picks
-  exclude?: AbilityKey[];       // stats that cannot be chosen
-  note?: string;                // UI note
+  count: number; // how many +1 picks
+  exclude?: AbilityKey[]; // stats that cannot be chosen
+  note?: string; // UI note
 }
 
 export interface RaceDefinition {
   name: string;
   speed: number;
   asi?: Partial<Record<AbilityKey, number>>; // Ability Score Increase
-  flexible?: FlexibleASI;                     // e.g., Half-Elf +1/+1 to two different
+  flexible?: FlexibleASI; // e.g., Half-Elf +1/+1 to two different
   traits?: string[];
-  description?: string;                       // long UA description (paraphrased)
-  subraces?: Record<string, {
-    asi?: Partial<Record<AbilityKey, number>>;
-    flexible?: FlexibleASI;
-    traits?: string[];
-    description?: string;
-  }>;
+  description?: string; // long UA description (paraphrased)
+  subraces?: Record<
+    string,
+    {
+      asi?: Partial<Record<AbilityKey, number>>;
+      flexible?: FlexibleASI;
+      traits?: string[];
+      description?: string;
+    }
+  >;
 }
 
 export const RACES: Record<string, RaceDefinition> = {

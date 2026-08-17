@@ -38,4 +38,3 @@ const Notes: React.FC<NotesProps> = ({ data }: NotesProps) => {
 };
 
 export default Notes;
-

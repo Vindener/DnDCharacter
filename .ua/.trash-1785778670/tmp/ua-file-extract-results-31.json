@@ -46,9 +46,7 @@
           "name": "createHost",
           "startLine": 11,
           "endLine": 15,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "createAnimation",
@@ -62,14 +60,8 @@
           "name": "AnimatedValue",
           "startLine": 17,
           "endLine": 31,
-          "methods": [
-            "constructor",
-            "setValue",
-            "interpolate"
-          ],
-          "properties": [
-            "value"
-          ]
+          "methods": ["constructor", "setValue", "interpolate"],
+          "properties": ["value"]
         }
       ],
       "exports": [

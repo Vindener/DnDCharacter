@@ -12,7 +12,8 @@ export type CharacterStoreActionsSlice = {
 
 export type CharacterStoreSelectorState = {
   characters: CharacterEntity[];
-} & CharacterStoreBasicsSlice & CharacterStoreActionsSlice;
+} & CharacterStoreBasicsSlice &
+  CharacterStoreActionsSlice;
 
 export const selectActiveCharacter = (
   state: Pick<CharacterStoreSelectorState, 'characters' | 'currentCharacterId'>,

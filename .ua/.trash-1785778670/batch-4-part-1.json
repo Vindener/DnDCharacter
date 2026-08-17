@@ -441,91 +441,583 @@
     }
   ],
   "edges": [
-    { "source": "file:src/dm/repositories/campaignNotesRepository.test.ts", "target": "file:src/dm/repositories/campaignNotesRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/dm/repositories/campaignNotesRepository.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/dm/repositories/campaignRepository.test.ts", "target": "file:src/dm/repositories/campaignRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/dm/repositories/campaignRepository.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/dm/repositories/dmSettingsRepository.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/character.mapper.test.ts", "target": "file:src/domain/mappers/character.mapper.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/character.mapper.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/homebrew.mapper.test.ts", "target": "file:src/domain/mappers/homebrew.mapper.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/homebrew.mapper.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/homebrew.mapper.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/spell.mapper.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/mappers/spell.mapper.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/migrations/index.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "file:src/domain/schemas/campaignNote.schema.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.test.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "file:src/domain/schemas/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7 },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.test.ts",
+      "target": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.test.ts",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/dm/repositories/dmSettingsRepository.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.test.ts",
+      "target": "file:src/domain/mappers/character.mapper.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/homebrew.mapper.test.ts",
+      "target": "file:src/domain/mappers/homebrew.mapper.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/homebrew.mapper.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/homebrew.mapper.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/spell.mapper.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/mappers/spell.mapper.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/migrations/index.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "file:src/domain/schemas/campaignNote.schema.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.test.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "file:src/domain/schemas/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    { "source": "file:src/dm/repositories/dmSettingsRepository.ts", "target": "function:src/dm/repositories/dmSettingsRepository.ts:loadDefaultCampaignId", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/dm/repositories/dmSettingsRepository.ts", "target": "function:src/dm/repositories/dmSettingsRepository.ts:persistDefaultCampaignId", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:migrateCharacterPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:entityToDto", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:entityToViewModel", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToDraft", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToEntity", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/mappers/spell.mapper.ts", "target": "function:src/domain/mappers/spell.mapper.ts:spellbookInputToEntity", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.test.ts", "target": "function:src/domain/migrations/index.test.ts:legacyPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateCharacterV1toV2", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateCharacterV2toV3", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateCharacterV3toV4", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateKindV1toV2", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateKindV2toV3", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:stampPersistedSchemaVersion", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateV1toV2", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateV2toV3", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateV3toV4", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateToLatest", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:normalizeStorageEnvelope", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:createStorageEnvelope", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parsePlayer", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseMonster", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:clampList", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseDifficulty", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseConflictRemote", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:normalizeCampaignEncounterPayload", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignEncounter.schema.ts", "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseQueueItem", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "function:src/domain/schemas/campaignInitiative.schema.ts:parseCombatant", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "function:src/domain/schemas/campaignInitiative.schema.ts:clampCombatants", "type": "contains", "direction": "forward", "weight": 1.0 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "function:src/domain/schemas/campaignInitiative.schema.ts:normalizeCampaignInitiativePayload", "type": "contains", "direction": "forward", "weight": 1.0 },
+    {
+      "source": "file:src/dm/repositories/dmSettingsRepository.ts",
+      "target": "function:src/dm/repositories/dmSettingsRepository.ts:loadDefaultCampaignId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/dm/repositories/dmSettingsRepository.ts",
+      "target": "function:src/dm/repositories/dmSettingsRepository.ts:persistDefaultCampaignId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:migrateCharacterPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:entityToDto",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:entityToViewModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToDraft",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToEntity",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/mappers/spell.mapper.ts",
+      "target": "function:src/domain/mappers/spell.mapper.ts:spellbookInputToEntity",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.test.ts",
+      "target": "function:src/domain/migrations/index.test.ts:legacyPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateCharacterV1toV2",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateCharacterV2toV3",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateCharacterV3toV4",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateKindV1toV2",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateKindV2toV3",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:stampPersistedSchemaVersion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateV1toV2",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateV2toV3",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateV3toV4",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateToLatest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:normalizeStorageEnvelope",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:createStorageEnvelope",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parsePlayer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseMonster",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:clampList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseDifficulty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseConflictRemote",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:normalizeCampaignEncounterPayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignEncounter.schema.ts",
+      "target": "function:src/domain/schemas/campaignEncounter.schema.ts:parseQueueItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "function:src/domain/schemas/campaignInitiative.schema.ts:parseCombatant",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "function:src/domain/schemas/campaignInitiative.schema.ts:clampCombatants",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "function:src/domain/schemas/campaignInitiative.schema.ts:normalizeCampaignInitiativePayload",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    { "source": "file:src/dm/repositories/dmSettingsRepository.ts", "target": "function:src/dm/repositories/dmSettingsRepository.ts:loadDefaultCampaignId", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/dm/repositories/dmSettingsRepository.ts", "target": "function:src/dm/repositories/dmSettingsRepository.ts:persistDefaultCampaignId", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:entityToDto", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:entityToViewModel", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToDraft", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToEntity", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/mappers/spell.mapper.ts", "target": "function:src/domain/mappers/spell.mapper.ts:spellbookInputToEntity", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateV1toV2", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateV2toV3", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateV3toV4", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migrateToLatest", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:normalizeStorageEnvelope", "type": "exports", "direction": "forward", "weight": 0.8 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "function:src/domain/migrations/index.ts:createStorageEnvelope", "type": "exports", "direction": "forward", "weight": 0.8 },
+    {
+      "source": "file:src/dm/repositories/dmSettingsRepository.ts",
+      "target": "function:src/dm/repositories/dmSettingsRepository.ts:loadDefaultCampaignId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/dm/repositories/dmSettingsRepository.ts",
+      "target": "function:src/dm/repositories/dmSettingsRepository.ts:persistDefaultCampaignId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:entityToDto",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:entityToViewModel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToDraft",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "function:src/domain/mappers/character.mapper.ts:cloudDocToEntity",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/mappers/spell.mapper.ts",
+      "target": "function:src/domain/mappers/spell.mapper.ts:spellbookInputToEntity",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateV1toV2",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateV2toV3",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateV3toV4",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migrateToLatest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:normalizeStorageEnvelope",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "function:src/domain/migrations/index.ts:createStorageEnvelope",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    { "source": "file:src/dm/repositories/campaignNotesRepository.ts", "target": "file:src/dm/repositories/campaignNotesRepository.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/dm/repositories/campaignRepository.ts", "target": "file:src/dm/repositories/campaignRepository.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/mappers/character.mapper.ts", "target": "file:src/domain/mappers/character.mapper.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/mappers/homebrew.mapper.ts", "target": "file:src/domain/mappers/homebrew.mapper.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/migrations/index.ts", "target": "file:src/domain/migrations/index.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
-    { "source": "file:src/domain/schemas/campaignInitiative.schema.ts", "target": "file:src/domain/schemas/campaignInitiative.schema.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5 },
+    {
+      "source": "file:src/dm/repositories/campaignNotesRepository.ts",
+      "target": "file:src/dm/repositories/campaignNotesRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/dm/repositories/campaignRepository.ts",
+      "target": "file:src/dm/repositories/campaignRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/mappers/character.mapper.ts",
+      "target": "file:src/domain/mappers/character.mapper.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/mappers/homebrew.mapper.ts",
+      "target": "file:src/domain/mappers/homebrew.mapper.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/migrations/index.ts",
+      "target": "file:src/domain/migrations/index.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/domain/schemas/campaignInitiative.schema.ts",
+      "target": "file:src/domain/schemas/campaignInitiative.schema.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
 
-    { "source": "function:src/dm/repositories/dmSettingsRepository.ts:loadDefaultCampaignId", "target": "function:src/domain/migrations/index.ts:normalizeStorageEnvelope", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/dm/repositories/dmSettingsRepository.ts:persistDefaultCampaignId", "target": "function:src/domain/migrations/index.ts:createStorageEnvelope", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/domain/mappers/character.mapper.ts:migrateCharacterPayload", "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/domain/schemas/campaignEncounter.schema.ts:normalizeCampaignEncounterPayload", "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest", "type": "calls", "direction": "forward", "weight": 0.8 },
-    { "source": "function:src/domain/schemas/campaignInitiative.schema.ts:normalizeCampaignInitiativePayload", "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest", "type": "calls", "direction": "forward", "weight": 0.8 }
+    {
+      "source": "function:src/dm/repositories/dmSettingsRepository.ts:loadDefaultCampaignId",
+      "target": "function:src/domain/migrations/index.ts:normalizeStorageEnvelope",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/dm/repositories/dmSettingsRepository.ts:persistDefaultCampaignId",
+      "target": "function:src/domain/migrations/index.ts:createStorageEnvelope",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/domain/mappers/character.mapper.ts:migrateCharacterPayload",
+      "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/domain/schemas/campaignEncounter.schema.ts:normalizeCampaignEncounterPayload",
+      "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/domain/schemas/campaignInitiative.schema.ts:normalizeCampaignInitiativePayload",
+      "target": "function:src/domain/migrations/index.ts:migratePayloadToLatest",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
   ]
 }

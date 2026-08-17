@@ -19,6 +19,7 @@ Mythgate 5e Companion is a mobile character sheet for 5e and homebrew campaigns,
 ### Product Pillars
 
 1. Player-friendly
+
 - quick character sheet interaction;
 - minimal UI noise during play;
 - quick actions for frequent session operations;
@@ -26,6 +27,7 @@ Mythgate 5e Companion is a mobile character sheet for 5e and homebrew campaigns,
 - offline-first access.
 
 2. GM-friendly
+
 - fast access to party and characters;
 - controlled editing and synchronization;
 - shared updates workflow;
@@ -35,24 +37,29 @@ Mythgate 5e Companion is a mobile character sheet for 5e and homebrew campaigns,
 ## 2. Product Principles For Redesign
 
 1. Session-first UX
+
 - core actions must be reachable in 1-2 taps during play:
 - change HP, add temp HP, roll dice, apply condition, rest, open spell/attack/note.
 
 2. Edit separately from Play
+
 - Play Mode: low-friction interaction, large touch targets, minimum forms;
 - Edit Mode: full configuration surface with structured forms.
 
 3. Local-first, Cloud-enhanced
+
 - local data exists always;
 - cloud provides collaboration and sync;
 - user always sees explicit data status.
 
 4. Homebrew as first-class
+
 - native support for custom fields/resources/sections;
 - custom reset rules;
 - custom spell lists and feature blocks.
 
 5. GM is not secondary
+
 - GM workspace is a coherent operating area, not an incidental list of screens.
 
 ## 3. Roles and Capability Model
@@ -65,14 +72,14 @@ Mythgate 5e Companion is a mobile character sheet for 5e and homebrew campaigns,
 
 ### Capability Matrix
 
-| Capability | Player | GM | Hybrid |
-| --- | --- | --- | --- |
-| Quick session actions on own sheet | Yes | Optional | Yes |
-| Full edit of own sheet | Yes | Optional | Yes |
-| Edit another player's shared sheet | By permission | Yes (with permission) | Yes |
-| Party overview | Optional | Yes | Yes |
-| GM tools (notes, bestiary, initiative, spells ref) | Optional | Yes | Yes |
-| Resolve sync conflicts | Own sheets | Shared/party sheets | Both |
+| Capability                                         | Player        | GM                    | Hybrid |
+| -------------------------------------------------- | ------------- | --------------------- | ------ |
+| Quick session actions on own sheet                 | Yes           | Optional              | Yes    |
+| Full edit of own sheet                             | Yes           | Optional              | Yes    |
+| Edit another player's shared sheet                 | By permission | Yes (with permission) | Yes    |
+| Party overview                                     | Optional      | Yes                   | Yes    |
+| GM tools (notes, bestiary, initiative, spells ref) | Optional      | Yes                   | Yes    |
+| Resolve sync conflicts                             | Own sheets    | Shared/party sheets   | Both   |
 
 ## 4. Main User Flows
 
@@ -84,6 +91,7 @@ Mythgate 5e Companion is a mobile character sheet for 5e and homebrew campaigns,
 4. Sync status badge updates (`Pending sync` or `Synced`).
 
 Success criteria:
+
 - primary actions are 1-2 taps;
 - no form-heavy interaction in play path.
 
@@ -95,6 +103,7 @@ Success criteria:
 4. Cloud sync runs in background when available.
 
 Success criteria:
+
 - deep edit does not degrade Play Mode speed;
 - unsaved local draft is never lost.
 
@@ -106,6 +115,7 @@ Success criteria:
 4. Change is synced and appears in player's shared timeline.
 
 Success criteria:
+
 - explicit attribution for who changed what;
 - safe permissions (owner/editor model).
 
@@ -117,6 +127,7 @@ Success criteria:
 4. GM can review diff and continue.
 
 Success criteria:
+
 - near-real-time visibility online;
 - clear status while one side is offline.
 
@@ -128,6 +139,7 @@ Success criteria:
 4. On reconnect, sync engine applies queued changes with conflict checks.
 
 Success criteria:
+
 - full functional play/edit offline;
 - zero data loss after reconnect.
 
@@ -136,14 +148,17 @@ Success criteria:
 ### Canonical Layers
 
 1. `LocalState` (device baseline)
+
 - always writable/readable;
 - contains current draft used by UI.
 
 2. `CloudSharedState` (collaboration layer)
+
 - shared canonical doc for owners/editors;
 - source for remote updates.
 
 3. `LastSyncState` (merge baseline)
+
 - snapshot/version used to compute diffs and detect conflicts.
 
 ### Sync Status (visible to user)
@@ -161,11 +176,13 @@ Success criteria:
 3. If cloud path unchanged: auto-merge local change.
 4. If both local and cloud changed same path: create conflict item.
 5. Conflict resolution UI offers:
+
 - keep local;
 - keep cloud;
 - merge manually (for text/list fields).
 
 Priority rule:
+
 - no silent overwrite for session-critical counters (`hp`, `tempHp`, `deathSaves`, `spellSlots`, custom trackers).
 
 ## 6. Character Data Structure (Target Logical Schema)
@@ -278,11 +295,7 @@ Stage 1 file scope is now fully implemented in product foundation layer:
 - conflict resolution entry points are available in Character Sheet;
 - flow instrumentation is added for role/session/open/quick-action/conflict events.
 
-
-
 ## 12. Cross-stage Note (2026-03-29)
 
 - Stage 3 is defined as Homebrew-first system and is documented in `docs/product-homebrew-stage-3.md`.
 - Historically, Stage 1 was used for role/capability model and baseline sync/conflict policy.
-
-

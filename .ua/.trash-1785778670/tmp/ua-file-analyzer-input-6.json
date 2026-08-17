@@ -1,37 +1,39 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/context/TrackerTemplates-store.ts", "language": "typescript", "sizeLines": 2, "fileCategory": "code"},
-    {"path": "src/dm/domain/initiative/roll.ts", "language": "typescript", "sizeLines": 16, "fileCategory": "code"},
-    {"path": "src/screens/Character/Character.tsx", "language": "typescript", "sizeLines": 194, "fileCategory": "code"},
-    {"path": "src/screens/Character/components/CharacterHeader.tsx", "language": "typescript", "sizeLines": 132, "fileCategory": "code"},
-    {"path": "src/screens/Character/components/CharacterModals.tsx", "language": "typescript", "sizeLines": 622, "fileCategory": "code"},
-    {"path": "src/screens/Character/components/CharacterTabs.tsx", "language": "typescript", "sizeLines": 71, "fileCategory": "code"},
-    {"path": "src/screens/Character/components/CombatSummaryCard.tsx", "language": "typescript", "sizeLines": 87, "fileCategory": "code"},
-    {"path": "src/screens/Character/components/QuickActionBar.tsx", "language": "typescript", "sizeLines": 55, "fileCategory": "code"},
-    {"path": "src/screens/Character/hooks/useCharacterActions.tsx", "language": "typescript", "sizeLines": 3717, "fileCategory": "code"},
-    {"path": "src/screens/Character/hooks/useQuickActions.ts", "language": "typescript", "sizeLines": 71, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/CharacterTabContent.test.tsx", "language": "typescript", "sizeLines": 83, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/CharacterTabContent.tsx", "language": "typescript", "sizeLines": 62, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/CombatTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/HomebrewTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/InventoryTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/MagicTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/NotesTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
-    {"path": "src/screens/Character/tabs/OverviewTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code"},
-    {"path": "src/screens/Dice/Dice.tsx", "language": "typescript", "sizeLines": 51, "fileCategory": "code"},
-    {"path": "src/screens/DiceRoller/DiceRoller.test.tsx", "language": "typescript", "sizeLines": 101, "fileCategory": "code"},
-    {"path": "src/screens/DiceRoller/DiceRoller.tsx", "language": "typescript", "sizeLines": 438, "fileCategory": "code"},
-    {"path": "src/shared/helpers/calculateModifier.ts", "language": "typescript", "sizeLines": 3, "fileCategory": "code"},
-    {"path": "src/shared/services/diceRoller.test.ts", "language": "typescript", "sizeLines": 112, "fileCategory": "code"},
-    {"path": "src/shared/services/diceRoller.ts", "language": "typescript", "sizeLines": 171, "fileCategory": "code"}
+    { "path": "src/context/TrackerTemplates-store.ts", "language": "typescript", "sizeLines": 2, "fileCategory": "code" },
+    { "path": "src/dm/domain/initiative/roll.ts", "language": "typescript", "sizeLines": 16, "fileCategory": "code" },
+    { "path": "src/screens/Character/Character.tsx", "language": "typescript", "sizeLines": 194, "fileCategory": "code" },
+    { "path": "src/screens/Character/components/CharacterHeader.tsx", "language": "typescript", "sizeLines": 132, "fileCategory": "code" },
+    { "path": "src/screens/Character/components/CharacterModals.tsx", "language": "typescript", "sizeLines": 622, "fileCategory": "code" },
+    { "path": "src/screens/Character/components/CharacterTabs.tsx", "language": "typescript", "sizeLines": 71, "fileCategory": "code" },
+    { "path": "src/screens/Character/components/CombatSummaryCard.tsx", "language": "typescript", "sizeLines": 87, "fileCategory": "code" },
+    { "path": "src/screens/Character/components/QuickActionBar.tsx", "language": "typescript", "sizeLines": 55, "fileCategory": "code" },
+    { "path": "src/screens/Character/hooks/useCharacterActions.tsx", "language": "typescript", "sizeLines": 3717, "fileCategory": "code" },
+    { "path": "src/screens/Character/hooks/useQuickActions.ts", "language": "typescript", "sizeLines": 71, "fileCategory": "code" },
+    {
+      "path": "src/screens/Character/tabs/CharacterTabContent.test.tsx",
+      "language": "typescript",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    { "path": "src/screens/Character/tabs/CharacterTabContent.tsx", "language": "typescript", "sizeLines": 62, "fileCategory": "code" },
+    { "path": "src/screens/Character/tabs/CombatTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code" },
+    { "path": "src/screens/Character/tabs/HomebrewTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code" },
+    { "path": "src/screens/Character/tabs/InventoryTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code" },
+    { "path": "src/screens/Character/tabs/MagicTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code" },
+    { "path": "src/screens/Character/tabs/NotesTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code" },
+    { "path": "src/screens/Character/tabs/OverviewTab.tsx", "language": "typescript", "sizeLines": 6, "fileCategory": "code" },
+    { "path": "src/screens/Dice/Dice.tsx", "language": "typescript", "sizeLines": 51, "fileCategory": "code" },
+    { "path": "src/screens/DiceRoller/DiceRoller.test.tsx", "language": "typescript", "sizeLines": 101, "fileCategory": "code" },
+    { "path": "src/screens/DiceRoller/DiceRoller.tsx", "language": "typescript", "sizeLines": 438, "fileCategory": "code" },
+    { "path": "src/shared/helpers/calculateModifier.ts", "language": "typescript", "sizeLines": 3, "fileCategory": "code" },
+    { "path": "src/shared/services/diceRoller.test.ts", "language": "typescript", "sizeLines": 112, "fileCategory": "code" },
+    { "path": "src/shared/services/diceRoller.ts", "language": "typescript", "sizeLines": 171, "fileCategory": "code" }
   ],
   "batchImportData": {
     "src/context/TrackerTemplates-store.ts": [],
-    "src/dm/domain/initiative/roll.ts": [
-      "src/dm/domain/types/index.ts",
-      "src/shared/services/diceRoller.ts"
-    ],
+    "src/dm/domain/initiative/roll.ts": ["src/dm/domain/types/index.ts", "src/shared/services/diceRoller.ts"],
     "src/screens/Character/Character.tsx": [
       "src/context/Character-store.ts",
       "src/repositories/characterCloudRepository.ts",
@@ -56,15 +58,9 @@
       "src/shared/helpers/calculateModifier.ts",
       "src/shared/services/diceRoller.ts"
     ],
-    "src/screens/Character/components/CharacterTabs.tsx": [
-      "src/screens/Character/hooks/useCharacterActions.tsx"
-    ],
-    "src/screens/Character/components/CombatSummaryCard.tsx": [
-      "src/screens/Character/hooks/useCharacterActions.tsx"
-    ],
-    "src/screens/Character/components/QuickActionBar.tsx": [
-      "src/screens/Character/hooks/useCharacterActions.tsx"
-    ],
+    "src/screens/Character/components/CharacterTabs.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
+    "src/screens/Character/components/CombatSummaryCard.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
+    "src/screens/Character/components/QuickActionBar.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
     "src/screens/Character/hooks/useCharacterActions.tsx": [
       "src/context/AppRole-store.ts",
       "src/context/Character-store.ts",
@@ -99,9 +95,7 @@
       "src/types/Spellbook.ts"
     ],
     "src/screens/Character/hooks/useQuickActions.ts": [],
-    "src/screens/Character/tabs/CharacterTabContent.test.tsx": [
-      "src/screens/Character/tabs/CharacterTabContent.tsx"
-    ],
+    "src/screens/Character/tabs/CharacterTabContent.test.tsx": ["src/screens/Character/tabs/CharacterTabContent.tsx"],
     "src/screens/Character/tabs/CharacterTabContent.tsx": [
       "src/screens/Character/tabs/CombatTab.tsx",
       "src/screens/Character/tabs/HomebrewTab.tsx",
@@ -116,23 +110,15 @@
     "src/screens/Character/tabs/MagicTab.tsx": [],
     "src/screens/Character/tabs/NotesTab.tsx": [],
     "src/screens/Character/tabs/OverviewTab.tsx": [],
-    "src/screens/Dice/Dice.tsx": [
-      "src/context/Theme-store.ts",
-      "src/screens/Dice/styles.ts",
-      "src/shared/services/diceRoller.ts"
-    ],
-    "src/screens/DiceRoller/DiceRoller.test.tsx": [
-      "src/screens/DiceRoller/DiceRoller.tsx"
-    ],
+    "src/screens/Dice/Dice.tsx": ["src/context/Theme-store.ts", "src/screens/Dice/styles.ts", "src/shared/services/diceRoller.ts"],
+    "src/screens/DiceRoller/DiceRoller.test.tsx": ["src/screens/DiceRoller/DiceRoller.tsx"],
     "src/screens/DiceRoller/DiceRoller.tsx": [
       "src/context/Theme-store.ts",
       "src/screens/DiceRoller/styles.ts",
       "src/shared/services/diceRoller.ts"
     ],
     "src/shared/helpers/calculateModifier.ts": [],
-    "src/shared/services/diceRoller.test.ts": [
-      "src/shared/services/diceRoller.ts"
-    ],
+    "src/shared/services/diceRoller.test.ts": ["src/shared/services/diceRoller.ts"],
     "src/shared/services/diceRoller.ts": []
   }
 }

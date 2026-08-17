@@ -1,36 +1,66 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "scripts/validate-srd.mjs", "language": "javascript", "sizeLines": 13, "fileCategory": "code"},
-    {"path": "src/domain/mappers/index.ts", "language": "typescript", "sizeLines": 5, "fileCategory": "code"},
-    {"path": "src/domain/spellbook/characterSpellAdapter.ts", "language": "typescript", "sizeLines": 201, "fileCategory": "code"},
-    {"path": "src/domain/spellbook/spellCloudRepository.ts", "language": "typescript", "sizeLines": 8, "fileCategory": "code"},
-    {"path": "src/domain/spellbook/spellLocalRepository.ts", "language": "typescript", "sizeLines": 197, "fileCategory": "code"},
-    {"path": "src/domain/spellbook/spellRepository.ts", "language": "typescript", "sizeLines": 266, "fileCategory": "code"},
-    {"path": "src/domain/spellbook/spellbookEntity.ts", "language": "typescript", "sizeLines": 75, "fileCategory": "code"},
-    {"path": "src/domain/srd/adapters.ts", "language": "typescript", "sizeLines": 69, "fileCategory": "code"},
-    {"path": "src/domain/srd/localization.test.ts", "language": "typescript", "sizeLines": 58, "fileCategory": "code"},
-    {"path": "src/domain/srd/schemas.ts", "language": "typescript", "sizeLines": 190, "fileCategory": "code"},
-    {"path": "src/domain/srd/srdRepository.test.ts", "language": "typescript", "sizeLines": 107, "fileCategory": "code"},
-    {"path": "src/domain/srd/srdRepository.ts", "language": "typescript", "sizeLines": 215, "fileCategory": "code"},
-    {"path": "src/domain/srd/srdSelectors.ts", "language": "typescript", "sizeLines": 103, "fileCategory": "code"},
-    {"path": "src/domain/srd/types.ts", "language": "typescript", "sizeLines": 173, "fileCategory": "code"},
-    {"path": "src/domain/types/sourceMetadata.ts", "language": "typescript", "sizeLines": 13, "fileCategory": "code"},
-    {"path": "src/services/storeEffects/dmStoreEffects.test.ts", "language": "typescript", "sizeLines": 184, "fileCategory": "code"},
-    {"path": "src/services/storeEffects/dmStoreEffects.ts", "language": "typescript", "sizeLines": 292, "fileCategory": "code"},
-    {"path": "src/shared/const/CharacterClass.ts", "language": "typescript", "sizeLines": 32, "fileCategory": "code"},
-    {"path": "src/stores/dmStore.ts", "language": "typescript", "sizeLines": 61, "fileCategory": "code"}
+    { "path": "scripts/validate-srd.mjs", "language": "javascript", "sizeLines": 13, "fileCategory": "code" },
+    { "path": "src/domain/mappers/index.ts", "language": "typescript", "sizeLines": 5, "fileCategory": "code" },
+    { "path": "src/domain/spellbook/characterSpellAdapter.ts", "language": "typescript", "sizeLines": 201, "fileCategory": "code" },
+    { "path": "src/domain/spellbook/spellCloudRepository.ts", "language": "typescript", "sizeLines": 8, "fileCategory": "code" },
+    { "path": "src/domain/spellbook/spellLocalRepository.ts", "language": "typescript", "sizeLines": 197, "fileCategory": "code" },
+    { "path": "src/domain/spellbook/spellRepository.ts", "language": "typescript", "sizeLines": 266, "fileCategory": "code" },
+    { "path": "src/domain/spellbook/spellbookEntity.ts", "language": "typescript", "sizeLines": 75, "fileCategory": "code" },
+    { "path": "src/domain/srd/adapters.ts", "language": "typescript", "sizeLines": 69, "fileCategory": "code" },
+    { "path": "src/domain/srd/localization.test.ts", "language": "typescript", "sizeLines": 58, "fileCategory": "code" },
+    { "path": "src/domain/srd/schemas.ts", "language": "typescript", "sizeLines": 190, "fileCategory": "code" },
+    { "path": "src/domain/srd/srdRepository.test.ts", "language": "typescript", "sizeLines": 107, "fileCategory": "code" },
+    { "path": "src/domain/srd/srdRepository.ts", "language": "typescript", "sizeLines": 215, "fileCategory": "code" },
+    { "path": "src/domain/srd/srdSelectors.ts", "language": "typescript", "sizeLines": 103, "fileCategory": "code" },
+    { "path": "src/domain/srd/types.ts", "language": "typescript", "sizeLines": 173, "fileCategory": "code" },
+    { "path": "src/domain/types/sourceMetadata.ts", "language": "typescript", "sizeLines": 13, "fileCategory": "code" },
+    { "path": "src/services/storeEffects/dmStoreEffects.test.ts", "language": "typescript", "sizeLines": 184, "fileCategory": "code" },
+    { "path": "src/services/storeEffects/dmStoreEffects.ts", "language": "typescript", "sizeLines": 292, "fileCategory": "code" },
+    { "path": "src/shared/const/CharacterClass.ts", "language": "typescript", "sizeLines": 32, "fileCategory": "code" },
+    { "path": "src/stores/dmStore.ts", "language": "typescript", "sizeLines": 61, "fileCategory": "code" }
   ],
   "batchImportData": {
     "scripts/validate-srd.mjs": ["src/domain/srd/srdRepository.ts"],
-    "src/domain/mappers/index.ts": ["src/domain/mappers/character.mapper.ts", "src/domain/mappers/homebrew.mapper.ts", "src/domain/mappers/spell.mapper.ts"],
-    "src/domain/spellbook/characterSpellAdapter.ts": ["src/domain/mappers/index.ts", "src/domain/spellbook/spellbookEntity.ts", "src/domain/types/character.ts", "src/shared/const/CharacterClass.ts", "src/shared/const/ClassPresets.ts", "src/shared/helpers/calculateModifier.ts"],
+    "src/domain/mappers/index.ts": [
+      "src/domain/mappers/character.mapper.ts",
+      "src/domain/mappers/homebrew.mapper.ts",
+      "src/domain/mappers/spell.mapper.ts"
+    ],
+    "src/domain/spellbook/characterSpellAdapter.ts": [
+      "src/domain/mappers/index.ts",
+      "src/domain/spellbook/spellbookEntity.ts",
+      "src/domain/types/character.ts",
+      "src/shared/const/CharacterClass.ts",
+      "src/shared/const/ClassPresets.ts",
+      "src/shared/helpers/calculateModifier.ts"
+    ],
     "src/domain/spellbook/spellCloudRepository.ts": ["src/domain/spellbook/spellRepository.ts"],
-    "src/domain/spellbook/spellLocalRepository.ts": ["src/domain/mappers/index.ts", "src/domain/migrations/index.ts", "src/domain/spellbook/characterSpellAdapter.ts", "src/domain/spellbook/spellRepository.ts", "src/domain/spellbook/spellbookEntity.ts", "src/domain/srd/adapters.ts", "src/domain/srd/srdRepository.ts"],
-    "src/domain/spellbook/spellRepository.ts": ["src/domain/mappers/index.ts", "src/domain/schemas/index.ts", "src/domain/spellbook/characterSpellAdapter.ts", "src/domain/spellbook/spellCloudRepository.ts", "src/domain/spellbook/spellLocalRepository.ts", "src/domain/spellbook/spellbookEntity.ts"],
+    "src/domain/spellbook/spellLocalRepository.ts": [
+      "src/domain/mappers/index.ts",
+      "src/domain/migrations/index.ts",
+      "src/domain/spellbook/characterSpellAdapter.ts",
+      "src/domain/spellbook/spellRepository.ts",
+      "src/domain/spellbook/spellbookEntity.ts",
+      "src/domain/srd/adapters.ts",
+      "src/domain/srd/srdRepository.ts"
+    ],
+    "src/domain/spellbook/spellRepository.ts": [
+      "src/domain/mappers/index.ts",
+      "src/domain/schemas/index.ts",
+      "src/domain/spellbook/characterSpellAdapter.ts",
+      "src/domain/spellbook/spellCloudRepository.ts",
+      "src/domain/spellbook/spellLocalRepository.ts",
+      "src/domain/spellbook/spellbookEntity.ts"
+    ],
     "src/domain/spellbook/spellbookEntity.ts": ["src/domain/types/sourceMetadata.ts"],
     "src/domain/srd/adapters.ts": ["src/domain/spellbook/spellbookEntity.ts", "src/domain/srd/types.ts", "src/types/Monster.ts"],
-    "src/domain/srd/localization.test.ts": ["src/domain/srd/adapters.ts", "src/domain/srd/localization.ts", "src/domain/srd/srdRepository.ts"],
+    "src/domain/srd/localization.test.ts": [
+      "src/domain/srd/adapters.ts",
+      "src/domain/srd/localization.ts",
+      "src/domain/srd/srdRepository.ts"
+    ],
     "src/domain/srd/schemas.ts": ["src/domain/srd/types.ts"],
     "src/domain/srd/srdRepository.test.ts": ["src/domain/srd/srdRepository.ts"],
     "src/domain/srd/srdRepository.ts": ["src/data/srd/index.ts", "src/domain/srd/schemas.ts", "src/domain/srd/types.ts"],
@@ -38,8 +68,22 @@
     "src/domain/srd/types.ts": ["src/domain/types/sourceMetadata.ts", "src/types/Skills.ts", "src/types/Stats.ts"],
     "src/domain/types/sourceMetadata.ts": [],
     "src/services/storeEffects/dmStoreEffects.test.ts": ["src/services/storeEffects/dmStoreEffects.ts", "src/stores/dmStore.ts"],
-    "src/services/storeEffects/dmStoreEffects.ts": ["src/dm/domain/types/index.ts", "src/domain/migrations/index.ts", "src/domain/srd/adapters.ts", "src/domain/srd/srdRepository.ts", "src/stores/dmStore.ts", "src/types/Character.ts", "src/types/Monster.ts"],
+    "src/services/storeEffects/dmStoreEffects.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/domain/migrations/index.ts",
+      "src/domain/srd/adapters.ts",
+      "src/domain/srd/srdRepository.ts",
+      "src/stores/dmStore.ts",
+      "src/types/Character.ts",
+      "src/types/Monster.ts"
+    ],
     "src/shared/const/CharacterClass.ts": [],
-    "src/stores/dmStore.ts": ["src/dm/domain/types/index.ts", "src/services/storeEffects/dmStoreEffects.ts", "src/types/Character.ts", "src/types/Monster.ts", "src/types/Product.ts"]
+    "src/stores/dmStore.ts": [
+      "src/dm/domain/types/index.ts",
+      "src/services/storeEffects/dmStoreEffects.ts",
+      "src/types/Character.ts",
+      "src/types/Monster.ts",
+      "src/types/Product.ts"
+    ]
   }
 }

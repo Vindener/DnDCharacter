@@ -38,11 +38,7 @@
           "name": "decideCascadeAction",
           "startLine": 23,
           "endLine": 50,
-          "params": [
-            "doc",
-            "myUid",
-            "chosenNewOwnerUid"
-          ]
+          "params": ["doc", "myUid", "chosenNewOwnerUid"]
         }
       ],
       "exports": [
@@ -92,39 +88,25 @@
           "name": "toOwnershipDoc",
           "startLine": 30,
           "endLine": 36,
-          "params": [
-            "data"
-          ]
+          "params": ["data"]
         },
         {
           "name": "planCollectionOps",
           "startLine": 38,
           "endLine": 79,
-          "params": [
-            "db",
-            "collectionName",
-            "myUid",
-            "transferSelections"
-          ]
+          "params": ["db", "collectionName", "myUid", "transferSelections"]
         },
         {
           "name": "planConnectionOps",
           "startLine": 81,
           "endLine": 94,
-          "params": [
-            "db",
-            "myUid"
-          ]
+          "params": ["db", "myUid"]
         },
         {
           "name": "runAccountDeletionCascade",
           "startLine": 105,
           "endLine": 137,
-          "params": [
-            "db",
-            "myUid",
-            "transferSelections"
-          ]
+          "params": ["db", "myUid", "transferSelections"]
         }
       ],
       "exports": [

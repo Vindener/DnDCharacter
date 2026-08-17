@@ -29,7 +29,7 @@ package's tests (its `vitest.config.ts` only exists inside `functions/`).
    atomic end-to-end — not expected at this app's scale, but worth knowing).
 6. Only after the Firestore cascade succeeds, calls `admin.auth().deleteUser(uid)`.
    If that last step fails, the function returns `{ status: 'partial', stage:
-   'auth-delete-failed' }` instead of throwing, so the client can show a distinct
+'auth-delete-failed' }` instead of throwing, so the client can show a distinct
    "your data is gone but the sign-in account may still exist" message instead of
    a generic error.
 

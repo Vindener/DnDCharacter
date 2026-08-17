@@ -49,14 +49,22 @@
     "order": 8,
     "title": "Стор персонажа й головний ігровий хук",
     "description": "characterStore.ts — Zustand-стор персонажів, який делегує побічні ефекти (завантаження, збереження, оновлення полів) окремому модулю ефектів; Character-store.ts у src/context — це лише реекспорт-барель для сумісності зі старими імпортами. useCharacterActions.tsx — це центральний хук головного ігрового екрана: 3717 рядків, що керують усім станом аркуша, хмарною синхронізацією, історією змін, кидками кубиків, рівнями, спорядженням і заклинаннями. CLAUDE.md прямо забороняє \"розпилювати\" цей файл до релізу через ризик регресій.",
-    "nodeIds": ["file:src/stores/characterStore.ts", "file:src/context/Character-store.ts", "file:src/screens/Character/hooks/useCharacterActions.tsx"],
+    "nodeIds": [
+      "file:src/stores/characterStore.ts",
+      "file:src/context/Character-store.ts",
+      "file:src/screens/Character/hooks/useCharacterActions.tsx"
+    ],
     "languageLesson": "Барель-реекспорти (`src/context/*` → `src/stores/*`) — типовий прийом для поступової міграції коду без ламання існуючих імпортів: стара точка входу лишається робочою, поки весь код не переведуть на нову."
   },
   {
     "order": 9,
     "title": "Хмарна синхронізація і спільне редагування",
     "description": "firebase.ts — точка ініціалізації Firebase, що реекспортує auth/firestore/functions та хелпери на кшталт serverTimestamp і arrayUnion. characterCloudRepository.ts — ключовий файл інваріантів спільного редагування: upsert/підписки/передача власності/керування редакторами аркуша персонажа. characterSyncCoordinator.ts — ядро логіки синку: переходи стану, побудова плану завантаження, посекційний merge локальних і хмарних змін та вирішення конфліктів. Це найважливіший архітектурний факт проєкту — аркуш персонажа редагують кілька людей одночасно (owner + editors), і ці три файли реалізують саме цю модель.",
-    "nodeIds": ["file:src/services/firebase.ts", "file:src/repositories/characterCloudRepository.ts", "file:src/services/characterSyncCoordinator.ts"],
+    "nodeIds": [
+      "file:src/services/firebase.ts",
+      "file:src/repositories/characterCloudRepository.ts",
+      "file:src/services/characterSyncCoordinator.ts"
+    ],
     "languageLesson": "Посекційний merge (замість read-modify-write усього документа) — свідоме архітектурне рішення: секції аркуша (combat, spells, equipment) синхронізуються незалежно, зменшуючи ймовірність конфлікту між двома редакторами, що правлять різні частини персонажа одночасно."
   },
   {
@@ -69,7 +77,12 @@
     "order": 11,
     "title": "DM / Campaign Management модуль",
     "description": "src/dm — це ізольований пакет для GM Workspace, свідомо виділений як виняток release-hardening фази. dm/domain/types/index.ts описує спільні типи домену (кампанії, ініціатива, нотатки, енкаунтери) — файл із 38 залежними файлами, майже такий же важливий, як основна доменна модель персонажа. campaignRepository.ts — центральний репозиторій кампаній із локальним сховищем, CRUD-операціями та запрошенням редактора за email. DMNavigator.tsx і DM.tsx формують вхід у весь цей підрозділ застосунку — власний стек навігації й головний екран зі списком кампаній.",
-    "nodeIds": ["file:src/dm/domain/types/index.ts", "file:src/dm/repositories/campaignRepository.ts", "file:src/navigation/DMNavigator.tsx", "file:src/screens/DM/DM.tsx"]
+    "nodeIds": [
+      "file:src/dm/domain/types/index.ts",
+      "file:src/dm/repositories/campaignRepository.ts",
+      "file:src/navigation/DMNavigator.tsx",
+      "file:src/screens/DM/DM.tsx"
+    ]
   },
   {
     "order": 12,

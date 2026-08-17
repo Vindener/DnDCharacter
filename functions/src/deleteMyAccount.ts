@@ -23,9 +23,7 @@ export type DeleteMyAccountRequest = {
 
 export type DeleteMyAccountResponse = { status: 'success' } | { status: 'partial'; stage: string };
 
-type WriteOp =
-  | { kind: 'delete'; ref: DocumentReference }
-  | { kind: 'update'; ref: DocumentReference; data: Record<string, unknown> };
+type WriteOp = { kind: 'delete'; ref: DocumentReference } | { kind: 'update'; ref: DocumentReference; data: Record<string, unknown> };
 
 function toOwnershipDoc(data: DocumentData): CascadeOwnershipDoc {
   return {
@@ -102,11 +100,7 @@ const BATCH_CHUNK_SIZE = 450;
  * atomically, but a very large fan-out (500+ owned/shared docs) is not
  * atomic end-to-end — see functions/README.md.
  */
-export async function runAccountDeletionCascade(
-  db: Firestore,
-  myUid: string,
-  transferSelections: Record<string, string>,
-): Promise<void> {
+export async function runAccountDeletionCascade(db: Firestore, myUid: string, transferSelections: Record<string, string>): Promise<void> {
   const ops: WriteOp[] = [];
 
   for (const collectionName of CASCADE_COLLECTIONS) {

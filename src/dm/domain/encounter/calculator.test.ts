@@ -10,10 +10,7 @@ describe('dm/domain/encounter/calculator', () => {
   });
 
   it('returns no-data when there are no monsters', () => {
-    const result = evaluateEncounterDifficulty(
-      [{ level: 3 }, { level: 3 }, { level: 3 }, { level: 3 }],
-      [],
-    );
+    const result = evaluateEncounterDifficulty([{ level: 3 }, { level: 3 }, { level: 3 }, { level: 3 }], []);
 
     expect(result.adjustedXP).toBe(0);
     expect(result.xpPerPlayer).toBe(0);
@@ -22,10 +19,7 @@ describe('dm/domain/encounter/calculator', () => {
   });
 
   it('treats zero-count monsters as zero XP contribution', () => {
-    const result = evaluateEncounterDifficulty(
-      [{ level: 5 }, { level: 5 }, { level: 5 }, { level: 5 }],
-      [{ challenge: '10', count: 0 }],
-    );
+    const result = evaluateEncounterDifficulty([{ level: 5 }, { level: 5 }, { level: 5 }, { level: 5 }], [{ challenge: '10', count: 0 }]);
 
     expect(result.baseXP).toBe(0);
     expect(result.adjustedXP).toBe(0);
@@ -33,10 +27,7 @@ describe('dm/domain/encounter/calculator', () => {
   });
 
   it('applies higher pressure for smaller parties vs larger parties', () => {
-    const smallParty = evaluateEncounterDifficulty(
-      [{ level: 5 }, { level: 5 }],
-      [{ challenge: '2', count: 3 }],
-    );
+    const smallParty = evaluateEncounterDifficulty([{ level: 5 }, { level: 5 }], [{ challenge: '2', count: 3 }]);
     const largeParty = evaluateEncounterDifficulty(
       [{ level: 5 }, { level: 5 }, { level: 5 }, { level: 5 }, { level: 5 }, { level: 5 }],
       [{ challenge: '2', count: 3 }],

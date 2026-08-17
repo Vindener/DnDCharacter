@@ -54,13 +54,15 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
         subTitle: { ...sharedStyles.label, marginTop: sp(12), marginBottom: sp(6), fontSize: fs(15), opacity: 0.9 },
         divider: { height: 1, backgroundColor: colors.border, opacity: 0.5, marginVertical: 12 },
       }),
-    [colors, sharedStyles.label]
+    [colors, sharedStyles.label],
   );
 
   const { updateCharacterCoins, updateCharacterCustomCoins } = useCharacterStore();
   const { coins: customCoinsList, load } = useCustomCoinsStore();
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const initial = data.coins ?? { gold: 0, silver: 0, copper: 0 };
   const [gold, setGold] = useState<number>(initial.gold ?? 0);
@@ -81,7 +83,14 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
       if (nextCustom[c.id] == null) nextCustom[c.id] = 0;
     }
     setCustomMap(nextCustom);
-  }, [data.id, data.coins?.gold, data.coins?.silver, data.coins?.copper, JSON.stringify(data.customCoins), JSON.stringify(customCoinsList.map(c => c.id))]);
+  }, [
+    data.id,
+    data.coins?.gold,
+    data.coins?.silver,
+    data.coins?.copper,
+    JSON.stringify(data.customCoins),
+    JSON.stringify(customCoinsList.map((c) => c.id)),
+  ]);
 
   const commitBuiltIn = (next: { gold: number; silver: number; copper: number }) => {
     updateCharacterCoins(data.id, next);
@@ -148,11 +157,7 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
           data={customCoinsList}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Row
-              label={`${item.name} (${item.code})`}
-              value={customMap[item.id] ?? 0}
-              onChange={(v) => updateCustomValue(item.id, v)}
-            />
+            <Row label={`${item.name} (${item.code})`} value={customMap[item.id] ?? 0} onChange={(v) => updateCustomValue(item.id, v)} />
           )}
         />
       )}
@@ -161,5 +166,3 @@ const Coins: React.FC<CoinsProps> = ({ data }) => {
 };
 
 export default Coins;
-
-

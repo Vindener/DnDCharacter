@@ -15,14 +15,18 @@ const useAppRoleStore = create<AppRoleStore>((set) => ({
     set({ role });
     try {
       await persistAppRole(role);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 
   loadRole: async () => {
     try {
       const role = await loadAppRole();
       set({ role });
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   },
 }));
 

@@ -68,96 +68,67 @@
           "name": "normalizeSpellName",
           "startLine": 8,
           "endLine": 12,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "normalizeClassKey",
           "startLine": 19,
           "endLine": 29,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "normalizeAbilityKey",
           "startLine": 31,
           "endLine": 53,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "resolveSpellcastingAbility",
           "startLine": 55,
           "endLine": 62,
-          "params": [
-            "character"
-          ]
+          "params": ["character"]
         },
         {
           "name": "getPreparedSpellsLimit",
           "startLine": 64,
           "endLine": 83,
-          "params": [
-            "character"
-          ]
+          "params": ["character"]
         },
         {
           "name": "hasSpell",
           "startLine": 85,
           "endLine": 88,
-          "params": [
-            "list",
-            "name"
-          ]
+          "params": ["list", "name"]
         },
         {
           "name": "addUniqueSpell",
           "startLine": 90,
           "endLine": 95,
-          "params": [
-            "list",
-            "spellName"
-          ]
+          "params": ["list", "spellName"]
         },
         {
           "name": "removeSpell",
           "startLine": 97,
           "endLine": 100,
-          "params": [
-            "list",
-            "spellName"
-          ]
+          "params": ["list", "spellName"]
         },
         {
           "name": "collectCharacterSpellNames",
           "startLine": 102,
           "endLine": 112,
-          "params": [
-            "character"
-          ]
+          "params": ["character"]
         },
         {
           "name": "getCharacterSpellStatus",
           "startLine": 114,
           "endLine": 120,
-          "params": [
-            "character",
-            "spellName"
-          ]
+          "params": ["character", "spellName"]
         },
         {
           "name": "applySpellStatus",
           "startLine": 122,
           "endLine": 201,
-          "params": [
-            "character",
-            "spellName",
-            "status",
-            "options"
-          ]
+          "params": ["character", "spellName", "status", "options"]
         }
       ],
       "exports": [
@@ -565,17 +536,13 @@
           "name": "parseStoredValue",
           "startLine": 15,
           "endLine": 22,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "sortSpells",
           "startLine": 24,
           "endLine": 26,
-          "params": [
-            "spells"
-          ]
+          "params": ["spells"]
         },
         {
           "name": "buildSeedSpells",
@@ -587,61 +554,43 @@
           "name": "mergeStoredWithSeed",
           "startLine": 32,
           "endLine": 43,
-          "params": [
-            "stored",
-            "seed"
-          ]
+          "params": ["stored", "seed"]
         },
         {
           "name": "buildLegacyIdMap",
           "startLine": 45,
           "endLine": 52,
-          "params": [
-            "stored",
-            "spells"
-          ]
+          "params": ["stored", "spells"]
         },
         {
           "name": "remapKnownIds",
           "startLine": 54,
           "endLine": 58,
-          "params": [
-            "rawIds",
-            "knownIds",
-            "legacyIdMap"
-          ]
+          "params": ["rawIds", "knownIds", "legacyIdMap"]
         },
         {
           "name": "saveSpells",
           "startLine": 60,
           "endLine": 66,
-          "params": [
-            "spells"
-          ]
+          "params": ["spells"]
         },
         {
           "name": "saveFavoriteSpellIds",
           "startLine": 68,
           "endLine": 77,
-          "params": [
-            "favoriteSpellIds"
-          ]
+          "params": ["favoriteSpellIds"]
         },
         {
           "name": "savePinnedSpellIds",
           "startLine": 79,
           "endLine": 88,
-          "params": [
-            "pinnedSpellIds"
-          ]
+          "params": ["pinnedSpellIds"]
         },
         {
           "name": "saveSpellNotesById",
           "startLine": 90,
           "endLine": 99,
-          "params": [
-            "spellNotesById"
-          ]
+          "params": ["spellNotesById"]
         },
         {
           "name": "loadSpellbookState",
@@ -1193,61 +1142,43 @@
           "name": "toDamageProfiles",
           "startLine": 46,
           "endLine": 50,
-          "params": [
-            "input"
-          ]
+          "params": ["input"]
         },
         {
           "name": "normalizeInputComponents",
           "startLine": 52,
           "endLine": 55,
-          "params": [
-            "value",
-            "fallback"
-          ]
+          "params": ["value", "fallback"]
         },
         {
           "name": "normalizeInputClasses",
           "startLine": 57,
           "endLine": 60,
-          "params": [
-            "value",
-            "fallback"
-          ]
+          "params": ["value", "fallback"]
         },
         {
           "name": "safePush",
           "startLine": 62,
           "endLine": 68,
-          "params": [
-            "cloudRepository",
-            "state"
-          ]
+          "params": ["cloudRepository", "state"]
         },
         {
           "name": "mergeCloudState",
           "startLine": 70,
           "endLine": 72,
-          "params": [
-            "localState",
-            "_cloudState"
-          ]
+          "params": ["localState", "_cloudState"]
         },
         {
           "name": "isEditableSpell",
           "startLine": 74,
           "endLine": 76,
-          "params": [
-            "spell"
-          ]
+          "params": ["spell"]
         },
         {
           "name": "createSpellRepository",
           "startLine": 78,
           "endLine": 266,
-          "params": [
-            "options"
-          ]
+          "params": ["options"]
         }
       ],
       "exports": [
@@ -1680,25 +1611,19 @@
           "name": "actionListToText",
           "startLine": 5,
           "endLine": 7,
-          "params": [
-            "actions"
-          ]
+          "params": ["actions"]
         },
         {
           "name": "srdSpellToSpellbookSpell",
           "startLine": 9,
           "endLine": 31,
-          "params": [
-            "spell"
-          ]
+          "params": ["spell"]
         },
         {
           "name": "srdMonsterToMonsterDto",
           "startLine": 33,
           "endLine": 69,
-          "params": [
-            "monster"
-          ]
+          "params": ["monster"]
         }
       ],
       "exports": [
@@ -1781,10 +1706,7 @@
           "name": "parseSrdArray",
           "startLine": 188,
           "endLine": 190,
-          "params": [
-            "schema",
-            "value"
-          ]
+          "params": ["schema", "value"]
         }
       ],
       "exports": [
@@ -1879,9 +1801,7 @@
           "name": "expectSrdMetadata",
           "startLine": 15,
           "endLine": 20,
-          "params": [
-            "item"
-          ]
+          "params": ["item"]
         }
       ],
       "callGraph": [
@@ -2021,9 +1941,7 @@
           "name": "getSrdRaceById",
           "startLine": 119,
           "endLine": 121,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "getSrdClasses",
@@ -2035,18 +1953,13 @@
           "name": "getSrdClassById",
           "startLine": 127,
           "endLine": 129,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "getClassProgression",
           "startLine": 131,
           "endLine": 134,
-          "params": [
-            "classId",
-            "level"
-          ]
+          "params": ["classId", "level"]
         },
         {
           "name": "getSrdClassProgressions",
@@ -2058,17 +1971,13 @@
           "name": "getAvailableSkillsForClass",
           "startLine": 140,
           "endLine": 145,
-          "params": [
-            "classId"
-          ]
+          "params": ["classId"]
         },
         {
           "name": "getStartingEquipmentForClass",
           "startLine": 147,
           "endLine": 149,
-          "params": [
-            "classId"
-          ]
+          "params": ["classId"]
         },
         {
           "name": "getConditions",
@@ -2092,9 +2001,7 @@
           "name": "getSrdSpellById",
           "startLine": 163,
           "endLine": 165,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "getSrdMonsters",
@@ -2106,9 +2013,7 @@
           "name": "getSrdMonsterById",
           "startLine": 171,
           "endLine": 173,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "getSrdReferences",
@@ -2120,9 +2025,7 @@
           "name": "getSrdReferenceById",
           "startLine": 179,
           "endLine": 181,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "getSrdBackgrounds",
@@ -2134,9 +2037,7 @@
           "name": "getSrdBackgroundById",
           "startLine": 187,
           "endLine": 189,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "getSrdLanguages",
@@ -2604,153 +2505,109 @@
           "name": "getSrdSubraces",
           "startLine": 4,
           "endLine": 6,
-          "params": [
-            "raceId"
-          ]
+          "params": ["raceId"]
         },
         {
           "name": "getSrdSubraceById",
           "startLine": 8,
           "endLine": 10,
-          "params": [
-            "raceId",
-            "subraceId"
-          ]
+          "params": ["raceId", "subraceId"]
         },
         {
           "name": "getSrdRaceSpeed",
           "startLine": 12,
           "endLine": 14,
-          "params": [
-            "raceId"
-          ]
+          "params": ["raceId"]
         },
         {
           "name": "getSrdRaceAbilityIncreases",
           "startLine": 16,
           "endLine": 23,
-          "params": [
-            "raceId",
-            "subraceId"
-          ]
+          "params": ["raceId", "subraceId"]
         },
         {
           "name": "getSrdRaceFlexibleIncrease",
           "startLine": 25,
           "endLine": 29,
-          "params": [
-            "raceId",
-            "subraceId"
-          ]
+          "params": ["raceId", "subraceId"]
         },
         {
           "name": "getSrdRaceTraits",
           "startLine": 31,
           "endLine": 36,
-          "params": [
-            "raceId",
-            "subraceId"
-          ]
+          "params": ["raceId", "subraceId"]
         },
         {
           "name": "getSrdRaceLanguages",
           "startLine": 38,
           "endLine": 43,
-          "params": [
-            "raceId",
-            "subraceId"
-          ]
+          "params": ["raceId", "subraceId"]
         },
         {
           "name": "getSrdClassFeaturesAtLevel",
           "startLine": 45,
           "endLine": 50,
-          "params": [
-            "classId",
-            "level"
-          ]
+          "params": ["classId", "level"]
         },
         {
           "name": "getSrdProgressionFeatureNames",
           "startLine": 52,
           "endLine": 59,
-          "params": [
-            "classId",
-            "level"
-          ]
+          "params": ["classId", "level"]
         },
         {
           "name": "getSrdClassDisplayName",
           "startLine": 61,
           "endLine": 63,
-          "params": [
-            "classId"
-          ]
+          "params": ["classId"]
         },
         {
           "name": "getSrdRaceDisplayName",
           "startLine": 65,
           "endLine": 67,
-          "params": [
-            "raceId"
-          ]
+          "params": ["raceId"]
         },
         {
           "name": "getSrdSubraceDisplayName",
           "startLine": 69,
           "endLine": 71,
-          "params": [
-            "raceId",
-            "subraceId"
-          ]
+          "params": ["raceId", "subraceId"]
         },
         {
           "name": "getSrdBackgroundDisplayName",
           "startLine": 73,
           "endLine": 75,
-          "params": [
-            "backgroundId"
-          ]
+          "params": ["backgroundId"]
         },
         {
           "name": "isSrdRaceId",
           "startLine": 77,
           "endLine": 79,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "isSrdClassId",
           "startLine": 81,
           "endLine": 83,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "isSrdBackgroundId",
           "startLine": 85,
           "endLine": 87,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "findSrdRaceByName",
           "startLine": 89,
           "endLine": 95,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "findSrdClassByName",
           "startLine": 97,
           "endLine": 103,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         }
       ],
       "exports": [
@@ -3124,41 +2981,31 @@
           "name": "persistUserTemplates",
           "startLine": 46,
           "endLine": 51,
-          "params": [
-            "templates"
-          ]
+          "params": ["templates"]
         },
         {
           "name": "normalizeRole",
           "startLine": 53,
           "endLine": 56,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "parseStoredValue",
           "startLine": 59,
           "endLine": 66,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "isSrdMonster",
           "startLine": 68,
           "endLine": 70,
-          "params": [
-            "monster"
-          ]
+          "params": ["monster"]
         },
         {
           "name": "normalizeCustomMonster",
           "startLine": 72,
           "endLine": 80,
-          "params": [
-            "monster"
-          ]
+          "params": ["monster"]
         },
         {
           "name": "getSrdMonsterSeed",
@@ -3170,25 +3017,19 @@
           "name": "mergeMonstersWithSrd",
           "startLine": 86,
           "endLine": 97,
-          "params": [
-            "stored"
-          ]
+          "params": ["stored"]
         },
         {
           "name": "persistableMonsters",
           "startLine": 99,
           "endLine": 101,
-          "params": [
-            "monsters"
-          ]
+          "params": ["monsters"]
         },
         {
           "name": "createDmStoreEffects",
           "startLine": 102,
           "endLine": 291,
-          "params": [
-            "{ set, get }"
-          ]
+          "params": ["{ set, get }"]
         }
       ],
       "exports": [

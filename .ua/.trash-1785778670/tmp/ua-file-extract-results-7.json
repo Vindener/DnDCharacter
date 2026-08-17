@@ -25,9 +25,7 @@
           "name": "getStyles",
           "startLine": 4,
           "endLine": 48,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -92,9 +90,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 242,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -460,9 +456,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 973,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -1682,9 +1676,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 397,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -2134,9 +2126,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 128,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -2336,9 +2326,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 25,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -2506,9 +2494,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 9,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -2548,9 +2534,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 105,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -2755,9 +2739,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 307,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -3102,9 +3084,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 322,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -3554,9 +3534,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 72,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -3702,9 +3680,7 @@
           "name": "getStyles",
           "startLine": 86,
           "endLine": 120,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "callGraph": [
@@ -3867,9 +3843,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 134,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -4189,9 +4163,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 101,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -4356,9 +4328,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 405,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -4943,9 +4913,7 @@
           "name": "createUiStoreEffects",
           "startLine": 24,
           "endLine": 120,
-          "params": [
-            "{ set, get }"
-          ]
+          "params": ["{ set, get }"]
         }
       ],
       "exports": [
@@ -5135,9 +5103,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 42,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -5217,9 +5183,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 33,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -5289,9 +5253,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 16,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -5331,9 +5293,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 25,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -5418,9 +5378,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 24,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -5495,9 +5453,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 15,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [

@@ -22,7 +22,6 @@ function getHitDiceSides(className: string): number {
   return HIT_DICE_MAP[key] || 6;
 }
 
-
 export function createEmptyCharacter(overrides: CharacterDraft = {}): CharacterEntity {
   const base: CharacterEntity = {
     id: overrides.id ?? '',

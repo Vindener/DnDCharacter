@@ -1,4 +1,3 @@
-
 export interface ClassGear {
   base: string[]; // always gain
   choices: { label: string; options: string[] }[]; // choose one per group
@@ -30,7 +29,7 @@ export const CLASS_GEAR: Record<string, ClassGear> = {
     ],
   },
   druid: {
-    base: ['Дерев\'яний щит або інша проста зброя', 'Дрюїдичний фокус'],
+    base: ["Дерев'яний щит або інша проста зброя", 'Дрюїдичний фокус'],
     choices: [
       { label: 'Зброя', options: ['Секіра', 'Серп'] },
       { label: 'Набір', options: ['Дослідницький набір', 'Набір дослідника підземель'] },

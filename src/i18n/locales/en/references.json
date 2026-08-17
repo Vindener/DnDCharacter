@@ -36,7 +36,10 @@
         "blinded": { "title": "Blinded", "body": "Cannot see and automatically fails checks that require sight." },
         "charmed": { "title": "Charmed", "body": "Cannot attack the charmer and the charmer has advantage on social checks." },
         "deafened": { "title": "Deafened", "body": "Cannot hear and automatically fails checks that require hearing." },
-        "frightened": { "title": "Frightened", "body": "Has disadvantage while the source of fear is in sight and cannot willingly move closer." },
+        "frightened": {
+          "title": "Frightened",
+          "body": "Has disadvantage while the source of fear is in sight and cannot willingly move closer."
+        },
         "grappled": { "title": "Grappled", "body": "Speed becomes 0 until the grapple ends." },
         "incapacitated": { "title": "Incapacitated", "body": "Cannot take actions or reactions." },
         "invisible": { "title": "Invisible", "body": "Cannot be seen without special senses or magic." },
@@ -57,22 +60,34 @@
       "title": "Resting",
       "summary": "Short and long rest rules for recovery during play.",
       "details": {
-        "0": { "title": "Short rest", "body": "A short rest is a period of downtime, at least 1 hour long, during which characters do nothing more strenuous than eating, drinking, reading, and tending wounds." },
-        "1": { "title": "Long rest", "body": "A long rest is an extended downtime period used to recover hit points, features, and spell slots according to class rules." }
+        "0": {
+          "title": "Short rest",
+          "body": "A short rest is a period of downtime, at least 1 hour long, during which characters do nothing more strenuous than eating, drinking, reading, and tending wounds."
+        },
+        "1": {
+          "title": "Long rest",
+          "body": "A long rest is an extended downtime period used to recover hit points, features, and spell slots according to class rules."
+        }
       }
     },
     "ability-checks": {
       "title": "Ability Checks",
       "summary": "Ability checks resolve uncertain actions using d20 plus the relevant ability modifier and proficiency when applicable.",
       "details": {
-        "0": { "title": "Core check", "body": "Roll a d20 and add the relevant ability modifier. If a character has proficiency that applies, add the proficiency bonus." }
+        "0": {
+          "title": "Core check",
+          "body": "Roll a d20 and add the relevant ability modifier. If a character has proficiency that applies, add the proficiency bonus."
+        }
       }
     },
     "saving-throws": {
       "title": "Saving Throws",
       "summary": "Saving throws resist harmful effects and use d20 plus an ability modifier and proficiency when applicable.",
       "details": {
-        "0": { "title": "Core save", "body": "A saving throw represents an attempt to resist a spell, trap, poison, disease, or similar threat." }
+        "0": {
+          "title": "Core save",
+          "body": "A saving throw represents an attempt to resist a spell, trap, poison, disease, or similar threat."
+        }
       }
     },
     "equipment": {
@@ -93,7 +108,10 @@
       "title": "Spellcasting Basics",
       "summary": "Spell level, casting time, range, components, duration, concentration, rituals, and higher-level casting.",
       "details": {
-        "0": { "title": "Spell anatomy", "body": "A spell entry includes level, school, casting time, range, components, duration, and spell text. Some spells have ritual, concentration, or higher-level casting rules." }
+        "0": {
+          "title": "Spell anatomy",
+          "body": "A spell entry includes level, school, casting time, range, components, duration, and spell text. Some spells have ritual, concentration, or higher-level casting rules."
+        }
       }
     }
   }

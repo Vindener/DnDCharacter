@@ -18,4 +18,3 @@ export const SKILL_NAMES: Record<string, string> = {
   stealth: 'Потайливість',
   survival: 'Виживання',
 };
-  

@@ -19,11 +19,7 @@ export {
   SkeletonSpellCard,
   SkeletonText,
 } from '@/shared/ui/skeleton';
-export {
-  resolveButtonVariant,
-  resolveCardVariant,
-  resolveTextStyleVariant,
-} from '@/shared/ui/variantResolvers';
+export { resolveButtonVariant, resolveCardVariant, resolveTextStyleVariant } from '@/shared/ui/variantResolvers';
 
 export type { TextProps, TextTone } from '@/shared/ui/Text';
 export type { ButtonProps, ButtonVariant, ButtonSize } from '@/shared/ui/Button';

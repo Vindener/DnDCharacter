@@ -42,7 +42,7 @@ export function filterSpellbookSpells(options: SpellbookFilterOptions): Spellboo
 
   return options.spells
     .filter((spell) => {
-      const status = getCharacterSpellStatus(options.selectedCharacter, spell.name);
+      const status = getCharacterSpellStatus(options.selectedCharacter, [getLocalizedSpellFields(spell, options.locale).name, spell.name]);
       if (options.activeTab === 'prepared' && status !== 'prepared') return false;
       if (options.activeTab === 'known' && status !== 'known' && status !== 'cantrip') return false;
       if (options.activeTab === 'favorites' && !favoriteSet.has(spell.id)) return false;
@@ -72,7 +72,9 @@ export function filterSpellbookSpells(options: SpellbookFilterOptions): Spellboo
         spell.license,
         damageText,
         getLocalizedSpellSearchText(spell, options.locale),
-      ].join(' ').toLowerCase();
+      ]
+        .join(' ')
+        .toLowerCase();
       return haystack.includes(filter);
     })
     .sort((a, b) => {
@@ -81,9 +83,6 @@ export function filterSpellbookSpells(options: SpellbookFilterOptions): Spellboo
         if (pinDelta) return pinDelta;
       }
       if (a.level !== b.level) return a.level - b.level;
-      return getLocalizedSpellFields(a, options.locale).name.localeCompare(
-        getLocalizedSpellFields(b, options.locale).name,
-        options.locale,
-      );
+      return getLocalizedSpellFields(a, options.locale).name.localeCompare(getLocalizedSpellFields(b, options.locale).name, options.locale);
     });
 }

@@ -40,7 +40,11 @@ export async function loadMonstersState(): Promise<{ monsters: MonsterDto[]; pin
   };
 }
 
-export async function persistMonstersState(monsters: MonsterDto[], pinnedMonsterIds: string[], favoriteMonsterIds: string[] = []): Promise<void> {
+export async function persistMonstersState(
+  monsters: MonsterDto[],
+  pinnedMonsterIds: string[],
+  favoriteMonsterIds: string[] = [],
+): Promise<void> {
   const validPins = pinnedMonsterIds.filter((id) => monsters.some((monster) => monster.id === id));
   const validFavorites = favoriteMonsterIds.filter((id) => monsters.some((monster) => monster.id === id));
   await AsyncStorage.setItem(MONSTERS_STORAGE_KEY, JSON.stringify(createStorageEnvelope('dmMonsters', monsters)));

@@ -14,26 +14,21 @@ describe('decideCascadeAction (functions mirror)', () => {
   });
 
   it('one of several owners -> removeFromOwners', () => {
-    expect(
-      decideCascadeAction({ ownerUid: 'me', owners: ['me', 'ownerB'], editors: [] }, 'me'),
-    ).toEqual({ type: 'removeFromOwners' });
+    expect(decideCascadeAction({ ownerUid: 'me', owners: ['me', 'ownerB'], editors: [] }, 'me')).toEqual({ type: 'removeFromOwners' });
   });
 
   it('editor only -> removeFromEditors', () => {
-    expect(
-      decideCascadeAction({ ownerUid: 'ownerB', owners: ['ownerB'], editors: ['me'] }, 'me'),
-    ).toEqual({ type: 'removeFromEditors' });
+    expect(decideCascadeAction({ ownerUid: 'ownerB', owners: ['ownerB'], editors: ['me'] }, 'me')).toEqual({ type: 'removeFromEditors' });
   });
 
   it('explicit chosen owner wins over first-editor default', () => {
-    expect(
-      decideCascadeAction({ ownerUid: 'me', owners: ['me'], editors: ['editorA', 'editorB'] }, 'me', 'editorB'),
-    ).toEqual({ type: 'transferOwnership', newOwnerUid: 'editorB' });
+    expect(decideCascadeAction({ ownerUid: 'me', owners: ['me'], editors: ['editorA', 'editorB'] }, 'me', 'editorB')).toEqual({
+      type: 'transferOwnership',
+      newOwnerUid: 'editorB',
+    });
   });
 
   it('neither owner nor editor -> noop', () => {
-    expect(
-      decideCascadeAction({ ownerUid: 'ownerB', owners: ['ownerB'], editors: [] }, 'me'),
-    ).toEqual({ type: 'noop' });
+    expect(decideCascadeAction({ ownerUid: 'ownerB', owners: ['ownerB'], editors: [] }, 'me')).toEqual({ type: 'noop' });
   });
 });

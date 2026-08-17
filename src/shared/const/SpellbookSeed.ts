@@ -249,10 +249,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Конус вогню, ряткидок DEX на половину.',
     tags: ['damage', 'aoe', 'fire'],
-    damageProfiles: [
-      d('Базово', '3d6', 'fire', 'DEX save, на успіх половина'),
-      d('Апкаст', '+1d6/slot', 'fire', 'за слот вище 1'),
-    ],
+    damageProfiles: [d('Базово', '3d6', 'fire', 'DEX save, на успіх половина'), d('Апкаст', '+1d6/slot', 'fire', 'за слот вище 1')],
   },
   {
     name: 'Хроматична сфера',
@@ -276,10 +273,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Куб енергії, ряткидок CON на половину.',
     tags: ['damage', 'aoe', 'thunder'],
-    damageProfiles: [
-      d('Базово', '2d8', 'thunder', 'CON save, на успіх половина'),
-      d('Апкаст', '+1d8/slot', 'thunder', 'за слот вище 1'),
-    ],
+    damageProfiles: [d('Базово', '2d8', 'thunder', 'CON save, на успіх половина'), d('Апкаст', '+1d8/slot', 'thunder', 'за слот вище 1')],
   },
   {
     name: 'Гнильне торкання',
@@ -311,10 +305,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Три spell-атаки вогнем.',
     tags: ['damage', 'attack', 'fire'],
-    damageProfiles: [
-      d('За 1 промінь', '2d6', 'fire'),
-      d('Апкаст', '+1 промінь/slot', 'fire', 'за слот вище 2'),
-    ],
+    damageProfiles: [d('За 1 промінь', '2d6', 'fire'), d('Апкаст', '+1 промінь/slot', 'fire', 'за слот вище 2')],
   },
   {
     name: 'Розкол',
@@ -322,10 +313,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Гучний вибух, ряткидок CON на половину.',
     tags: ['damage', 'aoe', 'thunder'],
-    damageProfiles: [
-      d('Базово', '3d8', 'thunder', 'CON save, на успіх половина'),
-      d('Апкаст', '+1d8/slot', 'thunder', 'за слот вище 2'),
-    ],
+    damageProfiles: [d('Базово', '3d8', 'thunder', 'CON save, на успіх половина'), d('Апкаст', '+1d8/slot', 'thunder', 'за слот вище 2')],
   },
   {
     name: 'Кислотна стріла Мелфа',
@@ -333,10 +321,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Кислота при попаданні та додатково на початку ходу.',
     tags: ['damage', 'attack', 'acid'],
-    damageProfiles: [
-      d('Попадання (миттєво)', '4d4', 'acid'),
-      d('Кінець наступного ходу', '2d4', 'acid'),
-    ],
+    damageProfiles: [d('Попадання (миттєво)', '4d4', 'acid'), d('Кінець наступного ходу', '2d4', 'acid')],
   },
   {
     name: 'Духовна зброя',
@@ -352,10 +337,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Ціль у зоні робить ряткидок CON.',
     tags: ['damage', 'aoe', 'radiant'],
-    damageProfiles: [
-      d('Базово', '2d10', 'radiant', 'CON save, на успіх половина'),
-      d('Апкаст', '+1d10/slot', 'radiant', 'за слот вище 2'),
-    ],
+    damageProfiles: [d('Базово', '2d10', 'radiant', 'CON save, на успіх половина'), d('Апкаст', '+1d10/slot', 'radiant', 'за слот вище 2')],
   },
   {
     name: 'Туманний крок',
@@ -386,10 +368,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Класичний AoE-вибух вогню.',
     tags: ['damage', 'aoe', 'fire'],
-    damageProfiles: [
-      d('Базово', '8d6', 'fire', 'DEX save, на успіх половина'),
-      d('Апкаст', '+1d6/slot', 'fire', 'за слот вище 3'),
-    ],
+    damageProfiles: [d('Базово', '8d6', 'fire', 'DEX save, на успіх половина'), d('Апкаст', '+1d6/slot', 'fire', 'за слот вище 3')],
   },
   {
     name: 'Блискавка',
@@ -465,10 +444,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Зона льоду та уламків.',
     tags: ['damage', 'aoe', 'cold', 'bludgeoning'],
-    damageProfiles: [
-      d('Холод', '4d6', 'cold'),
-      d('Дробильний', '2d8', 'bludgeoning'),
-    ],
+    damageProfiles: [d('Холод', '4d6', 'cold'), d('Дробильний', '2d8', 'bludgeoning')],
   },
   {
     name: 'Стіна вогню',
@@ -507,10 +483,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Втілення',
     description: 'Великий конус морозу.',
     tags: ['damage', 'aoe', 'cold'],
-    damageProfiles: [
-      d('Базово', '8d8', 'cold', 'CON save, на успіх половина'),
-      d('Апкаст', '+1d8/slot', 'cold', 'за слот вище 5'),
-    ],
+    damageProfiles: [d('Базово', '8d8', 'cold', 'CON save, на успіх половина'), d('Апкаст', '+1d8/slot', 'cold', 'за слот вище 5')],
   },
   {
     name: 'Удар полум’я',
@@ -529,10 +502,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Виклик',
     description: 'Рухома токсична хмара.',
     tags: ['damage', 'aoe', 'poison'],
-    damageProfiles: [
-      d('Базово', '5d8', 'poison', 'CON save, на успіх половина'),
-      d('Апкаст', '+1d8/slot', 'poison', 'за слот вище 5'),
-    ],
+    damageProfiles: [d('Базово', '5d8', 'poison', 'CON save, на успіх половина'), d('Апкаст', '+1d8/slot', 'poison', 'за слот вище 5')],
   },
   {
     name: 'Утримати монстра',
@@ -582,10 +552,7 @@ const RAW_SPELLBOOK_SEED: UpsertSpellbookSpellInput[] = [
     school: 'Некромантія',
     description: 'Велика зона некротичного урону.',
     tags: ['damage', 'aoe', 'necrotic'],
-    damageProfiles: [
-      d('Базово', '8d6', 'necrotic', 'CON save, на успіх половина'),
-      d('Апкаст', '+2d6/slot', 'necrotic', 'за слот вище 6'),
-    ],
+    damageProfiles: [d('Базово', '8d6', 'necrotic', 'CON save, на успіх половина'), d('Апкаст', '+2d6/slot', 'necrotic', 'за слот вище 6')],
   },
   {
     name: 'Сонячний промінь',

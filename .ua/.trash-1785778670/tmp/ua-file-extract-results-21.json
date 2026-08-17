@@ -1,12 +1,7 @@
 {
   "scriptCompleted": true,
   "filesAnalyzed": 0,
-  "filesSkipped": [
-    "android/build.gradle",
-    "android/gradle.properties",
-    "android/gradlew.bat",
-    "android/settings.gradle"
-  ],
+  "filesSkipped": ["android/build.gradle", "android/gradle.properties", "android/gradlew.bat", "android/settings.gradle"],
   "analysisOutcomes": {
     "structure": {
       "succeeded": 0,

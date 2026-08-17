@@ -1,10 +1,11 @@
 ---
-description: "Use when working on React Native Expo screens/components/services in this repo. Enforces Android-first UX, strict TypeScript (no any), Zustand store patterns, and Firestore service conventions."
-name: "DnDCharacter Mobile RN Standards"
+description: 'Use when working on React Native Expo screens/components/services in this repo. Enforces Android-first UX, strict TypeScript (no any), Zustand store patterns, and Firestore service conventions.'
+name: 'DnDCharacter Mobile RN Standards'
 applyTo:
-  - "src/**/*.ts"
-  - "src/**/*.tsx"
+  - 'src/**/*.ts'
+  - 'src/**/*.tsx'
 ---
+
 # DnDCharacter Mobile Standards
 
 ## Scope

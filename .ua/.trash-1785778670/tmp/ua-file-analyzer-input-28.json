@@ -1,31 +1,56 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": ".agents/skills/create-android-component/SKILL.md", "language": "markdown", "sizeLines": 40, "fileCategory": "docs"},
-    {"path": ".claude/settings.json", "language": "json", "sizeLines": 5, "fileCategory": "config"},
-    {"path": ".firebaserc", "language": "unknown", "sizeLines": 5, "fileCategory": "code"},
-    {"path": ".github/instructions/mobile-rn-standards.instructions.md", "language": "markdown", "sizeLines": 60, "fileCategory": "docs"},
-    {"path": ".npmrc", "language": "unknown", "sizeLines": 1, "fileCategory": "code"},
-    {"path": ".ua/.understandignore", "language": "unknown", "sizeLines": 90, "fileCategory": "code"},
-    {"path": ".ua/config.json", "language": "json", "sizeLines": 1, "fileCategory": "config"},
-    {"path": "android/app/build.gradle", "language": "gradle", "sizeLines": 189, "fileCategory": "config"},
-    {"path": "android/app/debug.keystore", "language": "keystore", "sizeLines": 8, "fileCategory": "code"},
-    {"path": "android/app/google-services.json", "language": "json", "sizeLines": 70, "fileCategory": "config"},
-    {"path": "android/app/proguard-rules.pro", "language": "pro", "sizeLines": 14, "fileCategory": "code"},
-    {"path": "android/app/src/androidTest/AndroidManifest.xml", "language": "xml", "sizeLines": 16, "fileCategory": "config"},
-    {"path": "android/app/src/debug/AndroidManifest.xml", "language": "xml", "sizeLines": 7, "fileCategory": "config"},
-    {"path": "android/app/src/main/AndroidManifest.xml", "language": "xml", "sizeLines": 32, "fileCategory": "config"},
-    {"path": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt", "language": "kotlin", "sizeLines": 61, "fileCategory": "code"},
-    {"path": "android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt", "language": "kotlin", "sizeLines": 57, "fileCategory": "code"},
-    {"path": "android/app/src/main/res/drawable/ic_launcher_background.xml", "language": "xml", "sizeLines": 5, "fileCategory": "config"},
-    {"path": "android/app/src/main/res/drawable/rn_edit_text_material.xml", "language": "xml", "sizeLines": 37, "fileCategory": "config"},
-    {"path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml", "language": "xml", "sizeLines": 4, "fileCategory": "config"},
-    {"path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml", "language": "xml", "sizeLines": 4, "fileCategory": "config"},
-    {"path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.webp", "language": "webp", "sizeLines": 7, "fileCategory": "code"},
-    {"path": "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp", "language": "webp", "sizeLines": 7, "fileCategory": "code"},
-    {"path": "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp", "language": "webp", "sizeLines": 3, "fileCategory": "code"},
-    {"path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.webp", "language": "webp", "sizeLines": 2, "fileCategory": "code"},
-    {"path": "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp", "language": "webp", "sizeLines": 1, "fileCategory": "code"}
+    { "path": ".agents/skills/create-android-component/SKILL.md", "language": "markdown", "sizeLines": 40, "fileCategory": "docs" },
+    { "path": ".claude/settings.json", "language": "json", "sizeLines": 5, "fileCategory": "config" },
+    { "path": ".firebaserc", "language": "unknown", "sizeLines": 5, "fileCategory": "code" },
+    { "path": ".github/instructions/mobile-rn-standards.instructions.md", "language": "markdown", "sizeLines": 60, "fileCategory": "docs" },
+    { "path": ".npmrc", "language": "unknown", "sizeLines": 1, "fileCategory": "code" },
+    { "path": ".ua/.understandignore", "language": "unknown", "sizeLines": 90, "fileCategory": "code" },
+    { "path": ".ua/config.json", "language": "json", "sizeLines": 1, "fileCategory": "config" },
+    { "path": "android/app/build.gradle", "language": "gradle", "sizeLines": 189, "fileCategory": "config" },
+    { "path": "android/app/debug.keystore", "language": "keystore", "sizeLines": 8, "fileCategory": "code" },
+    { "path": "android/app/google-services.json", "language": "json", "sizeLines": 70, "fileCategory": "config" },
+    { "path": "android/app/proguard-rules.pro", "language": "pro", "sizeLines": 14, "fileCategory": "code" },
+    { "path": "android/app/src/androidTest/AndroidManifest.xml", "language": "xml", "sizeLines": 16, "fileCategory": "config" },
+    { "path": "android/app/src/debug/AndroidManifest.xml", "language": "xml", "sizeLines": 7, "fileCategory": "config" },
+    { "path": "android/app/src/main/AndroidManifest.xml", "language": "xml", "sizeLines": 32, "fileCategory": "config" },
+    {
+      "path": "android/app/src/main/java/com/vind/MythgateDND/MainActivity.kt",
+      "language": "kotlin",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "android/app/src/main/java/com/vind/MythgateDND/MainApplication.kt",
+      "language": "kotlin",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    { "path": "android/app/src/main/res/drawable/ic_launcher_background.xml", "language": "xml", "sizeLines": 5, "fileCategory": "config" },
+    { "path": "android/app/src/main/res/drawable/rn_edit_text_material.xml", "language": "xml", "sizeLines": 37, "fileCategory": "config" },
+    { "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml", "language": "xml", "sizeLines": 4, "fileCategory": "config" },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "language": "xml",
+      "sizeLines": 4,
+      "fileCategory": "config"
+    },
+    { "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.webp", "language": "webp", "sizeLines": 7, "fileCategory": "code" },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    { "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp", "language": "webp", "sizeLines": 3, "fileCategory": "code" },
+    { "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.webp", "language": "webp", "sizeLines": 2, "fileCategory": "code" },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.webp",
+      "language": "webp",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    }
   ],
   "batchImportData": {
     ".agents/skills/create-android-component/SKILL.md": [],

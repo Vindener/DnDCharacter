@@ -65,6 +65,7 @@ Privacy Policy.
 
 Використовуючи функції спільного доступу (запрошення редакторів, нотатки DM,
 кампанії), ти погоджуєшся:
+
 - не використовувати текстові поля (нотатки, homebrew-описи) для незаконного,
   образливого контенту чи переслідування інших користувачів;
 - не намагатися отримати доступ до аркушів чи кампаній, до яких тебе не
@@ -138,6 +139,7 @@ time via Settings.
 
 By using sharing features (inviting editors, DM notes, campaigns), you agree
 not to:
+
 - use text fields (notes, homebrew descriptions) for illegal, abusive
   content, or to harass other users;
 - attempt to access sheets or campaigns you have not been invited to;

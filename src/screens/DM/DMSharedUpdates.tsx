@@ -16,12 +16,7 @@ import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter'
 import type { CharacterViewModel } from '@/types/Character';
 import useSyncStore from '@/context/Sync-store';
 import useAppRoleStore from '@/context/AppRole-store';
-import {
-  getShareDisplayStatus,
-  getSyncDisplayStatus,
-  isNetworkOnline,
-  mapRoleToHistoryActor,
-} from '@/shared/helpers/collaboration/status';
+import { getShareDisplayStatus, getSyncDisplayStatus, isNetworkOnline, mapRoleToHistoryActor } from '@/shared/helpers/collaboration/status';
 import { syncToCloud } from '@/services/characterSyncCoordinator';
 
 type FilterKey = 'all' | 'mine' | 'shared' | 'needs-review';
@@ -180,7 +175,9 @@ const DMSharedUpdates = () => {
     setReviewedMap(next);
     try {
       await characterLocalRepository.saveSharedUpdatesReviewedMap(next);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   };
 
   const markReviewed = async (id: string, updatedAtMs: number) => {
@@ -314,7 +311,9 @@ const DMSharedUpdates = () => {
                 onPress={() => setFilter(item)}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={[styles.filterChipText, active ? styles.filterChipTextActive : null]}>{t(`dm:sharedUpdates.filters.${item}`)}</Text>
+                <Text style={[styles.filterChipText, active ? styles.filterChipTextActive : null]}>
+                  {t(`dm:sharedUpdates.filters.${item}`)}
+                </Text>
               </Pressable>
             );
           })}
@@ -348,10 +347,14 @@ const DMSharedUpdates = () => {
             )}
             <View style={styles.statusRow}>
               <View style={styles.statusChip}>
-                <Text style={styles.statusChipText}>{item.needsReview ? t('dm:sharedUpdates.needsReview') : t('dm:sharedUpdates.reviewed')}</Text>
+                <Text style={styles.statusChipText}>
+                  {item.needsReview ? t('dm:sharedUpdates.needsReview') : t('dm:sharedUpdates.reviewed')}
+                </Text>
               </View>
               <View style={styles.statusChip}>
-                <Text style={styles.statusChipText}>{localCopyExists ? t('dm:sharedUpdates.localCopyExists') : t('dm:sharedUpdates.noLocalCopy')}</Text>
+                <Text style={styles.statusChipText}>
+                  {localCopyExists ? t('dm:sharedUpdates.localCopyExists') : t('dm:sharedUpdates.noLocalCopy')}
+                </Text>
               </View>
             </View>
             {!!item.changeHistory.length && (
@@ -362,7 +365,8 @@ const DMSharedUpdates = () => {
                   .slice(0, 3)
                   .map((entry) => (
                     <Text key={entry.id} style={styles.historyText}>
-                      {formatChangeSource(entry)} • {entry.summary || t('dm:sharedUpdates.noSummary')} • {new Date(entry.atMs).toLocaleString()}
+                      {formatChangeSource(entry)} • {entry.summary || t('dm:sharedUpdates.noSummary')} •{' '}
+                      {new Date(entry.atMs).toLocaleString()}
                     </Text>
                   ))}
               </View>
@@ -422,6 +426,3 @@ const DMSharedUpdates = () => {
 };
 
 export default DMSharedUpdates;
-
-
-

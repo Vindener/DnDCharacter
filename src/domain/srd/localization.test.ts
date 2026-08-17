@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { srdMonsterToMonsterDto, srdSpellToSpellbookSpell } from './adapters';
 import { getSrdMonsters, getSrdSpells } from './srdRepository';
-import {
-  getLocalizedMonster,
-  getLocalizedMonsterSearchText,
-  getLocalizedSpellFields,
-  getLocalizedSpellSearchText,
-} from './localization';
+import { getLocalizedMonster, getLocalizedMonsterSearchText, getLocalizedSpellFields, getLocalizedSpellSearchText } from './localization';
 
 describe('SRD Ukrainian localization overlays', () => {
   it('covers every spell and monster without changing identity metadata', () => {

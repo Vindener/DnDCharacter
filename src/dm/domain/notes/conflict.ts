@@ -19,4 +19,3 @@ export function buildConflictRemote(title: string, content: string, updatedAtMs:
     updatedAtMs: Number.isFinite(Number(updatedAtMs)) ? Number(updatedAtMs) : Date.now(),
   };
 }
-

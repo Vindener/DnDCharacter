@@ -7,13 +7,11 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-6.json` (single-file mode) OR `batch-6-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/context/TrackerTemplates-store.ts": [],
-  "src/dm/domain/initiative/roll.ts": [
-    "src/dm/domain/types/index.ts",
-    "src/shared/services/diceRoller.ts"
-  ],
+  "src/dm/domain/initiative/roll.ts": ["src/dm/domain/types/index.ts", "src/shared/services/diceRoller.ts"],
   "src/screens/Character/Character.tsx": [
     "src/context/Character-store.ts",
     "src/repositories/characterCloudRepository.ts",
@@ -38,15 +36,9 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/helpers/calculateModifier.ts",
     "src/shared/services/diceRoller.ts"
   ],
-  "src/screens/Character/components/CharacterTabs.tsx": [
-    "src/screens/Character/hooks/useCharacterActions.tsx"
-  ],
-  "src/screens/Character/components/CombatSummaryCard.tsx": [
-    "src/screens/Character/hooks/useCharacterActions.tsx"
-  ],
-  "src/screens/Character/components/QuickActionBar.tsx": [
-    "src/screens/Character/hooks/useCharacterActions.tsx"
-  ],
+  "src/screens/Character/components/CharacterTabs.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
+  "src/screens/Character/components/CombatSummaryCard.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
+  "src/screens/Character/components/QuickActionBar.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
   "src/screens/Character/hooks/useCharacterActions.tsx": [
     "src/context/AppRole-store.ts",
     "src/context/Character-store.ts",
@@ -81,9 +73,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/types/Spellbook.ts"
   ],
   "src/screens/Character/hooks/useQuickActions.ts": [],
-  "src/screens/Character/tabs/CharacterTabContent.test.tsx": [
-    "src/screens/Character/tabs/CharacterTabContent.tsx"
-  ],
+  "src/screens/Character/tabs/CharacterTabContent.test.tsx": ["src/screens/Character/tabs/CharacterTabContent.tsx"],
   "src/screens/Character/tabs/CharacterTabContent.tsx": [
     "src/screens/Character/tabs/CombatTab.tsx",
     "src/screens/Character/tabs/HomebrewTab.tsx",
@@ -98,28 +88,21 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
   "src/screens/Character/tabs/MagicTab.tsx": [],
   "src/screens/Character/tabs/NotesTab.tsx": [],
   "src/screens/Character/tabs/OverviewTab.tsx": [],
-  "src/screens/Dice/Dice.tsx": [
-    "src/context/Theme-store.ts",
-    "src/screens/Dice/styles.ts",
-    "src/shared/services/diceRoller.ts"
-  ],
-  "src/screens/DiceRoller/DiceRoller.test.tsx": [
-    "src/screens/DiceRoller/DiceRoller.tsx"
-  ],
+  "src/screens/Dice/Dice.tsx": ["src/context/Theme-store.ts", "src/screens/Dice/styles.ts", "src/shared/services/diceRoller.ts"],
+  "src/screens/DiceRoller/DiceRoller.test.tsx": ["src/screens/DiceRoller/DiceRoller.tsx"],
   "src/screens/DiceRoller/DiceRoller.tsx": [
     "src/context/Theme-store.ts",
     "src/screens/DiceRoller/styles.ts",
     "src/shared/services/diceRoller.ts"
   ],
   "src/shared/helpers/calculateModifier.ts": [],
-  "src/shared/services/diceRoller.test.ts": [
-    "src/shared/services/diceRoller.ts"
-  ],
+  "src/shared/services/diceRoller.test.ts": ["src/shared/services/diceRoller.ts"],
   "src/shared/services/diceRoller.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/dm/domain/initiative/roll.ts": [
@@ -133,12 +116,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/repositories/characterCloudRepository.ts",
@@ -221,9 +199,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     }
   ],
   "src/screens/Character/components/CharacterHeader.tsx": [
@@ -237,9 +213,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     }
   ],
   "src/screens/Character/components/QuickActionBar.tsx": [
@@ -253,42 +227,27 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/AppRole-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Spellbook-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Sync-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default",
-        "selectSyncByCharacterId",
-        "selectSyncStoreActions"
-      ]
+      "symbols": ["default", "selectSyncByCharacterId", "selectSyncStoreActions"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/domain/schemas/index.ts",
@@ -381,9 +340,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     },
     {
       "path": "src/repositories/characterCloudRepository.ts",
@@ -417,27 +374,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/components/CharacterSourceBadge.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "getCharacterSourceBadgeLabel",
-        "CharacterSourceBadge"
-      ]
+      "symbols": ["getCharacterSourceBadgeLabel", "CharacterSourceBadge"]
     },
     {
       "path": "src/screens/Character/hooks/levelChange.ts",
       "batchIndex": 13,
-      "symbols": [
-        "MIN_CHARACTER_LEVEL",
-        "MAX_CHARACTER_LEVEL",
-        "buildNextHitDice",
-        "applyLevelChange"
-      ]
+      "symbols": ["MIN_CHARACTER_LEVEL", "MAX_CHARACTER_LEVEL", "buildNextHitDice", "applyLevelChange"]
     },
     {
       "path": "src/screens/Character/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/characterSyncCoordinator.ts",
@@ -458,16 +405,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/helpers/collaboration/status.ts",
@@ -485,9 +423,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/createEmptyCharacter.ts",
       "batchIndex": 5,
-      "symbols": [
-        "createEmptyCharacter"
-      ]
+      "symbols": ["createEmptyCharacter"]
     },
     {
       "path": "src/shared/helpers/derived.ts",
@@ -508,51 +444,32 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/dice.ts",
       "batchIndex": 13,
-      "symbols": [
-        "parseDice",
-        "rollDice"
-      ]
+      "symbols": ["parseDice", "rollDice"]
     },
     {
       "path": "src/shared/helpers/homebrew.ts",
       "batchIndex": 3,
-      "symbols": [
-        "normalizeHomebrewV3",
-        "isHomebrewCharacter",
-        "appendQuickSessionNote"
-      ]
+      "symbols": ["normalizeHomebrewV3", "isHomebrewCharacter", "appendQuickSessionNote"]
     },
     {
       "path": "src/shared/helpers/mapCloudCharacter.ts",
       "batchIndex": 3,
-      "symbols": [
-        "mapCloudCharacterToLocalDto"
-      ]
+      "symbols": ["mapCloudCharacterToLocalDto"]
     },
     {
       "path": "src/shared/helpers/sourcePresentation.ts",
       "batchIndex": 2,
-      "symbols": [
-        "isBuiltInRulesSource",
-        "shouldDisplaySourceMetadata"
-      ]
+      "symbols": ["isBuiltInRulesSource", "shouldDisplaySourceMetadata"]
     },
     {
       "path": "src/shared/services/telemetry/productTelemetry.ts",
       "batchIndex": 3,
-      "symbols": [
-        "setAnalyticsConsent",
-        "isAnalyticsConsentEnabled",
-        "trackProductEvent",
-        "getProductEvents"
-      ]
+      "symbols": ["setAnalyticsConsent", "isAnalyticsConsentEnabled", "trackProductEvent", "getProductEvents"]
     },
     {
       "path": "src/shared/styles/statusTones.ts",
       "batchIndex": 8,
-      "symbols": [
-        "getStatusToneColors"
-      ]
+      "symbols": ["getStatusToneColors"]
     },
     {
       "path": "src/types/Character.ts",
@@ -603,46 +520,34 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/Dice/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     }
   ],
   "src/screens/DiceRoller/DiceRoller.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/DiceRoller/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     },
     {
       "path": "src/screens/Initiative/LocalInitiativeBoard.tsx",
@@ -665,9 +570,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "AttributesItem"
-      ]
+      "symbols": ["AttributesItem"]
     }
   ],
   "src/shared/services/diceRoller.ts": [
@@ -717,6 +620,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/context/TrackerTemplates-store.ts` (2 lines, language: `typescript`, fileCategory: `code`)
 2. `src/dm/domain/initiative/roll.ts` (16 lines, language: `typescript`, fileCategory: `code`)
 3. `src/screens/Character/Character.tsx` (194 lines, language: `typescript`, fileCategory: `code`)

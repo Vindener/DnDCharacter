@@ -40,6 +40,3 @@ export const getStyles = (c: ThemeColors) =>
     },
     rerollButtonText: { color: c.onMagic, fontSize: fs(16) },
   });
-
-
-

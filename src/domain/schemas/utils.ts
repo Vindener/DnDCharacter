@@ -58,9 +58,7 @@ export function toBoolean(value: unknown, fallback = false): boolean {
 
 export function toStringArray(value: unknown, options?: { dedupe?: boolean }): string[] {
   if (!Array.isArray(value)) return [];
-  const list = value
-    .map((item) => toTrimmedString(item))
-    .filter(Boolean);
+  const list = value.map((item) => toTrimmedString(item)).filter(Boolean);
   if (!options?.dedupe) return list;
   return Array.from(new Set(list));
 }
@@ -76,10 +74,7 @@ export function toFiniteStringRecord(value: unknown): Record<string, number> {
   return out;
 }
 
-export function safeParseWithIssues<T>(
-  schema: z.ZodType<T>,
-  input: unknown,
-): SafeSchemaResult<T> {
+export function safeParseWithIssues<T>(schema: z.ZodType<T>, input: unknown): SafeSchemaResult<T> {
   const result = schema.safeParse(input);
   if (result.success) {
     return {

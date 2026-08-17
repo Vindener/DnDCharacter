@@ -7,22 +7,14 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-2.json` (single-file mode) OR `batch-2-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/context/Monster-store.ts": [],
-  "src/dm/repositories/monsterRepository.ts": [
-    "src/domain/migrations/index.ts",
-    "src/types/Monster.ts"
-  ],
-  "src/domain/spellbook/characterSpellAdapter.test.ts": [
-    "src/domain/spellbook/index.ts",
-    "src/shared/helpers/createEmptyCharacter.ts"
-  ],
+  "src/dm/repositories/monsterRepository.ts": ["src/domain/migrations/index.ts", "src/types/Monster.ts"],
+  "src/domain/spellbook/characterSpellAdapter.test.ts": ["src/domain/spellbook/index.ts", "src/shared/helpers/createEmptyCharacter.ts"],
   "src/domain/spellbook/index.ts": [],
-  "src/domain/spellbook/spellRepository.test.ts": [
-    "src/domain/migrations/index.ts",
-    "src/domain/spellbook/index.ts"
-  ],
+  "src/domain/spellbook/spellRepository.test.ts": ["src/domain/migrations/index.ts", "src/domain/spellbook/index.ts"],
   "src/domain/srd/localization.ts": [
     "src/data/locales/uk/monsters.json",
     "src/data/locales/uk/spells.json",
@@ -71,11 +63,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/types/Character.ts"
   ],
   "src/navigation/sharedTypes.ts": [],
-  "src/screens/Bestiary/Bestiary.test.tsx": [
-    "src/dm/domain/types/index.ts",
-    "src/screens/Bestiary/Bestiary.tsx",
-    "src/types/Monster.ts"
-  ],
+  "src/screens/Bestiary/Bestiary.test.tsx": ["src/dm/domain/types/index.ts", "src/screens/Bestiary/Bestiary.tsx", "src/types/Monster.ts"],
   "src/screens/Bestiary/Bestiary.tsx": [
     "src/context/Monster-store.ts",
     "src/context/Theme-store.ts",
@@ -97,14 +85,8 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/screens/Bestiary/bestiaryFilters.ts",
     "src/types/Monster.ts"
   ],
-  "src/screens/Bestiary/bestiaryFilters.ts": [
-    "src/domain/srd/localization.ts",
-    "src/types/Monster.ts"
-  ],
-  "src/screens/Monster/Monster.test.tsx": [
-    "src/screens/Monster/Monster.tsx",
-    "src/types/Monster.ts"
-  ],
+  "src/screens/Bestiary/bestiaryFilters.ts": ["src/domain/srd/localization.ts", "src/types/Monster.ts"],
+  "src/screens/Monster/Monster.test.tsx": ["src/screens/Monster/Monster.tsx", "src/types/Monster.ts"],
   "src/screens/Monster/Monster.tsx": [
     "src/context/Monster-store.ts",
     "src/context/Theme-store.ts",
@@ -146,14 +128,8 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/types/Character.ts",
     "src/types/Spellbook.ts"
   ],
-  "src/screens/Support/Support.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/services/storeEffects/spellbookStoreEffects.ts": [
-    "src/domain/spellbook/index.ts",
-    "src/stores/spellbookStore.ts"
-  ],
+  "src/screens/Support/Support.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+  "src/services/storeEffects/spellbookStoreEffects.ts": ["src/domain/spellbook/index.ts", "src/stores/spellbookStore.ts"],
   "src/shared/components/MonsterCard/MonsterCard.tsx": [
     "src/context/Monster-store.ts",
     "src/context/Theme-store.ts",
@@ -163,12 +139,8 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/helpers/sourcePresentation.ts",
     "src/types/Monster.ts"
   ],
-  "src/shared/const/SpellbookSeed.ts": [
-    "src/types/Spellbook.ts"
-  ],
-  "src/shared/helpers/sourcePresentation.test.ts": [
-    "src/shared/helpers/sourcePresentation.ts"
-  ],
+  "src/shared/const/SpellbookSeed.ts": ["src/types/Spellbook.ts"],
+  "src/shared/helpers/sourcePresentation.test.ts": ["src/shared/helpers/sourcePresentation.ts"],
   "src/shared/helpers/sourcePresentation.ts": [],
   "src/shared/services/fileSerice.ts": [
     "src/context/Character-store.ts",
@@ -176,22 +148,15 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/domain/types/index.ts",
     "src/types/Monster.ts"
   ],
-  "src/stores/monsterStore.ts": [
-    "src/dm/repositories/monsterRepository.ts",
-    "src/types/Monster.ts"
-  ],
-  "src/stores/spellbookStore.ts": [
-    "src/domain/types/index.ts",
-    "src/services/storeEffects/spellbookStoreEffects.ts"
-  ],
-  "src/types/Monster.ts": [
-    "src/domain/types/sourceMetadata.ts"
-  ],
+  "src/stores/monsterStore.ts": ["src/dm/repositories/monsterRepository.ts", "src/types/Monster.ts"],
+  "src/stores/spellbookStore.ts": ["src/domain/types/index.ts", "src/services/storeEffects/spellbookStoreEffects.ts"],
+  "src/types/Monster.ts": ["src/domain/types/sourceMetadata.ts"],
   "src/types/Spellbook.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/context/Monster-store.ts": [
@@ -246,18 +211,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/createEmptyCharacter.ts",
       "batchIndex": 5,
-      "symbols": [
-        "createEmptyCharacter"
-      ]
+      "symbols": ["createEmptyCharacter"]
     }
   ],
   "src/domain/spellbook/index.ts": [
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/domain/spellbook/spellRepository.test.ts": [
@@ -319,9 +280,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/DMEncounterPrep.tsx",
@@ -336,33 +295,24 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/PinnedReferencesList.tsx",
       "batchIndex": 3,
-      "symbols": [
-        "PinnedReferencesList"
-      ]
+      "symbols": ["PinnedReferencesList"]
     }
   ],
   "src/modules/Header/Header.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/modules/Header/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/services/auth/auth.tsx",
       "batchIndex": 14,
-      "symbols": [
-        "AuthProvider",
-        "useAuth"
-      ]
+      "symbols": ["AuthProvider", "useAuth"]
     },
     {
       "path": "src/shared/ui/index.ts",
@@ -409,25 +359,19 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     }
   ],
   "src/navigation/AppNavigator.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/navigation/DMNavigator.tsx",
       "batchIndex": 1,
-      "symbols": [
-        "DMNavigator"
-      ]
+      "symbols": ["DMNavigator"]
     },
     {
       "path": "src/screens/Initiative/Initiative.tsx",
@@ -437,41 +381,26 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "App.tsx",
       "batchIndex": 14,
-      "symbols": [
-        "App"
-      ]
+      "symbols": ["App"]
     }
   ],
   "src/navigation/ReferencesNavigator.tsx": [
     {
       "path": "src/screens/References/References.tsx",
       "batchIndex": 10,
-      "symbols": [
-        "References"
-      ]
+      "symbols": ["References"]
     }
   ],
   "src/navigation/TabNavigator.tsx": [
     {
       "path": "src/screens/Character/Character.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "Character"
-      ]
+      "symbols": ["Character"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -486,9 +415,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DiceRoller/DiceRoller.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "DiceRollerPanel"
-      ]
+      "symbols": ["DiceRollerPanel"]
     },
     {
       "path": "src/screens/Home/Home.tsx",
@@ -539,16 +466,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/shared/components/CharacterCard/CharacterCard.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "CharacterCard"
-      ]
+      "symbols": ["CharacterCard"]
     },
     {
       "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
@@ -567,9 +490,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -596,9 +517,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Bestiary/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/ui/skeleton/index.tsx",
@@ -623,10 +542,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/srd/adapters.ts",
       "batchIndex": 12,
-      "symbols": [
-        "srdSpellToSpellbookSpell",
-        "srdMonsterToMonsterDto"
-      ]
+      "symbols": ["srdSpellToSpellbookSpell", "srdMonsterToMonsterDto"]
     },
     {
       "path": "src/domain/srd/srdRepository.ts",
@@ -660,16 +576,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/Monster/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/TextInput/TextInput.tsx",
@@ -679,42 +591,24 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/screens/Spellbook/Spellbook.tsx": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Spellbook-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -806,16 +700,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Spellbook/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     },
     {
       "path": "src/shared/ui/skeleton/index.tsx",
@@ -871,9 +761,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/createEmptyCharacter.ts",
       "batchIndex": 5,
-      "symbols": [
-        "createEmptyCharacter"
-      ]
+      "symbols": ["createEmptyCharacter"]
     }
   ],
   "src/screens/Spellbook/spellbookFilters.ts": [
@@ -913,77 +801,48 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/shared/components/MonsterCard/MonsterCard.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/MonsterCard/style.ts",
       "batchIndex": 8,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     }
   ],
   "src/shared/helpers/sourcePresentation.ts": [
     {
       "path": "src/screens/Character/components/CharacterSourceBadge.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "getCharacterSourceBadgeLabel",
-        "CharacterSourceBadge"
-      ]
+      "symbols": ["getCharacterSourceBadgeLabel", "CharacterSourceBadge"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     }
   ],
   "src/shared/services/fileSerice.ts": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     },
     {
       "path": "src/domain/types/index.ts",
@@ -1017,24 +876,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/domain/srd/adapters.ts",
       "batchIndex": 12,
-      "symbols": [
-        "srdSpellToSpellbookSpell",
-        "srdMonsterToMonsterDto"
-      ]
+      "symbols": ["srdSpellToSpellbookSpell", "srdMonsterToMonsterDto"]
     },
     {
       "path": "src/screens/DM/PinnedReferencesList.tsx",
       "batchIndex": 3,
-      "symbols": [
-        "PinnedReferencesList"
-      ]
+      "symbols": ["PinnedReferencesList"]
     },
     {
       "path": "src/services/storeEffects/dmStoreEffects.ts",
       "batchIndex": 12,
-      "symbols": [
-        "createDmStoreEffects"
-      ]
+      "symbols": ["createDmStoreEffects"]
     },
     {
       "path": "src/stores/dmStore.ts",
@@ -1046,22 +898,19 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/PinnedReferencesList.tsx",
       "batchIndex": 3,
-      "symbols": [
-        "PinnedReferencesList"
-      ]
+      "symbols": ["PinnedReferencesList"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/context/Monster-store.ts` (1 lines, language: `typescript`, fileCategory: `code`)
 2. `src/dm/repositories/monsterRepository.ts` (57 lines, language: `typescript`, fileCategory: `code`)
 3. `src/domain/spellbook/characterSpellAdapter.test.ts` (101 lines, language: `typescript`, fileCategory: `code`)

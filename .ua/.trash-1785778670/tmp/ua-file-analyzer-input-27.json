@@ -1,11 +1,11 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/shared/mock/Elara_Moonshadow.json", "language": "json", "sizeLines": 131, "fileCategory": "config"},
-    {"path": "src/shared/mock/defaultCharacter.json", "language": "json", "sizeLines": 36, "fileCategory": "config"},
-    {"path": "src/shared/mock/defaultCharacter2.json", "language": "json", "sizeLines": 87, "fileCategory": "config"},
-    {"path": "src/shared/mock/demon-lord-001.json", "language": "json", "sizeLines": 22, "fileCategory": "config"},
-    {"path": "src/shared/mock/monsterBook.json", "language": "json", "sizeLines": 70, "fileCategory": "config"}
+    { "path": "src/shared/mock/Elara_Moonshadow.json", "language": "json", "sizeLines": 131, "fileCategory": "config" },
+    { "path": "src/shared/mock/defaultCharacter.json", "language": "json", "sizeLines": 36, "fileCategory": "config" },
+    { "path": "src/shared/mock/defaultCharacter2.json", "language": "json", "sizeLines": 87, "fileCategory": "config" },
+    { "path": "src/shared/mock/demon-lord-001.json", "language": "json", "sizeLines": 22, "fileCategory": "config" },
+    { "path": "src/shared/mock/monsterBook.json", "language": "json", "sizeLines": 70, "fileCategory": "config" }
   ],
   "batchImportData": {
     "src/shared/mock/Elara_Moonshadow.json": [],

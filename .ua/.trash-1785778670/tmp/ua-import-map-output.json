@@ -99,14 +99,10 @@
     "firestore.rules": [],
     "functions/README.md": [],
     "functions/package.json": [],
-    "functions/src/accountDeletionCascade.test.ts": [
-      "functions/src/accountDeletionCascade.ts"
-    ],
+    "functions/src/accountDeletionCascade.test.ts": ["functions/src/accountDeletionCascade.ts"],
     "functions/src/accountDeletionCascade.ts": [],
     "functions/src/createCampaignInvite.ts": [],
-    "functions/src/deleteMyAccount.ts": [
-      "functions/src/accountDeletionCascade.ts"
-    ],
+    "functions/src/deleteMyAccount.ts": ["functions/src/accountDeletionCascade.ts"],
     "functions/src/index.ts": [],
     "functions/src/redeemCampaignInvite.ts": [],
     "functions/tsconfig.json": [],
@@ -125,9 +121,7 @@
     "scripts/lint-ui-tokens.mjs": [],
     "scripts/manual-dev-client-android.ps1": [],
     "scripts/release-check.mjs": [],
-    "scripts/validate-srd.mjs": [
-      "src/domain/srd/srdRepository.ts"
-    ],
+    "scripts/validate-srd.mjs": ["src/domain/srd/srdRepository.ts"],
     "src/components/ShareCharacterSheetModal.tsx": [
       "src/context/Theme-store.ts",
       "src/repositories/characterCloudRepository.ts",
@@ -175,64 +169,29 @@
     "src/data/srd/spells.json": [],
     "src/dm/boundary.test.ts": [],
     "src/dm/domain/campaign/index.ts": [],
-    "src/dm/domain/campaign/linking.test.ts": [
-      "src/dm/domain/campaign/index.ts",
-      "src/dm/domain/types/index.ts"
-    ],
-    "src/dm/domain/campaign/linking.ts": [
-      "src/dm/domain/campaign/utils.ts",
-      "src/dm/domain/types/index.ts"
-    ],
-    "src/dm/domain/campaign/utils.test.ts": [
-      "src/dm/domain/campaign/index.ts",
-      "src/dm/domain/types/index.ts"
-    ],
-    "src/dm/domain/campaign/utils.ts": [
-      "src/dm/domain/types/index.ts"
-    ],
-    "src/dm/domain/encounter/calculator.test.ts": [
-      "src/dm/domain/encounter/index.ts"
-    ],
-    "src/dm/domain/encounter/calculator.ts": [
-      "src/dm/domain/types/index.ts"
-    ],
+    "src/dm/domain/campaign/linking.test.ts": ["src/dm/domain/campaign/index.ts", "src/dm/domain/types/index.ts"],
+    "src/dm/domain/campaign/linking.ts": ["src/dm/domain/campaign/utils.ts", "src/dm/domain/types/index.ts"],
+    "src/dm/domain/campaign/utils.test.ts": ["src/dm/domain/campaign/index.ts", "src/dm/domain/types/index.ts"],
+    "src/dm/domain/campaign/utils.ts": ["src/dm/domain/types/index.ts"],
+    "src/dm/domain/encounter/calculator.test.ts": ["src/dm/domain/encounter/index.ts"],
+    "src/dm/domain/encounter/calculator.ts": ["src/dm/domain/types/index.ts"],
     "src/dm/domain/encounter/index.ts": [],
     "src/dm/domain/index.ts": [],
     "src/dm/domain/initiative/index.ts": [],
-    "src/dm/domain/initiative/roll.test.ts": [
-      "src/dm/domain/initiative/index.ts",
-      "src/dm/domain/types/index.ts"
-    ],
-    "src/dm/domain/initiative/roll.ts": [
-      "src/dm/domain/types/index.ts",
-      "src/shared/services/diceRoller.ts"
-    ],
-    "src/dm/domain/notes/conflict.test.ts": [
-      "src/dm/domain/notes/index.ts",
-      "src/dm/domain/types/index.ts"
-    ],
-    "src/dm/domain/notes/conflict.ts": [
-      "src/dm/domain/types/index.ts"
-    ],
+    "src/dm/domain/initiative/roll.test.ts": ["src/dm/domain/initiative/index.ts", "src/dm/domain/types/index.ts"],
+    "src/dm/domain/initiative/roll.ts": ["src/dm/domain/types/index.ts", "src/shared/services/diceRoller.ts"],
+    "src/dm/domain/notes/conflict.test.ts": ["src/dm/domain/notes/index.ts", "src/dm/domain/types/index.ts"],
+    "src/dm/domain/notes/conflict.ts": ["src/dm/domain/types/index.ts"],
     "src/dm/domain/notes/index.ts": [],
     "src/dm/domain/types/campaign.ts": [],
     "src/dm/domain/types/campaignInvite.ts": [],
     "src/dm/domain/types/encounter.ts": [],
-    "src/dm/domain/types/encounterHistory.ts": [
-      "src/dm/domain/types/encounter.ts",
-      "src/dm/domain/types/notes.ts"
-    ],
+    "src/dm/domain/types/encounterHistory.ts": ["src/dm/domain/types/encounter.ts", "src/dm/domain/types/notes.ts"],
     "src/dm/domain/types/index.ts": [],
     "src/dm/domain/types/initiative.ts": [],
     "src/dm/domain/types/notes.ts": [],
-    "src/dm/hooks/useCampaignOwnership.ts": [
-      "src/dm/domain/types/index.ts",
-      "src/services/firebase.ts"
-    ],
-    "src/dm/repositories/appRoleRepository.ts": [
-      "src/domain/migrations/index.ts",
-      "src/types/Product.ts"
-    ],
+    "src/dm/hooks/useCampaignOwnership.ts": ["src/dm/domain/types/index.ts", "src/services/firebase.ts"],
+    "src/dm/repositories/appRoleRepository.ts": ["src/domain/migrations/index.ts", "src/types/Product.ts"],
     "src/dm/repositories/campaignEncountersRepository.test.ts": [
       "src/dm/domain/types/index.ts",
       "src/dm/repositories/campaignEncountersRepository.ts",
@@ -267,10 +226,7 @@
       "src/domain/schemas/index.ts",
       "src/services/firebase.ts"
     ],
-    "src/dm/repositories/campaignRepository.test.ts": [
-      "src/dm/repositories/campaignRepository.ts",
-      "src/domain/migrations/index.ts"
-    ],
+    "src/dm/repositories/campaignRepository.test.ts": ["src/dm/repositories/campaignRepository.ts", "src/domain/migrations/index.ts"],
     "src/dm/repositories/campaignRepository.ts": [
       "src/dm/domain/campaign/index.ts",
       "src/dm/domain/types/index.ts",
@@ -279,51 +235,30 @@
       "src/services/firebase.ts",
       "src/services/users.ts"
     ],
-    "src/dm/repositories/dmSettingsRepository.ts": [
-      "src/domain/migrations/index.ts"
-    ],
+    "src/dm/repositories/dmSettingsRepository.ts": ["src/domain/migrations/index.ts"],
     "src/dm/repositories/index.ts": [],
-    "src/dm/repositories/monsterRepository.ts": [
-      "src/domain/migrations/index.ts",
-      "src/types/Monster.ts"
-    ],
+    "src/dm/repositories/monsterRepository.ts": ["src/domain/migrations/index.ts", "src/types/Monster.ts"],
     "src/dm/repositories/storageRepositories.test.ts": [
       "src/dm/repositories/appRoleRepository.ts",
       "src/dm/repositories/monsterRepository.ts",
       "src/dm/repositories/trackerTemplatesRepository.ts"
     ],
-    "src/dm/repositories/trackerTemplatesRepository.ts": [
-      "src/dm/domain/types/index.ts",
-      "src/domain/migrations/index.ts"
-    ],
-    "src/domain/mappers/character.mapper.test.ts": [
-      "src/domain/mappers/character.mapper.ts",
-      "src/domain/migrations/index.ts"
-    ],
+    "src/dm/repositories/trackerTemplatesRepository.ts": ["src/dm/domain/types/index.ts", "src/domain/migrations/index.ts"],
+    "src/domain/mappers/character.mapper.test.ts": ["src/domain/mappers/character.mapper.ts", "src/domain/migrations/index.ts"],
     "src/domain/mappers/character.mapper.ts": [
       "src/domain/migrations/index.ts",
       "src/domain/schemas/index.ts",
       "src/domain/types/index.ts"
     ],
-    "src/domain/mappers/homebrew.mapper.test.ts": [
-      "src/domain/mappers/homebrew.mapper.ts"
-    ],
-    "src/domain/mappers/homebrew.mapper.ts": [
-      "src/domain/schemas/index.ts",
-      "src/domain/types/index.ts"
-    ],
+    "src/domain/mappers/homebrew.mapper.test.ts": ["src/domain/mappers/homebrew.mapper.ts"],
+    "src/domain/mappers/homebrew.mapper.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
     "src/domain/mappers/index.ts": [
       "src/domain/mappers/character.mapper.ts",
       "src/domain/mappers/homebrew.mapper.ts",
       "src/domain/mappers/spell.mapper.ts"
     ],
-    "src/domain/mappers/spell.mapper.ts": [
-      "src/domain/schemas/index.ts",
-      "src/domain/types/index.ts"
-    ],
-    "src/domain/migrations/index.test.ts": [
-      "src/domain/migrations/index.ts"
-    ],
+    "src/domain/mappers/spell.mapper.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+    "src/domain/migrations/index.test.ts": ["src/domain/migrations/index.ts"],
     "src/domain/migrations/index.ts": [],
     "src/domain/schemas/campaignEncounter.schema.ts": [
       "src/domain/migrations/index.ts",
@@ -331,28 +266,19 @@
       "src/domain/schemas/utils.ts",
       "src/domain/types/index.ts"
     ],
-    "src/domain/schemas/campaignInitiative.schema.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/domain/schemas/index.ts"
-    ],
+    "src/domain/schemas/campaignInitiative.schema.test.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts"],
     "src/domain/schemas/campaignInitiative.schema.ts": [
       "src/domain/migrations/index.ts",
       "src/domain/schemas/utils.ts",
       "src/domain/types/index.ts"
     ],
-    "src/domain/schemas/campaignNote.schema.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/domain/schemas/index.ts"
-    ],
+    "src/domain/schemas/campaignNote.schema.test.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts"],
     "src/domain/schemas/campaignNote.schema.ts": [
       "src/domain/migrations/index.ts",
       "src/domain/schemas/utils.ts",
       "src/domain/types/index.ts"
     ],
-    "src/domain/schemas/character.schema.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/domain/schemas/index.ts"
-    ],
+    "src/domain/schemas/character.schema.test.ts": ["src/domain/migrations/index.ts", "src/domain/schemas/index.ts"],
     "src/domain/schemas/character.schema.ts": [
       "src/domain/migrations/index.ts",
       "src/domain/schemas/homebrew.schema.ts",
@@ -360,34 +286,19 @@
       "src/domain/schemas/utils.ts",
       "src/domain/types/index.ts"
     ],
-    "src/domain/schemas/createCharacterWizard.schema.test.ts": [
-      "src/domain/schemas/index.ts"
-    ],
+    "src/domain/schemas/createCharacterWizard.schema.test.ts": ["src/domain/schemas/index.ts"],
     "src/domain/schemas/createCharacterWizard.schema.ts": [
       "src/domain/schemas/utils.ts",
       "src/screens/CreateCharacter/createCharacterWizard.ts"
     ],
-    "src/domain/schemas/homebrew.schema.test.ts": [
-      "src/domain/schemas/index.ts"
-    ],
-    "src/domain/schemas/homebrew.schema.ts": [
-      "src/domain/schemas/utils.ts",
-      "src/domain/types/index.ts"
-    ],
+    "src/domain/schemas/homebrew.schema.test.ts": ["src/domain/schemas/index.ts"],
+    "src/domain/schemas/homebrew.schema.ts": ["src/domain/schemas/utils.ts", "src/domain/types/index.ts"],
     "src/domain/schemas/index.ts": [],
-    "src/domain/schemas/spell.schema.test.ts": [
-      "src/domain/schemas/index.ts"
-    ],
-    "src/domain/schemas/spell.schema.ts": [
-      "src/domain/schemas/utils.ts",
-      "src/domain/types/index.ts"
-    ],
+    "src/domain/schemas/spell.schema.test.ts": ["src/domain/schemas/index.ts"],
+    "src/domain/schemas/spell.schema.ts": ["src/domain/schemas/utils.ts", "src/domain/types/index.ts"],
     "src/domain/schemas/utils.ts": [],
     "src/domain/spellbook/boundary.test.ts": [],
-    "src/domain/spellbook/characterSpellAdapter.test.ts": [
-      "src/domain/spellbook/index.ts",
-      "src/shared/helpers/createEmptyCharacter.ts"
-    ],
+    "src/domain/spellbook/characterSpellAdapter.test.ts": ["src/domain/spellbook/index.ts", "src/shared/helpers/createEmptyCharacter.ts"],
     "src/domain/spellbook/characterSpellAdapter.ts": [
       "src/domain/mappers/index.ts",
       "src/domain/spellbook/spellbookEntity.ts",
@@ -397,9 +308,7 @@
       "src/shared/helpers/calculateModifier.ts"
     ],
     "src/domain/spellbook/index.ts": [],
-    "src/domain/spellbook/spellCloudRepository.ts": [
-      "src/domain/spellbook/spellRepository.ts"
-    ],
+    "src/domain/spellbook/spellCloudRepository.ts": ["src/domain/spellbook/spellRepository.ts"],
     "src/domain/spellbook/spellLocalRepository.ts": [
       "src/domain/mappers/index.ts",
       "src/domain/migrations/index.ts",
@@ -409,10 +318,7 @@
       "src/domain/srd/adapters.ts",
       "src/domain/srd/srdRepository.ts"
     ],
-    "src/domain/spellbook/spellRepository.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/domain/spellbook/index.ts"
-    ],
+    "src/domain/spellbook/spellRepository.test.ts": ["src/domain/migrations/index.ts", "src/domain/spellbook/index.ts"],
     "src/domain/spellbook/spellRepository.ts": [
       "src/domain/mappers/index.ts",
       "src/domain/schemas/index.ts",
@@ -421,14 +327,8 @@
       "src/domain/spellbook/spellLocalRepository.ts",
       "src/domain/spellbook/spellbookEntity.ts"
     ],
-    "src/domain/spellbook/spellbookEntity.ts": [
-      "src/domain/types/sourceMetadata.ts"
-    ],
-    "src/domain/srd/adapters.ts": [
-      "src/domain/spellbook/spellbookEntity.ts",
-      "src/domain/srd/types.ts",
-      "src/types/Monster.ts"
-    ],
+    "src/domain/spellbook/spellbookEntity.ts": ["src/domain/types/sourceMetadata.ts"],
+    "src/domain/srd/adapters.ts": ["src/domain/spellbook/spellbookEntity.ts", "src/domain/srd/types.ts", "src/types/Monster.ts"],
     "src/domain/srd/index.ts": [],
     "src/domain/srd/localization.test.ts": [
       "src/domain/srd/adapters.ts",
@@ -442,26 +342,11 @@
       "src/types/Monster.ts",
       "src/types/Spellbook.ts"
     ],
-    "src/domain/srd/schemas.ts": [
-      "src/domain/srd/types.ts"
-    ],
-    "src/domain/srd/srdRepository.test.ts": [
-      "src/domain/srd/srdRepository.ts"
-    ],
-    "src/domain/srd/srdRepository.ts": [
-      "src/data/srd/index.ts",
-      "src/domain/srd/schemas.ts",
-      "src/domain/srd/types.ts"
-    ],
-    "src/domain/srd/srdSelectors.ts": [
-      "src/domain/srd/srdRepository.ts",
-      "src/domain/srd/types.ts"
-    ],
-    "src/domain/srd/types.ts": [
-      "src/domain/types/sourceMetadata.ts",
-      "src/types/Skills.ts",
-      "src/types/Stats.ts"
-    ],
+    "src/domain/srd/schemas.ts": ["src/domain/srd/types.ts"],
+    "src/domain/srd/srdRepository.test.ts": ["src/domain/srd/srdRepository.ts"],
+    "src/domain/srd/srdRepository.ts": ["src/data/srd/index.ts", "src/domain/srd/schemas.ts", "src/domain/srd/types.ts"],
+    "src/domain/srd/srdSelectors.ts": ["src/domain/srd/srdRepository.ts", "src/domain/srd/types.ts"],
+    "src/domain/srd/types.ts": ["src/domain/types/sourceMetadata.ts", "src/types/Skills.ts", "src/types/Stats.ts"],
     "src/domain/types/character.ts": [
       "src/types/DeathSaves.ts",
       "src/types/HitPoints.ts",
@@ -549,10 +434,7 @@
     "src/i18n/locales/uk/spellbook.json": [],
     "src/i18n/locales/uk/support.json": [],
     "src/i18n/locales/uk/whatsNew.json": [],
-    "src/i18n/types.ts": [
-      "src/i18n/index.ts",
-      "src/i18n/languageStorage.ts"
-    ],
+    "src/i18n/types.ts": ["src/i18n/index.ts", "src/i18n/languageStorage.ts"],
     "src/modules/Header/Header.tsx": [
       "src/context/Theme-store.ts",
       "src/modules/Header/style.ts",
@@ -561,10 +443,7 @@
       "src/shared/services/auth/auth.tsx",
       "src/shared/ui/index.ts"
     ],
-    "src/modules/Header/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/modules/Header/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/navigation/AppNavigator.tsx": [
       "src/context/Theme-store.ts",
       "src/modules/Header/Header.tsx",
@@ -627,29 +506,18 @@
       "src/shared/helpers/stripUndefinedDeep.ts",
       "src/shared/helpers/sync/syncErrorClassification.ts"
     ],
-    "src/repositories/characterLocalRepository.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/repositories/characterLocalRepository.ts"
-    ],
+    "src/repositories/characterLocalRepository.test.ts": ["src/domain/migrations/index.ts", "src/repositories/characterLocalRepository.ts"],
     "src/repositories/characterLocalRepository.ts": [
       "src/domain/mappers/index.ts",
       "src/domain/migrations/index.ts",
       "src/domain/types/index.ts"
     ],
-    "src/repositories/createCharacterDraftRepository.ts": [
-      "src/screens/CreateCharacter/createCharacterWizard.ts"
-    ],
+    "src/repositories/createCharacterDraftRepository.ts": ["src/screens/CreateCharacter/createCharacterWizard.ts"],
     "src/repositories/firstLaunchRepository.ts": [],
-    "src/repositories/syncPathFieldMap.test.ts": [
-      "src/repositories/syncPathFieldMap.ts"
-    ],
+    "src/repositories/syncPathFieldMap.test.ts": ["src/repositories/syncPathFieldMap.ts"],
     "src/repositories/syncPathFieldMap.ts": [],
     "src/repositories/whatsNewRepository.ts": [],
-    "src/screens/Bestiary/Bestiary.test.tsx": [
-      "src/dm/domain/types/index.ts",
-      "src/screens/Bestiary/Bestiary.tsx",
-      "src/types/Monster.ts"
-    ],
+    "src/screens/Bestiary/Bestiary.test.tsx": ["src/dm/domain/types/index.ts", "src/screens/Bestiary/Bestiary.tsx", "src/types/Monster.ts"],
     "src/screens/Bestiary/Bestiary.tsx": [
       "src/context/Monster-store.ts",
       "src/context/Theme-store.ts",
@@ -671,14 +539,8 @@
       "src/screens/Bestiary/bestiaryFilters.ts",
       "src/types/Monster.ts"
     ],
-    "src/screens/Bestiary/bestiaryFilters.ts": [
-      "src/domain/srd/localization.ts",
-      "src/types/Monster.ts"
-    ],
-    "src/screens/Bestiary/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/Bestiary/bestiaryFilters.ts": ["src/domain/srd/localization.ts", "src/types/Monster.ts"],
+    "src/screens/Bestiary/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/Character/Character.tsx": [
       "src/context/Character-store.ts",
       "src/repositories/characterCloudRepository.ts",
@@ -707,31 +569,16 @@
       "src/screens/Character/components/CharacterSourceBadge.tsx",
       "src/types/Character.ts"
     ],
-    "src/screens/Character/components/CharacterSourceBadge.tsx": [
-      "src/shared/helpers/sourcePresentation.ts",
-      "src/types/Character.ts"
-    ],
-    "src/screens/Character/components/CharacterTabs.tsx": [
-      "src/screens/Character/hooks/useCharacterActions.tsx"
-    ],
-    "src/screens/Character/components/CombatSummaryCard.tsx": [
-      "src/screens/Character/hooks/useCharacterActions.tsx"
-    ],
+    "src/screens/Character/components/CharacterSourceBadge.tsx": ["src/shared/helpers/sourcePresentation.ts", "src/types/Character.ts"],
+    "src/screens/Character/components/CharacterTabs.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
+    "src/screens/Character/components/CombatSummaryCard.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
     "src/screens/Character/components/QuickActionBar.test.tsx": [
       "src/screens/Character/components/QuickActionBar.tsx",
       "src/shared/styles/theme.ts"
     ],
-    "src/screens/Character/components/QuickActionBar.tsx": [
-      "src/screens/Character/hooks/useCharacterActions.tsx"
-    ],
-    "src/screens/Character/hooks/levelChange.test.ts": [
-      "src/screens/Character/hooks/levelChange.ts"
-    ],
-    "src/screens/Character/hooks/levelChange.ts": [
-      "src/shared/helpers/dice.ts",
-      "src/types/HitPoints.ts",
-      "src/types/Stats.ts"
-    ],
+    "src/screens/Character/components/QuickActionBar.tsx": ["src/screens/Character/hooks/useCharacterActions.tsx"],
+    "src/screens/Character/hooks/levelChange.test.ts": ["src/screens/Character/hooks/levelChange.ts"],
+    "src/screens/Character/hooks/levelChange.ts": ["src/shared/helpers/dice.ts", "src/types/HitPoints.ts", "src/types/Stats.ts"],
     "src/screens/Character/hooks/useCharacterActions.tsx": [
       "src/context/AppRole-store.ts",
       "src/context/Character-store.ts",
@@ -766,13 +613,8 @@
       "src/types/Spellbook.ts"
     ],
     "src/screens/Character/hooks/useQuickActions.ts": [],
-    "src/screens/Character/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/screens/Character/tabs/CharacterTabContent.test.tsx": [
-      "src/screens/Character/tabs/CharacterTabContent.tsx"
-    ],
+    "src/screens/Character/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/screens/Character/tabs/CharacterTabContent.test.tsx": ["src/screens/Character/tabs/CharacterTabContent.tsx"],
     "src/screens/Character/tabs/CharacterTabContent.tsx": [
       "src/screens/Character/tabs/CombatTab.tsx",
       "src/screens/Character/tabs/HomebrewTab.tsx",
@@ -813,9 +655,7 @@
       "src/shared/services/auth/index.ts",
       "src/shared/services/fileSerice.ts"
     ],
-    "src/screens/CreateCharacter/createCharacterWizard.test.ts": [
-      "src/screens/CreateCharacter/createCharacterWizard.ts"
-    ],
+    "src/screens/CreateCharacter/createCharacterWizard.test.ts": ["src/screens/CreateCharacter/createCharacterWizard.ts"],
     "src/screens/CreateCharacter/createCharacterWizard.ts": [
       "src/domain/srd/index.ts",
       "src/domain/types/index.ts",
@@ -825,10 +665,7 @@
       "src/shared/services/diceRoller.ts",
       "src/types/skillToStat.ts"
     ],
-    "src/screens/CreateCharacter/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/CreateCharacter/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/DM/DM.tsx": [
       "src/context/AppRole-store.ts",
       "src/context/Character-store.ts",
@@ -947,10 +784,7 @@
       "src/shared/styles/tokens.ts",
       "src/types/Character.ts"
     ],
-    "src/screens/DM/DMSharedUpdates.style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/DM/DMSharedUpdates.style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/DM/DMSharedUpdates.tsx": [
       "src/context/AppRole-store.ts",
       "src/context/Character-store.ts",
@@ -977,18 +811,9 @@
       "src/shared/components/TextInput/TextInput.tsx",
       "src/shared/styles/tokens.ts"
     ],
-    "src/screens/DM/EncounterCalculator/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/screens/DM/LootGenerator/LootGenerator.tsx": [
-      "src/context/Theme-store.ts",
-      "src/screens/DM/LootGenerator/style.ts"
-    ],
-    "src/screens/DM/LootGenerator/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/DM/EncounterCalculator/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/screens/DM/LootGenerator/LootGenerator.tsx": ["src/context/Theme-store.ts", "src/screens/DM/LootGenerator/style.ts"],
+    "src/screens/DM/LootGenerator/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/DM/PinnedReferencesList.tsx": [
       "src/domain/srd/localization.ts",
       "src/screens/DM/style.ts",
@@ -1001,35 +826,17 @@
       "src/types/Character.ts"
     ],
     "src/screens/DM/adapters/index.ts": [],
-    "src/screens/DM/adapters/unifiedParty.ts": [
-      "src/shared/helpers/mapCloudCharacter.ts",
-      "src/types/Character.ts"
-    ],
-    "src/screens/DM/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/screens/Dice/Dice.tsx": [
-      "src/context/Theme-store.ts",
-      "src/screens/Dice/styles.ts",
-      "src/shared/services/diceRoller.ts"
-    ],
-    "src/screens/Dice/styles.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/screens/DiceRoller/DiceRoller.test.tsx": [
-      "src/screens/DiceRoller/DiceRoller.tsx"
-    ],
+    "src/screens/DM/adapters/unifiedParty.ts": ["src/shared/helpers/mapCloudCharacter.ts", "src/types/Character.ts"],
+    "src/screens/DM/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/screens/Dice/Dice.tsx": ["src/context/Theme-store.ts", "src/screens/Dice/styles.ts", "src/shared/services/diceRoller.ts"],
+    "src/screens/Dice/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/screens/DiceRoller/DiceRoller.test.tsx": ["src/screens/DiceRoller/DiceRoller.tsx"],
     "src/screens/DiceRoller/DiceRoller.tsx": [
       "src/context/Theme-store.ts",
       "src/screens/DiceRoller/styles.ts",
       "src/shared/services/diceRoller.ts"
     ],
-    "src/screens/DiceRoller/styles.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/DiceRoller/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/Home/Home.test.tsx": [
       "src/screens/Home/Home.tsx",
       "src/shared/helpers/createEmptyCharacter.ts",
@@ -1064,10 +871,7 @@
       "src/types/Product.ts",
       "src/types/Sync.ts"
     ],
-    "src/screens/Home/styles.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/Home/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/Initiative/CampaignInitiativeBoard.tsx": [
       "src/context/Theme-store.ts",
       "src/dm/domain/types/index.ts",
@@ -1097,20 +901,14 @@
       "src/shared/services/diceRoller.ts",
       "src/shared/styles/tokens.ts"
     ],
-    "src/screens/Initiative/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/Initiative/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/LegalLicenses/LegalLicenses.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/styles/theme.ts",
       "src/shared/styles/tokens.ts",
       "src/shared/ui/index.ts"
     ],
-    "src/screens/Monster/Monster.test.tsx": [
-      "src/screens/Monster/Monster.tsx",
-      "src/types/Monster.ts"
-    ],
+    "src/screens/Monster/Monster.test.tsx": ["src/screens/Monster/Monster.tsx", "src/types/Monster.ts"],
     "src/screens/Monster/Monster.tsx": [
       "src/context/Monster-store.ts",
       "src/context/Theme-store.ts",
@@ -1123,24 +921,15 @@
       "src/shared/styles/tokens.ts",
       "src/types/Monster.ts"
     ],
-    "src/screens/Monster/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/screens/References/References.test.tsx": [
-      "src/i18n/index.ts",
-      "src/screens/References/References.tsx"
-    ],
+    "src/screens/Monster/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/screens/References/References.test.tsx": ["src/i18n/index.ts", "src/screens/References/References.tsx"],
     "src/screens/References/References.tsx": [
       "src/context/Theme-store.ts",
       "src/domain/srd/srdRepository.ts",
       "src/navigation/ReferencesNavigator.tsx",
       "src/screens/References/styles.ts"
     ],
-    "src/screens/References/styles.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/References/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/Settings/DeleteAccountModal.tsx": [
       "src/context/Theme-store.ts",
       "src/screens/Settings/styles.ts",
@@ -1162,10 +951,7 @@
       "src/shared/components/Firebase/Auth.tsx",
       "src/shared/services/fileSerice.ts"
     ],
-    "src/screens/Settings/styles.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/Settings/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/screens/Spellbook/Spellbook.tsx": [
       "src/context/Character-store.ts",
       "src/context/Spellbook-store.ts",
@@ -1195,18 +981,10 @@
       "src/types/Character.ts",
       "src/types/Spellbook.ts"
     ],
-    "src/screens/Spellbook/styles.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/screens/Support/Support.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/screens/Spellbook/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/screens/Support/Support.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
     "src/screens/Support/index.ts": [],
-    "src/services/accountDeletion.test.ts": [
-      "src/services/accountDeletion.ts"
-    ],
+    "src/services/accountDeletion.test.ts": ["src/services/accountDeletion.ts"],
     "src/services/accountDeletion.ts": [
       "src/repositories/characterCloudRepository.ts",
       "src/services/accountDeletionCascade.ts",
@@ -1214,17 +992,10 @@
       "src/shared/services/auth/index.ts",
       "src/shared/services/telemetry/productTelemetry.ts"
     ],
-    "src/services/accountDeletionCascade.test.ts": [
-      "src/services/accountDeletionCascade.ts"
-    ],
+    "src/services/accountDeletionCascade.test.ts": ["src/services/accountDeletionCascade.ts"],
     "src/services/accountDeletionCascade.ts": [],
-    "src/services/campaignInvite.ts": [
-      "src/services/firebase.ts",
-      "src/shared/services/telemetry/productTelemetry.ts"
-    ],
-    "src/services/characterDeletion.test.ts": [
-      "src/services/characterDeletion.ts"
-    ],
+    "src/services/campaignInvite.ts": ["src/services/firebase.ts", "src/shared/services/telemetry/productTelemetry.ts"],
+    "src/services/characterDeletion.test.ts": ["src/services/characterDeletion.ts"],
     "src/services/characterDeletion.ts": [],
     "src/services/characterSheets.ts": [],
     "src/services/characterSyncCoordinator.test.ts": [
@@ -1246,18 +1017,10 @@
       "src/types/Character.ts",
       "src/types/Sync.ts"
     ],
-    "src/services/connections.ts": [
-      "src/services/firebase.ts"
-    ],
-    "src/services/dmCampaignNotes.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/services/dmCampaignNotes.ts"
-    ],
+    "src/services/connections.ts": ["src/services/firebase.ts"],
+    "src/services/dmCampaignNotes.test.ts": ["src/domain/migrations/index.ts", "src/services/dmCampaignNotes.ts"],
     "src/services/dmCampaignNotes.ts": [],
-    "src/services/dmCampaigns.test.ts": [
-      "src/domain/migrations/index.ts",
-      "src/services/dmCampaigns.ts"
-    ],
+    "src/services/dmCampaigns.test.ts": ["src/domain/migrations/index.ts", "src/services/dmCampaigns.ts"],
     "src/services/dmCampaigns.ts": [],
     "src/services/firebase.ts": [],
     "src/services/storeEffects/characterStoreEffects.ts": [
@@ -1270,10 +1033,7 @@
       "src/stores/characterStore.ts",
       "src/stores/syncStore.ts"
     ],
-    "src/services/storeEffects/dmStoreEffects.test.ts": [
-      "src/services/storeEffects/dmStoreEffects.ts",
-      "src/stores/dmStore.ts"
-    ],
+    "src/services/storeEffects/dmStoreEffects.test.ts": ["src/services/storeEffects/dmStoreEffects.ts", "src/stores/dmStore.ts"],
     "src/services/storeEffects/dmStoreEffects.ts": [
       "src/dm/domain/types/index.ts",
       "src/domain/migrations/index.ts",
@@ -1283,22 +1043,14 @@
       "src/types/Character.ts",
       "src/types/Monster.ts"
     ],
-    "src/services/storeEffects/spellbookStoreEffects.ts": [
-      "src/domain/spellbook/index.ts",
-      "src/stores/spellbookStore.ts"
-    ],
-    "src/services/storeEffects/syncStoreEffects.ts": [
-      "src/services/characterSyncCoordinator.ts",
-      "src/stores/syncStore.ts"
-    ],
+    "src/services/storeEffects/spellbookStoreEffects.ts": ["src/domain/spellbook/index.ts", "src/stores/spellbookStore.ts"],
+    "src/services/storeEffects/syncStoreEffects.ts": ["src/services/characterSyncCoordinator.ts", "src/stores/syncStore.ts"],
     "src/services/storeEffects/uiStoreEffects.ts": [
       "src/shared/services/telemetry/productTelemetry.ts",
       "src/shared/styles/theme.ts",
       "src/stores/uiStore.ts"
     ],
-    "src/services/users.ts": [
-      "src/services/firebase.ts"
-    ],
+    "src/services/users.ts": ["src/services/firebase.ts"],
     "src/shared/components/CharacterCard/CharacterCard.tsx": [
       "src/context/Character-store.ts",
       "src/context/Theme-store.ts",
@@ -1307,10 +1059,7 @@
       "src/shared/components/CharacterCard/style.ts",
       "src/types/Character.ts"
     ],
-    "src/shared/components/CharacterCard/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/CharacterCard/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/CharacterMenu/CharacterMenu.tsx": [
       "src/components/ShareCharacterSheetModal.tsx",
       "src/context/Character-store.ts",
@@ -1327,19 +1076,13 @@
       "src/shared/styles/tokens.ts",
       "src/types/Character.ts"
     ],
-    "src/shared/components/CharacterMenu/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/CharacterMenu/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/CharacterOverview/CharacterOverview.tsx": [
       "src/context/Character-store.ts",
       "src/context/Theme-store.ts",
       "src/shared/components/CharacterOverview/style.ts"
     ],
-    "src/shared/components/CharacterOverview/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/CharacterOverview/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/CharacterStats/CharacterStats.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/components/CharacterOverview/CharacterOverview.tsx",
@@ -1433,10 +1176,7 @@
       "src/shared/components/RollResultModal/RollResultModal.tsx",
       "src/shared/components/TextInput/TextInput.tsx"
     ],
-    "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx": [
       "src/context/Character-store.ts",
       "src/context/Theme-store.ts",
@@ -1468,21 +1208,10 @@
       "src/shared/styles/tokens.ts",
       "src/types/Weapon.ts"
     ],
-    "src/shared/components/CharacterStats/Tabs/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/components/CharacterStats/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/components/EmptyPlaceholder.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx": [
-      "src/shared/components/ErrorBoundary/ErrorBoundary.tsx"
-    ],
+    "src/shared/components/CharacterStats/Tabs/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/components/CharacterStats/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/components/EmptyPlaceholder.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/components/ErrorBoundary/ErrorBoundary.test.tsx": ["src/shared/components/ErrorBoundary/ErrorBoundary.tsx"],
     "src/shared/components/ErrorBoundary/ErrorBoundary.tsx": [
       "src/context/Theme-store.ts",
       "src/i18n/index.ts",
@@ -1490,10 +1219,7 @@
       "src/shared/services/telemetry/productTelemetry.ts",
       "src/shared/ui/index.ts"
     ],
-    "src/shared/components/ErrorBoundary/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/ErrorBoundary/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/Firebase/Auth.tsx": [
       "src/context/Theme-store.ts",
       "src/screens/Settings/styles.ts",
@@ -1507,22 +1233,15 @@
       "src/shared/components/Modal/Modal.tsx",
       "src/shared/ui/index.ts"
     ],
-    "src/shared/components/FirstLaunchModals/style.ts": [
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/components/Loader/Loader.tsx": [
-      "src/context/Theme-store.ts"
-    ],
+    "src/shared/components/FirstLaunchModals/style.ts": ["src/shared/styles/tokens.ts"],
+    "src/shared/components/Loader/Loader.tsx": ["src/context/Theme-store.ts"],
     "src/shared/components/Loader/style.ts": [],
     "src/shared/components/Modal/Modal.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/components/Modal/style.ts",
       "src/shared/ui/index.ts"
     ],
-    "src/shared/components/Modal/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/Modal/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/MonsterCard/MonsterCard.tsx": [
       "src/context/Monster-store.ts",
       "src/context/Theme-store.ts",
@@ -1532,24 +1251,15 @@
       "src/shared/helpers/sourcePresentation.ts",
       "src/types/Monster.ts"
     ],
-    "src/shared/components/MonsterCard/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/MonsterCard/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/RollResultModal/RollResultModal.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/components/Loader/Loader.tsx",
       "src/shared/components/Modal/Modal.tsx",
       "src/shared/components/RollResultModal/style.ts"
     ],
-    "src/shared/components/RollResultModal/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/components/TextInput/MultiTextInput.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/RollResultModal/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/components/TextInput/MultiTextInput.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/TextInput/TextInput.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/styles/tokens.ts",
@@ -1562,57 +1272,31 @@
       "src/shared/components/WhatsNewModal/style.ts",
       "src/shared/ui/index.ts"
     ],
-    "src/shared/components/WhatsNewModal/style.ts": [
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/WhatsNewModal/style.ts": ["src/shared/styles/tokens.ts"],
     "src/shared/const/Backgrounds.ts": [],
     "src/shared/const/CharacterClass.ts": [],
     "src/shared/const/CharacterTabs.ts": [],
-    "src/shared/const/CharacterTemplates.ts": [
-      "src/domain/types/index.ts"
-    ],
+    "src/shared/const/CharacterTemplates.ts": ["src/domain/types/index.ts"],
     "src/shared/const/ClassPresets.ts": [],
     "src/shared/const/ClassStartingGear.ts": [],
     "src/shared/const/DiceOptions.ts": [],
     "src/shared/const/Races.ts": [],
     "src/shared/const/SkillsTab.ts": [],
-    "src/shared/const/SpellbookSeed.ts": [
-      "src/types/Spellbook.ts"
-    ],
+    "src/shared/const/SpellbookSeed.ts": ["src/types/Spellbook.ts"],
     "src/shared/const/SubclassDetails.ts": [],
     "src/shared/const/Subclasses.ts": [],
-    "src/shared/const/TrackerTemplates.ts": [
-      "src/dm/domain/types/index.ts"
-    ],
+    "src/shared/const/TrackerTemplates.ts": ["src/dm/domain/types/index.ts"],
     "src/shared/const/Weapons.ts": [],
     "src/shared/const/WeaponsDb.ts": [],
-    "src/shared/const/attributes.ts": [
-      "src/domain/types/index.ts"
-    ],
+    "src/shared/const/attributes.ts": ["src/domain/types/index.ts"],
     "src/shared/const/encounter.ts": [],
     "src/shared/const/experience.ts": [],
     "src/shared/helpers/calculateModifier.ts": [],
-    "src/shared/helpers/collaboration/status.ts": [
-      "src/types/Product.ts",
-      "src/types/Sync.ts"
-    ],
-    "src/shared/helpers/combat.ts": [
-      "src/domain/types/index.ts",
-      "src/shared/const/ClassPresets.ts",
-      "src/shared/const/Weapons.ts"
-    ],
-    "src/shared/helpers/createEmptyCharacter.ts": [
-      "src/domain/schemas/index.ts",
-      "src/domain/types/index.ts"
-    ],
-    "src/shared/helpers/derived.test.ts": [
-      "src/shared/helpers/derived.ts"
-    ],
-    "src/shared/helpers/derived.ts": [
-      "src/types/Character.ts",
-      "src/types/Skills.ts",
-      "src/types/Stats.ts"
-    ],
+    "src/shared/helpers/collaboration/status.ts": ["src/types/Product.ts", "src/types/Sync.ts"],
+    "src/shared/helpers/combat.ts": ["src/domain/types/index.ts", "src/shared/const/ClassPresets.ts", "src/shared/const/Weapons.ts"],
+    "src/shared/helpers/createEmptyCharacter.ts": ["src/domain/schemas/index.ts", "src/domain/types/index.ts"],
+    "src/shared/helpers/derived.test.ts": ["src/shared/helpers/derived.ts"],
+    "src/shared/helpers/derived.ts": ["src/types/Character.ts", "src/types/Skills.ts", "src/types/Stats.ts"],
     "src/shared/helpers/dice.ts": [],
     "src/shared/helpers/gear.ts": [
       "src/domain/types/index.ts",
@@ -1620,47 +1304,26 @@
       "src/shared/helpers/weapons.ts",
       "src/types/Weapon.ts"
     ],
-    "src/shared/helpers/homebrew.ts": [
-      "src/domain/mappers/index.ts",
-      "src/domain/types/index.ts"
-    ],
-    "src/shared/helpers/mapCloudCharacter.ts": [
-      "src/domain/mappers/index.ts",
-      "src/domain/types/index.ts"
-    ],
-    "src/shared/helpers/sourcePresentation.test.ts": [
-      "src/shared/helpers/sourcePresentation.ts"
-    ],
+    "src/shared/helpers/homebrew.ts": ["src/domain/mappers/index.ts", "src/domain/types/index.ts"],
+    "src/shared/helpers/mapCloudCharacter.ts": ["src/domain/mappers/index.ts", "src/domain/types/index.ts"],
+    "src/shared/helpers/sourcePresentation.test.ts": ["src/shared/helpers/sourcePresentation.ts"],
     "src/shared/helpers/sourcePresentation.ts": [],
     "src/shared/helpers/spellbook.ts": [],
     "src/shared/helpers/stripUndefinedDeep.ts": [],
-    "src/shared/helpers/sync/conflictPolicy.test.ts": [
-      "src/shared/helpers/sync/conflictPolicy.ts"
-    ],
-    "src/shared/helpers/sync/conflictPolicy.ts": [
-      "src/types/Sync.ts"
-    ],
-    "src/shared/helpers/sync/syncErrorClassification.test.ts": [
-      "src/shared/helpers/sync/syncErrorClassification.ts"
-    ],
+    "src/shared/helpers/sync/conflictPolicy.test.ts": ["src/shared/helpers/sync/conflictPolicy.ts"],
+    "src/shared/helpers/sync/conflictPolicy.ts": ["src/types/Sync.ts"],
+    "src/shared/helpers/sync/syncErrorClassification.test.ts": ["src/shared/helpers/sync/syncErrorClassification.ts"],
     "src/shared/helpers/sync/syncErrorClassification.ts": [],
-    "src/shared/helpers/weapons.ts": [
-      "src/shared/const/WeaponsDb.ts"
-    ],
+    "src/shared/helpers/weapons.ts": ["src/shared/const/WeaponsDb.ts"],
     "src/shared/mock/Elara_Moonshadow.json": [],
     "src/shared/mock/defaultCharacter.json": [],
     "src/shared/mock/defaultCharacter2.json": [],
     "src/shared/mock/demon-lord-001.json": [],
     "src/shared/mock/monsterBook.json": [],
     "src/shared/services/auth/auth.tsx": [],
-    "src/shared/services/auth/google.ts": [
-      "src/i18n/index.ts",
-      "src/shared/services/toast/index.ts"
-    ],
+    "src/shared/services/auth/google.ts": ["src/i18n/index.ts", "src/shared/services/toast/index.ts"],
     "src/shared/services/auth/index.ts": [],
-    "src/shared/services/diceRoller.test.ts": [
-      "src/shared/services/diceRoller.ts"
-    ],
+    "src/shared/services/diceRoller.test.ts": ["src/shared/services/diceRoller.ts"],
     "src/shared/services/diceRoller.ts": [],
     "src/shared/services/fileSerice.ts": [
       "src/context/Character-store.ts",
@@ -1668,82 +1331,35 @@
       "src/domain/types/index.ts",
       "src/types/Monster.ts"
     ],
-    "src/shared/services/telemetry/productTelemetry.test.ts": [
-      "src/shared/services/telemetry/productTelemetry.ts"
-    ],
+    "src/shared/services/telemetry/productTelemetry.test.ts": ["src/shared/services/telemetry/productTelemetry.ts"],
     "src/shared/services/telemetry/productTelemetry.ts": [],
-    "src/shared/services/telemetry/startupTrace.test.ts": [
-      "src/shared/services/telemetry/startupTrace.ts"
-    ],
+    "src/shared/services/telemetry/startupTrace.test.ts": ["src/shared/services/telemetry/startupTrace.ts"],
     "src/shared/services/telemetry/startupTrace.ts": [],
     "src/shared/services/toast/index.ts": [],
     "src/shared/styles/index.ts": [],
-    "src/shared/styles/statusTones.ts": [
-      "src/shared/styles/theme.ts"
-    ],
+    "src/shared/styles/statusTones.ts": ["src/shared/styles/theme.ts"],
     "src/shared/styles/theme.ts": [],
-    "src/shared/styles/tokens.test.ts": [
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/styles/tokens.test.ts": ["src/shared/styles/tokens.ts"],
     "src/shared/styles/tokens.ts": [],
-    "src/shared/styles/useDesignTokens.ts": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/styles/useDesignTokens.ts": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
     "src/shared/ui/Button.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/styles/tokens.ts",
       "src/shared/ui/Text.tsx",
       "src/shared/ui/variantResolvers.ts"
     ],
-    "src/shared/ui/Card.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts",
-      "src/shared/ui/variantResolvers.ts"
-    ],
-    "src/shared/ui/Chip.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts",
-      "src/shared/ui/Text.tsx"
-    ],
-    "src/shared/ui/Input.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/ui/Screen.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/ui/Section.tsx": [
-      "src/shared/styles/tokens.ts",
-      "src/shared/ui/Text.tsx"
-    ],
-    "src/shared/ui/Text.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts",
-      "src/shared/ui/variantResolvers.ts"
-    ],
+    "src/shared/ui/Card.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/variantResolvers.ts"],
+    "src/shared/ui/Chip.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/Text.tsx"],
+    "src/shared/ui/Input.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/ui/Screen.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/ui/Section.tsx": ["src/shared/styles/tokens.ts", "src/shared/ui/Text.tsx"],
+    "src/shared/ui/Text.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/variantResolvers.ts"],
     "src/shared/ui/index.ts": [],
-    "src/shared/ui/skeleton/index.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/ui/skeleton/skeleton.test.tsx": [
-      "src/shared/ui/skeleton/index.tsx"
-    ],
-    "src/shared/ui/uiVariants.test.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/ui/variantResolvers.ts"
-    ],
-    "src/shared/ui/variantResolvers.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/stores/appRoleStore.ts": [
-      "src/dm/repositories/appRoleRepository.ts",
-      "src/types/Product.ts"
-    ],
+    "src/shared/ui/skeleton/index.tsx": ["src/context/Theme-store.ts", "src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/ui/skeleton/skeleton.test.tsx": ["src/shared/ui/skeleton/index.tsx"],
+    "src/shared/ui/uiVariants.test.ts": ["src/shared/styles/theme.ts", "src/shared/ui/variantResolvers.ts"],
+    "src/shared/ui/variantResolvers.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/stores/appRoleStore.ts": ["src/dm/repositories/appRoleRepository.ts", "src/types/Product.ts"],
     "src/stores/characterStore.ts": [
       "src/domain/types/index.ts",
       "src/services/storeEffects/characterStoreEffects.ts",
@@ -1752,9 +1368,7 @@
       "src/types/Traits.ts",
       "src/types/Weapon.ts"
     ],
-    "src/stores/dmSettingsStore.ts": [
-      "src/dm/repositories/dmSettingsRepository.ts"
-    ],
+    "src/stores/dmSettingsStore.ts": ["src/dm/repositories/dmSettingsRepository.ts"],
     "src/stores/dmStore.ts": [
       "src/dm/domain/types/index.ts",
       "src/services/storeEffects/dmStoreEffects.ts",
@@ -1762,70 +1376,45 @@
       "src/types/Monster.ts",
       "src/types/Product.ts"
     ],
-    "src/stores/monsterStore.ts": [
-      "src/dm/repositories/monsterRepository.ts",
-      "src/types/Monster.ts"
-    ],
-    "src/stores/selectors/characterStoreSelectors.ts": [
-      "src/domain/types/index.ts"
-    ],
-    "src/stores/selectors/syncStoreSelectors.ts": [
-      "src/types/Sync.ts"
-    ],
-    "src/stores/spellbookStore.ts": [
-      "src/domain/types/index.ts",
-      "src/services/storeEffects/spellbookStoreEffects.ts"
-    ],
+    "src/stores/monsterStore.ts": ["src/dm/repositories/monsterRepository.ts", "src/types/Monster.ts"],
+    "src/stores/selectors/characterStoreSelectors.ts": ["src/domain/types/index.ts"],
+    "src/stores/selectors/syncStoreSelectors.ts": ["src/types/Sync.ts"],
+    "src/stores/spellbookStore.ts": ["src/domain/types/index.ts", "src/services/storeEffects/spellbookStoreEffects.ts"],
     "src/stores/storeSelectors.test.ts": [
       "src/shared/helpers/createEmptyCharacter.ts",
       "src/stores/selectors/characterStoreSelectors.ts",
       "src/stores/selectors/syncStoreSelectors.ts"
     ],
-    "src/stores/syncStore.ts": [
-      "src/services/storeEffects/syncStoreEffects.ts",
-      "src/types/Sync.ts"
-    ],
+    "src/stores/syncStore.ts": ["src/services/storeEffects/syncStoreEffects.ts", "src/types/Sync.ts"],
     "src/stores/trackerTemplatesStore.ts": [
       "src/dm/domain/types/index.ts",
       "src/dm/repositories/trackerTemplatesRepository.ts",
       "src/types/Character.ts"
     ],
-    "src/stores/uiStore.ts": [
-      "src/services/storeEffects/uiStoreEffects.ts",
-      "src/shared/styles/theme.ts",
-      "src/types/CustomCoin.ts"
-    ],
+    "src/stores/uiStore.ts": ["src/services/storeEffects/uiStoreEffects.ts", "src/shared/styles/theme.ts", "src/types/CustomCoin.ts"],
     "src/test/mocks/expo-modules-core.ts": [],
     "src/test/mocks/react-native-firebase-analytics.ts": [],
     "src/test/mocks/react-native-firebase-crashlytics.ts": [],
     "src/test/mocks/react-native.tsx": [],
-    "src/test/mocks/react-navigation-native.ts": [
-      "src/shared/styles/theme.ts"
-    ],
+    "src/test/mocks/react-navigation-native.ts": ["src/shared/styles/theme.ts"],
     "src/types/Character.ts": [],
     "src/types/CustomCoin.ts": [],
     "src/types/DM.ts": [],
     "src/types/DeathSaves.ts": [],
     "src/types/HitPoints.ts": [],
-    "src/types/Monster.ts": [
-      "src/domain/types/sourceMetadata.ts"
-    ],
+    "src/types/Monster.ts": ["src/domain/types/sourceMetadata.ts"],
     "src/types/Product.ts": [],
     "src/types/SavingThrows.ts": [],
     "src/types/Skills.ts": [],
     "src/types/SourceMetadata.ts": [],
     "src/types/SpellSlots.ts": [],
     "src/types/Spellbook.ts": [],
-    "src/types/Spells.ts": [
-      "src/types/SpellSlots.ts"
-    ],
+    "src/types/Spells.ts": ["src/types/SpellSlots.ts"],
     "src/types/Stats.ts": [],
     "src/types/Sync.ts": [],
     "src/types/Traits.ts": [],
     "src/types/Weapon.ts": [],
-    "src/types/skillToStat.ts": [
-      "src/domain/types/index.ts"
-    ],
+    "src/types/skillToStat.ts": ["src/domain/types/index.ts"],
     "tsconfig.json": [],
     "vitest.config.ts": [],
     "vitest.rules.config.ts": []

@@ -71,6 +71,3 @@ export default function MultiTextInput({
     </View>
   );
 }
-
-
-

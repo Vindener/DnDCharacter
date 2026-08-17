@@ -25,17 +25,13 @@
           "name": "parseStoredValue",
           "startLine": 7,
           "endLine": 14,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "normalizeRole",
           "startLine": 16,
           "endLine": 19,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "loadAppRole",
@@ -47,9 +43,7 @@
           "name": "persistAppRole",
           "startLine": 28,
           "endLine": 30,
-          "params": [
-            "role"
-          ]
+          "params": ["role"]
         }
       ],
       "exports": [
@@ -137,9 +131,7 @@
           "name": "parseStoredValue",
           "startLine": 7,
           "endLine": 14,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "loadTrackerTemplates",
@@ -151,9 +143,7 @@
           "name": "persistTrackerTemplates",
           "startLine": 44,
           "endLine": 49,
-          "params": [
-            "templates"
-          ]
+          "params": ["templates"]
         }
       ],
       "exports": [

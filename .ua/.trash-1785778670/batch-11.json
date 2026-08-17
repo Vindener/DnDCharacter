@@ -333,133 +333,799 @@
     }
   ],
   "edges": [
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/const/WeaponsDb.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/shared/const/WeaponsDb.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "file:src/shared/components/TextInput/TextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "target": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "target": "file:src/shared/components/TextInput/TextInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/shared/const/SkillsTab.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "file:src/shared/const/SkillsTab.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/shared/components/TextInput/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "file:src/types/Spells.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/shared/components/TextInput/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "file:src/types/Spells.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/shared/components/CharacterStats/Tabs/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/shared/components/TextInput/MultiTextInput.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "file:src/types/Traits.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "file:src/types/Traits.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "file:src/types/Weapon.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "target": "file:src/types/Weapon.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/Loader/Loader.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/Loader/Loader.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "file:src/shared/components/Modal/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/Modal/Modal.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/Modal/Modal.tsx",
+      "target": "file:src/shared/components/Modal/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/Modal/Modal.tsx",
+      "target": "file:src/shared/ui/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/shared/components/Loader/Loader.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/shared/components/Modal/Modal.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "file:src/shared/components/RollResultModal/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "target": "file:src/shared/components/Loader/Loader.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "target": "file:src/shared/components/Modal/Modal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "target": "file:src/shared/components/RollResultModal/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/components/TextInput/TextInput.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/TextInput/TextInput.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/TextInput/TextInput.tsx",
+      "target": "file:src/shared/ui/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/const/attributes.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/shared/const/attributes.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:normalizeSkills", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/Loader/Loader.tsx", "target": "function:src/shared/components/Loader/Loader.tsx:Loader", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "function:src/shared/components/Modal/Modal.tsx:Modal", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "contains", "direction": "forward", "weight": 1.0},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:normalizeSkills",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/Loader/Loader.tsx",
+      "target": "function:src/shared/components/Loader/Loader.tsx:Loader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/Modal/Modal.tsx",
+      "target": "function:src/shared/components/Modal/Modal.tsx:Modal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/TextInput/TextInput.tsx",
+      "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/Loader/Loader.tsx", "target": "function:src/shared/components/Loader/Loader.tsx:Loader", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/Modal/Modal.tsx", "target": "function:src/shared/components/Modal/Modal.tsx:Modal", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/RollResultModal/RollResultModal.tsx", "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/TextInput/MultiTextInput.tsx", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/TextInput/TextInput.tsx", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/TextInput/index.ts", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/TextInput/index.ts", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "exports", "direction": "forward", "weight": 0.8},
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/style.ts",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/Loader/Loader.tsx",
+      "target": "function:src/shared/components/Loader/Loader.tsx:Loader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/Modal/Modal.tsx",
+      "target": "function:src/shared/components/Modal/Modal.tsx:Modal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/RollResultModal/RollResultModal.tsx",
+      "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/TextInput/MultiTextInput.tsx",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/TextInput/TextInput.tsx",
+      "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/TextInput/index.ts",
+      "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/TextInput/index.ts",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits", "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem", "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/Modal/Modal.tsx:Modal", "target": "function:src/shared/components/Modal/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "target": "function:src/shared/components/RollResultModal/style.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "target": "function:src/shared/components/Loader/Loader.tsx:Loader", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal", "target": "function:src/shared/components/Modal/Modal.tsx:Modal", "type": "calls", "direction": "forward", "weight": 0.8}
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx:Weapons",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx:Inventory",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx:Notes",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx:Proficiencies",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx:Skills",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx:Spells",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits",
+      "target": "function:src/shared/components/CharacterStats/Tabs/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx:Traits",
+      "target": "function:src/shared/components/TextInput/MultiTextInput.tsx:MultiTextInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "target": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx:SkillItem",
+      "target": "function:src/shared/components/TextInput/TextInput.tsx:TextInput",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/Modal/Modal.tsx:Modal",
+      "target": "function:src/shared/components/Modal/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "target": "function:src/shared/components/RollResultModal/style.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "target": "function:src/shared/components/Loader/Loader.tsx:Loader",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/RollResultModal/RollResultModal.tsx:RollResultModal",
+      "target": "function:src/shared/components/Modal/Modal.tsx:Modal",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
   ]
 }

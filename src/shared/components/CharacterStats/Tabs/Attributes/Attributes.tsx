@@ -18,19 +18,17 @@ const Attributes: React.FC<AttributesProps> = ({ data }) => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const handleChange = (key: StatKey, value: number) => {
-    updateCharacterAttribute(data.id ,key, value);
+    updateCharacterAttribute(data.id, key, value);
   };
 
   return (
     <View style={styles.container}>
       {attributes.map(({ key, label }) => (
         <AttributesItem key={key} label={label} statKey={key} value={data?.stats ? data.stats[key] : 0} onChange={handleChange} />
-    ))}
+      ))}
       {/* <Text style={styles.label}>Рятівні кидки:</Text> */}
-      
     </View>
   );
 };
 
 export default Attributes;
-

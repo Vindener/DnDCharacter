@@ -37,7 +37,7 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
 
   const rollD20 = () => {
     const random = Math.floor(Math.random() * 20) + 1;
-    return { total: random , formula: `${random}`, random };
+    return { total: random, formula: `${random}`, random };
   };
 
   useEffect(() => {
@@ -172,5 +172,3 @@ const Combat: React.FC<CombatProps> = ({ data }) => {
 };
 
 export default Combat;
-
-

@@ -68,12 +68,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "aberration",
-      "large",
-      "cr-10"
-    ]
+    "tags": ["monster", "aberration", "large", "cr-10"]
   },
   {
     "id": "deva",
@@ -139,12 +134,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "celestial",
-      "medium",
-      "cr-10"
-    ]
+    "tags": ["monster", "celestial", "medium", "cr-10"]
   },
   {
     "id": "planetar",
@@ -202,12 +192,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "celestial",
-      "large",
-      "cr-16"
-    ]
+    "tags": ["monster", "celestial", "large", "cr-16"]
   },
   {
     "id": "solar",
@@ -286,12 +271,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "celestial",
-      "large",
-      "cr-21"
-    ]
+    "tags": ["monster", "celestial", "large", "cr-21"]
   },
   {
     "id": "animated-armor",
@@ -345,12 +325,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "construct", "medium", "cr-1"]
   },
   {
     "id": "flying-sword",
@@ -400,12 +375,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "small",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "construct", "small", "cr-1-4"]
   },
   {
     "id": "rug-of-smothering",
@@ -467,12 +437,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "construct", "large", "cr-2"]
   },
   {
     "id": "ankheg",
@@ -526,12 +491,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-2"]
   },
   {
     "id": "azer",
@@ -581,12 +541,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "elemental", "medium", "cr-2"]
   },
   {
     "id": "monsters-b-basilisk",
@@ -644,12 +599,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-3"]
   },
   {
     "id": "behir",
@@ -714,12 +664,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "huge",
-      "cr-11"
-    ]
+    "tags": ["monster", "monstrosity", "huge", "cr-11"]
   },
   {
     "id": "bugbear",
@@ -769,12 +714,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (goblinoid)",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "humanoid (goblinoid)", "medium", "cr-1"]
   },
   {
     "id": "bulette",
@@ -828,12 +768,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-5"]
   },
   {
     "id": "monsters-c-centaur",
@@ -891,12 +826,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-2"]
   },
   {
     "id": "chimera",
@@ -953,12 +883,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-6"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-6"]
   },
   {
     "id": "chuul",
@@ -1012,12 +937,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "aberration",
-      "large",
-      "cr-4"
-    ]
+    "tags": ["monster", "aberration", "large", "cr-4"]
   },
   {
     "id": "cloaker",
@@ -1095,12 +1015,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "aberration",
-      "large",
-      "cr-8"
-    ]
+    "tags": ["monster", "aberration", "large", "cr-8"]
   },
   {
     "id": "cockatrice",
@@ -1149,12 +1064,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "monstrosity", "small", "cr-1-2"]
   },
   {
     "id": "couatl",
@@ -1228,12 +1138,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "celestial",
-      "medium",
-      "cr-4"
-    ]
+    "tags": ["monster", "celestial", "medium", "cr-4"]
   },
   {
     "id": "monsters-d-darkmantle",
@@ -1287,12 +1192,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "monstrosity", "small", "cr-1-2"]
   },
   {
     "id": "balor",
@@ -1358,12 +1258,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "huge",
-      "cr-19"
-    ]
+    "tags": ["monster", "fiend (demon)", "huge", "cr-19"]
   },
   {
     "id": "dretch",
@@ -1420,12 +1315,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "small",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "fiend (demon)", "small", "cr-1-4"]
   },
   {
     "id": "glabrezu",
@@ -1487,12 +1377,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "large",
-      "cr-9"
-    ]
+    "tags": ["monster", "fiend (demon)", "large", "cr-9"]
   },
   {
     "id": "hezrou",
@@ -1550,12 +1435,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "large",
-      "cr-8"
-    ]
+    "tags": ["monster", "fiend (demon)", "large", "cr-8"]
   },
   {
     "id": "marilith",
@@ -1622,12 +1502,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "large",
-      "cr-16"
-    ]
+    "tags": ["monster", "fiend (demon)", "large", "cr-16"]
   },
   {
     "id": "nalfeshnee",
@@ -1697,12 +1572,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "large",
-      "cr-13"
-    ]
+    "tags": ["monster", "fiend (demon)", "large", "cr-13"]
   },
   {
     "id": "quasit",
@@ -1764,12 +1634,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon",
-      "tiny",
-      "cr-1"
-    ]
+    "tags": ["monster", "fiend (demon", "tiny", "cr-1"]
   },
   {
     "id": "vrock",
@@ -1839,12 +1704,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (demon)",
-      "large",
-      "cr-6"
-    ]
+    "tags": ["monster", "fiend (demon)", "large", "cr-6"]
   },
   {
     "id": "barbed-devil",
@@ -1906,12 +1766,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "fiend (devil)", "medium", "cr-5"]
   },
   {
     "id": "bearded-devil",
@@ -1981,12 +1836,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "fiend (devil)", "medium", "cr-3"]
   },
   {
     "id": "bone-devil",
@@ -2044,12 +1894,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "large",
-      "cr-9"
-    ]
+    "tags": ["monster", "fiend (devil)", "large", "cr-9"]
   },
   {
     "id": "chain-devil",
@@ -2116,12 +1961,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "medium",
-      "cr-8"
-    ]
+    "tags": ["monster", "fiend (devil)", "medium", "cr-8"]
   },
   {
     "id": "erinyes",
@@ -2180,12 +2020,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "medium",
-      "cr-12"
-    ]
+    "tags": ["monster", "fiend (devil)", "medium", "cr-12"]
   },
   {
     "id": "horned-devil",
@@ -2251,12 +2086,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "large",
-      "cr-11"
-    ]
+    "tags": ["monster", "fiend (devil)", "large", "cr-11"]
   },
   {
     "id": "ice-devil",
@@ -2322,12 +2152,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "large",
-      "cr-14"
-    ]
+    "tags": ["monster", "fiend (devil)", "large", "cr-14"]
   },
   {
     "id": "imp",
@@ -2381,12 +2206,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil",
-      "tiny",
-      "cr-1"
-    ]
+    "tags": ["monster", "fiend (devil", "tiny", "cr-1"]
   },
   {
     "id": "lemure",
@@ -2432,12 +2252,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "fiend (devil)", "medium", "cr-0"]
   },
   {
     "id": "pit-fiend",
@@ -2511,12 +2326,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (devil)",
-      "large",
-      "cr-20"
-    ]
+    "tags": ["monster", "fiend (devil)", "large", "cr-20"]
   },
   {
     "id": "plesiosaurus",
@@ -2562,12 +2372,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-2"]
   },
   {
     "id": "triceratops",
@@ -2621,12 +2426,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-5"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-5"]
   },
   {
     "id": "tyrannosaurus-rex",
@@ -2679,12 +2479,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-8"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-8"]
   },
   {
     "id": "doppelganger",
@@ -2746,12 +2541,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity (shapechanger)",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity (shapechanger)", "medium", "cr-3"]
   },
   {
     "id": "chromatic-black-dragon-ancient-black-dragon",
@@ -2826,12 +2616,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-21"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-21"]
   },
   {
     "id": "adult-black-dragon",
@@ -2902,12 +2687,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-14"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-14"]
   },
   {
     "id": "young-black-dragon",
@@ -2965,12 +2745,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-7"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-7"]
   },
   {
     "id": "black-dragon-wyrmling",
@@ -3020,12 +2795,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-2"]
   },
   {
     "id": "dragon-ancient-blue-dragon",
@@ -3100,12 +2870,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-23"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-23"]
   },
   {
     "id": "adult-blue-dragon",
@@ -3176,12 +2941,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-16"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-16"]
   },
   {
     "id": "young-blue-dragon",
@@ -3234,12 +2994,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-9"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-9"]
   },
   {
     "id": "blue-dragon-wyrmling",
@@ -3284,12 +3039,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-3"]
   },
   {
     "id": "dragon-ancient-green-dragon",
@@ -3364,12 +3114,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-22"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-22"]
   },
   {
     "id": "adult-green-dragon",
@@ -3440,12 +3185,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-15"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-15"]
   },
   {
     "id": "young-green-dragon",
@@ -3503,12 +3243,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-8"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-8"]
   },
   {
     "id": "green-dragon-wyrmling",
@@ -3558,12 +3293,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-2"]
   },
   {
     "id": "dragon-ancient-red-dragon",
@@ -3638,12 +3368,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-24"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-24"]
   },
   {
     "id": "adult-red-dragon",
@@ -3718,12 +3443,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-17"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-17"]
   },
   {
     "id": "young-red-dragon",
@@ -3776,12 +3496,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-10"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-10"]
   },
   {
     "id": "red-dragon-wyrmling",
@@ -3826,12 +3541,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-4"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-4"]
   },
   {
     "id": "dragon-ancient-white-dragon",
@@ -3910,12 +3620,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-20"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-20"]
   },
   {
     "id": "adult-white-dragon",
@@ -3994,12 +3699,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-13"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-13"]
   },
   {
     "id": "young-white-dragon",
@@ -4057,12 +3757,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-6"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-6"]
   },
   {
     "id": "white-dragon-wyrmling",
@@ -4107,12 +3802,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-2"]
   },
   {
     "id": "metallic-brass-dragon-ancient-brass-dragon",
@@ -4203,12 +3893,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-20"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-20"]
   },
   {
     "id": "adult-brass-dragon",
@@ -4291,12 +3976,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-13"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-13"]
   },
   {
     "id": "young-brass-dragon",
@@ -4357,12 +4037,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-6"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-6"]
   },
   {
     "id": "brass-dragon-wyrmling",
@@ -4415,12 +4090,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-1"]
   },
   {
     "id": "dragon-ancient-bronze-dragon",
@@ -4511,12 +4181,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-22"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-22"]
   },
   {
     "id": "adult-bronze-dragon",
@@ -4607,12 +4272,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-15"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-15"]
   },
   {
     "id": "young-bronze-dragon",
@@ -4678,12 +4338,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-8"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-8"]
   },
   {
     "id": "bronze-dragon-wyrmling",
@@ -4741,12 +4396,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-2"]
   },
   {
     "id": "dragon-ancient-copper-dragon",
@@ -4837,12 +4487,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-21"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-21"]
   },
   {
     "id": "adult-copper-dragon",
@@ -4929,12 +4574,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-14"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-14"]
   },
   {
     "id": "young-copper-dragon",
@@ -5003,12 +4643,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-7"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-7"]
   },
   {
     "id": "copper-dragon-wyrmling",
@@ -5065,12 +4700,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-1"]
   },
   {
     "id": "dragon-ancient-gold-dragon",
@@ -5161,12 +4791,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-24"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-24"]
   },
   {
     "id": "adult-gold-dragon",
@@ -5257,12 +4882,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-17"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-17"]
   },
   {
     "id": "young-gold-dragon",
@@ -5328,12 +4948,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-10"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-10"]
   },
   {
     "id": "gold-dragon-wyrmling",
@@ -5391,12 +5006,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-3"]
   },
   {
     "id": "dragon-ancient-silver-dragon",
@@ -5487,12 +5097,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-23"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-23"]
   },
   {
     "id": "adult-silver-dragon",
@@ -5583,12 +5188,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "huge",
-      "cr-16"
-    ]
+    "tags": ["monster", "dragon", "huge", "cr-16"]
   },
   {
     "id": "young-silver-dragon",
@@ -5649,12 +5249,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-9"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-9"]
   },
   {
     "id": "silver-dragon-wyrmling",
@@ -5707,12 +5302,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "dragon", "medium", "cr-2"]
   },
   {
     "id": "dragon-turtle",
@@ -5774,12 +5364,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "gargantuan",
-      "cr-17"
-    ]
+    "tags": ["monster", "dragon", "gargantuan", "cr-17"]
   },
   {
     "id": "drider",
@@ -5853,12 +5438,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-6"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-6"]
   },
   {
     "id": "dryad",
@@ -5924,12 +5504,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fey",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "fey", "medium", "cr-1"]
   },
   {
     "id": "duergar",
@@ -5995,12 +5570,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (dwarf)",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "humanoid (dwarf)", "medium", "cr-1"]
   },
   {
     "id": "air-elemental",
@@ -6054,12 +5624,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-5"]
   },
   {
     "id": "earth-elemental",
@@ -6109,12 +5674,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-5"]
   },
   {
     "id": "fire-elemental",
@@ -6172,12 +5732,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-5"]
   },
   {
     "id": "water-elemental",
@@ -6235,12 +5790,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-5"]
   },
   {
     "id": "elf-drow",
@@ -6306,12 +5856,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (elf)",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "humanoid (elf)", "medium", "cr-1-4"]
   },
   {
     "id": "ettercap",
@@ -6393,12 +5938,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-2"]
   },
   {
     "id": "ettin",
@@ -6460,12 +6000,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "large",
-      "cr-4"
-    ]
+    "tags": ["monster", "giant", "large", "cr-4"]
   },
   {
     "id": "monsters-f-fungi-shrieker",
@@ -6511,12 +6046,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "plant",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "plant", "medium", "cr-0"]
   },
   {
     "id": "violet-fungus",
@@ -6562,12 +6092,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "plant",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "plant", "medium", "cr-1-4"]
   },
   {
     "id": "monsters-g-gargoyle",
@@ -6625,12 +6150,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "elemental", "medium", "cr-2"]
   },
   {
     "id": "djinni",
@@ -6696,12 +6216,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-11"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-11"]
   },
   {
     "id": "efreeti",
@@ -6759,12 +6274,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-11"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-11"]
   },
   {
     "id": "ghost",
@@ -6838,12 +6348,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-4"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-4"]
   },
   {
     "id": "ghouls-ghast",
@@ -6905,12 +6410,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-2"]
   },
   {
     "id": "ghoul",
@@ -6959,12 +6459,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-1"]
   },
   {
     "id": "cloud-giant",
@@ -7014,12 +6509,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "huge",
-      "cr-9"
-    ]
+    "tags": ["monster", "giant", "huge", "cr-9"]
   },
   {
     "id": "fire-giant",
@@ -7068,12 +6558,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "huge",
-      "cr-9"
-    ]
+    "tags": ["monster", "giant", "huge", "cr-9"]
   },
   {
     "id": "frost-giant",
@@ -7118,12 +6603,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "huge",
-      "cr-8"
-    ]
+    "tags": ["monster", "giant", "huge", "cr-8"]
   },
   {
     "id": "hill-giant",
@@ -7168,12 +6648,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "huge",
-      "cr-5"
-    ]
+    "tags": ["monster", "giant", "huge", "cr-5"]
   },
   {
     "id": "stone-giant",
@@ -7228,12 +6703,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "huge",
-      "cr-7"
-    ]
+    "tags": ["monster", "giant", "huge", "cr-7"]
   },
   {
     "id": "storm-giant",
@@ -7287,12 +6757,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "huge",
-      "cr-13"
-    ]
+    "tags": ["monster", "giant", "huge", "cr-13"]
   },
   {
     "id": "gibbering-mouther",
@@ -7354,12 +6819,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "aberration",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "aberration", "medium", "cr-2"]
   },
   {
     "id": "gnoll",
@@ -7417,12 +6877,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (gnoll)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (gnoll)", "medium", "cr-1-2"]
   },
   {
     "id": "gnome-deep-svirfneblin",
@@ -7480,12 +6935,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (gnome)",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (gnome)", "small", "cr-1-2"]
   },
   {
     "id": "goblin",
@@ -7535,12 +6985,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (goblinoid)",
-      "small",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "humanoid (goblinoid)", "small", "cr-1-4"]
   },
   {
     "id": "clay-golem",
@@ -7598,12 +7043,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "large",
-      "cr-9"
-    ]
+    "tags": ["monster", "construct", "large", "cr-9"]
   },
   {
     "id": "flesh-golem",
@@ -7669,12 +7109,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "construct", "medium", "cr-5"]
   },
   {
     "id": "iron-golem",
@@ -7732,12 +7167,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "large",
-      "cr-16"
-    ]
+    "tags": ["monster", "construct", "large", "cr-16"]
   },
   {
     "id": "stone-golem",
@@ -7791,12 +7221,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "large",
-      "cr-10"
-    ]
+    "tags": ["monster", "construct", "large", "cr-10"]
   },
   {
     "id": "gorgon",
@@ -7862,12 +7287,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-5"]
   },
   {
     "id": "grick",
@@ -7921,12 +7341,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-2"]
   },
   {
     "id": "griffon",
@@ -7980,12 +7395,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-2"]
   },
   {
     "id": "grimlock",
@@ -8035,12 +7445,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (grimlock)",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "humanoid (grimlock)", "medium", "cr-1-4"]
   },
   {
     "id": "green-hag",
@@ -8098,12 +7503,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fey",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "fey", "medium", "cr-3"]
   },
   {
     "id": "night-hag",
@@ -8173,12 +7573,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "fiend", "medium", "cr-5"]
   },
   {
     "id": "sea-hag",
@@ -8272,12 +7667,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fey",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "fey", "medium", "cr-2"]
   },
   {
     "id": "large-or-smaller-as-a-wyrmling-challenge-2-or-higher",
@@ -8396,12 +7786,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-1"]
   },
   {
     "id": "hell-hound",
@@ -8451,12 +7836,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "fiend", "medium", "cr-3"]
   },
   {
     "id": "hippogriff",
@@ -8510,12 +7890,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-1"]
   },
   {
     "id": "hobgoblin",
@@ -8565,12 +7940,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (goblinoid)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (goblinoid)", "medium", "cr-1-2"]
   },
   {
     "id": "homunculus",
@@ -8620,12 +7990,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "construct", "tiny", "cr-0"]
   },
   {
     "id": "hydra",
@@ -8679,12 +8044,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "huge",
-      "cr-8"
-    ]
+    "tags": ["monster", "monstrosity", "huge", "cr-8"]
   },
   {
     "id": "monsters-i-invisible-stalker",
@@ -8734,12 +8094,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "medium",
-      "cr-6"
-    ]
+    "tags": ["monster", "elemental", "medium", "cr-6"]
   },
   {
     "id": "monsters-k-kobold",
@@ -8793,12 +8148,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (kobold)",
-      "small",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (kobold)", "small", "cr-1-8"]
   },
   {
     "id": "kraken",
@@ -8877,12 +8227,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity (titan)",
-      "gargantuan",
-      "cr-23"
-    ]
+    "tags": ["monster", "monstrosity (titan)", "gargantuan", "cr-23"]
   },
   {
     "id": "monsters-l-lamia",
@@ -8944,12 +8289,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-4"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-4"]
   },
   {
     "id": "lich",
@@ -9024,12 +8364,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-21"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-21"]
   },
   {
     "id": "lizardfolk",
@@ -9091,12 +8426,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (lizardfolk)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (lizardfolk)", "medium", "cr-1-2"]
   },
   {
     "id": "werebear",
@@ -9158,12 +8488,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (human",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "humanoid (human", "medium", "cr-5"]
   },
   {
     "id": "wereboar",
@@ -9225,12 +8550,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (human",
-      "medium",
-      "cr-4"
-    ]
+    "tags": ["monster", "humanoid (human", "medium", "cr-4"]
   },
   {
     "id": "wererat",
@@ -9292,12 +8612,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (human",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "humanoid (human", "medium", "cr-2"]
   },
   {
     "id": "weretiger",
@@ -9367,12 +8682,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (human",
-      "medium",
-      "cr-4"
-    ]
+    "tags": ["monster", "humanoid (human", "medium", "cr-4"]
   },
   {
     "id": "werewolf",
@@ -9434,12 +8744,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (human",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "humanoid (human", "medium", "cr-3"]
   },
   {
     "id": "monsters-m-magmin",
@@ -9489,12 +8794,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "elemental", "small", "cr-1-2"]
   },
   {
     "id": "manticore",
@@ -9556,12 +8856,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-3"]
   },
   {
     "id": "medusa",
@@ -9627,12 +8922,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-6"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-6"]
   },
   {
     "id": "dust-mephit",
@@ -9698,12 +8988,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "elemental", "small", "cr-1-2"]
   },
   {
     "id": "ice-mephit",
@@ -9761,12 +9046,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "elemental", "small", "cr-1-2"]
   },
   {
     "id": "magma-mephit",
@@ -9824,12 +9104,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "small",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "elemental", "small", "cr-1-2"]
   },
   {
     "id": "steam-mephit",
@@ -9883,12 +9158,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "small",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "elemental", "small", "cr-1-4"]
   },
   {
     "id": "merfolk",
@@ -9934,12 +9204,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (merfolk)",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (merfolk)", "medium", "cr-1-8"]
   },
   {
     "id": "merrow",
@@ -9997,12 +9262,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-2"]
   },
   {
     "id": "mimic",
@@ -10060,12 +9320,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity (shapechanger)",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "monstrosity (shapechanger)", "medium", "cr-2"]
   },
   {
     "id": "minotaur",
@@ -10119,12 +9374,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-3"]
   },
   {
     "id": "mummy",
@@ -10177,12 +9427,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-3"]
   },
   {
     "id": "mummy-lord",
@@ -10261,12 +9506,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-15"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-15"]
   },
   {
     "id": "guardian-naga",
@@ -10320,12 +9560,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-10"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-10"]
   },
   {
     "id": "spirit-naga",
@@ -10379,12 +9614,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-8"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-8"]
   },
   {
     "id": "nightmare",
@@ -10434,12 +9664,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "fiend", "large", "cr-3"]
   },
   {
     "id": "monsters-o-ogre",
@@ -10484,12 +9709,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "giant", "large", "cr-2"]
   },
   {
     "id": "oni",
@@ -10555,12 +9775,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "large",
-      "cr-7"
-    ]
+    "tags": ["monster", "giant", "large", "cr-7"]
   },
   {
     "id": "black-pudding",
@@ -10623,12 +9838,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "ooze",
-      "large",
-      "cr-4"
-    ]
+    "tags": ["monster", "ooze", "large", "cr-4"]
   },
   {
     "id": "gelatinous-cube",
@@ -10706,12 +9916,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "ooze",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "ooze", "large", "cr-2"]
   },
   {
     "id": "gray-ooze",
@@ -10769,12 +9974,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "ooze",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "ooze", "medium", "cr-1-2"]
   },
   {
     "id": "ochre-jelly",
@@ -10829,12 +10029,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "ooze",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "ooze", "large", "cr-2"]
   },
   {
     "id": "orc",
@@ -10884,12 +10079,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (orc)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (orc)", "medium", "cr-1-2"]
   },
   {
     "id": "otyugh",
@@ -10955,12 +10145,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "aberration",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "aberration", "large", "cr-5"]
   },
   {
     "id": "owlbear",
@@ -11014,12 +10199,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-3"]
   },
   {
     "id": "monsters-p-pegasus",
@@ -11060,12 +10240,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "celestial",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "celestial", "large", "cr-2"]
   },
   {
     "id": "pseudodragon",
@@ -11123,12 +10298,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "tiny",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "dragon", "tiny", "cr-1-4"]
   },
   {
     "id": "purple-worm",
@@ -11186,12 +10356,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "gargantuan",
-      "cr-15"
-    ]
+    "tags": ["monster", "monstrosity", "gargantuan", "cr-15"]
   },
   {
     "id": "monsters-r-rakshasa",
@@ -11241,12 +10406,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend",
-      "medium",
-      "cr-13"
-    ]
+    "tags": ["monster", "fiend", "medium", "cr-13"]
   },
   {
     "id": "remorhaz",
@@ -11300,12 +10460,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "huge",
-      "cr-11"
-    ]
+    "tags": ["monster", "monstrosity", "huge", "cr-11"]
   },
   {
     "id": "roc",
@@ -11363,12 +10518,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "gargantuan",
-      "cr-11"
-    ]
+    "tags": ["monster", "monstrosity", "gargantuan", "cr-11"]
   },
   {
     "id": "roper",
@@ -11442,12 +10592,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-5"]
   },
   {
     "id": "rust-monster",
@@ -11509,12 +10654,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-1-2"]
   },
   {
     "id": "monsters-s-sahuagin",
@@ -11580,12 +10720,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (sahuagin)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (sahuagin)", "medium", "cr-1-2"]
   },
   {
     "id": "salamander",
@@ -11643,12 +10778,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "elemental", "large", "cr-5"]
   },
   {
     "id": "satyr",
@@ -11702,12 +10832,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fey",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "fey", "medium", "cr-1-2"]
   },
   {
     "id": "shadow",
@@ -11765,12 +10890,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-1-2"]
   },
   {
     "id": "shambling-mound",
@@ -11824,12 +10944,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "plant",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "plant", "large", "cr-5"]
   },
   {
     "id": "shield-guardian",
@@ -11892,12 +11007,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "construct",
-      "large",
-      "cr-7"
-    ]
+    "tags": ["monster", "construct", "large", "cr-7"]
   },
   {
     "id": "skeleton",
@@ -11942,12 +11052,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-1-4"]
   },
   {
     "id": "minotaur-skeleton",
@@ -11997,12 +11102,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "undead", "large", "cr-2"]
   },
   {
     "id": "warhorse-skeleton",
@@ -12043,12 +11143,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "large",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "undead", "large", "cr-1-2"]
   },
   {
     "id": "specter",
@@ -12098,12 +11193,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-1"]
   },
   {
     "id": "sphinxes-androsphinx",
@@ -12186,12 +11276,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-17"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-17"]
   },
   {
     "id": "gynosphinx",
@@ -12254,12 +11339,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-11"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-11"]
   },
   {
     "id": "sprite",
@@ -12321,12 +11401,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fey",
-      "tiny",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "fey", "tiny", "cr-1-4"]
   },
   {
     "id": "stirge",
@@ -12371,12 +11446,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-1-8"]
   },
   {
     "id": "succubus-incubus",
@@ -12442,12 +11512,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fiend (shapechanger)",
-      "medium",
-      "cr-4"
-    ]
+    "tags": ["monster", "fiend (shapechanger)", "medium", "cr-4"]
   },
   {
     "id": "monsters-t-tarrasque",
@@ -12538,12 +11603,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity (titan)",
-      "gargantuan",
-      "cr-30"
-    ]
+    "tags": ["monster", "monstrosity (titan)", "gargantuan", "cr-30"]
   },
   {
     "id": "treant",
@@ -12605,12 +11665,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "plant",
-      "huge",
-      "cr-9"
-    ]
+    "tags": ["monster", "plant", "huge", "cr-9"]
   },
   {
     "id": "troll",
@@ -12664,12 +11719,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "giant",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "giant", "large", "cr-5"]
   },
   {
     "id": "monsters-u-unicorn",
@@ -12748,12 +11798,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "celestial",
-      "large",
-      "cr-5"
-    ]
+    "tags": ["monster", "celestial", "large", "cr-5"]
   },
   {
     "id": "monsters-v-vampires-vampire",
@@ -12864,12 +11909,7 @@
     ],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead (shapechanger)",
-      "medium",
-      "cr-13"
-    ]
+    "tags": ["monster", "undead (shapechanger)", "medium", "cr-13"]
   },
   {
     "id": "vampire-spawn",
@@ -12939,12 +11979,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-5"]
   },
   {
     "id": "monsters-w-wight",
@@ -13002,12 +12037,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-3"]
   },
   {
     "id": "wisp",
@@ -13073,12 +12103,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "tiny",
-      "cr-2"
-    ]
+    "tags": ["monster", "undead", "tiny", "cr-2"]
   },
   {
     "id": "wraith",
@@ -13132,12 +12157,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-5"]
   },
   {
     "id": "wyvern",
@@ -13190,12 +12210,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "dragon",
-      "large",
-      "cr-6"
-    ]
+    "tags": ["monster", "dragon", "large", "cr-6"]
   },
   {
     "id": "monsters-x-xorn",
@@ -13249,12 +12264,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "elemental",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "elemental", "medium", "cr-5"]
   },
   {
     "id": "monsters-z-zombies-zombie",
@@ -13300,12 +12310,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "undead", "medium", "cr-1-4"]
   },
   {
     "id": "ogre-zombie",
@@ -13611,12 +12616,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "undead",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "undead", "large", "cr-2"]
   },
   {
     "id": "ape",
@@ -13661,12 +12661,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-2"]
   },
   {
     "id": "awakened-shrub",
@@ -13712,12 +12707,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "plant",
-      "small",
-      "cr-0"
-    ]
+    "tags": ["monster", "plant", "small", "cr-0"]
   },
   {
     "id": "awakened-tree",
@@ -13763,12 +12753,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "plant",
-      "huge",
-      "cr-2"
-    ]
+    "tags": ["monster", "plant", "huge", "cr-2"]
   },
   {
     "id": "axe-beak",
@@ -13809,12 +12794,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "baboon",
@@ -13860,12 +12840,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "small", "cr-0"]
   },
   {
     "id": "badger",
@@ -13911,12 +12886,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "bat",
@@ -13962,12 +12932,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "black-bear",
@@ -14021,12 +12986,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-2"]
   },
   {
     "id": "blink-dog",
@@ -14076,12 +13036,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "fey",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "fey", "medium", "cr-1-4"]
   },
   {
     "id": "blood-hawk",
@@ -14127,12 +13082,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "small", "cr-1-8"]
   },
   {
     "id": "boar",
@@ -14182,12 +13132,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "brown-bear",
@@ -14241,12 +13186,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "camel",
@@ -14287,12 +13227,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-8"]
   },
   {
     "id": "cat",
@@ -14338,12 +13273,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "constrictor-snake",
@@ -14396,12 +13326,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "crab",
@@ -14447,12 +13372,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "crocodile",
@@ -14502,12 +13422,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-2"]
   },
   {
     "id": "death-dog",
@@ -14561,12 +13476,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "monstrosity", "medium", "cr-1"]
   },
   {
     "id": "deer",
@@ -14607,12 +13517,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-0"]
   },
   {
     "id": "dire-wolf",
@@ -14658,12 +13563,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "draft-horse",
@@ -14704,12 +13604,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "eagle",
@@ -14755,12 +13650,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "small", "cr-0"]
   },
   {
     "id": "elephant",
@@ -14818,12 +13708,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-4"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-4"]
   },
   {
     "id": "elk",
@@ -14873,12 +13758,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "flying-snake",
@@ -14924,12 +13804,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-1-8"]
   },
   {
     "id": "frog",
@@ -14978,12 +13853,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "giant-ape",
@@ -15028,12 +13898,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-7"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-7"]
   },
   {
     "id": "giant-badger",
@@ -15087,12 +13952,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "giant-bat",
@@ -15138,12 +13998,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "giant-boar",
@@ -15197,12 +14052,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-2"]
   },
   {
     "id": "giant-centipede",
@@ -15247,12 +14097,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "small", "cr-1-4"]
   },
   {
     "id": "giant-constrictor-snake",
@@ -15301,12 +14146,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-2"]
   },
   {
     "id": "giant-crab",
@@ -15356,12 +14196,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-8"]
   },
   {
     "id": "giant-crocodile",
@@ -15423,12 +14258,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-5"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-5"]
   },
   {
     "id": "giant-eagle",
@@ -15486,12 +14316,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "giant-elk",
@@ -15545,12 +14370,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-2"]
   },
   {
     "id": "giant-fire-beetle",
@@ -15604,12 +14424,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "small", "cr-0"]
   },
   {
     "id": "giant-frog",
@@ -15667,12 +14482,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "giant-goat",
@@ -15726,12 +14536,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-2"]
   },
   {
     "id": "giant-hyena",
@@ -15781,12 +14586,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "giant-lizard",
@@ -15831,12 +14631,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "giant-octopus",
@@ -15894,12 +14689,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "giant-owl",
@@ -15949,12 +14739,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "giant-poisonous-snake",
@@ -15995,12 +14780,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "giant-rat",
@@ -16054,12 +14834,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "small", "cr-1-8"]
   },
   {
     "id": "giant-scorpion",
@@ -16112,12 +14887,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "beast", "large", "cr-3"]
   },
   {
     "id": "giant-sea-horse",
@@ -16167,12 +14937,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-2"]
   },
   {
     "id": "giant-shark",
@@ -16222,12 +14987,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-5"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-5"]
   },
   {
     "id": "giant-spider",
@@ -16293,12 +15053,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "giant-toad",
@@ -16356,12 +15111,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "giant-vulture",
@@ -16419,12 +15169,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "giant-wasp",
@@ -16469,12 +15214,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-2"]
   },
   {
     "id": "giant-weasel",
@@ -16520,12 +15260,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-8"]
   },
   {
     "id": "giant-wolf-spider",
@@ -16579,12 +15314,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "goat",
@@ -16638,12 +15368,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-0"]
   },
   {
     "id": "hawk",
@@ -16689,12 +15414,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "hunter-shark",
@@ -16740,12 +15460,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-2"]
   },
   {
     "id": "hyena",
@@ -16791,12 +15506,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-0"]
   },
   {
     "id": "jackal",
@@ -16846,12 +15556,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "small", "cr-0"]
   },
   {
     "id": "killer-whale",
@@ -16897,12 +15602,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-3"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-3"]
   },
   {
     "id": "lion",
@@ -16960,12 +15660,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "lizard",
@@ -17010,12 +15705,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "mammoth",
@@ -17073,12 +15763,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "huge",
-      "cr-6"
-    ]
+    "tags": ["monster", "beast", "huge", "cr-6"]
   },
   {
     "id": "mastiff",
@@ -17128,12 +15813,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-8"]
   },
   {
     "id": "halflings-and-other",
@@ -17183,12 +15863,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoids ride them as mounts. mule medium beast",
-      "small",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoids ride them as mounts. mule medium beast", "small", "cr-1-8"]
   },
   {
     "id": "octopus",
@@ -17246,12 +15921,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "small",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "small", "cr-0"]
   },
   {
     "id": "owl",
@@ -17297,12 +15967,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "panther",
@@ -17356,12 +16021,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "phase-spider",
@@ -17419,12 +16079,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-3"]
   },
   {
     "id": "poisonous-snake",
@@ -17465,12 +16120,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-1-8"]
   },
   {
     "id": "polar-bear",
@@ -17524,12 +16174,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-2"]
   },
   {
     "id": "pony",
@@ -17574,12 +16219,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-8"]
   },
   {
     "id": "quipper",
@@ -17629,12 +16269,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "rat",
@@ -17680,12 +16315,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "raven",
@@ -17731,12 +16361,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "reef-shark",
@@ -17786,12 +16411,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-2"]
   },
   {
     "id": "rhinoceros",
@@ -17837,12 +16457,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-2"]
   },
   {
     "id": "riding-horse",
@@ -17883,12 +16498,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-4"]
   },
   {
     "id": "toothed-tiger",
@@ -17942,12 +16552,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-2"]
   },
   {
     "id": "scorpion",
@@ -17988,12 +16593,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "sea-horse",
@@ -18034,12 +16634,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "spider",
@@ -18097,12 +16692,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "medium-swarm-of",
@@ -18152,12 +16742,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beasts",
-      "tiny",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beasts", "tiny", "cr-1-4"]
   },
   {
     "id": "swarm-of-insects",
@@ -18207,12 +16792,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "swarm of tiny beasts",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "swarm of tiny beasts", "medium", "cr-1-2"]
   },
   {
     "id": "swarm-of-poisonous-snakes",
@@ -18262,12 +16842,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "swarm of tiny beasts",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "swarm of tiny beasts", "medium", "cr-2"]
   },
   {
     "id": "swarm-of-quippers",
@@ -18317,12 +16892,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "swarm of tiny beasts",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "swarm of tiny beasts", "medium", "cr-1"]
   },
   {
     "id": "medium-swarm-of-2",
@@ -18372,12 +16942,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beasts",
-      "tiny",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beasts", "tiny", "cr-1-4"]
   },
   {
     "id": "swarm-of-ravens",
@@ -18443,12 +17008,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "swarm of tiny beasts",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "swarm of tiny beasts", "medium", "cr-1-4"]
   },
   {
     "id": "tiger",
@@ -18502,12 +17062,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1"]
   },
   {
     "id": "vulture",
@@ -18553,12 +17108,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-0"]
   },
   {
     "id": "warhorse",
@@ -18608,12 +17158,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "large",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "beast", "large", "cr-1-2"]
   },
   {
     "id": "weasel",
@@ -18659,12 +17204,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "tiny",
-      "cr-0"
-    ]
+    "tags": ["monster", "beast", "tiny", "cr-0"]
   },
   {
     "id": "winter-wolf",
@@ -18714,12 +17254,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-3"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-3"]
   },
   {
     "id": "wolf",
@@ -18765,12 +17300,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "beast",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "beast", "medium", "cr-1-4"]
   },
   {
     "id": "worg",
@@ -18844,12 +17374,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "monstrosity",
-      "large",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "monstrosity", "large", "cr-1-2"]
   },
   {
     "id": "acolyte",
@@ -18895,12 +17420,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-4"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-4"]
   },
   {
     "id": "archmage",
@@ -18958,12 +17478,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-12"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-12"]
   },
   {
     "id": "assassin",
@@ -19021,12 +17536,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-8"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-8"]
   },
   {
     "id": "bandit",
@@ -19079,12 +17589,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-8"]
   },
   {
     "id": "bandit-captain",
@@ -19142,12 +17647,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-2"]
   },
   {
     "id": "berserker",
@@ -19197,12 +17697,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-2"]
   },
   {
     "id": "commoner",
@@ -19243,12 +17738,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-0"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-0"]
   },
   {
     "id": "cultist",
@@ -19294,12 +17784,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-8"]
   },
   {
     "id": "cult-fanatic",
@@ -19345,12 +17830,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-2"]
   },
   {
     "id": "druid",
@@ -19396,12 +17876,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-2"]
   },
   {
     "id": "gladiator",
@@ -19460,12 +17935,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-5"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-5"]
   },
   {
     "id": "guard",
@@ -19510,12 +17980,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-8"]
   },
   {
     "id": "knight",
@@ -19582,12 +18047,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-3"]
   },
   {
     "id": "mage",
@@ -19641,12 +18101,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-6"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-6"]
   },
   {
     "id": "noble",
@@ -19692,12 +18147,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-8"]
   },
   {
     "id": "priest",
@@ -19755,12 +18205,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-2"]
   },
   {
     "id": "scout",
@@ -19814,12 +18259,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-2"]
   },
   {
     "id": "spy",
@@ -19877,12 +18317,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1"]
   },
   {
     "id": "thug",
@@ -19936,12 +18371,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-2"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-2"]
   },
   {
     "id": "tribal-warrior",
@@ -19987,12 +18417,7 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-1-8"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-1-8"]
   },
   {
     "id": "veteran",
@@ -20049,11 +18474,6 @@
     "legendaryActions": [],
     "source": "srd-5.1",
     "license": "ogl-1.0a",
-    "tags": [
-      "monster",
-      "humanoid (any race)",
-      "medium",
-      "cr-3"
-    ]
+    "tags": ["monster", "humanoid (any race)", "medium", "cr-3"]
   }
 ]

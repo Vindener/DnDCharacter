@@ -54,9 +54,15 @@ describe('bestiaryFilters', () => {
 
   it('filters by size, source, environment, and favorites', () => {
     expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, size: 'Small' }, []).map((monster) => monster.id)).toEqual(['goblin']);
-    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, source: 'srd-5.1' }, []).map((monster) => monster.id)).toEqual(['dragon']);
-    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, environment: 'Forest' }, []).map((monster) => monster.id)).toEqual(['goblin']);
-    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, favoritesOnly: true }, ['dragon']).map((monster) => monster.id)).toEqual(['dragon']);
+    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, source: 'srd-5.1' }, []).map((monster) => monster.id)).toEqual([
+      'dragon',
+    ]);
+    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, environment: 'Forest' }, []).map((monster) => monster.id)).toEqual([
+      'goblin',
+    ]);
+    expect(filterMonsters(monsters, { ...DEFAULT_BESTIARY_FILTERS, favoritesOnly: true }, ['dragon']).map((monster) => monster.id)).toEqual(
+      ['dragon'],
+    );
   });
 
   it('returns no results when filters conflict', () => {

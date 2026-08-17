@@ -37,18 +37,20 @@ beforeEach(() => {
 
 describe('dmCampaigns migration pipeline', () => {
   it('loads legacy campaigns payload and migrates to schema v3 at runtime', async () => {
-    asyncStorageMock.getItem.mockResolvedValueOnce(JSON.stringify([
-      {
-        id: 'campaign-1',
-        name: 'Alpha',
-        nameNormalized: 'alpha',
-        ownerUid: 'u-1',
-        owners: ['u-1'],
-        editors: [],
-        createdAtMs: 1,
-        updatedAtMs: 2,
-      },
-    ]));
+    asyncStorageMock.getItem.mockResolvedValueOnce(
+      JSON.stringify([
+        {
+          id: 'campaign-1',
+          name: 'Alpha',
+          nameNormalized: 'alpha',
+          ownerUid: 'u-1',
+          owners: ['u-1'],
+          editors: [],
+          createdAtMs: 1,
+          updatedAtMs: 2,
+        },
+      ]),
+    );
 
     const campaigns = await loadLocalCampaigns();
 

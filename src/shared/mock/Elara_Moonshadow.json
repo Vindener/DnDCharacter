@@ -38,13 +38,7 @@
     "stealth": 2,
     "survival": 2
   },
-  "proficiencies": [
-    "Daggers",
-    "Quarterstaffs",
-    "Light Crossbows",
-    "Common",
-    "Elvish"
-  ],
+  "proficiencies": ["Daggers", "Quarterstaffs", "Light Crossbows", "Common", "Elvish"],
   "hp": {
     "max": 28,
     "current": 20,
@@ -55,12 +49,7 @@
     "successes": 1,
     "failures": 0
   },
-  "inventory": [
-    "Spellbook",
-    "Component Pouch",
-    "Scholar's Robes",
-    "Potion of Healing"
-  ],
+  "inventory": ["Spellbook", "Component Pouch", "Scholar's Robes", "Potion of Healing"],
   "armorClassDetails": "Mage Armor (AC = 13 + Dex modifier)",
   "weapons": [
     {
@@ -76,14 +65,7 @@
     "bonds": "I’ve been searching my whole life for the answer to a certain question.",
     "flaws": "I am easily distracted by the promise of information."
   },
-  "featuresAndTraits": [
-    "Arcane Recovery",
-    "Spellcasting",
-    "Evocation Savant",
-    "Sculpt Spells",
-    "Darkvision",
-    "Fey Ancestry"
-  ],
+  "featuresAndTraits": ["Arcane Recovery", "Spellcasting", "Evocation Savant", "Sculpt Spells", "Darkvision", "Fey Ancestry"],
   "spells": {
     "spellcastingAbility": "Intelligence",
     "spellSaveDC": 14,
@@ -102,26 +84,9 @@
         "used": 0
       }
     },
-    "knownSpells": [
-      "Mage Armor",
-      "Magic Missile",
-      "Detect Magic",
-      "Shield",
-      "Scorching Ray",
-      "Fireball"
-    ],
-    "preparedSpells": [
-      "Mage Armor",
-      "Magic Missile",
-      "Shield",
-      "Scorching Ray",
-      "Fireball"
-    ],
-    "cantrips": [
-      "Prestidigitation",
-      "Fire Bolt",
-      "Mage Hand"
-    ]
+    "knownSpells": ["Mage Armor", "Magic Missile", "Detect Magic", "Shield", "Scorching Ray", "Fireball"],
+    "preparedSpells": ["Mage Armor", "Magic Missile", "Shield", "Scorching Ray", "Fireball"],
+    "cantrips": ["Prestidigitation", "Fire Bolt", "Mage Hand"]
   },
   "notes": "Has a mysterious arcane tattoo.",
   "alliesAndOrganizations": "College of the Arcane Mind",

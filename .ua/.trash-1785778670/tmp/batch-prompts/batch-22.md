@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-22.json` (single-file mode) OR `batch-22-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "docs/audit-2026-07.md": [],
@@ -32,11 +33,13 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {}
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `docs/audit-2026-07.md` (279 lines, language: `markdown`, fileCategory: `docs`)
 2. `docs/campaign-management-prompts.md` (564 lines, language: `markdown`, fileCategory: `docs`)
 3. `docs/claude-code-prompts.md` (1069 lines, language: `markdown`, fileCategory: `docs`)

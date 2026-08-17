@@ -219,9 +219,7 @@
           "name": "onCreate",
           "startLine": 14,
           "endLine": 20,
-          "params": [
-            "savedInstanceState"
-          ]
+          "params": ["savedInstanceState"]
         },
         {
           "name": "getMainComponentName",
@@ -247,12 +245,7 @@
           "name": "MainActivity",
           "startLine": 13,
           "endLine": 61,
-          "methods": [
-            "onCreate",
-            "getMainComponentName",
-            "createReactActivityDelegate",
-            "invokeDefaultOnBackPressed"
-          ],
+          "methods": ["onCreate", "getMainComponentName", "createReactActivityDelegate", "invokeDefaultOnBackPressed"],
           "properties": []
         }
       ],
@@ -334,9 +327,7 @@
           "name": "onConfigurationChanged",
           "startLine": 53,
           "endLine": 56,
-          "params": [
-            "newConfig"
-          ]
+          "params": ["newConfig"]
         }
       ],
       "classes": [
@@ -344,14 +335,8 @@
           "name": "MainApplication",
           "startLine": 19,
           "endLine": 57,
-          "methods": [
-            "onCreate",
-            "onConfigurationChanged"
-          ],
-          "properties": [
-            "reactNativeHost",
-            "reactHost"
-          ]
+          "methods": ["onCreate", "onConfigurationChanged"],
+          "properties": ["reactNativeHost", "reactHost"]
         }
       ],
       "exports": [

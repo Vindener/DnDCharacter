@@ -1,11 +1,5 @@
 import { uuid } from 'expo-modules-core';
-import type {
-  CharacterDto,
-  CharacterEntity,
-  SpellDamageProfile,
-  SpellbookSpell,
-  UpsertSpellbookSpellInput,
-} from '@/domain/types';
+import type { CharacterDto, CharacterEntity, SpellDamageProfile, SpellbookSpell, UpsertSpellbookSpellInput } from '@/domain/types';
 import {
   normalizeCharacterSpells,
   normalizeSpell,
@@ -17,9 +11,12 @@ import {
 type CharacterSpellsEntity = CharacterEntity['spells'];
 type CharacterSpellsDto = CharacterDto['spells'];
 type CharacterSpellsDraft = Partial<CharacterSpellsEntity> | null | undefined;
-type SpellbookDraft = (Omit<Partial<SpellbookSpell>, 'damageProfiles'> & {
-  damageProfiles?: UpsertSpellbookSpellInput['damageProfiles'] | SpellDamageProfile[] | null;
-}) | null | undefined;
+type SpellbookDraft =
+  | (Omit<Partial<SpellbookSpell>, 'damageProfiles'> & {
+      damageProfiles?: UpsertSpellbookSpellInput['damageProfiles'] | SpellDamageProfile[] | null;
+    })
+  | null
+  | undefined;
 
 export function dtoToEntity(dto: CharacterSpellsDto): CharacterSpellsEntity {
   return normalizeCharacterSpells(dto);
@@ -82,7 +79,8 @@ export function spellbookInputToEntity(input: UpsertSpellbookSpellInput, existin
     ritual: normalizedInput.ritual ?? base.ritual,
     concentration: normalizedInput.concentration ?? base.concentration,
     damageProfiles: normalizeSpellbookDamageProfiles(normalizedInput.damageProfiles ?? base.damageProfiles),
-    source: normalizedInput.source || (existing?.source === 'homebrew' || existing?.source === 'imported' ? existing.source : 'user-custom'),
+    source:
+      normalizedInput.source || (existing?.source === 'homebrew' || existing?.source === 'imported' ? existing.source : 'user-custom'),
     license: normalizedInput.license || (existing?.license && existing.source !== 'srd-5.1' ? existing.license : 'custom'),
     createdAt: existing?.createdAt || base.createdAt || now,
     updatedAt: now,

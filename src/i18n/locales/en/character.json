@@ -591,6 +591,7 @@
       "search": "Search Spellbook",
       "searchPlaceholder": "Enter name or school",
       "empty": "Nothing found in spellbook.",
+      "searchHint": "Start typing a name or school to find a spell in the spellbook.",
       "name": "Spell name",
       "namePlaceholder": "Spell name",
       "levelLabel": "Level (0-9)",

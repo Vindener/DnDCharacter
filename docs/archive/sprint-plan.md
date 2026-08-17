@@ -8,6 +8,7 @@ Goal:
 Improve the dice experience and loading UX.
 
 Scope:
+
 - Dice UI polish.
 - d20, d4, d6, d8, d10, d12, d100.
 - Modifiers.
@@ -18,11 +19,13 @@ Scope:
 - Skeleton on Home, Character, Spellbook, and Bestiary.
 
 Out of scope:
+
 - Full Character Sheet redesign.
 - GM Desktop.
 - Firebase schema changes.
 
 Definition of Done:
+
 - Dice can be rolled normally.
 - d20 supports advantage/disadvantage.
 - Roll result shows formula and total.
@@ -35,6 +38,7 @@ Goal:
 Make Home a fast start center for active play.
 
 Scope:
+
 - Continue Session block.
 - Character cards with HP, AC, initiative, and sync/share badges.
 - Quick actions for Create Character, Roll Dice, Spellbook, Bestiary, and GM tools.
@@ -42,11 +46,13 @@ Scope:
 - Sync status strip.
 
 Out of scope:
+
 - Full GM Desktop.
 - New cloud schema.
 - Deep Character Sheet redesign.
 
 Definition of Done:
+
 - Home answers "What can I continue right now?"
 - Loading, empty, offline, pending-sync, and conflict states are explicit.
 - Quick actions navigate to the correct screens.
@@ -57,6 +63,7 @@ Goal:
 Make Character Sheet the primary in-session gameplay screen.
 
 Scope:
+
 - Play Mode and Edit Mode separation.
 - Combat Summary Card.
 - Quick Action Bar.
@@ -64,11 +71,13 @@ Scope:
 - Better visibility for HP, AC, initiative, speed, proficiency, spell slots, conditions, and notes.
 
 Out of scope:
+
 - Full rule automation engine.
 - GM Desktop.
 - Broad data model rewrite unless required by the screen polish.
 
 Definition of Done:
+
 - Session-critical information is visible quickly.
 - Play Mode is not a heavy form.
 - Edit Mode remains available for full configuration.
@@ -79,6 +88,7 @@ Goal:
 Make character creation guided, understandable, and usable on small screens.
 
 Scope:
+
 - Wizard flow.
 - Scroll/keyboard behavior fix.
 - Sticky Back/Next actions with safe content padding.
@@ -86,11 +96,13 @@ Scope:
 - Partial draft preservation.
 
 Out of scope:
+
 - Replacing navigation architecture.
 - Firebase schema changes.
 - Full homebrew rule engine.
 
 Definition of Done:
+
 - User can complete character creation without fields hidden by keyboard/footer.
 - Back/Next does not lose entered data.
 - Review screen shows the important mechanical summary.
@@ -101,6 +113,7 @@ Goal:
 Make Spellbook an in-session tool for players and DMs.
 
 Scope:
+
 - Search.
 - Filters by level, class, school, ritual, and concentration.
 - Tabs for all/prepared/known/favorites/custom.
@@ -108,11 +121,13 @@ Scope:
 - Character integration for prepared/known/favorite state.
 
 Out of scope:
+
 - Full spell rules automation.
 - GM Desktop.
 - New remote schema unless explicitly needed.
 
 Definition of Done:
+
 - Spell lookup is fast during play.
 - Spell metadata is preserved.
 - Empty/search-no-results/filter states are clear.
@@ -123,6 +138,7 @@ Goal:
 Make Bestiary a fast GM encounter tool.
 
 Scope:
+
 - Search.
 - Filters by CR, type, environment, size, source, and favorites.
 - Monster cards with AC, HP, speed, CR, and main attack data.
@@ -130,11 +146,13 @@ Scope:
 - Pin/add-to-encounter flow.
 
 Out of scope:
+
 - Full encounter builder rewrite.
 - GM Desktop.
 - Automated balancing engine unless explicitly requested.
 
 Definition of Done:
+
 - GM can quickly find, inspect, pin, and prepare monsters.
 - Monster mechanical data is not hidden deep in long text.
 - Loading, empty, and search states are clear.
@@ -145,6 +163,7 @@ Goal:
 Create a larger GM workspace after the mobile player/GM UX polish cycle.
 
 Scope ideas:
+
 - campaign workspace;
 - party overview;
 - encounter builder;

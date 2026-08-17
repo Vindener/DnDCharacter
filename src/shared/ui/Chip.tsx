@@ -15,15 +15,7 @@ export interface ChipProps extends Omit<PressableProps, 'style'> {
   style?: ViewStyle | ViewStyle[];
 }
 
-export const Chip: React.FC<ChipProps> = ({
-  label,
-  selected = false,
-  tone = 'default',
-  size = 'md',
-  style,
-  android_ripple,
-  ...rest
-}) => {
+export const Chip: React.FC<ChipProps> = ({ label, selected = false, tone = 'default', size = 'md', style, android_ripple, ...rest }) => {
   const colors = useThemeStore((s) => s.colors);
   const tones = {
     default: { activeBg: colors.text, activeText: colors.background, idleBg: colors.background, idleText: colors.text },
@@ -69,4 +61,3 @@ const styles = StyleSheet.create({
 });
 
 export default Chip;
-

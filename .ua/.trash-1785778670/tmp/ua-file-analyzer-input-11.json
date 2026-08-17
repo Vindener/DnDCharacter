@@ -1,26 +1,71 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx", "language": "typescript", "sizeLines": 108, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx", "language": "typescript", "sizeLines": 41, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx", "language": "typescript", "sizeLines": 42, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx", "language": "typescript", "sizeLines": 58, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx", "language": "typescript", "sizeLines": 91, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx", "language": "typescript", "sizeLines": 174, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx", "language": "typescript", "sizeLines": 66, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx", "language": "typescript", "sizeLines": 338, "fileCategory": "code"},
-    {"path": "src/shared/components/CharacterStats/Tabs/style.ts", "language": "typescript", "sizeLines": 36, "fileCategory": "code"},
-    {"path": "src/shared/components/Loader/Loader.tsx", "language": "typescript", "sizeLines": 60, "fileCategory": "code"},
-    {"path": "src/shared/components/Modal/Modal.tsx", "language": "typescript", "sizeLines": 59, "fileCategory": "code"},
-    {"path": "src/shared/components/RollResultModal/RollResultModal.tsx", "language": "typescript", "sizeLines": 75, "fileCategory": "code"},
-    {"path": "src/shared/components/TextInput/MultiTextInput.tsx", "language": "typescript", "sizeLines": 76, "fileCategory": "code"},
-    {"path": "src/shared/components/TextInput/TextInput.tsx", "language": "typescript", "sizeLines": 35, "fileCategory": "code"},
-    {"path": "src/shared/components/TextInput/index.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code"},
-    {"path": "src/shared/const/CharacterTabs.ts", "language": "typescript", "sizeLines": 11, "fileCategory": "code"},
-    {"path": "src/shared/const/SkillsTab.ts", "language": "typescript", "sizeLines": 20, "fileCategory": "code"},
-    {"path": "src/shared/const/attributes.ts", "language": "typescript", "sizeLines": 18, "fileCategory": "code"},
-    {"path": "src/shared/const/experience.ts", "language": "typescript", "sizeLines": 36, "fileCategory": "code"},
-    {"path": "src/types/Character.ts", "language": "typescript", "sizeLines": 27, "fileCategory": "code"}
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx",
+      "language": "typescript",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/SkillItem.tsx",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Spells/Spells.tsx",
+      "language": "typescript",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Traits/Traits.tsx",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/shared/components/CharacterStats/Tabs/Weapons/Weapon.tsx",
+      "language": "typescript",
+      "sizeLines": 338,
+      "fileCategory": "code"
+    },
+    { "path": "src/shared/components/CharacterStats/Tabs/style.ts", "language": "typescript", "sizeLines": 36, "fileCategory": "code" },
+    { "path": "src/shared/components/Loader/Loader.tsx", "language": "typescript", "sizeLines": 60, "fileCategory": "code" },
+    { "path": "src/shared/components/Modal/Modal.tsx", "language": "typescript", "sizeLines": 59, "fileCategory": "code" },
+    {
+      "path": "src/shared/components/RollResultModal/RollResultModal.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    { "path": "src/shared/components/TextInput/MultiTextInput.tsx", "language": "typescript", "sizeLines": 76, "fileCategory": "code" },
+    { "path": "src/shared/components/TextInput/TextInput.tsx", "language": "typescript", "sizeLines": 35, "fileCategory": "code" },
+    { "path": "src/shared/components/TextInput/index.ts", "language": "typescript", "sizeLines": 1, "fileCategory": "code" },
+    { "path": "src/shared/const/CharacterTabs.ts", "language": "typescript", "sizeLines": 11, "fileCategory": "code" },
+    { "path": "src/shared/const/SkillsTab.ts", "language": "typescript", "sizeLines": 20, "fileCategory": "code" },
+    { "path": "src/shared/const/attributes.ts", "language": "typescript", "sizeLines": 18, "fileCategory": "code" },
+    { "path": "src/shared/const/experience.ts", "language": "typescript", "sizeLines": 36, "fileCategory": "code" },
+    { "path": "src/types/Character.ts", "language": "typescript", "sizeLines": 27, "fileCategory": "code" }
   ],
   "batchImportData": {
     "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx": [
@@ -84,13 +129,8 @@
       "src/shared/styles/tokens.ts",
       "src/types/Weapon.ts"
     ],
-    "src/shared/components/CharacterStats/Tabs/style.ts": [
-      "src/shared/styles/theme.ts",
-      "src/shared/styles/tokens.ts"
-    ],
-    "src/shared/components/Loader/Loader.tsx": [
-      "src/context/Theme-store.ts"
-    ],
+    "src/shared/components/CharacterStats/Tabs/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+    "src/shared/components/Loader/Loader.tsx": ["src/context/Theme-store.ts"],
     "src/shared/components/Modal/Modal.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/components/Modal/style.ts",
@@ -102,10 +142,7 @@
       "src/shared/components/Modal/Modal.tsx",
       "src/shared/components/RollResultModal/style.ts"
     ],
-    "src/shared/components/TextInput/MultiTextInput.tsx": [
-      "src/context/Theme-store.ts",
-      "src/shared/styles/tokens.ts"
-    ],
+    "src/shared/components/TextInput/MultiTextInput.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
     "src/shared/components/TextInput/TextInput.tsx": [
       "src/context/Theme-store.ts",
       "src/shared/styles/tokens.ts",
@@ -114,9 +151,7 @@
     "src/shared/components/TextInput/index.ts": [],
     "src/shared/const/CharacterTabs.ts": [],
     "src/shared/const/SkillsTab.ts": [],
-    "src/shared/const/attributes.ts": [
-      "src/domain/types/index.ts"
-    ],
+    "src/shared/const/attributes.ts": ["src/domain/types/index.ts"],
     "src/shared/const/experience.ts": [],
     "src/types/Character.ts": []
   }

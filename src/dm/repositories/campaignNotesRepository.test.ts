@@ -69,9 +69,10 @@ describe('dm/repositories/campaignNotesRepository', () => {
   });
 
   it('migrates legacy DM_NOTES_V2 into versioned notes storage', async () => {
-    storage.set('DM_NOTES_V2', JSON.stringify([
-      { id: 'old-1', title: 'Legacy title', content: 'Legacy body', campaign: 'Base', lastEdited: 100 },
-    ]));
+    storage.set(
+      'DM_NOTES_V2',
+      JSON.stringify([{ id: 'old-1', title: 'Legacy title', content: 'Legacy body', campaign: 'Base', lastEdited: 100 }]),
+    );
 
     const notes = await loadLocalCampaignNotes();
 

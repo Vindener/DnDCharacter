@@ -50,28 +50,34 @@ export default function References() {
       id: entry.id,
       title: t(`srd.${entry.id}.title`, { defaultValue: entry.title }),
       description: t(`srd.${entry.id}.summary`, { defaultValue: entry.summary }),
-      icon: entry.id === 'conditions'
-        ? 'pulse-outline' as const
-        : entry.id === 'equipment'
-          ? 'cube-outline' as const
-          : entry.id === 'spellcasting-basics'
-            ? 'sparkles-outline' as const
-            : 'reader-outline' as const,
+      icon:
+        entry.id === 'conditions'
+          ? ('pulse-outline' as const)
+          : entry.id === 'equipment'
+            ? ('cube-outline' as const)
+            : entry.id === 'spellcasting-basics'
+              ? ('sparkles-outline' as const)
+              : ('reader-outline' as const),
       testID: `references.srd.${entry.id}`,
-      details: entry.id === 'conditions'
-        ? getConditions().slice(0, 8).map((condition) => ({
-            title: t(`srd.conditions.details.${condition.id}.title`, { defaultValue: condition.name }),
-            body: t(`srd.conditions.details.${condition.id}.body`, { defaultValue: condition.summary }),
-          }))
-        : entry.id === 'equipment'
-          ? getEquipment().slice(0, 8).map((item) => ({
-              title: t(`srd.equipment.details.${item.id}.title`, { defaultValue: item.name }),
-              body: t(`srd.equipment.details.${item.id}.body`, { defaultValue: item.category }),
-            }))
-          : entry.entries.map((detail, index) => ({
-              title: t(`srd.${entry.id}.details.${index}.title`, { defaultValue: detail.title }),
-              body: t(`srd.${entry.id}.details.${index}.body`, { defaultValue: detail.body }),
-            })),
+      details:
+        entry.id === 'conditions'
+          ? getConditions()
+              .slice(0, 8)
+              .map((condition) => ({
+                title: t(`srd.conditions.details.${condition.id}.title`, { defaultValue: condition.name }),
+                body: t(`srd.conditions.details.${condition.id}.body`, { defaultValue: condition.summary }),
+              }))
+          : entry.id === 'equipment'
+            ? getEquipment()
+                .slice(0, 8)
+                .map((item) => ({
+                  title: t(`srd.equipment.details.${item.id}.title`, { defaultValue: item.name }),
+                  body: t(`srd.equipment.details.${item.id}.body`, { defaultValue: item.category }),
+                }))
+            : entry.entries.map((detail, index) => ({
+                title: t(`srd.${entry.id}.details.${index}.title`, { defaultValue: detail.title }),
+                body: t(`srd.${entry.id}.details.${index}.body`, { defaultValue: detail.body }),
+              })),
     })),
   ];
 

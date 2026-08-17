@@ -235,75 +235,471 @@
     }
   ],
   "edges": [
-    {"source": "file:src/services/accountDeletion.ts", "target": "file:src/repositories/characterCloudRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/accountDeletion.ts", "target": "file:src/services/accountDeletionCascade.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/accountDeletion.ts", "target": "file:src/services/firebase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/accountDeletion.ts", "target": "file:src/shared/services/auth/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/accountDeletion.ts", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/accountDeletionCascade.test.ts", "target": "file:src/services/accountDeletionCascade.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/i18n/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/repositories/characterLocalRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/shared/services/toast/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/stores/characterStore.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "file:src/stores/syncStore.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/syncStoreEffects.ts", "target": "file:src/services/characterSyncCoordinator.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/syncStoreEffects.ts", "target": "file:src/stores/syncStore.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/Firebase/Auth.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/Firebase/Auth.tsx", "target": "file:src/screens/Settings/styles.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/Firebase/Auth.tsx", "target": "file:src/services/users.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/Firebase/Auth.tsx", "target": "file:src/shared/services/auth/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "file:src/i18n/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "file:src/shared/services/toast/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/syncStore.ts", "target": "file:src/services/storeEffects/syncStoreEffects.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/syncStore.ts", "target": "file:src/types/Sync.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "file:src/services/accountDeletionCascade.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "file:src/shared/services/auth/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "file:src/shared/services/telemetry/productTelemetry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/accountDeletionCascade.test.ts",
+      "target": "file:src/services/accountDeletionCascade.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/i18n/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/repositories/characterLocalRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/shared/services/telemetry/productTelemetry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/shared/services/toast/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/stores/characterStore.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "file:src/stores/syncStore.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/syncStoreEffects.ts",
+      "target": "file:src/services/characterSyncCoordinator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/syncStoreEffects.ts",
+      "target": "file:src/stores/syncStore.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/Firebase/Auth.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/Firebase/Auth.tsx",
+      "target": "file:src/screens/Settings/styles.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/Firebase/Auth.tsx",
+      "target": "file:src/services/users.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/Firebase/Auth.tsx",
+      "target": "file:src/shared/services/auth/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "file:src/i18n/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "file:src/shared/services/toast/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/syncStore.ts",
+      "target": "file:src/services/storeEffects/syncStoreEffects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/syncStore.ts",
+      "target": "file:src/types/Sync.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/services/accountDeletion.ts", "target": "class:src/services/accountDeletion.ts:AccountDeletionError", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:buildTransferKey", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:collectPreviewForCollection", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:previewAccountDeletion", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:requestAccountDeletion", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/accountDeletionCascade.ts", "target": "function:src/services/accountDeletionCascade.ts:decideCascadeAction", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/storeEffects/syncStoreEffects.ts", "target": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/Firebase/Auth.tsx", "target": "function:src/shared/components/Firebase/Auth.tsx:Auth", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:configureGoogleSignIn", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:onGoogleButtonPress", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:reauthenticateWithGoogle", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:logout", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/services/toast/index.ts", "target": "function:src/shared/services/toast/index.ts:showToast", "type": "contains", "direction": "forward", "weight": 1.0},
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "class:src/services/accountDeletion.ts:AccountDeletionError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:buildTransferKey",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:collectPreviewForCollection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:previewAccountDeletion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:requestAccountDeletion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/accountDeletionCascade.ts",
+      "target": "function:src/services/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/storeEffects/syncStoreEffects.ts",
+      "target": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/Firebase/Auth.tsx",
+      "target": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:configureGoogleSignIn",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:onGoogleButtonPress",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:reauthenticateWithGoogle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:logout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/services/toast/index.ts",
+      "target": "function:src/shared/services/toast/index.ts:showToast",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    {"source": "file:src/services/accountDeletion.ts", "target": "class:src/services/accountDeletion.ts:AccountDeletionError", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:buildTransferKey", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:previewAccountDeletion", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/accountDeletion.ts", "target": "function:src/services/accountDeletion.ts:requestAccountDeletion", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/accountDeletionCascade.ts", "target": "function:src/services/accountDeletionCascade.ts:decideCascadeAction", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/storeEffects/characterStoreEffects.ts", "target": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/storeEffects/syncStoreEffects.ts", "target": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/Firebase/Auth.tsx", "target": "function:src/shared/components/Firebase/Auth.tsx:Auth", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:configureGoogleSignIn", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:onGoogleButtonPress", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:reauthenticateWithGoogle", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/services/auth/google.ts", "target": "function:src/shared/services/auth/google.ts:logout", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/services/toast/index.ts", "target": "function:src/shared/services/toast/index.ts:showToast", "type": "exports", "direction": "forward", "weight": 0.8},
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "class:src/services/accountDeletion.ts:AccountDeletionError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:buildTransferKey",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:previewAccountDeletion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "function:src/services/accountDeletion.ts:requestAccountDeletion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/accountDeletionCascade.ts",
+      "target": "function:src/services/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/storeEffects/characterStoreEffects.ts",
+      "target": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/storeEffects/syncStoreEffects.ts",
+      "target": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/Firebase/Auth.tsx",
+      "target": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:configureGoogleSignIn",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:onGoogleButtonPress",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:reauthenticateWithGoogle",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/services/auth/google.ts",
+      "target": "function:src/shared/services/auth/google.ts:logout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/services/toast/index.ts",
+      "target": "function:src/shared/services/toast/index.ts:showToast",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/services/accountDeletion.ts:collectPreviewForCollection", "target": "function:src/repositories/characterCloudRepository.ts:getEditorsForSheet", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/accountDeletion.ts:collectPreviewForCollection", "target": "function:src/services/accountDeletionCascade.ts:decideCascadeAction", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/accountDeletion.ts:requestAccountDeletion", "target": "function:src/shared/services/auth/google.ts:reauthenticateWithGoogle", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/accountDeletion.ts:requestAccountDeletion", "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects", "target": "function:src/domain/schemas/index.ts:parseCharacter", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects", "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects", "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncMap", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects", "target": "function:src/services/characterSyncCoordinator.ts:applySyncTransition", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/Firebase/Auth.tsx:Auth", "target": "function:src/shared/services/auth/google.ts:configureGoogleSignIn", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/Firebase/Auth.tsx:Auth", "target": "function:src/shared/services/auth/google.ts:onGoogleButtonPress", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/Firebase/Auth.tsx:Auth", "target": "function:src/shared/services/auth/google.ts:logout", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/Firebase/Auth.tsx:Auth", "target": "function:src/services/users.ts:ensureUserIndexOnLogin", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/components/Firebase/Auth.tsx:Auth", "target": "function:src/screens/Settings/styles.ts:getStyles", "type": "calls", "direction": "forward", "weight": 0.8},
+    {
+      "source": "function:src/services/accountDeletion.ts:collectPreviewForCollection",
+      "target": "function:src/repositories/characterCloudRepository.ts:getEditorsForSheet",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/accountDeletion.ts:collectPreviewForCollection",
+      "target": "function:src/services/accountDeletionCascade.ts:decideCascadeAction",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/accountDeletion.ts:requestAccountDeletion",
+      "target": "function:src/shared/services/auth/google.ts:reauthenticateWithGoogle",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/accountDeletion.ts:requestAccountDeletion",
+      "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects",
+      "target": "function:src/domain/schemas/index.ts:parseCharacter",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/storeEffects/characterStoreEffects.ts:createCharacterStoreEffects",
+      "target": "function:src/shared/services/telemetry/productTelemetry.ts:trackProductEvent",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects",
+      "target": "function:src/services/characterSyncCoordinator.ts:normalizeSyncMap",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/services/storeEffects/syncStoreEffects.ts:createSyncStoreEffects",
+      "target": "function:src/services/characterSyncCoordinator.ts:applySyncTransition",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "target": "function:src/shared/services/auth/google.ts:configureGoogleSignIn",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "target": "function:src/shared/services/auth/google.ts:onGoogleButtonPress",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "target": "function:src/shared/services/auth/google.ts:logout",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "target": "function:src/services/users.ts:ensureUserIndexOnLogin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/components/Firebase/Auth.tsx:Auth",
+      "target": "function:src/screens/Settings/styles.ts:getStyles",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "file:src/services/accountDeletion.ts", "target": "file:src/services/accountDeletion.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/services/accountDeletionCascade.ts", "target": "file:src/services/accountDeletionCascade.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5}
+    {
+      "source": "file:src/services/accountDeletion.ts",
+      "target": "file:src/services/accountDeletion.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/services/accountDeletionCascade.ts",
+      "target": "file:src/services/accountDeletionCascade.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
   ]
 }

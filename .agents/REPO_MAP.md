@@ -1,6 +1,7 @@
 # REPO_MAP.md
 
 ## High-Level Map
+
 - `App.tsx` - root app composition, auth provider, navigator, toast
 - `src/navigation/` - app tabs and nested navigators
 - `src/screens/` - screen entry points
@@ -16,54 +17,67 @@
 ## Current Roadmap Areas
 
 ### Dice
+
 - `src/screens/Dice/`
 - `src/screens/DiceRoller/`
 
 ### Home
+
 - `src/screens/Home/`
 
 ### Character
+
 - `src/screens/Character/`
 - `src/screens/Character/Character.tsx`
 
 ### Create Character
+
 - `src/screens/CreateCharacter/`
 - `src/screens/CreateCharacter/CreateCharacter.tsx`
 
 ### Spellbook
+
 - `src/screens/Spellbook/`
 - `src/domain/spellbook/`
 
 ### Bestiary
+
 - `src/screens/Bestiary/`
 - `src/screens/Monster/`
 
 ### Shared UI
+
 - `src/shared/ui/`
 - `src/shared/styles/`
 - `src/shared/components/`
 
 Suggested Skeleton location:
+
 - `src/shared/ui/Skeleton*`
 - or `src/shared/components/Skeleton*`
 
 Do not create Skeleton code during documentation-only tasks.
 
 ## Important Flows
+
 1. Local character flow:
+
 - create/edit character;
 - persist in Zustand + AsyncStorage.
 
 2. Cloud sync flow:
+
 - auth user;
 - map local DTO to Firestore doc;
 - upsert or create remote sheet.
 
 3. Sharing flow:
+
 - owners/editors arrays in Firestore;
 - invite by email and connection creation.
 
 ## High-Impact Files
+
 - `App.tsx`
 - `src/navigation/AppNavigator.tsx`
 - `src/context/Character-store.ts`

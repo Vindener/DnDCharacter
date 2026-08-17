@@ -78,6 +78,28 @@ describe('domain/spellbook/characterSpellAdapter', () => {
     expect(cleared.spells.cantrips).not.toContain('Light');
   });
 
+  it('resolves and updates status via alias names, so a localized and a base spell name are treated as the same spell', () => {
+    // A character's stored spell name can be the localized (uk) display name — e.g. what
+    // startingSpells.ts auto-fills — while the reference spell it maps to is looked up by its
+    // base/English name. getCharacterSpellStatus/applySpellStatus accept an alias list so
+    // both forms resolve to the same known/prepared/cantrip status.
+    const character = createEmptyCharacter({
+      class: 'Wizard',
+      spells: { ...EMPTY_SPELLS, knownSpells: ['Щит'] },
+    });
+
+    expect(getCharacterSpellStatus(character, ['Shield', 'Щит'])).toBe('known');
+    expect(getCharacterSpellStatus(character, ['Shield'])).toBe('available');
+
+    const prepared = applySpellStatus(character, ['Shield', 'Щит'], 'prepared');
+    expect(prepared.spells.knownSpells).not.toContain('Щит');
+    expect(prepared.spells.preparedSpells).toContain('Shield');
+
+    const cleared = applySpellStatus(prepared, ['Shield', 'Щит'], 'available');
+    expect(cleared.spells.preparedSpells).toEqual([]);
+    expect(cleared.spells.knownSpells).toEqual([]);
+  });
+
   it('calculates prepared spell limit for prepared casters', () => {
     const wizard = createEmptyCharacter({
       class: 'Wizard',

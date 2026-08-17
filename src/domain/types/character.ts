@@ -202,4 +202,3 @@ export type CharacterDto = CharacterModelBase;
 export type CharacterDraft = Partial<Omit<CharacterEntity, 'id'>> & { id?: string };
 
 export type CharacterViewModel = CharacterEntity;
-

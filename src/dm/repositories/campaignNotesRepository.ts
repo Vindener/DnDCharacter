@@ -1,18 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import type {
-  DMCampaignNote,
-  DMCampaignNoteQueueItem,
-  DMNoteSyncDisplayStatus,
-} from '@/dm/domain/types';
+import type { DMCampaignNote, DMCampaignNoteQueueItem, DMNoteSyncDisplayStatus } from '@/dm/domain/types';
 import { parseCampaignNote, parseCampaignNoteQueueItem } from '@/domain/schemas';
 import { db, fbAuth, hasDoc, now } from '@/services/firebase';
 import { ensureCampaignForName } from '@/dm/repositories/campaignRepository';
-import {
-  LATEST_SCHEMA_VERSION,
-  createStorageEnvelope,
-  migratePayloadToLatest,
-  normalizeStorageEnvelope,
-} from '@/domain/migrations';
+import { LATEST_SCHEMA_VERSION, createStorageEnvelope, migratePayloadToLatest, normalizeStorageEnvelope } from '@/domain/migrations';
 
 const LOCAL_NOTES_KEY = 'DM_CAMPAIGN_NOTES_V1';
 const LOCAL_QUEUE_KEY = 'DM_CAMPAIGN_NOTES_QUEUE_V1';
@@ -84,9 +75,7 @@ async function loadQueue(): Promise<DMCampaignNoteQueueItem[]> {
     const parsed = raw ? JSON.parse(raw) : null;
     const migrated = normalizeStorageEnvelope<DMCampaignNoteQueueItem[]>('dmNotesQueue', parsed, []);
     if (!Array.isArray(migrated.data)) return [];
-    return migrated.data
-      .map((item) => parseCampaignNoteQueueItem(item))
-      .filter((item): item is DMCampaignNoteQueueItem => Boolean(item));
+    return migrated.data.map((item) => parseCampaignNoteQueueItem(item)).filter((item): item is DMCampaignNoteQueueItem => Boolean(item));
   } catch {
     return [];
   }
@@ -96,7 +85,9 @@ async function persistQueue(queue: DMCampaignNoteQueueItem[]): Promise<void> {
   try {
     const envelope = createStorageEnvelope('dmNotesQueue', queue || []);
     await AsyncStorage.setItem(LOCAL_QUEUE_KEY, JSON.stringify(envelope));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 async function enqueue(type: 'upsert' | 'delete', noteId: string, campaignId: string): Promise<void> {
@@ -200,7 +191,9 @@ async function persistLocalCampaignNotes(notes: DMCampaignNote[]): Promise<void>
     }));
     const envelope = createStorageEnvelope('dmCampaignNotes', canonical);
     await AsyncStorage.setItem(LOCAL_NOTES_KEY, JSON.stringify(envelope));
-  } catch (_error) { /* intentionally ignored */ }
+  } catch (_error) {
+    /* intentionally ignored */
+  }
 }
 
 function canSyncCloud(): boolean {
@@ -209,8 +202,9 @@ function canSyncCloud(): boolean {
 
 async function replaceLocalNote(note: DMCampaignNote): Promise<DMCampaignNote[]> {
   const local = await loadLocalCampaignNotes();
-  const next = [...local.filter((item) => item.id !== note.id), { ...note, schemaVersion: LATEST_SCHEMA_VERSION }]
-    .sort((a, b) => b.updatedAtMs - a.updatedAtMs);
+  const next = [...local.filter((item) => item.id !== note.id), { ...note, schemaVersion: LATEST_SCHEMA_VERSION }].sort(
+    (a, b) => b.updatedAtMs - a.updatedAtMs,
+  );
   await persistLocalCampaignNotes(next);
   return next;
 }
@@ -232,11 +226,8 @@ function canAccessByRole(note: DMCampaignNote, uid: string): boolean {
 
 function buildCloudPayload(note: DMCampaignNote, existing?: Record<string, unknown> | null): Record<string, unknown> {
   const me = fbAuth.currentUser?.uid || note.ownerUid;
-  const owners = Array.isArray(existing?.owners) && existing?.owners.length
-    ? (existing?.owners as string[])
-    : note.owners.length
-      ? note.owners
-      : [me];
+  const owners =
+    Array.isArray(existing?.owners) && existing?.owners.length ? (existing?.owners as string[]) : note.owners.length ? note.owners : [me];
   const editors = Array.isArray(existing?.editors) ? (existing?.editors as string[]) : note.editors || [];
 
   return {
@@ -458,7 +449,9 @@ export async function flushCampaignNotesQueue(): Promise<void> {
         await syncUpsert(note);
       }
       remaining = remaining.filter((entry) => entry.id !== item.id);
-    } catch (_error) { /* intentionally ignored */ }
+    } catch (_error) {
+      /* intentionally ignored */
+    }
   }
 
   await persistQueue(remaining);

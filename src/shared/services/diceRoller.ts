@@ -32,9 +32,7 @@ export type DiceRollResult = {
   createdAt: Date;
 };
 
-type FormulaTerm =
-  | { type: 'dice'; sign: 1 | -1; count: number; sides: number }
-  | { type: 'constant'; sign: 1 | -1; value: number };
+type FormulaTerm = { type: 'dice'; sign: 1 | -1; count: number; sides: number } | { type: 'constant'; sign: 1 | -1; value: number };
 
 const DICE_SIDES: Record<DiceType, number> = {
   d4: 4,
@@ -98,7 +96,7 @@ export function rollDice(input: RollDiceInput): DiceRollResult {
   const random = input.random ?? DEFAULT_RANDOM;
   const count = clampCount(input.count ?? 1);
   const modifier = input.modifier ?? 0;
-  const proficiencyBonus = input.includeProficiency ? input.proficiencyBonus ?? 0 : 0;
+  const proficiencyBonus = input.includeProficiency ? (input.proficiencyBonus ?? 0) : 0;
 
   if (!sides) throw new Error('Непідтримуваний кубик.');
   if (mode !== 'normal' && (dice !== 'd20' || count !== 1)) {

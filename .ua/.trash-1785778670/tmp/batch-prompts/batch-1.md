@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-1.json` (single-file mode) OR `batch-1-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/context/AppRole-store.ts": [],
@@ -14,42 +15,18 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
   "src/context/Spellbook-store.ts": [],
   "src/context/Sync-store.ts": [],
   "src/dm/domain/campaign/index.ts": [],
-  "src/dm/domain/campaign/linking.test.ts": [
-    "src/dm/domain/campaign/index.ts",
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/dm/domain/campaign/linking.ts": [
-    "src/dm/domain/campaign/utils.ts",
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/dm/domain/campaign/utils.test.ts": [
-    "src/dm/domain/campaign/index.ts",
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/dm/domain/campaign/utils.ts": [
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/dm/domain/encounter/calculator.ts": [
-    "src/dm/domain/types/index.ts"
-  ],
+  "src/dm/domain/campaign/linking.test.ts": ["src/dm/domain/campaign/index.ts", "src/dm/domain/types/index.ts"],
+  "src/dm/domain/campaign/linking.ts": ["src/dm/domain/campaign/utils.ts", "src/dm/domain/types/index.ts"],
+  "src/dm/domain/campaign/utils.test.ts": ["src/dm/domain/campaign/index.ts", "src/dm/domain/types/index.ts"],
+  "src/dm/domain/campaign/utils.ts": ["src/dm/domain/types/index.ts"],
+  "src/dm/domain/encounter/calculator.ts": ["src/dm/domain/types/index.ts"],
   "src/dm/domain/initiative/index.ts": [],
-  "src/dm/domain/initiative/roll.test.ts": [
-    "src/dm/domain/initiative/index.ts",
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/dm/domain/notes/conflict.test.ts": [
-    "src/dm/domain/notes/index.ts",
-    "src/dm/domain/types/index.ts"
-  ],
-  "src/dm/domain/notes/conflict.ts": [
-    "src/dm/domain/types/index.ts"
-  ],
+  "src/dm/domain/initiative/roll.test.ts": ["src/dm/domain/initiative/index.ts", "src/dm/domain/types/index.ts"],
+  "src/dm/domain/notes/conflict.test.ts": ["src/dm/domain/notes/index.ts", "src/dm/domain/types/index.ts"],
+  "src/dm/domain/notes/conflict.ts": ["src/dm/domain/types/index.ts"],
   "src/dm/domain/notes/index.ts": [],
   "src/dm/domain/types/index.ts": [],
-  "src/dm/hooks/useCampaignOwnership.ts": [
-    "src/dm/domain/types/index.ts",
-    "src/services/firebase.ts"
-  ],
+  "src/dm/hooks/useCampaignOwnership.ts": ["src/dm/domain/types/index.ts", "src/services/firebase.ts"],
   "src/dm/repositories/campaignEncountersRepository.test.ts": [
     "src/dm/domain/types/index.ts",
     "src/dm/repositories/campaignEncountersRepository.ts",
@@ -113,9 +90,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/helpers/stripUndefinedDeep.ts",
     "src/shared/helpers/sync/syncErrorClassification.ts"
   ],
-  "src/repositories/syncPathFieldMap.test.ts": [
-    "src/repositories/syncPathFieldMap.ts"
-  ],
+  "src/repositories/syncPathFieldMap.test.ts": ["src/repositories/syncPathFieldMap.ts"],
   "src/repositories/syncPathFieldMap.ts": [],
   "src/screens/DM/DM.tsx": [
     "src/context/AppRole-store.ts",
@@ -191,15 +166,14 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/context/AppRole-store.ts": [
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/DMPartyOverview.tsx",
@@ -233,9 +207,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/Spellbook/Spellbook.tsx",
@@ -247,9 +219,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -286,12 +256,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/adapters/campaignLink.ts",
       "batchIndex": 3,
-      "symbols": [
-        "toCampaignLinkInput",
-        "buildCampaignFallbackIdForCharacter",
-        "isCharacterInCampaign",
-        "getCharacterCampaignLabel"
-      ]
+      "symbols": ["toCampaignLinkInput", "buildCampaignFallbackIdForCharacter", "isCharacterInCampaign", "getCharacterCampaignLabel"]
     }
   ],
   "src/dm/domain/initiative/index.ts": [
@@ -305,18 +270,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/dm/domain/initiative/roll.ts",
       "batchIndex": 6,
-      "symbols": [
-        "rollInitiativeFor",
-        "sortByInitiative"
-      ]
+      "symbols": ["rollInitiativeFor", "sortByInitiative"]
     },
     {
       "path": "src/dm/repositories/trackerTemplatesRepository.ts",
       "batchIndex": 15,
-      "symbols": [
-        "loadTrackerTemplates",
-        "persistTrackerTemplates"
-      ]
+      "symbols": ["loadTrackerTemplates", "persistTrackerTemplates"]
     },
     {
       "path": "src/screens/Bestiary/Bestiary.test.tsx",
@@ -351,12 +310,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/adapters/campaignLink.ts",
       "batchIndex": 3,
-      "symbols": [
-        "toCampaignLinkInput",
-        "buildCampaignFallbackIdForCharacter",
-        "isCharacterInCampaign",
-        "getCharacterCampaignLabel"
-      ]
+      "symbols": ["toCampaignLinkInput", "buildCampaignFallbackIdForCharacter", "isCharacterInCampaign", "getCharacterCampaignLabel"]
     },
     {
       "path": "src/screens/Home/homeViewModel.ts",
@@ -395,16 +349,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/dmStoreEffects.ts",
       "batchIndex": 12,
-      "symbols": [
-        "createDmStoreEffects"
-      ]
+      "symbols": ["createDmStoreEffects"]
     },
     {
       "path": "src/shared/const/TrackerTemplates.ts",
       "batchIndex": 3,
-      "symbols": [
-        "SYSTEM_RESOURCE_TEMPLATES"
-      ]
+      "symbols": ["SYSTEM_RESOURCE_TEMPLATES"]
     },
     {
       "path": "src/stores/dmStore.ts",
@@ -421,16 +371,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/screens/Initiative/Initiative.tsx",
@@ -537,16 +478,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/screens/DM/DMEncounterPrep.tsx",
@@ -653,23 +585,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/helpers/stripUndefinedDeep.ts",
       "batchIndex": 3,
-      "symbols": [
-        "stripUndefinedDeep"
-      ]
+      "symbols": ["stripUndefinedDeep"]
     },
     {
       "path": "src/screens/DM/DMEncounterPrep.tsx",
@@ -765,16 +686,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/dm/repositories/campaignNotesRepository.test.ts",
@@ -800,31 +712,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/connections.ts",
       "batchIndex": 3,
-      "symbols": [
-        "ensureConnection"
-      ]
+      "symbols": ["ensureConnection"]
     },
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/services/users.ts",
       "batchIndex": 3,
-      "symbols": [
-        "ensureUserIndexOnLogin",
-        "findUserByEmail"
-      ]
+      "symbols": ["ensureUserIndexOnLogin", "findUserByEmail"]
     },
     {
       "path": "src/dm/repositories/campaignRepository.test.ts",
@@ -906,20 +804,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/AppNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "AppNavigator"
-      ]
+      "symbols": ["AppNavigator"]
     }
   ],
   "src/repositories/characterCloudRepository.ts": [
     {
       "path": "src/domain/mappers/index.ts",
       "batchIndex": 12,
-      "symbols": [
-        "characterMapper",
-        "homebrewMapper",
-        "spellMapper"
-      ]
+      "symbols": ["characterMapper", "homebrewMapper", "spellMapper"]
     },
     {
       "path": "src/domain/migrations/index.ts",
@@ -943,53 +835,32 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/connections.ts",
       "batchIndex": 3,
-      "symbols": [
-        "ensureConnection"
-      ]
+      "symbols": ["ensureConnection"]
     },
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/services/users.ts",
       "batchIndex": 3,
-      "symbols": [
-        "ensureUserIndexOnLogin",
-        "findUserByEmail"
-      ]
+      "symbols": ["ensureUserIndexOnLogin", "findUserByEmail"]
     },
     {
       "path": "src/shared/helpers/stripUndefinedDeep.ts",
       "batchIndex": 3,
-      "symbols": [
-        "stripUndefinedDeep"
-      ]
+      "symbols": ["stripUndefinedDeep"]
     },
     {
       "path": "src/shared/helpers/sync/syncErrorClassification.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getFirestoreErrorCode",
-        "classifySyncError"
-      ]
+      "symbols": ["getFirestoreErrorCode", "classifySyncError"]
     },
     {
       "path": "src/components/ShareCharacterSheetModal.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "ShareCharacterSheetModal"
-      ]
+      "symbols": ["ShareCharacterSheetModal"]
     },
     {
       "path": "src/repositories/characterCloudRepository.test.ts",
@@ -999,16 +870,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/Character.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "Character"
-      ]
+      "symbols": ["Character"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/CreateCharacter/CreateCharacter.tsx",
@@ -1033,12 +900,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/accountDeletion.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AccountDeletionError",
-        "buildTransferKey",
-        "previewAccountDeletion",
-        "requestAccountDeletion"
-      ]
+      "symbols": ["AccountDeletionError", "buildTransferKey", "previewAccountDeletion", "requestAccountDeletion"]
     },
     {
       "path": "src/services/characterSyncCoordinator.test.ts",
@@ -1064,9 +926,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/CharacterCard/CharacterCard.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "CharacterCard"
-      ]
+      "symbols": ["CharacterCard"]
     },
     {
       "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
@@ -1078,54 +938,32 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Monster-store.ts",
       "batchIndex": 2,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/DM/PinnedReferencesList.tsx",
       "batchIndex": 3,
-      "symbols": [
-        "PinnedReferencesList"
-      ]
+      "symbols": ["PinnedReferencesList"]
     },
     {
       "path": "src/screens/DM/style.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/helpers/collaboration/status.ts",
@@ -1143,21 +981,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/helpers/mapCloudCharacter.ts",
       "batchIndex": 3,
-      "symbols": [
-        "mapCloudCharacterToLocalDto"
-      ]
+      "symbols": ["mapCloudCharacterToLocalDto"]
     },
     {
       "path": "src/shared/services/auth/index.ts",
       "batchIndex": 10,
-      "symbols": [
-        "AuthProvider",
-        "useAuth",
-        "configureGoogleSignIn",
-        "onGoogleButtonPress",
-        "logout",
-        "reauthenticateWithGoogle"
-      ]
+      "symbols": ["AuthProvider", "useAuth", "configureGoogleSignIn", "onGoogleButtonPress", "logout", "reauthenticateWithGoogle"]
     },
     {
       "path": "src/types/Character.ts",
@@ -1193,42 +1022,29 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/types/Product.ts",
       "batchIndex": 15,
-      "symbols": [
-        "APP_ROLES"
-      ]
+      "symbols": ["APP_ROLES"]
     }
   ],
   "src/screens/DM/DMCampaignDetail.tsx": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Monster-store.ts",
       "batchIndex": 2,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/DM/PinnedReferencesList.tsx",
       "batchIndex": 3,
-      "symbols": [
-        "PinnedReferencesList"
-      ]
+      "symbols": ["PinnedReferencesList"]
     },
     {
       "path": "src/screens/DM/adapters/index.ts",
@@ -1246,18 +1062,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/style.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/campaignInvite.ts",
       "batchIndex": 3,
-      "symbols": [
-        "CampaignInviteError",
-        "createCampaignInvite",
-        "redeemCampaignInvite"
-      ]
+      "symbols": ["CampaignInviteError", "createCampaignInvite", "redeemCampaignInvite"]
     },
     {
       "path": "src/services/characterSyncCoordinator.ts",
@@ -1278,33 +1088,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     },
     {
       "path": "src/shared/services/telemetry/productTelemetry.ts",
       "batchIndex": 3,
-      "symbols": [
-        "setAnalyticsConsent",
-        "isAnalyticsConsentEnabled",
-        "trackProductEvent",
-        "getProductEvents"
-      ]
+      "symbols": ["setAnalyticsConsent", "isAnalyticsConsentEnabled", "trackProductEvent", "getProductEvents"]
     },
     {
       "path": "src/types/Character.ts",
@@ -1342,9 +1136,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/domain/schemas/index.ts",
@@ -1414,23 +1206,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/style.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/helpers/collaboration/status.ts",
@@ -1448,35 +1229,19 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/screens/DM/DMCampaigns.tsx": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/screens/DM/adapters/index.ts",
@@ -1494,45 +1259,29 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/style.ts",
       "batchIndex": 3,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/services/campaignInvite.ts",
       "batchIndex": 3,
-      "symbols": [
-        "CampaignInviteError",
-        "createCampaignInvite",
-        "redeemCampaignInvite"
-      ]
+      "symbols": ["CampaignInviteError", "createCampaignInvite", "redeemCampaignInvite"]
     },
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/components/Modal/Modal.tsx",
       "batchIndex": 11,
-      "symbols": [
-        "Modal"
-      ]
+      "symbols": ["Modal"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/context/AppRole-store.ts` (1 lines, language: `typescript`, fileCategory: `code`)
 2. `src/context/DmSettings-store.ts` (1 lines, language: `typescript`, fileCategory: `code`)
 3. `src/context/Spellbook-store.ts` (1 lines, language: `typescript`, fileCategory: `code`)

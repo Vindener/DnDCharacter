@@ -1,12 +1,7 @@
 import type { AppRole } from '@/types/Product';
 import type { CharacterSyncState } from '@/types/Sync';
 
-export type SyncDisplayStatus =
-  | 'Local only'
-  | 'Synced'
-  | 'Pending sync'
-  | 'Offline changes pending'
-  | 'Conflict detected';
+export type SyncDisplayStatus = 'Local only' | 'Synced' | 'Pending sync' | 'Offline changes pending' | 'Conflict detected';
 
 export type ShareDisplayStatus = 'Shared with DM' | 'Shared with Player' | null;
 

@@ -7,5 +7,3 @@ export const getStyles = (c: ThemeColors) =>
     container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: c.background },
     text: { color: c.text, fontSize: fs(16) },
   });
-
-

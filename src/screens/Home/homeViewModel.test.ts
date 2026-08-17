@@ -153,7 +153,18 @@ describe('home view model', () => {
     expect(
       buildDmPreview({
         role: 'Player',
-        campaigns: [{ id: 'c1', name: 'Curse of Strahd', nameNormalized: 'curse-of-strahd', ownerUid: 'me', owners: [], editors: [], createdAtMs: 1, updatedAtMs: 1 }],
+        campaigns: [
+          {
+            id: 'c1',
+            name: 'Curse of Strahd',
+            nameNormalized: 'curse-of-strahd',
+            ownerUid: 'me',
+            owners: [],
+            editors: [],
+            createdAtMs: 1,
+            updatedAtMs: 1,
+          },
+        ],
         partyCount: 4,
         pendingChanges: 2,
         conflictCount: 0,
@@ -162,7 +173,18 @@ describe('home view model', () => {
     expect(
       buildDmPreview({
         role: 'Hybrid',
-        campaigns: [{ id: 'c1', name: 'Curse of Strahd', nameNormalized: 'curse-of-strahd', ownerUid: 'me', owners: [], editors: [], createdAtMs: 1, updatedAtMs: 1 }],
+        campaigns: [
+          {
+            id: 'c1',
+            name: 'Curse of Strahd',
+            nameNormalized: 'curse-of-strahd',
+            ownerUid: 'me',
+            owners: [],
+            editors: [],
+            createdAtMs: 1,
+            updatedAtMs: 1,
+          },
+        ],
         partyCount: 4,
         pendingChanges: 2,
         conflictCount: 0,

@@ -112,19 +112,10 @@
       "document:docs/ui-kit.md",
       "document:docs/ux-ui-roadmap.md"
     ],
-    ".claude": [
-      "config:.claude/settings.json"
-    ],
-    ".github": [
-      "document:.github/instructions/mobile-rn-standards.instructions.md"
-    ],
-    ".ua": [
-      "file:.ua/.understandignore",
-      "config:.ua/config.json"
-    ],
-    "firestore-tests": [
-      "file:firestore-tests/rules.test.ts"
-    ],
+    ".claude": ["config:.claude/settings.json"],
+    ".github": ["document:.github/instructions/mobile-rn-standards.instructions.md"],
+    ".ua": ["file:.ua/.understandignore", "config:.ua/config.json"],
+    "firestore-tests": ["file:firestore-tests/rules.test.ts"],
     "src/context": [
       "file:src/context/AppRole-store.ts",
       "file:src/context/DmSettings-store.ts",
@@ -243,10 +234,7 @@
       "file:src/domain/types/spellbook.ts",
       "file:src/domain/types/sync.ts"
     ],
-    "src/modules": [
-      "file:src/modules/Header/Header.tsx",
-      "file:src/modules/Header/style.ts"
-    ],
+    "src/modules": ["file:src/modules/Header/Header.tsx", "file:src/modules/Header/style.ts"],
     "src/services": [
       "file:src/services/storeEffects/spellbookStoreEffects.ts",
       "file:src/services/campaignInvite.ts",
@@ -313,9 +301,7 @@
       "file:src/test/mocks/react-native-firebase-crashlytics.ts",
       "file:src/test/mocks/react-native.tsx"
     ],
-    "src/components": [
-      "file:src/components/ShareCharacterSheetModal.tsx"
-    ],
+    "src/components": ["file:src/components/ShareCharacterSheetModal.tsx"],
     "src/i18n": [
       "file:src/i18n/index.ts",
       "file:src/i18n/languageStorage.ts",
@@ -411,10 +397,7 @@
       "file:src/screens/Spellbook/spellbookFilters.ts",
       "file:src/screens/Spellbook/styles.ts"
     ],
-    "src/screens/Support": [
-      "file:src/screens/Support/Support.tsx",
-      "file:src/screens/Support/index.ts"
-    ],
+    "src/screens/Support": ["file:src/screens/Support/Support.tsx", "file:src/screens/Support/index.ts"],
     "src/screens/Home": [
       "file:src/screens/Home/Home.tsx",
       "file:src/screens/Home/homeViewModel.test.ts",
@@ -459,18 +442,13 @@
       "file:src/screens/Character/hooks/levelChange.test.ts",
       "file:src/screens/Character/hooks/levelChange.ts"
     ],
-    "src/screens/Dice": [
-      "file:src/screens/Dice/Dice.tsx",
-      "file:src/screens/Dice/styles.ts"
-    ],
+    "src/screens/Dice": ["file:src/screens/Dice/Dice.tsx", "file:src/screens/Dice/styles.ts"],
     "src/screens/DiceRoller": [
       "file:src/screens/DiceRoller/DiceRoller.test.tsx",
       "file:src/screens/DiceRoller/DiceRoller.tsx",
       "file:src/screens/DiceRoller/styles.ts"
     ],
-    "src/screens/LegalLicenses": [
-      "file:src/screens/LegalLicenses/LegalLicenses.tsx"
-    ],
+    "src/screens/LegalLicenses": ["file:src/screens/LegalLicenses/LegalLicenses.tsx"],
     "src/screens/References": [
       "file:src/screens/References/styles.ts",
       "file:src/screens/References/References.test.tsx",
@@ -2493,9 +2471,7 @@
     "infraFiles": []
   },
   "dataPipeline": {
-    "schemaFiles": [
-      "firestore.rules"
-    ],
+    "schemaFiles": ["firestore.rules"],
     "migrationFiles": [],
     "dataModelFiles": [
       "src/repositories/characterCloudRepository.ts",

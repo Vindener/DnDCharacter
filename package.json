@@ -101,7 +101,10 @@
       }
     },
     "install": {
-      "exclude": ["react-native-keyboard-controller", "@react-native-picker/picker"]
+      "exclude": [
+        "react-native-keyboard-controller",
+        "@react-native-picker/picker"
+      ]
     }
   },
   "overrides": {

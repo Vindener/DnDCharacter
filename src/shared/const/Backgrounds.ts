@@ -1,9 +1,9 @@
 export interface BackgroundDef {
   key: string;
-  name: string;         // UA
+  name: string; // UA
   skills: string[];
   tools?: string[];
-  languages?: number;   // number of additional languages
+  languages?: number; // number of additional languages
   featureName: string;
   featureDescription: string; // long UA paraphrase
 }
@@ -15,7 +15,8 @@ export const BACKGROUNDS: BackgroundDef[] = [
     skills: ['Релігія', 'Проникливість'],
     languages: 2,
     featureName: 'Осередок віри',
-    featureDescription: 'Вас знають при святині або храмі. Ви можете розраховувати на підтримку одновірців: нічліг, лікування, ритуальна допомога, якщо не зловживаєте довірою.',
+    featureDescription:
+      'Вас знають при святині або храмі. Ви можете розраховувати на підтримку одновірців: нічліг, лікування, ритуальна допомога, якщо не зловживаєте довірою.',
   },
   {
     key: 'criminal',
@@ -23,7 +24,8 @@ export const BACKGROUNDS: BackgroundDef[] = [
     skills: ['Обман', 'Скритність'],
     tools: ['Інструменти злодія', 'Ігровий набір (на вибір)'],
     featureName: 'Контакти у підпіллі',
-    featureDescription: 'У вас є надійний контакт у злочинному світі та мережа посередників, що допомагає передавати повідомлення та знаходити заборонені речі.',
+    featureDescription:
+      'У вас є надійний контакт у злочинному світі та мережа посередників, що допомагає передавати повідомлення та знаходити заборонені речі.',
   },
   {
     key: 'soldier',
@@ -31,7 +33,8 @@ export const BACKGROUNDS: BackgroundDef[] = [
     skills: ['Атлетика', 'Залякування'],
     tools: ['Ігрові кості або карти', 'Транспорт (наземний)'],
     featureName: 'Військова репутація',
-    featureDescription: 'Завдяки службі вас поважають військові. Ви можете отримати доступ до військових об’єктів, знайти притулок у казармі або в таборі союзників.',
+    featureDescription:
+      'Завдяки службі вас поважають військові. Ви можете отримати доступ до військових об’єктів, знайти притулок у казармі або в таборі союзників.',
   },
   {
     key: 'sage',
@@ -39,7 +42,8 @@ export const BACKGROUNDS: BackgroundDef[] = [
     skills: ['Аркана', 'Історія'],
     languages: 2,
     featureName: 'Дослідник знань',
-    featureDescription: 'Ви знаєте, де шукати інформацію: бібліотеки, університети, архіви. Якщо не маєте відповіді, зможете відшукати джерело.',
+    featureDescription:
+      'Ви знаєте, де шукати інформацію: бібліотеки, університети, архіви. Якщо не маєте відповіді, зможете відшукати джерело.',
   },
   {
     key: 'folkhero',
@@ -51,4 +55,4 @@ export const BACKGROUNDS: BackgroundDef[] = [
   },
 ];
 
-export const BACKGROUND_OPTIONS = BACKGROUNDS.map(b => b.key);
+export const BACKGROUND_OPTIONS = BACKGROUNDS.map((b) => b.key);

@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-11.json` (single-file mode) OR `batch-11-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx": [
@@ -70,87 +71,50 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/styles/tokens.ts",
     "src/types/Weapon.ts"
   ],
-  "src/shared/components/CharacterStats/Tabs/style.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/Loader/Loader.tsx": [
-    "src/context/Theme-store.ts"
-  ],
-  "src/shared/components/Modal/Modal.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/components/Modal/style.ts",
-    "src/shared/ui/index.ts"
-  ],
+  "src/shared/components/CharacterStats/Tabs/style.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/Loader/Loader.tsx": ["src/context/Theme-store.ts"],
+  "src/shared/components/Modal/Modal.tsx": ["src/context/Theme-store.ts", "src/shared/components/Modal/style.ts", "src/shared/ui/index.ts"],
   "src/shared/components/RollResultModal/RollResultModal.tsx": [
     "src/context/Theme-store.ts",
     "src/shared/components/Loader/Loader.tsx",
     "src/shared/components/Modal/Modal.tsx",
     "src/shared/components/RollResultModal/style.ts"
   ],
-  "src/shared/components/TextInput/MultiTextInput.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/shared/components/TextInput/TextInput.tsx": [
-    "src/context/Theme-store.ts",
-    "src/shared/styles/tokens.ts",
-    "src/shared/ui/index.ts"
-  ],
+  "src/shared/components/TextInput/MultiTextInput.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts"],
+  "src/shared/components/TextInput/TextInput.tsx": ["src/context/Theme-store.ts", "src/shared/styles/tokens.ts", "src/shared/ui/index.ts"],
   "src/shared/components/TextInput/index.ts": [],
   "src/shared/const/CharacterTabs.ts": [],
   "src/shared/const/SkillsTab.ts": [],
-  "src/shared/const/attributes.ts": [
-    "src/domain/types/index.ts"
-  ],
+  "src/shared/const/attributes.ts": ["src/domain/types/index.ts"],
   "src/shared/const/experience.ts": [],
   "src/types/Character.ts": []
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/const/WeaponsDb.ts",
       "batchIndex": 13,
-      "symbols": [
-        "WEAPONS_DB",
-        "findWeapon",
-        "isWeaponName"
-      ]
+      "symbols": ["WEAPONS_DB", "findWeapon", "isWeaponName"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
@@ -162,19 +126,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
@@ -186,19 +143,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
@@ -210,35 +160,24 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     }
   ],
   "src/shared/components/CharacterStats/Tabs/Skills/Skills.tsx": [
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/CharacterStats/CharacterStats.tsx",
@@ -250,33 +189,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/types/Spells.ts",
@@ -293,19 +216,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/types/Traits.ts",
@@ -322,33 +238,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Character-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default",
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["default", "selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/types/Weapon.ts",
@@ -360,24 +260,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
@@ -404,25 +292,19 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/shared/components/Modal/Modal.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/Modal/style.ts",
       "batchIndex": 8,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/ui/index.ts",
@@ -469,9 +351,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/components/CharacterModals.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "CharacterModals"
-      ]
+      "symbols": ["CharacterModals"]
     },
     {
       "path": "src/screens/DM/DMCampaignDetail.tsx",
@@ -523,23 +403,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/components/RollResultModal/style.ts",
       "batchIndex": 8,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "AttributesItem"
-      ]
+      "symbols": ["AttributesItem"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
@@ -551,23 +425,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/BackStory/BackStory.tsx",
@@ -579,23 +442,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     },
     {
       "path": "src/shared/ui/index.ts",
@@ -657,9 +509,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Monster/Monster.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "Monster"
-      ]
+      "symbols": ["Monster"]
     },
     {
       "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
@@ -669,9 +519,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "AttributesItem"
-      ]
+      "symbols": ["AttributesItem"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Combat/Combat.tsx",
@@ -695,9 +543,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/AttributesItem.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "AttributesItem"
-      ]
+      "symbols": ["AttributesItem"]
     },
     {
       "path": "src/shared/components/CharacterStats/Tabs/Attributes/Attributes.tsx",
@@ -707,11 +553,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/stores/characterStore.ts",
       "batchIndex": 13,
-      "symbols": [
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     }
   ],
   "src/shared/const/experience.ts": [
@@ -725,16 +567,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     },
     {
       "path": "src/screens/Character/Character.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "Character"
-      ]
+      "symbols": ["Character"]
     },
     {
       "path": "src/screens/Character/components/CharacterSourceBadge.test.tsx",
@@ -744,17 +582,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Character/components/CharacterSourceBadge.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "getCharacterSourceBadgeLabel",
-        "CharacterSourceBadge"
-      ]
+      "symbols": ["getCharacterSourceBadgeLabel", "CharacterSourceBadge"]
     },
     {
       "path": "src/screens/Character/hooks/useCharacterActions.tsx",
       "batchIndex": 6,
-      "symbols": [
-        "useCharacterActions"
-      ]
+      "symbols": ["useCharacterActions"]
     },
     {
       "path": "src/screens/DM/DM.tsx",
@@ -784,19 +617,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/DM/adapters/campaignLink.ts",
       "batchIndex": 3,
-      "symbols": [
-        "toCampaignLinkInput",
-        "buildCampaignFallbackIdForCharacter",
-        "isCharacterInCampaign",
-        "getCharacterCampaignLabel"
-      ]
+      "symbols": ["toCampaignLinkInput", "buildCampaignFallbackIdForCharacter", "isCharacterInCampaign", "getCharacterCampaignLabel"]
     },
     {
       "path": "src/screens/DM/adapters/unifiedParty.ts",
       "batchIndex": 9,
-      "symbols": [
-        "buildUnifiedPartyList"
-      ]
+      "symbols": ["buildUnifiedPartyList"]
     },
     {
       "path": "src/screens/Home/Home.test.tsx",
@@ -825,9 +651,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/screens/Spellbook/spellbookFilters.ts",
       "batchIndex": 2,
-      "symbols": [
-        "filterSpellbookSpells"
-      ]
+      "symbols": ["filterSpellbookSpells"]
     },
     {
       "path": "src/services/characterSyncCoordinator.ts",
@@ -848,16 +672,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/storeEffects/dmStoreEffects.ts",
       "batchIndex": 12,
-      "symbols": [
-        "createDmStoreEffects"
-      ]
+      "symbols": ["createDmStoreEffects"]
     },
     {
       "path": "src/shared/components/CharacterCard/CharacterCard.tsx",
       "batchIndex": 9,
-      "symbols": [
-        "CharacterCard"
-      ]
+      "symbols": ["CharacterCard"]
     },
     {
       "path": "src/shared/components/CharacterMenu/CharacterMenu.tsx",
@@ -920,6 +740,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/shared/components/CharacterStats/Tabs/Inventory/Inventory.tsx` (108 lines, language: `typescript`, fileCategory: `code`)
 2. `src/shared/components/CharacterStats/Tabs/Notes/Notes.tsx` (41 lines, language: `typescript`, fileCategory: `code`)
 3. `src/shared/components/CharacterStats/Tabs/Proficiencies/Proficiencies.tsx` (42 lines, language: `typescript`, fileCategory: `code`)

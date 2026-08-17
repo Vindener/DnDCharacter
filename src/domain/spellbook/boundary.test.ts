@@ -53,9 +53,7 @@ describe('spellbook domain boundary guards', () => {
         }
 
         const isReactNativeDependency =
-          importedPath === 'react-native' ||
-          importedPath.startsWith('react-native/') ||
-          importedPath.startsWith('@react-native');
+          importedPath === 'react-native' || importedPath.startsWith('react-native/') || importedPath.startsWith('@react-native');
 
         if (isReactNativeDependency && !isAllowedInfraDependency(filePath, importedPath)) {
           violations.push(`${filePath} -> ${importedPath}`);

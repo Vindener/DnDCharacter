@@ -471,19 +471,32 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   );
   const quickSpellCandidates = useMemo(() => {
     const filter = quickSpellSearch.trim().toLowerCase();
+    // With no search text, sorting the full spellbook by level and taking the top 10 always
+    // surfaced only cantrips (level 0 dominates the list) — require a search term instead of
+    // showing a misleading "cantrips only" default (search hint text lives in CharacterModals).
+    if (!filter) return [];
     return [...(spellbookSpells || [])]
       .filter((spell) => {
-        if (!filter) return true;
-        return spell.name.toLowerCase().includes(filter) || spell.school.toLowerCase().includes(filter);
+        if (spell.name.toLowerCase().includes(filter) || spell.school.toLowerCase().includes(filter)) return true;
+        // spell.name/school are the base (English for srd-5.1) fields — a uk search term like
+        // "кислоти" only matches the localized display name, not "Acid Splash".
+        const localized = getLocalizedSpellFields(spell, i18n.language);
+        return localized.name.toLowerCase().includes(filter) || localized.school.toLowerCase().includes(filter);
       })
       .sort((a, b) => (a.level !== b.level ? a.level - b.level : a.name.localeCompare(b.name, sortLocale)))
       .slice(0, 10);
-  }, [quickSpellSearch, sortLocale, spellbookSpells]);
+  }, [quickSpellSearch, sortLocale, spellbookSpells, i18n.language]);
   const selectedQuickSpell = useMemo<SpellbookSpell | null>(() => {
     const key = normalizeSpellName(quickSpellName);
     if (!key) return null;
-    return (spellbookSpells || []).find((spell) => normalizeSpellName(spell.name) === key) || null;
-  }, [quickSpellName, spellbookSpells]);
+    // quickSpellName can hold either the base name (typed by hand) or the localized display
+    // name (set by pickExistingSpellForQuickAdd) — match against both.
+    return (
+      (spellbookSpells || []).find(
+        (spell) => normalizeSpellName(spell.name) === key || normalizeSpellName(getLocalizedSpellFields(spell, i18n.language).name) === key,
+      ) || null
+    );
+  }, [quickSpellName, spellbookSpells, i18n.language]);
   const preparedSpellNameSet = useMemo(() => {
     const next = new Set<string>();
     (characterData.spells.preparedSpells || []).forEach((entry) => {
@@ -1383,11 +1396,15 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     setSpellRollResult(null);
   }, []);
 
-  const pickExistingSpellForQuickAdd = useCallback((spell: SpellbookSpell) => {
-    setQuickSpellName(spell.name);
-    setQuickSpellLevel(String(clamp(Number(spell.level) || 1, 0, 9)));
-    setQuickSpellSearch(spell.name);
-  }, []);
+  const pickExistingSpellForQuickAdd = useCallback(
+    (spell: SpellbookSpell) => {
+      const localizedName = getLocalizedSpellFields(spell, i18n.language).name;
+      setQuickSpellName(localizedName);
+      setQuickSpellLevel(String(clamp(Number(spell.level) || 1, 0, 9)));
+      setQuickSpellSearch(localizedName);
+    },
+    [i18n.language],
+  );
 
   const addSpellFromCharacter = useCallback(
     (status: 'known' | 'prepared' | 'cantrip') => {
@@ -1411,12 +1428,17 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
         (prev) => applySpellStatus(prev, spellName, nextStatus, { preparedLimit: preparedSpellsLimit }),
         [`magic.${nextStatus}`],
       );
-      void upsertCustomSpell({
-        name: spellName,
-        level: nextStatus === 'cantrip' ? 0 : safeLevel,
-        school: t('defaults.customSpellSchool'),
-        tags: ['character-created'],
-      });
+      // Only register a brand-new spellbook entry when the typed name doesn't already match
+      // one — picking an existing spell from the search results (selectedQuickSpell) must
+      // attach that real entry, not shadow it with a blank "custom school" duplicate.
+      if (!selectedQuickSpell) {
+        void upsertCustomSpell({
+          name: spellName,
+          level: nextStatus === 'cantrip' ? 0 : safeLevel,
+          school: t('defaults.customSpellSchool'),
+          tags: ['character-created'],
+        });
+      }
 
       setQuickSpellName('');
       if (nextStatus !== 'cantrip') {
@@ -1434,6 +1456,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       preparedSpellsLimit,
       quickSpellLevel,
       quickSpellName,
+      selectedQuickSpell,
       t,
       upsertCustomSpell,
     ],

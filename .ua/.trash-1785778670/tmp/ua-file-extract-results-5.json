@@ -70,9 +70,7 @@
           "name": "saveCharacters",
           "startLine": 35,
           "endLine": 42,
-          "params": [
-            "characters"
-          ]
+          "params": ["characters"]
         },
         {
           "name": "loadLastSessionCharacterId",
@@ -84,9 +82,7 @@
           "name": "saveLastSessionCharacterId",
           "startLine": 52,
           "endLine": 58,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "clearLastSessionCharacterId",
@@ -104,9 +100,7 @@
           "name": "saveSharedUpdatesReviewedMap",
           "startLine": 87,
           "endLine": 93,
-          "params": [
-            "map"
-          ]
+          "params": ["map"]
         }
       ],
       "exports": [
@@ -272,9 +266,7 @@
           "name": "saveDraft",
           "startLine": 24,
           "endLine": 28,
-          "params": [
-            "draft"
-          ]
+          "params": ["draft"]
         },
         {
           "name": "clearDraft",
@@ -346,28 +338,19 @@
           "name": "findByTestId",
           "startLine": 216,
           "endLine": 218,
-          "params": [
-            "tree",
-            "testID"
-          ]
+          "params": ["tree", "testID"]
         },
         {
           "name": "press",
           "startLine": 220,
           "endLine": 224,
-          "params": [
-            "tree",
-            "testID"
-          ]
+          "params": ["tree", "testID"]
         },
         {
           "name": "pressAsync",
           "startLine": 226,
           "endLine": 230,
-          "params": [
-            "tree",
-            "testID"
-          ]
+          "params": ["tree", "testID"]
         },
         {
           "name": "pressLatestAlertAction",
@@ -379,26 +362,19 @@
           "name": "enterName",
           "startLine": 243,
           "endLine": 247,
-          "params": [
-            "tree",
-            "name"
-          ]
+          "params": ["tree", "name"]
         },
         {
           "name": "advanceToReview",
           "startLine": 249,
           "endLine": 253,
-          "params": [
-            "tree"
-          ]
+          "params": ["tree"]
         },
         {
           "name": "advanceToStats",
           "startLine": 255,
           "endLine": 260,
-          "params": [
-            "tree"
-          ]
+          "params": ["tree"]
         }
       ],
       "callGraph": [
@@ -2681,17 +2657,13 @@
           "name": "getCreateClassById",
           "startLine": 159,
           "endLine": 162,
-          "params": [
-            "classId"
-          ]
+          "params": ["classId"]
         },
         {
           "name": "getCreateStartingEquipmentForClass",
           "startLine": 164,
           "endLine": 167,
-          "params": [
-            "classId"
-          ]
+          "params": ["classId"]
         },
         {
           "name": "createInitialDraft",
@@ -2703,9 +2675,7 @@
           "name": "stringifyStats",
           "startLine": 361,
           "endLine": 370,
-          "params": [
-            "stats"
-          ]
+          "params": ["stats"]
         },
         {
           "name": "emptyStatText",
@@ -2717,116 +2687,85 @@
           "name": "mergeDraftWithDefaults",
           "startLine": 383,
           "endLine": 398,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "applyStartMethod",
           "startLine": 400,
           "endLine": 444,
-          "params": [
-            "draft",
-            "method"
-          ]
+          "params": ["draft", "method"]
         },
         {
           "name": "applyDerivedDefaults",
           "startLine": 446,
           "endLine": 479,
-          "params": [
-            "draft",
-            "options"
-          ]
+          "params": ["draft", "options"]
         },
         {
           "name": "deriveDraftDefaults",
           "startLine": 481,
           "endLine": 544,
-          "params": [
-            "draft"
-          ]
+          "params": ["draft"]
         },
         {
           "name": "getBaseStats",
           "startLine": 546,
           "endLine": 551,
-          "params": [
-            "draft"
-          ]
+          "params": ["draft"]
         },
         {
           "name": "formatAbilityModifier",
           "startLine": 553,
           "endLine": 556,
-          "params": [
-            "score"
-          ]
+          "params": ["score"]
         },
         {
           "name": "signedNumber",
           "startLine": 558,
           "endLine": 560,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "pointBuySpent",
           "startLine": 562,
           "endLine": 564,
-          "params": [
-            "stats"
-          ]
+          "params": ["stats"]
         },
         {
           "name": "createSavingThrowDefaults",
           "startLine": 566,
           "endLine": 576,
-          "params": [
-            "selectedClass"
-          ]
+          "params": ["selectedClass"]
         },
         {
           "name": "buildBackgroundMechanics",
           "startLine": 578,
           "endLine": 598,
-          "params": [
-            "backgroundKey"
-          ]
+          "params": ["backgroundKey"]
         },
         {
           "name": "shouldShowMagicStep",
           "startLine": 600,
           "endLine": 602,
-          "params": [
-            "draft"
-          ]
+          "params": ["draft"]
         },
         {
           "name": "rollAbilityScore",
           "startLine": 604,
           "endLine": 617,
-          "params": [
-            "random"
-          ]
+          "params": ["random"]
         },
         {
           "name": "rollAllAbilityScores",
           "startLine": 619,
           "endLine": 631,
-          "params": [
-            "random"
-          ]
+          "params": ["random"]
         },
         {
           "name": "buildCharacterFromDraft",
           "startLine": 633,
           "endLine": 743,
-          "params": [
-            "draft",
-            "id"
-          ]
+          "params": ["draft", "id"]
         },
         {
           "name": "createEmptyStats",
@@ -2838,163 +2777,115 @@
           "name": "parseStatsText",
           "startLine": 756,
           "endLine": 762,
-          "params": [
-            "stats",
-            "fallback"
-          ]
+          "params": ["stats", "fallback"]
         },
         {
           "name": "autoFillSkills",
           "startLine": 764,
           "endLine": 791,
-          "params": [
-            "stats"
-          ]
+          "params": ["stats"]
         },
         {
           "name": "parseInteger",
           "startLine": 793,
           "endLine": 797,
-          "params": [
-            "value",
-            "fallback"
-          ]
+          "params": ["value", "fallback"]
         },
         {
           "name": "clampNumber",
           "startLine": 799,
           "endLine": 801,
-          "params": [
-            "value",
-            "min",
-            "max"
-          ]
+          "params": ["value", "min", "max"]
         },
         {
           "name": "splitLines",
           "startLine": 803,
           "endLine": 808,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "buildInventory",
           "startLine": 810,
           "endLine": 818,
-          "params": [
-            "draft",
-            "selectedGear"
-          ]
+          "params": ["draft", "selectedGear"]
         },
         {
           "name": "buildNotes",
           "startLine": 820,
           "endLine": 827,
-          "params": [
-            "draft"
-          ]
+          "params": ["draft"]
         },
         {
           "name": "parseSpellSlots",
           "startLine": 829,
           "endLine": 837,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "srdSourceRef",
           "startLine": 839,
           "endLine": 848,
-          "params": [
-            "id",
-            "name"
-          ]
+          "params": ["id", "name"]
         },
         {
           "name": "homebrewSourceRef",
           "startLine": 850,
           "endLine": 859,
-          "params": [
-            "id",
-            "name"
-          ]
+          "params": ["id", "name"]
         },
         {
           "name": "customSourceRef",
           "startLine": 861,
           "endLine": 869,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "buildFeatureSourceRefs",
           "startLine": 871,
           "endLine": 889,
-          "params": [
-            "draft",
-            "raceTraits",
-            "classFeatureCount"
-          ]
+          "params": ["draft", "raceTraits", "classFeatureCount"]
         },
         {
           "name": "buildContentSources",
           "startLine": 891,
           "endLine": 931,
-          "params": [
-            "draft",
-            "featureSources"
-          ]
+          "params": ["draft", "featureSources"]
         },
         {
           "name": "templateCustomFields",
           "startLine": 933,
           "endLine": 940,
-          "params": [
-            "draft"
-          ]
+          "params": ["draft"]
         },
         {
           "name": "textToResources",
           "startLine": 942,
           "endLine": 949,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "textToSections",
           "startLine": 951,
           "endLine": 957,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "textToHomebrewEntries",
           "startLine": 959,
           "endLine": 967,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "looksLikeWeapon",
           "startLine": 969,
           "endLine": 972,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "looksLikeArmor",
           "startLine": 974,
           "endLine": 977,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         }
       ],
       "exports": [
@@ -4698,45 +4589,31 @@
           "name": "mkId",
           "startLine": 12,
           "endLine": 12,
-          "params": [
-            "prefix",
-            "index"
-          ]
+          "params": ["prefix", "index"]
         },
         {
           "name": "cloneResource",
           "startLine": 95,
           "endLine": 100,
-          "params": [
-            "resource",
-            "index"
-          ]
+          "params": ["resource", "index"]
         },
         {
           "name": "cloneSection",
           "startLine": 102,
           "endLine": 107,
-          "params": [
-            "section",
-            "index"
-          ]
+          "params": ["section", "index"]
         },
         {
           "name": "cloneEntry",
           "startLine": 109,
           "endLine": 115,
-          "params": [
-            "entry",
-            "index"
-          ]
+          "params": ["entry", "index"]
         },
         {
           "name": "buildTemplatePatch",
           "startLine": 117,
           "endLine": 125,
-          "params": [
-            "templateId"
-          ]
+          "params": ["templateId"]
         }
       ],
       "exports": [
@@ -4846,9 +4723,7 @@
           "name": "findWeapon",
           "startLine": 35,
           "endLine": 38,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         }
       ],
       "exports": [
@@ -4893,53 +4768,37 @@
           "name": "abilityMod",
           "startLine": 5,
           "endLine": 7,
-          "params": [
-            "score"
-          ]
+          "params": ["score"]
         },
         {
           "name": "proficiencyBonus",
           "startLine": 9,
           "endLine": 15,
-          "params": [
-            "level"
-          ]
+          "params": ["level"]
         },
         {
           "name": "isProficientWithWeapon",
           "startLine": 17,
           "endLine": 25,
-          "params": [
-            "charClass",
-            "weapon"
-          ]
+          "params": ["charClass", "weapon"]
         },
         {
           "name": "computeAttackBonus",
           "startLine": 27,
           "endLine": 44,
-          "params": [
-            "character",
-            "weaponName"
-          ]
+          "params": ["character", "weaponName"]
         },
         {
           "name": "defaultDamageString",
           "startLine": 46,
           "endLine": 50,
-          "params": [
-            "weaponName"
-          ]
+          "params": ["weaponName"]
         },
         {
           "name": "damageAbilityMod",
           "startLine": 52,
           "endLine": 55,
-          "params": [
-            "weaponName",
-            "usedAbility",
-            "character"
-          ]
+          "params": ["weaponName", "usedAbility", "character"]
         }
       ],
       "exports": [
@@ -5064,17 +4923,13 @@
           "name": "getHitDiceSides",
           "startLine": 20,
           "endLine": 23,
-          "params": [
-            "className"
-          ]
+          "params": ["className"]
         },
         {
           "name": "createEmptyCharacter",
           "startLine": 26,
           "endLine": 159,
-          "params": [
-            "overrides"
-          ]
+          "params": ["overrides"]
         }
       ],
       "exports": [
@@ -5137,25 +4992,19 @@
           "name": "selectActiveCharacter",
           "startLine": 17,
           "endLine": 23,
-          "params": [
-            "state"
-          ]
+          "params": ["state"]
         },
         {
           "name": "selectCharacterStoreBasics",
           "startLine": 25,
           "endLine": 28,
-          "params": [
-            "state"
-          ]
+          "params": ["state"]
         },
         {
           "name": "selectCharacterStoreActions",
           "startLine": 30,
           "endLine": 33,
-          "params": [
-            "state"
-          ]
+          "params": ["state"]
         }
       ],
       "exports": [
@@ -5200,17 +5049,13 @@
           "name": "selectSyncByCharacterId",
           "startLine": 21,
           "endLine": 23,
-          "params": [
-            "characterId"
-          ]
+          "params": ["characterId"]
         },
         {
           "name": "selectSyncStoreActions",
           "startLine": 25,
           "endLine": 37,
-          "params": [
-            "state"
-          ]
+          "params": ["state"]
         }
       ],
       "exports": [
@@ -5243,17 +5088,13 @@
           "name": "createCharacterState",
           "startLine": 13,
           "endLine": 22,
-          "params": [
-            "partial"
-          ]
+          "params": ["partial"]
         },
         {
           "name": "createSyncState",
           "startLine": 24,
           "endLine": 40,
-          "params": [
-            "partial"
-          ]
+          "params": ["partial"]
         }
       ],
       "metrics": {

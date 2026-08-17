@@ -1,14 +1,558 @@
 [
-  { "id": "barbarian", "name": "Barbarian", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "martial"], "hitDie": 12, "primaryAbilities": ["strength", "constitution"], "savingThrows": ["strength", "constitution"], "proficiencies": ["Light armor", "Medium armor", "Shields", "Simple weapons", "Martial weapons"], "skillChoices": { "choose": 2, "from": ["animalHandling", "athletics", "intimidation", "nature", "perception", "survival"] }, "startingEquipment": { "base": ["Explorer's pack", "Four javelins"], "choices": [{ "label": "Primary weapon", "options": ["Greataxe", "Any martial melee weapon"] }, { "label": "Secondary weapon", "options": ["Two handaxes", "Any simple weapon"] }] }, "features": [{ "id": "barbarian-rage", "name": "Rage", "level": 1, "summary": "Enter a battle fury that improves melee damage and resilience.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "barbarian-unarmored-defense", "name": "Unarmored Defense", "level": 1, "summary": "When not wearing armor, AC can use Dexterity and Constitution modifiers.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "bard", "name": "Bard", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "caster"], "hitDie": 8, "primaryAbilities": ["charisma"], "savingThrows": ["dexterity", "charisma"], "proficiencies": ["Light armor", "Simple weapons", "Hand crossbows", "Longswords", "Rapiers", "Shortswords", "Musical instruments"], "spellcastingAbility": "charisma", "skillChoices": { "choose": 3, "from": ["acrobatics", "animalHandling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuasion", "religion", "sleightOfHand", "stealth", "survival"] }, "startingEquipment": { "base": ["Leather armor", "Dagger"], "choices": [{ "label": "Weapon", "options": ["Rapier", "Longsword", "Any simple weapon"] }, { "label": "Pack", "options": ["Diplomat's pack", "Entertainer's pack"] }, { "label": "Instrument", "options": ["Lute", "Any musical instrument"] }] }, "features": [{ "id": "bard-spellcasting", "name": "Spellcasting", "level": 1, "summary": "Cast bard spells using Charisma.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }, { "id": "bard-bardic-inspiration", "name": "Bardic Inspiration", "level": 1, "summary": "Use bonus action to inspire another creature with a die.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "cleric", "name": "Cleric", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "caster"], "hitDie": 8, "primaryAbilities": ["wisdom"], "savingThrows": ["wisdom", "charisma"], "proficiencies": ["Light armor", "Medium armor", "Shields", "Simple weapons"], "spellcastingAbility": "wisdom", "skillChoices": { "choose": 2, "from": ["history", "insight", "medicine", "persuasion", "religion"] }, "startingEquipment": { "base": ["Shield", "Holy symbol"], "choices": [{ "label": "Weapon", "options": ["Mace", "Warhammer if proficient"] }, { "label": "Armor", "options": ["Scale mail", "Leather armor", "Chain mail if proficient"] }, { "label": "Pack", "options": ["Priest's pack", "Explorer's pack"] }] }, "features": [{ "id": "cleric-spellcasting", "name": "Spellcasting", "level": 1, "summary": "Prepare and cast cleric spells using Wisdom.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }, { "id": "cleric-divine-domain", "name": "Divine Domain", "level": 1, "summary": "Choose a divine domain that grants features and spells.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "druid", "name": "Druid", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "caster"], "hitDie": 8, "primaryAbilities": ["wisdom"], "savingThrows": ["intelligence", "wisdom"], "proficiencies": ["Light armor", "Medium armor", "Shields", "Clubs", "Daggers", "Darts", "Javelins", "Maces", "Quarterstaffs", "Scimitars", "Sickles", "Slings", "Spears", "Herbalism kit"], "spellcastingAbility": "wisdom", "skillChoices": { "choose": 2, "from": ["arcana", "animalHandling", "insight", "medicine", "nature", "perception", "religion", "survival"] }, "startingEquipment": { "base": ["Leather armor", "Explorer's pack", "Druidic focus"], "choices": [{ "label": "Shield or weapon", "options": ["Wooden shield", "Any simple weapon"] }, { "label": "Weapon", "options": ["Scimitar", "Any simple melee weapon"] }] }, "features": [{ "id": "druid-druidic", "name": "Druidic", "level": 1, "summary": "Know the secret language of druids.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "druid-spellcasting", "name": "Spellcasting", "level": 1, "summary": "Prepare and cast druid spells using Wisdom.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }] },
-  { "id": "fighter", "name": "Fighter", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "martial"], "hitDie": 10, "primaryAbilities": ["strength", "dexterity", "constitution"], "savingThrows": ["strength", "constitution"], "proficiencies": ["All armor", "Shields", "Simple weapons", "Martial weapons"], "skillChoices": { "choose": 2, "from": ["acrobatics", "animalHandling", "athletics", "history", "insight", "intimidation", "perception", "survival"] }, "startingEquipment": { "base": [], "choices": [{ "label": "Armor", "options": ["Chain mail", "Leather armor, longbow, and 20 arrows"] }, { "label": "Weapon set", "options": ["Martial weapon and shield", "Two martial weapons"] }, { "label": "Ranged option", "options": ["Light crossbow and 20 bolts", "Two handaxes"] }, { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }] }, "features": [{ "id": "fighter-fighting-style", "name": "Fighting Style", "level": 1, "summary": "Adopt a particular style of fighting as your specialty.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "fighter-second-wind", "name": "Second Wind", "level": 1, "summary": "Use a bonus action to regain hit points once per rest.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "bonus-action"] }] },
-  { "id": "monk", "name": "Monk", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "martial"], "hitDie": 8, "primaryAbilities": ["dexterity", "wisdom"], "savingThrows": ["strength", "dexterity"], "proficiencies": ["Simple weapons", "Shortswords", "Artisan's tools or musical instrument"], "skillChoices": { "choose": 2, "from": ["acrobatics", "athletics", "history", "insight", "religion", "stealth"] }, "startingEquipment": { "base": ["10 darts"], "choices": [{ "label": "Weapon", "options": ["Shortsword", "Any simple weapon"] }, { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }] }, "features": [{ "id": "monk-unarmored-defense", "name": "Unarmored Defense", "level": 1, "summary": "When not wearing armor or shield, AC can use Dexterity and Wisdom modifiers.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "monk-martial-arts", "name": "Martial Arts", "level": 1, "summary": "Use Dexterity and special damage rules with monk weapons and unarmed strikes.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "paladin", "name": "Paladin", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "half-caster"], "hitDie": 10, "primaryAbilities": ["strength", "charisma"], "savingThrows": ["wisdom", "charisma"], "proficiencies": ["All armor", "Shields", "Simple weapons", "Martial weapons"], "spellcastingAbility": "charisma", "skillChoices": { "choose": 2, "from": ["athletics", "insight", "intimidation", "medicine", "persuasion", "religion"] }, "startingEquipment": { "base": ["Chain mail", "Holy symbol"], "choices": [{ "label": "Weapon set", "options": ["Martial weapon and shield", "Two martial weapons"] }, { "label": "Secondary weapon", "options": ["Five javelins", "Any simple melee weapon"] }, { "label": "Pack", "options": ["Priest's pack", "Explorer's pack"] }] }, "features": [{ "id": "paladin-divine-sense", "name": "Divine Sense", "level": 1, "summary": "Sense certain celestial, fiend, undead, consecrated, or desecrated presences.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "paladin-lay-on-hands", "name": "Lay on Hands", "level": 1, "summary": "Use a healing pool equal to paladin level times 5.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "healing"] }] },
-  { "id": "ranger", "name": "Ranger", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "half-caster"], "hitDie": 10, "primaryAbilities": ["dexterity", "wisdom"], "savingThrows": ["strength", "dexterity"], "proficiencies": ["Light armor", "Medium armor", "Shields", "Simple weapons", "Martial weapons"], "spellcastingAbility": "wisdom", "skillChoices": { "choose": 3, "from": ["animalHandling", "athletics", "insight", "investigation", "nature", "perception", "stealth", "survival"] }, "startingEquipment": { "base": ["Longbow and 20 arrows"], "choices": [{ "label": "Armor", "options": ["Scale mail", "Leather armor"] }, { "label": "Weapons", "options": ["Two shortswords", "Two simple melee weapons"] }, { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }] }, "features": [{ "id": "ranger-favored-enemy", "name": "Favored Enemy", "level": 1, "summary": "Gain benefits for tracking and recalling information about chosen foes.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "ranger-natural-explorer", "name": "Natural Explorer", "level": 1, "summary": "Gain exploration benefits in a favored terrain.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "rogue", "name": "Rogue", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "martial"], "hitDie": 8, "primaryAbilities": ["dexterity"], "savingThrows": ["dexterity", "intelligence"], "proficiencies": ["Light armor", "Simple weapons", "Hand crossbows", "Longswords", "Rapiers", "Shortswords", "Thieves' tools"], "skillChoices": { "choose": 4, "from": ["acrobatics", "athletics", "deception", "insight", "intimidation", "investigation", "perception", "performance", "persuasion", "sleightOfHand", "stealth"] }, "startingEquipment": { "base": ["Leather armor", "Two daggers", "Thieves' tools"], "choices": [{ "label": "Melee weapon", "options": ["Rapier", "Shortsword"] }, { "label": "Ranged weapon", "options": ["Shortbow and 20 arrows", "Shortsword"] }, { "label": "Pack", "options": ["Burglar's pack", "Dungeoneer's pack", "Explorer's pack"] }] }, "features": [{ "id": "rogue-expertise", "name": "Expertise", "level": 1, "summary": "Double proficiency bonus for selected proficiencies.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "skill"] }, { "id": "rogue-sneak-attack", "name": "Sneak Attack", "level": 1, "summary": "Deal extra damage once per turn when attack conditions are met.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "rogue-thieves-cant", "name": "Thieves' Cant", "level": 1, "summary": "Know the secret mix of dialect, jargon, and code used by rogues.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "sorcerer", "name": "Sorcerer", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "caster"], "hitDie": 6, "primaryAbilities": ["charisma"], "savingThrows": ["constitution", "charisma"], "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light crossbows"], "spellcastingAbility": "charisma", "skillChoices": { "choose": 2, "from": ["arcana", "deception", "insight", "intimidation", "persuasion", "religion"] }, "startingEquipment": { "base": ["Two daggers"], "choices": [{ "label": "Weapon", "options": ["Light crossbow and 20 bolts", "Any simple weapon"] }, { "label": "Focus or pouch", "options": ["Component pouch", "Arcane focus"] }, { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }] }, "features": [{ "id": "sorcerer-spellcasting", "name": "Spellcasting", "level": 1, "summary": "Cast sorcerer spells using Charisma.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }, { "id": "sorcerer-sorcerous-origin", "name": "Sorcerous Origin", "level": 1, "summary": "Choose the source of your innate magic.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }] },
-  { "id": "warlock", "name": "Warlock", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "caster"], "hitDie": 8, "primaryAbilities": ["charisma"], "savingThrows": ["wisdom", "charisma"], "proficiencies": ["Light armor", "Simple weapons"], "spellcastingAbility": "charisma", "skillChoices": { "choose": 2, "from": ["arcana", "deception", "history", "intimidation", "investigation", "nature", "religion"] }, "startingEquipment": { "base": ["Leather armor", "Any simple weapon", "Two daggers"], "choices": [{ "label": "Ranged or melee", "options": ["Light crossbow and 20 bolts", "Any simple weapon"] }, { "label": "Focus or pouch", "options": ["Component pouch", "Arcane focus"] }, { "label": "Pack", "options": ["Scholar's pack", "Dungeoneer's pack"] }] }, "features": [{ "id": "warlock-otherworldly-patron", "name": "Otherworldly Patron", "level": 1, "summary": "Choose the being that grants your magic.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature"] }, { "id": "warlock-pact-magic", "name": "Pact Magic", "level": 1, "summary": "Cast warlock spells using Charisma and pact spell slots.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }] },
-  { "id": "wizard", "name": "Wizard", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class", "caster"], "hitDie": 6, "primaryAbilities": ["intelligence"], "savingThrows": ["intelligence", "wisdom"], "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light crossbows"], "spellcastingAbility": "intelligence", "skillChoices": { "choose": 2, "from": ["arcana", "history", "insight", "investigation", "medicine", "religion"] }, "startingEquipment": { "base": ["Spellbook"], "choices": [{ "label": "Weapon", "options": ["Quarterstaff", "Dagger"] }, { "label": "Focus or pouch", "options": ["Component pouch", "Arcane focus"] }, { "label": "Pack", "options": ["Scholar's pack", "Explorer's pack"] }] }, "features": [{ "id": "wizard-spellcasting", "name": "Spellcasting", "level": 1, "summary": "Prepare and cast wizard spells using Intelligence.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }, { "id": "wizard-arcane-recovery", "name": "Arcane Recovery", "level": 1, "summary": "Recover some expended spell slots once per day after a short rest.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["class-feature", "magic"] }] }
+  {
+    "id": "barbarian",
+    "name": "Barbarian",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "martial"],
+    "hitDie": 12,
+    "primaryAbilities": ["strength", "constitution"],
+    "savingThrows": ["strength", "constitution"],
+    "proficiencies": ["Light armor", "Medium armor", "Shields", "Simple weapons", "Martial weapons"],
+    "skillChoices": { "choose": 2, "from": ["animalHandling", "athletics", "intimidation", "nature", "perception", "survival"] },
+    "startingEquipment": {
+      "base": ["Explorer's pack", "Four javelins"],
+      "choices": [
+        { "label": "Primary weapon", "options": ["Greataxe", "Any martial melee weapon"] },
+        { "label": "Secondary weapon", "options": ["Two handaxes", "Any simple weapon"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "barbarian-rage",
+        "name": "Rage",
+        "level": 1,
+        "summary": "Enter a battle fury that improves melee damage and resilience.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "barbarian-unarmored-defense",
+        "name": "Unarmored Defense",
+        "level": 1,
+        "summary": "When not wearing armor, AC can use Dexterity and Constitution modifiers.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "bard",
+    "name": "Bard",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "caster"],
+    "hitDie": 8,
+    "primaryAbilities": ["charisma"],
+    "savingThrows": ["dexterity", "charisma"],
+    "proficiencies": ["Light armor", "Simple weapons", "Hand crossbows", "Longswords", "Rapiers", "Shortswords", "Musical instruments"],
+    "spellcastingAbility": "charisma",
+    "skillChoices": {
+      "choose": 3,
+      "from": [
+        "acrobatics",
+        "animalHandling",
+        "arcana",
+        "athletics",
+        "deception",
+        "history",
+        "insight",
+        "intimidation",
+        "investigation",
+        "medicine",
+        "nature",
+        "perception",
+        "performance",
+        "persuasion",
+        "religion",
+        "sleightOfHand",
+        "stealth",
+        "survival"
+      ]
+    },
+    "startingEquipment": {
+      "base": ["Leather armor", "Dagger"],
+      "choices": [
+        { "label": "Weapon", "options": ["Rapier", "Longsword", "Any simple weapon"] },
+        { "label": "Pack", "options": ["Diplomat's pack", "Entertainer's pack"] },
+        { "label": "Instrument", "options": ["Lute", "Any musical instrument"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "bard-spellcasting",
+        "name": "Spellcasting",
+        "level": 1,
+        "summary": "Cast bard spells using Charisma.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      },
+      {
+        "id": "bard-bardic-inspiration",
+        "name": "Bardic Inspiration",
+        "level": 1,
+        "summary": "Use bonus action to inspire another creature with a die.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "cleric",
+    "name": "Cleric",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "caster"],
+    "hitDie": 8,
+    "primaryAbilities": ["wisdom"],
+    "savingThrows": ["wisdom", "charisma"],
+    "proficiencies": ["Light armor", "Medium armor", "Shields", "Simple weapons"],
+    "spellcastingAbility": "wisdom",
+    "skillChoices": { "choose": 2, "from": ["history", "insight", "medicine", "persuasion", "religion"] },
+    "startingEquipment": {
+      "base": ["Shield", "Holy symbol"],
+      "choices": [
+        { "label": "Weapon", "options": ["Mace", "Warhammer if proficient"] },
+        { "label": "Armor", "options": ["Scale mail", "Leather armor", "Chain mail if proficient"] },
+        { "label": "Pack", "options": ["Priest's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "cleric-spellcasting",
+        "name": "Spellcasting",
+        "level": 1,
+        "summary": "Prepare and cast cleric spells using Wisdom.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      },
+      {
+        "id": "cleric-divine-domain",
+        "name": "Divine Domain",
+        "level": 1,
+        "summary": "Choose a divine domain that grants features and spells.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "druid",
+    "name": "Druid",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "caster"],
+    "hitDie": 8,
+    "primaryAbilities": ["wisdom"],
+    "savingThrows": ["intelligence", "wisdom"],
+    "proficiencies": [
+      "Light armor",
+      "Medium armor",
+      "Shields",
+      "Clubs",
+      "Daggers",
+      "Darts",
+      "Javelins",
+      "Maces",
+      "Quarterstaffs",
+      "Scimitars",
+      "Sickles",
+      "Slings",
+      "Spears",
+      "Herbalism kit"
+    ],
+    "spellcastingAbility": "wisdom",
+    "skillChoices": {
+      "choose": 2,
+      "from": ["arcana", "animalHandling", "insight", "medicine", "nature", "perception", "religion", "survival"]
+    },
+    "startingEquipment": {
+      "base": ["Leather armor", "Explorer's pack", "Druidic focus"],
+      "choices": [
+        { "label": "Shield or weapon", "options": ["Wooden shield", "Any simple weapon"] },
+        { "label": "Weapon", "options": ["Scimitar", "Any simple melee weapon"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "druid-druidic",
+        "name": "Druidic",
+        "level": 1,
+        "summary": "Know the secret language of druids.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "druid-spellcasting",
+        "name": "Spellcasting",
+        "level": 1,
+        "summary": "Prepare and cast druid spells using Wisdom.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      }
+    ]
+  },
+  {
+    "id": "fighter",
+    "name": "Fighter",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "martial"],
+    "hitDie": 10,
+    "primaryAbilities": ["strength", "dexterity", "constitution"],
+    "savingThrows": ["strength", "constitution"],
+    "proficiencies": ["All armor", "Shields", "Simple weapons", "Martial weapons"],
+    "skillChoices": {
+      "choose": 2,
+      "from": ["acrobatics", "animalHandling", "athletics", "history", "insight", "intimidation", "perception", "survival"]
+    },
+    "startingEquipment": {
+      "base": [],
+      "choices": [
+        { "label": "Armor", "options": ["Chain mail", "Leather armor, longbow, and 20 arrows"] },
+        { "label": "Weapon set", "options": ["Martial weapon and shield", "Two martial weapons"] },
+        { "label": "Ranged option", "options": ["Light crossbow and 20 bolts", "Two handaxes"] },
+        { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "fighter-fighting-style",
+        "name": "Fighting Style",
+        "level": 1,
+        "summary": "Adopt a particular style of fighting as your specialty.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "fighter-second-wind",
+        "name": "Second Wind",
+        "level": 1,
+        "summary": "Use a bonus action to regain hit points once per rest.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "bonus-action"]
+      }
+    ]
+  },
+  {
+    "id": "monk",
+    "name": "Monk",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "martial"],
+    "hitDie": 8,
+    "primaryAbilities": ["dexterity", "wisdom"],
+    "savingThrows": ["strength", "dexterity"],
+    "proficiencies": ["Simple weapons", "Shortswords", "Artisan's tools or musical instrument"],
+    "skillChoices": { "choose": 2, "from": ["acrobatics", "athletics", "history", "insight", "religion", "stealth"] },
+    "startingEquipment": {
+      "base": ["10 darts"],
+      "choices": [
+        { "label": "Weapon", "options": ["Shortsword", "Any simple weapon"] },
+        { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "monk-unarmored-defense",
+        "name": "Unarmored Defense",
+        "level": 1,
+        "summary": "When not wearing armor or shield, AC can use Dexterity and Wisdom modifiers.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "monk-martial-arts",
+        "name": "Martial Arts",
+        "level": 1,
+        "summary": "Use Dexterity and special damage rules with monk weapons and unarmed strikes.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "paladin",
+    "name": "Paladin",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "half-caster"],
+    "hitDie": 10,
+    "primaryAbilities": ["strength", "charisma"],
+    "savingThrows": ["wisdom", "charisma"],
+    "proficiencies": ["All armor", "Shields", "Simple weapons", "Martial weapons"],
+    "spellcastingAbility": "charisma",
+    "skillChoices": { "choose": 2, "from": ["athletics", "insight", "intimidation", "medicine", "persuasion", "religion"] },
+    "startingEquipment": {
+      "base": ["Chain mail", "Holy symbol"],
+      "choices": [
+        { "label": "Weapon set", "options": ["Martial weapon and shield", "Two martial weapons"] },
+        { "label": "Secondary weapon", "options": ["Five javelins", "Any simple melee weapon"] },
+        { "label": "Pack", "options": ["Priest's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "paladin-divine-sense",
+        "name": "Divine Sense",
+        "level": 1,
+        "summary": "Sense certain celestial, fiend, undead, consecrated, or desecrated presences.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "paladin-lay-on-hands",
+        "name": "Lay on Hands",
+        "level": 1,
+        "summary": "Use a healing pool equal to paladin level times 5.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "healing"]
+      }
+    ]
+  },
+  {
+    "id": "ranger",
+    "name": "Ranger",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "half-caster"],
+    "hitDie": 10,
+    "primaryAbilities": ["dexterity", "wisdom"],
+    "savingThrows": ["strength", "dexterity"],
+    "proficiencies": ["Light armor", "Medium armor", "Shields", "Simple weapons", "Martial weapons"],
+    "spellcastingAbility": "wisdom",
+    "skillChoices": {
+      "choose": 3,
+      "from": ["animalHandling", "athletics", "insight", "investigation", "nature", "perception", "stealth", "survival"]
+    },
+    "startingEquipment": {
+      "base": ["Longbow and 20 arrows"],
+      "choices": [
+        { "label": "Armor", "options": ["Scale mail", "Leather armor"] },
+        { "label": "Weapons", "options": ["Two shortswords", "Two simple melee weapons"] },
+        { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "ranger-favored-enemy",
+        "name": "Favored Enemy",
+        "level": 1,
+        "summary": "Gain benefits for tracking and recalling information about chosen foes.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "ranger-natural-explorer",
+        "name": "Natural Explorer",
+        "level": 1,
+        "summary": "Gain exploration benefits in a favored terrain.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "rogue",
+    "name": "Rogue",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "martial"],
+    "hitDie": 8,
+    "primaryAbilities": ["dexterity"],
+    "savingThrows": ["dexterity", "intelligence"],
+    "proficiencies": ["Light armor", "Simple weapons", "Hand crossbows", "Longswords", "Rapiers", "Shortswords", "Thieves' tools"],
+    "skillChoices": {
+      "choose": 4,
+      "from": [
+        "acrobatics",
+        "athletics",
+        "deception",
+        "insight",
+        "intimidation",
+        "investigation",
+        "perception",
+        "performance",
+        "persuasion",
+        "sleightOfHand",
+        "stealth"
+      ]
+    },
+    "startingEquipment": {
+      "base": ["Leather armor", "Two daggers", "Thieves' tools"],
+      "choices": [
+        { "label": "Melee weapon", "options": ["Rapier", "Shortsword"] },
+        { "label": "Ranged weapon", "options": ["Shortbow and 20 arrows", "Shortsword"] },
+        { "label": "Pack", "options": ["Burglar's pack", "Dungeoneer's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "rogue-expertise",
+        "name": "Expertise",
+        "level": 1,
+        "summary": "Double proficiency bonus for selected proficiencies.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "skill"]
+      },
+      {
+        "id": "rogue-sneak-attack",
+        "name": "Sneak Attack",
+        "level": 1,
+        "summary": "Deal extra damage once per turn when attack conditions are met.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "rogue-thieves-cant",
+        "name": "Thieves' Cant",
+        "level": 1,
+        "summary": "Know the secret mix of dialect, jargon, and code used by rogues.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "sorcerer",
+    "name": "Sorcerer",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "caster"],
+    "hitDie": 6,
+    "primaryAbilities": ["charisma"],
+    "savingThrows": ["constitution", "charisma"],
+    "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light crossbows"],
+    "spellcastingAbility": "charisma",
+    "skillChoices": { "choose": 2, "from": ["arcana", "deception", "insight", "intimidation", "persuasion", "religion"] },
+    "startingEquipment": {
+      "base": ["Two daggers"],
+      "choices": [
+        { "label": "Weapon", "options": ["Light crossbow and 20 bolts", "Any simple weapon"] },
+        { "label": "Focus or pouch", "options": ["Component pouch", "Arcane focus"] },
+        { "label": "Pack", "options": ["Dungeoneer's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "sorcerer-spellcasting",
+        "name": "Spellcasting",
+        "level": 1,
+        "summary": "Cast sorcerer spells using Charisma.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      },
+      {
+        "id": "sorcerer-sorcerous-origin",
+        "name": "Sorcerous Origin",
+        "level": 1,
+        "summary": "Choose the source of your innate magic.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      }
+    ]
+  },
+  {
+    "id": "warlock",
+    "name": "Warlock",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "caster"],
+    "hitDie": 8,
+    "primaryAbilities": ["charisma"],
+    "savingThrows": ["wisdom", "charisma"],
+    "proficiencies": ["Light armor", "Simple weapons"],
+    "spellcastingAbility": "charisma",
+    "skillChoices": { "choose": 2, "from": ["arcana", "deception", "history", "intimidation", "investigation", "nature", "religion"] },
+    "startingEquipment": {
+      "base": ["Leather armor", "Any simple weapon", "Two daggers"],
+      "choices": [
+        { "label": "Ranged or melee", "options": ["Light crossbow and 20 bolts", "Any simple weapon"] },
+        { "label": "Focus or pouch", "options": ["Component pouch", "Arcane focus"] },
+        { "label": "Pack", "options": ["Scholar's pack", "Dungeoneer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "warlock-otherworldly-patron",
+        "name": "Otherworldly Patron",
+        "level": 1,
+        "summary": "Choose the being that grants your magic.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature"]
+      },
+      {
+        "id": "warlock-pact-magic",
+        "name": "Pact Magic",
+        "level": 1,
+        "summary": "Cast warlock spells using Charisma and pact spell slots.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      }
+    ]
+  },
+  {
+    "id": "wizard",
+    "name": "Wizard",
+    "source": "srd-5.1",
+    "license": "ogl-1.0a",
+    "tags": ["class", "caster"],
+    "hitDie": 6,
+    "primaryAbilities": ["intelligence"],
+    "savingThrows": ["intelligence", "wisdom"],
+    "proficiencies": ["Daggers", "Darts", "Slings", "Quarterstaffs", "Light crossbows"],
+    "spellcastingAbility": "intelligence",
+    "skillChoices": { "choose": 2, "from": ["arcana", "history", "insight", "investigation", "medicine", "religion"] },
+    "startingEquipment": {
+      "base": ["Spellbook"],
+      "choices": [
+        { "label": "Weapon", "options": ["Quarterstaff", "Dagger"] },
+        { "label": "Focus or pouch", "options": ["Component pouch", "Arcane focus"] },
+        { "label": "Pack", "options": ["Scholar's pack", "Explorer's pack"] }
+      ]
+    },
+    "features": [
+      {
+        "id": "wizard-spellcasting",
+        "name": "Spellcasting",
+        "level": 1,
+        "summary": "Prepare and cast wizard spells using Intelligence.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      },
+      {
+        "id": "wizard-arcane-recovery",
+        "name": "Arcane Recovery",
+        "level": 1,
+        "summary": "Recover some expended spell slots once per day after a short rest.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["class-feature", "magic"]
+      }
+    ]
+  }
 ]

@@ -25,9 +25,7 @@
           "name": "Inventory",
           "startLine": 18,
           "endLine": 102,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -230,9 +228,7 @@
           "name": "Notes",
           "startLine": 14,
           "endLine": 38,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -305,9 +301,7 @@
           "name": "Proficiencies",
           "startLine": 14,
           "endLine": 40,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -400,9 +394,7 @@
           "name": "SkillItem",
           "startLine": 15,
           "endLine": 58,
-          "params": [
-            "{ label, value, skillKey, onChange }"
-          ]
+          "params": ["{ label, value, skillKey, onChange }"]
         }
       ],
       "exports": [
@@ -527,17 +519,13 @@
           "name": "normalizeSkills",
           "startLine": 35,
           "endLine": 56,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "Skills",
           "startLine": 58,
           "endLine": 87,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -630,9 +618,7 @@
           "name": "Spells",
           "startLine": 27,
           "endLine": 169,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -1045,9 +1031,7 @@
           "name": "Traits",
           "startLine": 15,
           "endLine": 64,
-          "params": [
-            "{ data }"
-          ]
+          "params": ["{ data }"]
         }
       ],
       "callGraph": [
@@ -1170,26 +1154,19 @@
           "name": "randInt",
           "startLine": 9,
           "endLine": 9,
-          "params": [
-            "min",
-            "max"
-          ]
+          "params": ["min", "max"]
         },
         {
           "name": "parseDice",
           "startLine": 11,
           "endLine": 16,
-          "params": [
-            "expr"
-          ]
+          "params": ["expr"]
         },
         {
           "name": "rollDice",
           "startLine": 18,
           "endLine": 24,
-          "params": [
-            "expr"
-          ]
+          "params": ["expr"]
         },
         {
           "name": "Weapons",
@@ -1748,9 +1725,7 @@
           "name": "getStyles",
           "startLine": 5,
           "endLine": 34,
-          "params": [
-            "c"
-          ]
+          "params": ["c"]
         }
       ],
       "exports": [
@@ -1923,9 +1898,7 @@
           "name": "Modal",
           "startLine": 18,
           "endLine": 59,
-          "params": [
-            "{ title, subtitle, onSubmit, onClose, scrollToTopSignal = 0, children, isVisible }"
-          ]
+          "params": ["{ title, subtitle, onSubmit, onClose, scrollToTopSignal = 0, children, isVisible }"]
         }
       ],
       "exports": [
@@ -1995,9 +1968,7 @@
           "name": "RollResultModal",
           "startLine": 21,
           "endLine": 73,
-          "params": [
-            "{ isVisible, onClose, roll }"
-          ]
+          "params": ["{ isVisible, onClose, roll }"]
         }
       ],
       "exports": [
@@ -2205,9 +2176,7 @@
           "name": "TextInput",
           "startLine": 24,
           "endLine": 33,
-          "params": [
-            "{ style, unstyled = false, ...rest }"
-          ]
+          "params": ["{ style, unstyled = false, ...rest }"]
         }
       ],
       "callGraph": [
@@ -2333,9 +2302,7 @@
           "name": "getLevelByExperience",
           "startLine": 29,
           "endLine": 36,
-          "params": [
-            "exp"
-          ]
+          "params": ["exp"]
         }
       ],
       "exports": [

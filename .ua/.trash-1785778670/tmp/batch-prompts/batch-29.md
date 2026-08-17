@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-29.json` (single-file mode) OR `batch-29-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp": [],
@@ -38,11 +39,13 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {}
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `android/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp` (2 lines, language: `webp`, fileCategory: `code`)
 2. `android/app/src/main/res/mipmap-xhdpi/ic_launcher.webp` (3 lines, language: `webp`, fileCategory: `code`)
 3. `android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.webp` (6 lines, language: `webp`, fileCategory: `code`)

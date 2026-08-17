@@ -1,18 +1,18 @@
 {
   "projectRoot": "/home/vindener/Files/Projects/DnDCharacter",
   "batchFiles": [
-    {"path": "src/data/srd/abilities.json", "language": "json", "sizeLines": 9, "fileCategory": "config"},
-    {"path": "src/data/srd/backgrounds.json", "language": "json", "sizeLines": 23, "fileCategory": "config"},
-    {"path": "src/data/srd/classProgression.json", "language": "json", "sizeLines": 19, "fileCategory": "config"},
-    {"path": "src/data/srd/classes.json", "language": "json", "sizeLines": 14, "fileCategory": "config"},
-    {"path": "src/data/srd/conditions.json", "language": "json", "sizeLines": 17, "fileCategory": "config"},
-    {"path": "src/data/srd/equipment.json", "language": "json", "sizeLines": 25, "fileCategory": "config"},
-    {"path": "src/data/srd/languages.json", "language": "json", "sizeLines": 19, "fileCategory": "config"},
-    {"path": "src/data/srd/monsters.json", "language": "json", "sizeLines": 20059, "fileCategory": "config"},
-    {"path": "src/data/srd/races.json", "language": "json", "sizeLines": 154, "fileCategory": "config"},
-    {"path": "src/data/srd/references.json", "language": "json", "sizeLines": 128, "fileCategory": "config"},
-    {"path": "src/data/srd/skills.json", "language": "json", "sizeLines": 21, "fileCategory": "config"},
-    {"path": "src/data/srd/spells.json", "language": "json", "sizeLines": 10031, "fileCategory": "config"}
+    { "path": "src/data/srd/abilities.json", "language": "json", "sizeLines": 9, "fileCategory": "config" },
+    { "path": "src/data/srd/backgrounds.json", "language": "json", "sizeLines": 23, "fileCategory": "config" },
+    { "path": "src/data/srd/classProgression.json", "language": "json", "sizeLines": 19, "fileCategory": "config" },
+    { "path": "src/data/srd/classes.json", "language": "json", "sizeLines": 14, "fileCategory": "config" },
+    { "path": "src/data/srd/conditions.json", "language": "json", "sizeLines": 17, "fileCategory": "config" },
+    { "path": "src/data/srd/equipment.json", "language": "json", "sizeLines": 25, "fileCategory": "config" },
+    { "path": "src/data/srd/languages.json", "language": "json", "sizeLines": 19, "fileCategory": "config" },
+    { "path": "src/data/srd/monsters.json", "language": "json", "sizeLines": 20059, "fileCategory": "config" },
+    { "path": "src/data/srd/races.json", "language": "json", "sizeLines": 154, "fileCategory": "config" },
+    { "path": "src/data/srd/references.json", "language": "json", "sizeLines": 128, "fileCategory": "config" },
+    { "path": "src/data/srd/skills.json", "language": "json", "sizeLines": 21, "fileCategory": "config" },
+    { "path": "src/data/srd/spells.json", "language": "json", "sizeLines": 10031, "fileCategory": "config" }
   ],
   "batchImportData": {
     "src/data/srd/abilities.json": [],

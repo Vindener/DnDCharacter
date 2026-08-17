@@ -120,24 +120,29 @@ export function computeAC(stats: Partial<Stats> | undefined, cls: string): numbe
 export function getHitDieForClass(cls: string): number {
   const c = (cls || '').toLowerCase();
   switch (c) {
-    case 'barbarian': return 12;
+    case 'barbarian':
+      return 12;
     case 'fighter':
     case 'paladin':
-    case 'ranger': return 10;
+    case 'ranger':
+      return 10;
     case 'bard':
     case 'cleric':
     case 'druid':
     case 'monk':
     case 'rogue':
     case 'warlock':
-    case 'artificer': return 8;
+    case 'artificer':
+      return 8;
     case 'wizard':
-    case 'sorcerer': return 6;
-    default: return 8;
+    case 'sorcerer':
+      return 6;
+    default:
+      return 8;
   }
 }
 
-export function computeHP(level: number, cls: string, conScore: number): { max: number, current: number, temp: number, hitDice: string } {
+export function computeHP(level: number, cls: string, conScore: number): { max: number; current: number; temp: number; hitDice: string } {
   const hitDie = getHitDieForClass(cls);
   const conMod = abilityMod(conScore ?? 10);
   let max = hitDie + conMod;

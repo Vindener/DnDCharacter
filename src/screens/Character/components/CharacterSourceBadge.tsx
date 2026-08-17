@@ -14,10 +14,7 @@ type CharacterSourceBadgeProps = {
   };
 };
 
-export function getCharacterSourceBadgeLabel(
-  source: CharacterContentSourceRef | undefined,
-  t: (key: string) => string,
-): string | null {
+export function getCharacterSourceBadgeLabel(source: CharacterContentSourceRef | undefined, t: (key: string) => string): string | null {
   if (!source) return null;
   if (isBuiltInRulesSource(source.origin) || isBuiltInRulesSource(source.source)) return null;
   if (source.origin === 'homebrew' || source.source === 'homebrew') return t('badges.homebrew');

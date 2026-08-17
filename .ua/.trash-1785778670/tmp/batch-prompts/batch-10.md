@@ -7,6 +7,7 @@ Skill directory (for bundled scripts): /home/vindener/.config/Claude/local-agent
 Output: write to `/home/vindener/Files/Projects/DnDCharacter/.ua/intermediate/batch-10.json` (single-file mode) OR `batch-10-part-<k>.json` (split mode, per Step B of your output protocol).
 
 Pre-resolved import data for this batch (use directly — do NOT re-resolve imports from source):
+
 ```json
 {
   "src/context/CustomCoins-store.ts": [],
@@ -48,14 +49,8 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/i18n/locales/uk/whatsNew.json"
   ],
   "src/i18n/languageStorage.ts": [],
-  "src/i18n/types.ts": [
-    "src/i18n/index.ts",
-    "src/i18n/languageStorage.ts"
-  ],
-  "src/screens/References/References.test.tsx": [
-    "src/i18n/index.ts",
-    "src/screens/References/References.tsx"
-  ],
+  "src/i18n/types.ts": ["src/i18n/index.ts", "src/i18n/languageStorage.ts"],
+  "src/screens/References/References.test.tsx": ["src/i18n/index.ts", "src/screens/References/References.tsx"],
   "src/screens/References/References.tsx": [
     "src/context/Theme-store.ts",
     "src/domain/srd/srdRepository.ts",
@@ -83,13 +78,8 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/components/Firebase/Auth.tsx",
     "src/shared/services/fileSerice.ts"
   ],
-  "src/screens/Settings/styles.ts": [
-    "src/shared/styles/theme.ts",
-    "src/shared/styles/tokens.ts"
-  ],
-  "src/services/accountDeletion.test.ts": [
-    "src/services/accountDeletion.ts"
-  ],
+  "src/screens/Settings/styles.ts": ["src/shared/styles/theme.ts", "src/shared/styles/tokens.ts"],
+  "src/services/accountDeletion.test.ts": ["src/services/accountDeletion.ts"],
   "src/services/accountDeletion.ts": [
     "src/repositories/characterCloudRepository.ts",
     "src/services/accountDeletionCascade.ts",
@@ -97,9 +87,7 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/shared/services/auth/index.ts",
     "src/shared/services/telemetry/productTelemetry.ts"
   ],
-  "src/services/accountDeletionCascade.test.ts": [
-    "src/services/accountDeletionCascade.ts"
-  ],
+  "src/services/accountDeletionCascade.test.ts": ["src/services/accountDeletionCascade.ts"],
   "src/services/accountDeletionCascade.ts": [],
   "src/services/storeEffects/characterStoreEffects.ts": [
     "src/domain/schemas/index.ts",
@@ -111,30 +99,22 @@ Pre-resolved import data for this batch (use directly — do NOT re-resolve impo
     "src/stores/characterStore.ts",
     "src/stores/syncStore.ts"
   ],
-  "src/services/storeEffects/syncStoreEffects.ts": [
-    "src/services/characterSyncCoordinator.ts",
-    "src/stores/syncStore.ts"
-  ],
+  "src/services/storeEffects/syncStoreEffects.ts": ["src/services/characterSyncCoordinator.ts", "src/stores/syncStore.ts"],
   "src/shared/components/Firebase/Auth.tsx": [
     "src/context/Theme-store.ts",
     "src/screens/Settings/styles.ts",
     "src/services/users.ts",
     "src/shared/services/auth/index.ts"
   ],
-  "src/shared/services/auth/google.ts": [
-    "src/i18n/index.ts",
-    "src/shared/services/toast/index.ts"
-  ],
+  "src/shared/services/auth/google.ts": ["src/i18n/index.ts", "src/shared/services/toast/index.ts"],
   "src/shared/services/auth/index.ts": [],
   "src/shared/services/toast/index.ts": [],
-  "src/stores/syncStore.ts": [
-    "src/services/storeEffects/syncStoreEffects.ts",
-    "src/types/Sync.ts"
-  ]
+  "src/stores/syncStore.ts": ["src/services/storeEffects/syncStoreEffects.ts", "src/types/Sync.ts"]
 }
 ```
 
 Cross-batch neighbors with their exported symbols (confidence boost for cross-batch edges):
+
 ```json
 {
   "src/context/CustomCoins-store.ts": [
@@ -318,9 +298,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "App.tsx",
       "batchIndex": 14,
-      "symbols": [
-        "App"
-      ]
+      "symbols": ["App"]
     },
     {
       "path": "src/services/characterSyncCoordinator.ts",
@@ -341,18 +319,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/components/ErrorBoundary/ErrorBoundary.tsx",
       "batchIndex": 14,
-      "symbols": [
-        "ErrorBoundary"
-      ]
+      "symbols": ["ErrorBoundary"]
     }
   ],
   "src/screens/References/References.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/domain/srd/srdRepository.ts",
@@ -384,48 +358,36 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/ReferencesNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "ReferencesNavigator"
-      ]
+      "symbols": ["ReferencesNavigator"]
     },
     {
       "path": "src/screens/References/styles.ts",
       "batchIndex": 7,
-      "symbols": [
-        "getStyles"
-      ]
+      "symbols": ["getStyles"]
     }
   ],
   "src/screens/Settings/DeleteAccountModal.tsx": [
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     }
   ],
   "src/screens/Settings/Settings.tsx": [
     {
       "path": "src/context/DmSettings-store.ts",
       "batchIndex": 1,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Monster-store.ts",
       "batchIndex": 2,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/dm/domain/types/index.ts",
@@ -452,9 +414,7 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/navigation/TabNavigator.tsx",
       "batchIndex": 2,
-      "symbols": [
-        "TabNavigator"
-      ]
+      "symbols": ["TabNavigator"]
     },
     {
       "path": "src/shared/services/fileSerice.ts",
@@ -466,24 +426,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/shared/styles/theme.ts",
       "batchIndex": 8,
-      "symbols": [
-        "darkColors",
-        "lightColors"
-      ]
+      "symbols": ["darkColors", "lightColors"]
     },
     {
       "path": "src/shared/styles/tokens.ts",
       "batchIndex": 8,
-      "symbols": [
-        "space",
-        "radius",
-        "fontSize",
-        "typography",
-        "designTokens",
-        "sp",
-        "rd",
-        "fs"
-      ]
+      "symbols": ["space", "radius", "fontSize", "typography", "designTokens", "sp", "rd", "fs"]
     }
   ],
   "src/services/accountDeletion.ts": [
@@ -519,26 +467,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/services/firebase.ts",
       "batchIndex": 3,
-      "symbols": [
-        "fbAuth",
-        "db",
-        "fns",
-        "now",
-        "arrayUnion",
-        "deleteField",
-        "timestampToMillis",
-        "hasDoc"
-      ]
+      "symbols": ["fbAuth", "db", "fns", "now", "arrayUnion", "deleteField", "timestampToMillis", "hasDoc"]
     },
     {
       "path": "src/shared/services/telemetry/productTelemetry.ts",
       "batchIndex": 3,
-      "symbols": [
-        "setAnalyticsConsent",
-        "isAnalyticsConsentEnabled",
-        "trackProductEvent",
-        "getProductEvents"
-      ]
+      "symbols": ["setAnalyticsConsent", "isAnalyticsConsentEnabled", "trackProductEvent", "getProductEvents"]
     }
   ],
   "src/services/storeEffects/characterStoreEffects.ts": [
@@ -615,28 +549,17 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/repositories/characterLocalRepository.ts",
       "batchIndex": 5,
-      "symbols": [
-        "characterLocalRepository"
-      ]
+      "symbols": ["characterLocalRepository"]
     },
     {
       "path": "src/shared/services/telemetry/productTelemetry.ts",
       "batchIndex": 3,
-      "symbols": [
-        "setAnalyticsConsent",
-        "isAnalyticsConsentEnabled",
-        "trackProductEvent",
-        "getProductEvents"
-      ]
+      "symbols": ["setAnalyticsConsent", "isAnalyticsConsentEnabled", "trackProductEvent", "getProductEvents"]
     },
     {
       "path": "src/stores/characterStore.ts",
       "batchIndex": 13,
-      "symbols": [
-        "selectActiveCharacter",
-        "selectCharacterStoreActions",
-        "selectCharacterStoreBasics"
-      ]
+      "symbols": ["selectActiveCharacter", "selectCharacterStoreActions", "selectCharacterStoreBasics"]
     }
   ],
   "src/services/storeEffects/syncStoreEffects.ts": [
@@ -661,17 +584,12 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/context/Theme-store.ts",
       "batchIndex": 9,
-      "symbols": [
-        "default"
-      ]
+      "symbols": ["default"]
     },
     {
       "path": "src/services/users.ts",
       "batchIndex": 3,
-      "symbols": [
-        "ensureUserIndexOnLogin",
-        "findUserByEmail"
-      ]
+      "symbols": ["ensureUserIndexOnLogin", "findUserByEmail"]
     }
   ],
   "src/shared/services/auth/index.ts": [
@@ -718,18 +636,14 @@ Cross-batch neighbors with their exported symbols (confidence boost for cross-ba
     {
       "path": "src/types/Sync.ts",
       "batchIndex": 3,
-      "symbols": [
-        "CharacterSyncMap",
-        "CharacterSyncState",
-        "SyncStatus",
-        "SyncTransportState"
-      ]
+      "symbols": ["CharacterSyncMap", "CharacterSyncState", "SyncStatus", "SyncTransportState"]
     }
   ]
 }
 ```
 
 Files to analyze in this batch (every entry MUST be passed through to `batchFiles` with all four fields — `path`, `language`, `sizeLines`, `fileCategory`):
+
 1. `src/context/CustomCoins-store.ts` (1 lines, language: `typescript`, fileCategory: `code`)
 2. `src/i18n/index.ts` (169 lines, language: `typescript`, fileCategory: `code`)
 3. `src/i18n/languageStorage.ts` (25 lines, language: `typescript`, fileCategory: `code`)

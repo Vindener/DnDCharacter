@@ -461,105 +461,693 @@
     }
   ],
   "edges": [
-    {"source": "file:src/modules/Header/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/modules/Header/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Bestiary/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Bestiary/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Character/components/QuickActionBar.test.tsx", "target": "file:src/screens/Character/components/QuickActionBar.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Character/components/QuickActionBar.test.tsx", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Character/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Character/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/DMSharedUpdates.style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/DMSharedUpdates.style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/EncounterCalculator/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/EncounterCalculator/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx", "target": "file:src/screens/DM/LootGenerator/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/LootGenerator/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DM/LootGenerator/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Dice/styles.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Dice/styles.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DiceRoller/styles.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/DiceRoller/styles.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Home/styles.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Home/styles.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Initiative/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "file:src/shared/ui/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Monster/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Monster/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/References/styles.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/References/styles.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Spellbook/styles.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Spellbook/styles.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/uiStoreEffects.ts", "target": "file:src/shared/services/telemetry/productTelemetry.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/uiStoreEffects.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/storeEffects/uiStoreEffects.ts", "target": "file:src/stores/uiStore.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterCard/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterCard/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterMenu/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterMenu/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterOverview/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterOverview/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/style.ts", "target": "file:src/shared/styles/theme.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/components/CharacterStats/style.ts", "target": "file:src/shared/styles/tokens.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/modules/Header/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/modules/Header/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Bestiary/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Bestiary/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/components/QuickActionBar.test.tsx",
+      "target": "file:src/screens/Character/components/QuickActionBar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/components/QuickActionBar.test.tsx",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Character/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMSharedUpdates.style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/DMSharedUpdates.style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/EncounterCalculator/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/EncounterCalculator/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "target": "file:src/screens/DM/LootGenerator/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Dice/styles.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Dice/styles.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DiceRoller/styles.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/DiceRoller/styles.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Home/styles.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Home/styles.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Initiative/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "file:src/shared/ui/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Monster/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Monster/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/References/styles.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/References/styles.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Spellbook/styles.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Spellbook/styles.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/uiStoreEffects.ts",
+      "target": "file:src/shared/services/telemetry/productTelemetry.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/uiStoreEffects.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/storeEffects/uiStoreEffects.ts",
+      "target": "file:src/stores/uiStore.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterCard/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterCard/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterMenu/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterMenu/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterOverview/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterOverview/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/style.ts",
+      "target": "file:src/shared/styles/theme.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/style.ts",
+      "target": "file:src/shared/styles/tokens.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/modules/Header/style.ts", "target": "function:src/modules/Header/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Bestiary/style.ts", "target": "function:src/screens/Bestiary/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Character/style.ts", "target": "function:src/screens/Character/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/style.ts", "target": "function:src/screens/CreateCharacter/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/DM/DMSharedUpdates.style.ts", "target": "function:src/screens/DM/DMSharedUpdates.style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/DM/EncounterCalculator/style.ts", "target": "function:src/screens/DM/EncounterCalculator/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx", "target": "function:src/screens/DM/LootGenerator/LootGenerator.tsx:LootGenerator", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/DM/LootGenerator/style.ts", "target": "function:src/screens/DM/LootGenerator/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Dice/styles.ts", "target": "function:src/screens/Dice/styles.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/DiceRoller/styles.ts", "target": "function:src/screens/DiceRoller/styles.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Home/styles.ts", "target": "function:src/screens/Home/styles.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Initiative/style.ts", "target": "function:src/screens/Initiative/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "function:src/screens/LegalLicenses/LegalLicenses.tsx:LegalLicenses", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "function:src/screens/LegalLicenses/LegalLicenses.tsx:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Monster/style.ts", "target": "function:src/screens/Monster/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/References/styles.ts", "target": "function:src/screens/References/styles.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/Spellbook/styles.ts", "target": "function:src/screens/Spellbook/styles.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/services/storeEffects/uiStoreEffects.ts", "target": "function:src/services/storeEffects/uiStoreEffects.ts:createUiStoreEffects", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterCard/style.ts", "target": "function:src/shared/components/CharacterCard/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterMenu/style.ts", "target": "function:src/shared/components/CharacterMenu/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterOverview/style.ts", "target": "function:src/shared/components/CharacterOverview/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/components/CharacterStats/style.ts", "target": "function:src/shared/components/CharacterStats/style.ts:getStyles", "type": "contains", "direction": "forward", "weight": 1.0},
+    {
+      "source": "file:src/modules/Header/style.ts",
+      "target": "function:src/modules/Header/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Bestiary/style.ts",
+      "target": "function:src/screens/Bestiary/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Character/style.ts",
+      "target": "function:src/screens/Character/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/style.ts",
+      "target": "function:src/screens/CreateCharacter/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/DM/DMSharedUpdates.style.ts",
+      "target": "function:src/screens/DM/DMSharedUpdates.style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/DM/EncounterCalculator/style.ts",
+      "target": "function:src/screens/DM/EncounterCalculator/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "target": "function:src/screens/DM/LootGenerator/LootGenerator.tsx:LootGenerator",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/style.ts",
+      "target": "function:src/screens/DM/LootGenerator/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Dice/styles.ts",
+      "target": "function:src/screens/Dice/styles.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/DiceRoller/styles.ts",
+      "target": "function:src/screens/DiceRoller/styles.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Home/styles.ts",
+      "target": "function:src/screens/Home/styles.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Initiative/style.ts",
+      "target": "function:src/screens/Initiative/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "function:src/screens/LegalLicenses/LegalLicenses.tsx:LegalLicenses",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "function:src/screens/LegalLicenses/LegalLicenses.tsx:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Monster/style.ts",
+      "target": "function:src/screens/Monster/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/References/styles.ts",
+      "target": "function:src/screens/References/styles.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/Spellbook/styles.ts",
+      "target": "function:src/screens/Spellbook/styles.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/services/storeEffects/uiStoreEffects.ts",
+      "target": "function:src/services/storeEffects/uiStoreEffects.ts:createUiStoreEffects",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterCard/style.ts",
+      "target": "function:src/shared/components/CharacterCard/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterMenu/style.ts",
+      "target": "function:src/shared/components/CharacterMenu/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterOverview/style.ts",
+      "target": "function:src/shared/components/CharacterOverview/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/style.ts",
+      "target": "function:src/shared/components/CharacterStats/style.ts:getStyles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    {"source": "file:src/modules/Header/style.ts", "target": "function:src/modules/Header/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Bestiary/style.ts", "target": "function:src/screens/Bestiary/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Character/style.ts", "target": "function:src/screens/Character/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/style.ts", "target": "function:src/screens/CreateCharacter/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/DM/DMSharedUpdates.style.ts", "target": "function:src/screens/DM/DMSharedUpdates.style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/DM/EncounterCalculator/style.ts", "target": "function:src/screens/DM/EncounterCalculator/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx", "target": "function:src/screens/DM/LootGenerator/LootGenerator.tsx:LootGenerator", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/DM/LootGenerator/style.ts", "target": "function:src/screens/DM/LootGenerator/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Dice/styles.ts", "target": "function:src/screens/Dice/styles.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/DiceRoller/styles.ts", "target": "function:src/screens/DiceRoller/styles.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Home/styles.ts", "target": "function:src/screens/Home/styles.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Initiative/style.ts", "target": "function:src/screens/Initiative/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/LegalLicenses/LegalLicenses.tsx", "target": "function:src/screens/LegalLicenses/LegalLicenses.tsx:LegalLicenses", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Monster/style.ts", "target": "function:src/screens/Monster/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/References/styles.ts", "target": "function:src/screens/References/styles.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/Spellbook/styles.ts", "target": "function:src/screens/Spellbook/styles.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/services/storeEffects/uiStoreEffects.ts", "target": "function:src/services/storeEffects/uiStoreEffects.ts:createUiStoreEffects", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterCard/style.ts", "target": "function:src/shared/components/CharacterCard/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterMenu/style.ts", "target": "function:src/shared/components/CharacterMenu/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterOverview/style.ts", "target": "function:src/shared/components/CharacterOverview/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts", "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/components/CharacterStats/style.ts", "target": "function:src/shared/components/CharacterStats/style.ts:getStyles", "type": "exports", "direction": "forward", "weight": 0.8}
+    {
+      "source": "file:src/modules/Header/style.ts",
+      "target": "function:src/modules/Header/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Bestiary/style.ts",
+      "target": "function:src/screens/Bestiary/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Character/style.ts",
+      "target": "function:src/screens/Character/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/style.ts",
+      "target": "function:src/screens/CreateCharacter/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/DM/DMSharedUpdates.style.ts",
+      "target": "function:src/screens/DM/DMSharedUpdates.style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/DM/EncounterCalculator/style.ts",
+      "target": "function:src/screens/DM/EncounterCalculator/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/LootGenerator.tsx",
+      "target": "function:src/screens/DM/LootGenerator/LootGenerator.tsx:LootGenerator",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/DM/LootGenerator/style.ts",
+      "target": "function:src/screens/DM/LootGenerator/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Dice/styles.ts",
+      "target": "function:src/screens/Dice/styles.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/DiceRoller/styles.ts",
+      "target": "function:src/screens/DiceRoller/styles.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Home/styles.ts",
+      "target": "function:src/screens/Home/styles.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Initiative/style.ts",
+      "target": "function:src/screens/Initiative/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/LegalLicenses/LegalLicenses.tsx",
+      "target": "function:src/screens/LegalLicenses/LegalLicenses.tsx:LegalLicenses",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Monster/style.ts",
+      "target": "function:src/screens/Monster/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/References/styles.ts",
+      "target": "function:src/screens/References/styles.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/Spellbook/styles.ts",
+      "target": "function:src/screens/Spellbook/styles.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/services/storeEffects/uiStoreEffects.ts",
+      "target": "function:src/services/storeEffects/uiStoreEffects.ts:createUiStoreEffects",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterCard/style.ts",
+      "target": "function:src/shared/components/CharacterCard/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterMenu/style.ts",
+      "target": "function:src/shared/components/CharacterMenu/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterOverview/style.ts",
+      "target": "function:src/shared/components/CharacterOverview/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Attributes/AttributeItem/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts",
+      "target": "function:src/shared/components/CharacterStats/Tabs/Skills/SkillItem/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/components/CharacterStats/style.ts",
+      "target": "function:src/shared/components/CharacterStats/style.ts:getStyles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
   ]
 }

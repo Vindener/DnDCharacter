@@ -1,6 +1,7 @@
 # 5e Product Guidelines
 
 ## Core 5e Loop
+
 The GM describes the situation.
 Players describe actions.
 The GM resolves consequences.
@@ -8,6 +9,7 @@ The GM resolves consequences.
 The UI should help users act quickly during that loop.
 
 ## Dice
+
 - d20 is used for ability checks, saving throws, and attack rolls.
 - Roll result = d20 + ability modifier + proficiency if applicable.
 - Advantage = roll two d20 and use the higher.
@@ -16,7 +18,9 @@ The UI should help users act quickly during that loop.
 - Critical success/failure should be based on natural d20 results, not the total.
 
 ## Character Sheet
+
 Prioritize:
+
 - HP;
 - Temp HP;
 - AC;
@@ -35,7 +39,9 @@ Play Mode should support fast in-session actions.
 Edit Mode should contain full configuration and longer forms.
 
 ## Create Character
+
 Recommended flow:
+
 1. Identity
 2. Race
 3. Class
@@ -51,7 +57,9 @@ Recommended flow:
 Background should affect mechanics where the app supports it, not remain only descriptive text.
 
 ## Spellbook
+
 Spell cards should preserve:
+
 - level;
 - school;
 - casting time;
@@ -66,7 +74,9 @@ Spell cards should preserve:
 Spellbook should support quick lookup during play and integration with Character Sheet magic workflows.
 
 ## Bestiary
+
 Monster cards should prioritize:
+
 - name;
 - type;
 - CR;

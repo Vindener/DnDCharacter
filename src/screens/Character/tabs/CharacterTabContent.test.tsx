@@ -6,34 +6,70 @@ import { CharacterTabContent } from './CharacterTabContent';
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock('./OverviewTab', () => ({
-  OverviewTab: ({ mode, renderPlay, renderEdit }: { mode: 'play' | 'edit'; renderPlay: () => React.ReactNode; renderEdit: () => React.ReactNode }) => (
-    <>{mode === 'play' ? renderPlay() : renderEdit()}</>
-  ),
+  OverviewTab: ({
+    mode,
+    renderPlay,
+    renderEdit,
+  }: {
+    mode: 'play' | 'edit';
+    renderPlay: () => React.ReactNode;
+    renderEdit: () => React.ReactNode;
+  }) => <>{mode === 'play' ? renderPlay() : renderEdit()}</>,
 }));
 vi.mock('./CombatTab', () => ({
-  CombatTab: ({ mode, renderPlay, renderEdit }: { mode: 'play' | 'edit'; renderPlay: () => React.ReactNode; renderEdit: () => React.ReactNode }) => (
-    <>{mode === 'play' ? renderPlay() : renderEdit()}</>
-  ),
+  CombatTab: ({
+    mode,
+    renderPlay,
+    renderEdit,
+  }: {
+    mode: 'play' | 'edit';
+    renderPlay: () => React.ReactNode;
+    renderEdit: () => React.ReactNode;
+  }) => <>{mode === 'play' ? renderPlay() : renderEdit()}</>,
 }));
 vi.mock('./MagicTab', () => ({
-  MagicTab: ({ mode, renderPlay, renderEdit }: { mode: 'play' | 'edit'; renderPlay: () => React.ReactNode; renderEdit: () => React.ReactNode }) => (
-    <>{mode === 'play' ? renderPlay() : renderEdit()}</>
-  ),
+  MagicTab: ({
+    mode,
+    renderPlay,
+    renderEdit,
+  }: {
+    mode: 'play' | 'edit';
+    renderPlay: () => React.ReactNode;
+    renderEdit: () => React.ReactNode;
+  }) => <>{mode === 'play' ? renderPlay() : renderEdit()}</>,
 }));
 vi.mock('./InventoryTab', () => ({
-  InventoryTab: ({ mode, renderPlay, renderEdit }: { mode: 'play' | 'edit'; renderPlay: () => React.ReactNode; renderEdit: () => React.ReactNode }) => (
-    <>{mode === 'play' ? renderPlay() : renderEdit()}</>
-  ),
+  InventoryTab: ({
+    mode,
+    renderPlay,
+    renderEdit,
+  }: {
+    mode: 'play' | 'edit';
+    renderPlay: () => React.ReactNode;
+    renderEdit: () => React.ReactNode;
+  }) => <>{mode === 'play' ? renderPlay() : renderEdit()}</>,
 }));
 vi.mock('./NotesTab', () => ({
-  NotesTab: ({ mode, renderPlay, renderEdit }: { mode: 'play' | 'edit'; renderPlay: () => React.ReactNode; renderEdit: () => React.ReactNode }) => (
-    <>{mode === 'play' ? renderPlay() : renderEdit()}</>
-  ),
+  NotesTab: ({
+    mode,
+    renderPlay,
+    renderEdit,
+  }: {
+    mode: 'play' | 'edit';
+    renderPlay: () => React.ReactNode;
+    renderEdit: () => React.ReactNode;
+  }) => <>{mode === 'play' ? renderPlay() : renderEdit()}</>,
 }));
 vi.mock('./HomebrewTab', () => ({
-  HomebrewTab: ({ mode, renderPlay, renderEdit }: { mode: 'play' | 'edit'; renderPlay: () => React.ReactNode; renderEdit: () => React.ReactNode }) => (
-    <>{mode === 'play' ? renderPlay() : renderEdit()}</>
-  ),
+  HomebrewTab: ({
+    mode,
+    renderPlay,
+    renderEdit,
+  }: {
+    mode: 'play' | 'edit';
+    renderPlay: () => React.ReactNode;
+    renderEdit: () => React.ReactNode;
+  }) => <>{mode === 'play' ? renderPlay() : renderEdit()}</>,
 }));
 
 function makeProps(overrides = {}) {

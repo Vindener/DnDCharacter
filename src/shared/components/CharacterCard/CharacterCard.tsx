@@ -62,7 +62,8 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
           {character.name} {isShared ? `· ${t('legacy.card.shared')}` : ''}
         </Text>
         <Text style={styles.meta}>
-          {t('legacy.card.level', { level: character.level || 1 })} <Text style={styles.separator}>|</Text> {character.race || t('legacy.card.raceFallback')}
+          {t('legacy.card.level', { level: character.level || 1 })} <Text style={styles.separator}>|</Text>{' '}
+          {character.race || t('legacy.card.raceFallback')}
         </Text>
         <Text style={styles.classText}>{character.class || t('legacy.card.classFallback')}</Text>
       </View>
@@ -72,6 +73,3 @@ export const CharacterCard = ({ character }: CharacterCardProps) => {
     </TouchableOpacity>
   );
 };
-
-
-

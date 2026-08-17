@@ -60,10 +60,14 @@ function toBoolean(value: unknown, fallback = false): boolean {
 
 function parseDelimitedStringArray(value: unknown): string[] {
   if (typeof value === 'string') {
-    return Array.from(new Set(value
-      .split(',')
-      .map((entry) => entry.trim())
-      .filter(Boolean)));
+    return Array.from(
+      new Set(
+        value
+          .split(',')
+          .map((entry) => entry.trim())
+          .filter(Boolean),
+      ),
+    );
   }
   return toStringArray(value, { dedupe: true });
 }
@@ -137,9 +141,7 @@ function parseDamageProfiles(raw: unknown): SpellDamageProfile[] {
   }
 
   if (!Array.isArray(raw)) return [];
-  return raw
-    .map((entry, index) => parseDamageProfile(entry, index))
-    .filter((entry): entry is SpellDamageProfile => Boolean(entry));
+  return raw.map((entry, index) => parseDamageProfile(entry, index)).filter((entry): entry is SpellDamageProfile => Boolean(entry));
 }
 
 function parseSpellbookSpell(raw: unknown, fallbackId?: string): SpellbookSpell {
@@ -201,12 +203,17 @@ function parseCharacterSpells(raw: unknown): CharacterEntity['spells'] {
 function parseUpsertSpellInput(raw: unknown): UpsertSpellbookSpellInput {
   const cast = asRecord(raw);
   const tagsRaw = cast.tags;
-  const parsedTags = typeof tagsRaw === 'string'
-    ? Array.from(new Set(tagsRaw
-        .split(',')
-        .map((entry) => entry.trim())
-        .filter(Boolean)))
-    : toStringArray(tagsRaw, { dedupe: true });
+  const parsedTags =
+    typeof tagsRaw === 'string'
+      ? Array.from(
+          new Set(
+            tagsRaw
+              .split(',')
+              .map((entry) => entry.trim())
+              .filter(Boolean),
+          ),
+        )
+      : toStringArray(tagsRaw, { dedupe: true });
 
   return {
     spellId: toTrimmedString(cast.spellId) || undefined,
@@ -230,9 +237,7 @@ function parseUpsertSpellInput(raw: unknown): UpsertSpellbookSpellInput {
       condition: profile.condition,
     })),
     source: cast.source === undefined ? undefined : normalizeSpellSource(cast.source),
-    license: cast.license === undefined
-      ? undefined
-      : normalizeSpellLicense(cast.license, normalizeSpellSource(cast.source)),
+    license: cast.license === undefined ? undefined : normalizeSpellLicense(cast.license, normalizeSpellSource(cast.source)),
   };
 }
 
@@ -260,7 +265,9 @@ export const spellDamageProfileSchema: z.ZodType<SpellDamageProfile> = z.any().t
 
 export const spellSchema: z.ZodType<SpellbookSpell> = z.any().transform((value) => parseSpellbookSpell(value));
 export const characterSpellsSchema: z.ZodType<CharacterEntity['spells']> = z.any().transform((value) => parseCharacterSpells(value));
-export const upsertSpellbookSpellInputSchema: z.ZodType<UpsertSpellbookSpellInput> = z.any().transform((value) => parseUpsertSpellInput(value));
+export const upsertSpellbookSpellInputSchema: z.ZodType<UpsertSpellbookSpellInput> = z
+  .any()
+  .transform((value) => parseUpsertSpellInput(value));
 
 export const spellFormSchema = z
   .any()

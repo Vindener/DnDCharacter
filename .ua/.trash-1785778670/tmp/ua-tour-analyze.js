@@ -68,11 +68,35 @@ const fanOutRanking = topN(fanOut, 20, 'fanOut');
 
 // ---- Entry point candidates ----
 const ENTRY_FILENAMES = new Set([
-  'index.ts', 'index.js', 'main.ts', 'main.js', 'app.ts', 'app.js',
-  'server.ts', 'server.js', 'mod.rs', 'main.go', 'main.py', 'main.rs',
-  'manage.py', 'app.py', 'wsgi.py', 'asgi.py', 'run.py', '__main__.py',
-  'Application.java', 'Main.java', 'Program.cs', 'config.ru', 'index.php',
-  'App.swift', 'Application.kt', 'main.cpp', 'main.c', 'App.tsx', 'App.jsx',
+  'index.ts',
+  'index.js',
+  'main.ts',
+  'main.js',
+  'app.ts',
+  'app.js',
+  'server.ts',
+  'server.js',
+  'mod.rs',
+  'main.go',
+  'main.py',
+  'main.rs',
+  'manage.py',
+  'app.py',
+  'wsgi.py',
+  'asgi.py',
+  'run.py',
+  '__main__.py',
+  'Application.java',
+  'Main.java',
+  'Program.cs',
+  'config.ru',
+  'index.php',
+  'App.swift',
+  'Application.kt',
+  'main.cpp',
+  'main.c',
+  'App.tsx',
+  'App.jsx',
 ]);
 
 // Compute fan-out top 10% threshold and fan-in bottom 25% threshold (over file-type nodes)
@@ -213,7 +237,7 @@ for (const e of edges) {
 
 const bidirectionalPairs = [];
 for (const e of edges) {
-  if ((e.type === 'imports' || e.type === 'calls')) {
+  if (e.type === 'imports' || e.type === 'calls') {
     const reverse = e.target + '->' + e.source;
     if (edgeSet.has(reverse) && e.source < e.target) {
       bidirectionalPairs.push([e.source, e.target]);

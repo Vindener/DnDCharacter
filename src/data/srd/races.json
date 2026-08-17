@@ -9,9 +9,30 @@
     "abilityScoreIncreases": { "strength": 2, "charisma": 1 },
     "languages": ["common", "draconic"],
     "traits": [
-      { "id": "dragonborn-draconic-ancestry", "name": "Draconic Ancestry", "summary": "Choose a dragon ancestry that determines breath weapon damage and resistance.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "dragonborn-breath-weapon", "name": "Breath Weapon", "summary": "Use an action to exhale destructive energy; damage scales at levels 6, 11, and 16.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "action"] },
-      { "id": "dragonborn-damage-resistance", "name": "Damage Resistance", "summary": "Gain resistance to the damage type tied to your draconic ancestry.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] }
+      {
+        "id": "dragonborn-draconic-ancestry",
+        "name": "Draconic Ancestry",
+        "summary": "Choose a dragon ancestry that determines breath weapon damage and resistance.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "dragonborn-breath-weapon",
+        "name": "Breath Weapon",
+        "summary": "Use an action to exhale destructive energy; damage scales at levels 6, 11, and 16.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait", "action"]
+      },
+      {
+        "id": "dragonborn-damage-resistance",
+        "name": "Damage Resistance",
+        "summary": "Gain resistance to the damage type tied to your draconic ancestry.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      }
     ],
     "subraces": []
   },
@@ -25,13 +46,68 @@
     "abilityScoreIncreases": { "constitution": 2 },
     "languages": ["common", "dwarvish"],
     "traits": [
-      { "id": "dwarf-darkvision", "name": "Darkvision", "summary": "See in dim light within 60 feet as bright light and darkness as dim light.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "dwarf-dwarven-resilience", "name": "Dwarven Resilience", "summary": "Advantage on saving throws against poison and resistance to poison damage.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "dwarf-dwarven-combat-training", "name": "Dwarven Combat Training", "summary": "Proficiency with battleaxe, handaxe, light hammer, and warhammer.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "proficiency"] }
+      {
+        "id": "dwarf-darkvision",
+        "name": "Darkvision",
+        "summary": "See in dim light within 60 feet as bright light and darkness as dim light.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "dwarf-dwarven-resilience",
+        "name": "Dwarven Resilience",
+        "summary": "Advantage on saving throws against poison and resistance to poison damage.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "dwarf-dwarven-combat-training",
+        "name": "Dwarven Combat Training",
+        "summary": "Proficiency with battleaxe, handaxe, light hammer, and warhammer.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait", "proficiency"]
+      }
     ],
     "subraces": [
-      { "id": "hill-dwarf", "name": "Hill Dwarf", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["subrace"], "abilityScoreIncreases": { "wisdom": 1 }, "traits": [{ "id": "hill-dwarf-dwarven-toughness", "name": "Dwarven Toughness", "summary": "Hit point maximum increases by 1 and by 1 again whenever you gain a level.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] }] },
-      { "id": "mountain-dwarf", "name": "Mountain Dwarf", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["subrace"], "abilityScoreIncreases": { "strength": 2 }, "traits": [{ "id": "mountain-dwarf-armor-training", "name": "Dwarven Armor Training", "summary": "Proficiency with light and medium armor.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "proficiency"] }] }
+      {
+        "id": "hill-dwarf",
+        "name": "Hill Dwarf",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["subrace"],
+        "abilityScoreIncreases": { "wisdom": 1 },
+        "traits": [
+          {
+            "id": "hill-dwarf-dwarven-toughness",
+            "name": "Dwarven Toughness",
+            "summary": "Hit point maximum increases by 1 and by 1 again whenever you gain a level.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait"]
+          }
+        ]
+      },
+      {
+        "id": "mountain-dwarf",
+        "name": "Mountain Dwarf",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["subrace"],
+        "abilityScoreIncreases": { "strength": 2 },
+        "traits": [
+          {
+            "id": "mountain-dwarf-armor-training",
+            "name": "Dwarven Armor Training",
+            "summary": "Proficiency with light and medium armor.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait", "proficiency"]
+          }
+        ]
+      }
     ]
   },
   {
@@ -44,13 +120,67 @@
     "abilityScoreIncreases": { "dexterity": 2 },
     "languages": ["common", "elvish"],
     "traits": [
-      { "id": "elf-darkvision", "name": "Darkvision", "summary": "See in dim light within 60 feet as bright light and darkness as dim light.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "elf-keen-senses", "name": "Keen Senses", "summary": "Gain proficiency in Perception.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "skill"] },
-      { "id": "elf-fey-ancestry", "name": "Fey Ancestry", "summary": "Advantage against being charmed, and magic cannot put you to sleep.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "elf-trance", "name": "Trance", "summary": "Meditate for 4 hours instead of sleeping for 8 hours.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] }
+      {
+        "id": "elf-darkvision",
+        "name": "Darkvision",
+        "summary": "See in dim light within 60 feet as bright light and darkness as dim light.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "elf-keen-senses",
+        "name": "Keen Senses",
+        "summary": "Gain proficiency in Perception.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait", "skill"]
+      },
+      {
+        "id": "elf-fey-ancestry",
+        "name": "Fey Ancestry",
+        "summary": "Advantage against being charmed, and magic cannot put you to sleep.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "elf-trance",
+        "name": "Trance",
+        "summary": "Meditate for 4 hours instead of sleeping for 8 hours.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      }
     ],
     "subraces": [
-      { "id": "high-elf", "name": "High Elf", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["subrace"], "abilityScoreIncreases": { "intelligence": 1 }, "languages": ["choice:1"], "traits": [{ "id": "high-elf-weapon-training", "name": "Elf Weapon Training", "summary": "Proficiency with longsword, shortsword, shortbow, and longbow.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "proficiency"] }, { "id": "high-elf-cantrip", "name": "Cantrip", "summary": "Know one wizard cantrip; Intelligence is the spellcasting ability for it.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "magic"] }] }
+      {
+        "id": "high-elf",
+        "name": "High Elf",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["subrace"],
+        "abilityScoreIncreases": { "intelligence": 1 },
+        "languages": ["choice:1"],
+        "traits": [
+          {
+            "id": "high-elf-weapon-training",
+            "name": "Elf Weapon Training",
+            "summary": "Proficiency with longsword, shortsword, shortbow, and longbow.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait", "proficiency"]
+          },
+          {
+            "id": "high-elf-cantrip",
+            "name": "Cantrip",
+            "summary": "Know one wizard cantrip; Intelligence is the spellcasting ability for it.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait", "magic"]
+          }
+        ]
+      }
     ]
   },
   {
@@ -63,11 +193,50 @@
     "abilityScoreIncreases": { "intelligence": 2 },
     "languages": ["common", "gnomish"],
     "traits": [
-      { "id": "gnome-darkvision", "name": "Darkvision", "summary": "See in dim light within 60 feet as bright light and darkness as dim light.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "gnome-cunning", "name": "Gnome Cunning", "summary": "Advantage on Intelligence, Wisdom, and Charisma saving throws against magic.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] }
+      {
+        "id": "gnome-darkvision",
+        "name": "Darkvision",
+        "summary": "See in dim light within 60 feet as bright light and darkness as dim light.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "gnome-cunning",
+        "name": "Gnome Cunning",
+        "summary": "Advantage on Intelligence, Wisdom, and Charisma saving throws against magic.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      }
     ],
     "subraces": [
-      { "id": "rock-gnome", "name": "Rock Gnome", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["subrace"], "abilityScoreIncreases": { "constitution": 1 }, "traits": [{ "id": "rock-gnome-artificers-lore", "name": "Artificer's Lore", "summary": "Double proficiency for certain History checks about magic items, alchemy, or technology.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "skill"] }, { "id": "rock-gnome-tinker", "name": "Tinker", "summary": "Use tinker tools and materials to create a small clockwork device.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "tool"] }] }
+      {
+        "id": "rock-gnome",
+        "name": "Rock Gnome",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["subrace"],
+        "abilityScoreIncreases": { "constitution": 1 },
+        "traits": [
+          {
+            "id": "rock-gnome-artificers-lore",
+            "name": "Artificer's Lore",
+            "summary": "Double proficiency for certain History checks about magic items, alchemy, or technology.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait", "skill"]
+          },
+          {
+            "id": "rock-gnome-tinker",
+            "name": "Tinker",
+            "summary": "Use tinker tools and materials to create a small clockwork device.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait", "tool"]
+          }
+        ]
+      }
     ]
   },
   {
@@ -81,9 +250,30 @@
     "flexibleAbilityScoreIncrease": { "count": 2, "amount": 1, "exclude": ["charisma"] },
     "languages": ["common", "elvish", "choice:1"],
     "traits": [
-      { "id": "half-elf-darkvision", "name": "Darkvision", "summary": "See in dim light within 60 feet as bright light and darkness as dim light.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "half-elf-fey-ancestry", "name": "Fey Ancestry", "summary": "Advantage against being charmed, and magic cannot put you to sleep.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "half-elf-skill-versatility", "name": "Skill Versatility", "summary": "Gain proficiency in two skills of your choice.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "skill"] }
+      {
+        "id": "half-elf-darkvision",
+        "name": "Darkvision",
+        "summary": "See in dim light within 60 feet as bright light and darkness as dim light.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "half-elf-fey-ancestry",
+        "name": "Fey Ancestry",
+        "summary": "Advantage against being charmed, and magic cannot put you to sleep.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "half-elf-skill-versatility",
+        "name": "Skill Versatility",
+        "summary": "Gain proficiency in two skills of your choice.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait", "skill"]
+      }
     ],
     "subraces": []
   },
@@ -97,10 +287,38 @@
     "abilityScoreIncreases": { "strength": 2, "constitution": 1 },
     "languages": ["common", "orc"],
     "traits": [
-      { "id": "half-orc-darkvision", "name": "Darkvision", "summary": "See in dim light within 60 feet as bright light and darkness as dim light.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "half-orc-menacing", "name": "Menacing", "summary": "Gain proficiency in Intimidation.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "skill"] },
-      { "id": "half-orc-relentless-endurance", "name": "Relentless Endurance", "summary": "Drop to 1 hit point instead of 0 once per long rest when not killed outright.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "half-orc-savage-attacks", "name": "Savage Attacks", "summary": "Roll one extra weapon damage die on a melee critical hit.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] }
+      {
+        "id": "half-orc-darkvision",
+        "name": "Darkvision",
+        "summary": "See in dim light within 60 feet as bright light and darkness as dim light.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "half-orc-menacing",
+        "name": "Menacing",
+        "summary": "Gain proficiency in Intimidation.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait", "skill"]
+      },
+      {
+        "id": "half-orc-relentless-endurance",
+        "name": "Relentless Endurance",
+        "summary": "Drop to 1 hit point instead of 0 once per long rest when not killed outright.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "half-orc-savage-attacks",
+        "name": "Savage Attacks",
+        "summary": "Roll one extra weapon damage die on a melee critical hit.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      }
     ],
     "subraces": []
   },
@@ -114,12 +332,50 @@
     "abilityScoreIncreases": { "dexterity": 2 },
     "languages": ["common", "halfling"],
     "traits": [
-      { "id": "halfling-lucky", "name": "Lucky", "summary": "Reroll a 1 on a d20 attack, ability check, or saving throw and use the new roll.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "halfling-brave", "name": "Brave", "summary": "Advantage on saving throws against being frightened.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "halfling-nimbleness", "name": "Halfling Nimbleness", "summary": "Move through the space of larger creatures.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] }
+      {
+        "id": "halfling-lucky",
+        "name": "Lucky",
+        "summary": "Reroll a 1 on a d20 attack, ability check, or saving throw and use the new roll.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "halfling-brave",
+        "name": "Brave",
+        "summary": "Advantage on saving throws against being frightened.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "halfling-nimbleness",
+        "name": "Halfling Nimbleness",
+        "summary": "Move through the space of larger creatures.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      }
     ],
     "subraces": [
-      { "id": "lightfoot", "name": "Lightfoot", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["subrace"], "abilityScoreIncreases": { "charisma": 1 }, "traits": [{ "id": "lightfoot-naturally-stealthy", "name": "Naturally Stealthy", "summary": "Can try to hide when obscured by a creature at least one size larger.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "skill"] }] }
+      {
+        "id": "lightfoot",
+        "name": "Lightfoot",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["subrace"],
+        "abilityScoreIncreases": { "charisma": 1 },
+        "traits": [
+          {
+            "id": "lightfoot-naturally-stealthy",
+            "name": "Naturally Stealthy",
+            "summary": "Can try to hide when obscured by a creature at least one size larger.",
+            "source": "srd-5.1",
+            "license": "ogl-1.0a",
+            "tags": ["racial-trait", "skill"]
+          }
+        ]
+      }
     ]
   },
   {
@@ -144,11 +400,31 @@
     "abilityScoreIncreases": { "intelligence": 1, "charisma": 2 },
     "languages": ["common", "infernal"],
     "traits": [
-      { "id": "tiefling-darkvision", "name": "Darkvision", "summary": "See in dim light within 60 feet as bright light and darkness as dim light.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "tiefling-hellish-resistance", "name": "Hellish Resistance", "summary": "Gain resistance to fire damage.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait"] },
-      { "id": "tiefling-infernal-legacy", "name": "Infernal Legacy", "summary": "Gain innate spells as you level; Charisma is the spellcasting ability.", "source": "srd-5.1", "license": "ogl-1.0a", "tags": ["racial-trait", "magic"] }
+      {
+        "id": "tiefling-darkvision",
+        "name": "Darkvision",
+        "summary": "See in dim light within 60 feet as bright light and darkness as dim light.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "tiefling-hellish-resistance",
+        "name": "Hellish Resistance",
+        "summary": "Gain resistance to fire damage.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait"]
+      },
+      {
+        "id": "tiefling-infernal-legacy",
+        "name": "Infernal Legacy",
+        "summary": "Gain innate spells as you level; Charisma is the spellcasting ability.",
+        "source": "srd-5.1",
+        "license": "ogl-1.0a",
+        "tags": ["racial-trait", "magic"]
+      }
     ],
     "subraces": []
   }
 ]
-

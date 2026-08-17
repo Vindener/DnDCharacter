@@ -18,12 +18,14 @@ Make character sheet a true in-session core feature that can replace paper sheet
 - visible sync/context status.
 
 Note on cross-stage consistency:
+
 - Historically, Stage 1 (`product-foundation-stage-1.md`) was used for role model and sync policy.
 - Stage 2 terminology follows Stage 1 role set: `Player`, `GM`, `Hybrid`.
 
 ## Scope Delivered In This Iteration
 
 1. Character screen redesign foundations:
+
 - `Play Mode / Edit Mode` toggle;
 - `Session Mode` toggle;
 - `Combat Summary Card`;
@@ -34,6 +36,7 @@ Note on cross-stage consistency:
 - custom fields and flexible trackers UI in Homebrew tab.
 
 2. Data model extension for redesign:
+
 - `sessionMode`;
 - `conditions`;
 - `customFields`;
@@ -42,6 +45,7 @@ Note on cross-stage consistency:
 - persisted in local + cloud DTO mapping.
 
 3. Home redesign foundations:
+
 - role switch (`Player`, `GM`, `Hybrid`);
 - resume block with `Continue Session`;
 - live character preview cards with badges (`Local`, `Synced`, `Shared`, `Homebrew`);
@@ -50,6 +54,7 @@ Note on cross-stage consistency:
 - sync/status strip.
 
 4. Spellbook quick-access screen:
+
 - added `Spellbook` route in stack;
 - aggregated spells from local characters for quick lookup.
 
@@ -58,6 +63,7 @@ Note on cross-stage consistency:
 ### Play Mode
 
 - prioritized top-to-bottom:
+
 1. identity/status
 2. combat summary
 3. quick actions
@@ -85,6 +91,7 @@ Note on cross-stage consistency:
 Target role: action hub.
 
 Current implementation baseline:
+
 - role switch;
 - resume and continue session;
 - character cards with statuses;
@@ -93,6 +100,7 @@ Current implementation baseline:
 - sync strip.
 
 Next pass:
+
 - prioritize “last active session” timeline;
 - add explicit cloud conflict badges;
 - add “pending shared updates” drill-down screen.
@@ -102,6 +110,7 @@ Next pass:
 Implemented as Stage 2 core.
 
 Next pass:
+
 - add richer combat action templates (actions/bonus/reactions);
 - add explicit conflict indicator on field level;
 - add tab-level per-user change history for shared sheets.
@@ -109,10 +118,12 @@ Next pass:
 ### C. Create Character
 
 Stage 2 decision:
+
 - keep existing multi-step flow now;
 - align it with target 7-step onboarding in next dedicated pass.
 
 Next pass targets:
+
 - start-method step;
 - storage/share step (`Local only` vs `Local + Cloud`);
 - review with explicit sync onboarding hints.
@@ -120,9 +131,11 @@ Next pass targets:
 ### D. GM
 
 Current project state:
+
 - GM entry and tools exist, but still broad.
 
 Next pass targets:
+
 - party overview as primary card;
 - shared sheet management lane;
 - session tools lane;
@@ -132,9 +145,11 @@ Next pass targets:
 ### E. Bestiary
 
 Current project state:
+
 - list + details present.
 
 Next pass targets:
+
 - stronger filters (`CR`, `type`, `environment`, `source`, tags);
 - collapsible long sections;
 - GM quick view and encounter pinning.
@@ -164,5 +179,3 @@ Stage 4 should focus on shared collaboration quality:
 - explicit sync state model in store;
 - conflict review UI;
 - GM party-first workflows and shared change timeline.
-
-

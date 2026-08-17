@@ -7,7 +7,9 @@ export function dtoToEntity(dto: HomebrewDraft): HomebrewEntitySlice {
   return parseHomebrew(dto);
 }
 
-export function entityToDto(entity: HomebrewEntitySlice): Pick<
+export function entityToDto(
+  entity: HomebrewEntitySlice,
+): Pick<
   CharacterDto,
   | 'characterTemplateId'
   | 'customFields'

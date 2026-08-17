@@ -100,9 +100,7 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
 
       const normalizedName = normalizeSpellName(name);
       const currentSpells = currentState.spells || [];
-      const byId = normalizedInput.spellId
-        ? currentSpells.find((spell) => spell.id === normalizedInput.spellId)
-        : null;
+      const byId = normalizedInput.spellId ? currentSpells.find((spell) => spell.id === normalizedInput.spellId) : null;
       const existingCustomByName = currentSpells.find(
         (spell) => spell.source === 'user-custom' && normalizeSpellName(spell.name) === normalizedName,
       );
@@ -216,9 +214,7 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
 
     toggleFavorite: async (currentState, spellId) => {
       const current = currentState.favoriteSpellIds || [];
-      const favoriteSpellIds = current.includes(spellId)
-        ? current.filter((id) => id !== spellId)
-        : [spellId, ...current];
+      const favoriteSpellIds = current.includes(spellId) ? current.filter((id) => id !== spellId) : [spellId, ...current];
 
       const nextState: SpellbookState = {
         ...currentState,
@@ -232,9 +228,7 @@ export function createSpellRepository(options: SpellRepositoryOptions = {}): Spe
 
     togglePinnedSpell: async (currentState, spellId) => {
       const current = currentState.pinnedSpellIds || [];
-      const pinnedSpellIds = current.includes(spellId)
-        ? current.filter((id) => id !== spellId)
-        : [spellId, ...current];
+      const pinnedSpellIds = current.includes(spellId) ? current.filter((id) => id !== spellId) : [spellId, ...current];
 
       const nextState: SpellbookState = {
         ...currentState,

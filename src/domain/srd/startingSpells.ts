@@ -16,11 +16,16 @@ interface ClassLevel1SpellProfile {
 }
 
 // SRD 5.1 level-1 spellcasting numbers (PHB class tables). Paladin and Ranger get their
-// spellcasting feature at 2nd level, not 1st, so they intentionally suggest nothing here.
+// spellcasting feature at 2nd level, not 1st, so their level-1 suggestion is correctly
+// zero cantrips/spells — but they still need an entry here (mode + 0 counts) so
+// getClassLevel1SpellMode() isn't 'none' for them, which is what unlocks the spell-picker
+// modal's eligible list for players building a level 2+ Paladin/Ranger by hand.
 const CLASS_LEVEL1_SPELL_PROFILES: Record<string, ClassLevel1SpellProfile> = {
   Bard: { mode: 'known', cantripsKnown: 2, spellsKnown: 4 },
   Cleric: { mode: 'prepared', cantripsKnown: 3, spellsKnown: 2 },
   Druid: { mode: 'prepared', cantripsKnown: 2, spellsKnown: 2 },
+  Paladin: { mode: 'prepared', cantripsKnown: 0, spellsKnown: 0 },
+  Ranger: { mode: 'known', cantripsKnown: 0, spellsKnown: 0 },
   Sorcerer: { mode: 'known', cantripsKnown: 4, spellsKnown: 2 },
   Warlock: { mode: 'known', cantripsKnown: 2, spellsKnown: 2 },
   Wizard: { mode: 'known', cantripsKnown: 3, spellsKnown: 6 },

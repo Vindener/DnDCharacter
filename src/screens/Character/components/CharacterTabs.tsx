@@ -34,11 +34,7 @@ function CharacterTabsBase({ styles, colors, tabOrder, tabLabels, selectedTab, h
   const renderItem = useCallback(
     ({ item }: { item: TabItem }) => (
       <Pressable
-        style={[
-          styles.tabChip,
-          selectedTab === item.tab ? styles.tabChipActive : null,
-          item.hasConflict ? styles.tabChipConflict : null,
-        ]}
+        style={[styles.tabChip, selectedTab === item.tab ? styles.tabChipActive : null, item.hasConflict ? styles.tabChipConflict : null]}
         onPress={() => openTab(item.tab)}
         android_ripple={{ color: colors.ripple }}
         testID={TAB_TEST_IDS[item.tab]}
@@ -49,7 +45,18 @@ function CharacterTabsBase({ styles, colors, tabOrder, tabLabels, selectedTab, h
         </View>
       </Pressable>
     ),
-    [colors.ripple, colors.warning, openTab, selectedTab, styles.tabChip, styles.tabChipActive, styles.tabChipConflict, styles.tabChipInner, styles.tabChipText, styles.tabChipTextActive],
+    [
+      colors.ripple,
+      colors.warning,
+      openTab,
+      selectedTab,
+      styles.tabChip,
+      styles.tabChipActive,
+      styles.tabChipConflict,
+      styles.tabChipInner,
+      styles.tabChipText,
+      styles.tabChipTextActive,
+    ],
   );
 
   return (

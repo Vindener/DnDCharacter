@@ -193,18 +193,13 @@
           "name": "resolveCampaignForLink",
           "startLine": 4,
           "endLine": 13,
-          "params": [
-            "link",
-            "campaigns"
-          ]
+          "params": ["link", "campaigns"]
         },
         {
           "name": "buildLegacyCampaignFallbackId",
           "startLine": 15,
           "endLine": 18,
-          "params": [
-            "campaignName"
-          ]
+          "params": ["campaignName"]
         }
       ],
       "exports": [
@@ -282,57 +277,43 @@
           "name": "normalizeCampaignName",
           "startLine": 3,
           "endLine": 14,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "slugifyCampaignName",
           "startLine": 16,
           "endLine": 19,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "buildCampaignId",
           "startLine": 21,
           "endLine": 23,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "sortCampaignsByRecency",
           "startLine": 25,
           "endLine": 27,
-          "params": [
-            "items"
-          ]
+          "params": ["items"]
         },
         {
           "name": "sanitizeCampaignSummary",
           "startLine": 33,
           "endLine": 38,
-          "params": [
-            "input"
-          ]
+          "params": ["input"]
         },
         {
           "name": "clampPartyLevelEstimate",
           "startLine": 40,
           "endLine": 45,
-          "params": [
-            "input"
-          ]
+          "params": ["input"]
         },
         {
           "name": "sanitizeCampaignPinnedIds",
           "startLine": 50,
           "endLine": 54,
-          "params": [
-            "input"
-          ]
+          "params": ["input"]
         }
       ],
       "exports": [
@@ -522,19 +503,13 @@
           "name": "getMonsterMultiplier",
           "startLine": 68,
           "endLine": 96,
-          "params": [
-            "monsters",
-            "partySize"
-          ]
+          "params": ["monsters", "partySize"]
         },
         {
           "name": "evaluateEncounterDifficulty",
           "startLine": 98,
           "endLine": 148,
-          "params": [
-            "players",
-            "monsters"
-          ]
+          "params": ["players", "monsters"]
         }
       ],
       "exports": [
@@ -659,9 +634,7 @@
           "name": "combatant",
           "startLine": 5,
           "endLine": 18,
-          "params": [
-            "overrides"
-          ]
+          "params": ["overrides"]
         }
       ],
       "metrics": {
@@ -695,19 +668,13 @@
           "name": "hasConflict",
           "startLine": 11,
           "endLine": 13,
-          "params": [
-            "note"
-          ]
+          "params": ["note"]
         },
         {
           "name": "buildConflictRemote",
           "startLine": 15,
           "endLine": 21,
-          "params": [
-            "title",
-            "content",
-            "updatedAtMs"
-          ]
+          "params": ["title", "content", "updatedAtMs"]
         }
       ],
       "exports": [
@@ -830,9 +797,7 @@
           "name": "useCampaignOwnership",
           "startLine": 4,
           "endLine": 7,
-          "params": [
-            "campaign"
-          ]
+          "params": ["campaign"]
         }
       ],
       "exports": [
@@ -872,9 +837,7 @@
           "name": "buildEncounter",
           "startLine": 51,
           "endLine": 69,
-          "params": [
-            "overrides"
-          ]
+          "params": ["overrides"]
         }
       ],
       "callGraph": [
@@ -912,25 +875,19 @@
           "name": "toMillis",
           "startLine": 10,
           "endLine": 16,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "sanitizeEncounter",
           "startLine": 18,
           "endLine": 30,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "mapCloudEncounter",
           "startLine": 32,
           "endLine": 60,
-          "params": [
-            "doc"
-          ]
+          "params": ["doc"]
         },
         {
           "name": "loadQueue",
@@ -942,19 +899,13 @@
           "name": "persistQueue",
           "startLine": 76,
           "endLine": 83,
-          "params": [
-            "queue"
-          ]
+          "params": ["queue"]
         },
         {
           "name": "enqueue",
           "startLine": 85,
           "endLine": 96,
-          "params": [
-            "type",
-            "encounterId",
-            "campaignId"
-          ]
+          "params": ["type", "encounterId", "campaignId"]
         },
         {
           "name": "loadLocalCampaignEncounters",
@@ -966,9 +917,7 @@
           "name": "persistLocalCampaignEncounters",
           "startLine": 113,
           "endLine": 124,
-          "params": [
-            "encounters"
-          ]
+          "params": ["encounters"]
         },
         {
           "name": "canSyncCloud",
@@ -980,61 +929,43 @@
           "name": "replaceLocalEncounter",
           "startLine": 130,
           "endLine": 137,
-          "params": [
-            "encounter"
-          ]
+          "params": ["encounter"]
         },
         {
           "name": "removeLocalEncounter",
           "startLine": 139,
           "endLine": 144,
-          "params": [
-            "encounterId"
-          ]
+          "params": ["encounterId"]
         },
         {
           "name": "canAccessByRole",
           "startLine": 146,
           "endLine": 152,
-          "params": [
-            "encounter",
-            "uid"
-          ]
+          "params": ["encounter", "uid"]
         },
         {
           "name": "buildCloudPayload",
           "startLine": 154,
           "endLine": 179,
-          "params": [
-            "encounter",
-            "existing"
-          ]
+          "params": ["encounter", "existing"]
         },
         {
           "name": "syncUpsertEncounter",
           "startLine": 181,
           "endLine": 217,
-          "params": [
-            "encounter"
-          ]
+          "params": ["encounter"]
         },
         {
           "name": "mergeRemoteIntoLocal",
           "startLine": 219,
           "endLine": 262,
-          "params": [
-            "local",
-            "remote"
-          ]
+          "params": ["local", "remote"]
         },
         {
           "name": "subscribeCampaignEncounters",
           "startLine": 264,
           "endLine": 302,
-          "params": [
-            "campaignId",
-            "cb"
-          ]
+          "params": ["campaignId", "cb"]
         },
         {
           "name": "defaultSyncStatusForEncounter",
@@ -1046,18 +977,13 @@
           "name": "upsertCampaignEncounter",
           "startLine": 309,
           "endLine": 355,
-          "params": [
-            "encounter"
-          ]
+          "params": ["encounter"]
         },
         {
           "name": "deleteCampaignEncounter",
           "startLine": 357,
           "endLine": 370,
-          "params": [
-            "encounterId",
-            "campaignId"
-          ]
+          "params": ["encounterId", "campaignId"]
         },
         {
           "name": "flushCampaignEncountersQueue",
@@ -1069,10 +995,7 @@
           "name": "resolveCampaignEncounterConflict",
           "startLine": 405,
           "endLine": 492,
-          "params": [
-            "encounterId",
-            "strategy"
-          ]
+          "params": ["encounterId", "strategy"]
         }
       ],
       "exports": [
@@ -1958,25 +1881,19 @@
           "name": "toMillis",
           "startLine": 12,
           "endLine": 18,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "sanitizeTracker",
           "startLine": 20,
           "endLine": 27,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "mapCloudTracker",
           "startLine": 29,
           "endLine": 51,
-          "params": [
-            "doc"
-          ]
+          "params": ["doc"]
         },
         {
           "name": "loadAllLocalTrackers",
@@ -1988,33 +1905,25 @@
           "name": "persistAllLocalTrackers",
           "startLine": 65,
           "endLine": 73,
-          "params": [
-            "trackers"
-          ]
+          "params": ["trackers"]
         },
         {
           "name": "replaceLocalTracker",
           "startLine": 75,
           "endLine": 79,
-          "params": [
-            "tracker"
-          ]
+          "params": ["tracker"]
         },
         {
           "name": "removeLocalTracker",
           "startLine": 81,
           "endLine": 84,
-          "params": [
-            "campaignId"
-          ]
+          "params": ["campaignId"]
         },
         {
           "name": "loadLocalCampaignInitiative",
           "startLine": 86,
           "endLine": 89,
-          "params": [
-            "campaignId"
-          ]
+          "params": ["campaignId"]
         },
         {
           "name": "canSyncCloud",
@@ -2026,52 +1935,37 @@
           "name": "buildCloudPayload",
           "startLine": 95,
           "endLine": 120,
-          "params": [
-            "tracker"
-          ]
+          "params": ["tracker"]
         },
         {
           "name": "writeThroughCloud",
           "startLine": 128,
           "endLine": 146,
-          "params": [
-            "tracker"
-          ]
+          "params": ["tracker"]
         },
         {
           "name": "startCampaignInitiative",
           "startLine": 148,
           "endLine": 167,
-          "params": [
-            "campaignId",
-            "combatants"
-          ]
+          "params": ["campaignId", "combatants"]
         },
         {
           "name": "updateCampaignInitiative",
           "startLine": 169,
           "endLine": 184,
-          "params": [
-            "campaignId",
-            "patch"
-          ]
+          "params": ["campaignId", "patch"]
         },
         {
           "name": "endCampaignInitiative",
           "startLine": 186,
           "endLine": 195,
-          "params": [
-            "campaignId"
-          ]
+          "params": ["campaignId"]
         },
         {
           "name": "subscribeCampaignInitiative",
           "startLine": 197,
           "endLine": 230,
-          "params": [
-            "campaignId",
-            "cb"
-          ]
+          "params": ["campaignId", "cb"]
         }
       ],
       "exports": [
@@ -2466,25 +2360,19 @@
           "name": "toMillis",
           "startLine": 32,
           "endLine": 38,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "sanitizeNote",
           "startLine": 40,
           "endLine": 52,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "mapCloudNote",
           "startLine": 54,
           "endLine": 79,
-          "params": [
-            "doc"
-          ]
+          "params": ["doc"]
         },
         {
           "name": "loadQueue",
@@ -2496,19 +2384,13 @@
           "name": "persistQueue",
           "startLine": 95,
           "endLine": 100,
-          "params": [
-            "queue"
-          ]
+          "params": ["queue"]
         },
         {
           "name": "enqueue",
           "startLine": 102,
           "endLine": 113,
-          "params": [
-            "type",
-            "noteId",
-            "campaignId"
-          ]
+          "params": ["type", "noteId", "campaignId"]
         },
         {
           "name": "readLocalCampaignNotesFromStorage",
@@ -2532,9 +2414,7 @@
           "name": "persistLocalCampaignNotes",
           "startLine": 195,
           "endLine": 204,
-          "params": [
-            "notes"
-          ]
+          "params": ["notes"]
         },
         {
           "name": "canSyncCloud",
@@ -2546,61 +2426,43 @@
           "name": "replaceLocalNote",
           "startLine": 210,
           "endLine": 216,
-          "params": [
-            "note"
-          ]
+          "params": ["note"]
         },
         {
           "name": "removeLocalNote",
           "startLine": 218,
           "endLine": 223,
-          "params": [
-            "noteId"
-          ]
+          "params": ["noteId"]
         },
         {
           "name": "canAccessByRole",
           "startLine": 225,
           "endLine": 231,
-          "params": [
-            "note",
-            "uid"
-          ]
+          "params": ["note", "uid"]
         },
         {
           "name": "buildCloudPayload",
           "startLine": 233,
           "endLine": 254,
-          "params": [
-            "note",
-            "existing"
-          ]
+          "params": ["note", "existing"]
         },
         {
           "name": "syncUpsert",
           "startLine": 256,
           "endLine": 291,
-          "params": [
-            "note"
-          ]
+          "params": ["note"]
         },
         {
           "name": "mergeRemoteIntoLocal",
           "startLine": 293,
           "endLine": 335,
-          "params": [
-            "local",
-            "remote"
-          ]
+          "params": ["local", "remote"]
         },
         {
           "name": "subscribeCampaignNotes",
           "startLine": 337,
           "endLine": 372,
-          "params": [
-            "campaignId",
-            "cb"
-          ]
+          "params": ["campaignId", "cb"]
         },
         {
           "name": "defaultSyncStatusForNote",
@@ -2612,18 +2474,13 @@
           "name": "upsertCampaignNote",
           "startLine": 379,
           "endLine": 422,
-          "params": [
-            "note"
-          ]
+          "params": ["note"]
         },
         {
           "name": "deleteCampaignNote",
           "startLine": 424,
           "endLine": 437,
-          "params": [
-            "noteId",
-            "campaignId"
-          ]
+          "params": ["noteId", "campaignId"]
         },
         {
           "name": "flushCampaignNotesQueue",
@@ -2635,11 +2492,7 @@
           "name": "resolveCampaignNoteConflict",
           "startLine": 467,
           "endLine": 518,
-          "params": [
-            "noteId",
-            "strategy",
-            "mergedContent"
-          ]
+          "params": ["noteId", "strategy", "mergedContent"]
         }
       ],
       "exports": [
@@ -3625,33 +3478,25 @@
           "name": "toMillis",
           "startLine": 37,
           "endLine": 43,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "sanitizeCampaign",
           "startLine": 45,
           "endLine": 76,
-          "params": [
-            "raw"
-          ]
+          "params": ["raw"]
         },
         {
           "name": "mapCloudCampaign",
           "startLine": 78,
           "endLine": 103,
-          "params": [
-            "doc"
-          ]
+          "params": ["doc"]
         },
         {
           "name": "persistLocalCampaigns",
           "startLine": 105,
           "endLine": 117,
-          "params": [
-            "campaigns"
-          ]
+          "params": ["campaigns"]
         },
         {
           "name": "loadLocalCampaigns",
@@ -3663,17 +3508,13 @@
           "name": "mergeCampaigns",
           "startLine": 137,
           "endLine": 150,
-          "params": [
-            "...lists"
-          ]
+          "params": ["...lists"]
         },
         {
           "name": "buildLocalCampaign",
           "startLine": 152,
           "endLine": 169,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "canCloudSync",
@@ -3685,105 +3526,73 @@
           "name": "buildCloudPayload",
           "startLine": 175,
           "endLine": 189,
-          "params": [
-            "campaign"
-          ]
+          "params": ["campaign"]
         },
         {
           "name": "upsertCampaign",
           "startLine": 191,
           "endLine": 218,
-          "params": [
-            "campaign"
-          ]
+          "params": ["campaign"]
         },
         {
           "name": "ensureCampaignForName",
           "startLine": 220,
           "endLine": 245,
-          "params": [
-            "name"
-          ]
+          "params": ["name"]
         },
         {
           "name": "renameCampaign",
           "startLine": 247,
           "endLine": 281,
-          "params": [
-            "campaignId",
-            "name"
-          ]
+          "params": ["campaignId", "name"]
         },
         {
           "name": "updateCampaignSummary",
           "startLine": 283,
           "endLine": 326,
-          "params": [
-            "campaignId",
-            "patch"
-          ]
+          "params": ["campaignId", "patch"]
         },
         {
           "name": "deleteCampaign",
           "startLine": 332,
           "endLine": 347,
-          "params": [
-            "campaignId"
-          ]
+          "params": ["campaignId"]
         },
         {
           "name": "toggleCampaignPinnedId",
           "startLine": 349,
           "endLine": 382,
-          "params": [
-            "campaignId",
-            "field",
-            "itemId"
-          ]
+          "params": ["campaignId", "field", "itemId"]
         },
         {
           "name": "togglePinnedMonsterForCampaign",
           "startLine": 384,
           "endLine": 386,
-          "params": [
-            "campaignId",
-            "monsterId"
-          ]
+          "params": ["campaignId", "monsterId"]
         },
         {
           "name": "togglePinnedSpellForCampaign",
           "startLine": 388,
           "endLine": 390,
-          "params": [
-            "campaignId",
-            "spellId"
-          ]
+          "params": ["campaignId", "spellId"]
         },
         {
           "name": "addCampaignEditorByEmail",
           "startLine": 396,
           "endLine": 419,
-          "params": [
-            "campaignId",
-            "email"
-          ]
+          "params": ["campaignId", "email"]
         },
         {
           "name": "getCampaignForLink",
           "startLine": 421,
           "endLine": 423,
-          "params": [
-            "link",
-            "campaigns"
-          ]
+          "params": ["link", "campaigns"]
         },
         {
           "name": "subscribeAccessibleCampaigns",
           "startLine": 425,
           "endLine": 495,
-          "params": [
-            "cb"
-          ]
+          "params": ["cb"]
         }
       ],
       "exports": [
@@ -5064,274 +4873,193 @@
           "name": "isRecord",
           "startLine": 187,
           "endLine": 189,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "toStringArray",
           "startLine": 191,
           "endLine": 194,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "toSheetSnapshotDoc",
           "startLine": 196,
           "endLine": 275,
-          "params": [
-            "id",
-            "raw"
-          ]
+          "params": ["id", "raw"]
         },
         {
           "name": "dtoToSheet",
           "startLine": 277,
           "endLine": 352,
-          "params": [
-            "dto"
-          ]
+          "params": ["dto"]
         },
         {
           "name": "mapPathToTab",
           "startLine": 354,
           "endLine": 362,
-          "params": [
-            "path"
-          ]
+          "params": ["path"]
         },
         {
           "name": "summarizePaths",
           "startLine": 364,
           "endLine": 369,
-          "params": [
-            "paths"
-          ]
+          "params": ["paths"]
         },
         {
           "name": "buildHistoryEntries",
           "startLine": 371,
           "endLine": 401,
-          "params": [
-            "uidValue",
-            "paths",
-            "atMs",
-            "actorRole"
-          ]
+          "params": ["uidValue", "paths", "atMs", "actorRole"]
         },
         {
           "name": "getValueAtPath",
           "startLine": 403,
           "endLine": 408,
-          "params": [
-            "source",
-            "path"
-          ]
+          "params": ["source", "path"]
         },
         {
           "name": "buildContentPayload",
           "startLine": 415,
           "endLine": 427,
-          "params": [
-            "dto"
-          ]
+          "params": ["dto"]
         },
         {
           "name": "upsertCharacterSheetFromLocal",
           "startLine": 429,
           "endLine": 488,
-          "params": [
-            "dto",
-            "options"
-          ]
+          "params": ["dto", "options"]
         },
         {
           "name": "bulkUpsertFromLocal",
           "startLine": 494,
           "endLine": 511,
-          "params": [
-            "list"
-          ]
+          "params": ["list"]
         },
         {
           "name": "subscribeCharacterSheet",
           "startLine": 513,
           "endLine": 535,
-          "params": [
-            "id",
-            "cb"
-          ]
+          "params": ["id", "cb"]
         },
         {
           "name": "updateCharacterSheet",
           "startLine": 537,
           "endLine": 542,
-          "params": [
-            "id",
-            "patch"
-          ]
+          "params": ["id", "patch"]
         },
         {
           "name": "deleteCharacterSheet",
           "startLine": 544,
           "endLine": 546,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "assertCallerIsOwner",
           "startLine": 548,
           "endLine": 551,
-          "params": [
-            "data",
-            "callerUid",
-            "action"
-          ]
+          "params": ["data", "callerUid", "action"]
         },
         {
           "name": "addEditorByEmail",
           "startLine": 558,
           "endLine": 576,
-          "params": [
-            "sheetId",
-            "email"
-          ]
+          "params": ["sheetId", "email"]
         },
         {
           "name": "removeEditor",
           "startLine": 578,
           "endLine": 590,
-          "params": [
-            "sheetId",
-            "editorUid"
-          ]
+          "params": ["sheetId", "editorUid"]
         },
         {
           "name": "transferOwnership",
           "startLine": 599,
           "endLine": 625,
-          "params": [
-            "sheetId",
-            "newOwnerUid"
-          ]
+          "params": ["sheetId", "newOwnerUid"]
         },
         {
           "name": "saveCharacterSheetAsNew",
           "startLine": 627,
           "endLine": 639,
-          "params": [
-            "dto"
-          ]
+          "params": ["dto"]
         },
         {
           "name": "subscribeMySheets",
           "startLine": 643,
           "endLine": 663,
-          "params": [
-            "cb"
-          ]
+          "params": ["cb"]
         },
         {
           "name": "subscribeSharedWithMe",
           "startLine": 665,
           "endLine": 685,
-          "params": [
-            "cb"
-          ]
+          "params": ["cb"]
         },
         {
           "name": "fetchCharacterSheet",
           "startLine": 687,
           "endLine": 696,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "autosaveCharacter",
           "startLine": 698,
           "endLine": 700,
-          "params": [
-            "dto"
-          ]
+          "params": ["dto"]
         },
         {
           "name": "splitChunks",
           "startLine": 702,
           "endLine": 708,
-          "params": [
-            "items",
-            "size"
-          ]
+          "params": ["items", "size"]
         },
         {
           "name": "getEditorsForSheet",
           "startLine": 710,
           "endLine": 735,
-          "params": [
-            "uids"
-          ]
+          "params": ["uids"]
         },
         {
           "name": "upsertFromLocal",
           "startLine": 737,
           "endLine": 739,
-          "params": [
-            "dto",
-            "options"
-          ]
+          "params": ["dto", "options"]
         },
         {
           "name": "fetchById",
           "startLine": 741,
           "endLine": 743,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         },
         {
           "name": "subscribeById",
           "startLine": 745,
           "endLine": 747,
-          "params": [
-            "id",
-            "cb"
-          ]
+          "params": ["id", "cb"]
         },
         {
           "name": "subscribeMine",
           "startLine": 749,
           "endLine": 751,
-          "params": [
-            "cb"
-          ]
+          "params": ["cb"]
         },
         {
           "name": "subscribeShared",
           "startLine": 753,
           "endLine": 755,
-          "params": [
-            "cb"
-          ]
+          "params": ["cb"]
         },
         {
           "name": "updateById",
           "startLine": 757,
           "endLine": 759,
-          "params": [
-            "id",
-            "patch"
-          ]
+          "params": ["id", "patch"]
         },
         {
           "name": "deleteById",
           "startLine": 761,
           "endLine": 763,
-          "params": [
-            "id"
-          ]
+          "params": ["id"]
         }
       ],
       "exports": [
@@ -6544,17 +6272,13 @@
           "name": "cleanPaths",
           "startLine": 42,
           "endLine": 45,
-          "params": [
-            "paths"
-          ]
+          "params": ["paths"]
         },
         {
           "name": "mapSyncPathsToFieldPaths",
           "startLine": 47,
           "endLine": 59,
-          "params": [
-            "paths"
-          ]
+          "params": ["paths"]
         }
       ],
       "exports": [
@@ -6634,9 +6358,7 @@
           "name": "toMillis",
           "startLine": 37,
           "endLine": 42,
-          "params": [
-            "value"
-          ]
+          "params": ["value"]
         },
         {
           "name": "DM",
@@ -7730,9 +7452,7 @@
           "name": "DMCampaignDetail",
           "startLine": 32,
           "endLine": 691,
-          "params": [
-            "{ route, navigation }"
-          ]
+          "params": ["{ route, navigation }"]
         }
       ],
       "callGraph": [
@@ -8865,9 +8585,7 @@
           "name": "DMCampaignNotes",
           "startLine": 28,
           "endLine": 417,
-          "params": [
-            "{ route }"
-          ]
+          "params": ["{ route }"]
         }
       ],
       "callGraph": [

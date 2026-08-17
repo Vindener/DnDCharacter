@@ -430,130 +430,850 @@
     }
   ],
   "edges": [
-    {"source": "file:src/repositories/characterCloudRepository.test.ts", "target": "file:src/repositories/characterCloudRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/characterCloudRepository.test.ts", "target": "file:src/shared/helpers/createEmptyCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/characterLocalRepository.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/characterLocalRepository.test.ts", "target": "file:src/repositories/characterLocalRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/characterLocalRepository.ts", "target": "file:src/domain/mappers/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/characterLocalRepository.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/characterLocalRepository.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/repositories/createCharacterDraftRepository.ts", "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx", "target": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx", "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/context/Character-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/context/Sync-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/context/Theme-store.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/dm/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/dm/repositories/campaignRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/domain/srd/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/navigation/TabNavigator.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/repositories/characterCloudRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/repositories/createCharacterDraftRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/screens/CreateCharacter/style.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/services/characterSyncCoordinator.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/services/firebase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/shared/const/CharacterTemplates.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/shared/const/Subclasses.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/shared/services/auth/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/shared/services/fileSerice.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.test.ts", "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/domain/srd/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/shared/const/CharacterTemplates.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/shared/helpers/combat.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/shared/helpers/createEmptyCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/shared/services/diceRoller.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/types/skillToStat.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Home/Home.test.tsx", "target": "file:src/screens/Home/Home.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Home/Home.test.tsx", "target": "file:src/shared/helpers/createEmptyCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Home/Home.test.tsx", "target": "file:src/shared/services/auth/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/screens/Home/Home.test.tsx", "target": "file:src/types/Character.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/dmCampaignNotes.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/dmCampaignNotes.test.ts", "target": "file:src/services/dmCampaignNotes.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/dmCampaigns.test.ts", "target": "file:src/domain/migrations/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/services/dmCampaigns.test.ts", "target": "file:src/services/dmCampaigns.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/const/CharacterTemplates.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/combat.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/combat.ts", "target": "file:src/shared/const/ClassPresets.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/combat.ts", "target": "file:src/shared/const/Weapons.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/createEmptyCharacter.ts", "target": "file:src/domain/schemas/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/shared/helpers/createEmptyCharacter.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/dmSettingsStore.ts", "target": "file:src/dm/repositories/dmSettingsRepository.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/selectors/characterStoreSelectors.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/selectors/syncStoreSelectors.ts", "target": "file:src/types/Sync.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/storeSelectors.test.ts", "target": "file:src/shared/helpers/createEmptyCharacter.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/storeSelectors.test.ts", "target": "file:src/stores/selectors/characterStoreSelectors.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/stores/storeSelectors.test.ts", "target": "file:src/stores/selectors/syncStoreSelectors.ts", "type": "imports", "direction": "forward", "weight": 0.7},
-    {"source": "file:src/types/skillToStat.ts", "target": "file:src/domain/types/index.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {
+      "source": "file:src/repositories/characterCloudRepository.test.ts",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/characterCloudRepository.test.ts",
+      "target": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.test.ts",
+      "target": "file:src/repositories/characterLocalRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.ts",
+      "target": "file:src/domain/mappers/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/repositories/createCharacterDraftRepository.ts",
+      "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "target": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/context/Character-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/context/Sync-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/context/Theme-store.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/dm/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/domain/srd/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/navigation/TabNavigator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/repositories/characterCloudRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/repositories/createCharacterDraftRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/screens/CreateCharacter/style.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/services/characterSyncCoordinator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/services/firebase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/shared/const/CharacterTemplates.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/shared/const/Subclasses.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/shared/services/auth/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/shared/services/fileSerice.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.test.ts",
+      "target": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/domain/srd/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/shared/const/CharacterTemplates.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/shared/helpers/combat.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/shared/services/diceRoller.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/types/skillToStat.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Home/Home.test.tsx",
+      "target": "file:src/screens/Home/Home.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Home/Home.test.tsx",
+      "target": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Home/Home.test.tsx",
+      "target": "file:src/shared/services/auth/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/screens/Home/Home.test.tsx",
+      "target": "file:src/types/Character.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/dmCampaignNotes.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/dmCampaignNotes.test.ts",
+      "target": "file:src/services/dmCampaignNotes.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/dmCampaigns.test.ts",
+      "target": "file:src/domain/migrations/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/services/dmCampaigns.test.ts",
+      "target": "file:src/services/dmCampaigns.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/const/CharacterTemplates.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/combat.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/combat.ts",
+      "target": "file:src/shared/const/ClassPresets.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/combat.ts",
+      "target": "file:src/shared/const/Weapons.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "target": "file:src/domain/schemas/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/dmSettingsStore.ts",
+      "target": "file:src/dm/repositories/dmSettingsRepository.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/selectors/characterStoreSelectors.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/selectors/syncStoreSelectors.ts",
+      "target": "file:src/types/Sync.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/storeSelectors.test.ts",
+      "target": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/storeSelectors.test.ts",
+      "target": "file:src/stores/selectors/characterStoreSelectors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/stores/storeSelectors.test.ts",
+      "target": "file:src/stores/selectors/syncStoreSelectors.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:src/types/skillToStat.ts",
+      "target": "file:src/domain/types/index.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
 
-    {"source": "file:src/repositories/characterLocalRepository.ts", "target": "function:src/repositories/characterLocalRepository.ts:loadCharacters", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/repositories/characterLocalRepository.ts", "target": "function:src/repositories/characterLocalRepository.ts:loadSharedUpdatesReviewedMap", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/repositories/createCharacterDraftRepository.ts", "target": "function:src/repositories/createCharacterDraftRepository.ts:loadDraft", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createInitialDraft", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:mergeDraftWithDefaults", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyStartMethod", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createSavingThrowDefaults", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildBackgroundMechanics", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAllAbilityScores", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:autoFillSkills", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildContentSources", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/combat.ts", "target": "function:src/shared/helpers/combat.ts:computeAttackBonus", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/helpers/createEmptyCharacter.ts", "target": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/shared/const/CharacterTemplates.ts", "target": "function:src/shared/const/CharacterTemplates.ts:buildTemplatePatch", "type": "contains", "direction": "forward", "weight": 1.0},
-    {"source": "file:src/stores/selectors/syncStoreSelectors.ts", "target": "function:src/stores/selectors/syncStoreSelectors.ts:selectSyncStoreActions", "type": "contains", "direction": "forward", "weight": 1.0},
+    {
+      "source": "file:src/repositories/characterLocalRepository.ts",
+      "target": "function:src/repositories/characterLocalRepository.ts:loadCharacters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.ts",
+      "target": "function:src/repositories/characterLocalRepository.ts:loadSharedUpdatesReviewedMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/repositories/createCharacterDraftRepository.ts",
+      "target": "function:src/repositories/createCharacterDraftRepository.ts:loadDraft",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createInitialDraft",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:mergeDraftWithDefaults",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyStartMethod",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createSavingThrowDefaults",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildBackgroundMechanics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAllAbilityScores",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:autoFillSkills",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildContentSources",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/combat.ts",
+      "target": "function:src/shared/helpers/combat.ts:computeAttackBonus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "target": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/shared/const/CharacterTemplates.ts",
+      "target": "function:src/shared/const/CharacterTemplates.ts:buildTemplatePatch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:src/stores/selectors/syncStoreSelectors.ts",
+      "target": "function:src/stores/selectors/syncStoreSelectors.ts:selectSyncStoreActions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
 
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createInitialDraft", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:mergeDraftWithDefaults", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyStartMethod", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createSavingThrowDefaults", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildBackgroundMechanics", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAllAbilityScores", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/combat.ts", "target": "function:src/shared/helpers/combat.ts:computeAttackBonus", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/helpers/createEmptyCharacter.ts", "target": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/shared/const/CharacterTemplates.ts", "target": "function:src/shared/const/CharacterTemplates.ts:buildTemplatePatch", "type": "exports", "direction": "forward", "weight": 0.8},
-    {"source": "file:src/stores/selectors/syncStoreSelectors.ts", "target": "function:src/stores/selectors/syncStoreSelectors.ts:selectSyncStoreActions", "type": "exports", "direction": "forward", "weight": 0.8},
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createInitialDraft",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:mergeDraftWithDefaults",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyStartMethod",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createSavingThrowDefaults",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildBackgroundMechanics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAllAbilityScores",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/combat.ts",
+      "target": "function:src/shared/helpers/combat.ts:computeAttackBonus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/helpers/createEmptyCharacter.ts",
+      "target": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/shared/const/CharacterTemplates.ts",
+      "target": "function:src/shared/const/CharacterTemplates.ts:buildTemplatePatch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:src/stores/selectors/syncStoreSelectors.ts",
+      "target": "function:src/stores/selectors/syncStoreSelectors.ts:selectSyncStoreActions",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:mergeDraftWithDefaults", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createInitialDraft", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyStartMethod", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createSavingThrowDefaults", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:autoFillSkills", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildContentSources", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAllAbilityScores", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "target": "function:src/shared/const/CharacterTemplates.ts:buildTemplatePatch", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "target": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter", "target": "function:src/repositories/createCharacterDraftRepository.ts:loadDraft", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter", "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter", "target": "function:src/repositories/characterCloudRepository.ts:addEditorByEmail", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter", "target": "function:src/services/characterSyncCoordinator.ts:syncToCloud", "type": "calls", "direction": "forward", "weight": 0.8},
-    {"source": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter", "target": "function:src/domain/schemas/index.ts:parseCharacter", "type": "calls", "direction": "forward", "weight": 0.8},
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:mergeDraftWithDefaults",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createInitialDraft",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyStartMethod",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:createSavingThrowDefaults",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:applyDerivedDefaults",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:deriveDraftDefaults",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:autoFillSkills",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildContentSources",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAllAbilityScores",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "target": "function:src/shared/const/CharacterTemplates.ts:buildTemplatePatch",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "target": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter",
+      "target": "function:src/repositories/createCharacterDraftRepository.ts:loadDraft",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:buildCharacterFromDraft",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter",
+      "target": "function:src/screens/CreateCharacter/createCharacterWizard.ts:rollAbilityScore",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter",
+      "target": "function:src/repositories/characterCloudRepository.ts:addEditorByEmail",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/screens/CreateCharacter/CreateCharacter.tsx:CreateCharacter",
+      "target": "function:src/services/characterSyncCoordinator.ts:syncToCloud",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:src/shared/helpers/createEmptyCharacter.ts:createEmptyCharacter",
+      "target": "function:src/domain/schemas/index.ts:parseCharacter",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
 
-    {"source": "file:src/repositories/characterCloudRepository.ts", "target": "file:src/repositories/characterCloudRepository.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/repositories/characterLocalRepository.ts", "target": "file:src/repositories/characterLocalRepository.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/screens/CreateCharacter/CreateCharacter.tsx", "target": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/screens/CreateCharacter/createCharacterWizard.ts", "target": "file:src/screens/CreateCharacter/createCharacterWizard.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/screens/Home/Home.tsx", "target": "file:src/screens/Home/Home.test.tsx", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/services/dmCampaignNotes.ts", "target": "file:src/services/dmCampaignNotes.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/services/dmCampaigns.ts", "target": "file:src/services/dmCampaigns.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/stores/selectors/characterStoreSelectors.ts", "target": "file:src/stores/storeSelectors.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
-    {"source": "file:src/stores/selectors/syncStoreSelectors.ts", "target": "file:src/stores/storeSelectors.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5},
+    {
+      "source": "file:src/repositories/characterCloudRepository.ts",
+      "target": "file:src/repositories/characterCloudRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/repositories/characterLocalRepository.ts",
+      "target": "file:src/repositories/characterLocalRepository.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/CreateCharacter.tsx",
+      "target": "file:src/screens/CreateCharacter/CreateCharacter.test.tsx",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/screens/CreateCharacter/createCharacterWizard.ts",
+      "target": "file:src/screens/CreateCharacter/createCharacterWizard.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/screens/Home/Home.tsx",
+      "target": "file:src/screens/Home/Home.test.tsx",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/services/dmCampaignNotes.ts",
+      "target": "file:src/services/dmCampaignNotes.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/services/dmCampaigns.ts",
+      "target": "file:src/services/dmCampaigns.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/stores/selectors/characterStoreSelectors.ts",
+      "target": "file:src/stores/storeSelectors.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:src/stores/selectors/syncStoreSelectors.ts",
+      "target": "file:src/stores/storeSelectors.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
 
-    {"source": "file:src/services/dmCampaigns.ts", "target": "file:src/dm/repositories/campaignRepository.ts", "type": "depends_on", "direction": "forward", "weight": 0.6}
+    {
+      "source": "file:src/services/dmCampaigns.ts",
+      "target": "file:src/dm/repositories/campaignRepository.ts",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
   ]
 }
