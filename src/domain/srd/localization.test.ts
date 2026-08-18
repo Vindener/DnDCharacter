@@ -1,7 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { srdMonsterToMonsterDto, srdSpellToSpellbookSpell } from './adapters';
-import { getSrdMonsters, getSrdSpells } from './srdRepository';
-import { getLocalizedMonster, getLocalizedMonsterSearchText, getLocalizedSpellFields, getLocalizedSpellSearchText } from './localization';
+import { getSrdBackgrounds, getSrdClasses, getSrdMonsters, getSrdRaceById, getSrdRaces, getSrdSpells } from './srdRepository';
+import {
+  getLocalizedBackgroundFeature,
+  getLocalizedClassFeatures,
+  getLocalizedEquipmentText,
+  getLocalizedMonster,
+  getLocalizedMonsterSearchText,
+  getLocalizedRaceTraits,
+  getLocalizedSpellFields,
+  getLocalizedSpellSearchText,
+  getLocalizedSubraceTraits,
+} from './localization';
 
 describe('SRD Ukrainian localization overlays', () => {
   it('covers every spell and monster without changing identity metadata', () => {
@@ -49,5 +59,67 @@ describe('SRD Ukrainian localization overlays', () => {
     expect(localized.senses).not.toContain('System Reference Document');
     expect(getLocalizedMonsterSearchText(deva, 'uk')).toContain('Магічний опір');
     expect(getLocalizedMonster(deva, 'en')).toBe(deva);
+  });
+
+  it('covers every race, class, and background without changing identity metadata', () => {
+    expect(getSrdRaces()).toHaveLength(9);
+    expect(getSrdClasses()).toHaveLength(12);
+    expect(getSrdBackgrounds()).toHaveLength(1);
+
+    getSrdRaces().forEach((race) => {
+      getLocalizedRaceTraits(race, 'uk').forEach((trait) => {
+        expect(trait.name).not.toMatch(/[A-Za-z]{2}/);
+      });
+      race.subraces.forEach((subrace) => {
+        getLocalizedSubraceTraits(race, subrace, 'uk').forEach((trait) => {
+          expect(trait.name).not.toMatch(/[A-Za-z]{2}/);
+        });
+      });
+    });
+
+    getSrdClasses().forEach((srdClass) => {
+      getLocalizedClassFeatures(srdClass, 'uk').forEach((feature) => {
+        expect(feature.name).not.toMatch(/[A-Za-z]{2}/);
+      });
+    });
+
+    getSrdBackgrounds().forEach((background) => {
+      expect(getLocalizedBackgroundFeature(background, 'uk').name).not.toMatch(/[A-Za-z]{2}/);
+    });
+  });
+
+  it('localizes a representative race trait and class feature, and falls back to English for en', () => {
+    const halfling = getSrdRaceById('halfling')!;
+    const luckyTrait = getLocalizedRaceTraits(halfling, 'uk').find((trait) => trait.id === 'halfling-lucky');
+    expect(luckyTrait?.name).toBe('Талан');
+    expect(getLocalizedRaceTraits(halfling, 'en')).toBe(halfling.traits);
+
+    const fighter = getSrdClasses().find((srdClass) => srdClass.id === 'fighter')!;
+    const secondWind = getLocalizedClassFeatures(fighter, 'uk').find((feature) => feature.id === 'fighter-second-wind');
+    expect(secondWind?.name).toBe('Другий шанс');
+    expect(getLocalizedClassFeatures(fighter, 'en')).toBe(fighter.features);
+
+    const acolyte = getSrdBackgrounds().find((background) => background.id === 'acolyte')!;
+    expect(getLocalizedBackgroundFeature(acolyte, 'uk').name).toBe('Прихисток вірян');
+    expect(getLocalizedBackgroundFeature(acolyte, 'en')).toBe(acolyte.feature);
+  });
+
+  it('has an equipment translation for every free-text equipment string in classes.json and backgrounds.json', () => {
+    const strings = new Set<string>();
+    getSrdClasses().forEach((srdClass) => {
+      srdClass.startingEquipment.base.forEach((item) => strings.add(item));
+      srdClass.startingEquipment.choices.forEach((choice) => {
+        strings.add(choice.label);
+        choice.options.forEach((option) => strings.add(option));
+      });
+    });
+    getSrdBackgrounds().forEach((background) => background.equipment.forEach((item) => strings.add(item)));
+
+    strings.forEach((text) => {
+      expect(getLocalizedEquipmentText(text, 'uk')).not.toBe(text);
+    });
+    strings.forEach((text) => {
+      expect(getLocalizedEquipmentText(text, 'en')).toBe(text);
+    });
   });
 });

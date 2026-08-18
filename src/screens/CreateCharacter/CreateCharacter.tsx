@@ -33,6 +33,7 @@ import { syncToCloud } from '@/services/characterSyncCoordinator';
 import { CHARACTER_TEMPLATE_PRESETS } from '@/shared/const/CharacterTemplates';
 import { getSrdBackgroundById, getSrdBackgrounds, getSrdRaces, getSrdSubraces } from '@/domain/srd';
 import type { SrdAbilityId as AbilityKey } from '@/domain/srd';
+import { getLocalizedEquipmentText } from '@/domain/srd/localization';
 import { SUBCLASSES } from '@/shared/const/Subclasses';
 import { onGoogleButtonPress } from '@/shared/services/auth';
 import FileService from '@/shared/services/fileSerice';
@@ -710,7 +711,7 @@ const CreateCharacter = (): JSX.Element => {
               key={key}
               label={
                 key === 'artificer'
-                  ? t('raceClass.homebrewClassLabel', { name: t('dnd:classes.artificer', { defaultValue: 'Artificer' }) })
+                  ? t('raceClass.homebrewClassLabel', { name: t('dnd:classes.artificer', { defaultValue: 'Inventor' }) })
                   : t(`dnd:classes.${key}`, { defaultValue: getCreateClassById(key)?.name || key })
               }
               value={key}
@@ -1026,7 +1027,7 @@ const CreateCharacter = (): JSX.Element => {
             <Text style={styles.sectionTitle}>{t('equipment.startingGear')}</Text>
             {gearDef.choices.map((choice, index) => (
               <View key={choice.label}>
-                <Text style={styles.label}>{choice.label}</Text>
+                <Text style={styles.label}>{getLocalizedEquipmentText(choice.label, i18n.language)}</Text>
                 <Picker
                   selectedValue={draft.gearSelections[index] ?? 0}
                   style={styles.picker}
@@ -1037,7 +1038,7 @@ const CreateCharacter = (): JSX.Element => {
                   }}
                 >
                   {choice.options.map((option, optionIndex) => (
-                    <Picker.Item key={option} label={option} value={optionIndex} />
+                    <Picker.Item key={option} label={getLocalizedEquipmentText(option, i18n.language)} value={optionIndex} />
                   ))}
                 </Picker>
               </View>
@@ -1045,7 +1046,7 @@ const CreateCharacter = (): JSX.Element => {
             <View style={styles.infoBox}>
               {derived.selectedGear.map((item) => (
                 <Text key={item} style={styles.sectionHint}>
-                  {item}
+                  {getLocalizedEquipmentText(item, i18n.language)}
                 </Text>
               ))}
             </View>

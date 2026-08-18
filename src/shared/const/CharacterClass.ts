@@ -9,7 +9,7 @@ export const CLASS_TRANSLATIONS: Record<string, string> = {
   monk: 'Монах',
   rogue: 'Розбійник',
   warlock: 'Чаклун',
-  artificer: 'Артифісер',
+  artificer: 'Винахідник',
   wizard: 'Чарівник',
   sorcerer: 'Чародій',
 };

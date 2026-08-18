@@ -10,6 +10,8 @@ import type {
 } from '@/domain/types';
 import { buildTemplatePatch } from '@/shared/const/CharacterTemplates';
 import {
+  getLocalizedSrdClassFeaturesAtLevel,
+  getLocalizedSrdRaceTraits,
   getSrdBackgroundById,
   getSrdBackgrounds,
   getSrdClassById,
@@ -19,11 +21,11 @@ import {
   getSrdRaceById,
   getSrdRaceFlexibleIncrease,
   getSrdRaceLanguages,
-  getSrdRaceTraits,
   getSrdRaces,
   getSrdSubraceById,
   getStartingEquipmentForClass,
 } from '@/domain/srd';
+import { getLocalizedBackgroundFeature } from '@/domain/srd/localization';
 import type { SrdAbilityId as AbilityKey, SrdClassFeature, SrdStartingEquipment } from '@/domain/srd';
 import { getSuggestedStartingSpells } from '@/domain/srd/startingSpells';
 import { abilityMod, proficiencyBonus } from '@/shared/helpers/combat';
@@ -185,8 +187,26 @@ const HOMEBREW_ARTIFICER: CreateClassDefinition = {
   ],
 };
 
+const HOMEBREW_ARTIFICER_UK_NAME = 'Винахідник';
+const HOMEBREW_ARTIFICER_UK_FEATURE_SUMMARY = 'Хоумбрю-клас, який зберігається окремо від вбудованих правил.';
+
 export function getCreateClassById(classId: string): CreateClassDefinition | undefined {
-  if (classId === 'artificer') return HOMEBREW_ARTIFICER;
+  if (classId === 'artificer') {
+    if (getCurrentLanguage() === 'uk') {
+      return {
+        ...HOMEBREW_ARTIFICER,
+        name: HOMEBREW_ARTIFICER_UK_NAME,
+        features: [
+          {
+            ...HOMEBREW_ARTIFICER.features[0],
+            name: HOMEBREW_ARTIFICER_UK_NAME,
+            summary: HOMEBREW_ARTIFICER_UK_FEATURE_SUMMARY,
+          },
+        ],
+      };
+    }
+    return HOMEBREW_ARTIFICER;
+  }
   return getSrdClassById(classId);
 }
 
@@ -622,7 +642,7 @@ export function createSavingThrowDefaults(selectedClass: string): Record<Ability
   };
 }
 
-export function buildBackgroundMechanics(backgroundKey: string): BackgroundMechanics {
+export function buildBackgroundMechanics(backgroundKey: string, language: string = getCurrentLanguage()): BackgroundMechanics {
   const background = getSrdBackgroundById(backgroundKey);
   if (!background) {
     return { skillProficiencies: {}, tools: [], proficiencies: [] };
@@ -636,11 +656,13 @@ export function buildBackgroundMechanics(backgroundKey: string): BackgroundMecha
   const proficiencies: string[] = [...background.skills];
   if (background.languages) proficiencies.push(`Languages: +${background.languages}`);
 
+  const feature = getLocalizedBackgroundFeature(background, language);
+
   return {
     skillProficiencies,
     tools: background.tools || [],
     proficiencies,
-    featureText: `${background.feature.name}: ${background.feature.summary}`,
+    featureText: `${feature.name}: ${feature.summary}`,
   };
 }
 
@@ -695,11 +717,19 @@ export function buildCharacterFromDraft(draft: CreateCharacterDraft, id: string)
   const raceLanguages = normalized.useCustomRace ? [] : getSrdRaceLanguages(normalized.raceKey, normalized.subraceKey);
   if (raceLanguages.length) proficiencies.push(`Languages: ${raceLanguages.join(', ')}`);
 
-  const srdRaceTraits = normalized.useCustomRace ? [] : getSrdRaceTraits(normalized.raceKey, normalized.subraceKey);
+  const language = getCurrentLanguage();
+  const srdRaceTraits = normalized.useCustomRace ? [] : getLocalizedSrdRaceTraits(normalized.raceKey, normalized.subraceKey, language);
   const classFeatureNames = normalized.selectedClass === 'custom' ? [] : getSrdProgressionFeatureNames(normalized.selectedClass, level);
-  const classFeatureSummaries = (getCreateClassById(normalized.selectedClass)?.features || [])
-    .filter((feature) => feature.level <= level)
-    .map((feature) => `${feature.name}: ${feature.summary}`);
+  const classFeatureSummaries =
+    normalized.selectedClass === 'custom'
+      ? []
+      : normalized.selectedClass === 'artificer'
+        ? (getCreateClassById('artificer')?.features || [])
+            .filter((feature) => feature.level <= level)
+            .map((feature) => `${feature.name}: ${feature.summary}`)
+        : getLocalizedSrdClassFeaturesAtLevel(normalized.selectedClass, level, language).map(
+            (feature) => `${feature.name}: ${feature.summary}`,
+          );
   const featuresAndTraits = Array.from(
     new Set(
       [...srdRaceTraits.map((trait) => `${trait.name}: ${trait.summary}`), ...classFeatureNames, ...classFeatureSummaries].filter(Boolean),
@@ -922,8 +952,9 @@ function buildFeatureSourceRefs(
 ): CharacterContentSourceRef[] {
   const refs = raceTraits.map((trait) => srdSourceRef(trait.id, trait.name));
   if (draft.selectedClass === 'artificer') {
+    const artificerName = getCreateClassById('artificer')?.name || 'Artificer';
     for (let index = 0; index < classFeatureCount; index += 1) {
-      refs.push(homebrewSourceRef('artificer', 'Artificer'));
+      refs.push(homebrewSourceRef('artificer', artificerName));
     }
     return refs;
   }
@@ -950,7 +981,7 @@ function buildContentSources(draft: CreateCharacterDraft, featureSources: Charac
     draft.selectedClass === 'custom'
       ? customSourceRef(draft.customClassName.trim() || 'Custom class')
       : draft.selectedClass === 'artificer'
-        ? homebrewSourceRef('artificer', 'Artificer')
+        ? homebrewSourceRef('artificer', getCreateClassById('artificer')?.name || 'Artificer')
         : srdSourceRef(draft.selectedClass, getCreateClassById(draft.selectedClass)?.name || draft.selectedClass);
   const background =
     draft.backgroundKey === 'custom'

@@ -28,7 +28,7 @@
     "sorcerer": "Чародій",
     "warlock": "Чаклун",
     "wizard": "Чарівник",
-    "artificer": "Артифісер",
+    "artificer": "Винахідник",
     "custom": "Власний клас"
   },
   "races": {
@@ -38,7 +38,7 @@
     "gnome": "Гном",
     "half-elf": "Напівельф",
     "half-orc": "Напіворк",
-    "halfling": "Галфлінг",
+    "halfling": "Напіврослик",
     "human": "Людина",
     "tiefling": "Тіфлінг"
   },

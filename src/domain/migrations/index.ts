@@ -96,6 +96,7 @@ const SRD_RACE_NAME_TO_ID: Record<string, string> = {
   напіворк: 'half-orc',
   halfling: 'halfling',
   галфлінг: 'halfling',
+  напіврослик: 'halfling',
   human: 'human',
   людина: 'human',
   tiefling: 'tiefling',
@@ -312,7 +313,7 @@ function migrateCharacterV3toV4(payload: unknown): unknown {
     if (classId) {
       next.classId = classId;
       contentSources.class = buildSrdContentSource(classId, classText || classId);
-    } else if (classKey === 'artificer' || classKey === 'артифісер') {
+    } else if (classKey === 'artificer' || classKey === 'артифісер' || classKey === 'винахідник') {
       contentSources.class = buildHomebrewContentSource('artificer', classText || 'Artificer');
     } else if (classText) {
       contentSources.class = buildLegacyCustomContentSource(classText);

@@ -71,7 +71,12 @@ import { createEmptyCharacter } from '@/shared/helpers/createEmptyCharacter';
 import { getStatusToneColors } from '@/shared/styles/statusTones';
 import type { DiceRollResult } from '@/shared/services/diceRoller';
 import { applyLevelChange, MAX_CHARACTER_LEVEL, MIN_CHARACTER_LEVEL, type LevelChangeDraftValues } from './levelChange';
-import { getSrdClassFeaturesAtLevel, getSrdProgressionFeatureNames, getSrdRaceTraits, warmCharacterSrdCache } from '@/domain/srd';
+import {
+  getLocalizedSrdClassFeaturesAtLevel,
+  getLocalizedSrdRaceTraits,
+  getSrdProgressionFeatureNames,
+  warmCharacterSrdCache,
+} from '@/domain/srd';
 import { CharacterSourceBadge } from '../components/CharacterSourceBadge';
 import { isBuiltInRulesSource } from '@/shared/helpers/sourcePresentation';
 import { getLocalizedSpellFields } from '@/domain/srd/localization';
@@ -1919,10 +1924,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     const rows: SourceFeatureRow[] = [];
     const featureSources = characterData.contentSources?.featuresAndTraits || [];
     const seen = new Set<string>();
+    const seenSourceIds = new Set<string>();
     const pushRow = (id: string, text: string, source?: CharacterContentSourceRef) => {
       const safeText = String(text || '').trim();
-      if (!safeText || seen.has(safeText.toLowerCase())) return;
+      if (!safeText) return;
+      if (source?.id && seenSourceIds.has(source.id)) return;
+      if (seen.has(safeText.toLowerCase())) return;
       seen.add(safeText.toLowerCase());
+      if (source?.id) seenSourceIds.add(source.id);
       rows.push({ id, text: safeText, source });
     };
 
@@ -1930,7 +1939,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       pushRow(`saved-${index}`, feature, featureSources[index]);
     });
 
-    getSrdRaceTraits(characterData.raceId, characterData.subraceId).forEach((trait) => {
+    getLocalizedSrdRaceTraits(characterData.raceId, characterData.subraceId, i18n.language).forEach((trait) => {
       pushRow(`race-${trait.id}`, `${trait.name}: ${trait.summary}`, {
         origin: 'srd-5.1',
         source: 'srd-5.1',
@@ -1940,7 +1949,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       });
     });
 
-    getSrdClassFeaturesAtLevel(characterData.classId, characterData.level).forEach((feature) => {
+    getLocalizedSrdClassFeaturesAtLevel(characterData.classId, characterData.level, i18n.language).forEach((feature) => {
       pushRow(`class-${feature.id}`, `${feature.name}: ${feature.summary}`, {
         origin: 'srd-5.1',
         source: 'srd-5.1',
@@ -1973,6 +1982,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     characterData.level,
     characterData.raceId,
     characterData.subraceId,
+    i18n.language,
   ]);
 
   const syncBadges = useMemo(() => {

@@ -1,6 +1,30 @@
 import { loadMonstersJson, loadSpellsJson } from '@/data/srd';
 import type { SpellbookSpell } from '@/types/Spellbook';
 import type { MonsterActionDto, MonsterDto } from '@/types/Monster';
+import type { SrdBackground, SrdClass, SrdClassFeature, SrdFeatureBase, SrdRace, SrdSubrace } from './types';
+
+type RaceTraitTranslation = { id: string; name: string; summary: string };
+
+type RaceTranslation = {
+  id: string;
+  name: string;
+  traits: RaceTraitTranslation[];
+  subraces: Array<{ id: string; traits: RaceTraitTranslation[] }>;
+};
+
+type ClassTranslation = {
+  id: string;
+  name: string;
+  features: Array<{ id: string; name: string; summary: string }>;
+};
+
+type BackgroundTranslation = {
+  id: string;
+  name: string;
+  feature: { id: string; name: string; summary: string };
+};
+
+type EquipmentTranslationsJson = Record<string, string>;
 
 type SpellTranslation = {
   id: string;
@@ -50,6 +74,10 @@ let monsterTranslationById: Map<string, MonsterTranslation> | undefined;
 let spellSchoolTranslations: Map<string, string> | undefined;
 let spellClassTranslations: Map<string, string> | undefined;
 let monsterTermTranslations: Map<string, string> | undefined;
+let raceTranslationById: Map<string, RaceTranslation> | undefined;
+let classTranslationById: Map<string, ClassTranslation> | undefined;
+let backgroundTranslationById: Map<string, BackgroundTranslation> | undefined;
+let equipmentTranslations: Map<string, string> | undefined;
 
 function ensureLocalizationLoaded(): void {
   if (spellTranslationById !== undefined) return;
@@ -83,6 +111,20 @@ function ensureLocalizationLoaded(): void {
     monsterTermTranslations!.set(monster.type, translation.type);
     monsterTermTranslations!.set(monster.alignment, translation.alignment);
   });
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy require(), see PERF-1
+  const raceTranslations = require('../../data/locales/uk/races.json') as RaceTranslation[];
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy require(), see PERF-1
+  const classTranslations = require('../../data/locales/uk/classes.json') as ClassTranslation[];
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy require(), see PERF-1
+  const backgroundTranslations = require('../../data/locales/uk/backgrounds.json') as BackgroundTranslation[];
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- deliberate lazy require(), see PERF-1
+  const equipmentTranslationsJson = require('../../data/locales/uk/equipment.json') as EquipmentTranslationsJson;
+
+  raceTranslationById = new Map(raceTranslations.map((entry) => [entry.id, entry]));
+  classTranslationById = new Map(classTranslations.map((entry) => [entry.id, entry]));
+  backgroundTranslationById = new Map(backgroundTranslations.map((entry) => [entry.id, entry]));
+  equipmentTranslations = new Map(Object.entries(equipmentTranslationsJson));
 }
 
 // Lets a screen pay the one-time require()+Map-build cost while its skeleton is still on
@@ -218,4 +260,48 @@ export function getLocalizedMonsterSearchText(monster: MonsterDto, language: str
   ]
     .filter(Boolean)
     .join(' ');
+}
+
+export function getLocalizedRaceTraits(race: SrdRace, language: string): SrdFeatureBase[] {
+  ensureLocalizationLoaded();
+  const translation = language === 'uk' && race.source === 'srd-5.1' ? raceTranslationById!.get(race.id) : undefined;
+  if (!translation) return race.traits;
+  return race.traits.map((trait, index) => {
+    const t = translation.traits[index];
+    return t && t.id === trait.id ? { ...trait, name: t.name, summary: t.summary } : trait;
+  });
+}
+
+export function getLocalizedSubraceTraits(race: SrdRace, subrace: SrdSubrace, language: string): SrdFeatureBase[] {
+  ensureLocalizationLoaded();
+  const raceTranslation = language === 'uk' && race.source === 'srd-5.1' ? raceTranslationById!.get(race.id) : undefined;
+  const subraceTranslation = raceTranslation?.subraces.find((entry) => entry.id === subrace.id);
+  if (!subraceTranslation) return subrace.traits;
+  return subrace.traits.map((trait, index) => {
+    const t = subraceTranslation.traits[index];
+    return t && t.id === trait.id ? { ...trait, name: t.name, summary: t.summary } : trait;
+  });
+}
+
+export function getLocalizedClassFeatures(srdClass: SrdClass, language: string): SrdClassFeature[] {
+  ensureLocalizationLoaded();
+  const translation = language === 'uk' && srdClass.source === 'srd-5.1' ? classTranslationById!.get(srdClass.id) : undefined;
+  if (!translation) return srdClass.features;
+  return srdClass.features.map((feature, index) => {
+    const t = translation.features[index];
+    return t && t.id === feature.id ? { ...feature, name: t.name, summary: t.summary } : feature;
+  });
+}
+
+export function getLocalizedBackgroundFeature(background: SrdBackground, language: string): SrdFeatureBase {
+  ensureLocalizationLoaded();
+  const translation = language === 'uk' && background.source === 'srd-5.1' ? backgroundTranslationById!.get(background.id) : undefined;
+  if (!translation || translation.feature.id !== background.feature.id) return background.feature;
+  return { ...background.feature, name: translation.feature.name, summary: translation.feature.summary };
+}
+
+export function getLocalizedEquipmentText(text: string, language: string): string {
+  ensureLocalizationLoaded();
+  if (language !== 'uk') return text;
+  return equipmentTranslations!.get(text) || text;
 }

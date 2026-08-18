@@ -1,3 +1,4 @@
+import { getLocalizedClassFeatures, getLocalizedRaceTraits, getLocalizedSubraceTraits } from './localization';
 import { getClassProgression, getSrdBackgroundById, getSrdClassById, getSrdClasses, getSrdRaceById, getSrdRaces } from './srdRepository';
 import type { SrdAbilityId, SrdClassFeature, SrdFeatureBase, SrdRace, SrdSubrace } from './types';
 
@@ -47,6 +48,21 @@ export function getSrdClassFeaturesAtLevel(classId: string | undefined, level: n
   const srdClass = getSrdClassById(classId);
   if (!srdClass) return [];
   return srdClass.features.filter((feature) => feature.level <= level);
+}
+
+export function getLocalizedSrdRaceTraits(raceId: string | undefined, subraceId: string | undefined, language: string): SrdFeatureBase[] {
+  if (!raceId) return [];
+  const race = getSrdRaceById(raceId);
+  if (!race) return [];
+  const subrace = subraceId ? getSrdSubraceById(raceId, subraceId) : undefined;
+  return [...getLocalizedRaceTraits(race, language), ...(subrace ? getLocalizedSubraceTraits(race, subrace, language) : [])];
+}
+
+export function getLocalizedSrdClassFeaturesAtLevel(classId: string | undefined, level: number, language: string): SrdClassFeature[] {
+  if (!classId) return [];
+  const srdClass = getSrdClassById(classId);
+  if (!srdClass) return [];
+  return getLocalizedClassFeatures(srdClass, language).filter((feature) => feature.level <= level);
 }
 
 export function getSrdProgressionFeatureNames(classId: string | undefined, level: number): string[] {
