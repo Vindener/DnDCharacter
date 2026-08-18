@@ -1,0 +1,43 @@
+src/data/locales/uk/backgrounds.json
+  s_5ea554202da0f3::t_e894e423014c70 1-11
+src/data/locales/uk/classes.json
+  s_5ea554202da0f3::t_4f81021ef9954d 1-199
+src/data/locales/uk/equipment.json
+  s_5ea554202da0f3::t_de993a258b621f 1-66
+src/data/locales/uk/races.json
+  s_5ea554202da0f3::t_aa17af73cfbd2e 1-253
+src/domain/migrations/index.ts
+  s_5ea554202da0f3::t_5720ac3084d545 99,316
+src/domain/srd/localization.test.ts
+  s_5ea554202da0f3::t_7d68ed39769dbb 3-14,63-124
+src/domain/srd/localization.ts
+  s_5ea554202da0f3::t_b8ee4d9ce23fbb 4-27,77-80,114-127,264-307
+src/domain/srd/srdSelectors.ts
+  s_5ea554202da0f3::t_d4af9ab0146e0b 1,51-65
+src/i18n/locales/uk/dnd.json
+  s_5ea554202da0f3::t_7f369a87b7951e 31,41
+src/screens/Character/hooks/useCharacterActions.tsx
+  s_5ea554202da0f3::t_b5d06b8416788b 74-79,1927,1930-1932,1934,1942,1952,1985
+src/screens/CreateCharacter/CreateCharacter.tsx
+  s_5ea554202da0f3::t_cd7fddcf0f4445 36,714,1030,1041,1049
+src/screens/CreateCharacter/createCharacterWizard.ts
+  s_5ea554202da0f3::t_f73538566b6869 13-14,28,190-192,194-209,645,659-660,665,720-721,723-732,955,957,984
+src/shared/const/CharacterClass.ts
+  s_5ea554202da0f3::t_bdb599072baa74 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "f01b0f1d92d90d92fcc66deb84f168b989759aee",
+  "prompts": {},
+  "sessions": {
+    "s_5ea554202da0f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ba841cc0-fd6e-46ff-bf19-85c8fee6bd99",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
