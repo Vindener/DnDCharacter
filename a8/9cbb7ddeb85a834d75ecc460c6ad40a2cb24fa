@@ -1,0 +1,74 @@
+src/screens/Support/Support.tsx
+  h_dfa0da26a12699 8
+src/domain/srd/localization.ts
+  s_f0b86136e2748a::t_c5e488e2c99d79 138-144
+src/domain/srd/srdRepository.ts
+  s_f0b86136e2748a::t_af58e6dcedf17d 209-215
+src/i18n/locales/en/dm.json
+  s_f0b86136e2748a::t_e105d57a79d716 177,182-208
+src/i18n/locales/en/settings.json
+  s_f0b86136e2748a::t_13964f6e045bcf 84-85
+src/i18n/locales/uk/dm.json
+  s_f0b86136e2748a::t_afece2c9d46785 177,182-208
+src/i18n/locales/uk/settings.json
+  s_f0b86136e2748a::t_deb1c18c0ce5fc 84-85
+src/navigation/AppNavigator.tsx
+  s_f0b86136e2748a::t_4a9950d4543884 53,61-62
+src/screens/DM/DM.tsx
+  s_f0b86136e2748a::t_3dfbdc68d17f3e 77,178-179,244-258,287,362
+src/screens/DM/DMCampaignDetail.tsx
+  s_f0b86136e2748a::t_fec3b364b75c23 74,82-84,376-383
+src/screens/DM/DMSharedUpdates.style.ts
+  s_f0b86136e2748a::t_805ba6c52112e5 65-70,80-84,116-121,140-152
+src/screens/DM/DMSharedUpdates.tsx
+  s_f0b86136e2748a::t_c17418e7fed4cd 284-295,344-347,351-371,378-387,390,397,402,405,411,416,420,425,429
+src/screens/Home/Home.tsx
+  s_f0b86136e2748a::t_7b497c2e5309d2 161-162,175-176,322-370
+src/screens/Settings/Settings.tsx
+  s_f0b86136e2748a::t_94b7ebb058ddbf 34-35,300-308
+src/services/storeEffects/uiStoreEffects.ts
+  s_f0b86136e2748a::t_cca51b0a13f7c7 27-28,35,152-171
+src/stores/uiStore.ts
+  s_f0b86136e2748a::t_d3b1a89594ce2b 15,26-27,40,51-52
+android/app/build.gradle
+  h_dfa0da26a12699 114
+app.json
+  h_dfa0da26a12699 19
+docs/audit-2026-07.md
+  h_dfa0da26a12699 335-340
+src/i18n/locales/en/changeHistory.json
+  h_dfa0da26a12699 5-16
+src/i18n/locales/en/whatsNew.json
+  h_dfa0da26a12699 5-11
+src/i18n/locales/uk/changeHistory.json
+  h_dfa0da26a12699 5-16
+src/i18n/locales/uk/whatsNew.json
+  h_dfa0da26a12699 5-11
+src/screens/Bestiary/Bestiary.tsx
+  h_dfa0da26a12699 17,103-107,109-113,115,395
+src/screens/Character/hooks/useCharacterActions.tsx
+  h_dfa0da26a12699 78,315-320,322-326,328,1953-1961,1964-1971,1974-1981,1983,1999
+src/screens/Spellbook/Spellbook.tsx
+  h_dfa0da26a12699 36,205-209,211-215,217,874,876
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "a89cbb7ddeb85a834d75ecc460c6ad40a2cb24fa",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_f0b86136e2748a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "417ed85b-f8e7-44f8-b93c-130018fd85dd",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
