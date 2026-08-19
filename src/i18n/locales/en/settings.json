@@ -81,7 +81,8 @@
   "debug": {
     "title": "Developer",
     "hint": "Only visible in dev builds.",
-    "firebaseToasts": "Firebase debug toasts"
+    "firebaseToasts": "Firebase debug toasts",
+    "forceShowSyncStrip": "Always show sync status block"
   },
   "defaultCampaign": {
     "title": "Default campaign",

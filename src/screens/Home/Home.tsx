@@ -158,6 +158,8 @@ const Home = () => {
     [currentCharacterId, lastSessionCharacterId, previewList],
   );
 
+  const forceShowSyncStrip = useThemeStore((s) => s.forceShowSyncStrip);
+
   const syncStrip = useMemo(
     () =>
       buildSyncStrip({
@@ -169,6 +171,8 @@ const Home = () => {
       }),
     [cloudPulseAt, conflictCount, isOnline, isSignedIn, pendingSyncCount, storeLastSyncAt],
   );
+
+  const showSyncStrip = syncStrip.hasConflict || syncStrip.hasPending || forceShowSyncStrip;
 
   const openRootTab = React.useCallback(
     (routeName: 'DM' | 'References', params?: Record<string, unknown>) => {
@@ -315,6 +319,55 @@ const Home = () => {
         </View>
       </View>
 
+      {showSyncStrip ? (
+        <View
+          style={[
+            styles.syncStrip,
+            syncStrip.hasConflict ? styles.syncStripDanger : null,
+            !syncStrip.hasConflict && syncStrip.hasPending ? styles.syncStripWarning : null,
+          ]}
+          testID='home.syncStrip'
+        >
+          <View style={styles.syncStripHeader}>
+            <Ionicons
+              name={
+                syncStrip.hasConflict ? 'alert-circle-outline' : syncStrip.hasPending ? 'cloud-upload-outline' : 'checkmark-circle-outline'
+              }
+              size={20}
+              color={syncStrip.hasConflict ? colors.danger : syncStrip.hasPending ? colors.warning : colors.success}
+            />
+            <Text style={styles.syncStripTitle}>
+              {syncStrip.hasConflict
+                ? t('home:syncStrip.conflictTitle')
+                : syncStrip.hasPending
+                  ? t('home:syncStrip.pendingTitle')
+                  : t('home:syncStrip.syncedTitle')}
+            </Text>
+          </View>
+          <View style={styles.syncPillRow}>
+            <Text style={styles.syncPillText}>{isOnline ? t('common:status.online') : t('common:status.offline')}</Text>
+            <Text style={styles.syncPillText}>{isSignedIn ? t('home:syncStrip.cloudConnected') : t('home:syncStrip.cloudNeedsLogin')}</Text>
+            <Text style={styles.syncPillText}>{t('home:syncStrip.lastSync', { value: lastSyncDisplay })}</Text>
+            <Text style={styles.syncPillText}>
+              {pendingSyncCount > 0 ? t('home:syncStrip.pending', { count: pendingSyncCount }) : t('home:syncStrip.noPending')}
+            </Text>
+            <Text style={styles.syncPillText}>
+              {conflictCount > 0 ? t('home:syncStrip.conflicts', { count: conflictCount }) : t('home:syncStrip.noConflicts')}
+            </Text>
+          </View>
+          {!isSignedIn ? (
+            <Pressable
+              style={styles.cloudLoginButton}
+              onPress={onLogin}
+              android_ripple={{ color: colors.ripple }}
+              testID='home.cloudLoginButton'
+            >
+              <Text style={styles.cloudLoginText}>{t('home:actions.cloudLogin')}</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
+
       {charactersLoadError ? (
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>{t('home:syncStrip.errorTitle')}</Text>
@@ -418,53 +471,6 @@ const Home = () => {
           <Text style={styles.sectionHint}>{t('home:empty.noCharactersHint')}</Text>
         </View>
       ) : null}
-
-      <View
-        style={[
-          styles.syncStrip,
-          syncStrip.hasConflict ? styles.syncStripDanger : null,
-          !syncStrip.hasConflict && syncStrip.hasPending ? styles.syncStripWarning : null,
-        ]}
-        testID='home.syncStrip'
-      >
-        <View style={styles.syncStripHeader}>
-          <Ionicons
-            name={
-              syncStrip.hasConflict ? 'alert-circle-outline' : syncStrip.hasPending ? 'cloud-upload-outline' : 'checkmark-circle-outline'
-            }
-            size={20}
-            color={syncStrip.hasConflict ? colors.danger : syncStrip.hasPending ? colors.warning : colors.success}
-          />
-          <Text style={styles.syncStripTitle}>
-            {syncStrip.hasConflict
-              ? t('home:syncStrip.conflictTitle')
-              : syncStrip.hasPending
-                ? t('home:syncStrip.pendingTitle')
-                : t('home:syncStrip.syncedTitle')}
-          </Text>
-        </View>
-        <View style={styles.syncPillRow}>
-          <Text style={styles.syncPillText}>{isOnline ? t('common:status.online') : t('common:status.offline')}</Text>
-          <Text style={styles.syncPillText}>{isSignedIn ? t('home:syncStrip.cloudConnected') : t('home:syncStrip.cloudNeedsLogin')}</Text>
-          <Text style={styles.syncPillText}>{t('home:syncStrip.lastSync', { value: lastSyncDisplay })}</Text>
-          <Text style={styles.syncPillText}>
-            {pendingSyncCount > 0 ? t('home:syncStrip.pending', { count: pendingSyncCount }) : t('home:syncStrip.noPending')}
-          </Text>
-          <Text style={styles.syncPillText}>
-            {conflictCount > 0 ? t('home:syncStrip.conflicts', { count: conflictCount }) : t('home:syncStrip.noConflicts')}
-          </Text>
-        </View>
-        {!isSignedIn ? (
-          <Pressable
-            style={styles.cloudLoginButton}
-            onPress={onLogin}
-            android_ripple={{ color: colors.ripple }}
-            testID='home.cloudLoginButton'
-          >
-            <Text style={styles.cloudLoginText}>{t('home:actions.cloudLogin')}</Text>
-          </Pressable>
-        ) : null}
-      </View>
     </ScrollView>
   );
 };

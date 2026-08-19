@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useThemeStore from '@/context/Theme-store';
 import { fs, rd, sp } from '@/shared/styles/tokens';
 
-const donationUrl = 'https://t.me/mythgatednd/12';
+const donationUrl = 'https://mythgatednd.pp.ua/app/support';
 const telegramChannelUrl = 'https://t.me/mythgatednd';
 // A personal-account chat, unlike a group/channel, honors Telegram's undocumented
 // but universally-supported `?text=` param and prefills the composer with it.

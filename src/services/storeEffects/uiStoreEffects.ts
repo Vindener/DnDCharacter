@@ -24,12 +24,15 @@ type UiStoreEffects = Pick<
   | 'loadAnalyticsConsent'
   | 'setFirebaseDebugToastsEnabled'
   | 'loadFirebaseDebugToastsEnabled'
+  | 'setForceShowSyncStrip'
+  | 'loadForceShowSyncStrip'
 >;
 
 const THEME_STORAGE_KEY = 'APP_THEME';
 const CUSTOM_COINS_STORAGE_KEY = 'custom_coins';
 const ANALYTICS_CONSENT_STORAGE_KEY = 'ANALYTICS_CONSENT_V1';
 const FIREBASE_DEBUG_TOASTS_STORAGE_KEY = 'FIREBASE_DEBUG_TOASTS_V1';
+const FORCE_SHOW_SYNC_STRIP_STORAGE_KEY = 'FORCE_SHOW_SYNC_STRIP_V1';
 
 export function createUiStoreEffects({ set, get }: UiStoreContext): UiStoreEffects {
   return {
@@ -145,6 +148,26 @@ export function createUiStoreEffects({ set, get }: UiStoreContext): UiStoreEffec
         /* intentionally ignored */
       }
       set({ firebaseDebugToastsEnabled: enabled });
+    },
+
+    setForceShowSyncStrip: async (enabled) => {
+      set({ forceShowSyncStrip: enabled });
+      try {
+        await AsyncStorage.setItem(FORCE_SHOW_SYNC_STRIP_STORAGE_KEY, JSON.stringify({ enabled }));
+      } catch (_error) {
+        /* intentionally ignored */
+      }
+    },
+
+    loadForceShowSyncStrip: async () => {
+      let enabled = false;
+      try {
+        const value = await AsyncStorage.getItem(FORCE_SHOW_SYNC_STRIP_STORAGE_KEY);
+        if (value) enabled = !!JSON.parse(value).enabled;
+      } catch (_error) {
+        /* intentionally ignored */
+      }
+      set({ forceShowSyncStrip: enabled });
     },
   };
 }

@@ -135,6 +135,13 @@ export function warmSrdLocalizationCache(): void {
   ensureLocalizationLoaded();
 }
 
+// Lets a screen decide, synchronously and without forcing the load itself, whether the
+// warm-up above has already run — so it can keep showing a skeleton for one more render
+// instead of racing the InteractionManager callback that calls warmSrdLocalizationCache().
+export function isSrdLocalizationWarm(): boolean {
+  return spellTranslationById !== undefined;
+}
+
 function getCanonicalId(id: string, prefix: string): string {
   return id.startsWith(prefix) ? id.slice(prefix.length) : id;
 }

@@ -14,7 +14,7 @@ import { SkeletonBestiary } from '@/shared/ui/skeleton';
 import { DeferredMount } from '@/shared/components/DeferredMount/DeferredMount';
 import type { ReferencesStackParamList } from '@/navigation/ReferencesNavigator';
 import { shouldDisplaySourceMetadata } from '@/shared/helpers/sourcePresentation';
-import { getLocalizedMonsterTerm, warmSrdLocalizationCache } from '@/domain/srd/localization';
+import { getLocalizedMonsterTerm, isSrdLocalizationWarm, warmSrdLocalizationCache } from '@/domain/srd/localization';
 import type { DMCampaign } from '@/dm/domain/types';
 import { subscribeAccessibleCampaigns, togglePinnedMonsterForCampaign } from '@/dm/repositories/campaignRepository';
 import {
@@ -100,10 +100,19 @@ const BestiaryScreen = ({ route }: Props) => {
     void loadMonsters();
   }, [loadMonsters]);
 
+  // The list's filter options (below) call getLocalizedMonsterTerm synchronously inside a
+  // useMemo, which would otherwise pay the one-time uk-locale parse+Map-build cost on the
+  // very render that replaces the skeleton with real content — felt as a freeze. Gating the
+  // skeleton on this flag too moves that cost onto a render where the skeleton is still up.
+  const [localizationReady, setLocalizationReady] = useState(() => isSrdLocalizationWarm());
   useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => warmSrdLocalizationCache());
+    if (localizationReady) return undefined;
+    const task = InteractionManager.runAfterInteractions(() => {
+      warmSrdLocalizationCache();
+      setLocalizationReady(true);
+    });
     return () => task.cancel();
-  }, []);
+  }, [localizationReady]);
 
   useEffect(() => {
     if (!campaignId) return undefined;
@@ -383,7 +392,7 @@ const BestiaryScreen = ({ route }: Props) => {
     );
   }
 
-  if (!isLoaded) {
+  if (!isLoaded || !localizationReady) {
     return (
       <View style={styles.container}>
         <SkeletonBestiary />

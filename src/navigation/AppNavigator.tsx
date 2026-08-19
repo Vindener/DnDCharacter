@@ -50,6 +50,7 @@ export default function AppNavigator() {
   const loadTheme = useThemeStore((s) => s.loadTheme);
   const loadAnalyticsConsent = useThemeStore((s) => s.loadAnalyticsConsent);
   const loadFirebaseDebugToastsEnabled = useThemeStore((s) => s.loadFirebaseDebugToastsEnabled);
+  const loadForceShowSyncStrip = useThemeStore((s) => s.loadForceShowSyncStrip);
   const insets = useSafeAreaInsets();
   const bottomInset = Math.max(insets.bottom, sp(6));
 
@@ -57,7 +58,8 @@ export default function AppNavigator() {
     loadTheme();
     loadAnalyticsConsent();
     loadFirebaseDebugToastsEnabled();
-  }, [loadTheme, loadAnalyticsConsent, loadFirebaseDebugToastsEnabled]);
+    loadForceShowSyncStrip();
+  }, [loadTheme, loadAnalyticsConsent, loadFirebaseDebugToastsEnabled, loadForceShowSyncStrip]);
 
   const isDark = useThemeStore((s) => s.isDark);
   const navigationStateRef = useRef<NavigationState | undefined>(undefined);

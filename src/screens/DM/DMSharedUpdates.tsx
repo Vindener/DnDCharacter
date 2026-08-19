@@ -281,6 +281,18 @@ const DMSharedUpdates = () => {
 
   const formatSource = (source: SharedRecord['source']) => t(`dm:sharedUpdates.sources.${source}`);
 
+  const formatPathSummary = (summary: string | undefined) => {
+    if (!summary) return t('dm:sharedUpdates.noSummary');
+    return t(`dm:sharedUpdates.pathLabels.${summary}`, { defaultValue: summary });
+  };
+
+  const syncStatusColor = (status: string) => {
+    if (status === 'Synced') return colors.success;
+    if (status === 'Conflict detected') return colors.danger;
+    if (status === 'Pending sync' || status === 'Offline changes pending') return colors.warning;
+    return colors.textSecondary;
+  };
+
   const formatChangeSource = (entry: { uid: string; actorRole?: string }) => {
     const currentUid = fbAuth.currentUser?.uid;
     if (currentUid && entry.uid && currentUid === entry.uid) return t('dm:sharedUpdates.changeSources.you');
@@ -329,66 +341,74 @@ const DMSharedUpdates = () => {
 
         return (
           <View key={`shared-${item.source}-${item.id}`} style={styles.itemCard}>
-            <Text style={styles.itemTitle}>{item.name}</Text>
-            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.sheetId', { id: item.id })}</Text>
-            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.source', { source: formatSource(item.source) })}</Text>
-            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.updated', { value: updatedLabel })}</Text>
-            <Text style={styles.itemMeta}>{t('dm:sharedUpdates.syncStatus', { status: formatSyncStatus(item.syncStatus) })}</Text>
-            {!!item.shareStatus && (
-              <Text style={styles.itemMeta}>{t('dm:sharedUpdates.shareStatus', { status: formatShareStatus(item.shareStatus) })}</Text>
-            )}
-            {latestHistoryLabel && (
-              <Text style={styles.itemMeta}>
-                {t('dm:sharedUpdates.latestMarker', {
-                  actor: latestHistoryLabel,
-                  summary: item.latestHistory?.summary || t('dm:sharedUpdates.noSummary'),
-                })}
-              </Text>
-            )}
-            <View style={styles.statusRow}>
-              <View style={styles.statusChip}>
-                <Text style={styles.statusChipText}>
+            <View style={styles.itemHeaderRow}>
+              <Text style={styles.itemTitle}>{item.name}</Text>
+              <View style={[styles.statusChip, { borderColor: item.needsReview ? colors.warning : colors.success }]}>
+                <Text style={[styles.statusChipText, { color: item.needsReview ? colors.warning : colors.success }]}>
                   {item.needsReview ? t('dm:sharedUpdates.needsReview') : t('dm:sharedUpdates.reviewed')}
                 </Text>
               </View>
+            </View>
+
+            <Text style={styles.itemMeta}>
+              {t('dm:sharedUpdates.source', { source: formatSource(item.source) })}
+              {'  ·  '}
+              {t('dm:sharedUpdates.updated', { value: updatedLabel })}
+              {'  ·  '}
+              {t('dm:sharedUpdates.sheetId', { id: `${item.id.slice(0, 8)}…` })}
+            </Text>
+
+            <View style={styles.statusRow}>
+              <View style={[styles.statusChip, { borderColor: syncStatusColor(item.syncStatus) }]}>
+                <Text style={[styles.statusChipText, { color: syncStatusColor(item.syncStatus) }]}>
+                  {formatSyncStatus(item.syncStatus)}
+                </Text>
+              </View>
+              {!!item.shareStatus && (
+                <View style={styles.statusChip}>
+                  <Text style={styles.statusChipText}>{formatShareStatus(item.shareStatus)}</Text>
+                </View>
+              )}
               <View style={styles.statusChip}>
                 <Text style={styles.statusChipText}>
                   {localCopyExists ? t('dm:sharedUpdates.localCopyExists') : t('dm:sharedUpdates.noLocalCopy')}
                 </Text>
               </View>
             </View>
+
+            {latestHistoryLabel && (
+              <Text style={styles.itemHighlight}>
+                {t('dm:sharedUpdates.latestMarker', {
+                  actor: latestHistoryLabel,
+                  summary: formatPathSummary(item.latestHistory?.summary),
+                })}
+              </Text>
+            )}
+
             {!!item.changeHistory.length && (
               <View style={styles.historyBox}>
+                <Text style={styles.historyTitle}>{t('dm:sharedUpdates.historyTitle')}</Text>
                 {item.changeHistory
                   .slice()
                   .sort((a, b) => (b.atMs || 0) - (a.atMs || 0))
                   .slice(0, 3)
                   .map((entry) => (
                     <Text key={entry.id} style={styles.historyText}>
-                      {formatChangeSource(entry)} • {entry.summary || t('dm:sharedUpdates.noSummary')} •{' '}
-                      {new Date(entry.atMs).toLocaleString()}
+                      {formatChangeSource(entry)} • {formatPathSummary(entry.summary)} • {new Date(entry.atMs).toLocaleString()}
                     </Text>
                   ))}
               </View>
             )}
+
             <View style={styles.actionsRow}>
               <Pressable
-                style={styles.actionButton}
+                style={styles.primaryActionButton}
                 onPress={() => {
                   void openInHeroes(item.payload);
                 }}
                 android_ripple={{ color: colors.ripple }}
               >
-                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.openLiveCopy')}</Text>
-              </Pressable>
-              <Pressable
-                style={styles.actionButton}
-                onPress={() => {
-                  void markReviewed(item.id, item.updatedAtMs);
-                }}
-                android_ripple={{ color: colors.ripple }}
-              >
-                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.markReviewed')}</Text>
+                <Text style={styles.primaryActionButtonText}>{t('dm:sharedUpdates.openLiveCopy')}</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}
@@ -398,6 +418,15 @@ const DMSharedUpdates = () => {
                 android_ripple={{ color: colors.ripple }}
               >
                 <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.syncNow')}</Text>
+              </Pressable>
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => {
+                  void markReviewed(item.id, item.updatedAtMs);
+                }}
+                android_ripple={{ color: colors.ripple }}
+              >
+                <Text style={styles.actionButtonText}>{t('dm:sharedUpdates.markReviewed')}</Text>
               </Pressable>
               <Pressable
                 style={styles.actionButton}

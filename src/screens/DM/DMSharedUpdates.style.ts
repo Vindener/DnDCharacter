@@ -62,6 +62,12 @@ export const getStyles = (c: ThemeColors) =>
       gap: sp(6),
       marginBottom: sp(10),
     },
+    itemHeaderRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: sp(8),
+    },
     itemTitle: {
       color: c.text,
       fontSize: fs(14),
@@ -70,6 +76,11 @@ export const getStyles = (c: ThemeColors) =>
     itemMeta: {
       color: c.textSecondary,
       fontSize: fs(12),
+    },
+    itemHighlight: {
+      color: c.text,
+      fontSize: fs(12),
+      fontWeight: '600',
     },
     statusRow: {
       flexDirection: 'row',
@@ -102,6 +113,12 @@ export const getStyles = (c: ThemeColors) =>
       padding: sp(8),
       gap: sp(4),
     },
+    historyTitle: {
+      color: c.textSecondary,
+      fontSize: fs(11),
+      fontWeight: '700',
+      textTransform: 'uppercase',
+    },
     historyText: {
       color: c.textSecondary,
       fontSize: fs(11),
@@ -117,6 +134,19 @@ export const getStyles = (c: ThemeColors) =>
     },
     actionButtonText: {
       color: c.text,
+      fontSize: fs(12),
+      fontWeight: '700',
+    },
+    primaryActionButton: {
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.primary,
+      backgroundColor: c.primary,
+      paddingVertical: sp(8),
+      paddingHorizontal: sp(10),
+    },
+    primaryActionButtonText: {
+      color: c.onPrimary,
       fontSize: fs(12),
       fontWeight: '700',
     },

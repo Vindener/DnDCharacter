@@ -71,6 +71,7 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
   const [emailInviteSuccess, setEmailInviteSuccess] = useState('');
   const [inviteError, setInviteError] = useState('');
   const [peopleByUid, setPeopleByUid] = useState<Map<string, string>>(new Map());
+  const [isCampaignsLoaded, setIsCampaignsLoaded] = useState(false);
 
   useEffect(() => {
     let unsub = () => {};
@@ -78,7 +79,9 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
 
     const run = async () => {
       unsub = await subscribeAccessibleCampaigns((next) => {
-        if (!cancelled) setCampaigns(next);
+        if (cancelled) return;
+        setCampaigns(next);
+        setIsCampaignsLoaded(true);
       });
     };
 
@@ -370,7 +373,14 @@ const DMCampaignDetail: React.FC<Props> = ({ route, navigation }) => {
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <View style={styles.card}>
-          <Text style={styles.hint}>{t('dm:campaignDetail.notFound')}</Text>
+          {isCampaignsLoaded ? (
+            <Text style={styles.hint}>{t('dm:campaignDetail.notFound')}</Text>
+          ) : (
+            <>
+              <ActivityIndicator color={colors.text} testID='dmCampaignDetail.loading' />
+              <Text style={styles.hint}>{t('common:loading')}</Text>
+            </>
+          )}
         </View>
       </ScrollView>
     );

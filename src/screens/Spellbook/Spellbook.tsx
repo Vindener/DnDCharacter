@@ -33,6 +33,7 @@ import {
   getLocalizedSpellClass,
   getLocalizedSpellFields,
   getLocalizedSpellSchool,
+  isSrdLocalizationWarm,
   warmSrdLocalizationCache,
 } from '@/domain/srd/localization';
 
@@ -201,10 +202,19 @@ const SpellbookScreen = ({ route }: Props) => {
     loadSpellbook().catch(() => {});
   }, [loadSpellbook]);
 
+  // Rendering spell cards calls getLocalizedSpellFields/getLocalizedSpellSchool synchronously,
+  // which would otherwise pay the one-time uk-locale parse+Map-build cost on the very render
+  // that replaces the skeleton with real content — felt as a freeze. Gating the skeleton on
+  // this flag too moves that cost onto a render where the skeleton is still up.
+  const [localizationReady, setLocalizationReady] = useState(() => isSrdLocalizationWarm());
   useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => warmSrdLocalizationCache());
+    if (localizationReady) return undefined;
+    const task = InteractionManager.runAfterInteractions(() => {
+      warmSrdLocalizationCache();
+      setLocalizationReady(true);
+    });
     return () => task.cancel();
-  }, []);
+  }, [localizationReady]);
 
   useEffect(() => {
     if (!campaignId) return undefined;
@@ -861,9 +871,9 @@ const SpellbookScreen = ({ route }: Props) => {
 
       {isDmMode && pinnedSpellIds.length ? <Text style={styles.preparedInfo}>{t('pinnedHint')}</Text> : null}
       {loadError ? <Text style={styles.errorText}>{loadError}</Text> : null}
-      {!loadError && !isLoaded ? <SkeletonSpellbook /> : null}
+      {!loadError && (!isLoaded || !localizationReady) ? <SkeletonSpellbook /> : null}
 
-      {!loadError && isLoaded ? (
+      {!loadError && isLoaded && localizationReady ? (
         <FlatList
           data={filteredSpells}
           keyExtractor={(item) => item.id}

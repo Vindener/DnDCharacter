@@ -48,9 +48,7 @@ const DM: React.FC = () => {
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
   const localCharacters = useCharacterStore((s) => s.characters);
-  const addCharacter = useCharacterStore((s) => s.addCharacter);
   const updateCharacter = useCharacterStore((s) => s.updateCharacter);
-  const setCurrentCharacterId = useCharacterStore((s) => s.setCurrentCharacterId);
   const syncByCharacter = useSyncStore((s) => s.syncByCharacter);
   const markLocalDraftPaths = useSyncStore((s) => s.markLocalDraftPaths);
   const roleMode = useAppRoleStore((s) => s.role);
@@ -76,6 +74,7 @@ const DM: React.FC = () => {
 
   const isSignedIn = Boolean(fbAuth.currentUser);
   const isOnline = isNetworkOnline(netInfo.isConnected);
+  const forceShowSyncStrip = useThemeStore((s) => s.forceShowSyncStrip);
 
   const formatRole = React.useCallback((role: AppRole) => t(`common:roles.${role}`), [t]);
   const formatSyncStatus = React.useCallback(
@@ -96,15 +95,6 @@ const DM: React.FC = () => {
     },
     [t],
   );
-  const formatSource = React.useCallback(
-    (source: DashboardCharacter['source']) => {
-      if (source === 'local') return t('common:status.localOnly');
-      if (source === 'mine') return t('common:status.cloud');
-      return t('common:status.shared');
-    },
-    [t],
-  );
-
   useEffect(() => {
     void loadMonsters();
     void loadSpellbook();
@@ -185,6 +175,8 @@ const DM: React.FC = () => {
     [netInfo.isConnected, syncByCharacter],
   );
 
+  const showSyncStatus = pendingSyncCount > 0 || conflictCount > 0 || forceShowSyncStrip;
+
   const unifiedParty = useMemo<DashboardCharacter[]>(() => {
     const byId = new Map<string, DashboardCharacter>();
 
@@ -226,34 +218,6 @@ const DM: React.FC = () => {
     parent.dispatch(CommonActions.navigate({ name: routeName, params }));
   };
 
-  const ensureLocalCharacter = async (character: CharacterViewModel) => {
-    const existing = useCharacterStore.getState().characters.find((item) => item.id === character.id);
-    if (existing) {
-      await updateCharacter(existing.id, character);
-    } else {
-      await addCharacter(character);
-    }
-    return character;
-  };
-
-  const openFullSheet = async (character: CharacterViewModel) => {
-    const local = await ensureLocalCharacter(character);
-    setCurrentCharacterId(local.id);
-    const parent = navigation.getParent();
-    if (!parent) return;
-    parent.dispatch(
-      CommonActions.navigate({
-        name: 'Heroes',
-        params: { screen: 'Character', params: { character: local } },
-      }),
-    );
-  };
-
-  const openQuickEdit = async (character: CharacterViewModel) => {
-    const local = await ensureLocalCharacter(character);
-    navigation.navigate('DMQuickEdit', { characterId: local.id });
-  };
-
   const onLogin = async () => {
     try {
       setIsSigningIn(true);
@@ -277,17 +241,21 @@ const DM: React.FC = () => {
           <View style={styles.statChip}>
             <Text style={styles.statChipText}>{t('dm:dashboard.partySize', { count: unifiedParty.length })}</Text>
           </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>
-              {t('dm:dashboard.network', { status: isOnline ? t('common:status.online') : t('common:status.offline') })}
-            </Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>{t('dm:dashboard.pendingSync', { count: pendingSyncCount })}</Text>
-          </View>
-          <View style={styles.statChip}>
-            <Text style={styles.statChipText}>{t('dm:dashboard.conflicts', { count: conflictCount })}</Text>
-          </View>
+          {showSyncStatus ? (
+            <>
+              <View style={styles.statChip}>
+                <Text style={styles.statChipText}>
+                  {t('dm:dashboard.network', { status: isOnline ? t('common:status.online') : t('common:status.offline') })}
+                </Text>
+              </View>
+              <View style={styles.statChip}>
+                <Text style={styles.statChipText}>{t('dm:dashboard.pendingSync', { count: pendingSyncCount })}</Text>
+              </View>
+              <View style={styles.statChip}>
+                <Text style={styles.statChipText}>{t('dm:dashboard.conflicts', { count: conflictCount })}</Text>
+              </View>
+            </>
+          ) : null}
           <View style={styles.statChip}>
             <Text style={styles.statChipText}>{t('dm:dashboard.role', { role: formatRole(roleMode) })}</Text>
           </View>
@@ -316,11 +284,7 @@ const DM: React.FC = () => {
         <View style={styles.laneGrid}>
           <Pressable
             style={styles.laneButton}
-            onPress={() =>
-              campaigns.length === 1
-                ? navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0].id })
-                : navigation.navigate('DMCampaigns')
-            }
+            onPress={() => navigation.navigate('DMEncounterPrep', { campaignId: campaigns[0]?.id })}
             android_ripple={{ color: colors.ripple }}
             testID='dm.encounterPrepButton'
           >
@@ -383,62 +347,6 @@ const DM: React.FC = () => {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.title}>{t('dm:dashboard.sharedCharactersTitle')}</Text>
-        <Text style={styles.hint}>{t('dm:dashboard.sharedCharactersHint')}</Text>
-        {unifiedParty.slice(0, 4).map((item) => {
-          const syncStatus = getSyncDisplayStatus(syncByCharacter[item.id], netInfo.isConnected);
-          const shareStatus = getShareDisplayStatus({
-            isSharedSheet: item.source === 'shared',
-            role: roleMode,
-            source: item.source,
-          });
-
-          return (
-            <View key={item.id} style={styles.updateRow}>
-              <Text style={styles.updateTitle}>{item.payload.name || t('common:fallbacks.character')}</Text>
-              <Text style={styles.updateMeta}>{t('dm:dashboard.source', { source: formatSource(item.source) })}</Text>
-              <Text style={styles.updateMeta}>{t('dm:dashboard.syncStatus', { status: formatSyncStatus(syncStatus) })}</Text>
-              {!!shareStatus && (
-                <Text style={styles.updateMeta}>{t('dm:dashboard.shareStatus', { status: formatShareStatus(shareStatus) })}</Text>
-              )}
-              <View style={styles.laneGrid}>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => {
-                    void openFullSheet(item.payload);
-                  }}
-                  android_ripple={{ color: colors.ripple }}
-                >
-                  <Ionicons name='link-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:dashboard.openLiveCopy')}</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => {
-                    void openQuickEdit(item.payload);
-                  }}
-                  android_ripple={{ color: colors.ripple }}
-                >
-                  <Ionicons name='create-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:dashboard.quickEdit')}</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.laneButton}
-                  onPress={() => {
-                    void openFullSheet(item.payload);
-                  }}
-                  android_ripple={{ color: colors.ripple }}
-                >
-                  <Ionicons name='document-outline' size={18} color={colors.text} />
-                  <Text style={styles.laneButtonText}>{t('dm:dashboard.openFullSheet')}</Text>
-                </Pressable>
-              </View>
-            </View>
-          );
-        })}
-      </View>
-
-      <View style={styles.card}>
         <Text style={styles.title}>{t('dm:dashboard.campaignNotesTitle')}</Text>
         <Text style={styles.hint}>{t('dm:dashboard.campaignNotesHint')}</Text>
         <View style={styles.statsRow}>
@@ -451,11 +359,7 @@ const DM: React.FC = () => {
         </View>
         <Pressable
           style={styles.authButton}
-          onPress={() =>
-            campaigns.length === 1
-              ? navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0].id })
-              : navigation.navigate('DMCampaigns')
-          }
+          onPress={() => navigation.navigate('DMCampaignNotes', { campaignId: campaigns[0]?.id })}
           android_ripple={{ color: colors.ripple }}
           testID='dm.campaignNotesButton'
         >

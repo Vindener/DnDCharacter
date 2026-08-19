@@ -174,11 +174,38 @@
     "syncNow": "Синхронізувати зараз",
     "localCopy": "Локальна копія",
     "duplicateShared": "Дублювати зі спільного",
+    "historyTitle": "Останні зміни",
     "filters": {
       "all": "Усі",
       "mine": "Мої",
       "shared": "Спільні",
-      "needsReview": "Потребують перевірки"
+      "needs-review": "Потребують перевірки"
+    },
+    "pathLabels": {
+      "overview": {
+        "identity": "Основна інформація",
+        "session-mode": "Режим сесії",
+        "saving-throws": "Рятівні кидки",
+        "skills": "Навички",
+        "conditions": "Стани",
+        "campaign": "Кампанія"
+      },
+      "combat": {
+        "core": "Бойові параметри",
+        "hp": "Здоров'я",
+        "rest": "Відпочинок",
+        "weapons": "Зброя"
+      },
+      "magic": {
+        "slots": "Комірки заклять"
+      },
+      "homebrew": {
+        "notes-groups": "Нотатки",
+        "resources": "Ресурси",
+        "fields": "Кастомні поля",
+        "sections": "Розділи",
+        "entries": "Записи"
+      }
     },
     "sources": {
       "mine": "Мої",

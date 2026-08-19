@@ -174,11 +174,38 @@
     "syncNow": "Sync now",
     "localCopy": "Local copy",
     "duplicateShared": "Duplicate from shared",
+    "historyTitle": "Recent changes",
     "filters": {
       "all": "All",
       "mine": "Mine",
       "shared": "Shared",
-      "needsReview": "Needs review"
+      "needs-review": "Needs review"
+    },
+    "pathLabels": {
+      "overview": {
+        "identity": "Core info",
+        "session-mode": "Session mode",
+        "saving-throws": "Saving throws",
+        "skills": "Skills",
+        "conditions": "Conditions",
+        "campaign": "Campaign"
+      },
+      "combat": {
+        "core": "Combat stats",
+        "hp": "Hit points",
+        "rest": "Rest",
+        "weapons": "Weapons"
+      },
+      "magic": {
+        "slots": "Spell slots"
+      },
+      "homebrew": {
+        "notes-groups": "Notes",
+        "resources": "Resources",
+        "fields": "Custom fields",
+        "sections": "Sections",
+        "entries": "Entries"
+      }
     },
     "sources": {
       "mine": "Mine",

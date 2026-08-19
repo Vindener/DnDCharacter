@@ -12,6 +12,7 @@ export interface UiStore {
   coins: CustomCoin[];
   analyticsConsentEnabled: boolean;
   firebaseDebugToastsEnabled: boolean;
+  forceShowSyncStrip: boolean;
   toggleTheme: () => Promise<void>;
   loadTheme: () => Promise<void>;
   load: () => Promise<void>;
@@ -22,6 +23,8 @@ export interface UiStore {
   loadAnalyticsConsent: () => Promise<void>;
   setFirebaseDebugToastsEnabled: (enabled: boolean) => Promise<void>;
   loadFirebaseDebugToastsEnabled: () => Promise<void>;
+  setForceShowSyncStrip: (enabled: boolean) => Promise<void>;
+  loadForceShowSyncStrip: () => Promise<void>;
 }
 
 const useUiStore = create<UiStore>((set, get) => {
@@ -34,6 +37,7 @@ const useUiStore = create<UiStore>((set, get) => {
     coins: [],
     analyticsConsentEnabled: false,
     firebaseDebugToastsEnabled: false,
+    forceShowSyncStrip: false,
     toggleTheme: effects.toggleTheme,
     loadTheme: effects.loadTheme,
     load: effects.load,
@@ -44,6 +48,8 @@ const useUiStore = create<UiStore>((set, get) => {
     loadAnalyticsConsent: effects.loadAnalyticsConsent,
     setFirebaseDebugToastsEnabled: effects.setFirebaseDebugToastsEnabled,
     loadFirebaseDebugToastsEnabled: effects.loadFirebaseDebugToastsEnabled,
+    setForceShowSyncStrip: effects.setForceShowSyncStrip,
+    loadForceShowSyncStrip: effects.loadForceShowSyncStrip,
   };
 });
 

@@ -31,6 +31,8 @@ const Settings = () => {
   const setAnalyticsConsent = useThemeStore((s) => s.setAnalyticsConsent);
   const firebaseDebugToastsEnabled = useThemeStore((s) => s.firebaseDebugToastsEnabled);
   const setFirebaseDebugToastsEnabled = useThemeStore((s) => s.setFirebaseDebugToastsEnabled);
+  const forceShowSyncStrip = useThemeStore((s) => s.forceShowSyncStrip);
+  const setForceShowSyncStrip = useThemeStore((s) => s.setForceShowSyncStrip);
   const colors = useThemeStore((s) => s.colors);
   const styles = React.useMemo(() => getStyles(colors), [colors]);
 
@@ -291,6 +293,15 @@ const Settings = () => {
               <Switch
                 value={firebaseDebugToastsEnabled}
                 onValueChange={(value) => void setFirebaseDebugToastsEnabled(value)}
+                trackColor={{ false: colors.border, true: colors.primary }}
+                thumbColor={colors.onPrimary}
+              />
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>{t('settings:debug.forceShowSyncStrip')}</Text>
+              <Switch
+                value={forceShowSyncStrip}
+                onValueChange={(value) => void setForceShowSyncStrip(value)}
                 trackColor={{ false: colors.border, true: colors.primary }}
                 thumbColor={colors.onPrimary}
               />

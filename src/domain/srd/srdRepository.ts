@@ -206,6 +206,13 @@ export function warmCharacterSrdCache(): void {
   loadClassProgressions();
 }
 
+// Synchronous check for the caches above, so a screen can defer SRD-derived rendering by
+// one render instead of racing the InteractionManager callback that calls
+// warmCharacterSrdCache() (see useCharacterActions.tsx's sourceFeatureRows).
+export function isCharacterSrdCacheWarm(): boolean {
+  return racesCache !== undefined && classesCache !== undefined && classProgressionsCache !== undefined;
+}
+
 // Build-time validation entry point (see scripts/validate-srd.mjs). Deliberately re-reads
 // the raw JSON via the same lazy loaders rather than the caches above, so this always
 // validates the actual on-disk data regardless of whether the runtime caches were

@@ -81,7 +81,8 @@
   "debug": {
     "title": "Розробка",
     "hint": "Видно лише в dev-білді.",
-    "firebaseToasts": "Вікна відлагодження Firebase"
+    "firebaseToasts": "Вікна відлагодження Firebase",
+    "forceShowSyncStrip": "Завжди показувати блок синхронізації"
   },
   "defaultCampaign": {
     "title": "Кампанія за замовчуванням",

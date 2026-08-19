@@ -75,6 +75,7 @@ import {
   getLocalizedSrdClassFeaturesAtLevel,
   getLocalizedSrdRaceTraits,
   getSrdProgressionFeatureNames,
+  isCharacterSrdCacheWarm,
   warmCharacterSrdCache,
 } from '@/domain/srd';
 import { CharacterSourceBadge } from '../components/CharacterSourceBadge';
@@ -311,10 +312,20 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
   useEffect(() => {
     characterDataRef.current = characterData;
   }, [characterData]);
+  // sourceFeatureRows below calls getLocalizedSrdRaceTraits/getLocalizedSrdClassFeaturesAtLevel
+  // synchronously, which would otherwise pay the one-time races/classes/progression parse cost
+  // on the very first render (characterData is already populated from the route param, so
+  // there's no skeleton gate here) — felt as a freeze right after tapping a character. srdReady
+  // starts true if an earlier screen already warmed the cache this session.
+  const [srdReady, setSrdReady] = useState(() => isCharacterSrdCacheWarm());
   useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => warmCharacterSrdCache());
+    if (srdReady) return undefined;
+    const task = InteractionManager.runAfterInteractions(() => {
+      warmCharacterSrdCache();
+      setSrdReady(true);
+    });
     return () => task.cancel();
-  }, []);
+  }, [srdReady]);
   const [mode, setMode] = useState<CharacterMode>('play');
   const [selectedTab, setSelectedTab] = useState<CharacterTab>('Overview');
   const [isCloudDoc, setIsCloudDoc] = useState<boolean>(false);
@@ -1939,35 +1950,37 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
       pushRow(`saved-${index}`, feature, featureSources[index]);
     });
 
-    getLocalizedSrdRaceTraits(characterData.raceId, characterData.subraceId, i18n.language).forEach((trait) => {
-      pushRow(`race-${trait.id}`, `${trait.name}: ${trait.summary}`, {
-        origin: 'srd-5.1',
-        source: 'srd-5.1',
-        license: 'ogl-1.0a',
-        id: trait.id,
-        name: trait.name,
+    if (srdReady) {
+      getLocalizedSrdRaceTraits(characterData.raceId, characterData.subraceId, i18n.language).forEach((trait) => {
+        pushRow(`race-${trait.id}`, `${trait.name}: ${trait.summary}`, {
+          origin: 'srd-5.1',
+          source: 'srd-5.1',
+          license: 'ogl-1.0a',
+          id: trait.id,
+          name: trait.name,
+        });
       });
-    });
 
-    getLocalizedSrdClassFeaturesAtLevel(characterData.classId, characterData.level, i18n.language).forEach((feature) => {
-      pushRow(`class-${feature.id}`, `${feature.name}: ${feature.summary}`, {
-        origin: 'srd-5.1',
-        source: 'srd-5.1',
-        license: 'ogl-1.0a',
-        id: feature.id,
-        name: feature.name,
+      getLocalizedSrdClassFeaturesAtLevel(characterData.classId, characterData.level, i18n.language).forEach((feature) => {
+        pushRow(`class-${feature.id}`, `${feature.name}: ${feature.summary}`, {
+          origin: 'srd-5.1',
+          source: 'srd-5.1',
+          license: 'ogl-1.0a',
+          id: feature.id,
+          name: feature.name,
+        });
       });
-    });
 
-    getSrdProgressionFeatureNames(characterData.classId, characterData.level).forEach((feature, index) => {
-      pushRow(`progression-${index}-${feature}`, feature, {
-        origin: 'srd-5.1',
-        source: 'srd-5.1',
-        license: 'ogl-1.0a',
-        id: characterData.classId,
-        name: feature,
+      getSrdProgressionFeatureNames(characterData.classId, characterData.level).forEach((feature, index) => {
+        pushRow(`progression-${index}-${feature}`, feature, {
+          origin: 'srd-5.1',
+          source: 'srd-5.1',
+          license: 'ogl-1.0a',
+          id: characterData.classId,
+          name: feature,
+        });
       });
-    });
+    }
 
     if (!rows.length && characterData.contentSources?.class) {
       pushRow('class-source', characterData.contentSources.class.name || characterData.class, characterData.contentSources.class);
@@ -1983,6 +1996,7 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     characterData.raceId,
     characterData.subraceId,
     i18n.language,
+    srdReady,
   ]);
 
   const syncBadges = useMemo(() => {

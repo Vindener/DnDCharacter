@@ -2,13 +2,13 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Fixed character spells showing dashes instead of real data (casting time, range, components) in the spellbook.",
-    "Fixed deleting a spell from the Known tab — it's now actually removed from the character instead of reappearing.",
-    "Paladin and Ranger now get suggested spells during character creation.",
-    "Unified the Cleric class translation in the spellbook.",
-    "Fixed Ukrainian-language spell search on the character sheet.",
-    "Adding an existing spell from the spellbook on the character sheet no longer creates a duplicate.",
-    "The filters block and the local-storage banner in the spellbook can now be collapsed/closed."
+    "Added Ukrainian localization for races, classes, backgrounds, and equipment — character traits and features now display in Ukrainian.",
+    "Fixed inconsistent Ukrainian naming for two class/race terms (Artificer, Halfling).",
+    "Removed a confusing block from the GM home screen and fixed the \"Start Encounter Prep\" and \"Campaign Notes\" buttons, which sometimes opened the wrong screen.",
+    "Fixed a \"Campaign not found\" error that could appear when opening a campaign from the list.",
+    "The sync status block on the Home and GM screens now only appears when there's actually something to report, instead of always showing.",
+    "Fixed a translation bug and made character cards easier to read on the Shared Updates screen.",
+    "Sped up the first time you open the Bestiary, Spellbook, or a character sheet in a session — less of a \"frozen\" feeling."
   ],
   "gotIt": "Got it"
 }
