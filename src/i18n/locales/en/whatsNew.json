@@ -2,13 +2,9 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Added Ukrainian localization for races, classes, backgrounds, and equipment — character traits and features now display in Ukrainian.",
-    "Fixed inconsistent Ukrainian naming for two class/race terms (Artificer, Halfling).",
-    "Removed a confusing block from the GM home screen and fixed the \"Start Encounter Prep\" and \"Campaign Notes\" buttons, which sometimes opened the wrong screen.",
-    "Fixed a \"Campaign not found\" error that could appear when opening a campaign from the list.",
-    "The sync status block on the Home and GM screens now only appears when there's actually something to report, instead of always showing.",
-    "Fixed a translation bug and made character cards easier to read on the Shared Updates screen.",
-    "Sped up the first time you open the Bestiary, Spellbook, or a character sheet in a session — less of a \"frozen\" feeling."
+    "Fixed a rare character sheet crash when using the app without an internet connection (airplane mode, weak signal) — it no longer crashes while trying to sync offline.",
+    "Updated status bar and bottom system bar behavior to match the latest Android requirements — more stable on newer devices and Android versions.",
+    "Updated internal app libraries to close known security vulnerabilities."
   ],
   "gotIt": "Got it"
 }

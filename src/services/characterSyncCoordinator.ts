@@ -197,7 +197,17 @@ function toTimestamp(atMs?: number): number {
 function cleanPaths(paths: unknown): string[] {
   if (!Array.isArray(paths)) return [];
   const normalized = paths.map((path) => String(path || '').trim()).filter(Boolean);
-  return Array.from(new Set(normalized));
+  const deduped = Array.from(new Set(normalized));
+  // Referential stability matters here: normalizeSyncState() runs this on every sync
+  // transition (not just ones that touch these fields), and callers key a React effect's
+  // dependency array off the result (useCharacterActions.tsx). Always allocating a new
+  // array made that effect see a "changed" dependency on every transition, looping
+  // setSyncTransport → re-render → effect re-run indefinitely (crashes synchronously when
+  // offline, since that branch has no debounce timer).
+  if (deduped.length === paths.length && deduped.every((path, i) => path === paths[i])) {
+    return paths as string[];
+  }
+  return deduped;
 }
 
 function resolveStatus(next: CharacterSyncState): CharacterSyncState {

@@ -16,7 +16,7 @@
         }
       ]
     ],
-    "version": "1.0.5",
+    "version": "1.0.6",
     "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/6d4ab658-1bc9-48a0-8c86-eeffa8f2a85e",
@@ -41,6 +41,7 @@
       },
       "googleServicesFile": "./google-services.json",
       "package": "com.vind.MythgateDND",
+      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": true,
       "intentFilters": [
         {

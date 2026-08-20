@@ -3,6 +3,14 @@
   "intro": "What changed in previous versions of the app.",
   "versions": [
     {
+      "version": "1.0.6",
+      "items": [
+        "Fixed a rare character sheet crash when using the app without an internet connection (airplane mode, weak signal) — it no longer crashes while trying to sync offline.",
+        "Updated status bar and bottom system bar behavior to match the latest Android requirements — more stable on newer devices and Android versions.",
+        "Updated internal app libraries to close known security vulnerabilities."
+      ]
+    },
+    {
       "version": "1.0.5",
       "items": [
         "Added Ukrainian localization for races, classes, backgrounds, and equipment — character traits and features now display in Ukrainian.",

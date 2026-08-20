@@ -47,19 +47,29 @@
    під `isStartupTraceEnabled()` (`startupTrace.ts`), тож у релізному білді
    без явного opt-in-флага жоден не виконується. Реального витоку даних
    немає; кількість (27→39) лишається на майбутнє як гігієна коду, не блокер.
-5. **`npm audit` — регрес: 22 → 35 → 38** (21 moderate, 17 high, перевірено
-   2026-08-13). Здебільшого той самий build/dev-тулчейн-кластер
-   (`@expo/config-plugins → xcode`, `metro → image-size`). **Новий нюанс
-   2026-08-13:** `nanoid <3.3.17` тепер підсвічується і як залежність
-   `@react-navigation/native` (`routers` генерує route-key через `nanoid()`) —
-   це вже виконується в самому бандлі застосунку, не лише в білд-тулчейні.
-   Вразливість (`GHSA-28wg-ghj8-5hjv`/`GHSA-2v37-7h3g-55p8`) — нескінченний
-   цикл при негативному/нульовому `size`, який ніхто в кодовій базі (і сам
-   react-navigation) не передає, тож практичного шляху експлойту немає, але
-   класифікація «все build-тулчейн» для цього одного пакета вже не точна.
-   `fixAvailable: true` без мажора — можна закрити через `overrides`
-   (аналогічно SEC-7), але це окрема задача з повним `validate` + локальний
-   Android-білд, не зроблено в межах цього аудиту.
+5. ~~**`npm audit` — регрес: 22 → 35 → 38.**~~ — ✅ Частково виправлено
+   2026-08-20: **38 → 26** (17 moderate, 9 high). Через `overrides` у
+   `package.json` закрито `nanoid` (3.3.12 → **3.3.18**, той самий пакет, що
+   раніше підсвічувався саме в бандлі застосунку через
+   `@react-navigation/routers` — `GHSA-28wg-ghj8-5hjv`/`GHSA-2v37-7h3g-55p8`),
+   `js-yaml` (новий top-level ключ 4.3.1 + оновлено вкладений
+   `@istanbuljs/load-nyc-config` override до 3.15.1 — нова CVE охопила й ці
+   версії), `fast-uri` (3.1.4 → 3.1.5, заразом закрило `ajv`), `undici`
+   (6.27.0 → 6.28.0, заразом закрило `node-gyp`), `hono` (4.12.34), `re2`
+   (1.26.1) — усі toolchain-only, крім `nanoid`. Окремо — `brace-expansion`
+   (`GHSA-rgw5-rvv9-x895`): **не** top-level override (це вже ламало
+   `gradlew :app:assembleRelease` раніше, SEC-7, відкат 2026-07-31), а
+   версійно-скопований `"minimatch@10.2.5": { "brace-expansion": "5.0.9" }`
+   — торкається лише одного конкретного вкладеного екземпляра.
+   **Перевірено:** `npm run validate` + `test:unit` (348/348) +
+   `test:rules` (34/34) зелені; заразом реально прогнано
+   `./gradlew :app:assembleDebug` (BUILD SUCCESSFUL, 3м 22с) — саме той
+   сценарій, який минулого разу ламався на `brace-expansion` — codegen і
+   dex-мердж пройшли без помилок. **Залишок (26, не чіпали):** увесь
+   Expo/Metro-кластер (потребує `expo@57`, заморожено до релізу) і
+   firebase-tools-кластер (`@opentelemetry/core`, `uuid`, `gaxios` та ін. —
+   потребують мажора самого пакета, toolchain-only, той самий
+   задокументований залишковий ризик, що й раніше).
 6. ~~**R4-2 — живий тест OTA не проведено.**~~ — ✅ Зроблено 2026-08-12,
    підтверджено власником продукту: `eas update` запущено, оновлення
    підхопилось на встановленому білді.
@@ -237,6 +247,72 @@ native SIGABRT (`Pointer tag ... was truncated` — double-free) у
 (`app.json` + `android/app/build.gradle`), запис додано в екран «Історія
 оновлень» і модалку «Що нового». Деталі — `docs/audit-2026-07.md` REL-10.
 
+9.7. **Google Play pre-launch report 2026-08-20 — три пункти, розібрано й
+   вирішено власником продукту того ж дня.**
+   - ✅ **Застарілі edge-to-edge API
+     (`Window.getStatusBarColor/setStatusBarColor/setNavigationBarColor`).**
+     Виправлено. Причина: `android/app/src/main/res/values/styles.xml`
+     явно вимикав edge-to-edge (`android:windowOptOutEdgeToEdgeEnforcement`,
+     який на `targetSdk 36` і так не діє) і задавав суцільний
+     `android:statusBarColor` в обох темах (`AppTheme`,
+     `Theme.App.SplashScreen`) — це змушувало AppCompat/RN звертатися до
+     застарілих сеттерів (видно й у трейсі `AppCompatSpinner$DialogPopup.onClick`).
+     Обидва атрибути прибрано; поведінка на реальних Android 15/16 не
+     змінюється (edge-to-edge вже був примусовим), зникає лише застарілий
+     виклик. Заразом виправлено документаційний дрейф —
+     `expo.edgeToEdgeEnabled=false` в `android/gradle.properties` ніде
+     фактично не читався (RN сам безумовно вмикає edge-to-edge через
+     `expo-modules-core`'s `EdgeToEdgePackage.kt`), зведено з `app.json` на
+     `true`. `typecheck`/`lint`/`test:unit` зелені без регресу. Деталі —
+     `docs/audit-2026-07.md` PLY-7.
+   - ✅ **`GmsBarcodeScanningDelegateActivity` з портретним locked
+     orientation у протестованому AAB.** Корінна причина — `expo-dev-client`
+     (dev-menu QR-сканер, тягне `com.google.mlkit:barcode-scanning`) стояв у
+     звичайних `dependencies`, а не `devDependencies`, тож потрапляв і в
+     білд для closed testing, хоча `App.tsx:12-15` вже й так гейтить його
+     JS-виклик через `if (__DEV__)` (PERF-4). Перенесено в `devDependencies`
+     (`package.json`), `package-lock.json` перегенеровано за задокументованою
+     процедурою (`npx -p node@20.19.4 -p npm@10 npm install
+     --package-lock-only --include=dev --include=optional --include=peer`) —
+     diff мінімальний, торкається лише запису `expo-dev-client`.
+     **Рішення власника продукту (2026-08-20):** ризик прийнятний, ще
+     ~7 днів до кінця 14-денного вікна (старт 2026-08-12) — новий AAB
+     збирає й подає власник продукту самостійно, не через це середовище.
+     **Не перевірено тут:** сам білд AAB і повторна перевірка pre-launch
+     report — за межами цього середовища.
+   - ⏳ **Обмеження resize/orientation на великих екранах (Android 16) —
+     відкладено.** `com.vind.MythgateDND.MainActivity` (і `app.json`
+     `orientation: "portrait"`) досі жорстко portrait-only. Google
+     попереджає, що починаючи з Android 16 система ігноруватиме це
+     обмеження на планшетах/фолдаблах — може зламати верстку, якщо екрани
+     не тестувались на великих розмірах/landscape. **Рішення власника
+     продукту (2026-08-20): відкласти, не блокер для 1.0.0** — вимагає
+     окремого QA-проходу по layouts на великих екранах, якого зараз не
+     було; не займатись без нього перед релізом.
+
+9.8. ~~**Краш "Maximum update depth exceeded" в режимі польоту (знайдено
+   власником продукту, скрін логів 2026-08-20).**~~ — ✅ Виправлено
+   2026-08-20. Ефект синку в
+   [`useCharacterActions.tsx:766-825`](../src/screens/Character/hooks/useCharacterActions.tsx#L766)
+   має `currentSync?.pendingPaths` у залежностях; офлайн-гілка (766-779)
+   синхронно (без дебаунс-таймера, на відміну від онлайн-гілки) викликає
+   `setSyncTransport`, який через `applySyncTransition` →
+   `normalizeSyncState` → `cleanPaths`
+   ([`characterSyncCoordinator.ts:197-201`](../src/services/characterSyncCoordinator.ts#L197))
+   щоразу створював **новий** масив `pendingPaths`, навіть коли вміст не
+   змінювався — компонент бачив "нову" залежність, викликав
+   `setSyncTransport` знову, і так по колу, доки React не впав у
+   `Maximum update depth exceeded`. Онлайн-гілка має той самий структурний
+   баг, але 1200ms-таймер маскував його (просто зайві записи в стор, без
+   крашу). **Фікс**: `cleanPaths` тепер повертає той самий референс масиву,
+   якщо вміст уже унікальний і без змін — виправляє нестабільність для
+   всіх трьох полів (`pendingPaths`/`conflictPaths`/`seenHistoryEntryIds`)
+   і для всіх типів переходів синку одразу. Перевірено: `typecheck`/
+   `lint`/`test:unit` (348/348)/`test:rules` (34/34) зелені без регресу.
+   **Не перевірено:** живий тест на реальному пристрої в режимі польоту —
+   немає пристрою в цьому середовищі, фікс верифіковано лише читанням коду
+   й проходженням тестів.
+
 ### Продуктове рішення
 
 10. ~~**REL-6 — білий спалах на старті.**~~ — ✅ Виправлено 2026-08-12: причина
@@ -297,3 +373,11 @@ native SIGABRT (`Pointer tag ... was truncated` — double-free) у
    client IDs for Android app») в історії гілки — файл із оновленими
    client ID вже в репозиторії, наступний білд (EAS чи локальний) підхопить
    його автоматично.
+
+---
+
+## Бажаний беклог (пост-1.0)
+
+Винесено в окремий документ 2026-08-20, щоб не дублювати той самий список у
+`release-blockers.md`, `release-plan-google-play.md` і `audit-2026-07.md` одночасно —
+→ **`docs/post-1.0-backlog.md`**.

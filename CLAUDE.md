@@ -25,8 +25,9 @@
 | `CLAUDE.md`                                                                                         | Робочі правила. Читати першим.                                                                                                |
 | `docs/release-plan-google-play.md`                                                                  | **Поточний план і спринти R1–R5.** Замінює `docs/archive/sprint-plan.md` і `docs/archive/ux-ui-roadmap.md`.                   |
 | `docs/collaborative-editing.md`                                                                     | Цільова модель спільного редагування + інваріанти, які не можна ламати.                                                       |
-| `docs/audit-2026-07.md`                                                                             | Реєстр знахідок (PLY / SEC / COL / PERF / REL) з файлами й рядками. Джерело задач, статуси оновлюються (востаннє 2026-08-13). |
+| `docs/audit-2026-07.md`                                                                             | Реєстр знахідок (PLY / SEC / COL / PERF / REL) з файлами й рядками. Джерело задач, статуси оновлюються (востаннє 2026-08-20). |
 | `docs/release-blockers.md`                                                                          | Живий список реальних блокерів релізу й відкритих питань до власника продукту.                                                |
+| `docs/post-1.0-backlog.md`                                                                          | Зведений список ідей, які свідомо НЕ входять у 1.0.0 — не блокери, не робити зараз.                                            |
 | `docs/legal-terms-of-service.md`                                                                    | Умови використання / Acceptable Use — єдиний правовий документ, якого бракувало.                                              |
 | `.github/instructions/mobile-rn-standards.instructions.md`                                          | Код-стандарти RN/TS. Чинні.                                                                                                   |
 | `docs/ui-kit.md`, `docs/loading-states-and-skeleton.md`, `docs/dnd-product-guidelines.md`           | Чинні.                                                                                                                        |
@@ -48,26 +49,24 @@
 - **`android/` закомічений** — bare-проєкт, prebuild на EAS не запускається. Наслідки в §4.
 - Пакетний менеджер — тільки `npm`, `legacy-peer-deps=true`.
 
-### Базова лінія якості (реально запускалося, оновлено 2026-08-13)
+### Базова лінія якості (реально запускалося, оновлено 2026-08-20)
 
 ```
 npx tsc --noEmit      -> 0 помилок
 npm run lint          -> 0 errors, 25 warnings (react-hooks/exhaustive-deps)
-npm run test:unit     -> 62 файли / 342 тести зелені (~2.5 с) (2026-08-13: 61/331)
-npm audit             -> 38 (0 critical / 17 high / 21 moderate), build-тулчейн + 1 runtime-залежність без практичного експлойту
+npm run lint:theme    -> passed
+npm run test:unit     -> 62 файли / 348 тестів зелені (~3.5 с)
+npm run test:rules    -> 34/34 (Firestore emulator)
+npm audit             -> 26 (0 critical / 9 high / 17 moderate), увесь залишок — Expo/Metro-кластер (потребує expo@57) і firebase-tools-кластер (потребує мажора самого пакета), build/dev-тулчейн-only
 ```
 
-Зростання `npm audit` (було 23, потім 22 після `overrides` за SEC-7, тоді 35,
-тепер 38) — і далі здебільшого build-toolchain-кластер
-`@expo/config-plugins → xcode`/`metro` (не рантайм APK), **окрім однієї
-новинки 2026-08-13**: `nanoid <3.3.17` тепер підсвічується і як залежність
-`@react-navigation/native` (routers генерують route-key через `nanoid()` за
-замовчуванням, без параметрів) — це вже виконується в бандлі застосунку, не
-лише в білд-тулчейні. Вразливість (`GHSA-28wg-ghj8-5hjv`/`GHSA-2v37-7h3g-55p8`)
-вимагає викликати `nanoid` з негативним або нульовим `size` — жодне місце в
-коді (і в самому react-navigation) так не робить, тож практичного шляху
-експлойту немає, але це вперше не «build-тулчейн» виправдання, а «код не
-викликає вразливий шлях». Деталі — `docs/audit-2026-07.md` SEC-7/SEC-11.
+`npm audit` 38 → 26 виправлено 2026-08-20 через `overrides` (`nanoid`, `js-yaml`,
+`fast-uri`, `undici`, `hono`, `re2`, версійно-скопований `brace-expansion` для
+`minimatch@10.2.5`) — той самий безпечний патерн, що й SEC-7, без мажорних
+апдейтів прямих залежностей. `nanoid`/`brace-expansion` окремо верифіковані
+реальною Android-збіркою (`gradlew :app:assembleDebug` — BUILD SUCCESSFUL), бо
+саме ці два раніше ламали Gradle (SEC-7, відкат 2026-07-31). Деталі —
+`docs/release-blockers.md` пункт 5, `docs/audit-2026-07.md` SEC-7/SEC-11.
 
 Твоя зміна не має погіршити цю лінію.
 
@@ -224,7 +223,7 @@ npx -p node@20.19.4 -p npm@10 npm ci --include=dev
 - `App.tsx:31-33` — `return null` до готовності i18n → біла пауза. Використати `expo-splash-screen`.
 - Немає root `ErrorBoundary` → біла сторінка без діагностики.
 - `FlatList` у Bestiary/Spellbook без `initialNumToRender`/`maxToRenderPerBatch`/`windowSize`/`removeClippedSubviews`. Правильний приклад уже є в `CharacterModals.tsx:481-483`.
-- **Edge-to-edge**: targetSdk = 36, а `expo.edgeToEdgeEnabled=false`. Для targetSdk 36 системний opt-out не працює — Android 15+ малює edge-to-edge незалежно від флага. Перевірити головні екрани, модалки й sticky-футери на Android 15/16 і полагодити інсети через `react-native-safe-area-context`.
+- **Edge-to-edge** — ✅ застарілі API (`setStatusBarColor`/`setNavigationBarColor`) виправлено 2026-08-20: `styles.xml` вимикав edge-to-edge непрацюючим на targetSdk 36 `windowOptOutEdgeToEdgeEnforcement` і задавав суцільний `statusBarColor`, що змушувало AppCompat/RN звертатись до застарілих сеттерів. Прибрано; `expo.edgeToEdgeEnabled` зведено з `false` на `true` в `app.json`/`gradle.properties` (документаційний дрейф — RN сам безумовно вмикає edge-to-edge через `expo-modules-core`). Деталі — `docs/audit-2026-07.md` PLY-7. **Досі відкрито**: прохід по модалках/sticky-футерах/`ScrollView` на реальному Android 15/16 пристрої — фізичне тестування, не зроблено.
 - **Квота Firestore**: підписка на кожну картку в `CharacterCard` + дві колекційні підписки. З кількома редакторами читання множаться. Перед релізом порахувати очікувані читання на активного користувача за сесію.
 
 ---
