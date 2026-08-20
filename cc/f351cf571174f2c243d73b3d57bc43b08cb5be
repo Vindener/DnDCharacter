@@ -1,0 +1,55 @@
+docs/release-plan-google-play.md
+  h_dfa0da26a12699 215
+  h_dfa0da26a12699 217,312-317
+android/app/src/main/res/values/styles.xml
+  s_0745e920b472a8::t_24332f6f951d64 4-10
+android/gradle.properties
+  s_0745e920b472a8::t_80a6444fadab99 60-65
+package-lock.json
+  s_0745e920b472a8::t_c38358454e86fb 68,4629-4631,7448-7450,7455,7506,10384,10399,10412,10423,10814-10817,12412-12414,13218-13220,13288,14595-14615,14740-14742,14878-14880,14888-14889,14893-14894,14900,14915-14917,14922,14940-14942,14953,14970-14972,14977,14983,16104-16106,16112-16117,18345-18347
+package.json
+  s_0745e920b472a8::t_b22693220fd245 82,113-114,117-120,134-137
+src/services/characterSyncCoordinator.ts
+  s_0745e920b472a8::t_5e1e662c5d2784 200-210
+CLAUDE.md
+  h_dfa0da26a12699 28,30,52,57-60,63-69,226
+android/app/build.gradle
+  h_dfa0da26a12699 114
+app.json
+  h_dfa0da26a12699 19,44
+docs/audit-2026-07.md
+  h_dfa0da26a12699 97-124,132,202,206-224
+docs/post-1.0-backlog.md
+  h_dfa0da26a12699 1-43
+docs/release-blockers.md
+  h_dfa0da26a12699 50-72,250-315,376-383
+src/i18n/locales/en/changeHistory.json
+  h_dfa0da26a12699 5-12
+src/i18n/locales/en/whatsNew.json
+  h_dfa0da26a12699 5-7
+src/i18n/locales/uk/changeHistory.json
+  h_dfa0da26a12699 5-12
+src/i18n/locales/uk/whatsNew.json
+  h_dfa0da26a12699 5-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "ccf351cf571174f2c243d73b3d57bc43b08cb5be",
+  "prompts": {},
+  "humans": {
+    "h_dfa0da26a12699": {
+      "author": "Vindener <vindener12@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0745e920b472a8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1f0f49a1-4d25-47b0-98f2-8a96294aab1b",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
