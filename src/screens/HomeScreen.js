@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Button,
   StyleSheet,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons"; // Пакет іконок для хрестика
 import * as FileSystem from "expo-file-system";

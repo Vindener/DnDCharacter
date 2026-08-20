@@ -1,6 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import HomeScreen from "../screens/HomeScreen";
 import DiceRollerScreen from "../screens/DiceRollerScreen";
@@ -12,14 +13,16 @@ const Stack = createStackNavigator();
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Головна" component={HomeScreen} />
-        <Stack.Screen name="DiceRoller" component={DiceRollerScreen} options={{ title: "Кидок кубика" }} />
-        <Stack.Screen name="CharacterSheet" component={CharacterSheetScreen} options={{ title: "Лист персонажа" }} />
-        <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} options={{ title: "Створити персонажа" }} />
-        <Stack.Screen name="Test" component={TestScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Головна" component={HomeScreen} />
+          <Stack.Screen name="DiceRoller" component={DiceRollerScreen} options={{ title: "Кидок кубика" }} />
+          <Stack.Screen name="CharacterSheet" component={CharacterSheetScreen} options={{ title: "Лист персонажа" }} />
+          <Stack.Screen name="CreateCharacter" component={CreateCharacterScreen} options={{ title: "Створити персонажа" }} />
+          <Stack.Screen name="Test" component={TestScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
