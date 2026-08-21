@@ -1,0 +1,23 @@
+.gitignore
+  s_e557083ab26276::t_51252ac6cb384c 19
+docs/local-android-build.md
+  s_e557083ab26276::t_6074c48b494a3d 1-95
+package.json
+  s_e557083ab26276::t_3ca36d8f5b4d8e 23-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "d250ecc89aa46c0338b56ce55dab73e8743b50c9",
+  "prompts": {},
+  "sessions": {
+    "s_e557083ab26276": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8bbb8f45-6b20-42d3-be9e-b471f4fbec54",
+        "model": "unknown"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
