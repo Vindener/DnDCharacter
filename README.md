@@ -113,6 +113,17 @@ All platforms production build:
 npx eas-cli build --platform all --profile production
 ```
 
+### Local release build (no EAS Build quota)
+
+`android/` is committed, so a signed release AAB/APK can be built locally with `gradlew` instead of queuing an EAS cloud build — useful when the EAS Build free-plan quota is exhausted. One-time signing setup (downloading the production upload keystore from `eas credentials` and placing it + its password in `~/.gradle/gradle.properties`) is documented in [docs/local-android-build.md](docs/local-android-build.md).
+
+```bash
+npm run build:android:local       # AAB (bundleRelease)
+npm run build:android:local:apk   # APK (assembleRelease)
+```
+
+Output lands in `.builds/` (gitignored) with a `versionCode`-stamped filename. The script reads the EAS remote `versionCode` counter to pick the next value, but pushing it back requires a manual step — see Versioning below and `docs/local-android-build.md`.
+
 ## Versioning
 
 `android/` is a committed bare project, so EAS Build does not run `expo prebuild`. That means the version shown in Google Play does **not** come from `app.json`.
@@ -123,7 +134,7 @@ npx eas-cli build --platform all --profile production
 
 Bump all three together when releasing. If only `app.json` is updated, the store keeps showing the old `versionName` from `build.gradle`, and a stale `expo_runtime_version` means OTA updates silently stop reaching installed builds (the app and the update no longer report the same runtime version).
 
-`versionCode` (in `build.gradle`) is **not** edited by hand — `eas.json` sets `cli.appVersionSource: "remote"`, so EAS Build assigns and increments it automatically.
+`versionCode` (in `build.gradle`) is **not** edited by hand — `eas.json` sets `cli.appVersionSource: "remote"`, so EAS Build assigns and increments it automatically. `scripts/build-android-local.sh` follows the same rule for local builds: it patches `versionCode` temporarily for the `gradlew` invocation and always restores the committed value afterward, so the file in git never drifts. After a local build, sync the used value back to EAS yourself (`npx eas-cli build:version:set --platform android` — interactive prompt, no `--version` flag) before the next cloud or local build, or the next one will try to reuse the same code.
 
 ## Publishing an OTA update
 
