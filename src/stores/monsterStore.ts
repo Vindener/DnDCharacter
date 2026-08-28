@@ -52,10 +52,8 @@ const useMonsterStore = create<MonsterStore>((set, get) => ({
     try {
       const existingPins = get().pinnedMonsterIds;
       const existingFavorites = get().favoriteMonsterIds;
-      const validPins = existingPins.filter((id) => newMonsters.some((monster) => monster.id === id));
-      const validFavorites = existingFavorites.filter((id) => newMonsters.some((monster) => monster.id === id));
-      await persistMonstersState(newMonsters, validPins, validFavorites);
-      set({ monsters: newMonsters, pinnedMonsterIds: validPins, favoriteMonsterIds: validFavorites });
+      const next = await persistMonstersState(newMonsters, existingPins, existingFavorites);
+      set({ monsters: next.monsters, pinnedMonsterIds: next.pinnedMonsterIds, favoriteMonsterIds: next.favoriteMonsterIds });
     } catch (_error) {
       /* intentionally ignored */
     }

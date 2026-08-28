@@ -54,7 +54,9 @@ describe('dm/repositories storage migrations', () => {
 
     const next = await loadMonstersState();
 
-    expect(next.monsters).toHaveLength(1);
+    expect(next.monsters.length).toBeGreaterThan(1);
+    expect(next.monsters.find((monster) => monster.id === 'monster-1')?.name).toBe('Goblin');
+    expect(next.monsters.some((monster) => monster.source === 'srd-5.1')).toBe(true);
     expect(next.pinnedMonsterIds).toEqual(['monster-1']);
     expect(next.favoriteMonsterIds).toEqual(['monster-1']);
   });
