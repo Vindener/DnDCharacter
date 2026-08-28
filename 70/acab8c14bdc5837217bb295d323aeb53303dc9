@@ -1,0 +1,23 @@
+src/dm/repositories/monsterRepository.ts
+  s_9a9528ed808b0c::t_36f5305bca9923 4-5,20-54,59-60,85-89,92
+src/stores/monsterStore.ts
+  s_9a9528ed808b0c::t_1b9df32b1a4781 55-56
+src/dm/repositories/storageRepositories.test.ts
+  s_9a9528ed808b0c::t_e2e9aa8010deb6 57-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "70acab8c14bdc5837217bb295d323aeb53303dc9",
+  "prompts": {},
+  "sessions": {
+    "s_9a9528ed808b0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "102e2eb6-e634-4317-8dde-bdb0b8d568f4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
