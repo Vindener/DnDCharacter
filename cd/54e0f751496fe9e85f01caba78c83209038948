@@ -1,0 +1,58 @@
+src/i18n/locales/uk/dm.json
+  s_43d1c7278cc498::t_c372777768b583 191-192,198-204,209-211
+  s_3168afb2b6b1c2::t_affc489d8859fb 212
+src/i18n/locales/en/dm.json
+  s_43d1c7278cc498::t_84db7676feaeb6 191-192,198-204,209-211
+  s_3168afb2b6b1c2::t_48da7a1446de4f 212
+src/i18n/locales/uk/whatsNew.json
+  s_43d1c7278cc498::t_69bfe7588ee313 5-6
+docs/release-plan-google-play.md
+  s_9a9528ed808b0c::t_79e84090846f85 90
+  s_9a9528ed808b0c::t_9affeee10fcbe2 224
+  s_9a9528ed808b0c::t_1f7a5898b2d013 300-301
+app.json
+  s_43d1c7278cc498::t_7e72684305457a 19
+docs/release-blockers.md
+  s_9a9528ed808b0c::t_cab127e737af82 16-36
+android/app/build.gradle
+  s_43d1c7278cc498::t_00ba6c8c7dd8d7 114
+src/screens/Character/Character.tsx
+  s_43d1c7278cc498::t_902428cee6f90d 173
+  s_43d1c7278cc498::t_a3cf6a6a46c421 81-87
+src/i18n/locales/en/whatsNew.json
+  s_43d1c7278cc498::t_337ad5cf72c5ac 5-6
+CLAUDE.md
+  s_9a9528ed808b0c::t_7c760eab47562c 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "cd54e0f751496fe9e85f01caba78c83209038948",
+  "prompts": {},
+  "sessions": {
+    "s_3168afb2b6b1c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34395e22-6298-4992-ba5e-058333e0da36",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_43d1c7278cc498": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "488a64eb-0dea-41d2-ab06-e0d36475b2f8",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_9a9528ed808b0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "102e2eb6-e634-4317-8dde-bdb0b8d568f4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
