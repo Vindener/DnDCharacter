@@ -78,6 +78,13 @@ function CharacterScreen({ route }: CharacterScreenProps) {
     getHistoryAuthorLabel,
   } = viewState;
   const hasStickyQuickActions = mode === 'play';
+
+  const formatHistorySummary = (entry: CharacterChangeHistoryEntry) => {
+    const summary = entry.summary || entry.paths.join(', ');
+    if (!summary) return '—';
+    return t(`dm:sharedUpdates.pathLabels.${summary}`, { defaultValue: summary });
+  };
+
   return (
     <View style={styles.screen} testID='character.screen'>
       <ScrollView
@@ -163,7 +170,7 @@ function CharacterScreen({ route }: CharacterScreenProps) {
               <View key={entry.id} style={styles.historyRow}>
                 <Text style={styles.historyAuthor}>{getHistoryAuthorLabel(entry)}</Text>
                 <Text style={styles.historyMeta}>{new Date(entry.atMs).toLocaleString()}</Text>
-                <Text style={styles.historyPaths}>{entry.summary || entry.paths.join(', ') || '—'}</Text>
+                <Text style={styles.historyPaths}>{formatHistorySummary(entry)}</Text>
               </View>
             ))}
           </View>

@@ -188,16 +188,27 @@
         "saving-throws": "Рятівні кидки",
         "skills": "Навички",
         "conditions": "Стани",
-        "campaign": "Кампанія"
+        "campaign": "Кампанія",
+        "stats": "Характеристики"
       },
       "combat": {
         "core": "Бойові параметри",
         "hp": "Здоров'я",
         "rest": "Відпочинок",
-        "weapons": "Зброя"
+        "weapons": "Зброя",
+        "conditions": "Стани",
+        "templates": {
+          "actions": "Шаблони дій",
+          "bonus-actions": "Шаблони бонусних дій",
+          "reactions": "Шаблони реакцій"
+        }
       },
       "magic": {
         "slots": "Комірки заклять"
+      },
+      "inventory": {
+        "items": "Інвентар",
+        "equipment": "Екіпіроване спорядження"
       },
       "homebrew": {
         "notes-groups": "Нотатки",

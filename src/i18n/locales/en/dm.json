@@ -188,16 +188,27 @@
         "saving-throws": "Saving throws",
         "skills": "Skills",
         "conditions": "Conditions",
-        "campaign": "Campaign"
+        "campaign": "Campaign",
+        "stats": "Ability scores"
       },
       "combat": {
         "core": "Combat stats",
         "hp": "Hit points",
         "rest": "Rest",
-        "weapons": "Weapons"
+        "weapons": "Weapons",
+        "conditions": "Conditions",
+        "templates": {
+          "actions": "Action templates",
+          "bonus-actions": "Bonus action templates",
+          "reactions": "Reaction templates"
+        }
       },
       "magic": {
         "slots": "Spell slots"
+      },
+      "inventory": {
+        "items": "Inventory items",
+        "equipment": "Equipped gear"
       },
       "homebrew": {
         "notes-groups": "Notes",

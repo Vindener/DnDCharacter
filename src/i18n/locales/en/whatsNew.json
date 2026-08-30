@@ -2,9 +2,8 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Fixed a rare character sheet crash when using the app without an internet connection (airplane mode, weak signal) — it no longer crashes while trying to sync offline.",
-    "Updated status bar and bottom system bar behavior to match the latest Android requirements — more stable on newer devices and Android versions.",
-    "Updated internal app libraries to close known security vulnerabilities."
+    "Added 317 SRD 5.1 monsters (source: 'srd-5.1') to the Bestiary — available right away, no JSON import or manual entry needed.",
+    "Fixed the character sheet's shared-changes history: instead of raw field names (e.g. \"combat.hp\", \"combat.conditions\") it now shows readable labels (\"Hit points\", \"Conditions\", etc.)."
   ],
   "gotIt": "Got it"
 }
