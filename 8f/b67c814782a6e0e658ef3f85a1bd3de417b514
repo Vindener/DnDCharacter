@@ -1,0 +1,42 @@
+CLAUDE.md
+  s_27c8f00e4762cd::t_69a1f7f565b3f7 16-27
+docs/post-1.0-backlog.md
+  s_27c8f00e4762cd::t_ed9b81a4c38722 15-18,20-21,23-28
+docs/audit-2026-07.md
+  s_27c8f00e4762cd::t_a1ac8ea2a2bb8b 472,474-476
+  s_27c8f00e4762cd::t_a5092cc5ff857b 351,353,356
+docs/release-blockers.md
+  s_0554713737bdc2::t_e75df7b52475fe 16-51,73,81-82,90-93
+  s_27c8f00e4762cd::t_36098c2806f4ae 52-72,74-80,83-89
+docs/release-plan-google-play.md
+  s_0554713737bdc2::t_9cc6c0976d29db 348-351
+  s_27c8f00e4762cd::t_02153524e17db1 300-339,343-345
+docs/collaborative-editing.md
+  s_27c8f00e4762cd::t_ba9ea80b9bf61b 231-301
+docs/claude-code-prompts.md
+  s_27c8f00e4762cd::t_5d3653e961bbf4 999-1210
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "8fb67c814782a6e0e658ef3f85a1bd3de417b514",
+  "prompts": {},
+  "sessions": {
+    "s_0554713737bdc2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "14b5876e-4517-4c80-8f28-4c5e7c572f59",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    },
+    "s_27c8f00e4762cd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "daaea88d-b99c-4308-8df9-2b71f5780bd1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
