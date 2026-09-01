@@ -996,6 +996,218 @@ splash-icon.png — три ідентичні файли по 497 КБ.
 
 ## Спринт R5 · Реліз
 
+### P5.0a · COL-4 повністю: семантичний merge лічильників (R5-0a) 🚧 GATE
+
+> Свідомий виняток зі scope freeze, рішення власника продукту 2026-09-01 —
+> `CLAUDE.md` Виняток 3. Раніше «після 1.0», зараз активна задача вікна.
+
+```
+Прочитай спочатку: CLAUDE.md Виняток 3, docs/collaborative-editing.md §3.1,
+src/shared/helpers/sync/conflictPolicy.ts (весь файл, 109 рядків),
+src/services/characterSyncCoordinator.ts (mergeCharacterBySections, рядки 451-557),
+src/repositories/characterCloudRepository.ts (upsertCharacterSheetFromLocal
+429-493, buildContentPayload 415-427, getValueAtPath 403-408),
+src/services/firebase.ts (36 рядків, усі експорти),
+src/types/HitPoints.ts, src/types/DeathSaves.ts, src/types/SpellSlots.ts,
+src/domain/types/character.ts (CharacterTracker, CharacterCustomResource),
+src/shared/helpers/sync/conflictPolicy.test.ts,
+src/services/characterSyncCoordinator.test.ts (describe "mergeCharacterBySections
+(COL-4 granularity)", рядок 304),
+src/repositories/characterCloudRepository.test.ts,
+src/repositories/syncPathFieldMap.test.ts.
+
+Контекст: дроблення combat на під-секції (vitals/defense/conditions/weapons)
+вже зроблено (R2-6). Але це не рятує сценарій одночасних дельт: якщо DM
+натисне «-7 HP», а гравець одразу «+2 HP» (лікування), поточний merge все
+одно бере «останній переміг» на рівні всього значення hp.current — одна з
+двох дельт тихо зникає, бо обидва клієнти пишуть АБСОЛЮТНЕ число, а не зміну.
+`FieldValue.increment()` вирішує це на рівні Firestore: сервер атомарно
+застосовує обидві дельти незалежно від порядку прибуття записів.
+
+Задача:
+1. Додай у src/services/firebase.ts тонкі обгортки `increment(n)` і
+   `arrayRemove(...items)` — за тим самим патерном, що вже є `arrayUnion`
+   (рядок 11). Наразі жодної з них там немає — підтверджено читанням файлу.
+2. Числові поля для переведення на дельти: `combat.hp.current`, `combat.hp.temp`
+   (src/types/HitPoints.ts), `combat.deathSaves.successes`/`failures`
+   (src/types/DeathSaves.ts), `magic.spells.spellSlots.{level}.used`
+   (src/types/SpellSlots.ts), `homebrew.resources.{id}.current` і
+   `homebrew.trackers.{id}.current` (CharacterCustomResource/CharacterTracker,
+   character.ts:32-56 — тільки `current`, НЕ `max`, `max` міняється рідко і
+   лишається «останній переміг»).
+3. У точці запису (characterCloudRepository.ts:456-473, точкові update-шляхи)
+   для цих конкретних полів: замість запису абсолютного нового значення —
+   порахувати дельту між локальним baseline (останнє відоме синхронізоване
+   значення) і новим локальним значенням, писати `increment(delta)`. Знайди,
+   чи вже є десь baseline-знімок (pendingPaths/syncState) — якщо немає,
+   це основний новий стан, який доведеться завести.
+4. `combat.conditions` (масив-множина): заміна цілого масиву → `arrayUnion`
+   для доданих, `arrayRemove` для знятих conditions, а не перезапис масиву.
+5. `mergeCharacterBySections` (characterSyncCoordinator.ts:451-557): для
+   полів-лічильників сервер сам порахує підсумок через increment — клієнт
+   не повинен додавати свою локальну дельту ще раз поверх значення, яке вже
+   прийшло зі снапшота (щоб не подвоїти зміну). Задокументуй і протестуй цю
+   eventual-consistency поведінку.
+6. `collectConflictPaths`/`CRITICAL_PATH_PREFIXES` (conflictPolicy.ts:3, 64-92):
+   для полів-лічильників з кроку 2 і для `combat.conditions` одночасний запис
+   з обох клієнтів більше НЕ повинен породжувати конфлікт-модалку — increment
+   і arrayUnion/arrayRemove комутативні й безпечні для одночасного застосування.
+7. Clamp на читанні (UI-шар, не сервер): `hp.current` не може відображатись
+   більшим за `hp.max` чи меншим за 0 після застосування increment —
+   `increment()` не має верхньої межі сам по собі.
+8. Тести: розшир conflictPolicy.test.ts і "mergeCharacterBySections (COL-4
+   granularity)" (characterSyncCoordinator.test.ts:304) кейсами одночасних
+   дельт (-7/+2 → фінальне значення коректне, без конфлікту) і одночасних
+   condition add/remove. Розшир characterCloudRepository.test.ts (навколо
+   рядків 125, 180, 193, 205) — перевірити, що payload для цих полів містить
+   саме `increment`/`arrayRemove`, а не абсолютні значення.
+
+Обмеження: `combat.defense`/`homebrew.fields`/`homebrew.sections` не чіпати —
+там немає лічильників, лишається «останній переможець» (уже коректно з R2-6).
+Presence і підколекція журналу — окремий промт P5.0b, тут не робити. Верхню
+межу лічильника не валідувати на сервері (firestore.rules) без окремого
+рішення власника продукту — лише clamp на клієнті, зазнач це як прийнятий
+ризик у звіті. functions/ не чіпати.
+
+Приймання: npx tsc --noEmit = 0; npm run lint = 0 errors; npm run test:unit
+зелений, включно з новими кейсами; сценарій для перевірки на двох клієнтах
+описаний у звіті (DM -7 HP + гравець +2 HP одночасно → правильне фінальне
+значення на обох, без конфлікт-модалки).
+
+Звіт: таблиця "шлях -> increment чи arrayUnion/arrayRemove чи без змін";
+що саме НЕ чіпав і чому; покроковий сценарій ручної перевірки на двох
+клієнтах для власника продукту.
+```
+
+---
+
+### P5.0b · COL-6 (presence) + COL-9 (журнал у підколекцію) (R5-0b) 🚧 GATE
+
+> Свідомий виняток зі scope freeze, рішення власника продукту 2026-09-01 —
+> `CLAUDE.md` Виняток 3. Раніше «після 1.0», зараз активна задача вікна.
+> Велика зміна — розглянь два окремі коміти всередині однієї сесії:
+> спочатку підколекція журналу (кроки 1-6), потім presence (кроки 7-9).
+
+```
+Прочитай спочатку: CLAUDE.md Виняток 3, docs/collaborative-editing.md §3.1,
+firestore.rules (весь файл, 309 рядків — особливо characterSheets 47-99,
+isValidCharacterSheetWrite 65-79, dmCampaignInitiative 260-306 як приклад
+патерну "підколекція, що читає owners/editors батька через get()"),
+src/repositories/characterCloudRepository.ts (buildHistoryEntries 371-401,
+CharacterChangeHistoryEntry тип 14-22, три місця запису changeHistory —
+447/468/486),
+src/services/characterSyncCoordinator.ts (computeRemoteHistorySync 601-619,
+computeSeenEntryIdsFromRawHistory 623-631, reconcileRemoteSnapshot 559-596),
+src/screens/Character/hooks/useCharacterActions.tsx (ефект підписки
+subscribeCharacterSheet 636-751, remotePathsSinceLastSync/seenHistoryEntryIds
+689-693, recordRemoteSyncState 713, tabHistory 2049-2056, latestTabChange/
+getHistoryAuthorLabel 2058-2060, formatChangeSource 566),
+src/screens/DM/DMSharedUpdates.tsx (SharedRecord тип 31-37, sanitizeHistory
+48-64, мапінг 131/139, latestHistory 156, рендер 388-391),
+src/screens/Character/Character.tsx (картка історії 158-177),
+src/services/firebase.ts.
+
+Контекст (важливо, звірено читанням коду — не з аудиту, там застарілі
+рядки): `changeHistory[]` зараз пишеться в масив на самому документі
+персонажа через `arrayUnion` (без обмеження на 50 записів — firestore.rules
+явно документує це як свідоме рішення, обрізання — окрема задача read-side).
+Ризик 1 MiB (COL-9) і бажаний серверний `serverTimestamp()` на кожен запис
+(продовження COL-5) вирішуються переносом у підколекцію. Presence (COL-6)
+зараз відсутній повністю ніде в коді — жодної реалізації.
+
+**Частина 1 — журнал у підколекцію (COL-9):**
+
+Задача:
+1. Нова підколекція `characterSheets/{sheetId}/changes/{entryId}` — кожен
+   запис журналу окремим документом з `createdAt: serverTimestamp()`. Формою
+   поля відповідають поточному `CharacterChangeHistoryEntry`
+   (characterCloudRepository.ts:14-22). ID документа — та сама схема, що й
+   зараз (`${uid}-${tab}-${atMs}`, buildHistoryEntries) для природної
+   ідемпотентності запису.
+2. Заміни три місця `arrayUnion(...additions)` у upsertCharacterSheetFromLocal
+   (характерні рядки 468 — точковий шлях, 486 — транзакційний фолбек) на
+   окремі `.set()` у підколекцію (через `WriteBatch` або `tx.set()` там, де
+   вже є транзакція).
+3. Існуючий масив `changeHistory[]` на документах не мігруй ретроактивно —
+   підколекція стартує «з нуля» з моменту релізу цієї зміни (так свідомо
+   вирішено в docs/collaborative-editing.md §3.1). Просто перестань писати
+   в старе поле; не видаляй його з документа в цьому проході — лише
+   задокументуй у звіті, які саме коди перестали в нього писати/читати,
+   щоб наступний PR міг безпечно прибрати поле.
+4. Онови споживачів:
+   - useCharacterActions.tsx: додай другу підписку `onSnapshot` на
+     підколекцію `changes` (сортування за `createdAt` desc, розумний ліміт
+     для UI — наприклад 50-100, без штучного обмеження самої колекції),
+     підключи результат у `computeRemoteHistorySync`/`recordRemoteSyncState`
+     (689-693, 713) замість парсингу `doc.changeHistory`.
+   - characterSyncCoordinator.ts: `computeRemoteHistorySync` (601-619) і
+     `computeSeenEntryIdsFromRawHistory` (623-631) приймають масив
+     документів підколекції замість масиву-поля — форма запису та сама,
+     тож достатньо тонкого адаптера.
+   - DMSharedUpdates.tsx: `sanitizeHistory` (48-64) і мапінг (131/139,
+     `latestHistory` 156) — DM тепер підписується на підколекцію `changes`
+     для кожного спільного аркуша. Зваж на CLAUDE.md §5.8 (кількість
+     слухачів має значення) — не підписуйся на підколекції всіх аркушів
+     одразу, лише для розгорнутого/відкритого в DM-екрані.
+   - Character.tsx (158-177): переключити джерело даних на підколекцію,
+     рендер лишити як є (`toLocaleString()`) — це не про формат дати.
+4. firestore.rules: додай `match /characterSheets/{sheetId}/changes/{entryId}`
+   за патерном dmCampaignInitiative (265-267, `get(...).data` до
+   батьківського документа для перевірки `owners`/`editors`, без дублювання
+   масивів доступу на кожному записі). `create` — для owner/editor
+   батьківського документа; без `update`/`delete` з клієнта (журнал —
+   append-only). Валідація форми запису — за конвенцією
+   `isValidCharacterSheetWrite` (65-79): обов'язкові ключі, обмеження
+   розміру/типів (`paths`, `actorRole` тощо, за формою
+   CharacterChangeHistoryEntry).
+5. Тести правил (firestore-tests/rules.test.ts або новий файл): editor/owner
+   можуть create+read записи; сторонній — ні; клієнт не може update/delete
+   існуючий запис; невалідна форма запису відхиляється.
+
+**Частина 2 — presence (COL-6):**
+
+6. Нова підколекція `characterSheets/{sheetId}/presence/{uid}` — один
+   документ на активного глядача: `{ uid, actorRole, tab,
+   lastActiveAt: serverTimestamp() }`.
+7. Клієнтський heartbeat: при відкритті екрана персонажа — одразу `set()` +
+   інтервал ~20-30с, поки екран у фокусі (перевір, чи в коді вже є хук
+   `useFocusEffect`-патерн для точки підключення); при закритті/втраті
+   фокусу — best-effort видалення власного presence-документа. Клієнт
+   ігнорує presence-записи старіші за ~90с як застарілі — Cloud Function
+   для очищення НЕ потрібна (CLAUDE.md §8.5, не плодити зайву інфраструктуру).
+8. UI: рядок у шапці аркуша персонажа (біля картки історії, Character.tsx
+   158-177, або в зоні табів) «DM зараз тут» / «DM був N хв тому» на основі
+   найсвіжішого `lastActiveAt` серед інших `uid`. Форматер відносного часу
+   зараз відсутній ніде в коді (Character.tsx показує повну дату/час через
+   `toLocaleString()`) — якщо в проєкті вже є `Intl.RelativeTimeFormat` чи
+   аналог десь ще, перевір і перевикористай; якщо ні, це нова, невелика
+   UI-функція, а не рефактор наявної.
+9. firestore.rules для `presence`: `create`/`update` лише власним `uid`,
+   `get`/`list` — owner/editor батьківського аркуша (та сама get()-конвенція,
+   що й для `changes`), `delete` — лише власним `uid` (самоочищення).
+
+Обмеження: dmCampaigns/dmCampaignNotes не чіпати — лише characterSheets.
+Cloud Function для presence-cleanup не додавати. Старе поле `changeHistory[]`
+не видаляти з документів у цьому проході. Не вигадуй «DM оновив Combat N с
+тому» як заміну — в CLAUDE.md/collaborative-editing.md це був дешевий
+проміжний варіант ДО повного presence; ми одразу робимо повний presence,
+тож проміжний крок пропускається.
+
+Приймання: npx tsc --noEmit = 0; npm run lint = 0 errors; npm run test:unit
+зелений; npm run test:rules зелений (нові кейси підколекцій); ручний тест на
+двох клієнтах — запис історії з клієнта А видно на клієнті Б майже одразу
+через підписку на підколекцію (не старе поле-масив); presence з'являється
+на клієнті Б протягом інтервалу heartbeat після відкриття аркуша клієнтом А
+і зникає протягом порогу застарілості після закриття.
+
+Звіт: диф правил; які UI-файли тепер читають підколекцію замість
+`changeHistory[]`; чи лишились читачі старого поля (має бути нуль); оцінка
+квоти читань/записів Firestore для presence-heartbeat за 30-хвилинну сесію
+двох клієнтів (CLAUDE.md §8.5).
+```
+
+---
+
 ### P5.1 · Підготувати регресійний прогін (R5-1)
 
 ```
