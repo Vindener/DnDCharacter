@@ -73,8 +73,13 @@ export function createSyncStoreEffects({ set, get }: SyncStoreContext): SyncStor
       await applyAndPersist({ type: 'mark-local-draft-paths', characterId, changedPaths });
     },
 
-    markCloudUploaded: async (characterId) => {
-      await applyAndPersist({ type: 'mark-cloud-uploaded', characterId });
+    markCloudUploaded: async (characterId, baseline) => {
+      await applyAndPersist({
+        type: 'mark-cloud-uploaded',
+        characterId,
+        counterBaseline: baseline?.counterBaseline,
+        conditionsBaseline: baseline?.conditionsBaseline,
+      });
     },
 
     markCloudDownloaded: async (characterId) => {

@@ -92,6 +92,8 @@ describe('store selectors', () => {
       transportMessage: null,
       lastSyncError: null,
       lastSyncAttemptAt: 100,
+      counterBaseline: {},
+      conditionsBaseline: [],
     };
     const syncB = {
       ...syncA,

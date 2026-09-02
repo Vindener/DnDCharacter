@@ -27,6 +27,8 @@ const mocks = vi.hoisted(() => {
     doc,
     runTransaction: vi.fn(async (fn: (transaction: typeof tx) => Promise<void>) => fn(tx)),
     arrayUnion: vi.fn((...items: unknown[]) => ({ __op: 'arrayUnion', items })),
+    arrayRemove: vi.fn((...items: unknown[]) => ({ __op: 'arrayRemove', items })),
+    increment: vi.fn((n: number) => ({ __op: 'increment', n })),
     deleteField: vi.fn(() => ({ __op: 'deleteField' })),
     ensureConnection: vi.fn(async () => {}),
     findUserByEmail: vi.fn(async (): Promise<string | null> => null),
@@ -43,6 +45,8 @@ vi.mock('@/services/firebase', () => ({
   now: () => 'server-now',
   hasDoc: (snap: { exists?: boolean } | null | undefined) => Boolean(snap?.exists),
   arrayUnion: mocks.arrayUnion,
+  arrayRemove: mocks.arrayRemove,
+  increment: mocks.increment,
   deleteField: mocks.deleteField,
 }));
 
@@ -57,6 +61,7 @@ vi.mock('@/services/users', () => ({
 import {
   addEditorByEmail,
   bulkUpsertFromLocal,
+  mergeCounterArrayById,
   removeEditor,
   transferOwnership,
   upsertCharacterSheetFromLocal,
@@ -77,6 +82,8 @@ describe('characterCloudRepository', () => {
     mocks.tx.set.mockClear();
     mocks.tx.update.mockReset().mockResolvedValue(undefined);
     mocks.arrayUnion.mockClear();
+    mocks.arrayRemove.mockClear();
+    mocks.increment.mockClear();
     mocks.ensureConnection.mockReset().mockResolvedValue(undefined);
     mocks.findUserByEmail.mockReset().mockResolvedValue(null);
   });
@@ -120,6 +127,175 @@ describe('characterCloudRepository', () => {
     for (const key of ACCESS_KEYS) {
       expect(patch).not.toHaveProperty(key);
     }
+  });
+
+  describe('COL-4 counter deltas (Виняток 3)', () => {
+    it('combat.hp with a counterBaseline writes FieldValue.increment() for hp.current, not an absolute value, and omits hp.temp (unchanged)', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', hp: { max: 20, current: 13, temp: 0 } }), {
+        historyPaths: ['combat.hp'],
+        counterBaseline: { 'hp.current': 20, 'hp.temp': 0 },
+      });
+
+      expect(mocks.targetRef.update).toHaveBeenCalledTimes(1);
+      const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(patch).not.toHaveProperty('hp');
+      expect(patch['hp.max']).toBe(20);
+      expect(patch['hp.current']).toEqual({ __op: 'increment', n: -7 });
+      expect(patch).not.toHaveProperty('hp.temp');
+      expect(mocks.increment).toHaveBeenCalledWith(-7);
+    });
+
+    it('regression: combat.hp with an EMPTY counterBaseline ({}) still writes hp.current/hp.temp as absolute values instead of silently omitting them', async () => {
+      // Every CharacterSyncState normalizes counterBaseline to {} (never undefined) on load —
+      // this is the REAL first-ever narrow write for a character under the new delta system,
+      // not an edge case. Treating "key absent from baseline" the same as "unchanged" here
+      // would silently drop hp.current/hp.temp from the update() call forever.
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', hp: { max: 13, current: 3, temp: 0 } }), {
+        historyPaths: ['combat.hp'],
+        counterBaseline: {},
+      });
+
+      const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(patch['hp.max']).toBe(13);
+      expect(patch['hp.current']).toBe(3);
+      expect(patch['hp.temp']).toBe(0);
+      expect(mocks.increment).not.toHaveBeenCalled();
+    });
+
+    it('COL-4 flagship scenario: DM -7 HP and player +2 HP each compute their own correct, independent delta against the same shared baseline (Firestore sums both atomically server-side)', async () => {
+      // Both devices last synced hp.current at 20 — this is the CharacterSyncState.counterBaseline
+      // each holds locally at the moment they each apply their own change.
+      const sharedBaseline = { 'hp.current': 20, 'hp.temp': 0 };
+
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', hp: { max: 20, current: 13, temp: 0 } }), {
+        historyPaths: ['combat.hp'],
+        counterBaseline: sharedBaseline,
+      });
+      const [dmPatch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(dmPatch['hp.current']).toEqual({ __op: 'increment', n: -7 });
+
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', hp: { max: 20, current: 22, temp: 0 } }), {
+        historyPaths: ['combat.hp'],
+        counterBaseline: sharedBaseline,
+      });
+      const [playerPatch] = mocks.targetRef.update.mock.calls[1] as [Record<string, unknown>];
+      expect(playerPatch['hp.current']).toEqual({ __op: 'increment', n: 2 });
+
+      // Neither write ever read the other's value — each delta is computed purely from its own
+      // local value minus the SAME shared baseline. FieldValue.increment() guarantees Firestore
+      // applies -7 and +2 atomically regardless of arrival order: 20 + (-7) + 2 = 15, the
+      // correct final value on both clients once each has observed the other's write — this
+      // last step is a Firestore server guarantee, not something a mocked unit test can
+      // observe; the two-client manual verification steps are in the task report.
+    });
+
+    it('combat.death-saves with a counterBaseline writes increment() for successes/failures', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', deathSaves: { successes: 2, failures: 1 } }), {
+        historyPaths: ['combat.death-saves'],
+        counterBaseline: { 'deathSaves.successes': 0, 'deathSaves.failures': 0 },
+      });
+
+      const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(patch).not.toHaveProperty('deathSaves');
+      expect(patch['deathSaves.successes']).toEqual({ __op: 'increment', n: 2 });
+      expect(patch['deathSaves.failures']).toEqual({ __op: 'increment', n: 1 });
+    });
+
+    it('magic.slots with a counterBaseline writes per-level increment() for used, and an absolute max', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+
+      await upsertCharacterSheetFromLocal(
+        createEmptyCharacter({
+          id: 'char-1',
+          name: 'Test',
+          spells: {
+            spellcastingAbility: 'int',
+            spellSaveDC: 13,
+            spellAttackBonus: 5,
+            spellSlots: { 1: { max: 4, used: 2 } },
+            knownSpells: [],
+            preparedSpells: [],
+            cantrips: [],
+          },
+        }),
+        { historyPaths: ['magic.slots'], counterBaseline: { 'spells.spellSlots.1.used': 1 } },
+      );
+
+      const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(patch).not.toHaveProperty('spells.spellSlots');
+      expect(patch['spells.spellSlots.1.max']).toBe(4);
+      expect(patch['spells.spellSlots.1.used']).toEqual({ __op: 'increment', n: 1 });
+    });
+
+    it('combat.conditions with a conditionsBaseline uses arrayUnion for additions and arrayRemove for removals, never an absolute array overwrite', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test', conditions: ['poisoned'] }), {
+        historyPaths: ['combat.conditions'],
+        conditionsBaseline: ['prone'],
+      });
+
+      expect(mocks.targetRef.update).toHaveBeenCalledTimes(3); // main patch + arrayUnion(add) + arrayRemove(remove)
+      const [mainPatch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(mainPatch).not.toHaveProperty('conditions');
+      const [addPatch] = mocks.targetRef.update.mock.calls[1] as [Record<string, unknown>];
+      expect(addPatch.conditions).toEqual({ __op: 'arrayUnion', items: ['poisoned'] });
+      const [removePatch] = mocks.targetRef.update.mock.calls[2] as [Record<string, unknown>];
+      expect(removePatch.conditions).toEqual({ __op: 'arrayRemove', items: ['prone'] });
+    });
+
+    it('a customResources counter delta forces the transactional path and merges by id instead of blindly overwriting the array', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+      mocks.tx.get.mockResolvedValueOnce({
+        id: 'char-1',
+        exists: true,
+        data: () => ({
+          ownerUid: 'user-1',
+          owners: ['user-1'],
+          editors: [],
+          customResources: [
+            { id: 'mana', label: 'Mana (server)', current: 9, max: 10, resetRule: 'long-rest' },
+            { id: 'ki', label: 'Ki (added by another device)', current: 2, max: 5, resetRule: 'short-rest' },
+            { id: 'rage', label: 'Rage', current: 3, max: 3, resetRule: 'long-rest' },
+          ],
+        }),
+      });
+
+      await upsertCharacterSheetFromLocal(
+        createEmptyCharacter({
+          id: 'char-1',
+          name: 'Test',
+          // locally: ticked mana down by 1 (5 -> 4 against this device's own baseline), never
+          // knew about 'ki', and deliberately removed 'rage' (which this device did know about).
+          customResources: [{ id: 'mana', label: 'Mana', current: 4, max: 10, resetRule: 'long-rest' }],
+        }),
+        {
+          historyPaths: ['homebrew.resources'],
+          counterBaseline: { 'customResources.mana.current': 5, 'customResources.rage.current': 3 },
+        },
+      );
+
+      expect(mocks.runTransaction).toHaveBeenCalledTimes(1);
+      expect(mocks.targetRef.update).not.toHaveBeenCalled();
+      const [, payload] = mocks.tx.set.mock.calls[0] as [unknown, Record<string, unknown>];
+      const resources = payload.customResources as Array<{ id: string; current: number }>;
+      // mana: this device's own delta (4 - 5 = -1) applied on top of the server's current
+      // value (9), not on top of the stale local value -> 8, not 4 and not 9.
+      expect(resources.find((r) => r.id === 'mana')?.current).toBe(8);
+      // ki: absent locally, but no baseline entry -> another device added it after our last
+      // sync, so it must survive, not be silently deleted.
+      expect(resources.find((r) => r.id === 'ki')).toBeTruthy();
+      // rage: absent locally AND this device's baseline knew about it -> deliberate deletion.
+      expect(resources.find((r) => r.id === 'rage')).toBeUndefined();
+    });
   });
 
   it('clears campaignId server-side with deleteField() when detaching, instead of skipping it', async () => {
@@ -387,5 +563,51 @@ describe('characterCloudRepository', () => {
 
       expect(failures).toEqual([{ id: 'char-a', code: 'firestore/permission-denied', message: 'Missing or insufficient permissions' }]);
     });
+  });
+});
+
+describe('mergeCounterArrayById', () => {
+  it("applies this device's own known delta on top of the server's current value, not on top of the stale local value", () => {
+    const result = mergeCounterArrayById([{ id: 'mana', current: 9 }], [{ id: 'mana', current: 4 }], { 'x.mana.current': 5 }, 'x.');
+    expect(result).toEqual([{ id: 'mana', current: 8 }]);
+  });
+
+  it('keeps a server-only id the device never knew about (added by another device since our last sync)', () => {
+    const result = mergeCounterArrayById(
+      [
+        { id: 'mana', current: 9 },
+        { id: 'ki', current: 2 },
+      ],
+      [{ id: 'mana', current: 9 }],
+      { 'x.mana.current': 9 },
+      'x.',
+    );
+    expect(result.map((r) => r.id).sort()).toEqual(['ki', 'mana']);
+  });
+
+  it('drops a server id the device knew about but has since removed locally (deliberate deletion)', () => {
+    const result = mergeCounterArrayById(
+      [
+        { id: 'mana', current: 9 },
+        { id: 'rage', current: 3 },
+      ],
+      [{ id: 'mana', current: 9 }],
+      { 'x.mana.current': 9, 'x.rage.current': 3 },
+      'x.',
+    );
+    expect(result.map((r) => r.id)).toEqual(['mana']);
+  });
+
+  it('appends a locally-added id absent from the server (structural add)', () => {
+    const result = mergeCounterArrayById(
+      [{ id: 'mana', current: 9 }],
+      [
+        { id: 'mana', current: 9 },
+        { id: 'new-res', current: 1 },
+      ],
+      { 'x.mana.current': 9 },
+      'x.',
+    );
+    expect(result.map((r) => r.id).sort()).toEqual(['mana', 'new-res']);
   });
 });

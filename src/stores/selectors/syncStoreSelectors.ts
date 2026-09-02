@@ -5,13 +5,24 @@ export type SyncStoreActionsSlice = {
   ensureCharacterSync: (characterId: string, hasCloud?: boolean) => Promise<void>;
   setCloudAvailability: (characterId: string, hasCloud: boolean) => Promise<void>;
   markLocalDraftPaths: (characterId: string, changedPaths: string[]) => Promise<void>;
-  markCloudUploaded: (characterId: string) => Promise<void>;
+  markCloudUploaded: (
+    characterId: string,
+    baseline?: { counterBaseline?: Record<string, number>; conditionsBaseline?: string[] },
+  ) => Promise<void>;
   markCloudDownloaded: (characterId: string) => Promise<void>;
   markConflict: (characterId: string, conflictPaths: string[]) => Promise<void>;
   clearConflicts: (characterId: string) => Promise<void>;
   setSyncTransport: (characterId: string, state: SyncTransportState, message?: string | null) => Promise<void>;
   markSyncError: (characterId: string, message: string) => Promise<void>;
-  recordRemoteSyncState: (characterId: string, payload: { seenHistoryEntryIds: string[]; serverSyncAtMs?: number }) => Promise<void>;
+  recordRemoteSyncState: (
+    characterId: string,
+    payload: {
+      seenHistoryEntryIds: string[];
+      serverSyncAtMs?: number;
+      counterBaseline?: Record<string, number>;
+      conditionsBaseline?: string[];
+    },
+  ) => Promise<void>;
 };
 
 export type SyncStoreSelectorState = {

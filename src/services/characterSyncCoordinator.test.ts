@@ -205,6 +205,79 @@ describe('characterSyncCoordinator helpers', () => {
     expect(syncPort.setCloudAvailability).not.toHaveBeenCalled();
   });
 
+  describe('COL-4 counter baseline advancement', () => {
+    it('a narrow combat.hp upload advances the baseline only for hp.current/hp.temp, leaving an unrelated still-pending counter untouched', async () => {
+      vi.mocked(characterCloudRepository.upsertFromLocal).mockResolvedValueOnce({ id: 'char-baseline', updated: true });
+      const character = createEmptyCharacter({
+        id: 'char-baseline',
+        name: 'Test',
+        hp: { max: 20, current: 13, temp: 0 },
+        customResources: [{ id: 'mana', label: 'Mana', current: 9, max: 10, resetRule: 'long-rest' }],
+      });
+      const syncPort = {
+        ensureCharacterSync: vi.fn(async () => {}),
+        setCloudAvailability: vi.fn(async () => {}),
+        markCloudUploaded: vi.fn(async () => {}),
+        setSyncTransport: vi.fn(async () => {}),
+        markSyncError: vi.fn(async () => {}),
+      };
+
+      await syncToCloud({
+        character,
+        // this device also has a separate, still-pending, not-yet-uploaded resource edit —
+        // its baseline must not be silently advanced by this unrelated combat.hp upload.
+        syncState: {
+          ...normalizeSyncState('char-baseline', null),
+          counterBaseline: { 'hp.current': 20, 'customResources.mana.current': 5 },
+        },
+        actorRole: 'Player',
+        syncPort,
+        isOnline: true,
+        historyPaths: ['combat.hp'],
+      });
+
+      expect(syncPort.markCloudUploaded).toHaveBeenCalledWith('char-baseline', {
+        counterBaseline: { 'hp.current': 13, 'hp.temp': 0, 'customResources.mana.current': 5 },
+        conditionsBaseline: undefined,
+      });
+    });
+
+    it('an untagged/fallback upload (or a brand-new document) advances the WHOLE counter baseline, since that write genuinely touches every field', async () => {
+      vi.mocked(characterCloudRepository.upsertFromLocal).mockResolvedValueOnce({ id: 'char-fallback', created: true });
+      const character = createEmptyCharacter({
+        id: 'char-fallback',
+        name: 'Test',
+        hp: { max: 20, current: 13, temp: 0 },
+        deathSaves: { successes: 1, failures: 0 },
+      });
+      const syncPort = {
+        ensureCharacterSync: vi.fn(async () => {}),
+        setCloudAvailability: vi.fn(async () => {}),
+        markCloudUploaded: vi.fn(async () => {}),
+        setSyncTransport: vi.fn(async () => {}),
+        markSyncError: vi.fn(async () => {}),
+      };
+
+      await syncToCloud({
+        character,
+        syncState: normalizeSyncState('char-fallback', null),
+        actorRole: 'Player',
+        syncPort,
+        isOnline: true,
+        // 'overview.identity' is not in COUNTER_SCOPE_BY_TAG — a scoped-only baseline update
+        // would wrongly leave hp/deathSaves unadvanced even though this write (a brand-new
+        // doc) wrote every field absolutely, causing the next real combat.hp upload to resend
+        // an already-applied delta a second time.
+        historyPaths: ['overview.identity'],
+      });
+
+      expect(syncPort.markCloudUploaded).toHaveBeenCalledWith('char-fallback', {
+        counterBaseline: { 'hp.current': 13, 'hp.temp': 0, 'deathSaves.successes': 1, 'deathSaves.failures': 0 },
+        conditionsBaseline: [],
+      });
+    });
+  });
+
   // COL-7 acceptance test: permission-denied must surface a visible toast + telemetry;
   // an offline/expected failure must stay silent, same as before this change.
   describe('COL-7 error visibility', () => {
@@ -320,7 +393,7 @@ describe('mergeCharacterBySections (COL-4 granularity)', () => {
     }
   });
 
-  it('fixes the conditions cross-surface bug: overview.conditions (player) vs combat.conditions (DM) now conflicts instead of silently overwriting', () => {
+  it('Виняток 3 (supersedes COL-4): overview.conditions (player) vs combat.conditions (DM) merge instead of conflicting — both write via arrayUnion/arrayRemove and commute', () => {
     const local = createEmptyCharacter({ id: 'char-conditions', name: 'Local', conditions: ['poisoned'] });
     const remote = createEmptyCharacter({ id: 'char-conditions', name: 'Local', conditions: ['prone'] });
 
@@ -329,9 +402,20 @@ describe('mergeCharacterBySections (COL-4 granularity)', () => {
       remoteCharacter: remote,
       remotePathsSinceLastSync: ['combat.conditions.prone'],
       syncState: { ...normalizeSyncState('char-conditions', null), pendingPaths: ['overview.conditions'] },
-    });
+    }) as ReconcileRemoteSnapshotResult;
 
-    expect(result.action).toBe('conflict');
+    expect(result.action).toBe('merge');
+    if (result.action === 'merge') {
+      // Local's own still-pending 'poisoned' add is kept in the view until its own upload
+      // lands; 'prone' (the DM's remote add) will show up once this device's own upload
+      // completes and a later snapshot reflects the server-merged array — both survive,
+      // neither is dropped, because both sides write via arrayUnion.
+      expect(result.character.conditions).toEqual(['poisoned']);
+      // The conditions baseline stays frozen while our own condition edit is still pending —
+      // advancing it to remote's ['prone'] now would corrupt the add/remove delta our own
+      // still-pending upload computes later.
+      expect(result.conditionsBaseline).toEqual([]);
+    }
   });
 
   it('merges independent combat sub-sections: local weapons pending survives, remote defense and homebrew sections are pulled in', () => {
@@ -551,6 +635,11 @@ describe('resolveConflict keep-cloud (COL-5 cursor bump)', () => {
     expect(recordRemoteSyncState).toHaveBeenCalledWith('char-conflict', {
       seenHistoryEntryIds: ['remote-1'],
       serverSyncAtMs: serverMs,
+      // keep-cloud fully replaces local with the fetched doc, so the whole counter/conditions
+      // baseline advances too (COL-4) — empty here because the mocked doc carries no hp/
+      // deathSaves/conditions fields.
+      counterBaseline: {},
+      conditionsBaseline: [],
     });
   });
 });

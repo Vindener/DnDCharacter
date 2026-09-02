@@ -2,8 +2,9 @@ import type { CharacterSyncMap, CharacterSyncState, SyncTransportState } from '@
 import type { CharacterViewModel } from '@/types/Character';
 import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
 import { characterCloudRepository } from '@/repositories/characterCloudRepository';
+import { mapSyncPathsToFieldPaths } from '@/repositories/syncPathFieldMap';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
-import { resolveSyncStatus, collectConflictPaths, pathToSyncSection } from '@/shared/helpers/sync/conflictPolicy';
+import { resolveSyncStatus, collectConflictPaths, pathToSyncSection, type SyncSection } from '@/shared/helpers/sync/conflictPolicy';
 import { classifySyncError } from '@/shared/helpers/sync/syncErrorClassification';
 import { characterMapper } from '@/domain/mappers';
 import { timestampToMillis } from '@/services/firebase';
@@ -44,9 +45,15 @@ type MarkLocalDraftPathsTransition = TransitionBase & {
   changedPaths: string[];
 };
 
+// COL-4: counterBaseline/conditionsBaseline advance the delta baseline for exactly the
+// counter keys this upload actually wrote (see extractCounterSnapshot/counterKeysInScope
+// below) — merged into the existing baseline, never a wholesale replace, so an unrelated
+// still-pending edit's baseline stays frozen.
 type MarkCloudUploadedTransition = TransitionBase & {
   type: 'mark-cloud-uploaded';
   message?: string | null;
+  counterBaseline?: Record<string, number>;
+  conditionsBaseline?: string[];
 };
 
 type MarkCloudDownloadedTransition = TransitionBase & {
@@ -86,6 +93,10 @@ type RecordRemoteSyncStateTransition = TransitionBase & {
   type: 'record-remote-sync-state';
   seenHistoryEntryIds: string[];
   serverSyncAtMs?: number;
+  // COL-4: baseline advancement from an observed remote snapshot — only for counter/condition
+  // keys not currently held back by a still-pending local edit (see computeNextCounterBaseline).
+  counterBaseline?: Record<string, number>;
+  conditionsBaseline?: string[];
 };
 
 export type SyncTransition =
@@ -128,14 +139,31 @@ export type ReconcileRemoteSnapshotArgs = {
 
 export type ReconcileRemoteSnapshotResult =
   | { action: 'conflict'; conflictPaths: string[]; pendingPaths: string[]; remotePathsSinceLastSync: string[] }
-  | { action: 'merge'; character: CharacterViewModel; pendingPaths: string[]; remotePathsSinceLastSync: string[] }
-  | { action: 'replace'; character: CharacterViewModel; pendingPaths: string[]; remotePathsSinceLastSync: string[] }
+  | {
+      action: 'merge';
+      character: CharacterViewModel;
+      pendingPaths: string[];
+      remotePathsSinceLastSync: string[];
+      counterBaseline: Record<string, number>;
+      conditionsBaseline: string[];
+    }
+  | {
+      action: 'replace';
+      character: CharacterViewModel;
+      pendingPaths: string[];
+      remotePathsSinceLastSync: string[];
+      counterBaseline: Record<string, number>;
+      conditionsBaseline: string[];
+    }
   | { action: 'noop'; pendingPaths: string[]; remotePathsSinceLastSync: string[] };
 
 export interface CharacterSyncUploadPort {
   ensureCharacterSync: (characterId: string, hasCloud?: boolean) => Promise<void>;
   setCloudAvailability: (characterId: string, hasCloud: boolean) => Promise<void>;
-  markCloudUploaded: (characterId: string) => Promise<void>;
+  markCloudUploaded: (
+    characterId: string,
+    baseline?: { counterBaseline?: Record<string, number>; conditionsBaseline?: string[] },
+  ) => Promise<void>;
   setSyncTransport: (characterId: string, state: SyncTransportState, message?: string | null) => Promise<void>;
   markSyncError: (characterId: string, message: string) => Promise<void>;
   markConflict?: (characterId: string, conflictPaths: string[]) => Promise<void>;
@@ -146,7 +174,15 @@ export interface CharacterSyncConflictPort extends CharacterSyncUploadPort {
   clearConflicts: (characterId: string) => Promise<void>;
   // Only required for the keep-cloud resolution path (see resolveConflict below) — the other
   // strategies never call it, so it's optional to avoid forcing every syncPort literal to supply it.
-  recordRemoteSyncState?: (characterId: string, payload: { seenHistoryEntryIds: string[]; serverSyncAtMs?: number }) => Promise<void>;
+  recordRemoteSyncState?: (
+    characterId: string,
+    payload: {
+      seenHistoryEntryIds: string[];
+      serverSyncAtMs?: number;
+      counterBaseline?: Record<string, number>;
+      conditionsBaseline?: string[];
+    },
+  ) => Promise<void>;
 }
 
 export type SyncToCloudArgs = {
@@ -239,6 +275,8 @@ export function buildDefaultSyncState(characterId: string, hasCloud = false): Ch
     lastSyncError: null,
     lastSyncAttemptAt: null,
     seenHistoryEntryIds: [],
+    counterBaseline: {},
+    conditionsBaseline: [],
   };
 }
 
@@ -257,6 +295,8 @@ export function normalizeSyncState(characterId: string, raw: Partial<CharacterSy
     transportMessage: raw.transportMessage ?? null,
     lastSyncError: raw.lastSyncError ?? null,
     lastSyncAttemptAt: raw.lastSyncAttemptAt ?? null,
+    counterBaseline: raw.counterBaseline && typeof raw.counterBaseline === 'object' ? raw.counterBaseline : {},
+    conditionsBaseline: cleanPaths(raw.conditionsBaseline),
   });
 }
 
@@ -348,6 +388,8 @@ export function applySyncTransition(map: CharacterSyncMap, transition: SyncTrans
       transportState: 'synced',
       transportMessage: transition.message ?? 'Auto-synced just now',
       lastSyncError: null,
+      counterBaseline: transition.counterBaseline ? { ...base.counterBaseline, ...transition.counterBaseline } : base.counterBaseline,
+      conditionsBaseline: transition.conditionsBaseline ?? base.conditionsBaseline,
     };
     return updateMap(map, next);
   }
@@ -406,6 +448,8 @@ export function applySyncTransition(map: CharacterSyncMap, transition: SyncTrans
       ...base,
       seenHistoryEntryIds: transition.seenHistoryEntryIds,
       lastSyncAt: typeof transition.serverSyncAtMs === 'number' ? transition.serverSyncAtMs : base.lastSyncAt,
+      counterBaseline: transition.counterBaseline ? { ...base.counterBaseline, ...transition.counterBaseline } : base.counterBaseline,
+      conditionsBaseline: transition.conditionsBaseline ?? base.conditionsBaseline,
     };
     return updateMap(map, next);
   }
@@ -448,17 +492,135 @@ export function buildUploadPlan(args: BuildUploadPlanArgs): BuildUploadPlanResul
   };
 }
 
+function computePendingSections(pendingPaths: string[]): Set<SyncSection> {
+  const sections = new Set<SyncSection>();
+  pendingPaths.forEach((path) => {
+    const section = pathToSyncSection(path);
+    if (section !== 'unknown') sections.add(section);
+  });
+  return sections;
+}
+
+// COL-4: hp.current/hp.temp are now written as FieldValue.increment() deltas, which have no
+// upper/lower bound of their own — two concurrent deltas can (correctly, per their own math)
+// push the server total above hp.max or below 0 momentarily. Clamp is purely a display
+// concern: it never feeds back into a write, so it can't itself cause a conflict or lose data.
+function clampHp(hp: CharacterViewModel['hp']): CharacterViewModel['hp'] {
+  if (!hp) return hp;
+  const max = typeof hp.max === 'number' ? hp.max : hp.current;
+  const current = Math.min(Math.max(hp.current, 0), max);
+  return current === hp.current ? hp : { ...hp, current };
+}
+
+// COL-4: last-known-synced value for every counter/condition field this device can observe on
+// a CharacterViewModel — the raw material for CharacterSyncState.counterBaseline/
+// conditionsBaseline. Keys match the dotted Firestore field paths the repository writes
+// (see characterCloudRepository.ts) so the two layers never disagree on naming.
+export function extractCounterSnapshot(character: CharacterViewModel): Record<string, number> {
+  const snapshot: Record<string, number> = {};
+  if (character.hp) {
+    snapshot['hp.current'] = character.hp.current ?? 0;
+    snapshot['hp.temp'] = character.hp.temp ?? 0;
+  }
+  if (character.deathSaves) {
+    snapshot['deathSaves.successes'] = character.deathSaves.successes ?? 0;
+    snapshot['deathSaves.failures'] = character.deathSaves.failures ?? 0;
+  }
+  Object.entries(character.spells?.spellSlots || {}).forEach(([level, slot]) => {
+    if (slot && typeof slot.used === 'number') snapshot[`spells.spellSlots.${level}.used`] = slot.used;
+  });
+  (character.customResources || []).forEach((resource) => {
+    if (resource?.id) snapshot[`customResources.${resource.id}.current`] = resource.current ?? 0;
+  });
+  (character.customTrackers || []).forEach((tracker) => {
+    if (tracker?.id) snapshot[`customTrackers.${tracker.id}.current`] = tracker.current ?? 0;
+  });
+  return snapshot;
+}
+
+export function extractConditionsSnapshot(character: CharacterViewModel): string[] {
+  return Array.from(new Set((character.conditions || []).map((condition) => String(condition || '').trim()).filter(Boolean)));
+}
+
+// Which counter-snapshot keys a given set of sync-path tags actually writes — mirrors
+// NARROW_SYNC_PATH_FIELD_MAP's per-tag granularity (not the coarser SyncSection grouping),
+// so advancing the baseline after an upload never touches a counter that upload didn't
+// actually write (that would freeze out a different, still-pending edit's own delta).
+const COUNTER_SCOPE_BY_TAG: Record<string, string[]> = {
+  'combat.hp': ['hp.current', 'hp.temp'],
+  'combat.death-saves': ['deathSaves.successes', 'deathSaves.failures'],
+  'magic.slots': ['spells.spellSlots.'],
+  'homebrew.resources': ['customResources.'],
+  'homebrew.trackers': ['customTrackers.'],
+};
+
+function isKeyInTagScope(key: string, scopeEntries: string[]): boolean {
+  return scopeEntries.some((entry) => (entry.endsWith('.') ? key.startsWith(entry) : key === entry));
+}
+
+export function counterKeysInScope(historyPaths: string[]): string[] {
+  const scope: string[] = [];
+  historyPaths.forEach((path) => {
+    const entries = COUNTER_SCOPE_BY_TAG[String(path || '').trim()];
+    if (entries) scope.push(...entries);
+  });
+  return scope;
+}
+
+export function conditionsInScope(historyPaths: string[]): boolean {
+  return historyPaths.some((path) => pathToSyncSection(path) === 'combat.conditions');
+}
+
+function pickInScopeSnapshot(snapshot: Record<string, number>, scopeEntries: string[]): Record<string, number> {
+  const picked: Record<string, number> = {};
+  Object.keys(snapshot).forEach((key) => {
+    if (isKeyInTagScope(key, scopeEntries)) picked[key] = snapshot[key];
+  });
+  return picked;
+}
+
+// Which counter-snapshot key-prefixes a still-pending local edit is holding back — used when
+// a remote snapshot arrives so the baseline only advances for fields that upload actually
+// left untouched, never for a field this device has its own un-uploaded delta against.
+function computeNextCounterBaseline(
+  oldBaseline: Record<string, number> | undefined,
+  remoteCharacter: CharacterViewModel,
+  pendingSections: Set<SyncSection>,
+): Record<string, number> {
+  const remoteSnapshot = extractCounterSnapshot(remoteCharacter);
+  const next = { ...(oldBaseline || {}) };
+  const vitalsHeld = pendingSections.has('combat.vitals') || pendingSections.has('combat');
+  const magicHeld = pendingSections.has('magic');
+  const resourcesHeld = pendingSections.has('homebrew.resources') || pendingSections.has('homebrew');
+  const trackersHeld = pendingSections.has('homebrew.trackers') || pendingSections.has('homebrew');
+
+  Object.keys(remoteSnapshot).forEach((key) => {
+    if ((key.startsWith('hp.') || key.startsWith('deathSaves.')) && vitalsHeld) return;
+    if (key.startsWith('spells.spellSlots.') && magicHeld) return;
+    if (key.startsWith('customResources.') && resourcesHeld) return;
+    if (key.startsWith('customTrackers.') && trackersHeld) return;
+    next[key] = remoteSnapshot[key];
+  });
+
+  return next;
+}
+
+function computeNextConditionsBaseline(
+  oldBaseline: string[] | undefined,
+  remoteCharacter: CharacterViewModel,
+  pendingSections: Set<SyncSection>,
+): string[] {
+  if (pendingSections.has('combat.conditions')) return oldBaseline || [];
+  return extractConditionsSnapshot(remoteCharacter);
+}
+
 function mergeCharacterBySections(
   local: CharacterViewModel,
   remote: CharacterViewModel,
   pendingPaths: string[],
   normalizeCharacter?: (character: CharacterViewModel) => CharacterViewModel,
 ): CharacterViewModel {
-  const pendingSections = new Set<string>();
-  pendingPaths.forEach((path) => {
-    const section = pathToSyncSection(path);
-    if (section !== 'unknown') pendingSections.add(section);
-  });
+  const pendingSections = computePendingSections(pendingPaths);
 
   const next = { ...local };
 
@@ -484,7 +646,11 @@ function mergeCharacterBySections(
   }
 
   if (!pendingSections.has('combat.vitals') && !pendingSections.has('combat')) {
-    next.hp = remote.hp;
+    // COL-4: remote.hp.current is the server-authoritative sum of every device's increment()
+    // deltas — this assignment takes it as-is exactly once, it never re-adds a local delta on
+    // top (mergeCharacterBySections either takes the whole remote value for a field or keeps
+    // the whole local value; it never combines the two), so this can't double-count.
+    next.hp = clampHp(remote.hp);
     next.deathSaves = remote.deathSaves;
   }
 
@@ -561,11 +727,16 @@ export function reconcileRemoteSnapshot(args: ReconcileRemoteSnapshotArgs): Reco
   const remotePathsSinceLastSync = cleanPaths(args.remotePathsSinceLastSync || []);
 
   if (!pendingPaths.length) {
+    // No pending local edits at all: nothing is held back, so the whole counter/conditions
+    // baseline advances to the remote snapshot's values.
+    const character = args.normalizeCharacter ? args.normalizeCharacter(args.remoteCharacter) : args.remoteCharacter;
     return {
       action: 'replace',
-      character: args.normalizeCharacter ? args.normalizeCharacter(args.remoteCharacter) : args.remoteCharacter,
+      character: { ...character, hp: clampHp(character.hp) },
       pendingPaths,
       remotePathsSinceLastSync,
+      counterBaseline: extractCounterSnapshot(args.remoteCharacter),
+      conditionsBaseline: extractConditionsSnapshot(args.remoteCharacter),
     };
   }
 
@@ -580,11 +751,14 @@ export function reconcileRemoteSnapshot(args: ReconcileRemoteSnapshotArgs): Reco
   }
 
   if (remotePathsSinceLastSync.length) {
+    const pendingSections = computePendingSections(pendingPaths);
     return {
       action: 'merge',
       character: mergeCharacterBySections(args.localCharacter, args.remoteCharacter, pendingPaths, args.normalizeCharacter),
       pendingPaths,
       remotePathsSinceLastSync,
+      counterBaseline: computeNextCounterBaseline(args.syncState?.counterBaseline, args.remoteCharacter, pendingSections),
+      conditionsBaseline: computeNextConditionsBaseline(args.syncState?.conditionsBaseline, args.remoteCharacter, pendingSections),
     };
   }
 
@@ -655,15 +829,45 @@ export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudRes
   await args.syncPort.setSyncTransport(args.character.id, args.startTransportState || 'syncing', args.syncingMessage || 'Синхронізація...');
 
   try {
+    // COL-4: the repository computes its own increment()/arrayUnion()/arrayRemove() deltas
+    // from these baselines — this call only forwards the last-known-synced values, it never
+    // pre-computes a delta itself (see characterCloudRepository.ts for why: array-shaped
+    // counters need a transactional by-id merge the repository alone can safely perform).
     const result = await characterCloudRepository.upsertFromLocal(characterMapper.entityToDto(args.character), {
       historyPaths: plan.historyPaths,
       actorRole: args.actorRole,
+      counterBaseline: args.syncState?.counterBaseline,
+      conditionsBaseline: args.syncState?.conditionsBaseline,
     });
 
     const targetCharacter = result?.id && result.id !== args.character.id ? { ...args.character, id: result.id } : args.character;
     await args.syncPort.ensureCharacterSync(targetCharacter.id, true);
     await args.syncPort.setCloudAvailability(targetCharacter.id, true);
-    await args.syncPort.markCloudUploaded(targetCharacter.id);
+
+    // Advance the baseline only for the counter/condition keys this specific upload actually
+    // wrote (see counterKeysInScope) — an unrelated still-pending edit's own delta must not be
+    // silently zeroed out by prematurely treating its field as "known-synced". A brand-new doc
+    // or an untagged/unknown-tag fallback write (mapSyncPathsToFieldPaths -> 'fallback') is the
+    // one case that genuinely writes the WHOLE document, absolute values and all — the baseline
+    // must advance for everything then, or the next narrow upload for an untouched-by-this-call
+    // field would recompute (and resend) the same delta a second time.
+    const isFullDocumentWrite = Boolean(result?.created) || mapSyncPathsToFieldPaths(plan.historyPaths).kind === 'fallback';
+    const counterSnapshotNow = extractCounterSnapshot(args.character);
+    const scopeEntries = counterKeysInScope(plan.historyPaths);
+    const nextCounterBaseline = isFullDocumentWrite
+      ? { ...(args.syncState?.counterBaseline || {}), ...counterSnapshotNow }
+      : scopeEntries.length
+        ? { ...(args.syncState?.counterBaseline || {}), ...pickInScopeSnapshot(counterSnapshotNow, scopeEntries) }
+        : undefined;
+    const nextConditionsBaseline =
+      isFullDocumentWrite || conditionsInScope(plan.historyPaths) ? extractConditionsSnapshot(args.character) : undefined;
+
+    await args.syncPort.markCloudUploaded(
+      targetCharacter.id,
+      nextCounterBaseline || nextConditionsBaseline
+        ? { counterBaseline: nextCounterBaseline, conditionsBaseline: nextConditionsBaseline }
+        : undefined,
+    );
     await args.syncPort.setSyncTransport(targetCharacter.id, 'synced', args.syncedMessage || 'Синхронізовано');
 
     return {
@@ -754,7 +958,14 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
     const seenHistoryEntryIds = computeSeenEntryIdsFromRawHistory((doc as { changeHistory?: unknown }).changeHistory);
     const serverSyncAtMs = timestampToMillis((doc as { lastChangeAt?: unknown }).lastChangeAt);
     if (args.syncPort.recordRemoteSyncState) {
-      await args.syncPort.recordRemoteSyncState(normalized.id, { seenHistoryEntryIds, serverSyncAtMs });
+      // keep-cloud fully replaces local with the fetched cloud doc — nothing is held back, so
+      // (like the 'replace' branch of reconcileRemoteSnapshot) the whole baseline advances.
+      await args.syncPort.recordRemoteSyncState(normalized.id, {
+        seenHistoryEntryIds,
+        serverSyncAtMs,
+        counterBaseline: extractCounterSnapshot(normalized),
+        conditionsBaseline: extractConditionsSnapshot(normalized),
+      });
     }
 
     await args.syncPort.markCloudDownloaded(normalized.id);
@@ -763,7 +974,7 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
 
     return {
       status: 'resolved-cloud',
-      targetCharacter: normalized,
+      targetCharacter: { ...normalized, hp: clampHp(normalized.hp) },
     };
   } catch (error) {
     return {

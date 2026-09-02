@@ -1,6 +1,28 @@
 import type { SyncStatus } from '@/types/Sync';
 
-const CRITICAL_PATH_PREFIXES = ['combat.hp', 'combat.death-saves', 'magic.spell-slots', 'homebrew.resources', 'homebrew.trackers'];
+// Виняток 3 (2026-09-01): these paths carry additive/set write semantics at the repository
+// layer — FieldValue.increment() for hp/deathSaves/spellSlots/resource/tracker `current`,
+// arrayUnion()/arrayRemove() for `conditions` (see characterCloudRepository.ts and
+// characterSyncCoordinator.ts). Two clients writing to them concurrently commute: Firestore
+// applies both deltas atomically regardless of arrival order, so they no longer need the
+// conflict-modal escalation that plain last-write-wins absolute fields require.
+// Accepted residual risk: combat.hp.max still travels under the coarse 'combat.hp' tag and
+// stays last-write-wins (only current/temp are deltas) — a truly simultaneous max-vs-counter
+// edit could still clobber, but max changes rarely enough that this is an accepted gap, not
+// something this exemption tries to solve.
+const COMMUTATIVE_PATH_PREFIXES = [
+  'combat.hp',
+  'combat.death-saves',
+  'magic.slots',
+  'homebrew.resources',
+  'homebrew.trackers',
+  'combat.conditions',
+  'overview.conditions',
+];
+
+function isCommutativePath(path: string): boolean {
+  return COMMUTATIVE_PATH_PREFIXES.some((prefix) => path.startsWith(prefix));
+}
 
 export type SyncSection =
   | 'overview'
@@ -54,23 +76,19 @@ export function pathToSyncSection(path: string): SyncSection {
   return 'unknown';
 }
 
-function isCriticalPath(path: string): boolean {
-  const value = String(path || '')
-    .trim()
-    .toLowerCase();
-  return CRITICAL_PATH_PREFIXES.some((prefix) => value.startsWith(prefix));
-}
-
 export function collectConflictPaths(localPaths: string[], cloudPaths: string[]): string[] {
   const normalizedCloud = cloudPaths.map((path) => String(path || '').trim()).filter(Boolean);
   const cloudSet = new Set(normalizedCloud);
   const cloudSections = new Set(normalizedCloud.map((path) => pathToSyncSection(path)));
-  const hasCriticalCloudPath = normalizedCloud.some((path) => isCriticalPath(path));
 
   const out: string[] = [];
   for (const rawPath of localPaths) {
     const path = String(rawPath || '').trim();
     if (!path) continue;
+
+    // Виняток 3: additive/set fields never escalate to a conflict, regardless of what the
+    // cloud side touched — see COMMUTATIVE_PATH_PREFIXES above.
+    if (isCommutativePath(path)) continue;
 
     if (cloudSet.has(path)) {
       out.push(path);
@@ -79,11 +97,6 @@ export function collectConflictPaths(localPaths: string[], cloudPaths: string[])
 
     const section = pathToSyncSection(path);
     if (section !== 'unknown' && cloudSections.has(section)) {
-      out.push(path);
-      continue;
-    }
-
-    if (isCriticalPath(path) && hasCriticalCloudPath) {
       out.push(path);
     }
   }

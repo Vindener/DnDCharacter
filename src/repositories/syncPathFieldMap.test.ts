@@ -4,6 +4,9 @@ import { mapSyncPathsToFieldPaths } from '@/repositories/syncPathFieldMap';
 describe('mapSyncPathsToFieldPaths', () => {
   it('maps each known narrow token to its exact field paths', () => {
     expect(mapSyncPathsToFieldPaths(['combat.hp'])).toEqual({ kind: 'narrow', fieldPaths: ['hp'] });
+    // COL-4: added so death-saves counters are reachable via the narrow delta-write path
+    // (see characterCloudRepository.ts) even though no UI currently tags this path.
+    expect(mapSyncPathsToFieldPaths(['combat.death-saves'])).toEqual({ kind: 'narrow', fieldPaths: ['deathSaves'] });
     expect(mapSyncPathsToFieldPaths(['combat.weapons'])).toEqual({ kind: 'narrow', fieldPaths: ['weapons'] });
     expect(mapSyncPathsToFieldPaths(['overview.session-mode'])).toEqual({ kind: 'narrow', fieldPaths: ['sessionMode'] });
     expect(mapSyncPathsToFieldPaths(['overview.saving-throws'])).toEqual({ kind: 'narrow', fieldPaths: ['savingThrows'] });

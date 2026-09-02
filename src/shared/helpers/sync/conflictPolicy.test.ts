@@ -33,20 +33,21 @@ describe('conflictPolicy helpers', () => {
     expect(pathToSyncSection('homebrew.something-new')).toBe('homebrew');
   });
 
-  it('detects direct, section and critical path overlaps', () => {
-    const conflicts = collectConflictPaths(
-      ['overview.identity', 'combat.hp.current', 'inventory.items'],
-      ['combat.hp.max', 'notes.session'],
-    );
+  it('detects direct and section overlaps for non-commutative paths', () => {
+    const conflicts = collectConflictPaths(['overview.identity', 'inventory.items'], ['overview.identity', 'notes.session']);
 
-    expect(conflicts).toContain('combat.hp.current');
-    expect(conflicts).not.toContain('overview.identity');
+    expect(conflicts).toContain('overview.identity');
     expect(conflicts).not.toContain('inventory.items');
   });
 
-  it('marks critical local paths as conflict when cloud has any critical path', () => {
+  it('COL-4 flagship scenario: DM and player both tagging the exact literal combat.hp used by real UI code no longer conflicts, even though both touched the same tag simultaneously', () => {
+    const conflicts = collectConflictPaths(['combat.hp'], ['combat.hp']);
+    expect(conflicts).toEqual([]);
+  });
+
+  it('Виняток 3: homebrew.resources is now commutative (increment-based), no longer a critical-path conflict', () => {
     const conflicts = collectConflictPaths(['homebrew.resources.mana.current'], ['combat.hp.current']);
-    expect(conflicts).toEqual(['homebrew.resources.mana.current']);
+    expect(conflicts).toEqual([]);
   });
 
   it('COL-4: HP vs condition is NOT a conflict (different combat sub-sections)', () => {
@@ -54,9 +55,9 @@ describe('conflictPolicy helpers', () => {
     expect(conflicts).toEqual([]);
   });
 
-  it('COL-4: HP vs HP is still a conflict (same combat sub-section)', () => {
+  it('Виняток 3 (supersedes COL-4): HP vs HP is no longer a conflict — hp.current/hp.temp are increment-based and commute; supersedes the original COL-4 assertion that same-sub-section HP writes must conflict', () => {
     const conflicts = collectConflictPaths(['combat.hp.current'], ['combat.hp.max']);
-    expect(conflicts).toContain('combat.hp.current');
+    expect(conflicts).toEqual([]);
   });
 
   it('COL-4: ac vs hp is NOT a conflict (defense vs vitals)', () => {
@@ -64,11 +65,13 @@ describe('conflictPolicy helpers', () => {
     expect(conflicts).toEqual([]);
   });
 
-  it('COL-4: overview.conditions vs combat.conditions now correctly conflict (cross-surface fix)', () => {
-    // Before the fix these resolved to different sections ('overview' vs 'combat') and could
-    // silently overwrite each other instead of surfacing a conflict for the user to resolve.
+  it('Виняток 3 (supersedes COL-4): overview.conditions vs combat.conditions no longer conflict — both are arrayUnion/arrayRemove-based and commute', () => {
+    // Before Виняток 3, these resolved to the same 'combat.conditions' section and were
+    // flagged as a conflict requiring manual review. Now that both surfaces write conditions
+    // via arrayUnion/arrayRemove, a concurrent add/remove from each surface merges safely
+    // without user intervention.
     const conflicts = collectConflictPaths(['overview.conditions'], ['combat.conditions.poisoned']);
-    expect(conflicts).toContain('overview.conditions');
+    expect(conflicts).toEqual([]);
   });
 
   it('COL-4: every sync path literal actually used by the character screen maps to a known section', () => {

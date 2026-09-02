@@ -1,4 +1,4 @@
-import { db, fbAuth, now, hasDoc, arrayUnion, deleteField } from '@/services/firebase';
+import { db, fbAuth, now, hasDoc, arrayUnion, arrayRemove, increment, deleteField } from '@/services/firebase';
 import { ensureConnection } from '@/services/connections';
 import { findUserByEmail } from '@/services/users';
 import type { CharacterDto } from '@/domain/types';
@@ -99,10 +99,17 @@ export type CharacterSheet = {
 type CharacterSheetPatch = Partial<CharacterSheet>;
 export type CharacterCloudDto = CharacterDto & { acDetails?: string };
 
+export type CharacterUpsertOptions = {
+  historyPaths?: string[];
+  actorRole?: CharacterActorRole;
+  counterBaseline?: Record<string, number>;
+  conditionsBaseline?: string[];
+};
+
 export interface CharacterCloudRepository {
   upsertFromLocal: (
     dto: CharacterCloudDto,
-    options?: { historyPaths?: string[]; actorRole?: CharacterActorRole },
+    options?: CharacterUpsertOptions,
   ) => Promise<{ id: string | null; created?: boolean; updated?: boolean }>;
   fetchById: (id: string) => Promise<CharacterSheet | null>;
   subscribeById: (id: string, cb: (doc: CharacterSheet | null) => void) => () => void;
@@ -426,22 +433,227 @@ function buildContentPayload(dto: CharacterCloudDto): Record<string, unknown> {
   return stripUndefinedDeep(full) as Record<string, unknown>;
 }
 
-export async function upsertCharacterSheetFromLocal(
-  dto: CharacterCloudDto,
-  options?: { historyPaths?: string[]; actorRole?: CharacterActorRole },
-) {
+// COL-4: last-known-synced value per delta/counter field (see CharacterSyncState.counterBaseline
+// in src/domain/types/sync.ts). Undefined means the caller never computed a baseline (e.g.
+// bulkUpsertFromLocal, autosaveCharacter) — those keep today's exact absolute-write behavior.
+export type CounterBaseline = Record<string, number>;
+export type ConditionsDelta = { add: string[]; remove: string[] };
+
+function counterDelta(baseline: CounterBaseline | undefined, key: string, current: number | undefined): number | undefined {
+  if (!baseline || !(key in baseline) || typeof current !== 'number') return undefined;
+  const delta = current - baseline[key];
+  return delta !== 0 ? delta : undefined;
+}
+
+type CounterWrite = { op: 'increment'; delta: number } | { op: 'absolute'; value: number } | { op: 'skip' };
+
+/**
+ * Bug fix: a baseline that simply has no entry yet for this key (this device's first write
+ * of it under the new delta system — every existing sync state normalizes to `{}`, not
+ * `undefined`, so this is the common case, not an edge case) must NOT be treated the same as
+ * "unchanged, skip" — that silently dropped hp.current/deathSaves/spell-slot-used from every
+ * narrow update() entirely, since nothing ever bootstrapped them. Bootstrap by writing the
+ * absolute value once; only fall back to increment() once the baseline actually has the key.
+ */
+function resolveCounterWrite(baseline: CounterBaseline, key: string, current: number | undefined): CounterWrite {
+  if (typeof current !== 'number') return { op: 'skip' };
+  if (!(key in baseline)) return { op: 'absolute', value: current };
+  const delta = current - baseline[key];
+  return delta !== 0 ? { op: 'increment', delta } : { op: 'skip' };
+}
+
+function computeConditionsDelta(baseline: string[] | undefined, current: string[]): ConditionsDelta | undefined {
+  if (baseline === undefined) return undefined;
+  const baseSet = new Set(baseline);
+  const currentSet = new Set(current);
+  return {
+    add: current.filter((condition) => !baseSet.has(condition)),
+    remove: baseline.filter((condition) => !currentSet.has(condition)),
+  };
+}
+
+type CounterArrayItem = { id: string; current?: number; [key: string]: unknown };
+
+/**
+ * By-id merge for array-shaped counters (customResources/customTrackers) that Firestore
+ * cannot target with a dotted increment() field path (increment only addresses map fields,
+ * not array elements). Server structure wins for everything except: (a) this device's own
+ * known delta is applied on top of the server's current `current` value, and (b) an id this
+ * device never knew about (no baseline entry) is kept even if locally absent — it was added
+ * by another device after our last sync, not something we deliberately deleted.
+ */
+export function mergeCounterArrayById<T extends CounterArrayItem>(
+  serverList: unknown,
+  localList: T[] | undefined,
+  baseline: CounterBaseline | undefined,
+  prefix: string,
+): T[] {
+  const server = Array.isArray(serverList) ? (serverList as T[]) : [];
+  const local = Array.isArray(localList) ? localList : [];
+  const serverMap = new Map(server.map((item) => [item.id, item]));
+  const seen = new Set<string>();
+  const result: T[] = [];
+
+  local.forEach((localItem) => {
+    seen.add(localItem.id);
+    const serverItem = serverMap.get(localItem.id);
+    const delta = serverItem ? counterDelta(baseline, `${prefix}${localItem.id}.current`, localItem.current) : undefined;
+    result.push(delta !== undefined && serverItem ? { ...localItem, current: (serverItem.current ?? 0) + delta } : localItem);
+  });
+
+  server.forEach((serverItem) => {
+    if (seen.has(serverItem.id)) return;
+    const knownBefore = Boolean(baseline && Object.prototype.hasOwnProperty.call(baseline, `${prefix}${serverItem.id}.current`));
+    if (!knownBefore) result.push(serverItem);
+  });
+
+  return result;
+}
+
+function hasArrayCounterDelta(dto: CharacterCloudDto, baseline: CounterBaseline | undefined): boolean {
+  if (!baseline) return false;
+  const touchesId = (id: unknown, current: unknown, prefix: string) =>
+    typeof id === 'string' && !!id && counterDelta(baseline, `${prefix}${id}.current`, current as number) !== undefined;
+  return (
+    (dto.customResources || []).some((resource) => touchesId(resource?.id, resource?.current, 'customResources.')) ||
+    (dto.customTrackers || []).some((tracker) => touchesId(tracker?.id, tracker?.current, 'customTrackers.'))
+  );
+}
+
+function applyHpFieldPatch(
+  patch: Record<string, unknown>,
+  contentPayload: Record<string, unknown>,
+  baseline: CounterBaseline | undefined,
+): void {
+  const hp = (getValueAtPath(contentPayload, 'hp') || {}) as { max?: number; current?: number; temp?: number };
+  if (baseline === undefined) {
+    patch.hp = hp;
+    return;
+  }
+  patch['hp.max'] = hp.max ?? 0;
+  const currentWrite = resolveCounterWrite(baseline, 'hp.current', hp.current);
+  if (currentWrite.op === 'increment') patch['hp.current'] = increment(currentWrite.delta);
+  else if (currentWrite.op === 'absolute') patch['hp.current'] = currentWrite.value;
+  const tempWrite = resolveCounterWrite(baseline, 'hp.temp', hp.temp);
+  if (tempWrite.op === 'increment') patch['hp.temp'] = increment(tempWrite.delta);
+  else if (tempWrite.op === 'absolute') patch['hp.temp'] = tempWrite.value;
+}
+
+function applyDeathSavesFieldPatch(
+  patch: Record<string, unknown>,
+  contentPayload: Record<string, unknown>,
+  baseline: CounterBaseline | undefined,
+): void {
+  const deathSaves = (getValueAtPath(contentPayload, 'deathSaves') || {}) as { successes?: number; failures?: number };
+  if (baseline === undefined) {
+    patch.deathSaves = deathSaves;
+    return;
+  }
+  const successesWrite = resolveCounterWrite(baseline, 'deathSaves.successes', deathSaves.successes);
+  if (successesWrite.op === 'increment') patch['deathSaves.successes'] = increment(successesWrite.delta);
+  else if (successesWrite.op === 'absolute') patch['deathSaves.successes'] = successesWrite.value;
+  const failuresWrite = resolveCounterWrite(baseline, 'deathSaves.failures', deathSaves.failures);
+  if (failuresWrite.op === 'increment') patch['deathSaves.failures'] = increment(failuresWrite.delta);
+  else if (failuresWrite.op === 'absolute') patch['deathSaves.failures'] = failuresWrite.value;
+}
+
+function applySpellSlotsFieldPatch(
+  patch: Record<string, unknown>,
+  contentPayload: Record<string, unknown>,
+  baseline: CounterBaseline | undefined,
+): void {
+  const slots = (getValueAtPath(contentPayload, 'spells.spellSlots') || {}) as Record<string, { max?: number; used?: number } | undefined>;
+  if (baseline === undefined) {
+    patch['spells.spellSlots'] = slots;
+    return;
+  }
+  Object.entries(slots).forEach(([level, slot]) => {
+    patch[`spells.spellSlots.${level}.max`] = slot?.max ?? 0;
+    const usedWrite = resolveCounterWrite(baseline, `spells.spellSlots.${level}.used`, slot?.used);
+    if (usedWrite.op === 'increment') patch[`spells.spellSlots.${level}.used`] = increment(usedWrite.delta);
+    else if (usedWrite.op === 'absolute') patch[`spells.spellSlots.${level}.used`] = usedWrite.value;
+  });
+}
+
+/** Same field-by-field delta decoration as the narrow-patch helpers above, but mutating a
+ * nested payload object (for the transactional set({merge:true}) branch) instead of building
+ * dotted update() keys. FieldValue.increment() works as a nested value either way. */
+function applyCounterPatchesToPayload(
+  payload: Record<string, unknown>,
+  serverData: Record<string, unknown>,
+  baseline: CounterBaseline | undefined,
+): void {
+  if (baseline === undefined) return;
+
+  if (isRecord(payload.hp)) {
+    const hp = payload.hp as { max?: number; current?: number; temp?: number };
+    const currentDelta = counterDelta(baseline, 'hp.current', hp.current);
+    const tempDelta = counterDelta(baseline, 'hp.temp', hp.temp);
+    payload.hp = {
+      ...hp,
+      current: currentDelta !== undefined ? increment(currentDelta) : hp.current,
+      temp: tempDelta !== undefined ? increment(tempDelta) : hp.temp,
+    };
+  }
+
+  if (isRecord(payload.deathSaves)) {
+    const deathSaves = payload.deathSaves as { successes?: number; failures?: number };
+    const successesDelta = counterDelta(baseline, 'deathSaves.successes', deathSaves.successes);
+    const failuresDelta = counterDelta(baseline, 'deathSaves.failures', deathSaves.failures);
+    payload.deathSaves = {
+      ...deathSaves,
+      successes: successesDelta !== undefined ? increment(successesDelta) : deathSaves.successes,
+      failures: failuresDelta !== undefined ? increment(failuresDelta) : deathSaves.failures,
+    };
+  }
+
+  const spells = payload.spells;
+  if (isRecord(spells) && isRecord(spells.spellSlots)) {
+    const slots = spells.spellSlots as Record<string, { max?: number; used?: number } | undefined>;
+    const nextSlots: Record<string, unknown> = {};
+    Object.entries(slots).forEach(([level, slot]) => {
+      const usedDelta = counterDelta(baseline, `spells.spellSlots.${level}.used`, slot?.used);
+      nextSlots[level] = { ...slot, used: usedDelta !== undefined ? increment(usedDelta) : slot?.used };
+    });
+    payload.spells = { ...spells, spellSlots: nextSlots };
+  }
+
+  if (Array.isArray(payload.customResources)) {
+    payload.customResources = mergeCounterArrayById(
+      serverData.customResources,
+      payload.customResources as CounterArrayItem[],
+      baseline,
+      'customResources.',
+    );
+  }
+
+  if (Array.isArray(payload.customTrackers)) {
+    payload.customTrackers = mergeCounterArrayById(
+      serverData.customTrackers,
+      payload.customTrackers as CounterArrayItem[],
+      baseline,
+      'customTrackers.',
+    );
+  }
+}
+
+export async function upsertCharacterSheetFromLocal(dto: CharacterCloudDto, options?: CharacterUpsertOptions) {
   const me = fbAuth.currentUser?.uid;
   if (!me) throw new Error('Not signed in');
 
   const ref = db.collection('characterSheets').doc(dto.id);
   const historyPaths = options?.historyPaths || [];
   const additions = historyPaths.length ? buildHistoryEntries(me, historyPaths, Date.now(), options?.actorRole) : [];
+  const counterBaseline = options?.counterBaseline;
+  const conditionsDelta = computeConditionsDelta(options?.conditionsBaseline, (dto.conditions || []) as string[]);
 
   const snap = await ref.get();
 
   if (!hasDoc(snap)) {
     // New document: dtoToSheet already sets ownerUid/owners/editors/createdAt for `me` —
-    // this is the only place those fields are written for a brand-new sheet.
+    // this is the only place those fields are written for a brand-new sheet. There is no
+    // prior baseline for a brand-new doc, so counters/conditions are written as absolute
+    // values here regardless of options — the baseline starts tracking from this point on.
     const payload = stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>;
     if (additions.length) {
       payload.changeHistory = additions;
@@ -452,11 +664,36 @@ export async function upsertCharacterSheetFromLocal(
   }
 
   const fieldMap = mapSyncPathsToFieldPaths(historyPaths);
+  // customResources/customTrackers are arrays — Firestore can't increment() into an array
+  // element, so an actual delta there needs a transactional read to merge by id safely, even
+  // when the sync-path tag would otherwise qualify for the fast narrow update(). Gated to
+  // fieldPaths this specific write actually declared: hasArrayCounterDelta alone would also
+  // fire for a stray *unrelated* still-pending resource edit sitting in the baseline mismatch
+  // (e.g. a plain 'combat.hp' upload while a separate, not-yet-uploaded resource edit is also
+  // pending) — that would eagerly flush that other edit's delta now, while the coordinator's
+  // own baseline advancement (scoped to *this* upload's tags) would never learn it happened,
+  // causing the resource's own later upload to resend — and thus double-apply — the same delta.
+  const forceTransaction =
+    fieldMap.kind === 'narrow' && fieldMap.fieldPaths.includes('customResources') && hasArrayCounterDelta(dto, counterBaseline);
 
-  if (fieldMap.kind === 'narrow') {
+  if (fieldMap.kind === 'narrow' && !forceTransaction) {
     const contentPayload = buildContentPayload(dto);
     const patch: Record<string, unknown> = { updatedAt: now() };
     for (const fieldPath of fieldMap.fieldPaths) {
+      if (fieldPath === 'hp') {
+        applyHpFieldPatch(patch, contentPayload, counterBaseline);
+        continue;
+      }
+      if (fieldPath === 'deathSaves') {
+        applyDeathSavesFieldPatch(patch, contentPayload, counterBaseline);
+        continue;
+      }
+      if (fieldPath === 'spells.spellSlots') {
+        applySpellSlotsFieldPatch(patch, contentPayload, counterBaseline);
+        continue;
+      }
+      if (fieldPath === 'conditions' && conditionsDelta !== undefined) continue; // applied via arrayUnion/arrayRemove below
+
       const value = getValueAtPath(contentPayload, fieldPath);
       // A field explicitly declared by historyPaths that resolves to undefined means the
       // caller cleared it locally (e.g. detaching a character sets campaignId back to
@@ -469,11 +706,14 @@ export async function upsertCharacterSheetFromLocal(
       patch.lastChangeAt = now();
     }
     await ref.update(patch);
+    if (conditionsDelta?.add.length) await ref.update({ conditions: arrayUnion(...conditionsDelta.add), updatedAt: now() });
+    if (conditionsDelta?.remove.length) await ref.update({ conditions: arrayRemove(...conditionsDelta.remove), updatedAt: now() });
     return { id: dto.id, updated: true };
   }
 
-  // Unknown/tab-default path set: fall back to a transactional read-modify-write so the
-  // read and write happen atomically instead of racing another client's write (COL-1).
+  // Unknown/tab-default path set (or an array-counter delta forcing a transactional merge):
+  // fall back to a transactional read-modify-write so the read and write happen atomically
+  // instead of racing another client's write (COL-1).
   // The plain `ref.get()` above can report the doc as existing from local cache before this
   // doc's very first `.set()` (the `!hasDoc(snap)` branch above) has actually committed
   // server-side. Re-check existence with the transaction's own strongly-consistent read: a
@@ -481,13 +721,22 @@ export async function upsertCharacterSheetFromLocal(
   // `owners != null` check with permission-denied, so fall back to the full ownership payload.
   await db.runTransaction(async (tx) => {
     const txSnap = await tx.get(ref);
-    const payload = hasDoc(txSnap) ? buildContentPayload(dto) : (stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>);
+    const exists = hasDoc(txSnap);
+    const payload = exists ? buildContentPayload(dto) : (stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>);
+    if (exists) {
+      const serverData = ((txSnap.data?.() || txSnap.data()) as Record<string, unknown>) || {};
+      applyCounterPatchesToPayload(payload, serverData, counterBaseline);
+      if (conditionsDelta !== undefined) delete payload.conditions;
+    }
     if (additions.length) {
       payload.changeHistory = arrayUnion(...additions);
       payload.lastChangeAt = now();
     }
     tx.set(ref, payload, { merge: true });
   });
+
+  if (conditionsDelta?.add.length) await ref.update({ conditions: arrayUnion(...conditionsDelta.add), updatedAt: now() });
+  if (conditionsDelta?.remove.length) await ref.update({ conditions: arrayRemove(...conditionsDelta.remove), updatedAt: now() });
 
   return { id: dto.id, updated: true };
 }
@@ -739,7 +988,7 @@ export async function getEditorsForSheet(uids: string[]): Promise<Array<{ uid: s
   }
 }
 
-export async function upsertFromLocal(dto: CharacterCloudDto, options?: { historyPaths?: string[]; actorRole?: CharacterActorRole }) {
+export async function upsertFromLocal(dto: CharacterCloudDto, options?: CharacterUpsertOptions) {
   return upsertCharacterSheetFromLocal(dto, options);
 }
 

@@ -19,6 +19,16 @@ export interface CharacterSyncState {
   lastSyncAttemptAt: number | null;
   // changeHistory[].id values already accounted for in remotePathsSinceLastSync — clock-independent.
   seenHistoryEntryIds?: string[];
+  // COL-4: last-known-synced value for each delta/counter field this device has observed
+  // (hp.current, hp.temp, deathSaves.successes/failures, spells.spellSlots.<level>.used,
+  // customResources.<id>.current, customTrackers.<id>.current). Used to compute the delta
+  // sent as FieldValue.increment() instead of overwriting with an absolute value, so two
+  // clients' concurrent counter edits both land instead of one clobbering the other. See
+  // docs/collaborative-editing.md and CLAUDE.md "Виняток 3".
+  counterBaseline: Record<string, number>;
+  // Same idea as counterBaseline, but for the `conditions` set (arrayUnion/arrayRemove
+  // instead of increment).
+  conditionsBaseline: string[];
 }
 
 export type CharacterSyncMap = Record<string, CharacterSyncState>;

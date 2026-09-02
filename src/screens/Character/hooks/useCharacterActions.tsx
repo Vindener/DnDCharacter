@@ -710,7 +710,14 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
       // Not for 'conflict' — leave those entries "unseen" until the conflict is resolved.
       const serverSyncAtMs = timestampToMillis(doc?.lastChangeAt);
-      recordRemoteSyncState(baseCharacter.id, { seenHistoryEntryIds, serverSyncAtMs }).catch((_error) => {
+      // COL-4: 'merge'/'replace' both carry an updated counter/conditions baseline (already
+      // gated against any still-pending local edit inside reconcileRemoteSnapshot) — 'noop'
+      // does not, since nothing was learned from this snapshot.
+      const baselineUpdate =
+        reconciled.action === 'merge' || reconciled.action === 'replace'
+          ? { counterBaseline: reconciled.counterBaseline, conditionsBaseline: reconciled.conditionsBaseline }
+          : undefined;
+      recordRemoteSyncState(baseCharacter.id, { seenHistoryEntryIds, serverSyncAtMs, ...baselineUpdate }).catch((_error) => {
         /* ignore cursor persist failure */
       });
 

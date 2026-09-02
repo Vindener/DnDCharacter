@@ -17,6 +17,7 @@ export type SyncPathFieldMapResult = { kind: 'narrow'; fieldPaths: string[] } | 
  */
 const NARROW_SYNC_PATH_FIELD_MAP: Record<string, string[]> = {
   'combat.hp': ['hp'],
+  'combat.death-saves': ['deathSaves'],
   'combat.core': ['ac', 'initiative', 'speed'],
   'combat.weapons': ['weapons'],
   'combat.conditions': ['conditions'],

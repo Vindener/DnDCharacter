@@ -26,6 +26,8 @@ function syncState(partial: Partial<CharacterSyncState>): CharacterSyncState {
     transportMessage: null,
     lastSyncError: null,
     lastSyncAttemptAt: null,
+    counterBaseline: {},
+    conditionsBaseline: [],
     ...partial,
   };
 }
