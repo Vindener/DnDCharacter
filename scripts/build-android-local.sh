@@ -63,12 +63,12 @@ echo "== 2/6 Resolving versionCode =="
 
 mkdir -p "$OUTPUT_DIR"
 VERSION_CACHE="$OUTPUT_DIR/.last-remote-versioncode"
+CACHED_LAST=$(cat "$VERSION_CACHE" 2>/dev/null || echo 0)
 NEW_VC=""
 
 if [ "$SKIP_VERSION_SYNC" -eq 1 ]; then
-  LAST=$(cat "$VERSION_CACHE" 2>/dev/null || echo 0)
-  NEW_VC=$((LAST + 1))
-  echo "Offline mode: using cached versionCode $LAST + 1 = $NEW_VC (NOT verified against EAS remote)."
+  NEW_VC=$((CACHED_LAST + 1))
+  echo "Offline mode: using cached versionCode $CACHED_LAST + 1 = $NEW_VC (NOT verified against EAS remote)."
 else
   REMOTE_OUTPUT="$(npx --yes eas-cli@latest build:version:get --platform android --non-interactive 2>&1)" || {
     echo "ERROR: could not reach EAS to read the remote versionCode:" >&2
@@ -82,8 +82,21 @@ else
     echo "$REMOTE_OUTPUT" >&2
     exit 1
   fi
-  NEW_VC=$((REMOTE_VC + 1))
-  echo "Remote versionCode is $REMOTE_VC -> this build will use $NEW_VC."
+  # The remote counter only advances once someone completes the interactive
+  # `eas build:version:set` prompt below — easy to forget. If a PREVIOUS local build
+  # already produced (and likely uploaded) a higher versionCode than the remote still
+  # reports, trusting the remote alone would silently regenerate that same
+  # already-used code and get rejected by Play Console a second time. Take whichever
+  # of the two is higher as the baseline.
+  BASELINE_VC=$REMOTE_VC
+  if [ "$CACHED_LAST" -gt "$BASELINE_VC" ]; then
+    BASELINE_VC=$CACHED_LAST
+    echo "NOTE: local cache ($CACHED_LAST) is ahead of EAS remote ($REMOTE_VC) — the remote sync"
+    echo "step was likely skipped after a previous build. Using the higher local value as the"
+    echo "baseline so this build doesn't reuse an already-built/uploaded versionCode."
+  fi
+  NEW_VC=$((BASELINE_VC + 1))
+  echo "Remote versionCode is $REMOTE_VC (local cache: $CACHED_LAST) -> this build will use $NEW_VC."
 fi
 
 echo "== 3/6 Patching build.gradle (temporary — restored automatically) =="
@@ -122,14 +135,56 @@ echo "$NEW_VC" > "$VERSION_CACHE"
 
 if [ "$SKIP_VERSION_SYNC" -eq 1 ]; then
   echo "Cached locally as $NEW_VC (unsynced). Sync with EAS remote before your next cloud build:"
+  echo "  npx eas-cli build:version:set --platform android"
 else
-  echo "IMPORTANT: EAS remote versionCode is still $((NEW_VC - 1)) — 'eas build:version:set' has"
-  echo "no non-interactive flag, so this script cannot push it for you. Before uploading this"
-  echo "artifact (or running any cloud/local build again), run this yourself and type '$NEW_VC'"
-  echo "at the prompt (it is an interactive text input — clear any pre-filled text first, typed"
-  echo "characters insert rather than replace):"
+  # `eas build:version:set` has no flag for the new value at all (verified: not even
+  # --non-interactive is accepted by this subcommand) — it's a pure interactive prompt
+  # that PRE-FILLS the current versionCode, and typed input inserts into it rather than
+  # replacing it. Piping the new digits straight into it would very likely produce
+  # garbage (e.g. "1315" instead of "15") instead of failing loudly, so that is never
+  # attempted here. `expect` is the only thing that can send real backspace keystrokes
+  # to clear the field first — used only if installed, and only as a best-effort attempt.
+  # The read-only verification right after is the actual safety net either way: it never
+  # trusts that the sync worked, it reads the value back and says so plainly.
+  SYNC_ATTEMPTED=0
+  if command -v expect >/dev/null 2>&1; then
+    SYNC_ATTEMPTED=1
+    echo "Attempting to sync EAS remote versionCode to $NEW_VC via expect (best-effort — watch this the first time)..."
+    expect -c "
+      set timeout 60
+      spawn npx --yes eas-cli@latest build:version:set --platform android
+      expect {
+        -re {[0-9]+} {
+          for {set i 0} {\$i < 12} {incr i} { send \x7f }
+          send \"$NEW_VC\r\"
+          exp_continue
+        }
+        eof
+      }
+    " || true
+  fi
+
+  echo "Verifying EAS remote versionCode..."
+  VERIFY_OUTPUT="$(npx --yes eas-cli@latest build:version:get --platform android --non-interactive 2>&1)" || VERIFY_OUTPUT=""
+  VERIFY_VC="$(echo "$VERIFY_OUTPUT" | grep -oE '[0-9]+' | tail -1)"
+
+  if [ "$VERIFY_VC" = "$NEW_VC" ]; then
+    echo "OK: EAS remote versionCode confirmed at $NEW_VC."
+  else
+    echo "IMPORTANT: EAS remote versionCode is still ${VERIFY_VC:-unknown}, not $NEW_VC." >&2
+    if [ "$SYNC_ATTEMPTED" -eq 1 ]; then
+      echo "The automatic 'expect' attempt ran but did not take effect — check its output above" >&2
+      echo "for what actually happened before retrying." >&2
+    else
+      echo "No 'expect' binary found, so this could not be automated (install it, e.g." >&2
+      echo "'sudo apt install expect', to let this script attempt it next time)." >&2
+    fi
+    echo "Before uploading this artifact (or running any cloud/local build again), run this" >&2
+    echo "yourself and type '$NEW_VC' at the prompt (clear any pre-filled text first — typed" >&2
+    echo "characters insert rather than replace):" >&2
+    echo "  npx eas-cli build:version:set --platform android" >&2
+  fi
 fi
-echo "  npx eas-cli build:version:set --platform android"
 
 echo "Done. AAB/APK is signed with the production upload key iff MYAPP_UPLOAD_* in"
 echo "$GRADLE_PROPS pointed at it — spot-check by comparing keytool -printcert -jarfile"
