@@ -1,0 +1,20 @@
+scripts/build-android-local.sh
+  s_54d2a7451c0806::t_46a562d2fa2007 138,140-186
+  s_54d2a7451c0806::t_0e3d2aa7dfc2b1 66,70-71,85-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "a726ca5164d6a1a09d7e52c816f19769a6f41a66",
+  "prompts": {},
+  "sessions": {
+    "s_54d2a7451c0806": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34b7bf7f-03aa-437d-9084-aafea59d52c7",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
