@@ -1,0 +1,107 @@
+src/shared/helpers/sync/conflictPolicy.ts
+  s_54d2a7451c0806::t_84189f4bc20ccc 90-92
+  s_54d2a7451c0806::t_f14197039a46da 3-25
+  s_54d2a7451c0806::t_05cd4b9fc70823 89
+src/repositories/syncPathFieldMap.test.ts
+  s_54d2a7451c0806::t_690bf62d3996b4 7-9
+android/app/build.gradle
+  s_54d2a7451c0806::t_0138b7edd78c55 114
+src/domain/types/sync.ts
+  s_54d2a7451c0806::t_2fa1f493c41d3b 22-31
+src/services/characterSyncCoordinator.ts
+  s_54d2a7451c0806::t_2f2e21336bcfbf 730-732,735,738-739,754,760-761
+  s_54d2a7451c0806::t_e33fc705f8647f 5
+  s_54d2a7451c0806::t_eedfc21beee4eb 961-968
+  s_54d2a7451c0806::t_e692cfa75bd3b5 849-855,857-863
+  s_54d2a7451c0806::t_929a2f56310eb7 48-51,55-56
+  s_54d2a7451c0806::t_8a3d905b6a7b2c 142-157,163-164,166,177-185
+  s_54d2a7451c0806::t_edf9c81b3790d9 96-99
+  s_54d2a7451c0806::t_916e62d11ce803 278-279,298-299
+  s_54d2a7451c0806::t_11e97d0e0e9e21 451-452
+  s_54d2a7451c0806::t_32f3e8b6abc46e 495-616,623
+  s_54d2a7451c0806::t_e6c78992f519b1 649-653
+  s_54d2a7451c0806::t_978b280ba12122 7
+  s_54d2a7451c0806::t_d01234e39ef0ca 391-392
+  s_54d2a7451c0806::t_168090789b1dee 832-835,839-840,846-848,856,864-870
+  s_54d2a7451c0806::t_ce2c5da49e917e 977
+  s_54d2a7451c0806::t_f973f2194a1272 165
+src/screens/Character/hooks/useCharacterActions.tsx
+  s_54d2a7451c0806::t_c8631e8223eeca 713-720
+src/i18n/locales/uk/whatsNew.json
+  s_54d2a7451c0806::t_9493a69da44886 5-7
+src/repositories/characterCloudRepository.ts
+  s_54d2a7451c0806::t_738486a94b2252 534-539
+  s_54d2a7451c0806::t_a1ea49479356ee 448-464
+  s_54d2a7451c0806::t_17e0f42f9269ba 572-574
+  s_54d2a7451c0806::t_ecb8a7c38f7348 102-108
+  s_54d2a7451c0806::t_a2b64774bbddd6 552-557
+  s_54d2a7451c0806::t_352c648ff253de 991
+  s_54d2a7451c0806::t_0bbed01fc139c0 1
+  s_54d2a7451c0806::t_bf279bc19c42a1 640
+  s_54d2a7451c0806::t_afbc6db3672340 436-447,465-525,527-533,540-551,558-571,575-583,585-625,627-634,636-639,647-648,654-656,667,679,683-696,709-710,714-716,724-730,738-739
+  s_54d2a7451c0806::t_05ea909fa59bb1 668-677
+  s_54d2a7451c0806::t_385e0ccd5c5f97 526
+  s_54d2a7451c0806::t_dd2aed083f92b9 584
+  s_54d2a7451c0806::t_23a86192f114f4 626
+  s_54d2a7451c0806::t_01e5c45dbf81ee 635
+  s_54d2a7451c0806::t_2b5623097b6e4f 678
+  s_54d2a7451c0806::t_6491ff360b004d 740
+  s_54d2a7451c0806::t_762a76888f9249 112
+src/services/firebase.ts
+  s_54d2a7451c0806::t_66ebe7b198ccc9 13-20
+src/screens/Home/homeViewModel.test.ts
+  s_54d2a7451c0806::t_a46628f9db9222 29-30
+src/services/characterSyncCoordinator.test.ts
+  s_54d2a7451c0806::t_39a04867ba37a8 396,405,407-418
+  s_54d2a7451c0806::t_7ad9696633372d 638-642
+  s_54d2a7451c0806::t_e50fe9a0fc6ac4 208-230,232-280
+  s_54d2a7451c0806::t_67a15647f3a10f 231
+src/repositories/syncPathFieldMap.ts
+  s_54d2a7451c0806::t_fda1f9d6650a9c 20
+src/stores/storeSelectors.test.ts
+  s_54d2a7451c0806::t_557b538f589d1b 95-96
+src/services/storeEffects/syncStoreEffects.ts
+  s_54d2a7451c0806::t_c78ab254c17bcf 76-82
+app.json
+  s_54d2a7451c0806::t_d647c03865acab 19
+src/i18n/locales/en/whatsNew.json
+  s_54d2a7451c0806::t_b377c84dac5e0e 5-7
+src/repositories/characterCloudRepository.test.ts
+  s_54d2a7451c0806::t_85d0266194cb0a 48-49
+  s_54d2a7451c0806::t_f6931ddc1e8455 85-86
+  s_54d2a7451c0806::t_867de7431fd873 64
+  s_54d2a7451c0806::t_5131a04911790c 30-31
+  s_54d2a7451c0806::t_7be74d4d4e4a2c 132-149,198-300
+  s_54d2a7451c0806::t_53f282849f4bc7 150-168
+  s_54d2a7451c0806::t_9f8dcf22fa5477 568-613
+  s_54d2a7451c0806::t_0cbfffc64264ff 169-197
+src/stores/syncStore.ts
+  s_54d2a7451c0806::t_b780d81caf9c50 12-13,15,22-27,29-30
+  s_54d2a7451c0806::t_456439f68762a8 14
+  s_54d2a7451c0806::t_773b19dd79ce3b 28
+src/shared/helpers/sync/conflictPolicy.test.ts
+  s_54d2a7451c0806::t_6ec48ec1ca7217 37
+  s_54d2a7451c0806::t_f520cff4866d47 48,50,58,60,68-72,74
+  s_54d2a7451c0806::t_c6952eb848c6f8 36,39
+  s_54d2a7451c0806::t_e4bd01c36ded1d 43-47
+src/stores/selectors/syncStoreSelectors.ts
+  s_54d2a7451c0806::t_9f35987ef4eb53 8-9,11,17-22,24-25
+  s_54d2a7451c0806::t_260233862fcc41 10
+  s_54d2a7451c0806::t_5e228fc2e4aed2 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "8a312c1a029e41039939e128a2b6706922c8d72b",
+  "prompts": {},
+  "sessions": {
+    "s_54d2a7451c0806": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "34b7bf7f-03aa-437d-9084-aafea59d52c7",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
