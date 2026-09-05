@@ -4,7 +4,7 @@ import { View, Text, Pressable, TextInput as RNTextInput, InteractionManager } f
 import type { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { useTranslation } from 'react-i18next';
 import { getStyles } from '../style';
@@ -28,9 +28,16 @@ import useCharacterStore, {
 import { calculateModifier } from '@/shared/helpers/calculateModifier';
 import { parseDice } from '@/shared/helpers/dice';
 import { computeSkillBonus, skillKeys } from '@/shared/helpers/derived';
-import type { CharacterActorRole, CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
+import type { CharacterActorRole, CharacterChangeHistoryEntry, CharacterPresenceEntry } from '@/repositories/characterCloudRepository';
 import type { CharacterSheet } from '@/repositories/characterCloudRepository';
-import { fetchCharacterSheet, subscribeCharacterSheet } from '@/repositories/characterCloudRepository';
+import {
+  clearCharacterPresence,
+  fetchCharacterSheet,
+  setCharacterPresence,
+  subscribeCharacterChanges,
+  subscribeCharacterPresence,
+  subscribeCharacterSheet,
+} from '@/repositories/characterCloudRepository';
 import { fbAuth, timestampToMillis } from '@/services/firebase';
 import useSyncStore, { selectSyncByCharacterId, selectSyncStoreActions } from '@/context/Sync-store';
 import { mapCloudCharacterToLocalDto } from '@/shared/helpers/mapCloudCharacter';
@@ -49,11 +56,13 @@ import { parseCharacter } from '@/domain/schemas';
 import useTrackerTemplateStore, { SYSTEM_RESOURCE_TEMPLATES } from '@/context/TrackerTemplates-store';
 import useAppRoleStore from '@/context/AppRole-store';
 import {
+  computePresenceStatus,
   getShareDisplayStatus,
   getSyncDisplayStatus,
   getSyncStatusKind,
   isNetworkOnline,
   mapRoleToHistoryActor,
+  type PresenceStatus,
 } from '@/shared/helpers/collaboration/status';
 import {
   buildUploadPlan,
@@ -119,6 +128,7 @@ type LevelChangeDraftText = {
 };
 
 const TAB_ORDER: CharacterTab[] = ['Overview', 'Combat', 'Magic', 'Inventory', 'Notes', 'Homebrew'];
+const HISTORY_PAGE_SIZE = 8;
 const TAB_PATH_PREFIX: Record<CharacterTab, string> = {
   Overview: 'overview.',
   Combat: 'combat.',
@@ -252,28 +262,6 @@ function ensureCharacterDefaults(character: CharacterViewModel): CharacterViewMo
     return { ...normalized, proficiencyBonus: buildProficiencyByLevel(normalized.level) };
   }
   return normalized;
-}
-
-function sanitizeChangeHistory(value: unknown): CharacterChangeHistoryEntry[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .map((entry): CharacterChangeHistoryEntry | null => {
-      if (!entry || typeof entry !== 'object') return null;
-      const cast = entry as Record<string, unknown>;
-      const tab = String(cast.tab || 'Overview') as CharacterTab;
-      if (!TAB_ORDER.includes(tab)) return null;
-      const actorRole: CharacterActorRole | undefined = cast.actorRole === 'DM' || cast.actorRole === 'Player' ? cast.actorRole : undefined;
-      return {
-        id: String(cast.id || ''),
-        uid: String(cast.uid || ''),
-        actorRole,
-        tab,
-        paths: Array.isArray(cast.paths) ? cast.paths.map((item) => String(item)) : [],
-        summary: typeof cast.summary === 'string' ? cast.summary : undefined,
-        atMs: Number(cast.atMs || 0),
-      };
-    })
-    .filter((entry): entry is CharacterChangeHistoryEntry => Boolean(entry && entry.id && entry.uid && entry.tab));
 }
 
 export function useCharacterActions({ route }: Partial<CharacterProps> & { route?: CharacterProps['route'] }) {
@@ -633,54 +621,19 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     });
   }, [baseCharacter.id, ensureCharacterSync, isCharacterMissing]);
 
-  useEffect(() => {
-    if (isCharacterMissing) return;
-    let alive = true;
-    fetchCharacterSheet(baseCharacter.id)
-      .then((doc) => {
-        if (!alive) return;
-        const exists = Boolean(doc);
-        const { owners, ownerUid, editors } = getSheetOwners(doc);
-        const me = fbAuth.currentUser?.uid || '';
-        const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
-        setIsCloudDoc(exists);
-        setIsOwnedByMe(owned);
-        setIsSharedSheet(Boolean(doc && editors.length > 0));
-        setSharedHistory(sanitizeChangeHistory(doc?.changeHistory));
-        setSyncFeedback(exists ? t('sync.cloudConnected') : t('sync.localOnlyCharacter'));
-        setCloudAvailability(baseCharacter.id, exists).catch((_error) => {
-          /* ignore cloud availability update failure */
-        });
-      })
-      .catch((_error) => {
-        if (!alive) return;
-        setIsCloudDoc(false);
-        setIsOwnedByMe(true);
-        setIsSharedSheet(false);
-        setSharedHistory([]);
-        setSyncFeedback(t('sync.localOnlyCharacter'));
-        setCloudAvailability(baseCharacter.id, false).catch((_nestedError) => {
-          /* ignore cloud availability rollback failure */
-        });
-      });
+  // COL-9: sharedHistory now comes from the changes subcollection (see the effect below),
+  // not doc.changeHistory. The remote doc and the remote history stream arrive from two
+  // independent onSnapshot listeners, so each keeps a ref to the other's latest value and
+  // runRemoteReconciliation is safe to call from either side — it no-ops via `if (!doc) return`
+  // until both have delivered at least one snapshot.
+  const latestRemoteDocRef = useRef<CharacterSheet | null>(null);
+  const latestHistoryRef = useRef<CharacterChangeHistoryEntry[]>([]);
 
-    const unsubscribe = subscribeCharacterSheet(baseCharacter.id, (doc) => {
-      const exists = Boolean(doc);
-      const { owners, ownerUid, editors } = getSheetOwners(doc);
+  const runRemoteReconciliation = useCallback(
+    (doc: CharacterSheet | null, history: CharacterChangeHistoryEntry[]) => {
+      if (!doc) return;
       const me = fbAuth.currentUser?.uid || '';
-      const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
-      setIsCloudDoc(exists);
-      setIsOwnedByMe(owned);
-      setIsSharedSheet(Boolean(doc && editors.length > 0));
-      const history = sanitizeChangeHistory(doc?.changeHistory);
-      setSharedHistory(history);
-      setSyncFeedback(exists ? t('sync.cloudConnected') : t('sync.localOnlyCharacter'));
-      setCloudAvailability(baseCharacter.id, exists).catch((_error) => {
-        /* ignore cloud availability update failure */
-      });
-
       const syncState = useSyncStore.getState().syncByCharacter[baseCharacter.id];
-      if (!exists) return;
 
       const remoteDto = ensureCharacterDefaults(mapCloudCharacterToLocalDto(doc as Record<string, unknown>));
       // COL-5: entry.atMs is the writer device's own clock — comparing it against this
@@ -740,22 +693,127 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
           });
         }
       }
+    },
+    [baseCharacter.id, markCloudDownloaded, markConflict, recordRemoteSyncState, setSyncTransport, t, updateCharacter],
+  );
+
+  useEffect(() => {
+    if (isCharacterMissing) return;
+    let alive = true;
+    fetchCharacterSheet(baseCharacter.id)
+      .then((doc) => {
+        if (!alive) return;
+        const exists = Boolean(doc);
+        const { owners, ownerUid, editors } = getSheetOwners(doc);
+        const me = fbAuth.currentUser?.uid || '';
+        const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
+        setIsCloudDoc(exists);
+        setIsOwnedByMe(owned);
+        setIsSharedSheet(Boolean(doc && editors.length > 0));
+        latestRemoteDocRef.current = doc;
+        setSyncFeedback(exists ? t('sync.cloudConnected') : t('sync.localOnlyCharacter'));
+        setCloudAvailability(baseCharacter.id, exists).catch((_error) => {
+          /* ignore cloud availability update failure */
+        });
+        runRemoteReconciliation(doc, latestHistoryRef.current);
+      })
+      .catch((_error) => {
+        if (!alive) return;
+        setIsCloudDoc(false);
+        setIsOwnedByMe(true);
+        setIsSharedSheet(false);
+        latestRemoteDocRef.current = null;
+        setSyncFeedback(t('sync.localOnlyCharacter'));
+        setCloudAvailability(baseCharacter.id, false).catch((_nestedError) => {
+          /* ignore cloud availability rollback failure */
+        });
+      });
+
+    const unsubscribe = subscribeCharacterSheet(baseCharacter.id, (doc) => {
+      const exists = Boolean(doc);
+      const { owners, ownerUid, editors } = getSheetOwners(doc);
+      const me = fbAuth.currentUser?.uid || '';
+      const owned = Boolean(me && (ownerUid === me || owners.includes(me)));
+      setIsCloudDoc(exists);
+      setIsOwnedByMe(owned);
+      setIsSharedSheet(Boolean(doc && editors.length > 0));
+      latestRemoteDocRef.current = doc;
+      setSyncFeedback(exists ? t('sync.cloudConnected') : t('sync.localOnlyCharacter'));
+      setCloudAvailability(baseCharacter.id, exists).catch((_error) => {
+        /* ignore cloud availability update failure */
+      });
+      if (!exists) return;
+      runRemoteReconciliation(doc, latestHistoryRef.current);
     });
 
     return () => {
       alive = false;
       if (typeof unsubscribe === 'function') unsubscribe();
     };
-  }, [
-    baseCharacter.id,
-    isCharacterMissing,
-    markCloudDownloaded,
-    markConflict,
-    recordRemoteSyncState,
-    setCloudAvailability,
-    setSyncTransport,
-    updateCharacter,
-  ]);
+  }, [baseCharacter.id, isCharacterMissing, runRemoteReconciliation, setCloudAvailability, t]);
+
+  // COL-9: second, independent subscription — the changes subcollection replaces
+  // doc.changeHistory as the source of sharedHistory and the remote-history diff.
+  useEffect(() => {
+    if (isCharacterMissing) return undefined;
+    const unsubscribe = subscribeCharacterChanges(baseCharacter.id, (entries) => {
+      latestHistoryRef.current = entries;
+      setSharedHistory(entries);
+      runRemoteReconciliation(latestRemoteDocRef.current, entries);
+    });
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }, [baseCharacter.id, isCharacterMissing, runRemoteReconciliation]);
+
+  // COL-6: presence. Read side — subscribe to other viewers' heartbeat docs and derive a
+  // "DM тут" / "DM був N хв тому" status, staleness-filtered client-side (no Cloud Function).
+  const [presenceStatus, setPresenceStatus] = useState<PresenceStatus>(null);
+  useEffect(() => {
+    if (isCharacterMissing || !isCloudDoc) {
+      setPresenceStatus(null);
+      return undefined;
+    }
+    const unsubscribe = subscribeCharacterPresence(baseCharacter.id, (entries: CharacterPresenceEntry[]) => {
+      const me = fbAuth.currentUser?.uid || '';
+      const others = entries.filter((entry) => entry.uid !== me);
+      setPresenceStatus(computePresenceStatus(others, Date.now()));
+    });
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }, [baseCharacter.id, isCharacterMissing, isCloudDoc]);
+
+  // COL-6: presence. Write side — heartbeat while the Character screen is focused, best-effort
+  // cleanup on blur/unmount. Gated on isCloudDoc (not isSharedSheet) so presence is visible the
+  // instant a second editor is added, not only once one already exists.
+  useFocusEffect(
+    useCallback(() => {
+      if (isCharacterMissing || !isCloudDoc) return undefined;
+      const actorRole = mapRoleToHistoryActor(roleMode);
+      const heartbeat = () => {
+        void setCharacterPresence(baseCharacter.id, selectedTab, actorRole);
+      };
+      heartbeat();
+      const intervalId = setInterval(heartbeat, 25000);
+      return () => {
+        clearInterval(intervalId);
+        void clearCharacterPresence(baseCharacter.id);
+      };
+    }, [baseCharacter.id, isCharacterMissing, isCloudDoc, roleMode, selectedTab]),
+  );
+
+  const presenceLabel = useMemo(() => {
+    if (!presenceStatus) return null;
+    const actorLabel =
+      presenceStatus.actorRole === 'DM'
+        ? t('history.presence.actorDm')
+        : presenceStatus.actorRole === 'Player'
+          ? t('history.presence.actorPlayer')
+          : t('history.presence.actorRemote');
+    if (presenceStatus.kind === 'here') return t('history.presence.here', { actor: actorLabel });
+    return t('history.presence.wasActive', { actor: actorLabel, minutes: presenceStatus.minutesAgo });
+  }, [presenceStatus, t]);
 
   useEffect(() => {
     setTempCurrentHp(String(characterData.hp.current));
@@ -2020,11 +2078,24 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
 
     pushBadge(syncStatusDisplayLabel, getSyncStatusKind(syncStatusLabel));
     if (shareStatusDisplayLabel) pushBadge(shareStatusDisplayLabel, 'accent');
+    // COL-6: presence shown at the same visual level as sync/share status, not buried
+    // further down the screen in the history card.
+    if (presenceLabel) pushBadge(presenceLabel, presenceStatus?.kind === 'here' ? 'success' : 'neutral');
     if (!isCloudDoc) pushBadge(t('badges.localOnly'), 'neutral');
     if (hasHomebrew) pushBadge(t('badges.homebrew'), 'warning');
     if (!isOnline) pushBadge(t('badges.offline'), 'warning');
     return badges;
-  }, [hasHomebrew, isCloudDoc, isOnline, shareStatusDisplayLabel, syncStatusDisplayLabel, syncStatusLabel, t]);
+  }, [
+    hasHomebrew,
+    isCloudDoc,
+    isOnline,
+    presenceLabel,
+    presenceStatus,
+    shareStatusDisplayLabel,
+    syncStatusDisplayLabel,
+    syncStatusLabel,
+    t,
+  ]);
 
   const hasConflictForPrefixes = useCallback(
     (prefixes: string[]) => {
@@ -2053,14 +2124,22 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     [hasConflictForPrefixes, styles.sectionConflictBadge, styles.sectionConflictBadgeText],
   );
 
-  const tabHistory = useMemo(() => {
+  const [historyVisibleCount, setHistoryVisibleCount] = useState(HISTORY_PAGE_SIZE);
+  useEffect(() => {
+    setHistoryVisibleCount(HISTORY_PAGE_SIZE);
+  }, [selectedTab]);
+
+  const tabHistoryAll = useMemo(() => {
     if (!isSharedSheet) return [];
     return sharedHistory
       .filter((entry) => entry.tab === selectedTab)
       .slice()
-      .sort((a, b) => (b.atMs || 0) - (a.atMs || 0))
-      .slice(0, 8);
+      .sort((a, b) => (b.atMs || 0) - (a.atMs || 0));
   }, [isSharedSheet, selectedTab, sharedHistory]);
+
+  const tabHistory = useMemo(() => tabHistoryAll.slice(0, historyVisibleCount), [tabHistoryAll, historyVisibleCount]);
+  const hasMoreHistory = tabHistoryAll.length > tabHistory.length;
+  const showMoreHistory = useCallback(() => setHistoryVisibleCount((prev) => prev + HISTORY_PAGE_SIZE), []);
 
   const latestTabChange = tabHistory[0];
   const latestTabChangeLabel = latestTabChange ? formatChangeSource(latestTabChange) : null;
@@ -3694,6 +3773,8 @@ export function useCharacterActions({ route }: Partial<CharacterProps> & { route
     latestTabChange,
     latestTabChangeLabel,
     getHistoryAuthorLabel,
+    hasMoreHistory,
+    showMoreHistory,
     renderOverviewPlay,
     renderOverviewEdit,
     renderCombatPlay,

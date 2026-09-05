@@ -17,7 +17,9 @@ export interface CharacterSyncState {
   transportMessage: string | null;
   lastSyncError: string | null;
   lastSyncAttemptAt: number | null;
-  // changeHistory[].id values already accounted for in remotePathsSinceLastSync — clock-independent.
+  // COL-9: ids of changes-subcollection entries already accounted for in
+  // remotePathsSinceLastSync — clock-independent. Was changeHistory[].id before the
+  // subcollection migration; the deprecated array field is no longer the source.
   seenHistoryEntryIds?: string[];
   // COL-4: last-known-synced value for each delta/counter field this device has observed
   // (hp.current, hp.temp, deathSaves.successes/failures, spells.spellSlots.<level>.used,

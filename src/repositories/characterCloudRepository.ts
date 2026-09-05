@@ -1,4 +1,4 @@
-import { db, fbAuth, now, hasDoc, arrayUnion, arrayRemove, increment, deleteField } from '@/services/firebase';
+import { db, fbAuth, now, hasDoc, arrayUnion, arrayRemove, increment, deleteField, timestampToMillis } from '@/services/firebase';
 import { ensureConnection } from '@/services/connections';
 import { findUserByEmail } from '@/services/users';
 import type { CharacterDto } from '@/domain/types';
@@ -121,6 +121,7 @@ export interface CharacterCloudRepository {
   removeEditor: (sheetId: string, editorUid: string) => Promise<void>;
   transferOwnership: (sheetId: string, newOwnerUid: string) => Promise<void>;
   getEditorsForSheet: (uids: string[]) => Promise<Array<{ uid: string; email: string }>>;
+  fetchRecentChangeEntries: (sheetId: string, limit?: number) => Promise<CharacterChangeHistoryEntry[]>;
 }
 
 const DEFAULT_STATS: CharacterDto['stats'] = {
@@ -407,6 +408,48 @@ function buildHistoryEntries(
   return out;
 }
 
+const HISTORY_TABS: CharacterTabKey[] = ['Overview', 'Combat', 'Magic', 'Inventory', 'Notes', 'Homebrew'];
+
+function toChangeEntry(id: string, raw: unknown): CharacterChangeHistoryEntry | null {
+  const source = isRecord(raw) ? raw : {};
+  const tab = source.tab as CharacterTabKey;
+  if (!HISTORY_TABS.includes(tab)) return null;
+  const uidValue = typeof source.uid === 'string' ? source.uid : '';
+  if (!uidValue) return null;
+  const actorRole = source.actorRole === 'DM' || source.actorRole === 'Player' ? source.actorRole : undefined;
+  // Prefer the server-resolved createdAt timestamp over the client-supplied atMs — that's
+  // the actual point of COL-9 (a real serverTimestamp() per entry instead of a client clock).
+  const atMs = timestampToMillis(source.createdAt) ?? Number(source.atMs || 0);
+  return {
+    id,
+    uid: uidValue,
+    actorRole,
+    tab,
+    paths: toStringArray(source.paths),
+    summary: typeof source.summary === 'string' ? source.summary : undefined,
+    atMs,
+  };
+}
+
+async function writeChangeEntries(sheetId: string, entries: CharacterChangeHistoryEntry[]): Promise<void> {
+  if (!entries.length) return;
+  const changesRef = db.collection('characterSheets').doc(sheetId).collection('changes');
+  const batch = db.batch();
+  for (const entry of entries) {
+    batch.set(changesRef.doc(entry.id), {
+      id: entry.id,
+      uid: entry.uid,
+      ...(entry.actorRole ? { actorRole: entry.actorRole } : {}),
+      tab: entry.tab,
+      paths: entry.paths,
+      ...(entry.summary ? { summary: entry.summary } : {}),
+      atMs: entry.atMs,
+      createdAt: now(),
+    });
+  }
+  await batch.commit();
+}
+
 function getValueAtPath(source: Record<string, unknown>, path: string): unknown {
   return path.split('.').reduce<unknown>((acc, segment) => {
     if (!isRecord(acc)) return undefined;
@@ -656,10 +699,10 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterCloudDto, opti
     // values here regardless of options — the baseline starts tracking from this point on.
     const payload = stripUndefinedDeep(dtoToSheet(dto)) as Record<string, unknown>;
     if (additions.length) {
-      payload.changeHistory = additions;
       payload.lastChangeAt = now();
     }
     await ref.set(payload);
+    if (additions.length) await writeChangeEntries(dto.id, additions);
     return { id: dto.id, created: true };
   }
 
@@ -702,10 +745,10 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterCloudDto, opti
       patch[fieldPath] = value === undefined ? deleteField() : value;
     }
     if (additions.length) {
-      patch.changeHistory = arrayUnion(...additions);
       patch.lastChangeAt = now();
     }
     await ref.update(patch);
+    if (additions.length) await writeChangeEntries(dto.id, additions);
     if (conditionsDelta?.add.length) await ref.update({ conditions: arrayUnion(...conditionsDelta.add), updatedAt: now() });
     if (conditionsDelta?.remove.length) await ref.update({ conditions: arrayRemove(...conditionsDelta.remove), updatedAt: now() });
     return { id: dto.id, updated: true };
@@ -729,8 +772,20 @@ export async function upsertCharacterSheetFromLocal(dto: CharacterCloudDto, opti
       if (conditionsDelta !== undefined) delete payload.conditions;
     }
     if (additions.length) {
-      payload.changeHistory = arrayUnion(...additions);
       payload.lastChangeAt = now();
+      const changesRef = ref.collection('changes');
+      for (const entry of additions) {
+        tx.set(changesRef.doc(entry.id), {
+          id: entry.id,
+          uid: entry.uid,
+          ...(entry.actorRole ? { actorRole: entry.actorRole } : {}),
+          tab: entry.tab,
+          paths: entry.paths,
+          ...(entry.summary ? { summary: entry.summary } : {}),
+          atMs: entry.atMs,
+          createdAt: now(),
+        });
+      }
     }
     tx.set(ref, payload, { merge: true });
   });
@@ -785,6 +840,121 @@ export function subscribeCharacterSheet(id: string, cb: (doc: CharacterSheet | n
   } catch {
     cb(null);
     return () => {};
+  }
+}
+
+export function subscribeCharacterChanges(sheetId: string, cb: (entries: CharacterChangeHistoryEntry[]) => void, limit = 100) {
+  const cleanId = String(sheetId || '').trim();
+  if (!cleanId) {
+    cb([]);
+    return () => {};
+  }
+
+  try {
+    return db
+      .collection('characterSheets')
+      .doc(cleanId)
+      .collection('changes')
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+      .onSnapshot(
+        (snap) => {
+          const out: CharacterChangeHistoryEntry[] = [];
+          snap?.forEach?.((doc) => {
+            const mapped = toChangeEntry(doc.id, doc.data?.() || doc.data());
+            if (mapped) out.push(mapped);
+          });
+          cb(out);
+        },
+        () => cb([]),
+      );
+  } catch {
+    cb([]);
+    return () => {};
+  }
+}
+
+export async function fetchRecentCharacterChanges(sheetId: string, limit = 100): Promise<CharacterChangeHistoryEntry[]> {
+  try {
+    const snap = await db.collection('characterSheets').doc(sheetId).collection('changes').orderBy('createdAt', 'desc').limit(limit).get();
+    const out: CharacterChangeHistoryEntry[] = [];
+    snap?.forEach?.((doc) => {
+      const mapped = toChangeEntry(doc.id, doc.data?.() || doc.data());
+      if (mapped) out.push(mapped);
+    });
+    return out;
+  } catch {
+    return [];
+  }
+}
+
+export type CharacterPresenceEntry = {
+  uid: string;
+  actorRole?: CharacterActorRole;
+  tab: CharacterTabKey;
+  lastActiveAtMs: number;
+};
+
+function toPresenceEntry(uidValue: string, raw: unknown): CharacterPresenceEntry | null {
+  const source = isRecord(raw) ? raw : {};
+  const tab = source.tab as CharacterTabKey;
+  if (!HISTORY_TABS.includes(tab)) return null;
+  const actorRole = source.actorRole === 'DM' || source.actorRole === 'Player' ? source.actorRole : undefined;
+  const lastActiveAtMs = timestampToMillis(source.lastActiveAt) ?? 0;
+  return { uid: uidValue, actorRole, tab, lastActiveAtMs };
+}
+
+export function subscribeCharacterPresence(sheetId: string, cb: (entries: CharacterPresenceEntry[]) => void) {
+  const cleanId = String(sheetId || '').trim();
+  if (!cleanId) {
+    cb([]);
+    return () => {};
+  }
+
+  try {
+    return db
+      .collection('characterSheets')
+      .doc(cleanId)
+      .collection('presence')
+      .onSnapshot(
+        (snap) => {
+          const out: CharacterPresenceEntry[] = [];
+          snap?.forEach?.((doc) => {
+            const mapped = toPresenceEntry(doc.id, doc.data?.() || doc.data());
+            if (mapped) out.push(mapped);
+          });
+          cb(out);
+        },
+        () => cb([]),
+      );
+  } catch {
+    cb([]);
+    return () => {};
+  }
+}
+
+export async function setCharacterPresence(sheetId: string, tab: CharacterTabKey, actorRole?: CharacterActorRole): Promise<void> {
+  const me = fbAuth.currentUser?.uid;
+  if (!me) return;
+  try {
+    await db
+      .collection('characterSheets')
+      .doc(sheetId)
+      .collection('presence')
+      .doc(me)
+      .set({ uid: me, tab, ...(actorRole ? { actorRole } : {}), lastActiveAt: now() });
+  } catch {
+    /* best-effort heartbeat — a failed write just means the next tick retries */
+  }
+}
+
+export async function clearCharacterPresence(sheetId: string): Promise<void> {
+  const me = fbAuth.currentUser?.uid;
+  if (!me) return;
+  try {
+    await db.collection('characterSheets').doc(sheetId).collection('presence').doc(me).delete();
+  } catch {
+    /* best-effort cleanup on blur/unmount */
   }
 }
 
@@ -1028,4 +1198,5 @@ export const characterCloudRepository: CharacterCloudRepository = {
   removeEditor,
   transferOwnership,
   getEditorsForSheet,
+  fetchRecentChangeEntries: fetchRecentCharacterChanges,
 };

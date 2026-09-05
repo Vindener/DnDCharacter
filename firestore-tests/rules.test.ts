@@ -8,6 +8,8 @@ import {
   type RulesTestContext,
   type RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 const PROJECT_ID = 'mythgatednd-rules-test';
 const RULES_PATH = resolve(__dirname, '..', 'firestore.rules');
@@ -100,6 +102,27 @@ function validDmCampaignNote(overrides: Record<string, unknown> = {}) {
     owners: ['dm-1'],
     editors: [],
     title: 'Session 1 recap',
+    ...overrides,
+  };
+}
+
+function validChangeEntry(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'owner-1-Combat-1000',
+    uid: 'owner-1',
+    tab: 'Combat',
+    paths: ['combat.hp.current'],
+    atMs: 1000,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    ...overrides,
+  };
+}
+
+function validPresenceDoc(overrides: Record<string, unknown> = {}) {
+  return {
+    uid: 'owner-1',
+    tab: 'Combat',
+    lastActiveAt: firebase.firestore.FieldValue.serverTimestamp(),
     ...overrides,
   };
 }
@@ -451,6 +474,182 @@ describe('firestore.rules', () => {
       );
 
       await assertSucceeds(newEditor.collection('dmCampaignInitiative').doc('campaign-1').get());
+    });
+  });
+
+  describe('characterSheets/{id}/changes (COL-9, append-only change log subcollection)', () => {
+    it('the owner can create and read a valid change entry', async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const owner = testEnv.authenticatedContext('owner-1').firestore();
+      await assertSucceeds(
+        owner.collection('characterSheets').doc('sheet-1').collection('changes').doc('owner-1-Combat-1000').set(validChangeEntry()),
+      );
+      await assertSucceeds(owner.collection('characterSheets').doc('sheet-1').collection('changes').get());
+    });
+
+    it('an editor can create and read a valid change entry', async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const editor = testEnv.authenticatedContext('editor-1').firestore();
+      await assertSucceeds(
+        editor
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('changes')
+          .doc('editor-1-Combat-2000')
+          .set(validChangeEntry({ id: 'editor-1-Combat-2000', uid: 'editor-1', atMs: 2000 })),
+      );
+    });
+
+    it('a stranger cannot create, get, or list change entries', async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const stranger = testEnv.authenticatedContext('stranger').firestore();
+      await assertFails(
+        stranger
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('changes')
+          .doc('stranger-Combat-3000')
+          .set(validChangeEntry({ id: 'stranger-Combat-3000', uid: 'stranger', atMs: 3000 })),
+      );
+      await assertFails(stranger.collection('characterSheets').doc('sheet-1').collection('changes').get());
+    });
+
+    it('nobody, including the owner, can update or delete an existing change entry', async () => {
+      await seed(async (db) => {
+        await db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet());
+        await db.collection('characterSheets').doc('sheet-1').collection('changes').doc('owner-1-Combat-1000').set(validChangeEntry());
+      });
+
+      const owner = testEnv.authenticatedContext('owner-1').firestore();
+      await assertFails(
+        owner
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('changes')
+          .doc('owner-1-Combat-1000')
+          .update({ summary: 'edited after the fact' }),
+      );
+      await assertFails(owner.collection('characterSheets').doc('sheet-1').collection('changes').doc('owner-1-Combat-1000').delete());
+    });
+
+    it('rejects a malformed entry (missing paths, bad tab, oversized paths) even from the owner', async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const owner = testEnv.authenticatedContext('owner-1').firestore();
+      const changesRef = owner.collection('characterSheets').doc('sheet-1').collection('changes');
+
+      await assertFails(changesRef.doc('bad-1').set({ id: 'bad-1', uid: 'owner-1', tab: 'Combat', atMs: 1 }));
+      await assertFails(changesRef.doc('bad-2').set(validChangeEntry({ id: 'bad-2', tab: 'NotARealTab' })));
+      await assertFails(
+        changesRef.doc('bad-3').set(
+          validChangeEntry({
+            id: 'bad-3',
+            paths: Array.from({ length: 51 }, (_, i) => `path.${i}`),
+          }),
+        ),
+      );
+    });
+  });
+
+  describe('characterSheets/{id}/presence (COL-6, per-viewer heartbeat)', () => {
+    it('the owner can create/update their own presence doc', async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const owner = testEnv.authenticatedContext('owner-1').firestore();
+      await assertSucceeds(
+        owner.collection('characterSheets').doc('sheet-1').collection('presence').doc('owner-1').set(validPresenceDoc()),
+      );
+      await assertSucceeds(
+        owner
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('presence')
+          .doc('owner-1')
+          .update({ lastActiveAt: firebase.firestore.FieldValue.serverTimestamp() }),
+      );
+    });
+
+    it("an editor cannot create/update another uid's presence doc (impersonation check)", async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const editor = testEnv.authenticatedContext('editor-1').firestore();
+      await assertFails(
+        editor
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('presence')
+          .doc('owner-1')
+          .set(validPresenceDoc({ uid: 'owner-1' })),
+      );
+    });
+
+    it('owner/editor can get/list any presence doc under a sheet they have access to', async () => {
+      await seed(async (db) => {
+        await db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet());
+        await db.collection('characterSheets').doc('sheet-1').collection('presence').doc('owner-1').set(validPresenceDoc());
+        await db
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('presence')
+          .doc('editor-1')
+          .set(validPresenceDoc({ uid: 'editor-1' }));
+      });
+
+      const editor = testEnv.authenticatedContext('editor-1').firestore();
+      await assertSucceeds(editor.collection('characterSheets').doc('sheet-1').collection('presence').doc('owner-1').get());
+      await assertSucceeds(editor.collection('characterSheets').doc('sheet-1').collection('presence').get());
+    });
+
+    it('a stranger cannot get/list/create/update/delete any presence doc', async () => {
+      await seed(async (db) => {
+        await db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet());
+        await db.collection('characterSheets').doc('sheet-1').collection('presence').doc('owner-1').set(validPresenceDoc());
+      });
+
+      const stranger = testEnv.authenticatedContext('stranger').firestore();
+      await assertFails(stranger.collection('characterSheets').doc('sheet-1').collection('presence').doc('owner-1').get());
+      await assertFails(stranger.collection('characterSheets').doc('sheet-1').collection('presence').get());
+      await assertFails(
+        stranger
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('presence')
+          .doc('stranger')
+          .set(validPresenceDoc({ uid: 'stranger' })),
+      );
+      await assertFails(stranger.collection('characterSheets').doc('sheet-1').collection('presence').doc('owner-1').delete());
+    });
+
+    it('a removed editor can still delete their own stale presence doc after losing sheet access', async () => {
+      await seed(async (db) => {
+        await db
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .set(validCharacterSheet({ editors: ['ex-editor'] }));
+        await db
+          .collection('characterSheets')
+          .doc('sheet-1')
+          .collection('presence')
+          .doc('ex-editor')
+          .set(validPresenceDoc({ uid: 'ex-editor' }));
+        await db.collection('characterSheets').doc('sheet-1').update({ editors: [] });
+      });
+
+      const exEditor = testEnv.authenticatedContext('ex-editor').firestore();
+      await assertSucceeds(exEditor.collection('characterSheets').doc('sheet-1').collection('presence').doc('ex-editor').delete());
+    });
+
+    it('rejects a malformed presence doc (missing lastActiveAt, bad tab)', async () => {
+      await seed((db) => db.collection('characterSheets').doc('sheet-1').set(validCharacterSheet()));
+
+      const owner = testEnv.authenticatedContext('owner-1').firestore();
+      const presenceRef = owner.collection('characterSheets').doc('sheet-1').collection('presence');
+
+      await assertFails(presenceRef.doc('owner-1').set({ uid: 'owner-1', tab: 'Combat' }));
+      await assertFails(presenceRef.doc('owner-1').set(validPresenceDoc({ tab: 'NotARealTab' })));
     });
   });
 });

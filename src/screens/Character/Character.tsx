@@ -76,6 +76,8 @@ function CharacterScreen({ route }: CharacterScreenProps) {
     latestTabChangeLabel,
     tabHistory,
     getHistoryAuthorLabel,
+    hasMoreHistory,
+    showMoreHistory,
   } = viewState;
   const hasStickyQuickActions = mode === 'play';
 
@@ -155,27 +157,6 @@ function CharacterScreen({ route }: CharacterScreenProps) {
           openTab={openTab}
         />
 
-        {isSharedSheet && (
-          <View style={styles.cardSecondary}>
-            <View style={styles.sectionTitleRow}>
-              <Text style={styles.sectionTitle}>{t('history.title', { tab: tabLabels[selectedTab] })}</Text>
-            </View>
-            {latestTabChangeLabel && latestTabChange ? (
-              <Text style={styles.blockTextMuted}>
-                {t('history.latestChange', { label: latestTabChangeLabel, date: new Date(latestTabChange.atMs).toLocaleString() })}
-              </Text>
-            ) : null}
-            {!tabHistory.length && <Text style={styles.blockTextMuted}>{t('history.empty')}</Text>}
-            {tabHistory.map((entry: CharacterChangeHistoryEntry) => (
-              <View key={entry.id} style={styles.historyRow}>
-                <Text style={styles.historyAuthor}>{getHistoryAuthorLabel(entry)}</Text>
-                <Text style={styles.historyMeta}>{new Date(entry.atMs).toLocaleString()}</Text>
-                <Text style={styles.historyPaths}>{formatHistorySummary(entry)}</Text>
-              </View>
-            ))}
-          </View>
-        )}
-
         <View style={styles.tabContent}>
           <CharacterTabContent
             selectedTab={selectedTab}
@@ -194,6 +175,32 @@ function CharacterScreen({ route }: CharacterScreenProps) {
             renderHomebrewEdit={viewState.renderHomebrewEdit}
           />
         </View>
+
+        {isSharedSheet && (
+          <View style={styles.cardSecondary}>
+            <View style={styles.sectionTitleRow}>
+              <Text style={styles.sectionTitle}>{t('history.title', { tab: tabLabels[selectedTab] })}</Text>
+            </View>
+            {latestTabChangeLabel && latestTabChange ? (
+              <Text style={styles.blockTextMuted}>
+                {t('history.latestChange', { label: latestTabChangeLabel, date: new Date(latestTabChange.atMs).toLocaleString() })}
+              </Text>
+            ) : null}
+            {!tabHistory.length && <Text style={styles.blockTextMuted}>{t('history.empty')}</Text>}
+            {tabHistory.map((entry: CharacterChangeHistoryEntry) => (
+              <View key={entry.id} style={styles.historyRow}>
+                <Text style={styles.historyAuthor}>{getHistoryAuthorLabel(entry)}</Text>
+                <Text style={styles.historyMeta}>{new Date(entry.atMs).toLocaleString()}</Text>
+                <Text style={styles.historyPaths}>{formatHistorySummary(entry)}</Text>
+              </View>
+            ))}
+            {hasMoreHistory && (
+              <Pressable style={styles.historyShowMoreButton} onPress={showMoreHistory} android_ripple={{ color: colors.ripple }}>
+                <Text style={styles.historyShowMoreText}>{t('history.showMore')}</Text>
+              </Pressable>
+            )}
+          </View>
+        )}
       </ScrollView>
 
       {hasStickyQuickActions && (

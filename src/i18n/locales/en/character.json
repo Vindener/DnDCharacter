@@ -100,12 +100,20 @@
     "title": "Shared Change History ({{tab}})",
     "latestChange": "Last change marker: {{label}} at {{date}}",
     "empty": "This tab has no shared history yet.",
+    "showMore": "Show more",
     "sources": {
       "you": "edited by you",
       "dm": "edited by GM",
       "player": "edited by player",
       "remote": "edited remotely",
       "uid": "edited by {{uid}}"
+    },
+    "presence": {
+      "here": "{{actor}} is here",
+      "wasActive": "{{actor}} was active {{minutes}} min ago",
+      "actorDm": "GM",
+      "actorPlayer": "Player",
+      "actorRemote": "Someone"
     }
   },
   "overview": {

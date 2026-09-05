@@ -804,6 +804,13 @@ export function computeSeenEntryIdsFromRawHistory(rawHistory: unknown): string[]
   return ids;
 }
 
+// COL-9: same id-extraction as computeSeenEntryIdsFromRawHistory, but for entries already
+// fetched from the changes subcollection (characterCloudRepository.fetchRecentChangeEntries),
+// not the deprecated changeHistory[] array field.
+export function computeSeenEntryIdsFromChangeEntries(entries: CharacterChangeHistoryEntry[]): string[] {
+  return entries.filter((entry) => Boolean(entry.id)).map((entry) => entry.id);
+}
+
 export async function syncToCloud(args: SyncToCloudArgs): Promise<SyncToCloudResult> {
   const plan = buildUploadPlan({
     syncState: args.syncState,
@@ -955,7 +962,8 @@ export async function resolveConflict(args: ResolveConflictArgs): Promise<Resolv
     // from this device, so no follow-up onSnapshot will bump the cursor on its own — bump it
     // here using the doc we just fetched, or the conflicting entries stay "unseen" forever and
     // keep re-triggering false conflicts against unrelated future remote changes.
-    const seenHistoryEntryIds = computeSeenEntryIdsFromRawHistory((doc as { changeHistory?: unknown }).changeHistory);
+    const recentChangeEntries = await characterCloudRepository.fetchRecentChangeEntries(args.character.id);
+    const seenHistoryEntryIds = computeSeenEntryIdsFromChangeEntries(recentChangeEntries);
     const serverSyncAtMs = timestampToMillis((doc as { lastChangeAt?: unknown }).lastChangeAt);
     if (args.syncPort.recordRemoteSyncState) {
       // keep-cloud fully replaces local with the fetched cloud doc — nothing is held back, so

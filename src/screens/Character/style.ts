@@ -445,6 +445,22 @@ export const getStyles = (c: ThemeColors) =>
       fontSize: fs(11),
       lineHeight: 16,
     },
+    historyShowMoreButton: {
+      borderRadius: rd(10),
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.background,
+      paddingVertical: sp(9),
+      paddingHorizontal: sp(10),
+      minHeight: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    historyShowMoreText: {
+      color: c.text,
+      fontSize: fs(12),
+      fontWeight: '700',
+    },
     cardPrimary: {
       backgroundColor: c.card,
       borderRadius: rd(16),

@@ -4,6 +4,7 @@ vi.mock('@/repositories/characterCloudRepository', () => ({
   characterCloudRepository: {
     upsertFromLocal: vi.fn(),
     fetchById: vi.fn(),
+    fetchRecentChangeEntries: vi.fn(),
   },
 }));
 
@@ -52,6 +53,7 @@ import type { CharacterChangeHistoryEntry, CharacterSheet } from '@/repositories
 import {
   applySyncTransition,
   computeRemoteHistorySync,
+  computeSeenEntryIdsFromChangeEntries,
   computeSeenEntryIdsFromRawHistory,
   normalizeSyncState,
   reconcileRemoteSnapshot,
@@ -601,14 +603,33 @@ describe('computeSeenEntryIdsFromRawHistory', () => {
   });
 });
 
+describe('computeSeenEntryIdsFromChangeEntries', () => {
+  it('returns an empty array for an empty list', () => {
+    expect(computeSeenEntryIdsFromChangeEntries([])).toEqual([]);
+  });
+
+  it('filters out entries with a blank id and preserves order', () => {
+    const entries = [
+      { id: 'a', uid: 'u1', tab: 'Combat', paths: [], atMs: 1 },
+      { id: '', uid: 'u2', tab: 'Combat', paths: [], atMs: 2 },
+      { id: 'b', uid: 'u3', tab: 'Overview', paths: [], atMs: 3 },
+    ] as unknown as CharacterChangeHistoryEntry[];
+
+    expect(computeSeenEntryIdsFromChangeEntries(entries)).toEqual(['a', 'b']);
+  });
+});
+
 describe('resolveConflict keep-cloud (COL-5 cursor bump)', () => {
   it('records seenHistoryEntryIds and serverSyncAtMs from the freshly fetched doc', async () => {
     const serverMs = 1_700_000_000_000;
     vi.mocked(characterCloudRepository.fetchById).mockResolvedValueOnce({
       id: 'char-conflict',
-      changeHistory: [{ id: 'remote-1', uid: 'uid-other', tab: 'Combat', paths: ['combat.hp.current'], atMs: 1 }],
       lastChangeAt: { toMillis: () => serverMs },
     } as unknown as CharacterSheet);
+    // COL-9: seen entry ids now come from the changes subcollection, not doc.changeHistory.
+    vi.mocked(characterCloudRepository.fetchRecentChangeEntries).mockResolvedValueOnce([
+      { id: 'remote-1', uid: 'uid-other', tab: 'Combat', paths: ['combat.hp.current'], atMs: 1 },
+    ]);
 
     const character = createEmptyCharacter({ id: 'char-conflict', name: 'Conflicted' });
     const recordRemoteSyncState = vi.fn(async () => {});

@@ -100,12 +100,20 @@
     "title": "Історія спільних змін ({{tab}})",
     "latestChange": "Маркер останньої зміни: {{label}} о {{date}}",
     "empty": "Для цієї вкладки ще немає спільної історії.",
+    "showMore": "Показати ще",
     "sources": {
       "you": "редаговано вами",
       "dm": "редаговано GM",
       "player": "редаговано гравцем",
       "remote": "редаговано віддалено",
       "uid": "редаговано {{uid}}"
+    },
+    "presence": {
+      "here": "{{actor}} тут",
+      "wasActive": "{{actor}} був(-ла) {{minutes}} хв тому",
+      "actorDm": "GM",
+      "actorPlayer": "Гравець",
+      "actorRemote": "Учасник"
     }
   },
   "overview": {

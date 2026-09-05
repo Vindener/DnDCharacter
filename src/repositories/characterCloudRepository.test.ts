@@ -8,10 +8,15 @@ const mocks = vi.hoisted(() => {
     update: vi.fn(async (_ref: unknown, _patch: Record<string, unknown>) => {}),
   };
 
+  const changesDocRef = { set: vi.fn(async (_data: Record<string, unknown>) => {}) };
+  const changesCollectionRef = { doc: vi.fn((_id?: string) => changesDocRef) };
+  const batchOps = { set: vi.fn(), commit: vi.fn(async () => {}) };
+
   const targetRef = {
     get: vi.fn(async () => ({ id: 'char-1', exists: false, data: () => null })),
     set: vi.fn(async (_payload: Record<string, unknown>, _options?: unknown) => {}),
     update: vi.fn(async (_patch: Record<string, unknown>) => {}),
+    collection: vi.fn((_name: string) => changesCollectionRef),
   };
   const generatedRef = {
     id: 'generated-copy',
@@ -23,9 +28,13 @@ const mocks = vi.hoisted(() => {
     tx,
     targetRef,
     generatedRef,
+    changesDocRef,
+    changesCollectionRef,
+    batchOps,
     collection: vi.fn(() => ({ doc })),
     doc,
     runTransaction: vi.fn(async (fn: (transaction: typeof tx) => Promise<void>) => fn(tx)),
+    batch: vi.fn(() => batchOps),
     arrayUnion: vi.fn((...items: unknown[]) => ({ __op: 'arrayUnion', items })),
     arrayRemove: vi.fn((...items: unknown[]) => ({ __op: 'arrayRemove', items })),
     increment: vi.fn((n: number) => ({ __op: 'increment', n })),
@@ -40,6 +49,7 @@ vi.mock('@/services/firebase', () => ({
   db: {
     collection: mocks.collection,
     runTransaction: mocks.runTransaction,
+    batch: mocks.batch,
   },
   fbAuth: mocks.fbAuth,
   now: () => 'server-now',
@@ -48,6 +58,7 @@ vi.mock('@/services/firebase', () => ({
   arrayRemove: mocks.arrayRemove,
   increment: mocks.increment,
   deleteField: mocks.deleteField,
+  timestampToMillis: (value: unknown) => (typeof value === 'number' ? value : undefined),
 }));
 
 vi.mock('@/services/connections', () => ({
@@ -86,6 +97,11 @@ describe('characterCloudRepository', () => {
     mocks.increment.mockClear();
     mocks.ensureConnection.mockReset().mockResolvedValue(undefined);
     mocks.findUserByEmail.mockReset().mockResolvedValue(null);
+    mocks.changesDocRef.set.mockClear();
+    mocks.changesCollectionRef.doc.mockClear();
+    mocks.batchOps.set.mockClear();
+    mocks.batchOps.commit.mockClear();
+    mocks.batch.mockClear();
   });
 
   it('rejects failed upserts without creating a duplicate cloud document', async () => {
@@ -285,7 +301,8 @@ describe('characterCloudRepository', () => {
 
       expect(mocks.runTransaction).toHaveBeenCalledTimes(1);
       expect(mocks.targetRef.update).not.toHaveBeenCalled();
-      const [, payload] = mocks.tx.set.mock.calls[0] as [unknown, Record<string, unknown>];
+      // Last tx.set call is the main sheet doc — earlier call(s) are the changes-subcollection entry.
+      const [, payload] = mocks.tx.set.mock.calls[mocks.tx.set.mock.calls.length - 1] as [unknown, Record<string, unknown>];
       const resources = payload.customResources as Array<{ id: string; current: number }>;
       // mana: this device's own delta (4 - 5 = -1) applied on top of the server's current
       // value (9), not on top of the stale local value -> 8, not 4 and not 9.
@@ -321,8 +338,9 @@ describe('characterCloudRepository', () => {
     expect(mocks.runTransaction).toHaveBeenCalledTimes(1);
     expect(mocks.targetRef.update).not.toHaveBeenCalled();
 
-    expect(mocks.tx.set).toHaveBeenCalledTimes(1);
-    const [, payload] = mocks.tx.set.mock.calls[0] as [unknown, Record<string, unknown>];
+    // One tx.set for the changes-subcollection entry (historyPaths given), one for the main doc.
+    expect(mocks.tx.set).toHaveBeenCalledTimes(2);
+    const [, payload] = mocks.tx.set.mock.calls[mocks.tx.set.mock.calls.length - 1] as [unknown, Record<string, unknown>];
     for (const key of ACCESS_KEYS) {
       expect(payload).not.toHaveProperty(key);
     }
@@ -353,56 +371,71 @@ describe('characterCloudRepository', () => {
     expect(payload.editors).toEqual([]);
   });
 
-  it('appends changeHistory via arrayUnion, not by assigning a plain array, on the narrow path', async () => {
-    mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+  describe('COL-9: change history written to the changes subcollection, not changeHistory[]', () => {
+    it('the narrow-update path writes history entries via a batch to the changes subcollection, and never sets changeHistory on the parent patch', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
 
-    await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
-      historyPaths: ['combat.hp'],
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
+        historyPaths: ['combat.hp'],
+      });
+
+      const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
+      expect(patch).not.toHaveProperty('changeHistory');
+      expect(patch).toHaveProperty('lastChangeAt');
+
+      expect(mocks.targetRef.collection).toHaveBeenCalledWith('changes');
+      expect(mocks.batch).toHaveBeenCalledTimes(1);
+      expect(mocks.batchOps.commit).toHaveBeenCalledTimes(1);
+      const [, entryData] = mocks.batchOps.set.mock.calls[0] as [unknown, Record<string, unknown>];
+      expect(entryData.uid).toBe('user-1');
+      expect(entryData.tab).toBe('Combat');
+      expect(entryData.createdAt).toBe('server-now');
+      expect(Array.isArray(entryData.paths)).toBe(true);
     });
 
-    expect(mocks.arrayUnion).toHaveBeenCalledTimes(1);
-    const [patch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
-    expect(patch.changeHistory).toEqual({ __op: 'arrayUnion', items: mocks.arrayUnion.mock.results[0].value.items });
-    expect(Array.isArray(patch.changeHistory)).toBe(false);
-  });
+    it('the transactional fallback path writes history entries via tx.set to the changes subcollection, atomically with the main doc write, and never sets changeHistory on the payload', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
 
-  it('appends changeHistory via arrayUnion on the transactional fallback path too', async () => {
-    mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
+        historyPaths: ['overview.identity'],
+      });
 
-    await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
-      historyPaths: ['overview.identity'],
+      // One tx.set for the change entry, one for the main sheet doc.
+      expect(mocks.tx.set).toHaveBeenCalledTimes(2);
+      const [, mainPayload] = mocks.tx.set.mock.calls[mocks.tx.set.mock.calls.length - 1] as [unknown, Record<string, unknown>];
+      expect(mainPayload).not.toHaveProperty('changeHistory');
+      expect(mainPayload).toHaveProperty('lastChangeAt');
+
+      const [, entryData] = mocks.tx.set.mock.calls[0] as [unknown, Record<string, unknown>];
+      expect(entryData.uid).toBe('user-1');
+      expect(entryData.tab).toBe('Overview');
+      expect(entryData.createdAt).toBe('server-now');
     });
 
-    expect(mocks.arrayUnion).toHaveBeenCalledTimes(1);
-    const [, payload] = mocks.tx.set.mock.calls[0] as [unknown, Record<string, unknown>];
-    expect(Array.isArray(payload.changeHistory)).toBe(false);
-  });
+    it('two sequential writes from different uids each write their own history entries, never overwriting the other', async () => {
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
+        historyPaths: ['combat.hp'],
+        actorRole: 'DM',
+      });
+      const [, firstEntry] = mocks.batchOps.set.mock.calls[0] as [unknown, Record<string, unknown>];
+      expect(firstEntry.uid).toBe('user-1');
+      expect(firstEntry.actorRole).toBe('DM');
 
-  it('two sequential writes from different uids each union only their own history entries, never overwriting the other', async () => {
-    mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
-    await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
-      historyPaths: ['combat.hp'],
-      actorRole: 'DM',
+      mocks.fbAuth.currentUser = { uid: 'user-2' };
+      mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
+      await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
+        historyPaths: ['combat.conditions'],
+        actorRole: 'Player',
+      });
+      const [, secondEntry] = mocks.batchOps.set.mock.calls[1] as [unknown, Record<string, unknown>];
+      expect(secondEntry.uid).toBe('user-2');
+      expect(secondEntry.actorRole).toBe('Player');
+
+      // Neither write ever read or recombined the other client's history entries —
+      // each call only ever writes its own freshly-built entry, id-keyed by uid+tab+atMs.
+      expect(firstEntry.id).not.toEqual(secondEntry.id);
     });
-    const [firstPatch] = mocks.targetRef.update.mock.calls[0] as [Record<string, unknown>];
-    const firstEntries = mocks.arrayUnion.mock.results[0].value.items as Array<{ uid: string }>;
-    expect(firstEntries.every((entry) => entry.uid === 'user-1')).toBe(true);
-    expect(firstPatch.changeHistory).toEqual({ __op: 'arrayUnion', items: firstEntries });
-
-    mocks.fbAuth.currentUser = { uid: 'user-2' };
-    mocks.targetRef.get.mockResolvedValueOnce({ id: 'char-1', exists: true, data: () => ({}) });
-    await upsertCharacterSheetFromLocal(createEmptyCharacter({ id: 'char-1', name: 'Test' }), {
-      historyPaths: ['overview.conditions'],
-      actorRole: 'Player',
-    });
-    const [secondPatch] = mocks.targetRef.update.mock.calls[1] as [Record<string, unknown>];
-    const secondEntries = mocks.arrayUnion.mock.results[1].value.items as Array<{ uid: string }>;
-    expect(secondEntries.every((entry) => entry.uid === 'user-2')).toBe(true);
-    expect(secondPatch.changeHistory).toEqual({ __op: 'arrayUnion', items: secondEntries });
-
-    // Neither write ever read or recombined the other client's changeHistory —
-    // each call only ever unions its own freshly-built entries.
-    expect(firstEntries).not.toEqual(secondEntries);
   });
 
   describe('access-write operations', () => {

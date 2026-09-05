@@ -5,7 +5,8 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { uuid } from 'expo-modules-core';
 import { useTranslation } from 'react-i18next';
-import { subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import { subscribeCharacterChanges, subscribeMySheets, subscribeSharedWithMe } from '@/repositories/characterCloudRepository';
+import type { CharacterChangeHistoryEntry } from '@/repositories/characterCloudRepository';
 import { characterLocalRepository } from '@/repositories/characterLocalRepository';
 import { fbAuth } from '@/services/firebase';
 import useThemeStore from '@/context/Theme-store';
@@ -28,13 +29,6 @@ type SharedRecord = {
   source: 'mine' | 'shared';
   updatedAtMs: number;
   payload: Record<string, unknown>;
-  changeHistory: Array<{
-    id: string;
-    uid: string;
-    actorRole?: string;
-    summary?: string;
-    atMs: number;
-  }>;
 };
 
 const toMillis = (value: unknown): number => {
@@ -43,24 +37,6 @@ const toMillis = (value: unknown): number => {
   if (typeof cast.toMillis === 'function') return cast.toMillis();
   if (typeof cast.seconds === 'number') return cast.seconds * 1000;
   return 0;
-};
-
-const sanitizeHistory = (value: unknown): SharedRecord['changeHistory'] => {
-  if (!Array.isArray(value)) return [];
-  return value
-    .map((item): SharedRecord['changeHistory'][number] | null => {
-      if (!item || typeof item !== 'object') return null;
-      const cast = item as Record<string, unknown>;
-      const actorRole = cast.actorRole === 'DM' || cast.actorRole === 'Player' ? cast.actorRole : undefined;
-      return {
-        id: String(cast.id || ''),
-        uid: String(cast.uid || ''),
-        actorRole,
-        summary: typeof cast.summary === 'string' ? cast.summary : undefined,
-        atMs: Number(cast.atMs || 0),
-      };
-    })
-    .filter((item): item is SharedRecord['changeHistory'][number] => Boolean(item && item.id && item.uid));
 };
 
 const DMSharedUpdates = () => {
@@ -88,6 +64,24 @@ const DMSharedUpdates = () => {
   const [sharedSheets, setSharedSheets] = useState<Record<string, unknown>[]>([]);
   const [reviewedMap, setReviewedMap] = useState<Record<string, number>>({});
   const isOnline = isNetworkOnline(netInfo.isConnected);
+
+  // COL-9: history no longer rides along on the mySheets/sharedSheets collection query —
+  // it lives in each sheet's own `changes` subcollection now. Subscribing to it for every
+  // sheet in this (unpaginated) list would turn 2 listeners into 2+N (CLAUDE.md §5.8), so
+  // only the currently expanded card gets a `changes` listener, at most one at a time.
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedHistory, setExpandedHistory] = useState<CharacterChangeHistoryEntry[]>([]);
+
+  useEffect(() => {
+    if (!expandedId) {
+      setExpandedHistory([]);
+      return undefined;
+    }
+    const unsubscribe = subscribeCharacterChanges(expandedId, setExpandedHistory, 20);
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
+  }, [expandedId]);
 
   useEffect(() => {
     characterLocalRepository
@@ -128,7 +122,6 @@ const DMSharedUpdates = () => {
       source: 'mine' as const,
       updatedAtMs: toMillis(sheet.updatedAt),
       payload: sheet,
-      changeHistory: sanitizeHistory(sheet.changeHistory),
     }));
     const shared = sharedSheets.map((sheet) => ({
       id: String(sheet.id || ''),
@@ -136,7 +129,6 @@ const DMSharedUpdates = () => {
       source: 'shared' as const,
       updatedAtMs: toMillis(sheet.updatedAt),
       payload: sheet,
-      changeHistory: sanitizeHistory(sheet.changeHistory),
     }));
 
     const merged = [...mine, ...shared];
@@ -153,14 +145,12 @@ const DMSharedUpdates = () => {
         role: roleMode,
         source: record.source === 'shared' ? 'shared' : 'mine',
       });
-      const latestHistory = record.changeHistory.slice().sort((a, b) => (b.atMs || 0) - (a.atMs || 0))[0];
       return {
         ...record,
         reviewedAt,
         needsReview,
         syncStatus,
         shareStatus,
-        latestHistory,
       };
     });
   }, [netInfo.isConnected, records, reviewedMap, roleMode, syncByCharacter]);
@@ -337,7 +327,7 @@ const DMSharedUpdates = () => {
       {filtered.map((item) => {
         const localCopyExists = characters.some((character) => character.id === item.id);
         const updatedLabel = item.updatedAtMs ? new Date(item.updatedAtMs).toLocaleString() : '—';
-        const latestHistoryLabel = item.latestHistory ? formatChangeSource(item.latestHistory) : null;
+        const isExpanded = expandedId === item.id;
 
         return (
           <View key={`shared-${item.source}-${item.id}`} style={styles.itemCard}>
@@ -376,19 +366,16 @@ const DMSharedUpdates = () => {
               </View>
             </View>
 
-            {latestHistoryLabel && (
-              <Text style={styles.itemHighlight}>
-                {t('dm:sharedUpdates.latestMarker', {
-                  actor: latestHistoryLabel,
-                  summary: formatPathSummary(item.latestHistory?.summary),
-                })}
+            <Pressable onPress={() => setExpandedId(isExpanded ? null : item.id)} android_ripple={{ color: colors.ripple }}>
+              <Text style={styles.historyTitle}>
+                {t('dm:sharedUpdates.historyTitle')} {isExpanded ? '▲' : '▼'}
               </Text>
-            )}
+            </Pressable>
 
-            {!!item.changeHistory.length && (
+            {isExpanded && (
               <View style={styles.historyBox}>
-                <Text style={styles.historyTitle}>{t('dm:sharedUpdates.historyTitle')}</Text>
-                {item.changeHistory
+                {!expandedHistory.length && <Text style={styles.historyText}>{t('dm:sharedUpdates.noSummary')}</Text>}
+                {expandedHistory
                   .slice()
                   .sort((a, b) => (b.atMs || 0) - (a.atMs || 0))
                   .slice(0, 3)

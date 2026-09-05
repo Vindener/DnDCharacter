@@ -2,9 +2,9 @@
   "title": "What's new in {{version}}",
   "intro": "A few changes worth knowing about:",
   "items": [
-    "Simultaneous changes to HP, death saves, spell slots, and character resources now combine correctly: if the DM deals damage while a player heals at the same time, both changes apply instead of one silently overwriting the other.",
-    "Adding or removing conditions (e.g. \"poisoned\") from two devices at once no longer triggers an unnecessary conflict prompt.",
-    "Fixed a rare sync issue where an HP change could fail to reach the cloud, leaving the character sheet stuck showing \"Sync pending.\""
+    "You can now see who else is looking at this character sheet right now: the history header shows \"DM is here\" or \"Player was active 3 min ago\".",
+    "Shared change history is now more reliable: entries no longer have a cap and won't get lost during an active shared session.",
+    "On the DM's shared updates screen, change history can now be expanded per character instead of loading everything at once."
   ],
   "gotIt": "Got it"
 }

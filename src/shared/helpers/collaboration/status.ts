@@ -78,3 +78,34 @@ export function summarizeHistoryPaths(paths: string[]): string {
   if (clean.length <= 2) return clean.join(', ');
   return `${clean.slice(0, 2).join(', ')} +${clean.length - 2}`;
 }
+
+// COL-6: presence. A viewer older than this is treated as gone — the client never learns
+// about a clean unmount that failed to fire (app killed, connection dropped), so staleness
+// is the only signal, deliberately without a Cloud Function to clean up orphaned docs.
+const PRESENCE_STALE_MS = 90_000;
+// Below this age we still say "here" rather than "was active N minutes ago" — smooths over
+// the gap between heartbeats (every ~25s) so a viewer doesn't appear to blink on/off.
+const PRESENCE_HERE_MS = 20_000;
+
+export type PresenceViewerEntry = {
+  uid: string;
+  actorRole?: string | null;
+  lastActiveAtMs: number;
+};
+
+export type PresenceStatus = { kind: 'here' | 'recent'; actorRole?: 'DM' | 'Player'; minutesAgo?: number } | null;
+
+export function computePresenceStatus(others: PresenceViewerEntry[], nowMs: number): PresenceStatus {
+  const fresh = others.filter((entry) => {
+    const age = nowMs - entry.lastActiveAtMs;
+    return age >= 0 && age <= PRESENCE_STALE_MS;
+  });
+  if (!fresh.length) return null;
+
+  const freshest = fresh.reduce((a, b) => (a.lastActiveAtMs >= b.lastActiveAtMs ? a : b));
+  const actorRole = freshest.actorRole === 'DM' || freshest.actorRole === 'Player' ? freshest.actorRole : undefined;
+  const ageMs = nowMs - freshest.lastActiveAtMs;
+
+  if (ageMs <= PRESENCE_HERE_MS) return { kind: 'here', actorRole };
+  return { kind: 'recent', actorRole, minutesAgo: Math.max(1, Math.round(ageMs / 60000)) };
+}
