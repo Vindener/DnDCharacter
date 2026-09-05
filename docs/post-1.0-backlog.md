@@ -12,18 +12,19 @@
    `docs/audit-2026-07.md` SEC-7/SEC-11). Мажорний апгрейд, заборонений у CLAUDE.md
    §6 до релізу. Одразу після 1.0.
 
-2. ~~**Семантичний merge лічильників (COL-4, повністю).**~~ — ⏳ **Перенесено в
-   1.0-scope 2026-09-01** (`CLAUDE.md` Виняток 3), робиться протягом нового
-   14-денного вікна закритого тесту. `FieldValue.increment()` для HP/slots/ресурсів
-   і `arrayUnion`/`arrayRemove` для conditions — зараз секція `combat` мержиться
-   цілком, тож DM, що крутить HP, і гравець, що ставить condition, отримують конфлікт
-   на всю секцію. Деталі й статус — `docs/collaborative-editing.md` §3.1,
+2. ~~**Семантичний merge лічильників (COL-4, повністю).**~~ — ✅ **Зроблено
+   2026-09-02** (коміт `8a312c1`), перенесено в 1.0-scope 2026-09-01 (`CLAUDE.md`
+   Виняток 3). `FieldValue.increment()` для HP/slots/ресурсів і `arrayUnion`/
+   `arrayRemove` для conditions. Деталі — `docs/collaborative-editing.md` §3.1,
    `docs/release-plan-google-play.md` R5 (задача R5-0a).
 
 3. ~~**Справжній presence (COL-6) + журнал змін у підколекцію (COL-9).**~~ — ⏳
-   **Перенесено в 1.0-scope 2026-09-01** (`CLAUDE.md` Виняток 3), робиться протягом
-   того ж вікна. Presence з heartbeat («хто щойно правив» у шапці) і винесення
-   `changeHistory[]` з масиву в документі в окрему підколекцію. Деталі й статус —
+   **Код зроблено 2026-09-05**, перенесено в 1.0-scope 2026-09-01 (`CLAUDE.md`
+   Виняток 3). Правила `firestore.rules` уже задеплоєні в prod-проєкт; код ще не
+   закомічено в git і не зібрано новим production-білдом. Presence з heartbeat
+   (бейдж «DM тут»/«Гравець тут» у шапці аркуша) і винесення `changeHistory[]` з
+   масиву в документі в окрему підколекцію `characterSheets/{id}/changes` — обидва
+   підтверджені реальними даними через Firestore Console. Деталі й статус —
    `docs/collaborative-editing.md` §3.1, `docs/release-plan-google-play.md` R5
    (задача R5-0b).
 
