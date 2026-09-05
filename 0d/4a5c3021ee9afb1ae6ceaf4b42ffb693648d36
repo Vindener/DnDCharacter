@@ -1,0 +1,93 @@
+src/i18n/locales/uk/character.json
+  s_141bfd620ad0db::t_1502b565eb8003 103
+  s_141bfd620ad0db::t_2dbfa148a22268 110-116
+src/screens/Character/hooks/useCharacterActions.tsx
+  s_141bfd620ad0db::t_c5a9caac26defe 2081-2083
+  s_141bfd620ad0db::t_aea92c88b4f1aa 3776-3777
+  s_141bfd620ad0db::t_32215ab2bd1085 7
+  s_141bfd620ad0db::t_ffc74a6c0c6802 753
+  s_141bfd620ad0db::t_50539cfbb1553f 59,65
+  s_141bfd620ad0db::t_60acdc7dda3a4c 2088-2098
+  s_141bfd620ad0db::t_a03a2923027f9c 2127-2132,2137,2140-2142
+  s_141bfd620ad0db::t_d25d16567319cc 31,33-40
+  s_141bfd620ad0db::t_2120a145d41cf8 624-634,696,698-746,754-816
+  s_141bfd620ad0db::t_153122a7b3b2f2 131
+  s_141bfd620ad0db::t_181f34b01db4c2 697
+  s_141bfd620ad0db::t_84c1a7178e40f7 2143
+src/screens/DM/DMSharedUpdates.tsx
+  s_141bfd620ad0db::t_a6f8ef09c639b6 8-9
+  s_141bfd620ad0db::t_f972554aee4fc3 330
+  s_141bfd620ad0db::t_4c9f8e36d4604e 68-85
+  s_141bfd620ad0db::t_f5cc8d39ce2056 369
+  s_141bfd620ad0db::t_ccae23fd4895a5 370-371,373,375,377-378
+src/i18n/locales/en/whatsNew.json
+  s_141bfd620ad0db::t_db1f301ebb16ff 5-7
+firestore.rules
+  s_141bfd620ad0db::t_a22c12545d6019 99-155
+src/repositories/characterCloudRepository.ts
+  s_141bfd620ad0db::t_21628060a5e325 1
+  s_141bfd620ad0db::t_f98e37fcb203f5 751
+  s_141bfd620ad0db::t_cf058eed4d290f 411-452
+  s_141bfd620ad0db::t_4494916e994349 776-788
+  s_141bfd620ad0db::t_f5cc8d39ce2056 846,879
+  s_141bfd620ad0db::t_8ed261cbe05e8e 1201
+  s_141bfd620ad0db::t_89202eca167162 124
+  s_141bfd620ad0db::t_362435218ebebf 847-878,880-960
+  s_141bfd620ad0db::t_e2bf2dbd711908 705
+src/shared/helpers/collaboration/status.test.ts
+  s_141bfd620ad0db::t_97c1f35f8f83ef 1-17,19-38
+  s_141bfd620ad0db::t_91b649263f230b 18
+src/repositories/characterCloudRepository.test.ts
+  s_141bfd620ad0db::t_fc072e8d505f3a 304-305
+  s_141bfd620ad0db::t_22ee547bce3ec6 374-376,378-393,396-397,399-401,403-412,415-423,425-433,435-437
+  s_141bfd620ad0db::t_3a7300a04fde61 100-104
+  s_141bfd620ad0db::t_840c092d274433 341-343
+  s_141bfd620ad0db::t_fbe37581b00d78 11-14,19,31-33,37,52,61
+src/services/characterSyncCoordinator.ts
+  s_141bfd620ad0db::t_a0767390b7ed61 807-813
+  s_141bfd620ad0db::t_826e9953efc9c4 965-966
+src/shared/helpers/collaboration/status.ts
+  s_141bfd620ad0db::t_66ade4608fb0da 81-111
+app.json
+  s_141bfd620ad0db::t_c9bb6811cc9428 19
+android/app/build.gradle
+  s_141bfd620ad0db::t_b7bcbef3c89c8b 114
+src/i18n/locales/uk/whatsNew.json
+  s_141bfd620ad0db::t_37224d159e109f 5-7
+src/domain/types/sync.ts
+  s_141bfd620ad0db::t_3794116e80a16a 20-22
+firestore-tests/rules.test.ts
+  s_141bfd620ad0db::t_f5cc8d39ce2056 523,535,575,628-631,642
+  s_141bfd620ad0db::t_cf9a4b32da4ac4 11-12
+  s_141bfd620ad0db::t_24378a344d4568 479-522,524-534,536-574,576-627,632-641,643-654
+  s_141bfd620ad0db::t_9de0653548311b 109-129
+src/services/characterSyncCoordinator.test.ts
+  s_141bfd620ad0db::t_4ce2e5ffd052c9 56
+  s_141bfd620ad0db::t_e97b8ba6fa46f9 7
+  s_141bfd620ad0db::t_1664386fffce7f 606-621
+  s_141bfd620ad0db::t_dcc4cdbd71da73 629-632
+src/i18n/locales/en/character.json
+  s_141bfd620ad0db::t_4af8de9f1fbe7d 103
+  s_141bfd620ad0db::t_cc79625cef5fb2 110-116
+src/screens/Character/Character.tsx
+  s_141bfd620ad0db::t_c055d12d1baae7 160-178,197-201
+  s_141bfd620ad0db::t_3058119b702ea9 79-80
+src/screens/Character/style.ts
+  s_141bfd620ad0db::t_11d014ff34a798 448-463
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "0d4a5c3021ee9afb1ae6ceaf4b42ffb693648d36",
+  "prompts": {},
+  "sessions": {
+    "s_141bfd620ad0db": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d37bef84-be58-40f5-b974-8a203de6501b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Vindener <vindener12@gmail.com>"
+    }
+  }
+}
